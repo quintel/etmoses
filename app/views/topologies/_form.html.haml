@@ -1,0 +1,6 @@
+= form_for(topology) do |f|
+  = f.label :graph, 'Topology as YAML'
+  = f.text_area :graph, value: YAML.dump(topology.graph)
+
+  .commit
+    = f.submit
