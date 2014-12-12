@@ -1,2 +1,5 @@
-%h2 Edit Topology
+%h5
+  Edit topology:
+  = @topology.created_at.to_formatted_s(:long)
+
 = render partial: 'form', locals: { topology: @topology }

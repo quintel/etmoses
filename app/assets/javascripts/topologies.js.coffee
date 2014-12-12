@@ -1,5 +1,5 @@
 showTopology = (url, element) ->
-  [width, height] = [1000, 400]
+  [width, height] = [882, 400]
 
   d3.json url, (error, json) ->
     $('.loading', element).detach()
@@ -10,8 +10,7 @@ showTopology = (url, element) ->
 
     # Stop the top level from being too far separated from each other, leading
     # to very wide diagrams.
-    tree.separation (a, b) ->
-      if a.parent is root and b.parent is root then 2 else 1
+    tree.separation (a, b) -> 1
 
     svg = d3.select(element)
       .append('svg')
@@ -57,4 +56,5 @@ showTopology = (url, element) ->
 
 $(document).on "page:change", ->
   $('.topology-view').each (idx, viewEl) ->
-    showTopology($(viewEl).data('url'), viewEl)
+    if $('.loading', viewEl).length
+      showTopology($(viewEl).data('url'), viewEl)

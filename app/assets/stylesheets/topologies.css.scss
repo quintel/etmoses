@@ -4,8 +4,8 @@
 
 .topology-view {
   border: 20px solid #eee;
-  margin: 0 0 20px;
-  padding: 20px;
+  margin: 20px 0;
+  padding: 20px 0;
 
   .node rect {
       fill: white;
@@ -29,7 +29,7 @@
 .new_topology, .edit_topology {
   textarea {
     display: block;
-    font: 13px monospace;
+    font: 13px/17px monospace;
     margin: 10px 0;
     padding: 5px;
     min-height: 300px;

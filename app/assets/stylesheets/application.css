@@ -11,5 +11,7 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require skeleton/normalize
+ *= require skeleton/skeleton
  *= require_self
  */
