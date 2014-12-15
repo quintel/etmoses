@@ -54,4 +54,6 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
   resources :topologies
+
+  root to: redirect('/topologies')
 end
