@@ -15,7 +15,6 @@ ActiveRecord::Schema.define(version: 20141212121540) do
 
   create_table "topologies", force: true do |t|
     t.text     "graph",      limit: 16777215,             null: false
-    t.integer  "version",                     default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
