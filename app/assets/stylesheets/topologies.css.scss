@@ -35,6 +35,24 @@
     min-height: 300px;
     width: 600px;
   }
+
+  #topology_editor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    font: 14px/18px monospace;
+  }
+
+  .editor-wrap {
+    border: 1px solid #ccc;
+    height: 400px;
+    position: relative;
+    width: 800px;
+    margin: 0 0 2.5rem;
+  }
 }
 
 form .or {

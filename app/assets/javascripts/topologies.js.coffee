@@ -58,3 +58,23 @@ $(document).on "page:change", ->
   $('.topology-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
       showTopology($(viewEl).data('url'), viewEl)
+
+  # Set up the topology editor.
+
+  topoEditor = $('textarea#topology_graph')
+
+  if topoEditor.length and ! $('#topology_editor').length
+    topoEditor.hide()
+    topoEditor.after($("""
+      <div class="editor-wrap"><pre id='topology_editor'></pre></div>
+    """))
+
+    editor = ace.edit('topology_editor')
+    editor.getSession().setValue(topoEditor.text())
+    editor.getSession().setMode('ace/mode/yaml')
+    editor.setTheme('ace/theme/github')
+    editor.setHighlightActiveLine(false)
+    editor.setShowPrintMargin(false)
+
+    $('.create_topology, .edit_topology').submit ->
+      topoEditor.text(editor.getSession().getValue())
