@@ -8,21 +8,21 @@
   padding: 20px 0;
 
   .node rect {
-      fill: white;
-      stroke: #ccc;
-      stroke-width: 1.5px;
-      border-top: 1px solid black;
+    fill: white;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+    border-top: 1px solid black;
   }
 
   .node {
-      cursor: default;
-      font: 12px sans-serif;
+    cursor: default;
+    font: 12px sans-serif;
   }
 
   .link {
-      fill: none;
-      stroke: #ccc;
-      stroke-width: 1.5px;
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
   }
 }
 
