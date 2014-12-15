@@ -1,0 +1,7 @@
+%h5 Topologies
+
+= link_to 'Create a new topology', new_topology_path, class: 'button'
+
+%ul
+  - @topologies.each do |topology|
+    %li= link_to "Topology: #{ topology.created_at.to_formatted_s(:long) }", topology_path(topology)

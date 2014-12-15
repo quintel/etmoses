@@ -1,0 +1,64 @@
+// Place all the styles related to the topology controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.topology-view {
+  border: 20px solid #eee;
+  margin: 20px 0;
+  padding: 20px 0;
+
+  .node rect {
+    fill: white;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+    border-top: 1px solid black;
+  }
+
+  .node {
+    cursor: default;
+    font: 12px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
+}
+
+.new_topology, .edit_topology {
+  textarea {
+    display: block;
+    font: 13px/17px monospace;
+    margin: 10px 0;
+    padding: 5px;
+    min-height: 300px;
+    width: 600px;
+  }
+
+  #topology_editor {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    font: 14px/18px monospace;
+  }
+
+  .editor-wrap {
+    border: 1px solid #ccc;
+    height: 400px;
+    position: relative;
+    width: 800px;
+    margin: 0 0 2.5rem;
+  }
+}
+
+form .or {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0 1rem;
+  text-transform: uppercase;
+  color: #888;
+}

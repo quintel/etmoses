@@ -1,0 +1,11 @@
+%h5
+  Topology:
+  = @topology.created_at.to_formatted_s(:long)
+
+#topology
+  .topology-view{ "data-url" => topology_url(@topology, format: :json) }
+    %span.loading Loading topology&hellip;
+
+  = link_to 'Edit', edit_topology_url(@topology), class: 'button'
+
+= link_to 'All topologies', topologies_path
