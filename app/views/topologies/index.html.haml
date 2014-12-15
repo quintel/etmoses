@@ -4,4 +4,4 @@
 
 %ul
   - @topologies.each do |topology|
-    %li= link_to topology.created_at.to_formatted_s(:long), topology_path(topology)
+    %li= link_to "Topology: #{ topology.created_at.to_formatted_s(:long) }", topology_path(topology)
