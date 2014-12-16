@@ -38,6 +38,10 @@ class TopologiesController < ApplicationController
 
   # Internal: Returns the permitted parameters for creating a topology.
   def topology_params
-    { graph: YAML.load(params[:topology].try(:[], :graph)) }
+    topology = params[:topology] || {}
+
+    [ :graph, :technologies ].each_with_object({}) do |key, data|
+      data[key] = YAML.load(topology[key]) if topology[key]
+    end
   end
 end # TopologiesController

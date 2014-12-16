@@ -1,6 +1,17 @@
 = form_for(topology) do |f|
   = f.label :graph, 'Topology as YAML'
-  = f.text_area :graph, value: YAML.dump(topology.graph)
+
+  - if topology.new_record?
+    = f.text_area :graph, value: Topology::DEFAULT_GRAPH
+  - else
+    = f.text_area :graph, value: YAML.dump(topology.graph)
+
+  = f.label :graph, 'Technologies as YAML'
+
+  - if topology.new_record?
+    = f.text_area :technologies, value: Topology::DEFAULT_TECHNOLOGIES
+  - else
+    = f.text_area :technologies, value: YAML.dump(topology.technologies)
 
   .commit
     = f.submit class: 'button-primary'

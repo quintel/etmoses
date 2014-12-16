@@ -1,0 +1,11 @@
+---
+network_chp:
+  edges:
+    # Each key is the name of a topology network node "such as "MV Network",
+    # "LV Network #4", etc. Each value describes the share of the technology
+    # assigned to the network.
+    parent_one: 0.4
+    parent_two: 0.6
+  attributes:
+    # Attributes which further describe the technology (optional).
+    availability: 0.7

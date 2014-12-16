@@ -1,22 +1,7 @@
 class Topology < ActiveRecord::Base
-  serialize :graph, JSON
+  serialize :graph,        JSON
+  serialize :technologies, JSON
 
-  DUMMY_GRAPH = [
-    { 'name' => 'HV Network', 'children' => [
-      { 'name' => '...', 'children' => [{ 'name' => '...' }] },
-      { 'name' => '...' }
-    ]}
-  ].freeze
-
-  def graph
-    super || DUMMY_GRAPH
-  end
-
-  def graph=(new_graph)
-    if new_graph.is_a?(String)
-      new_graph = YAML.parse(new_graph)
-    end
-
-    super(new_graph)
-  end
+  DEFAULT_GRAPH        = Rails.root.join('db/default_topology.yml').read
+  DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
 end

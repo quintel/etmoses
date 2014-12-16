@@ -54,27 +54,35 @@ showTopology = (url, element) ->
       .attr('text-anchor', 'middle')
       .text((data) -> data.name)
 
+createEditor = (textarea) ->
+  id = textarea.attr('id')
+
+  textarea.hide()
+  textarea.data('editor', true)
+
+  textarea.after($("""
+    <div class="editor-wrap"><pre id='#{ id }_editor'></pre></div>
+  """))
+
+  editor = ace.edit("#{ id }_editor")
+  editor.getSession().setValue(textarea.text())
+  editor.getSession().setMode('ace/mode/yaml')
+  editor.setTheme('ace/theme/github')
+  editor.setHighlightActiveLine(false)
+  editor.setShowPrintMargin(false)
+
+  textarea.parents('form').on 'submit', ->
+    textarea.text(editor.getSession().getValue())
+
 $(document).on "page:change", ->
   $('.topology-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
       showTopology($(viewEl).data('url'), viewEl)
 
-  # Set up the topology editor.
+  # Set up the topology editors.
 
-  topoEditor = $('textarea#topology_graph')
+  for selector in ['textarea#topology_graph', 'textarea#topology_technologies']
+    textarea = $(selector)
 
-  if topoEditor.length and ! $('#topology_editor').length
-    topoEditor.hide()
-    topoEditor.after($("""
-      <div class="editor-wrap"><pre id='topology_editor'></pre></div>
-    """))
-
-    editor = ace.edit('topology_editor')
-    editor.getSession().setValue(topoEditor.text())
-    editor.getSession().setMode('ace/mode/yaml')
-    editor.setTheme('ace/theme/github')
-    editor.setHighlightActiveLine(false)
-    editor.setShowPrintMargin(false)
-
-    $('.create_topology, .edit_topology').submit ->
-      topoEditor.text(editor.getSession().getValue())
+    if textarea.length and ! textarea.data('editor')
+      createEditor(textarea)
