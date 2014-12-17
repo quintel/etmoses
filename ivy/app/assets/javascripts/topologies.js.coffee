@@ -37,8 +37,21 @@ showTopology = (url, element) ->
       .selectAll('g.node')
       .data(nodes)
       .enter().append('g')
-      .attr('class', 'node')
+      .classed('node', true)
+      .classed('technology', (data) -> data.technology)
       .attr('transform', (data) -> "translate(#{ data.x }, #{ data.y })")
+
+    onMouseOut = ->
+      node.classed(common: false)
+
+    onMouseOver = (data) ->
+      onMouseOut()
+
+      if data.technology
+        node.classed('common', (other) -> other.technology is data.technology)
+
+    node.on('mouseover', onMouseOver)
+    node.on('mouseout', onMouseOut)
 
     # Draw a rectangle around each node.
 

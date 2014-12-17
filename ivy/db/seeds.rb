@@ -6,23 +6,43 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Topology.create(graph: [{
-  'name' =>  'HV Network',
-  'children' => [
-    {
-      'name' => 'Medium Voltage #1',
-      'children' => [
-        { 'name' => 'MV Connection #1' },
-        { 'name' => 'Low Voltage #1' },
-        { 'name' => 'Low Voltage #2' }
-      ]
-    }, {
-      'name' => 'Medium Voltage #2',
-      'children' => [
-        { 'name' => 'Low Voltage #3' },
-        { 'name' => 'Low Voltage #4' },
-        { 'name' => 'Low Voltage #5' }
-      ]
-    }
-  ]
-}])
+graph = <<-YML
+---
+- name: MV Network
+  children:
+  - name: 'LV #1'
+    children:
+    - technology: heat_pump_1
+  - name: 'LV #2'
+    children:
+    - name: Office Building
+      children:
+      - technology: heat_pump_1
+      - technology: solar_panel_1
+    - name: Home
+      children:
+      - technology: heat_pump_1
+      - technology: solar_panel_1
+  - name: 'LV #3'
+    children:
+    - technology: heat_pump_2
+    - technology: solar_panel_1
+YML
+
+technologies = <<-YML
+---
+heat_pump_1:
+  name: Heat Pump Type 1
+  efficiency: 4.0
+  capacity: 2.5
+heat_pump_2:
+  name: Heat Pump Type 2
+  efficiency: 4.5
+  capacity: 3.5
+solar_panel_1:
+  name: Solar Panel
+  efficiency: 1.0
+  capacity: 1.5
+YML
+
+Topology.create!(graph: YAML.load(graph), technologies: YAML.load(technologies))

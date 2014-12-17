@@ -1,3 +1,8 @@
+- if topology.errors.any?
+  %ul.errors
+    - topology.errors.full_messages.uniq.each do |message|
+      %li= message
+
 = form_for(topology) do |f|
   = f.label :graph, 'Topology as YAML'
 

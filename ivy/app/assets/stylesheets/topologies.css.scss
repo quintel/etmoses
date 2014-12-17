@@ -17,6 +17,14 @@
   .node {
     cursor: default;
     font: 12px sans-serif;
+
+    &.technology rect {
+      fill: #eee;
+    }
+
+    &.technology:hover rect, &.common rect {
+      stroke: #555;
+    }
   }
 
   .link {
@@ -61,4 +69,8 @@ form .or {
   padding: 0 1rem;
   text-transform: uppercase;
   color: #888;
+}
+
+.errors {
+  color: darkred;
 }

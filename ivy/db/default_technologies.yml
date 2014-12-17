@@ -1,11 +1,15 @@
 ---
-network_chp:
-  edges:
-    # Each key is the name of a topology network node "such as "MV Network",
-    # "LV Network #4", etc. Each value describes the share of the technology
-    # assigned to the network.
-    parent_one: 0.4
-    parent_two: 0.6
-  attributes:
-    # Attributes which further describe the technology (optional).
-    availability: 0.7
+heat_pump_1:
+  name: 'Heat Pump Type 1'
+  efficiency: 4.0
+  capacity: 2.5
+
+heat_pump_2:
+  name: 'Heat Pump Type 2'
+  efficiency: 4.5
+  capacity: 3.5
+
+solar_panel_1:
+  name: 'Solar Panel'
+  efficiency: 1.0
+  capacity: 1.5
