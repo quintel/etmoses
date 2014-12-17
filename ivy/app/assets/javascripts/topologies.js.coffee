@@ -43,9 +43,9 @@ showTopology = (url, element) ->
     # Draw a rectangle around each node.
 
     node.append('rect')
-      .attr('width', 120).attr('height', 25)
+      .attr('width', 130).attr('height', 25)
       .attr('rx', 5).attr('ry', 5) # Rounded corners
-      .attr('x', -60).attr('y')    # Relative x/y coords
+      .attr('x', -65).attr('y')    # Relative x/y coords
 
     # Add labels.
 
