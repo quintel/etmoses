@@ -1,5 +1,17 @@
+highlightTechnology = (element, key) ->
+  highlightNone(element)
+  d3.select(element).selectAll('g.node').classed('common', (other) -> other.technology is key)
+
+  $('#technologies .technology').each (idx, element) ->
+    if $(element).data('key') is key
+      $(element).addClass('common')
+
+highlightNone = (element, key) ->
+  d3.select(element).selectAll('g.node').classed(common: false)
+  $('#technologies .technology').removeClass('common')
+
 showTopology = (url, element) ->
-  [width, height] = [882, 400]
+  [width, height] = [920, 400]
 
   d3.json url, (error, json) ->
     $('.loading', element).detach()
@@ -41,17 +53,8 @@ showTopology = (url, element) ->
       .classed('technology', (data) -> data.technology)
       .attr('transform', (data) -> "translate(#{ data.x }, #{ data.y })")
 
-    onMouseOut = ->
-      node.classed(common: false)
-
-    onMouseOver = (data) ->
-      onMouseOut()
-
-      if data.technology
-        node.classed('common', (other) -> other.technology is data.technology)
-
-    node.on('mouseover', onMouseOver)
-    node.on('mouseout', onMouseOut)
+    node.on('mouseover', (d) -> if d.technology then highlightTechnology(element, d.technology))
+    node.on('mouseout', -> highlightNone(element))
 
     # Draw a rectangle around each node.
 
@@ -90,7 +93,12 @@ createEditor = (textarea) ->
 $(document).on "page:change", ->
   $('.topology-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
-      showTopology($(viewEl).data('url'), viewEl)
+      svg = showTopology($(viewEl).data('url'), viewEl)
+
+      $('#technologies .technology').hover(
+        ((event) -> highlightTechnology(viewEl, $(event.currentTarget).data('key'))),
+        ((event) -> highlightNone(viewEl))
+      )
 
   # Set up the topology editors.
 

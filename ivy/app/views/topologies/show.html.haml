@@ -6,7 +6,15 @@
   .topology-view{ "data-url" => topology_url(@topology, format: :json) }
     %span.loading Loading topology&hellip;
 
-  = link_to 'Edit', edit_topology_url(@topology), class: 'button'
+#technologies.row
+  - @topology.technologies.each do |key, tech|
+    .technology.three.columns{ "data-key" => key }
+      .inner
+        %h6= tech['name']
+        %ul
+          %li== key: #{ key.inspect }
+          - tech.except('name').each do |akey, avalue|
+            %li== #{ akey }: #{ avalue.inspect }
 
 
 = link_to '◄ All topologies', topologies_path, class: 'button button-primary'

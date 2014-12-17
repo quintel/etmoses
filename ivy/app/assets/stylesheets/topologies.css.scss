@@ -18,6 +18,10 @@
     cursor: default;
     font: 12px sans-serif;
 
+    &.technology:hover {
+      cursor: pointer;
+    }
+
     &.technology rect {
       fill: #eee;
     }
@@ -60,6 +64,29 @@
     position: relative;
     width: 800px;
     margin: 0 0 2.5rem;
+  }
+}
+
+#technologies .technology {
+  background: #eee;
+  border-radius: 5px;
+  font-size: 13px;
+  margin-bottom: 20px;
+
+  .inner {
+    padding: 5px 10px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.common {
+    border: 2px solid #999;
+
+    .inner {
+      padding: 3px 8px;
+    }
   }
 }
 
