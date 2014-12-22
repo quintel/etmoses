@@ -1,6 +1,9 @@
 %h5 Topologies
 
-= link_to 'Create a new topology', new_topology_path, class: 'button'
+#choose-start
+  = link_to 'Create a new hand-made topology', new_topology_path, class: 'button button-primary'
+  %span.or or
+  = link_to 'Create topology imported from ETE', import_topologies_path, class: 'button'
 
 %ul
   - @topologies.each do |topology|

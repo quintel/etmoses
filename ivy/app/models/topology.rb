@@ -5,6 +5,8 @@ class Topology < ActiveRecord::Base
   DEFAULT_GRAPH        = Rails.root.join('db/default_topology.yml').read
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
 
+  IMPORT_PROVIDERS = %w(beta.et-engine.com etengine.dev localhost:3000).freeze
+
   validate :validate_technologies_used
 
   # Creates a hash representing the full topology to be rendered by D3. Copies

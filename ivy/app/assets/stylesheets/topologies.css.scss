@@ -90,7 +90,7 @@
   }
 }
 
-form .or {
+.or {
   font-size: 11px;
   font-weight: 600;
   padding: 0 1rem;
@@ -99,5 +99,14 @@ form .or {
 }
 
 .errors {
-  color: darkred;
+  color: #a31c1c;
+}
+
+form.inline .field_with_errors {
+  display: inline-block;
+
+  input[type=text], select {
+    background: #fee;
+    border-color: #a31c1c;
+  }
 }

@@ -1,0 +1,11 @@
+%h5 Create topology with technologies from ETEngine
+
+- if @import.errors.any?
+  %ul.errors
+    - @import.errors.full_messages.uniq.each do |message|
+      %li= message
+
+= form_for(@import, url: import_topologies_path, method: :post, html: { class: 'inline' }) do |form|
+  = import_engine_select_tag(form)
+  = form.text_field(:scenario_id, placeholder: 'Scenario ID', style: 'box-sizing: border-box')
+  = form.submit 'Continue&hellip;'.html_safe, class: 'button-primary'

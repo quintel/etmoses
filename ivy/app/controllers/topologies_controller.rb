@@ -11,9 +11,26 @@ class TopologiesController < ApplicationController
     respond_with(@topology = Topology.new)
   end
 
+  # GET /topologies/import
+  def import
+    respond_with(@import = Import.new)
+  end
+
+  # POST /topologies/import
+  def perform_import
+    @import = Import.new(params[:import])
+
+    if @import.valid?
+      @topology = @import.topology
+      render :new
+    else
+      render :import
+    end
+  end
+
   # POST /topologies
   def create
-    respond_with(Topology.create(topology_params))
+    respond_with(@topology = Topology.create(topology_params))
   end
 
   # GET /topologies/:id
