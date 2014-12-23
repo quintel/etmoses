@@ -51,11 +51,13 @@ class Import
   #
   # Returns a hash.
   def technologies_from(response)
-    response.each_with_object({}) do |(key, data), techs|
+    top = { "LV #1" => [], "LV #2" => [], "LV #3" => [] }
+
+    response.each_with_object(top) do |(key, data), techs|
       data['number_of_units']['future'].floor.times do |index|
-        techs["#{ key }_#{ index + 1 }"] = {
+        techs["LV ##{ (index % 3) + 1 }"].push({
           'name' => "#{ key.titleize } ##{ index + 1 }"
-        }
+        })
       end
     end
   end
