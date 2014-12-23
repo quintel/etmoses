@@ -7,7 +7,7 @@ class Topology < ActiveRecord::Base
 
   IMPORT_PROVIDERS = %w(beta.et-engine.com etengine.dev localhost:3000).freeze
 
-  validate :validate_technologies_used
+  validate :validate_technology_connections
 
   # Creates a hash representing the full topology to be rendered by D3. Copies
   # important attributes from the techologies hash into the topology.
@@ -55,12 +55,13 @@ class Topology < ActiveRecord::Base
 
   # Asserts that the technologies used in the graph have all been defined in
   # the technologies collection.
-  def validate_technologies_used
-    each_node do |node|
-      if node['technology'] && ! technologies.key?(node['technology'])
-        errors.add(:graph,
-                   "uses undefined technology #{ node['technology'].inspect }")
-      end
+  def validate_technology_connections
+    node_keys = []
+    each_node { |node| node_keys.push(node['name']) }
+
+    technologies.keys.reject { |key| node_keys.include?(key) }.each do |key|
+      errors.add(:technologies,
+                 "includes a connection to missing node #{ key.inspect }")
     end
   end
 end

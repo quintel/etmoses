@@ -1,9 +1,9 @@
-highlightTechnology = (element, key) ->
+highlightNode = (element, key) ->
   highlightNone(element)
-  d3.select(element).selectAll('g.node').classed('common', (other) -> other.technology is key)
+  d3.select(element).selectAll('g.node').classed('common', (other) -> other.name is key)
 
   $('#technologies .technology').each (idx, element) ->
-    if $(element).data('key') is key
+    if $(element).data('node') is key
       $(element).addClass('common')
 
 highlightNone = (element, key) ->
@@ -50,10 +50,9 @@ showTopology = (url, element) ->
       .data(nodes)
       .enter().append('g')
       .classed('node', true)
-      .classed('technology', (data) -> data.technology)
       .attr('transform', (data) -> "translate(#{ data.x }, #{ data.y })")
 
-    node.on('mouseover', (d) -> if d.technology then highlightTechnology(element, d.technology))
+    node.on('mouseover', (d) -> highlightNode(element, d.name))
     node.on('mouseout', -> highlightNone(element))
 
     # Draw a rectangle around each node.
@@ -96,7 +95,7 @@ $(document).on "page:change", ->
       svg = showTopology($(viewEl).data('url'), viewEl)
 
       $('#technologies .technology').hover(
-        ((event) -> highlightTechnology(viewEl, $(event.currentTarget).data('key'))),
+        ((event) -> highlightNode(viewEl, $(event.currentTarget).data('node'))),
         ((event) -> highlightNone(viewEl))
       )
 

@@ -1,14 +1,8 @@
 ---
-- name: MV Network
+- name: HV Network
   children:
-  - name: "LV #1"
+  - name: MV Network
     children:
-    - technology: heat_pump_1
-  - name: "LV #2"
-    children:
-    - technology: heat_pump_1
-    - technology: solar_panel_1
-  - name: "LV #3"
-    children:
-    - technology: heat_pump_2
-    - technology: solar_panel_1
+    - name: "LV #1"
+    - name: "LV #2"
+    - name: "LV #3"

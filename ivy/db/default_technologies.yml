@@ -1,15 +1,21 @@
 ---
-heat_pump_1:
-  name: 'Heat Pump Type 1'
-  efficiency: 4.0
-  capacity: 2.5
+"LV #1":
+  - name: 'Heat Pump Type 1'
+    efficiency: 4.0
+    capacity: 2.5
 
-heat_pump_2:
-  name: 'Heat Pump Type 2'
-  efficiency: 4.5
-  capacity: 3.5
+"LV #2":
+  - name: 'Heat Pump Type 1'
+    efficiency: 4.0
+    capacity: 2.5
+  - name: 'Solar Panel'
+    efficiency: 1.0
+    capacity: 1.5
 
-solar_panel_1:
-  name: 'Solar Panel'
-  efficiency: 1.0
-  capacity: 1.5
+"LV #3":
+  - name: 'Heat Pump Type 2'
+    efficiency: 4.5
+    capacity: 3.5
+  - name: 'Solar Panel'
+    efficiency: 1.0
+    capacity: 1.5
