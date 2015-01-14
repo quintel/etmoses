@@ -76,14 +76,62 @@ RSpec.describe 'Building a graph' do
           expect(node).to be
         end
 
-        it 'belongs to "MV Network' do
+        it 'belongs to "MV Network"' do
           expect(node.in.first).to eq(graph.node('MV Network'))
         end
 
         it 'has no children' do
           expect(node.out.to_a).to be_empty
         end
+
+        it 'has no technologies' do
+          expect(node.get(:technologies)).to be_empty
+        end
       end
     end # LV #1, LV #2, LV #3
   end # with a simple HV/MV/LVx3 layout
+
+  context 'with a node with Heat Pump and Solar technologies' do
+    let(:structure) do
+      [{ name: 'Leaf' }]
+    end
+
+    let(:technologies) do
+      YAML.load(<<-EOS.gsub(/ {6}/, ''))
+      ---
+      Leaf:
+      - name: Heat Pump
+        efficiency: 4.0
+        capacity: 2.5
+      - name: Solar Panel
+        efficiency: 1.0
+        capacity: 1.5
+      EOS
+    end
+
+    let(:graph) { ETLoader.build(structure, technologies) }
+    let(:node)  { graph.node('Leaf') }
+
+    it 'includes a Heat Pump' do
+      expect(node.get(:technologies)).to have_key('Heat Pump')
+    end
+
+    it 'sets the Heat Pump attributes' do
+      tech = node.get(:technologies)['Heat Pump']
+
+      expect(tech.to_h).to eq(
+        name: 'Heat Pump', efficiency: 4.0, capacity: 2.5)
+    end
+
+    it 'includes a Solar Panel' do
+      expect(node.get(:technologies)).to have_key('Solar Panel')
+    end
+
+    it 'sets the Solar Panel attributes' do
+      tech = node.get(:technologies)['Solar Panel']
+
+      expect(tech.to_h).to eq(
+        name: 'Solar Panel', efficiency: 1.0, capacity: 1.5)
+    end
+  end # a node with some attached technologies
 end # Building a graph

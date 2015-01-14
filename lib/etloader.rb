@@ -1,5 +1,7 @@
 require 'turbine'
+require 'virtus'
 
+require_relative 'etloader/technology'
 require_relative 'etloader/version'
 
 module ETLoader
@@ -10,6 +12,8 @@ module ETLoader
   # nodes - An array of nodes to be added to the graph. Each element in the
   #         array should have a unique :name key to identify the node, and an
   #         optional :children key containing an array of child nodes.
+  # techs - A hash where each key matches the key of a node, and each value is
+  #         an array of technologies connected to the node. Optional.
   #
   # For example:
   #
@@ -28,14 +32,21 @@ module ETLoader
   #   # => #<Turbine::Graph (5 nodes, 4 edges)>
   #
   # Returns a Turbine::Graph.
-  def build(nodes, graph = Turbine::Graph.new, parent = nil)
+  def build(nodes, techs = {}, graph = Turbine::Graph.new, parent = nil)
     nodes.each do |data|
       data = Hash[data.map { |key, value| [key.to_sym, value] }]
       node = graph.add(Turbine::Node.new(data[:name]))
 
+      node_techs = techs[data[:name]] || {}
+
+      node.set(:technologies, Hash[node_techs.map do |attrs|
+        tech = Technology.new(attrs)
+        [tech.name, tech]
+      end])
+
       parent.connect_to(node) if parent
 
-      build(data[:children], graph, node) if data[:children]
+      build(data[:children], techs, graph, node) if data[:children]
     end
 
     graph

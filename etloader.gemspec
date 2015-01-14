@@ -21,6 +21,7 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.2.0'
 
   gem.add_dependency 'turbine-graph', '>= 0.1'
+  gem.add_dependency 'virtus',        '~> 1.0.4'
 
   gem.add_development_dependency 'rake',  '>= 10.3.0'
   gem.add_development_dependency 'rspec', '>= 3.1.0'
