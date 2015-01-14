@@ -91,6 +91,27 @@ RSpec.describe 'Building a graph' do
     end # LV #1, LV #2, LV #3
   end # with a simple HV/MV/LVx3 layout
 
+  context 'with a node which has custom properties' do
+    let(:structure) do
+      [{ name: 'Leaf', children: [] }]
+    end
+
+    let(:graph) { ETLoader.build([{ name: 'Leaf', capacity: 2.0 }]) }
+    let(:node)  { graph.node('Leaf') }
+
+    it 'sets the property on the node' do
+      expect(node.get(:capacity)).to eq(2.0)
+    end
+
+    it 'does not set a :name property' do
+      expect(node.properties.keys).to_not include(:name)
+    end
+
+    it 'does not set a :children property' do
+      expect(node.properties.keys).to_not include(:children)
+    end
+  end # with a node which has custom properties
+
   context 'with a node with Heat Pump and Solar technologies' do
     let(:structure) do
       [{ name: 'Leaf' }]

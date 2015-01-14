@@ -37,12 +37,23 @@ module ETLoader
       data = Hash[data.map { |key, value| [key.to_sym, value] }]
       node = graph.add(Turbine::Node.new(data[:name]))
 
+      # Properties
+
+      node.properties = data.dup.tap do |props|
+        props.delete(:name)
+        props.delete(:children)
+      end
+
+      # Technologies
+
       node_techs = techs[data[:name]] || {}
 
       node.set(:technologies, Hash[node_techs.map do |attrs|
         tech = Technology.new(attrs)
         [tech.name, tech]
       end])
+
+      # Connections and children.
 
       parent.connect_to(node) if parent
 
