@@ -5,5 +5,6 @@ module ETLoader
     attribute :name,       String
     attribute :efficiency, Float
     attribute :capacity,   Float
+    attribute :demand,     Float
   end # Technology
 end # ETLoader

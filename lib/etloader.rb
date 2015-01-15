@@ -1,6 +1,7 @@
 require 'turbine'
 require 'virtus'
 
+require_relative 'etloader/calculator'
 require_relative 'etloader/technology'
 require_relative 'etloader/version'
 
