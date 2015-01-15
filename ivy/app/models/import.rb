@@ -54,7 +54,7 @@ class Import
     top = { "LV #1" => [], "LV #2" => [], "LV #3" => [] }
 
     response.each_with_object(top) do |(key, data), techs|
-      data['number_of_units']['future'].floor.times do |index|
+      data['number_of_units']['future'].round.times do |index|
         techs["LV ##{ (index % 3) + 1 }"].push({
           'name' => "#{ key.titleize } ##{ index + 1 }"
         })
