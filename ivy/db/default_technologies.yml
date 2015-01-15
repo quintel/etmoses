@@ -3,6 +3,10 @@
   - name: 'Heat Pump Type 1'
     efficiency: 4.0
     capacity: 2.5
+  - name: 'Television'
+    demand: 1.1
+  - name: 'Washing Machine'
+    demand: 0.4
 
 "LV #2":
   - name: 'Heat Pump Type 1'
@@ -11,6 +15,8 @@
   - name: 'Solar Panel'
     efficiency: 1.0
     capacity: 1.5
+  - name: 'Television'
+    demand: 1.1
 
 "LV #3":
   - name: 'Heat Pump Type 2'
