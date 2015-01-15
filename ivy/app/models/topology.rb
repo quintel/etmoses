@@ -14,7 +14,7 @@ class Topology < ActiveRecord::Base
   #
   # This should be moved to a presenter after the prototype stage.
   def as_json(*)
-    { graph: format_children(graph), technologies: technologies }
+    { graph: GraphToTree.convert(to_graph), technologies: technologies }
   end
 
   # Traverses each node in the graph, yielding it's data.
@@ -25,6 +25,14 @@ class Topology < ActiveRecord::Base
       block.call(node)
       each_node(node['children'], &block) if node['children']
     end
+  end
+
+  # Public: Creates a Turbine graph representing the graph and technologies
+  # defined in the topology.
+  #
+  # Returns a Turbine::Graph.
+  def to_graph
+    ETLoader.build(graph, technologies)
   end
 
   #######
