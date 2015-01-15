@@ -14,7 +14,8 @@ class Topology < ActiveRecord::Base
   #
   # This should be moved to a presenter after the prototype stage.
   def as_json(*)
-    { graph: GraphToTree.convert(to_graph), technologies: technologies }
+    { graph: GraphToTree.convert(ETLoader::Calculator.new(to_graph).calculate),
+      technologies: technologies }
   end
 
   # Traverses each node in the graph, yielding it's data.

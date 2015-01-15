@@ -67,7 +67,12 @@ showTopology = (url, element) ->
     node.append('text')
       .attr('dx', 0).attr('dy', 17) # Relative x/y coords.
       .attr('text-anchor', 'middle')
-      .text((data) -> data.name)
+      .text((data) ->
+        if data.demand
+          "#{ data.name } (#{ data.demand })"
+        else
+          data.name
+      )
 
 createEditor = (textarea) ->
   id = textarea.attr('id')
