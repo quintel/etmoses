@@ -14,18 +14,14 @@ class Topology < ActiveRecord::Base
   #
   # This should be moved to a presenter after the prototype stage.
   def as_json(*)
-    { graph: GraphToTree.convert(ETLoader::Calculator.new(to_graph).calculate),
-      technologies: technologies }
+    graph = GraphToTree.convert(calculator.calculate)
+    { graph: graph, technologies: technologies }
   end
 
-  # Traverses each node in the graph, yielding it's data.
-  #
-  # Returns nothing.
-  def each_node(nodes = graph, &block)
-    nodes.each do |node|
-      block.call(node)
-      each_node(node['children'], &block) if node['children']
-    end
+  # Creates the ETLoader calculator which will determine the demands of the
+  # topology.
+  def calculator
+    ETLoader::Calculator.new(to_graph)
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies
@@ -33,7 +29,17 @@ class Topology < ActiveRecord::Base
   #
   # Returns a Turbine::Graph.
   def to_graph
-    ETLoader.build(graph, technologies)
+    TreeToGraph.convert(graph, technologies)
+  end
+
+  # Traverses each node in the graph, yielding it's data.
+  #
+  # Returns nothing.
+  def each_node(nodes = [graph], &block)
+    nodes.each do |node|
+      block.call(node)
+      each_node(node['children'], &block) if node['children']
+    end
   end
 
   #######

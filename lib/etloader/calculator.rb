@@ -4,27 +4,12 @@ module ETLoader
       @graph = graph
     end
 
-    def calculate
-      @graph.nodes
-        .select { |n| n.out.to_a.empty? }
-        .each(&method(:calculate_node))
-
-      @graph
+    def refinery_graph
+      @refinery ||= Refinery::Catalyst::FromTurbine.call(@graph)
     end
 
-    #######
-    private
-    #######
-
-    def calculate_node(node)
-      node.set(:calculated, true)
-
-      node.set(:demand, node.get(:technologies).values
-        .map(&:demand).compact.reduce(:+))
-
-      node.in.
-        reject { |n| n.get(:calculated) }.
-        each(&method(:calculate_node))
+    def calculate
+      Refinery::Catalyst::Calculators.call(refinery_graph)
     end
   end # Calculator
 end # ETLoader
