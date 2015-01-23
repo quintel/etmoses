@@ -117,6 +117,14 @@ $(document).on "page:change", ->
         ((event) -> highlightNone(viewEl))
       )
 
+  # Topology Debug
+  $('#topology .debug button').on 'click', (event) ->
+    button = $(this).detach()
+    console.log button
+    $('#topology .debug').append($("<img/>").attr('src', button.data('src')))
+
+    event.preventDefault()
+
   # Set up the topology editors.
 
   for selector in ['textarea#topology_graph', 'textarea#topology_technologies']

@@ -1,5 +1,6 @@
 class TopologiesController < ApplicationController
   respond_to :html, :json
+  respond_to :png, only: :show
 
   rescue_from Refinery::IncalculableGraphError do |ex|
     result = { error: 'Sorry, your topology could not be calculated' }
@@ -46,7 +47,17 @@ class TopologiesController < ApplicationController
 
   # GET /topologies/:id
   def show
-    respond_with(@topology = Topology.find(params[:id]))
+    @topology = Topology.find(params[:id])
+
+    respond_with(@topology) do |format|
+      format.png do
+        graph   = @topology.calculator.calculate
+        diagram = Refinery::Diagram::Base.new(graph)
+
+        render text: diagram.draw_to(String),
+          type: 'image/png', disposition: 'inline'
+      end
+    end
   end
 
   # GET /topologies/:id/edit

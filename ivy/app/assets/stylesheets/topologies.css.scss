@@ -2,6 +2,10 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#topology .debug img {
+  width: 100%;
+}
+
 .topology-view {
   border: 20px solid #eee;
   margin: 20px 0;
@@ -18,7 +22,7 @@
     }
 
     .detail {
-      font-size: 13px;
+      font-size: 14px;
       margin-bottom: 0;
     }
   }

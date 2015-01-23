@@ -5,6 +5,8 @@
 #topology
   .topology-view{ "data-url" => topology_url(@topology, format: :json) }
     %span.loading Loading topology&hellip;
+  .debug
+    %button{ 'data-src' => topology_url(format: :png) } Debug
 
 #technologies
   - @topology.technologies.each do |key, techs|
