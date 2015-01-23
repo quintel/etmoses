@@ -1,8 +1,8 @@
 ---
-- name: HV Network
+name: HV Network
+children:
+- name: MV Network
   children:
-  - name: MV Network
-    children:
-    - name: "LV #1"
-    - name: "LV #2"
-    - name: "LV #3"
+  - name: "LV #1"
+  - name: "LV #2"
+  - name: "LV #3"
