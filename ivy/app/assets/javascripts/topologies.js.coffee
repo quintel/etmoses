@@ -16,6 +16,19 @@ showTopology = (url, element) ->
   d3.json url, (error, json) ->
     $('.loading', element).detach()
 
+    if error
+      errData = JSON.parse(error.responseText)
+      errEl   = $('<div class="error"></div>')
+
+      errEl.append($('<span class="message"></span>').text(errData['error']))
+
+      if errData.hasOwnProperty('message')
+        errEl.append($('<pre class="detail"></pre>').text(errData['message']))
+
+      $(element).append(errEl)
+
+      return false
+
     tree     = d3.layout.tree().size([width, height - 40])
     diagonal = d3.svg.diagonal().projection((d) -> [d.x, d.y])
     root     = json.graph[0]

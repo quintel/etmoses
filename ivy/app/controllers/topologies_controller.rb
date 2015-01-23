@@ -1,6 +1,17 @@
 class TopologiesController < ApplicationController
   respond_to :html, :json
 
+  rescue_from Refinery::IncalculableGraphError do |ex|
+    result = { error: 'Sorry, your topology could not be calculated' }
+
+    if Rails.env.development? || Rails.env.test?
+      result[:message]   = ex.message
+      result[:backtrace] = ex.backtrace
+    end
+
+    render json: result, status: 500
+  end
+
   # GET /topologies
   def index
     respond_with(@topologies = Topology.all.order('created_at DESC'))
