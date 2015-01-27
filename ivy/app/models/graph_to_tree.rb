@@ -7,23 +7,20 @@ class GraphToTree
   #
   # Returns an Array.
   def self.convert(graph)
-    [convert_node(graph.node(:source).out.first)]
+    [convert_node(graph.nodes.detect { |n| n.in_edges.none? })]
   end
 
   # Internal: Converts a single Turbine::Node an a hash of attributes.
   def self.convert_node(node)
-    children = node.out_edges
-      .reject { |e| e.get(:type) == :overflow || e.to.get(:transparent) }
-      .map(&:to).to_a.map(&method(:convert_node))
+    children = node.out_edges.map(&:to).to_a.map(&method(:convert_node))
 
     props = node.properties.except(:technologies).merge(
       name:     node.key,
       children: children
     )
 
-    if props[:demand]
-      props[:demand] = props[:demand].to_f
-    end
+    # Convert back from Rational.
+    props[:load] = props[:load].try(:to_f)
 
     props
   end

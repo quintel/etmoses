@@ -43,5 +43,4 @@ gem 'spring',        group: :development
 
 # Application Gems.
 gem 'rest-client'
-gem 'etloader', path: '..'
-gem 'refinery', github: 'quintel/refinery'
+gem 'turbine-graph', require: 'turbine'

@@ -22,34 +22,34 @@ technologies = <<-YML
 ---
 'LV #1':
 - name: Heat Pump Type 1
-  capacity: 2.5
+  load: -2.5
 - name: Electric Car
-  demand: 8.2
+  load: 8.2
 'Office Building':
 - name: Heat Pump Type 1
-  capacity: 2.5
+  load: -2.5
 - name: Solar Panel
-  capacity: 1.5
+  load: -1.5
 - name: Server Farm
-  demand: 6.6
+  load: 6.6
 - name: Coffee Machine
-  demand: 1.3
+  load: 1.3
 'Home':
 - name: Heat Pump Type 1
-  capacity: 2.5
+  load: -2.5
 - name: Solar Panel
-  capacity: 1.5
+  load: -1.5
 - name: Washing Machine
-  demand: 2.1
+  load: 2.1
 - name: Electric Oven
-  demand: 3.1
+  load: 3.1
 'LV #3':
 - name: Heat Pump Type 2
-  capacity: 3.5
+  load: -3.5
 - name: Solar Panel
-  capacity: 1.5
+  load: -1.5
 - name: Electric Car
-  demand: 8.2
+  load: 8.2
 YML
 
 Topology.create!(graph: YAML.load(graph), technologies: YAML.load(technologies))

@@ -1,17 +1,5 @@
 class TopologiesController < ApplicationController
   respond_to :html, :json
-  respond_to :png, only: :show
-
-  rescue_from Refinery::IncalculableGraphError do |ex|
-    result = { error: 'Sorry, your topology could not be calculated' }
-
-    if Rails.env.development? || Rails.env.test?
-      result[:message]   = ex.message
-      result[:backtrace] = ex.backtrace
-    end
-
-    render json: result, status: 500
-  end
 
   # GET /topologies
   def index
@@ -47,16 +35,19 @@ class TopologiesController < ApplicationController
 
   # GET /topologies/:id
   def show
-    @topology = Topology.find(params[:id])
+    respond_with(@topology = Topology.find(params[:id]))
+  rescue RuntimeError => ex
+    if request.format.json?
+      result = { error: 'Sorry, your topology could not be calculated' }
 
-    respond_with(@topology) do |format|
-      format.png do
-        graph   = @topology.calculator.calculate
-        diagram = Refinery::Diagram::Base.new(graph)
-
-        render text: diagram.draw_to(String),
-          type: 'image/png', disposition: 'inline'
+      if Rails.env.development? || Rails.env.test?
+        result[:message]   = ex.message
+        result[:backtrace] = ex.backtrace
       end
+
+      render json: result, status: 500
+    else
+      raise ex
     end
   end
 

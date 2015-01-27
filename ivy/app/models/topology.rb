@@ -14,14 +14,8 @@ class Topology < ActiveRecord::Base
   #
   # This should be moved to a presenter after the prototype stage.
   def as_json(*)
-    graph = GraphToTree.convert(calculator.calculate)
+    graph = GraphToTree.convert(Calculator.calculate(to_graph))
     { graph: graph, technologies: technologies }
-  end
-
-  # Creates the ETLoader calculator which will determine the demands of the
-  # topology.
-  def calculator
-    ETLoader::Calculator.new(to_graph)
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies

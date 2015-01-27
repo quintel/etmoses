@@ -81,8 +81,8 @@ showTopology = (url, element) ->
       .attr('dx', 0).attr('dy', 17) # Relative x/y coords.
       .attr('text-anchor', 'middle')
       .text((data) ->
-        if data.demand
-          "#{ data.name } (#{ data.demand })"
+        if data.load
+          "#{ data.name } (#{ data.load })"
         else
           data.name
       )
@@ -116,14 +116,6 @@ $(document).on "page:change", ->
         ((event) -> highlightNode(viewEl, $(event.currentTarget).data('node'))),
         ((event) -> highlightNone(viewEl))
       )
-
-  # Topology Debug
-  $('#topology .debug button').on 'click', (event) ->
-    button = $(this).detach()
-    console.log button
-    $('#topology .debug').append($("<img/>").attr('src', button.data('src')))
-
-    event.preventDefault()
 
   # Set up the topology editors.
 
