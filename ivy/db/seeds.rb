@@ -8,41 +8,48 @@
 
 graph = <<-YML
 ---
-- name: MV Network
+name: MV Network
+children:
+- name: 'LV #1'
+- name: 'LV #2'
   children:
-  - name: 'LV #1'
-    children:
-    - technology: heat_pump_1
-  - name: 'LV #2'
-    children:
-    - name: Office Building
-      children:
-      - technology: heat_pump_1
-      - technology: solar_panel_1
-    - name: Home
-      children:
-      - technology: heat_pump_1
-      - technology: solar_panel_1
-  - name: 'LV #3'
-    children:
-    - technology: heat_pump_2
-    - technology: solar_panel_1
+  - name: Office Building
+  - name: Home
+- name: 'LV #3'
 YML
 
 technologies = <<-YML
 ---
-heat_pump_1:
-  name: Heat Pump Type 1
-  efficiency: 4.0
+'LV #1':
+- name: Heat Pump Type 1
   capacity: 2.5
-heat_pump_2:
-  name: Heat Pump Type 2
-  efficiency: 4.5
-  capacity: 3.5
-solar_panel_1:
-  name: Solar Panel
-  efficiency: 1.0
+- name: Electric Car
+  demand: 8.2
+'Office Building':
+- name: Heat Pump Type 1
+  capacity: 2.5
+- name: Solar Panel
   capacity: 1.5
+- name: Server Farm
+  demand: 6.6
+- name: Coffee Machine
+  demand: 1.3
+'Home':
+- name: Heat Pump Type 1
+  capacity: 2.5
+- name: Solar Panel
+  capacity: 1.5
+- name: Washing Machine
+  demand: 2.1
+- name: Electric Oven
+  demand: 3.1
+'LV #3':
+- name: Heat Pump Type 2
+  capacity: 3.5
+- name: Solar Panel
+  capacity: 1.5
+- name: Electric Car
+  demand: 8.2
 YML
 
 Topology.create!(graph: YAML.load(graph), technologies: YAML.load(technologies))

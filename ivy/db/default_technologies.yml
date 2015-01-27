@@ -1,7 +1,6 @@
 ---
 'LV #1':
 - name: Heat Pump Type 1
-  efficiency: 4.0
   capacity: 2.5
 - name: Television
   demand: 1.1
@@ -10,22 +9,14 @@
 
 'LV #2':
 - name: Heat Pump Type 1
-  efficiency: 4.0
   capacity: 2.5
 - name: Solar Panel
-  efficiency: 1.0
   capacity: 1.5
 - name: Television
   demand: 1.1
 
 'LV #3':
 - name: Heat Pump Type 2
-  efficiency: 4.5
   capacity: 3.5
 - name: Solar Panel
-  efficiency: 1.0
   capacity: 1.5
-
-MV Network:
-- name: Large CHP
-  capacity: 55.0
