@@ -99,7 +99,7 @@ class TreeToGraph
         graph.add(Turbine::Node.new(
           "#{ node.key } C", demand: demand, transparent: true
         )),
-        :energy, child_share: 0.0
+        :energy, child_share: 0.0, demand: demand
       )
     end
   end
