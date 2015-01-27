@@ -15,7 +15,6 @@
           .inner
             %h6= tech['name']
             %ul
-              %li== key: #{ key.inspect }
               - tech.except('name').each do |akey, avalue|
                 %li== #{ akey }: #{ avalue.inspect }
 
