@@ -1,8 +1,17 @@
 # Takes a Refinery graph and computes loads.
-module Calculator
-  module_function
+class Calculator
+  def self.calculate(graph)
+    new(graph).calculate
+  end
 
-  # Public: Given a graph, calculated the load bottom-up.
+  # Public: Creates a new calculator for determining the load across the entire
+  # given +graph+.
+  def initialize(graph)
+    @graph   = graph
+    @visited = {}
+  end
+
+  # Public: Calculates the load bottom-up.
   #
   # Starting with the leaf ("sink") nodes, the load of the graph is calculated
   # by summing the loads of any child nodes (including negative (supply) loads)
@@ -13,11 +22,13 @@ module Calculator
   # calculated has one or more children which have not yet themselves been
   # calculated, the node will be skipped and returned to later.
   #
-  # Returns the given graph.
-  def calculate(graph)
-    nodes = graph.nodes.reject { |n| n.out_edges.any? }
+  # Returns the graph.
+  def calculate
+    nodes = @graph.nodes.reject { |n| n.out_edges.any? }
 
     while node = nodes.shift
+      next if @visited.key?(node)
+
       if node.out.get(:load).any?(&:nil?)
         # One or more children haven't yet got a load.
         nodes.push(node)
@@ -25,16 +36,22 @@ module Calculator
       end
 
       calculate_node(node)
-
       nodes.push(*node.in.to_a)
+
+      @visited[node] = true
     end
 
-    graph
+    @graph
   end
+
+  #######
+  private
+  #######
 
   # Internal: Computed the load of a single node.
   #
-  # Returns nothing.
+  # Returns the calculated demand, or nil if the node had already been
+  # calculated.
   def calculate_node(node)
     return if node.get(:load)
 
