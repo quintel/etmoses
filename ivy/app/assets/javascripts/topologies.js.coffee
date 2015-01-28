@@ -81,7 +81,7 @@ showTopology = (url, element) ->
       .attr('dx', 0).attr('dy', 17) # Relative x/y coords.
       .attr('text-anchor', 'middle')
       .text((data) ->
-        if data.load
+        if data.load?
           "#{ data.name } (#{ data.load })"
         else
           data.name
