@@ -7,6 +7,10 @@ class Topology < ActiveRecord::Base
 
   IMPORT_PROVIDERS = %w(beta.et-engine.com etengine.dev localhost:3000).freeze
 
+  before_validation do
+    self.technologies = {} unless technologies
+  end
+
   validate :validate_technology_connections
 
   # Creates a hash representing the full topology to be rendered by D3. Copies
