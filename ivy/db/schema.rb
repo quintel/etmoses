@@ -11,13 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141216131530) do
+ActiveRecord::Schema.define(version: 20150128125605) do
 
-  create_table "topologies", force: true do |t|
-    t.text     "graph",        limit: 16777215, null: false
+  create_table "testing_grounds", force: true do |t|
+    t.text     "technologies", limit: 16777215, null: false
+    t.integer  "topology_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "technologies", limit: 16777215
+  end
+
+  create_table "topologies", force: true do |t|
+    t.text "graph", limit: 16777215, null: false
   end
 
 end
