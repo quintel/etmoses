@@ -53,12 +53,12 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  resources :topologies do
+  resources :testing_grounds do
     collection do
       get  'import'
       post 'import', to: :perform_import
     end
   end
 
-  root to: redirect('/topologies')
+  root to: redirect('/testing_grounds')
 end

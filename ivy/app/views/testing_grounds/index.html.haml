@@ -1,0 +1,10 @@
+%h5 Topologies
+
+#choose-start
+  = link_to 'Create a new hand-made testing ground', new_testing_ground_path, class: 'button button-primary'
+  %span.or or
+  = link_to 'Create testing ground imported from ETE', import_testing_grounds_path, class: 'button'
+
+%ul
+  - @testing_grounds.each do |tg|
+    %li= link_to "Testing ground: #{ tg.created_at.to_formatted_s(:long) }", testing_ground_path(tg)

@@ -9,23 +9,25 @@ class Import
 
   attr_reader :provider, :scenario_id
 
-  validates :provider,    inclusion: { in: Topology::IMPORT_PROVIDERS }
+  validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
 
   # Public: Creates a new Import with the given provider and scenario.
   #
   # Returns an Import.
   def initialize(attributes = {})
-    @provider    = attributes[:provider] || Topology::IMPORT_PROVIDERS.first
+    @provider =
+      attributes[:provider] || TestingGround::IMPORT_PROVIDERS.first
+
     @scenario_id = attributes[:scenario_id]
   end
 
-  # Public: Import data from the remote provider and return a Topology with
+  # Public: Import data from the remote provider and return a TestingGround with
   # appropriate technologies.
   #
-  # Returns a Topology.
-  def topology
-    Topology.new(technologies: technologies_from(response))
+  # Returns a TestingGround.
+  def testing_ground
+    TestingGround.new(technologies: technologies_from(response))
   end
 
   # Internal: Required in order to use Import within +form_for+ view block.

@@ -7,7 +7,7 @@ class GraphToTree
   #
   # Returns an Array.
   def self.convert(graph)
-    [convert_node(graph.nodes.detect { |n| n.in_edges.none? })]
+    convert_node(graph.nodes.detect { |n| n.in_edges.none? })
   end
 
   # Internal: Converts a single Turbine::Node an a hash of attributes.

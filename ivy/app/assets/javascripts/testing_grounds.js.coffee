@@ -31,7 +31,7 @@ showTopology = (url, element) ->
 
     tree     = d3.layout.tree().size([width, height - 40])
     diagonal = d3.svg.diagonal().projection((d) -> [d.x, d.y])
-    root     = json.graph[0]
+    root     = json.graph
 
     # Stop the top level from being too far separated from each other, leading
     # to very wide diagrams.
@@ -44,7 +44,7 @@ showTopology = (url, element) ->
       .append('g')
         .attr("transform", "translate(0,5)")
 
-    nodes = tree.nodes(json.graph[0])
+    nodes = tree.nodes(root)
     links = tree.links(nodes)
 
     # Draw links.
@@ -108,7 +108,7 @@ createEditor = (textarea) ->
     textarea.text(editor.getSession().getValue())
 
 $(document).on "page:change", ->
-  $('.topology-view').each (idx, viewEl) ->
+  $('.testing-ground-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
       svg = showTopology($(viewEl).data('url'), viewEl)
 
@@ -117,9 +117,9 @@ $(document).on "page:change", ->
         ((event) -> highlightNone(viewEl))
       )
 
-  # Set up the topology editors.
+  # Set up the network editors.
 
-  for selector in ['textarea#topology_graph', 'textarea#topology_technologies']
+  for selector in ['textarea#testing_ground_topology_attributes_graph', 'textarea#testing_ground_technologies']
     textarea = $(selector)
 
     if textarea.length and ! textarea.data('editor')

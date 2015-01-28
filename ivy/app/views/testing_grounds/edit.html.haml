@@ -1,0 +1,5 @@
+%h5
+  Edit testing ground:
+  = @testing_ground.created_at.to_formatted_s(:long)
+
+= render partial: 'form', locals: { testing_ground: @testing_ground }

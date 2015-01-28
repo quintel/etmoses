@@ -1,0 +1,22 @@
+%h5
+  Testing ground:
+  = @testing_ground.created_at.to_formatted_s(:long)
+
+#testing-ground
+  .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json) }
+    %span.loading Loading testing ground&hellip;
+
+#technologies
+  - @testing_ground.technologies.each do |key, techs|
+    .row
+      %h5= key
+      - techs.each do |tech|
+        .technology.three.columns{ "data-node" => key }
+          .inner
+            %h6= tech['name']
+            %ul
+              - tech.except('name').each do |akey, avalue|
+                %li== #{ akey }: #{ avalue.inspect }
+
+= link_to '◄ All testing grounds', testing_grounds_path, class: 'button button-primary'
+= link_to 'Edit', edit_testing_ground_url(@testing_ground), class: 'button'

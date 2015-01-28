@@ -1,0 +1,28 @@
+- if testing_ground.errors.any?
+  %ul.errors
+    - testing_ground.errors.full_messages.uniq.each do |message|
+      %li= message
+
+= form_for(testing_ground) do |f|
+  = f.fields_for :topology do |topo_form|
+    = f.label :graph, 'Testing ground as YAML'
+
+    - if testing_ground.new_record? && testing_ground.topology.graph.blank?
+      = topo_form.text_area :graph, value: Topology::DEFAULT_GRAPH
+    - else
+      = topo_form.text_area :graph, value: YAML.dump(testing_ground.topology.graph)
+
+  = f.label :technologies, 'Technologies as YAML'
+
+  - if testing_ground.new_record? && testing_ground.technologies.blank?
+    = f.text_area :technologies, value: TestingGround::DEFAULT_TECHNOLOGIES
+  - else
+    = f.text_area :technologies, value: YAML.dump(testing_ground.technologies)
+
+  .commit
+    = f.submit class: 'button-primary'
+    %span.or or
+    - if testing_ground.new_record?
+      = link_to 'Cancel', testing_grounds_path, class: 'button'
+    - else
+      = link_to 'Cancel', testing_ground_path(testing_ground), class: 'button'

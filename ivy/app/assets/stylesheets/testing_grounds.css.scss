@@ -2,7 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.topology-view {
+.testing-ground-view {
   border: 20px solid #eee;
   margin: 20px 0;
   padding: 20px 0;
@@ -54,7 +54,7 @@
   }
 }
 
-.new_topology, .edit_topology {
+.new_testing_ground, .edit_testing_ground {
   textarea {
     display: block;
     font: 13px/17px monospace;
