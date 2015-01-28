@@ -67,6 +67,8 @@ class TreeToGraph
       node.set(:load, techs.map do |tech|
         Rational((tech[:load] || 0.0).to_s)
       end.compact.reduce(:+))
+    elsif children.none?
+      node.set(:load, Rational('0.0'))
     end
 
     # Children
