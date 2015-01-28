@@ -7,7 +7,7 @@ class Import
   # from ETEngine.
   NODE_KEYS = YAML.load_file(Rails.root.join('db/import_technologies.yml'))
 
-  attr_reader :provider, :scenario_id
+  attr_reader :provider, :scenario_id, :topology_id
 
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
@@ -20,6 +20,7 @@ class Import
       attributes[:provider] || TestingGround::IMPORT_PROVIDERS.first
 
     @scenario_id = attributes[:scenario_id]
+    @topology_id = attributes[:topology_id]
   end
 
   # Public: Import data from the remote provider and return a TestingGround with
@@ -27,7 +28,9 @@ class Import
   #
   # Returns a TestingGround.
   def testing_ground
-    TestingGround.new(technologies: technologies_from(response))
+    TestingGround.new(
+      topology:     topology,
+      technologies: technologies_from(response))
   end
 
   # Internal: Required in order to use Import within +form_for+ view block.
@@ -35,9 +38,17 @@ class Import
     nil
   end
 
-  ######
+  def topology
+    if @topology_id.blank?
+      Topology.new(graph: YAML.load(Topology::DEFAULT_GRAPH))
+    else
+      Topology.new(graph: Topology.find(@topology_id).graph)
+    end
+  end
+
+  #######
   private
-  ######
+  #######
 
   # Internal: Imports the requested data from the remote provider and returns
   # the JSON response as a Hash.
@@ -45,7 +56,7 @@ class Import
     JSON.parse(RestClient.post(
       URL_TEMPLATE % [@provider, @scenario_id],
       { keys: NODE_KEYS }.to_json,
-      { content_type: :json, accept: :json}
+      { content_type: :json, accept: :json }
     ))['nodes']
   end
 
@@ -53,14 +64,31 @@ class Import
   #
   # Returns a hash.
   def technologies_from(response)
-    top = { "LV #1" => [], "LV #2" => [], "LV #3" => [] }
+    # Figure out which nodes are the "leaf" nodes.
 
-    response.each_with_object(top) do |(key, data), techs|
+    graph = TreeToGraph.convert(topology.graph)
+
+    topo = graph.nodes.select { |n| n.edges(:out).empty? }.map do |node|
+      { key: node.key, techs: [] }
+    end
+
+    # Combine the technologies into an array so that they can be distributed
+    # evenly.
+
+    techs = response.each_with_object([]) do |(key, data), list|
       data['number_of_units']['future'].round.times do |index|
-        techs["LV ##{ (index % 3) + 1 }"].push({
-          'name' => "#{ key.titleize } ##{ index + 1 }"
-        })
+        list.push('name' => "#{ key.titleize } ##{ index + 1 }")
       end
+    end
+
+    techs.each_with_index do |tech, index|
+      topo[index % topo.length][:techs].push(tech)
+    end
+
+    # Convert the array of nodes back into one big technology hash.
+
+    topo.each_with_object({}) do |tech, hash|
+      hash[tech[:key]] = tech[:techs]
     end
   end
 end # Import

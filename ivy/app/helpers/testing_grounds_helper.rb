@@ -11,4 +11,17 @@ module TestingGroundsHelper
 
     form.select(:provider, options_for_select(providers))
   end
+
+  def import_topology_select_tag(form)
+    topologies = Topology.all.reverse.map do |topo|
+      if testing_ground = TestingGround.where(topology_id: topo.id).first
+        ["Topology from #{ testing_ground.created_at.to_formatted_s(:long) } " \
+         "testing ground", topo.id]
+      end
+    end.compact
+
+    topologies.unshift(['Default topology', nil])
+
+    form.select(:topology_id, topologies)
+  end
 end
