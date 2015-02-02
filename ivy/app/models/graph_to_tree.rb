@@ -14,7 +14,7 @@ class GraphToTree
   def self.convert_node(node)
     children = node.out_edges.map(&:to).to_a.map(&method(:convert_node))
 
-    props = node.properties.except(:technologies).merge(
+    props = node.properties.merge(
       name:     node.key,
       children: children
     )
