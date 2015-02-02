@@ -38,7 +38,7 @@ class TreeToGraph
   #######
 
   def initialize(tree, techs)
-    @tree  = tree
+    @tree  = tree || {}
     @techs = techs
   end
 
