@@ -8,7 +8,8 @@ class TestingGround < ActiveRecord::Base
 
   IMPORT_PROVIDERS = %w(beta.et-engine.com etengine.dev localhost:3000).freeze
 
-  validate :validate_technology_connections
+  validates :topology, presence: true
+  validate  :validate_technology_connections, if: :topology
 
   before_validation do
     self.technologies = {} unless technologies
