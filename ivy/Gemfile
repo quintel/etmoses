@@ -40,6 +40,14 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+group :development, :test do
+  gem 'rspec-rails', '~> 3.1'
+end
+
+group :development do
+  gem 'guard'
+  gem 'guard-rspec'
+end
 
 # Application Gems.
 gem 'rest-client'
