@@ -53,6 +53,8 @@ class TreeToGraph
   # Internal: Builds a single node from the tree hash, and recurses through and
   # child nodes.
   def build_node(attrs, parent = nil, graph = Turbine::Graph.new)
+    return unless valid_node?(attrs)
+
     attrs    = attrs.symbolize_keys
     children = attrs.delete(:children) || []
     node     = graph.add(Turbine::Node.new(attrs.delete(:name), attrs))
@@ -80,5 +82,11 @@ class TreeToGraph
   # technologies attached to the node.
   def techs(node_key)
     (@techs[node_key] || []).map(&:symbolize_keys)
+  end
+
+  # Internal: Determines if the given node attributes are sufficient to add a
+  # new node to the graph.
+  def valid_node?(attrs)
+    attrs.key?(:name) || attrs.key?('name'.freeze)
   end
 end # TreeToGraph
