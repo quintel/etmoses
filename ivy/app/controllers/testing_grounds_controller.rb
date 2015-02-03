@@ -36,7 +36,7 @@ class TestingGroundsController < ApplicationController
   # GET /topologies/:id
   def show
     respond_with(@testing_ground = TestingGround.find(params[:id]))
-  rescue RuntimeError => ex
+  rescue StandardError => ex
     if request.format.json?
       result = { error: 'Sorry, your testing ground could not be calculated' }
 
