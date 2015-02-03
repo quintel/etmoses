@@ -25,6 +25,9 @@ showTopology = (url, element) ->
       if errData.hasOwnProperty('message')
         errEl.append($('<pre class="detail"></pre>').text(errData['message']))
 
+      if errData.hasOwnProperty('backtrace')
+        errEl.append($('<pre class="backtrace"></pre>').html(errData['backtrace'].join('<br>')))
+
       $(element).append(errEl)
 
       return false

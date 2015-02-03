@@ -41,7 +41,7 @@ class TestingGroundsController < ApplicationController
       result = { error: 'Sorry, your testing ground could not be calculated' }
 
       if Rails.env.development? || Rails.env.test?
-        result[:message]   = ex.message
+        result[:message]   = "#{ ex.class }: #{ ex.message }"
         result[:backtrace] = ex.backtrace
       end
 

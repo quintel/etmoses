@@ -17,9 +17,14 @@
       font-weight: bold;
     }
 
-    .detail {
+    .detail, .backtrace {
       font-size: 14px;
       margin-bottom: 0;
+    }
+
+    .backtrace {
+      color: #777;
+      font-size: 12px;
     }
   }
 
