@@ -48,6 +48,7 @@ end
 group :development do
   gem 'guard'
   gem 'guard-rspec'
+  gem 'pry-rails'
 end
 
 # Application Gems.
