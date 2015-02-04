@@ -40,7 +40,7 @@ class TestingGround < ActiveRecord::Base
   # the technologies collection.
   def validate_technology_connections
     node_keys = []
-    topology.each_node { |node| node_keys.push(node['name']) }
+    topology.each_node { |node| node_keys.push(node[:name]) }
 
     technologies.keys.reject { |key| node_keys.include?(key) }.each do |key|
       errors.add(:technologies,

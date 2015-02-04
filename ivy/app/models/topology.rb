@@ -9,11 +9,9 @@ class Topology < ActiveRecord::Base
   #
   # Returns nothing.
   def each_node(nodes = [graph], &block)
-    nodes.each do |node|
+    nodes.map(&:symbolize_keys).each do |node|
       block.call(node)
-
-      each_node(node['children'], &block) if node['children']
-      each_node(node[:children], &block)  if node[:children]
+      each_node(node[:children], &block) if node[:children]
     end
   end
 
