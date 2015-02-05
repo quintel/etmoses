@@ -1,9 +1,6 @@
 class Technology
   include Virtus.model
 
-  # Path to the load profiles.
-  PROFILE_DIR = Rails.root.join('data/curves')
-
   attribute :key,      String
   attribute :profiles, Array[String]
 
@@ -12,8 +9,15 @@ class Technology
   #
   # Returns a hash.
   def profiles
-    @loaded_profiles ||= super.each_with_object({}) do |key, data|
-      data[key] = Merit::Curve.load_file(PROFILE_DIR.join("#{ key }.csv"))
+    Rails.cache.fetch("static.tech_profiles.#{ key }") do
+      paths = super.map do |pattern|
+        Pathname.glob(Ivy.data_dir.join("curves/#{ pattern }.csv"))
+      end.flatten.compact.uniq
+
+      paths.each_with_object({}) do |filename, data|
+        key = filename.basename.to_s[0..-5]
+        data[key] = Merit::Curve.load_file(filename)
+      end
     end
   end
 
@@ -41,8 +45,8 @@ class Technology
     #
     # Returns a hash.
     def loaded_files
-      @loaded ||= begin
-        files = Pathname.glob(Rails.root.join('data/technologies/*.yml'))
+      Rails.cache.fetch('static.technologies'.freeze) do
+        files = Pathname.glob(Ivy.data_dir.join('technologies/*.yml'))
 
         files.each_with_object({}) do |file, data|
           key        = file.basename.to_s[0...-4]
