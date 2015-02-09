@@ -21,6 +21,12 @@ class Technology
     end
   end
 
+  # Public: Returns if the given load profile key may be used with this
+  # technology.
+  def permitted_profile?(key)
+    profiles.key?(key)
+  end
+
   class << self
     # Public: An array containing all loaded technologies.
     def all
@@ -33,6 +39,11 @@ class Technology
     # Returns a Technology.
     def find(key)
       loaded_files[key] || fail(ActiveRecord::RecordNotFound)
+    end
+
+    # Public: Returns whether a technology matching the given key exists.
+    def exists?(key)
+      loaded_files.key?(key)
     end
 
     #######

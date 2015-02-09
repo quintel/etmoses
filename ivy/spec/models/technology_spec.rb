@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Technology do
   context 'with two technologies in the data/technologies dir' do
     it 'loads two technologies' do
-      expect(Technology.all.length).to eq(2)
+      expect(Technology.all.length).to eq(3)
     end
 
     it 'assigns the first technology' do

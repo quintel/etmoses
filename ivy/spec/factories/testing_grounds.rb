@@ -2,7 +2,6 @@ FactoryGirl.define do
   factory :testing_ground do
     topology
 
-    # technologies { YAML.load(<<-YML.strip_heredoc) }
     technologies { YAML.load(<<-YML.strip_heredoc) }
       ---
       lv1:

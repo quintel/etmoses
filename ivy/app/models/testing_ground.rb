@@ -10,6 +10,7 @@ class TestingGround < ActiveRecord::Base
 
   validates :topology, presence: true
   validate  :validate_technology_connections, if: :topology
+  validate  :validate_technology_types
 
   before_validation do
     self.technologies = {} unless technologies
@@ -47,4 +48,25 @@ class TestingGround < ActiveRecord::Base
                  "includes a connection to missing node #{ key.inspect }")
     end
   end
-end
+
+  # Asserts that, whenever a user has defined that a technology uses a
+  # pre-existing technology, that the technology actually exists.
+  def validate_technology_types
+    technologies.values.flatten.each do |data|
+      type    = data['type'.freeze]
+      profile = data['profile'.freeze]
+
+      if type && ! Technology.exists?(type)
+        errors.add(:technologies, "has an unknown technology type: #{ type }")
+      elsif profile
+        tech = Technology.find(type || 'generic')
+
+        unless tech.permitted_profile?(profile)
+          errors.add(:technologies,
+                     "may not use the #{ profile.inspect } profile " \
+                     "with a #{ type.inspect }")
+        end
+      end
+    end
+  end
+end # TestingGround
