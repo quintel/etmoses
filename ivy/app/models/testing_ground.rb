@@ -1,5 +1,5 @@
 class TestingGround < ActiveRecord::Base
-  serialize :technologies, JSON
+  serialize :technologies, TechnologyList
 
   belongs_to :topology
   accepts_nested_attributes_for :topology
@@ -33,6 +33,15 @@ class TestingGround < ActiveRecord::Base
     TreeToGraph.convert(topology.graph, technologies)
   end
 
+  # Public: Sets the list of technologies associated with the TestingGround.
+  def technologies=(techs)
+    case techs
+      when Hash   then super(TechnologyList.from_hash(techs))
+      when String then super(TechnologyList.load(techs))
+      else             super
+    end
+  end
+
   #######
   private
   #######
@@ -52,20 +61,15 @@ class TestingGround < ActiveRecord::Base
   # Asserts that, whenever a user has defined that a technology uses a
   # pre-existing technology, that the technology actually exists.
   def validate_technology_types
-    technologies.values.flatten.each do |data|
-      type    = data['type'.freeze]
-      profile = data['profile'.freeze]
-
-      if type && ! Technology.exists?(type)
-        errors.add(:technologies, "has an unknown technology type: #{ type }")
-      elsif profile
-        tech = Technology.find(type || 'generic')
-
-        unless tech.permitted_profile?(profile)
-          errors.add(:technologies,
-                     "may not use the #{ profile.inspect } profile " \
-                     "with a #{ type.inspect }")
-        end
+    technologies.each_tech do |tech|
+      if ! tech.exists?
+        errors.add(
+          :technologies, "has an unknown technology type: #{ tech.type }")
+      elsif tech.profile && ! tech.library.permitted_profile?(tech.profile)
+        errors.add(
+          :technologies,
+          "may not use the #{ tech.profile.inspect } profile " \
+          "with a #{ tech.type.inspect }")
       end
     end
   end

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe TreeToGraph do
-  let(:graph) { TreeToGraph.convert(tree, techs) }
+  let(:graph) { TreeToGraph.convert(tree, TechnologyList.from_hash(techs)) }
   let(:techs) { {} }
 
   context 'with nil' do

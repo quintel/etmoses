@@ -7,11 +7,24 @@ RSpec.describe TestingGround do
 
   describe 'technolgies' do
     context 'when the user sets no value' do
-      it 'is set to an empty hash prior to validation' do
-        tg = TestingGround.new
-        expect { tg.valid? }.to change { tg.technologies }.from(nil).to({})
+      it 'is set to a TechnologyList when initialized' do
+        expect(TestingGround.new.technologies).to be_a(TechnologyList)
       end
     end # when the user sets no value
+
+    context 'when the user sets a string value' do
+      let(:str)   { '{"lv1":[{"name":"Test"}]}' }
+      let(:techs) { TestingGround.new(technologies: str).technologies }
+
+      it 'sets the TechnologyList' do
+        expect(techs).to be_a(TechnologyList)
+      end
+
+      it 'sets the technologies' do
+        expect(techs['lv1']).to be_a(Array)
+        expect(techs['lv1'].first.name).to eq('Test')
+      end
+    end # when the user sets a string value
 
     context 'with an invalid owner node' do
       it 'is not valid' do

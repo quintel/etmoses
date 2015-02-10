@@ -24,4 +24,22 @@ module TestingGroundsHelper
 
     form.select(:topology_id, topologies)
   end
+
+  def topology_field_value(testing_ground)
+    if testing_ground.new_record? && testing_ground.topology.graph.blank?
+      Topology::DEFAULT_GRAPH
+    else
+      YAML.dump(testing_ground.topology.graph)
+    end
+  end
+
+  def technologies_field_value(testing_ground)
+    if testing_ground.new_record? && testing_ground.technologies.blank?
+      TestingGround::DEFAULT_TECHNOLOGIES
+    else
+      YAML.dump(Hash[testing_ground.technologies.map do |node, techs|
+        [node, techs.map { |t| t.to_h.compact.stringify_keys }]
+      end])
+    end
+  end
 end

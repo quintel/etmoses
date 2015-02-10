@@ -24,7 +24,7 @@ class TreeToGraph
   #   # => #<Turbine::Graph (5 nodes, 4 edges)>
   #
   # Returns a Turbine::Graph.
-  def self.convert(tree, techs = {})
+  def self.convert(tree, techs = TechnologyList.new)
     new(tree, techs).to_graph
   end
 
@@ -65,10 +65,10 @@ class TreeToGraph
 
     # Consumers and suppliers.
 
-    if (techs = techs(node.key)).any?
-      node.set(:load, techs.map do |tech|
+    if @techs[node.key].any?
+      node.set(:load, @techs[node.key].map do |tech|
         begin
-          Rational((tech[:load] || 0.0).to_s)
+          Rational((tech.load || 0.0).to_s)
         rescue ArgumentError
           nil
         end
@@ -80,12 +80,6 @@ class TreeToGraph
     # Children
 
     children.each { |c| build_node(c, node, graph) }
-  end
-
-  # Internal: Returns an array of hashes, each one containing details of
-  # technologies attached to the node.
-  def techs(node_key)
-    (@techs[node_key] || []).map(&:symbolize_keys)
   end
 
   # Internal: Determines if the given node attributes are sufficient to add a
