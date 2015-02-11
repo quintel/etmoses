@@ -3,8 +3,12 @@
   = @testing_ground.created_at.to_formatted_s(:long)
 
 #testing-ground
-  .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json) }
+  .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json, point: params[:point] || 0) }
     %span.loading Loading testing ground&hellip;
+  %form.point-changer
+    Point:
+    %input{ name: 'point', type: 'text', value: params[:point] || 0 }
+    %input{ type: 'submit', value: 'View' }
 
 #technologies
   - @testing_ground.technologies.each do |key, techs|

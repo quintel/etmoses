@@ -20,8 +20,10 @@ class TestingGround < ActiveRecord::Base
   # important attributes from the techologies hash into the topology.
   #
   # This should be moved to a presenter after the prototype stage.
-  def as_json(*)
-    graph = GraphToTree.convert(Calculator.calculate(to_graph))
+  def as_json(opts = {})
+    point = opts[:point] || 0
+    graph = GraphToTree.convert(Calculator.calculate(to_graph(point)))
+
     { graph: graph, technologies: technologies }
   end
 
@@ -29,8 +31,8 @@ class TestingGround < ActiveRecord::Base
   # defined in the topology.
   #
   # Returns a Turbine::Graph.
-  def to_graph
-    TreeToGraph.convert(topology.graph, technologies)
+  def to_graph(point = 0)
+    TreeToGraph.convert(topology.graph, technologies, point)
   end
 
   # Public: Sets the list of technologies associated with the TestingGround.

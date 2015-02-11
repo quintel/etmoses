@@ -59,6 +59,13 @@
   }
 }
 
+.point-changer {
+  input[type=text] {
+    height: 24px;
+    width: 50px;
+  }
+}
+
 .new_testing_ground, .edit_testing_ground {
   textarea {
     display: block;

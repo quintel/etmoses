@@ -24,8 +24,8 @@ class TreeToGraph
   #   # => #<Turbine::Graph (5 nodes, 4 edges)>
   #
   # Returns a Turbine::Graph.
-  def self.convert(tree, techs = TechnologyList.new)
-    new(tree, techs).to_graph
+  def self.convert(tree, techs = TechnologyList.new, point = 0)
+    new(tree, techs, point).to_graph
   end
 
   # Internal: Converts the tree and technologies into a Turbine::Graph.
@@ -37,9 +37,10 @@ class TreeToGraph
   private
   #######
 
-  def initialize(tree, techs)
+  def initialize(tree, techs, point = 0)
     @tree  = tree || {}
     @techs = techs
+    @point = point
   end
 
   # Internal: Creates a new graph using the tree and technologies hash given to
@@ -69,7 +70,7 @@ class TreeToGraph
       node.set(:load, @techs[node.key].map do |tech|
         begin
           if tech.profile
-            Rational(tech.profile_curve.get(0).to_s)
+            Rational(tech.profile_curve.get(@point).to_s)
           else
             Rational((tech.load || 0.0).to_s)
           end
