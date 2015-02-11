@@ -1,5 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+  config.cache_store = :memory_store, { size: 64.megabytes }
 
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
