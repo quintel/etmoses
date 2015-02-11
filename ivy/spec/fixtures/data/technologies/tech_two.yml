@@ -1,4 +1,4 @@
 ---
 profiles:
-  - "*_chp"
-  - total_demand
+  - one
+  - "t*"

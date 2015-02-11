@@ -25,4 +25,11 @@ class Technology
   def library
     Library::Technology.find(type.presence || 'generic')
   end
+
+  # Public: Returns the load profile Curve, if the :profile attribute is set.
+  #
+  # Returns a Merit::Curve.
+  def profile_curve
+    profile && library.profiles[profile]
+  end
 end # end

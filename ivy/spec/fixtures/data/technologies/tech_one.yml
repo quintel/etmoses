@@ -1,4 +1,4 @@
 ---
 profiles:
-  - agriculture_chp
-  - total_demand
+  - one
+  - two

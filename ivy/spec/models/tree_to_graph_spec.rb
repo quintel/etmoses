@@ -84,6 +84,14 @@ RSpec.describe TreeToGraph do
       end
     end
 
+    context 'and one technology uses a load profile' do
+      let(:techs) { { a: [{ load: 1.1 }, { profile: 'one' }] } }
+
+      it 'sets a load attribute' do
+        expect(graph.node(:a).get(:load)).to eq(Rational('3.1'))
+      end
+    end
+
     context 'and one technology has a negative load' do
       let(:techs) { { a: [{ load: 1.1 }, { load: -2.3 }] } }
 

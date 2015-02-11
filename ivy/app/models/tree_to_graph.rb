@@ -68,7 +68,11 @@ class TreeToGraph
     if @techs[node.key].any?
       node.set(:load, @techs[node.key].map do |tech|
         begin
-          Rational((tech.load || 0.0).to_s)
+          if tech.profile
+            Rational(tech.profile_curve.get(0).to_s)
+          else
+            Rational((tech.load || 0.0).to_s)
+          end
         rescue ArgumentError
           nil
         end

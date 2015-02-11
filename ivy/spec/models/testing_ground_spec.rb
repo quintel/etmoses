@@ -95,20 +95,32 @@ RSpec.describe TestingGround do
       it 'is valid' do
         expect(tg).to be_valid
       end
+
+      it 'may have a :load' do
+        tg.technologies['lv1'].first.load = 5.0
+        expect(tg).to be_valid
+      end
     end # with no load profile set
 
     context 'with a permitted load profile set' do
       let(:tg) do
         build(:testing_ground, technologies: {
           'lv1' => [{
-            'name' => 'No Type', 'type' => 'tech_one',
-            'profile' => 'agriculture_chp'
+            'name' => 'No Type', 'type' => 'tech_one', 'profile' => 'one'
           }]
         })
       end
 
       it 'is valid' do
         expect(tg).to be_valid
+      end
+
+      it 'may not have a :load' do
+        tg.technologies['lv1'].first.load = 5.0
+
+        expect(tg.errors_on(:technologies)).to include(
+          "may not have an explicitly set load, and also a load profile"
+        )
       end
     end # with a permitted load profile set
 
