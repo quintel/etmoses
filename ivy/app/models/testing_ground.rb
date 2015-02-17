@@ -22,9 +22,17 @@ class TestingGround < ActiveRecord::Base
   # This should be moved to a presenter after the prototype stage.
   def as_json(opts = {})
     point = opts[:point] || 0
-    graph = GraphToTree.convert(Calculator.calculate(to_graph(point)))
 
-    { graph: graph, technologies: technologies }
+    calculators = [
+      Calculation::TechnologyLoad,
+      Calculation::Flows
+    ]
+
+    graph = calculators.reduce(to_graph) do |graph, calculator|
+      calculator.call(graph, point)
+    end
+
+    { graph: GraphToTree.convert(graph), technologies: technologies }
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies

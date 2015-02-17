@@ -60,30 +60,9 @@ class TreeToGraph
     children = attrs.delete(:children) || []
     node     = graph.add(Turbine::Node.new(attrs.delete(:name), attrs))
 
-    # Parent connection.
+    node.set(:techs, @techs[node.key])
 
     parent.connect_to(node, :energy) if parent
-
-    # Consumers and suppliers.
-
-    if @techs[node.key].any?
-      node.set(:load, @techs[node.key].map do |tech|
-        begin
-          if tech.profile
-            Rational(tech.profile_curve.get(@point).to_s)
-          else
-            Rational((tech.load || 0.0).to_s)
-          end
-        rescue ArgumentError
-          nil
-        end
-      end.compact.reduce(:+))
-    elsif children.none?
-      node.set(:load, Rational('0.0'))
-    end
-
-    # Children
-
     children.each { |c| build_node(c, node, graph) }
   end
 

@@ -31,8 +31,8 @@ RSpec.describe TreeToGraph do
   context 'when a node has no children' do
     let(:tree) { { name: :a } }
 
-    it 'sets the load to zero' do
-      expect(graph.node(:a).get(:load)).to eq(Rational('0'))
+    it 'sets no technologies' do
+      expect(graph.node(:a).get(:techs)).to eq([])
     end
   end # when a node has no children
 
@@ -74,54 +74,11 @@ RSpec.describe TreeToGraph do
   end # with a parent and two children
 
   context 'when a node has two attached technologies' do
-    let(:tree) { { name: :a } }
+    let(:tree)  { { name: :a } }
+    let(:techs) { { a: [{ load: 1.1 }, { load: 2.3 }] } }
 
-    context 'and both technologies have a positive load' do
-      let(:techs) { { a: [{ load: 1.1 }, { load: 2.3 }] } }
-
-      it 'sets a load attribute' do
-        expect(graph.node(:a).get(:load)).to eq(Rational('3.4'))
-      end
-    end
-
-    context 'and one technology uses a load profile' do
-      let(:techs) { { a: [{ load: 1.1 }, { profile: 'one' }] } }
-
-      it 'sets a load attribute' do
-        expect(graph.node(:a).get(:load)).to eq(Rational('3.1'))
-      end
-    end
-
-    context 'and one technology has a negative load' do
-      let(:techs) { { a: [{ load: 1.1 }, { load: -2.3 }] } }
-
-      it 'sets a load attribute' do
-        expect(graph.node(:a).get(:load)).to eq(Rational('-1.2'))
-      end
-    end
-
-    context 'and one technology has an undefined load' do
-      let(:techs) { { a: [{ load: 1.1 }, {}] } }
-
-      it 'assumes the undefined load is zero' do
-        expect(graph.node(:a).get(:load)).to eq(Rational('1.1'))
-      end
-    end
-
-    context 'and a technology defines load as a numeric string' do
-      let(:techs) { { a: [{ load: 1.1 }, { load: '2.3' }] } }
-
-      it 'sets a load attribute' do
-        expect(graph.node(:a).get(:load)).to eq(Rational('3.4'))
-      end
-    end
-
-    context 'and a technology defines load as a non-numeric string' do
-      let(:techs) { { a: [{ load: 1.1 }, { load: 'nope' }] } }
-
-      it 'assumes the non-numeric load is zero' do
-        expect(graph.node(:a).get(:load)).to eq(Rational('1.1'))
-      end
+    it 'sets both technologies' do
+      expect(graph.node(:a).get(:techs).length).to eq(2)
     end
   end # when a node has two attached technologies
 end # describe TreeToGraph

@@ -1,0 +1,109 @@
+module Calculation
+  # Given
+  class TechnologyLoad
+    def self.call(graph, point)
+      new(graph, point).run
+    end
+
+    def initialize(graph, point)
+      @graph = graph
+      @point = point
+      @order = Merit::Order.new
+
+      @tech_nodes = graph.nodes.select { |node| node.get(:techs).any? }
+    end
+
+    def run
+      # Keep track of the merit-order-calculated loads for each technology so
+      # that we can show them to the user.
+      @tech_nodes.each { |node| node.set(:tech_loads, {}) }
+
+      add_participants!
+      @order.calculate
+      assign_loads!
+
+      @graph
+    end
+
+    #######
+    private
+    #######
+
+    # Steps
+    # -----
+
+    # Internal: Iterates through all the technologies defined in the graph, and
+    # adds each one to the merit order.
+    def add_participants!
+      @tech_nodes.each do |node|
+        mo_techs = node.get(:techs).select do |tech|
+          merit_order_tech?(tech)
+        end
+
+        # We add each merit order participant to the order, but keep track of
+        # each participant and its associated technology so that we can
+        # correctly set the loads later.
+        node.set(:mo_techs, mo_techs.map do |tech|
+          @order.add(participant_for(tech))
+        end)
+      end
+    end
+
+    # Internal: After the merit order has been run, assigns the technology load
+    # back to the node.
+    def assign_loads!
+      @tech_nodes.each do |node|
+        node.set(:load, node.get(:mo_techs).reduce(0.0) do |sum, participant|
+          # We use point zero, since we only calculated a single point.
+          amount = participant.load_curve.get(0)
+
+          # Producers need their load switching back to a negative.
+          sum + (participant.is_a?(Merit::Producer) ? -amount : amount)
+        end)
+      end
+    end
+
+    # Helpers
+    # -------
+
+    # Internal: Determines if the given technology should be included in the
+    # merit order calculation.
+    def merit_order_tech?(technology)
+      technology.profile || technology.capacity || technology.load
+    end
+
+    # Internal: Given a Technology, returns an appropriate Merit::Participant
+    # which may be used within the merit order.
+    def participant_for(technology)
+      if technology.capacity
+        # Dispatchable producer.
+        Merit::DispatchableProducer.new(
+          key:                      SecureRandom.uuid,
+          output_capacity_per_unit: technology.capacity,
+          number_of_units:          1.0,
+          availability:             1.0,
+          # Actual marginal costs need to be defined by the user, or read from
+          # ETEngine. This is pending.
+          marginal_costs:           1.0
+        ).tap { |p| p.load_curve = Merit::Curve.new([]) }
+      elsif technology.profile
+        # Could be a consumer or producer; we can't tell without inspecting the
+        # curve. We *can* do that when calculating a single point, but there are
+        # occasions where the answer is ambigous (what is a load of 0?).
+        #
+        # We take the one point we care about from the original curve, and use
+        # a new curve -- containing only that one point -- in the participant.
+        Merit::User.create(
+          key:        SecureRandom.uuid,
+          load_curve: Merit::Curve.new([technology.profile_curve.get(@point)])
+        )
+      else
+        # Consumer or a producer; again, we can't really be sure which.
+        Merit::User.create(
+          key:        SecureRandom.uuid,
+          load_curve: Merit::Curve.new([technology.load])
+        )
+      end
+    end
+  end # TechLoad
+end # Calculation

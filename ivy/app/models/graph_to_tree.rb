@@ -12,17 +12,9 @@ class GraphToTree
 
   # Internal: Converts a single Turbine::Node an a hash of attributes.
   def self.convert_node(node)
-    children = node.out_edges.map(&:to).to_a.map(&method(:convert_node))
-
-    props = node.properties.merge(
-      name:     node.key,
-      children: children
-    )
-
-    # Convert back from Rational.
-    props[:load] = props[:load].try(:to_f)
-
-    props
+    { name:     node.key,
+      children: node.out_edges.map(&:to).to_a.map(&method(:convert_node)),
+      load:     node.get(:load).try(:to_f) }
   end
 
   private_class_method :convert_node

@@ -1,10 +1,11 @@
 class Technology
   include Virtus.model
 
-  attribute :name,    String
-  attribute :type,    String, default: 'generic'
-  attribute :load,    Float
-  attribute :profile, String
+  attribute :name,     String
+  attribute :type,     String, default: 'generic'
+  attribute :load,     Float
+  attribute :profile,  String
+  attribute :capacity, Float
 
   # Public: Returns if the technology has been defined in the data/technologies
   # directory.
