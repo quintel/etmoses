@@ -19,7 +19,7 @@
           .inner
             %h6= tech.name
             %ul
-              - tech.attributes.except(:name).each do |akey, avalue|
+              - tech.attributes.except(:name).compact.each do |akey, avalue|
                 %li== #{ akey }: #{ avalue.inspect }
 
 = link_to '◄ All testing grounds', testing_grounds_path, class: 'button button-primary'
