@@ -1,0 +1,85 @@
+#!/usr/bin/env ruby
+
+require 'csv'
+require 'pathname'
+require 'fileutils'
+
+HEADER_CONVERTER = ->(string) {
+  string && string.downcase.gsub(/[^a-z0-9_\-]+/, '_').gsub(/\A_|_\Z/, '')
+}
+
+COMMA_NUMBER_CONVERTER = ->(string) {
+  if string && string.match(/\A\d+,\d+.*\Z/)
+    string.tr(',', '.').to_f
+  else
+    string
+  end
+}
+
+class Reporter
+  def initialize(output = StringIO.new)
+    @output = output
+  end
+
+  def report
+    @iterations = 0
+    yield self
+    say_progress!
+  end
+
+  def did(thing)
+    @iterations += 1
+    say_progress! if (@iterations % 5000).zero?
+  end
+
+  def say_progress!
+    @output.puts("Done #{ @iterations } points ")
+  end
+end
+
+class Splitter
+  IGNORES  = [ /\A\Z/, /timestep\Z/, /\Atime\Z/, /,,,,\Z/ ]
+
+  CSV_OPTS = { col_sep: ';', headers: true,
+               converters: [COMMA_NUMBER_CONVERTER, :float],
+               header_converters: [HEADER_CONVERTER] }
+
+  def initialize(source, destination, batch_size = 1)
+    @source      = source
+    @destination = destination
+    @open_files  = {}
+    @batch_size  = batch_size
+  end
+
+  def run(reporter)
+    CSV.foreach(@source, CSV_OPTS) do |row|
+      row.each do |key, value|
+        next if IGNORES.any? { |i| i.match(key) }
+        file(key).write("#{ value }\n")
+      end
+
+      reporter.did(row)
+    end
+  ensure
+    @open_files.values.each(&:close)
+  end
+
+  #######
+  private
+  #######
+
+  def file(name)
+    @open_files[name] ||= File.open(@destination.join("#{ name }.csv"), 'w')
+  end
+end
+
+out      = Pathname.new("split-#{ Time.now.strftime('%Y-%m-%d_%H-%M-%S') }")
+reporter = Reporter.new($stderr)
+
+FileUtils.mkdir(out)
+
+reporter.report do
+  Splitter.new(ARGV[0], out).run(reporter)
+end
+
+puts Pathname.glob(out.join('*.csv')).to_a

@@ -1,0 +1,126 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'fileutils'
+require 'slop'
+
+# Represents a source CSV file. Holds on to a copy of the values in case we're
+# converting it to multiple sample counts.
+class Source
+  attr_reader :path
+
+  def initialize(path)
+    @path = Pathname.new(path)
+  end
+
+  def values
+    @values ||= File.foreach(@path).map(&:to_f)
+  end
+
+  def length
+    values.length
+  end
+
+  def inspect
+    "#<Source path=#{ @path.to_s } (#{ length } values)>"
+  end
+end
+
+# Converts a source CSV curve to a smaller, sampled one. The maxiumum value from
+# each "chunk" is retained in the sampled curve, and all others are dropped.
+class Sampler
+  attr_reader :source, :samples
+
+  def initialize(source, samples)
+    @source  = source
+    @samples = samples
+  end
+
+  def sampled
+    output = []
+
+    unless @source.length % @samples == 0
+      fail "cannot translate #{ @source.length } into #{ @samples } samples"
+    end
+
+    chunk_size = @source.length / @samples
+    contents   = @source.values.dup
+
+    while (sample = contents.shift(chunk_size)).any?
+      output.push(Array(sample).max)
+    end
+
+    output
+  end
+end
+
+# Writes a sampled curve to disk.
+class Writer
+  def initialize(sampler, template)
+    @sampler  = sampler
+    @template = template
+  end
+
+  def filename
+    original = @sampler.source.path
+
+    @template % {
+      basename: original.basename(original.extname).to_s,
+      extname:  original.extname.to_s[1..-1],
+      samples:  @sampler.samples
+    }
+  end
+
+  def write_to(directory)
+    Pathname.new(directory).join(filename)
+      .write(@sampler.sampled.map(&:to_f).join("\n"))
+  end
+end
+
+# Setup ------------------------------------------------------------------------
+
+opts = Slop.parse do |o|
+  o.banner = "usage: sample [options] [<source files>] [<destination>]"
+  o.array   '-s', '--samples',  'number of samples in output', delimiter: ',', default: [8760]
+  o.boolean '-v', '--verbose',  'enables verbose mode',        default: false
+  o.string  '-t', '--template', 'output filename template',    default: '%{basename}@%{samples}.%{extname}'
+end
+
+if opts.arguments.length.zero?
+  puts opts
+  exit(1)
+elsif File.file?(opts.arguments.last)
+  fail "#{ opts.arguments.last } is a file; you forgot to include a " \
+       "destination directory"
+elsif opts.arguments.length == 1
+  # Read a list of files to be processed from STDIN.
+  files = STDIN.read.split("\n")
+else
+  # File list should be provided on the command-line otherwise.
+  files = opts.arguments[0...-1]
+end
+
+samples = opts[:samples].map(&:to_i)
+dest    = opts.arguments.last
+
+# If the user specified a directory as the source, sample all the CSV files
+# contained within.
+files = files.map do |file|
+  File.directory?(file) ? Pathname.glob("#{ file }/*.csv").to_a : file
+end.flatten
+
+# Lets do this thing! ----------------------------------------------------------
+
+FileUtils.mkdir_p(dest)
+
+files.each do |path|
+  source = Source.new(path)
+
+  samples.each do |count|
+    Writer.new(Sampler.new(source, count), opts[:template]).write_to(dest)
+  end
+
+  if opts[:verbose]
+    puts "Finished #{ source.path.basename }"
+  end
+end
