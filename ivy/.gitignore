@@ -17,3 +17,7 @@
 
 # Ignore temporary load curves.
 /data/curves/tmp_*.csv
+
+# Ignore split load profiles.
+/split-*
+/bin/profiles/split-*
