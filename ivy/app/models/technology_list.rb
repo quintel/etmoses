@@ -50,4 +50,11 @@ class TechnologyList
   def [](key)
     @list[key] || []
   end
+
+  # Public: Converts the list to a JSON representation.
+  def as_json(*)
+    each_with_object({}) do |(node, techs), data|
+      data[node] = techs.map(&:to_h)
+    end
+  end
 end # TechnologyList
