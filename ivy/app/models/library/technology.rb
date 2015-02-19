@@ -5,27 +5,31 @@ module Library
     attribute :key,      String
     attribute :profiles, Array[String]
 
-    # Public: A hash where each key is the name of a load profile, and each value
-    # the Merit::Curve containing the curve data.
-    #
-    # Returns a hash.
-    def profiles
-      Rails.cache.fetch("static.tech_profiles.#{ key }") do
-        paths = super.map do |pattern|
+    # Public: Given the name of a profile, returns that profile as Merit::Curve.
+    # If the profile may not be used by this technology, a
+    def profile(name)
+      if permitted_profile?(name)
+        Rails.cache.fetch("static.tech_profiles.#{ name }") do
+          Merit::Curve.load_file(profile_map[name])
+        end
+      end
+    end
+
+    # Public: Returns a list of profiles which may be used with this technology.
+    def profile_map
+      Rails.cache.fetch("static.permitted_profiles.#{ key }") do
+        expanded = profiles.map do |pattern|
           Pathname.glob(Ivy.data_dir.join("curves/#{ pattern }.csv"))
         end.flatten.compact.uniq
 
-        paths.each_with_object({}) do |filename, data|
-          key = filename.basename.to_s[0..-5]
-          data[key] = Merit::Curve.load_file(filename)
-        end
+        Hash[expanded.map { |file| [file.basename.to_s[0..-5], file] }]
       end
     end
 
     # Public: Returns if the given load profile key may be used with this
     # technology.
     def permitted_profile?(key)
-      profiles.key?(key)
+      profile_map.key?(key)
     end
 
     class << self

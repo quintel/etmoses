@@ -21,14 +21,14 @@ RSpec.describe Library::Technology do
 
   context 'when a technology has two permitted load profiles' do
     it 'returns two profiles' do
-      expect(Library::Technology.find('tech_one').profiles.keys.sort).
+      expect(Library::Technology.find('tech_one').profile_map.keys.sort).
         to eq(%w( one two ))
     end
   end # when a technology has two permitted load profiles
 
   context 'when a technology specified a load profile as a glob' do
     it 'returns all matching profiles' do
-      expect(Library::Technology.find('tech_two').profiles.keys.sort).
+      expect(Library::Technology.find('tech_two').profile_map.keys.sort).
         to eq(%w( one three two ))
     end
   end # when a technology specified a load profile as a glob

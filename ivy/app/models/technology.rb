@@ -31,6 +31,6 @@ class Technology
   #
   # Returns a Merit::Curve.
   def profile_curve
-    profile && library.profiles[profile]
+    profile && library.profile(profile)
   end
 end # end
