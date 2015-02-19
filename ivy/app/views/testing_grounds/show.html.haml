@@ -15,12 +15,12 @@
     .row
       %h5= key
       - techs.each do |tech|
-        .technology.three.columns{ "data-node" => key }
+        .technology.three.columns{ "data-node" => key, "data-tech" => tech.name }
           .inner
             %h6= tech.name
             %ul
-              - tech.attributes.except(:name).compact.each do |akey, avalue|
-                %li== #{ akey }: #{ avalue.inspect }
+              - tech.attributes.except(:name, :type).compact.each do |akey, avalue|
+                %li{ class: akey }== #{ akey }: #{ avalue.inspect }
 
 = link_to '◄ All testing grounds', testing_grounds_path, class: 'button button-primary'
 = link_to 'Edit', edit_testing_ground_url(@testing_ground), class: 'button'

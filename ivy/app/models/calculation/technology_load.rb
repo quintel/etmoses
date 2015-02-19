@@ -78,7 +78,7 @@ module Calculation
       if technology.capacity
         # Dispatchable producer.
         Merit::DispatchableProducer.new(
-          key:                      SecureRandom.uuid,
+          key:                      [technology.name, SecureRandom.uuid],
           output_capacity_per_unit: technology.capacity,
           number_of_units:          1.0,
           availability:             1.0,
@@ -94,13 +94,13 @@ module Calculation
         # We take the one point we care about from the original curve, and use
         # a new curve -- containing only that one point -- in the participant.
         Merit::User.create(
-          key:        SecureRandom.uuid,
+          key:        [technology.name, SecureRandom.uuid],
           load_curve: Merit::Curve.new([technology.profile_curve.get(@point)])
         )
       else
         # Consumer or a producer; again, we can't really be sure which.
         Merit::User.create(
-          key:        SecureRandom.uuid,
+          key:        [technology.name, SecureRandom.uuid],
           load_curve: Merit::Curve.new([technology.load])
         )
       end

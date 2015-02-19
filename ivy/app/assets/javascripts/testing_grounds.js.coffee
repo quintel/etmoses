@@ -90,6 +90,15 @@ showTopology = (url, element) ->
           data.name
       )
 
+    # Show technology loads.
+    for own node, techs of json.technologies
+      for tech in techs
+        element = $("#technologies [data-node='#{ node }'][data-tech='#{ tech.name }']")
+        console.log node, tech
+
+        unless $('.load', element).length
+          $('ul', element).append($("<li class='load quiet'></li>").text("load: #{ tech.load }"))
+
 createEditor = (textarea) ->
   id = textarea.attr('id')
 

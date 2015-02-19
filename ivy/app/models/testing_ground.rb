@@ -32,7 +32,7 @@ class TestingGround < ActiveRecord::Base
       calculator.call(graph, point)
     end
 
-    { graph: GraphToTree.convert(graph), technologies: technologies }
+    { graph: GraphToTree.convert(graph), technologies: technologies_json(graph) }
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies
@@ -41,6 +41,23 @@ class TestingGround < ActiveRecord::Base
   # Returns a Turbine::Graph.
   def to_graph(point = 0)
     TreeToGraph.convert(topology.graph, technologies, point)
+  end
+
+  # Public: Given a calculated graph, returns the technologies JSON, injecting
+  # the load of each technology into the appropriate hash.
+  #
+  # Returns a Hash.
+  def technologies_json(graph)
+    original = technologies.as_json
+
+    original.each do |key, techs|
+      (graph.node(key).get(:mo_techs) || []).each do |mo_tech|
+        tech = techs.detect { |t| t[:name] == mo_tech.key.first }
+        tech[:load] = mo_tech.load_curve.get(0)
+      end
+    end
+
+    original
   end
 
   # Public: Sets the list of technologies associated with the TestingGround.
