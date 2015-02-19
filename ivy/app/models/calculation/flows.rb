@@ -16,6 +16,10 @@ module Calculation
       visited = {}
       nodes   = graph.nodes.reject { |n| n.out_edges.any? }
 
+      # Every leaf node should have a load by now. If it doesn't, set the load
+      # to zero.
+      nodes.each { |node| node.set(:load, 0.0) unless node.get(:load) }
+
       while node = nodes.shift
         next if visited.key?(node)
 
