@@ -47,10 +47,15 @@ class Sampler
     contents   = @source.values.dup
 
     while (sample = contents.shift(chunk_size)).any?
-      # * sample.length makes the output energetically consistent with the
-      #   original curve
       # * 60 converts kWh to kW.
-      output.push(Array(sample).max * sample.length * 60)
+      # 
+      # This works because the original data is in minutes (hours / 60)
+      # and the values are in kWh.
+      # To kWh -> kW we need to divide every point through the time-step
+      # expressed in hours:
+      # value_new = value_old / (1 / 60)
+      #           = value_old * 60
+      output.push(Array(sample).max * 60.0)
     end
 
     output
