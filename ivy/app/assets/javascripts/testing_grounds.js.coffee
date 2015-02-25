@@ -80,24 +80,17 @@ showTopology = (url, element) ->
 
     # Add labels.
 
+    point = parseInt($('.point-changer input[name=point]').val(), 10) or 0
+
     node.append('text')
       .attr('dx', 0).attr('dy', 17) # Relative x/y coords.
       .attr('text-anchor', 'middle')
       .text((data) ->
-        if data.load?
-          "#{ data.name } (#{ data.load })"
+        if data.load?[point]
+          "#{ data.name } (#{ data.load[point] })"
         else
           data.name
       )
-
-    # Show technology loads.
-    for own node, techs of json.technologies
-      for tech in techs
-        element = $("#technologies [data-node='#{ node }'][data-tech='#{ tech.name }']")
-        console.log node, tech
-
-        unless $('.load', element).length
-          $('ul', element).append($("<li class='load quiet'></li>").text("load: #{ tech.load }"))
 
 createEditor = (textarea) ->
   id = textarea.attr('id')

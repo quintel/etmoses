@@ -58,7 +58,7 @@ class TreeToGraph
 
     attrs    = attrs.symbolize_keys
     children = attrs.delete(:children) || []
-    node     = graph.add(Turbine::Node.new(attrs.delete(:name), attrs))
+    node     = graph.add(Ivy::Node.new(attrs.delete(:name), attrs))
 
     node.set(:techs, @techs[node.key])
 

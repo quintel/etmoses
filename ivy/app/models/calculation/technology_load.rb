@@ -1,23 +1,22 @@
 module Calculation
   # Given
   class TechnologyLoad
-    def self.call(graph, point)
-      new(graph, point).run
+    def self.call(graph)
+      new(graph).run
     end
 
-    def initialize(graph, point)
+    def initialize(graph)
       @graph = graph
-      @point = point
       @order = Merit::Order.new
 
       @tech_nodes = graph.nodes.select { |node| node.get(:techs).any? }
+
+      @length = @tech_nodes.map { |n| n.get(:techs) }.flatten.map do |tech|
+        tech.profile ? tech.profile_curve.length : 1
+      end.max
     end
 
     def run
-      # Keep track of the merit-order-calculated loads for each technology so
-      # that we can show them to the user.
-      @tech_nodes.each { |node| node.set(:tech_loads, {}) }
-
       add_participants!
       @order.calculate
       assign_loads!
@@ -53,13 +52,15 @@ module Calculation
     # back to the node.
     def assign_loads!
       @tech_nodes.each do |node|
-        node.set(:load, node.get(:mo_techs).reduce(0.0) do |sum, participant|
-          # We use point zero, since we only calculated a single point.
-          amount = participant.load_curve.get(0)
+        @length.times do |point|
+          node.set_load(point, node.get(:mo_techs).reduce(0.0) do |sum, parti|
+            # We use point zero, since we only calculated a single point.
+            amount = parti.load_curve.get(point)
 
-          # Producers need their load switching back to a negative.
-          sum + (participant.is_a?(Merit::Producer) ? -amount : amount)
-        end)
+            # Producers need their load switching back to a negative.
+            sum + (parti.is_a?(Merit::Producer) ? -amount : amount)
+          end)
+        end
       end
     end
 
@@ -95,13 +96,13 @@ module Calculation
         # a new curve -- containing only that one point -- in the participant.
         Merit::User.create(
           key:        [technology.name, SecureRandom.uuid],
-          load_curve: Merit::Curve.new([technology.profile_curve.get(@point)])
+          load_curve: technology.profile_curve
         )
       else
         # Consumer or a producer; again, we can't really be sure which.
         Merit::User.create(
           key:        [technology.name, SecureRandom.uuid],
-          load_curve: Merit::Curve.new([technology.load])
+          load_curve: Merit::Curve.new([technology.load] * @length)
         )
       end
     end

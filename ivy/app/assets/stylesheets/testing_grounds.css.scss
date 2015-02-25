@@ -39,15 +39,8 @@
     cursor: default;
     font: 12px sans-serif;
 
-    &.technology:hover {
+    &:hover rect {
       cursor: pointer;
-    }
-
-    &.technology rect {
-      fill: #eee;
-    }
-
-    &.technology:hover rect, &.common rect {
       stroke: #555;
     }
   }

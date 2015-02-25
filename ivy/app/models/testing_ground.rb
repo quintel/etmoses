@@ -29,10 +29,10 @@ class TestingGround < ActiveRecord::Base
     ]
 
     graph = calculators.reduce(to_graph) do |graph, calculator|
-      calculator.call(graph, point)
+      calculator.call(graph)
     end
 
-    { graph: GraphToTree.convert(graph), technologies: technologies_json(graph) }
+    { graph: GraphToTree.convert(graph), technologies: technologies }
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies

@@ -14,7 +14,7 @@ class GraphToTree
   def self.convert_node(node)
     { name:     node.key,
       children: node.out_edges.map(&:to).to_a.map(&method(:convert_node)),
-      load:     node.get(:load).try(:to_f) }
+      load:     node.get(:load).to_a }
   end
 
   private_class_method :convert_node
