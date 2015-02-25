@@ -39,9 +39,17 @@
     cursor: default;
     font: 12px sans-serif;
 
-    &:hover rect {
+    &:hover {
       cursor: pointer;
+    }
+
+    &:hover rect {
       stroke: #555;
+    }
+
+    &.focused rect {
+      fill: #add1ec;
+      stroke: #3299dc;
     }
   }
 
@@ -56,6 +64,28 @@
   input[type=text] {
     height: 24px;
     width: 50px;
+  }
+}
+
+.node-info {
+  h5 {
+    margin-bottom: 0;
+  }
+
+  .load-graph svg {
+    height: 500px;
+    margin-bottom: 25px;
+  }
+}
+
+.nvtooltip h3 {
+  font-size: 1.5rem;
+  letter-spacing: 0;
+}
+
+@media (min-width: 550px) {
+  .nvtooltip h3 {
+    font-size: 1.5rem;
   }
 }
 
@@ -88,6 +118,14 @@
   }
 }
 
+#technologies .row {
+  display: none;
+
+  &.focused {
+    display: block;
+  }
+}
+
 #technologies .technology {
   background: #eee;
   border-radius: 5px;
@@ -96,18 +134,6 @@
 
   .inner {
     padding: 5px 10px;
-  }
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  &.common {
-    border: 2px solid #999;
-
-    .inner {
-      padding: 3px 8px;
-    }
   }
 
   .quiet {

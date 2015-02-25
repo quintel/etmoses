@@ -10,12 +10,15 @@
     %input{ name: 'point', type: 'text', value: params[:point] || 0 }
     %input{ type: 'submit', value: 'View' }
 
+.node-info
+  %h5
+  .load-graph
+
 #technologies
   - @testing_ground.technologies.each do |key, techs|
-    .row
-      %h5= key
+    .row{ "data-node" => key }
       - techs.each do |tech|
-        .technology.three.columns{ "data-node" => key, "data-tech" => tech.name }
+        .technology.three.columns{ "data-tech" => tech.name }
           .inner
             %h6= tech.name
             %ul

@@ -1,14 +1,14 @@
-highlightNode = (element, key) ->
-  highlightNone(element)
-  d3.select(element).selectAll('g.node').classed('common', (other) -> other.name is key)
+focusNode = (element, key) ->
+  focusNone(element)
+  d3.select(element).selectAll('g.node').classed('focused', (other) -> other.name is key)
 
-  $('#technologies .technology').each (idx, element) ->
+  $('#technologies .row').each (idx, element) ->
     if $(element).data('node') is key
-      $(element).addClass('common')
+      $(element).addClass('focused')
 
-highlightNone = (element, key) ->
-  d3.select(element).selectAll('g.node').classed(common: false)
-  $('#technologies .technology').removeClass('common')
+focusNone = (element, key) ->
+  d3.select(element).selectAll('g.node').classed(focused: false)
+  $('#technologies .row').removeClass('focused')
 
 showTopology = (url, element) ->
   [width, height] = [920, 400]
@@ -68,8 +68,19 @@ showTopology = (url, element) ->
       .classed('node', true)
       .attr('transform', (data) -> "translate(#{ data.x }, #{ data.y })")
 
-    node.on('mouseover', (d) -> highlightNode(element, d.name))
-    node.on('mouseout', -> highlightNone(element))
+    node.on 'click', (data) ->
+      infoEl = $('.node-info')
+      infoEl.children('h5').text(data.name)
+
+      $('.load-graph').empty().append('<svg></svg>')
+
+      focusNode(element, data.name)
+
+      (new LoadChart([{
+        key:    data.name,
+        area:   true,
+        values: downsampleCurve(data.load, 365)
+      }])).render('.load-graph svg')
 
     # Draw a rectangle around each node.
 
@@ -91,6 +102,55 @@ showTopology = (url, element) ->
         else
           data.name
       )
+
+# Creates a line chart to represent the load of a network component over time.
+# Uses nvd3 in order to create a "focus" area so the user may zoom on and view
+# the curve in greater detail.
+class LoadChart
+  constructor: (@data) ->
+    # pass
+
+  render: (intoSelector) =>
+    self = this
+
+    nv.addGraph =>
+      d3.select(intoSelector).datum(@data).call(@chart())
+
+  chart: ->
+    chart = nv.models.lineWithFocusChart()
+
+    chart.options({
+      duration:           0
+      transitionDuration: 0
+      interpolate:        'linear'
+      forceY:             [0.0]
+    })
+
+    chart.useVoronoi(false)
+    chart.lines.duration(0)
+    chart.lines2.duration(0)
+    chart.lines2.forceY([0.0])
+
+    chart.xAxis.tickFormat(d3.format(',f'))
+    chart.x2Axis.tickFormat(d3.format(',f'))
+    chart.yAxis.tickFormat(d3.format(',.2f'))
+    chart.y2Axis.tickFormat(d3.format(',.2f'))
+
+    chart
+
+# Public: Given an array of values, downsamples the array to the given
+# +outLength+. The array is split into "chunks", and the maximum value of each
+# chunk is selected.
+#
+# For example:
+#
+#   downsampleCurve([2, 7, 4, 5, 2, 9], 2) # => [7, 9]
+downsampleCurve = (curve, outLength) ->
+  curveLength = curve.length
+  chunkLength = Math.floor(curveLength / outLength) or 1
+
+  for startIndex in [0...curveLength] by chunkLength
+    { x: startIndex, y: d3.max(curve[startIndex...(startIndex + chunkLength)]) }
 
 createEditor = (textarea) ->
   id = textarea.attr('id')
@@ -116,11 +176,6 @@ $(document).on "page:change", ->
   $('.testing-ground-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
       svg = showTopology($(viewEl).data('url'), viewEl)
-
-      $('#technologies .technology').hover(
-        ((event) -> highlightNode(viewEl, $(event.currentTarget).data('node'))),
-        ((event) -> highlightNone(viewEl))
-      )
 
   # Set up the network editors.
 
