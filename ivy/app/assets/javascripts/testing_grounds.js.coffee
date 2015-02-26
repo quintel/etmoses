@@ -79,11 +79,25 @@ showTopology = (url, element) ->
 
       focusNode(element, data.name)
 
-      (new LoadChart([{
+      values = downsampleCurve(data.load, 365)
+
+      chartData = [{
         key:    data.name,
         area:   true,
-        values: downsampleCurve(data.load, 365)
-      }])).render('.load-graph svg')
+        values: values
+      }]
+
+      if data.capacity
+        capacityValues = for point in values
+          { x: point.x, y: data.capacity }
+
+        chartData.push({
+          key:   'Capacity',
+          color: 'darkred',
+          values: capacityValues
+        })
+
+      (new LoadChart(chartData)).render('.load-graph svg')
 
     # Draw a rectangle around each node.
 
