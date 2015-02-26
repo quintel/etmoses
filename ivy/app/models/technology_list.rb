@@ -32,6 +32,22 @@ class TechnologyList
     JSON.dump(Hash[list.to_h.map { |key, techs| [key, techs.map(&:to_h)] }])
   end
 
+  # Public: Given a CSV file as a string, creates a TechnologyList.
+  #
+  # Parses the contents of the CSV into a new TechnologyList. The file is
+  # expected to contain a header row naming each column, with a mandatory
+  # "connection" column describing to which node the technology is attached.
+  #
+  # Returns a TechnologyList.
+  def self.from_csv(csv)
+    data = CSV.parse(csv, headers: true).each_with_object({}) do |row, data|
+      data[row['connection']] ||= []
+      data[row['connection']].push(row.to_h.except('connection'))
+    end
+
+    TechnologyList.from_hash(data)
+  end
+
   # Returns the raw hash containing each technology keyed on it's owner node.
   attr_reader :list
 

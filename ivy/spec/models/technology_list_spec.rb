@@ -38,6 +38,39 @@ RSpec.describe TechnologyList do
     end
   end # to_csv
 
+  describe '.from_csv with 2x2 connections' do
+    let(:csv)  { TechnologyList.load(JSON.dump(hash)).to_csv }
+    let(:list) { TechnologyList.from_csv(csv) }
+
+    it 'returns a TechnologyList' do
+      expect(list).to be_a(TechnologyList)
+    end
+
+    it 'adds each connection' do
+      expect(list.keys).to eq(%w( lv1 lv2 ))
+    end
+
+    it 'adds technologies to the first connection' do
+      expect(list['lv1'].length).to eq(2)
+
+      expect(list['lv1'][0].name).to eq('One')
+      expect(list['lv1'][0].load).to eq(1.2)
+
+      expect(list['lv1'][1].name).to eq('Two')
+      expect(list['lv1'][1].load).to eq(-0.3)
+    end
+
+    it 'adds technologies to the second connection' do
+      expect(list['lv2'].length).to eq(2)
+
+      expect(list['lv2'][0].name).to eq('Three')
+      expect(list['lv2'][0].load).to eq(3.2)
+
+      expect(list['lv2'][1].name).to eq('Four')
+      expect(list['lv2'][1].load).to eq(0.1)
+    end
+  end # .from_csv
+
   describe '.load' do
     it 'returns an empty list when given nil' do
       list = TechnologyList.load(nil)
