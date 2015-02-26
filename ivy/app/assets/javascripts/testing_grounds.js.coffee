@@ -66,6 +66,9 @@ showTopology = (url, element) ->
       .data(nodes)
       .enter().append('g')
       .classed('node', true)
+      .classed('exceedance', (data) ->
+        data.capacity && d3.max(data.load) > data.capacity
+      )
       .attr('transform', (data) -> "translate(#{ data.x }, #{ data.y })")
 
     node.on 'click', (data) ->

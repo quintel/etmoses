@@ -32,7 +32,6 @@
     fill: white;
     stroke: #ccc;
     stroke-width: 1.5px;
-    border-top: 1px solid black;
   }
 
   .node {
@@ -50,6 +49,17 @@
     &.focused rect {
       fill: #add1ec;
       stroke: #3299dc;
+    }
+  }
+
+  .node.exceedance {
+    rect {
+      fill: #ecadad;
+      stroke: #e45a53;
+    }
+
+    &:hover rect {
+      stroke: #8b4d4a
     }
   }
 
