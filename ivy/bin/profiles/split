@@ -55,7 +55,7 @@ class Splitter
     CSV.foreach(@source, CSV_OPTS) do |row|
       row.each do |key, value|
         next if IGNORES.any? { |i| i.match(key) }
-        file(key).write("#{ value }\n")
+        file(key).write("#{ value }\n") if value
       end
 
       reporter.did(row)
