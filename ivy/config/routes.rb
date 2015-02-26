@@ -58,6 +58,10 @@ Rails.application.routes.draw do
       get  'import'
       post 'import', to: :perform_import
     end
+
+    member do
+      get 'technologies'
+    end
   end
 
   root to: redirect('/testing_grounds')

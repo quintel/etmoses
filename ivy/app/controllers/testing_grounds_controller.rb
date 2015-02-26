@@ -1,5 +1,6 @@
 class TestingGroundsController < ApplicationController
   respond_to :html, :json
+  respond_to :csv, only: :technologies
 
   # GET /topologies
   def index
@@ -56,6 +57,11 @@ class TestingGroundsController < ApplicationController
     else
       raise ex
     end
+  end
+
+  # GET /testing_grounds/:id/technologies.csv
+  def technologies
+    respond_with(TestingGround.find(params[:id]).technologies)
   end
 
   # GET /topologies/:id/edit

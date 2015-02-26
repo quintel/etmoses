@@ -27,3 +27,4 @@
 
 = link_to '◄ All testing grounds', testing_grounds_path, class: 'button button-primary'
 = link_to 'Edit', edit_testing_ground_url(@testing_ground), class: 'button'
+= link_to 'Download Tech. CSV', technologies_testing_ground_url(@testing_ground, format: :csv), class: 'button'
