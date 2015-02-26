@@ -15,6 +15,29 @@ RSpec.describe TechnologyList do
       load: 0.1
   YML
 
+  describe '#to_csv' do
+    let(:csv)    { TechnologyList.load(JSON.dump(hash)).to_csv }
+    let(:parsed) { CSV.parse(csv, headers: true) }
+
+    it 'includes headers' do
+      expect(csv.lines.first).to include('connection')
+    end
+
+    it 'includes technologies' do
+      expect(parsed.detect { |row| row['name'] == 'One' }).to be
+      expect(parsed.detect { |row| row['name'] == 'Two' }).to be
+      expect(parsed.detect { |row| row['name'] == 'Three' }).to be
+      expect(parsed.detect { |row| row['name'] == 'Four' }).to be
+    end
+
+    it 'includes technology attributes' do
+      tech = parsed.detect { |row| row['name'] == 'Two' }
+
+      expect(tech['connection']).to eq('lv1')
+      expect(tech['load']).to eq('-0.3')
+    end
+  end # to_csv
+
   describe '.load' do
     it 'returns an empty list when given nil' do
       list = TechnologyList.load(nil)

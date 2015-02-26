@@ -57,4 +57,18 @@ class TechnologyList
       data[node] = techs.map(&:to_h)
     end
   end
+
+  # Public: Converts the technology list to a CSV file.
+  def to_csv
+    attributes = Technology.attribute_set.map(&:name)
+    options    = { headers: [:connection, *attributes], write_headers: true }
+
+    CSV.generate(options) do |csv|
+      each do |connection, technologies|
+        technologies.each do |technology|
+          csv << [connection, *technology.attributes.values_at(*attributes)]
+        end
+      end
+    end
+  end
 end # TechnologyList
