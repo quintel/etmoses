@@ -69,6 +69,12 @@ class TestingGround < ActiveRecord::Base
     end
   end
 
+  # Public: Set the technologies using an imported CSV file.
+  def technologies_csv=(csv)
+    csv = csv.read if csv.respond_to?(:read)
+    self.technologies = TechnologyList.from_csv(csv)
+  end
+
   #######
   private
   #######

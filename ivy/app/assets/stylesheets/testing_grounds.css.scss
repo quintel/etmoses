@@ -126,6 +126,26 @@
     width: 800px;
     margin: 0 0 2.5rem;
   }
+
+  .tech-choice {
+    label {
+      display: inline-block;
+      font-weight: normal;
+      margin-right: 10px;
+      font-size: 13px;
+
+      input {
+        margin-top: 0px;
+        margin-right: 2px;
+        vertical-align: text-top;
+      }
+    }
+  }
+
+  #testing_ground_technologies_csv {
+    display: none;
+    font-size: 12px;
+  }
 }
 
 #technologies .row {

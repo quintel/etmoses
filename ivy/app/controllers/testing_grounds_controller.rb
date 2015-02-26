@@ -83,9 +83,15 @@ class TestingGroundsController < ApplicationController
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:technologies, { topology_attributes: :graph }])
+      .permit([:technologies, :technologies_csv,
+               { topology_attributes: :graph }])
 
-    yamlize_attribute!(tg_params, :technologies)
+    if tg_params[:technologies_csv]
+      tg_params.delete(:technologies)
+    else
+      yamlize_attribute!(tg_params, :technologies)
+    end
+
     yamlize_attribute!(tg_params[:topology_attributes], :graph)
 
     tg_params

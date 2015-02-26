@@ -201,3 +201,13 @@ $(document).on "page:change", ->
 
     if textarea.length and ! textarea.data('editor')
       createEditor(textarea)
+
+  $('#js_technologies_as_yaml, #js_technologies_as_csv').click (event) ->
+    editor = $('#testing_ground_technologies_editor').parent()
+
+    if $(event.currentTarget).is('#js_technologies_as_yaml')
+      $('#testing_ground_technologies_csv').hide()
+      editor.show()
+    else
+      $('#testing_ground_technologies_csv').show()
+      editor.hide()
