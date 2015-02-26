@@ -8,9 +8,9 @@ class Topology < ActiveRecord::Base
   # Traverses each node in the graph, yielding it's data.
   #
   # Returns nothing.
-  def each_node(nodes = [graph])
+  def each_node(nodes = [graph], &block)
     nodes.map(&:symbolize_keys).each do |node|
-      yield node
+      block.call(node)
       each_node(node[:children], &block) if node[:children]
     end
   end
