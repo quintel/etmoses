@@ -32,10 +32,8 @@ gem 'spring',        group: :development
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use unicorn as the app server
-# gem 'unicorn'
+gem 'puma'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
@@ -49,6 +47,11 @@ end
 group :development do
   gem 'guard'
   gem 'guard-rspec'
+
+  gem 'capistrano-rbenv',    '~> 2.0',   require: false
+  gem 'capistrano-rails',    '~> 1.1',   require: false
+  gem 'capistrano-bundler',  '~> 1.1',   require: false
+  gem 'capistrano3-unicorn', '~> 0.2',   require: false
 end
 
 # Application Gems.
