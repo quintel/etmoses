@@ -47,8 +47,5 @@ namespace :deploy do
     invoke 'unicorn:restart'
   end
 
-  after  'bundler:install',   'deploy:app_config'
-  before 'deploy:publishing', 'deploy:etsource'
-
   after :publishing, :restart
 end
