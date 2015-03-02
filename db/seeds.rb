@@ -52,4 +52,8 @@ technologies = <<-YML
   load: 8.2
 YML
 
-Topology.create!(graph: YAML.load(graph), technologies: YAML.load(technologies))
+
+TestingGround.create!(
+  topology:     Topology.create!(graph: YAML.load(graph)),
+  technologies: YAML.load(technologies)
+)
