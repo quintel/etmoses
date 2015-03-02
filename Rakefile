@@ -1,17 +1,6 @@
-# Console --------------------------------------------------------------------
+# Add your own tasks in files placed in lib/tasks ending in .rake,
+# for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
-namespace :console do
-  task :run do
-    command = system("which pry > /dev/null 2>&1") ? 'pry' : 'irb'
-    exec "#{ command } -I./lib -r./lib/etloader.rb"
-  end
+require File.expand_path('../config/application', __FILE__)
 
-  desc 'Open a pry or irb session with a stub graph on `ETLoader.stub`'
-  task :stub do
-    command = system("which pry > /dev/null 2>&1") ? 'pry' : 'irb'
-    exec "#{ command } -I./lib -r./lib/etloader.rb -r./examples/simple.rb"
-  end
-end
-
-desc 'Open a pry or irb session preloaded with ETLoader'
-task console: ['console:run']
+Rails.application.load_tasks
