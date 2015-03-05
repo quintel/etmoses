@@ -233,29 +233,21 @@ d3.json(url, function(error, treeData) {
             .attr('r', 0)
 
         nodeEnter.append('text')
-            .attr('x', function(d) {
-                return d.children || d._children ? -10 : 10;
-            })
+            .attr('x', function(d) { return d === root ? -10 : 10; })
             .attr('dy', '.38em')
             .attr('class', 'nodeText')
+            .text(function(d) { return d.name; })
+            .style('fill-opacity', 0)
             .attr('text-anchor', function(d) {
-                return d.children || d._children ? 'end' : 'start';
-            })
-            .text(function(d) {
-                return d.name;
-            })
-            .style('fill-opacity', 0);
+                return d === root ? 'end' : 'start';
+            });
 
         // Update the text to reflect whether node has children or not.
         node.select('text')
-            .attr('x', function(d) {
-                return d.children || d._children ? -10 : 10;
-            })
+            .attr('x', function(d) { return d === root ? -10 : 10; })
+            .text(function(d) { return d.name; })
             .attr('text-anchor', function(d) {
-                return d.children || d._children ? 'end' : 'start';
-            })
-            .text(function(d) {
-                return d.name;
+                return d === root ? 'end' : 'start';
             });
 
         // Change the circle fill depending on whether it has children and is collapsed
