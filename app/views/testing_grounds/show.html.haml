@@ -4,7 +4,12 @@
 
 #testing-ground
   .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json, point: params[:point] || 0) }
-    %span.loading Loading testing ground&hellip;
+    %span.loading
+      %h5
+        %span.main Calculating your testing ground&hellip;
+      %span.more
+        Large testing grounds may take up to 30 seconds to display. Please be
+        patient, and don't hit refresh!
   %form.point-changer
     Point:
     %input{ name: 'point', type: 'text', value: params[:point] || 0 }
