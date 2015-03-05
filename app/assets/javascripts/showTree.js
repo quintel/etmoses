@@ -208,7 +208,7 @@ d3.json(url, function(error, treeData) {
         node = svgGroup.selectAll('g.node')
             .data(nodes, function(d) { return d.id || (d.id = ++nodeIds); });
 
-        node.classed('collapsed', function(d) { return d._children });
+        node.classed('collapsed', function(d) { return d._children; });
 
         // Enter any new nodes at the parent's previous position.
         nodeEnter = node.enter().append('g')
@@ -217,6 +217,12 @@ d3.json(url, function(error, treeData) {
             .classed('exceedance', function(d) {
               return d.capacity && d3.max(d.load) > d.capacity
             })
+            .classed('collapsed', function(d) {
+                // We have to run the "collapsed" function again (it is already
+                // defined above), as the above version does not run the first
+                // time the update() function is called.
+                return d._children;
+            })
             .attr('transform', function(d) {
                 return 'translate(' + source.y0 + ',' + source.x0 + ')';
             })
@@ -224,7 +230,6 @@ d3.json(url, function(error, treeData) {
 
         nodeEnter.append('circle')
             .attr('class', 'nodeCircle')
-            .classed('collapsed', function(d) { return d._children })
             .attr('r', 0)
 
         nodeEnter.append('text')
@@ -254,9 +259,7 @@ d3.json(url, function(error, treeData) {
             });
 
         // Change the circle fill depending on whether it has children and is collapsed
-        node.select('circle.nodeCircle')
-            .attr('r', 7.5)
-            .classed('collapsed', function(d) { return d._children });
+        node.select('circle.nodeCircle').attr('r', 7.5);
 
         // Transition nodes to their new position.
         nodeUpdate = node.transition()
@@ -266,8 +269,7 @@ d3.json(url, function(error, treeData) {
             });
 
         // Fade the text in
-        nodeUpdate.select('text')
-            .style('fill-opacity', 1);
+        nodeUpdate.select('text').style('fill-opacity', 1);
 
         // Transition exiting nodes to the parent's new position.
         nodeExit = node.exit().transition()
