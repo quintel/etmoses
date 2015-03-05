@@ -36,14 +36,7 @@ class TestingGroundsController < ApplicationController
 
   # GET /topologies/:id
   def show
-    @testing_ground = TestingGround.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: @testing_ground.as_json(point: params[:point].try(:to_i))
-      end
-    end
+    respond_with(@testing_ground = TestingGround.find(params[:id]))
   rescue StandardError => ex
     if request.format.json?
       result = { error: 'Sorry, your testing ground could not be calculated' }

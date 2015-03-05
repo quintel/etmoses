@@ -20,9 +20,7 @@ class TestingGround < ActiveRecord::Base
   # important attributes from the techologies hash into the topology.
   #
   # This should be moved to a presenter after the prototype stage.
-  def as_json(opts = {})
-    point = opts[:point] || 0
-
+  def as_json(*)
     calculators = [
       Calculation::TechnologyLoad,
       Calculation::Flows
