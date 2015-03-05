@@ -10,115 +10,161 @@ focusNone = (element, key) ->
   d3.select(element).selectAll('g.node').classed(focused: false)
   $('#technologies .row').removeClass('focused')
 
-showTopology = (url, element) ->
-  [width, height] = [920, 400]
+# Creates the tree diagram. An experimental, top-down version of the diagram
+# which lacks pan-and-zoom.
+showTopology = (jsonURL, container) ->
+  margin = top: 20, right: 20, bottom: 20, left: 20
+  width  = 958 - margin.right - margin.left
+  height = 800 - margin.top - margin.bottom
 
-  d3.json url, (error, json) ->
-    $('.loading', element).detach()
+  i = 0
+  duration = 0
+  root = null
+  ease = 'cubic-out'
 
-    if error
-      errData = JSON.parse(error.responseText)
-      errEl   = $('<div class="error"></div>')
+  tree = d3.layout.tree().size([width, height])
+  diagonal = d3.svg.diagonal().projection(({x, y}) -> [x, y])
 
-      errEl.append($('<span class="message"></span>').text(errData['error']))
+  innerWidth  = width + margin.right + margin.left
+  innerHeight = height + margin.top + margin.bottom
 
-      if errData.hasOwnProperty('message')
-        errEl.append($('<pre class="detail"></pre>').text(errData['message']))
+  # Draw the diagram area.
+  svg = d3.select(container)
+    .append('svg')
+      # .attr('width', width + margin.right + margin.left)
+      # .attr('height', height + margin.top + margin.bottom)
+      .attr('viewBox', "0 0 #{innerWidth} #{innerHeight}")
+      .attr('preserveAspectRatio', 'xMidYMid meet')
+      .attr('pointer-events', 'all')
+    .append('g')
+      .attr('transform', "translate(#{margin.left}, #{margin.top})")
 
-      if errData.hasOwnProperty('backtrace')
-        errEl.append($('<pre class="backtrace"></pre>').html(errData['backtrace'].join('<br>')))
+  $.getJSON(jsonURL).success (json) ->
+    root    = json.graph
+    root.x0 = 0
+    root.y0 = width / 2
 
-      $(element).append(errEl)
+    collapse = (node) ->
+      if node.children and node.children.length
+        node._children = node.children
+        node._children.forEach(collapse)
+        node.children = null
+      else
+        node.children = null
 
-      return false
+    root.children.forEach(collapse)
+    update(root)
 
-    tree     = d3.layout.tree().size([width, height - 40])
-    diagonal = d3.svg.diagonal().projection((d) -> [d.x, d.y])
-    root     = json.graph
+    # Initial draw is instant (no transision); future changes should happen
+    # smoothly.
+    duration = 250
 
-    # Stop the top level from being too far separated from each other, leading
-    # to very wide diagrams.
-    tree.separation (a, b) -> 1
-
-    svg = d3.select(element)
-      .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-      .append('g')
-        .attr("transform", "translate(0,5)")
-
-    nodes = tree.nodes(root)
+  update = (source) ->
+    # Compute the new tree layout.
+    nodes = tree.nodes(root).reverse()
     links = tree.links(nodes)
 
-    # Draw links.
+    # Normalize for fixed-depth.
+    nodes.forEach (node) ->
+      node.y = node.depth * 150
 
-    link = svg
-      .selectAll('path.link')
-        .data(links)
-      .enter().append('path')
-        .attr('class', 'link')
-        .attr('d', diagonal)
+    # Update the nodes...
+    node = svg.selectAll('g.node').data(nodes, (node) -> node.id or= i++)
 
-    # Draw nodes.
+    # Enter any nodes at the parent's previous position.
+    nodeEnter = node.enter().append('g')
+      .attr('class', 'node')
+      .attr('transform', (node) -> "translate(#{source.x0},#{source.y0})")
+      .on('click', click)
 
-    node = svg
-      .selectAll('g.node')
-      .data(nodes)
-      .enter().append('g')
-      .classed('node', true)
-      .classed('exceedance', (data) ->
-        data.capacity && d3.max(data.load) > data.capacity
+    nodeEnter.append('circle')
+      .attr('r', 1e-6)
+      .style('fill', (node) -> if node._children then 'lightsteelblue' else '#fff')
+
+    nodeEnter.append('text')
+      .style('fill-opacity', 1e-6)
+      .style('font-weight', 'bold')
+      .style('fill', '#444')
+      .attr('x', -13)
+      .attr('dy', '.38em')
+      .text((node) -> node.name)
+      .attr('text-anchor', (node) -> 'end')
+
+    nodeEnter.append('text')
+      .style('fill-opacity', 1e-6)
+      .attr('fill', '#888')
+      .attr('x', 13)
+      .attr('dy', '.43em')
+      .attr('text-anchor', (node) -> 'start')
+      .text((node) ->
+        if node.load?[0] then Math.round(node.load?[0] * 100) / 100 else '')
+
+    # Transition nodes to their new position.
+    nodeUpdate = node.transition()
+      .duration(duration).ease(ease)
+      .attr('transform', (node) -> "translate(#{node.x},#{node.y})")
+
+    nodeUpdate.select('circle')
+      .attr('r', 7.5)
+      .attr('fill-opacity', 1)
+      .attr('stroke-opacity', 1)
+      .style('fill', (node) ->
+        if node._children then 'lightsteelblue' else '#fff')
+
+    nodeUpdate.selectAll('text').style('fill-opacity', 1)
+
+    # Transition existing nodes to the parent's new position.
+    nodeExit = node.exit().transition()
+      .duration(duration).ease(ease)
+      .attr('transform', (node) -> "translate(#{source.x},#{source.y})")
+      .remove()
+
+    nodeExit.select('circle').attr('r', 1e-6)
+      .attr('fill-opacity', 1e-6)
+      .attr('stroke-opacity', 1e-6)
+    nodeExit.selectAll('text').style('fill-opacity', 1e-6)
+
+    # Update the links
+    link = svg.selectAll('path.link')
+      .data(links, (node) -> node.target.id)
+
+    # Enter any new links at the parent's previous position.
+    link.enter().insert('path', 'g')
+      .attr('class', 'link')
+      .attr('d', ->
+        o = x: source.x0, y: source.y0
+        diagonal(source: o, target: o)
       )
-      .attr('transform', (data) -> "translate(#{ data.x }, #{ data.y })")
 
-    node.on 'click', (data) ->
-      infoEl = $('.node-info')
-      infoEl.children('h5').text(data.name)
+    # # Transition link to their new position.
+    link.transition().duration(duration).ease(ease)
+      .attr('d', diagonal).attr('stroke-opacity', 1)
 
-      $('.load-graph').empty().append('<svg></svg>')
-
-      focusNode(element, data.name)
-
-      values = downsampleCurve(data.load, 365)
-
-      chartData = [{
-        key:    data.name,
-        area:   true,
-        values: values
-      }]
-
-      if data.capacity
-        capacityValues = for point in values
-          { x: point.x, y: data.capacity }
-
-        chartData.push({
-          key:   'Capacity',
-          color: 'darkred',
-          values: capacityValues
-        })
-
-      (new LoadChart(chartData)).render('.load-graph svg')
-
-    # Draw a rectangle around each node.
-
-    node.append('rect')
-      .attr('width', 130).attr('height', 25)
-      .attr('rx', 5).attr('ry', 5) # Rounded corners
-      .attr('x', -65).attr('y')    # Relative x/y coords
-
-    # Add labels.
-
-    point = parseInt($('.point-changer input[name=point]').val(), 10) or 0
-
-    node.append('text')
-      .attr('dx', 0).attr('dy', 17) # Relative x/y coords.
-      .attr('text-anchor', 'middle')
-      .text((data) ->
-        if data.load?[point]
-          "#{ data.name } (#{ data.load[point] })"
-        else
-          data.name
+    # # Transition exiting nodes to the parent's new position.
+    link.exit().transition()
+      .duration(duration).ease(ease)
+      .attr('stroke-opacity', 1e-6)
+      .attr('d', ->
+        o = x: source.x, y: source.y
+        diagonal(source: o, target: o)
       )
+      .remove()
+
+    # Stash the old positions for transition.
+    nodes.forEach (node) ->
+      node.x0 = node.x
+      node.y0 = node.y
+
+  # Toggle children on click.
+  click = (node) ->
+    if node.children
+      node._children = node.children
+      node.children = null
+    else
+      node.children = node._children
+      node._children = null
+
+    update(node)
 
 # Creates a line chart to represent the load of a network component over time.
 # Uses nvd3 in order to create a "focus" area so the user may zoom on and view
@@ -155,6 +201,8 @@ class LoadChart
 
     chart
 
+window.LoadChart = LoadChart
+
 # Public: Given an array of values, downsamples the array to the given
 # +outLength+. The array is split into "chunks", and the maximum value of each
 # chunk is selected.
@@ -168,6 +216,8 @@ downsampleCurve = (curve, outLength) ->
 
   for startIndex in [0...curveLength] by chunkLength
     { x: startIndex, y: d3.max(curve[startIndex...(startIndex + chunkLength)]) }
+
+window.downsampleCurve = downsampleCurve
 
 createEditor = (textarea) ->
   id = textarea.attr('id')
@@ -192,7 +242,8 @@ createEditor = (textarea) ->
 $(document).on "page:change", ->
   $('.testing-ground-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
-      svg = showTopology($(viewEl).data('url'), viewEl)
+      showTree($(viewEl).data('url'), viewEl)
+      # svg = showTopology($(viewEl).data('url'), viewEl)
 
   # Set up the network editors.
 

@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require d3
 //= require nv.d3
+//= require testing_grounds
 //= require_tree .

@@ -63,21 +63,38 @@
     }
   }
 
-  .node.exceedance {
-    rect {
-      fill: #ecadad;
-      stroke: #e45a53;
-    }
+  .node {
+    cursor: pointer;
+  }
 
-    &:hover rect {
-      stroke: #8b4d4a
-    }
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+
+  .node.collapsed circle {
+    fill: lightsteelblue;
+  }
+
+  .node text {
+    font: 12px sans-serif;
   }
 
   .link {
     fill: none;
-    stroke: #ccc;
+    stroke: #bbb;
     stroke-width: 1.5px;
+  }
+
+  .node.exceedance {
+    circle {
+      stroke: #e45a53;
+    }
+
+    &.collapsed circle {
+      fill: #f0c1c1;
+    }
   }
 }
 
