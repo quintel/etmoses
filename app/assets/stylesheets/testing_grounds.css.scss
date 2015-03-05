@@ -110,6 +110,11 @@
     margin-bottom: 0;
   }
 
+  .download-curve {
+    display: none;
+    float: right;
+  }
+
   .load-graph svg {
     height: 500px;
     margin-bottom: 25px;

@@ -159,7 +159,24 @@ d3.json(url, function(error, treeData) {
         }
 
         $('.load-graph').empty().append('<svg></svg>');
-        (new loadChart(chartData)).render('.load-graph svg')
+        $('.node-info h5').text(d.name);
+
+        $('#technologies .row').hide();
+        $('#technologies .row[data-node="' + d.name + '"]').show();
+
+        $('.node-info .download-curve').show().unbind('click')
+            .click(function(event) {
+                var file = document.createElement('a');
+
+                file.setAttribute('download', d.name + ' Curve.csv');
+                file.setAttribute('href', 'data:text/csv;charset=utf-8,' +
+                                         encodeURIComponent(d.load.join("\n")));
+                file.click();
+
+                event.preventDefault();
+            });
+
+        new loadChart(chartData).render('.load-graph svg')
     }
 
     function update(source) {
