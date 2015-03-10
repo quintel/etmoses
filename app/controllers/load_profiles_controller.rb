@@ -1,9 +1,10 @@
 class LoadProfilesController < ApplicationController
   respond_to :html
+  respond_to :json, only: :show
 
   # GET /load_profiles
   def show
-    @load_profile = LoadProfile.find(params[:id])
+    respond_with(@load_profile = LoadProfile.find(params[:id]))
   end
 
   # GET /load_profiles/new

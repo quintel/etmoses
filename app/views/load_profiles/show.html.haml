@@ -3,6 +3,8 @@
   %li== Curve file name: #{ @load_profile.curve_file_name }
   %li== Curve file size: #{ number_to_human_size(@load_profile.curve_file_size) }
 
+.profile-graph.line-chart{ 'data-url' => load_profile_path(@load_profile, format: :json) }
+
 .commit
   = link_to('Download', @load_profile.curve.url, class: 'button')
   %span.or or

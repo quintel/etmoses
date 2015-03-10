@@ -13,6 +13,12 @@ class LoadProfile < ActiveRecord::Base
     end
   end
 
+  # Public: Returns a hash containing the values to be serialised as JSON.
+  # Includes the raw curve values.
+  def as_json(*)
+    super.merge('values' => merit_curve.to_a)
+  end
+
   # Public: Returns the Merit::Curve which containing each of the load profile
   # values.
   def merit_curve
