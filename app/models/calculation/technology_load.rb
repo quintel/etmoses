@@ -18,7 +18,7 @@ module Calculation
 
     def run
       add_participants!
-      @order.calculate
+      @order.calculate if @order.participants.any?
       assign_loads!
 
       @graph
