@@ -176,6 +176,10 @@ class LoadChart
   render: (intoSelector) =>
     self = this
 
+    @data.forEach (series) ->
+      for point in [1..364]
+        series.values.push x: series.values[0].x + point, y: series.values[0].y
+
     nv.addGraph =>
       d3.select(intoSelector).datum(@data).call(@chart())
 
