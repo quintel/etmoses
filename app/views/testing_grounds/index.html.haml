@@ -8,3 +8,6 @@
 %ul
   - @testing_grounds.each do |tg|
     %li= link_to "Testing ground: #{ tg.created_at.to_formatted_s(:long) }", testing_ground_path(tg)
+
+%hr
+= link_to('Load Profiles', load_profiles_path, class: 'button')

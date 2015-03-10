@@ -11,7 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150128125605) do
+ActiveRecord::Schema.define(version: 20150309112056) do
+
+  create_table "load_profiles", force: true do |t|
+    t.string   "key",                                null: false
+    t.string   "name"
+    t.boolean  "locked",             default: false, null: false
+    t.string   "curve_file_name"
+    t.string   "curve_content_type"
+    t.integer  "curve_file_size"
+    t.datetime "curve_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
 
   create_table "testing_grounds", force: true do |t|
     t.text     "technologies", limit: 16777215, null: false

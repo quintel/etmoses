@@ -64,5 +64,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :load_profiles
+
   root to: redirect('/testing_grounds')
 end

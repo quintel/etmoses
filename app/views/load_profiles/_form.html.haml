@@ -1,0 +1,29 @@
+- if @load_profile.errors.any?
+  %ul.errors
+    - @load_profile.errors.full_messages.uniq.each do |message|
+      %li= message
+
+= form_for @load_profile, html: { multipart: true } do |form|
+  - if @load_profile.new_record?
+    = form.label :key
+    = form.text_field :key
+    %span.hint Optional
+
+  = form.label :name
+  = form.text_field :name
+  %span.hint Optional
+
+  - unless @load_profile.locked?
+    = form.label :curve
+    = form.file_field :curve, accept: 'text/csv'
+
+    - unless @load_profile.new_record?
+      %span.hint(style="display: block; margin: -10px 0 20px") Leave blank if you don't want to change the curve
+
+  .commit
+    = form.submit class: 'button-primary'
+    %span.or or
+    - if @load_profile.new_record?
+      = link_to 'Cancel', load_profiles_path, class: 'button'
+    - else
+      = link_to 'Cancel', load_profile_path(@load_profile), class: 'button'

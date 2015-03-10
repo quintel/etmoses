@@ -104,6 +104,8 @@ RSpec.describe TestingGround do
 
     context 'with a permitted load profile set' do
       let(:tg) do
+        create(:load_profile, key: 'one')
+
         build(:testing_ground, technologies: {
           'lv1' => [{
             'name' => 'No Type', 'type' => 'tech_one', 'profile' => 'one'

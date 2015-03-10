@@ -1,0 +1,2 @@
+module LoadProfilesHelper
+end
