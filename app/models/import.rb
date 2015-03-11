@@ -3,14 +3,31 @@ class Import
 
   URL_TEMPLATE = 'http://%s/api/v3/scenarios/%d/converters/stats'.freeze
 
-  # A collection of converter keys representing technologies we need to fetch
-  # from ETEngine.
-  NODE_KEYS = YAML.load_file(Rails.root.join('db/import_technologies.yml'))
-
   attr_reader :provider, :scenario_id, :topology_id
 
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
+
+  # Public: Returns a hash of technologies which we can import from ETEngine.
+  #
+  # Each key is the name of a tehnology in ETEngine, and each value a hash
+  # containing the technology attributes. Technologies whose attributes include
+  # "import=false" will be omitted.
+  #
+  # Returns a hash.
+  def self.import_targets
+    Rails.cache.fetch('import.import_targets') do
+      glob = Rails.root.join('data/technologies/*.yml')
+
+      Hash[Pathname.glob(glob).map do |path|
+        attrs = YAML.load_file(path).symbolize_keys
+
+        unless attrs[:import] == false
+          [path.basename(path.extname).to_s.to_sym, attrs]
+        end
+      end.compact]
+    end
+  end
 
   # Public: Creates a new Import with the given provider and scenario.
   #
@@ -55,7 +72,7 @@ class Import
   def response
     JSON.parse(RestClient.post(
       URL_TEMPLATE % [@provider, @scenario_id],
-      { keys: NODE_KEYS }.to_json,
+      { keys: self.class.import_targets.keys }.to_json,
       { content_type: :json, accept: :json }
     ))['nodes']
   end
@@ -76,8 +93,18 @@ class Import
     # evenly.
 
     techs = response.each_with_object([]) do |(key, data), list|
-      data['number_of_units']['future'].round.times do |index|
-        list.push('name' => "#{ key.titleize } ##{ index + 1 }")
+      units   = data['number_of_units']['future'].round
+      target  = self.class.import_targets[key.to_sym]
+      imports = target[:import_attributes]
+
+      base_attrs = imports.each_with_object({}) do |(local, remote), base|
+        base[local] = data.key?(remote) ? data[remote]['future'] : 0.0
+      end
+
+      units.times do |index|
+        list.push(base_attrs.merge(
+          'name' => "#{ key.titleize } ##{ index + 1 }"
+        ))
       end
     end
 
