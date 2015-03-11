@@ -1,10 +1,9 @@
 %h5 Load Profiles
 
-%p= link_to 'Create a new load profile', new_load_profile_path, class: 'button button-primary'
+%p
+  = link_to('◄ Testing Grounds', testing_grounds_path, class: 'button')
+  = link_to 'Create a new load profile', new_load_profile_path, class: 'button button-primary'
 
 %ul
   - LoadProfile.all.sort_by(&:display_name).each do |profile|
     %li= link_to(profile.display_name, profile)
-
-%hr
-= link_to('Testing Grounds', testing_grounds_path, class: 'button')
