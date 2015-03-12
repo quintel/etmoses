@@ -2,8 +2,11 @@ module Library
   class Technology
     include Virtus.model
 
-    attribute :key,      String
-    attribute :profiles, Array[String]
+    attribute :key,               String
+    attribute :name,              String
+    attribute :profiles,          Array[String]
+    attribute :import_attributes, Hash[String => String]
+    attribute :export_to,         String
 
     # Public: Given the name of a profile, returns that profile as Merit::Curve.
     # If the profile may not be used by this technology, a
