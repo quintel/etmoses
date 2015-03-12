@@ -3,6 +3,36 @@ function showTree(url, container) {
 
 // Get JSON data
 d3.json(url, function(error, treeData) {
+    if (error) {
+        // .message
+        // .detail
+        // .backtrace
+        var errorData = JSON.parse(error.response),
+            errorEl   = $('<div class="error"></div>'),
+            messageEl = $('<div class="message"></div>');
+
+        $('.loading').remove();
+
+        $('.testing-ground-view').append(
+            errorEl.append(messageEl.text(errorData.error))
+        );
+
+        if (errorData.message) {
+            errorEl.append(
+                $('<div class="detail"></div>').text(errorData.message)
+            );
+        }
+
+        if (errorData.backtrace) {
+            errorEl.append(
+                $('<pre class="backtrace"></pre>')
+                    .html(errorData.backtrace.join('<br/>'))
+            );
+        }
+
+        return false;
+    }
+
     // Calculate total nodes, max label length
     var maxLabelLength = 0,
 
@@ -332,7 +362,7 @@ d3.json(url, function(error, treeData) {
         });
     }
 
-    $('.loading').remove()
+    $('.loading').remove();
 
     // Show nodes from the top-most two levels of the tree; nodes beneath will
     // be hidden until the user chooses to view them.
