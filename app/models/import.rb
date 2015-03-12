@@ -96,14 +96,17 @@ class Import
       units   = data['number_of_units']['future'].round
       target  = self.class.import_targets[key.to_sym]
       imports = target[:import_attributes]
+      title   = target[:name] || key.titleize
 
       base_attrs = imports.each_with_object({}) do |(local, remote), base|
         base[local] = data.key?(remote) ? data[remote]['future'] : 0.0
       end
 
+      base_attrs['type'] = key
+
       units.times do |index|
         list.push(base_attrs.merge(
-          'name' => "#{ key.titleize } ##{ index + 1 }"
+          'name' => "#{ title } ##{ index + 1 }"
         ))
       end
     end
