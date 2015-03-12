@@ -91,7 +91,7 @@ module Calculation
         # Consumer or a producer; again, we can't really be sure which.
         Merit::User.create(
           key:        [technology.name, SecureRandom.uuid],
-          load_curve: Merit::Curve.new([technology.load] * @length)
+          load_curve: Merit::Curve.new([technology.load || 0.0] * @length)
         )
       end
     end
