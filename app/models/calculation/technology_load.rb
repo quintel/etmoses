@@ -76,18 +76,7 @@ module Calculation
     # Internal: Given a Technology, returns an appropriate Merit::Participant
     # which may be used within the merit order.
     def participant_for(technology)
-      if technology.capacity
-        # Dispatchable producer.
-        Merit::DispatchableProducer.new(
-          key:                      [technology.name, SecureRandom.uuid],
-          output_capacity_per_unit: technology.capacity,
-          number_of_units:          1.0,
-          availability:             1.0,
-          # Actual marginal costs need to be defined by the user, or read from
-          # ETEngine. This is pending.
-          marginal_costs:           1.0
-        ).tap { |p| p.load_curve = Merit::Curve.new([]) }
-      elsif technology.profile
+      if technology.profile
         # Could be a consumer or producer; we can't tell without inspecting the
         # curve. We *can* do that when calculating a single point, but there are
         # occasions where the answer is ambigous (what is a load of 0?).
