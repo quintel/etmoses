@@ -4,9 +4,6 @@ function showTree(url, container) {
 // Get JSON data
 d3.json(url, function(error, treeData) {
     if (error) {
-        // .message
-        // .detail
-        // .backtrace
         var errorData = JSON.parse(error.response),
             errorEl   = $('<div class="error"></div>'),
             messageEl = $('<div class="message"></div>');
@@ -162,12 +159,6 @@ d3.json(url, function(error, treeData) {
     function click(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
 
-        if (d._children || d.children) {
-            toggleChildren(d);
-            update(d);
-            centerNode(d);
-        }
-
         // Load chart.
         var values    = window.downsampleCurve(d.load, 365),
             loadChart = window.LoadChart;
@@ -207,6 +198,16 @@ d3.json(url, function(error, treeData) {
             });
 
         new loadChart(chartData).render('.load-graph svg')
+    }
+
+    function dblClick(d) {
+        if (d3.event.defaultPrevented) return; // click suppressed
+
+        if (d._children || d.children) {
+            toggleChildren(d);
+            update(d);
+            centerNode(d);
+        }
     }
 
     function update(source) {
@@ -273,6 +274,7 @@ d3.json(url, function(error, treeData) {
             .attr('transform', function(d) {
                 return 'translate(' + source.y0 + ',' + source.x0 + ')';
             })
+            .on('dblclick', dblClick)
             .on('click', click);
 
         nodeEnter.append('circle')
