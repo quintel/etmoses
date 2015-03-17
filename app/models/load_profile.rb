@@ -24,9 +24,11 @@ class LoadProfile < ActiveRecord::Base
 
   # Public: Returns the Merit::Curve which containing each of the load profile
   # values.
-  def merit_curve
-    Rails.cache.fetch("profile.#{ id }.#{ curve_updated_at.to_s(:db) }") do
-      Merit::Curve.load_file(curve.path)
+  def merit_curve(scaling = :original)
+    cache_key = "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ scaling }"
+
+    Rails.cache.fetch(cache_key) do
+      Merit::Curve.load_file(curve.path(scaling))
     end
   end
 

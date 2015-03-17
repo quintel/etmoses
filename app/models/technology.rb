@@ -32,6 +32,14 @@ class Technology
   #
   # Returns a Merit::Curve.
   def profile_curve
-    profile && library.profile(profile)
+    load_profile = LoadProfile.find_by_key(profile)
+
+    if capacity
+      load_profile.merit_curve(:capacity_scaled) * capacity
+    elsif demand
+      load_profile.merit_curve(:demand_scaled) * demand
+    else
+      load_profile.merit_curve
+    end
   end
 end # end

@@ -9,12 +9,6 @@ module Library
     attribute :import_attributes, Hash[String => String]
     attribute :export_to,         String
 
-    # Public: Given the name of a profile, returns that profile as Merit::Curve.
-    # If the profile may not be used by this technology, a
-    def profile(name)
-      LoadProfile.find_by_key(name).merit_curve if permitted_profile?(name)
-    end
-
     # Public: Returns if the given load profile key may be used with this
     # technology.
     def permitted_profile?(key)
