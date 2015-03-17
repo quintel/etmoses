@@ -49,5 +49,6 @@ namespace :deploy do
     invoke 'unicorn:restart'
   end
 
+  after 'deploy:compile_assets', 'paperclip:build_missing_styles'
   after :publishing, :restart
 end
