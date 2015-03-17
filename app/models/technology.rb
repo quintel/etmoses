@@ -6,6 +6,7 @@ class Technology
   attribute :load,     Float
   attribute :profile,  String
   attribute :capacity, Float
+  attribute :demand,   Float
 
   # Public: Returns if the technology has been defined in the data/technologies
   # directory.
