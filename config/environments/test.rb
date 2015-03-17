@@ -36,4 +36,19 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Paperclip
+
+  paperclip_path = if ENV['PARALLEL_TEST_GROUPS']
+    "test_files/:rails_env/#{ENV['TEST_ENV_NUMBER'].to_i}/" +
+    ":class/:attachment/:id_partition/:basename.:style.:extension"
+  else
+    "test_files/:rails_env/" +
+    ":class/:attachment/:id_partition/:basename.:style.:extension"
+  end
+
+  config.paperclip_defaults = {
+    path: ":rails_root/public/#{ paperclip_path }",
+    url:  "/#{ paperclip_path }"
+  }
 end

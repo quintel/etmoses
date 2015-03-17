@@ -1,5 +1,8 @@
 class LoadProfile < ActiveRecord::Base
-  has_attached_file :curve
+  has_attached_file :curve, styles: {
+    demand_scaled:   { scale_by: :sum, processors: [:scaled_curve] },
+    capacity_scaled: { scale_by: :max, processors: [:scaled_curve]}
+  }
 
   validates_attachment :curve, presence: true,
     content_type: { content_type: 'text/csv' },

@@ -26,6 +26,17 @@ module Ivy
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    # Paperclip
+    # ---------
+
+    paperclip_path = 'system/:class/:attachment/:id_partition/' +
+                     ':basename.:style.:extension'
+
+    config.paperclip_defaults = {
+      path: ":rails_root/public/#{ paperclip_path }",
+      url:  "/#{ paperclip_path }"
+    }
   end
 
   # Public: Path to the directory in which static data files files typically

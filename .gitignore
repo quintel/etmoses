@@ -42,3 +42,6 @@ bower.json
 # Ignore split load profiles.
 /split-*
 /bin/profiles/split-*
+
+# Temporary Paperclip test files.
+/public/test_files
