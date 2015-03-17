@@ -17,7 +17,7 @@ RSpec.describe Import do
   end
 
   context 'with no existing topology' do
-    let(:response) { build_response('households_space_heater_coal' => 1.0) }
+    let(:response) { build_response('tech_one' => 1.0) }
 
     it 'builds a new topology' do
       expect(testing_ground.topology).to be_new_record
@@ -30,33 +30,30 @@ RSpec.describe Import do
 
   context 'with five coal heaters and three gas heaters' do
     let(:response) do
-      build_response(
-        'households_space_heater_coal' => 5.0,
-        'households_space_heater_combined_network_gas' => 3.0
-      )
+      build_response('tech_one' => 5.0,'tech_two' => 3.0)
     end
 
     it 'adds three coal heaters to LV #1' do
       expect(testing_ground.technologies['lv1'].select do |tech|
-        tech['name'].match(/heater coal/i)
+        tech['name'].match(/tech one/i)
       end.length).to eq(3)
     end
 
     it 'adds two coal heaters to LV #2' do
       expect(testing_ground.technologies['lv2'].select do |tech|
-        tech['name'].match(/heater coal/i)
+        tech['name'].match(/tech one/i)
       end.length).to eq(2)
     end
 
     it 'adds one gas heater to LV #1' do
       expect(testing_ground.technologies['lv1'].select do |tech|
-        tech['name'].match(/heater combined network gas/i)
+        tech['name'].match(/tech two/i)
       end.length).to eq(1)
     end
 
     it 'adds two gas heaters to LV #2' do
       expect(testing_ground.technologies['lv2'].select do |tech|
-        tech['name'].match(/heater combined network gas/i)
+        tech['name'].match(/tech two/i)
       end.length).to eq(2)
     end
   end # with five coal heaters and three gas heaters

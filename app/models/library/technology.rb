@@ -5,6 +5,7 @@ module Library
     attribute :key,               String
     attribute :name,              String
     attribute :profiles,          Array[String]
+    attribute :import,            Boolean, default: true
     attribute :import_attributes, Hash[String => String]
     attribute :export_to,         String
 

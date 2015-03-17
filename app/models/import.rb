@@ -17,15 +17,7 @@ class Import
   # Returns a hash.
   def self.import_targets
     Rails.cache.fetch('import.import_targets') do
-      glob = Rails.root.join('data/technologies/*.yml')
-
-      Hash[Pathname.glob(glob).map do |path|
-        attrs = YAML.load_file(path).symbolize_keys
-
-        unless attrs[:import] == false
-          [path.basename(path.extname).to_s.to_sym, attrs]
-        end
-      end.compact]
+      Library::Technology.all.select(&:import?)
     end
   end
 
@@ -72,7 +64,7 @@ class Import
   def response
     JSON.parse(RestClient.post(
       URL_TEMPLATE % [@provider, @scenario_id],
-      { keys: self.class.import_targets.keys }.to_json,
+      { keys: self.class.import_targets.map(&:key) }.to_json,
       { content_type: :json, accept: :json }
     ))['nodes']
   end
@@ -94,9 +86,9 @@ class Import
 
     techs = response.each_with_object([]) do |(key, data), list|
       units   = data['number_of_units']['future'].round
-      target  = self.class.import_targets[key.to_sym]
-      imports = target[:import_attributes]
-      title   = target[:name] || key.titleize
+      target  = Library::Technology.find(key)
+      imports = target.import_attributes
+      title   = target.name || target.key.to_s.titleize
 
       base_attrs = imports.each_with_object({}) do |(local, remote), base|
         base[local] = data.key?(remote) ? data[remote]['future'] : 0.0
