@@ -2,6 +2,24 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body {
+  padding-top: 20px;
+}
+
+h5 .subtitle {
+  color: #777;
+  font-size: 1.5rem;
+  margin-left: 5px;
+}
+
+ul.testing-grounds {
+  .date {
+    color: #777;
+    font-size: 1.2rem;
+    margin-left: 5px;
+  }
+}
+
 .testing-ground-view {
   border: 1px solid #ddd;
   border-top-color: #ccc;
@@ -159,6 +177,10 @@
     position: relative;
     width: 800px;
     margin: 0 0 2.5rem;
+  }
+
+  input[type=text] {
+    width: 500px;
   }
 
   .tech-choice {

@@ -4,6 +4,9 @@
       %li= message
 
 = form_for(testing_ground) do |f|
+  = f.label :name, 'Testing ground name'
+  = f.text_field :name
+
   = f.fields_for :topology do |topo_form|
     = f.label :graph, 'Testing ground as YAML'
     = topo_form.text_area :graph, value: topology_field_value(testing_ground)

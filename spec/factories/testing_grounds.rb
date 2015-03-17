@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :testing_ground do
+    name 'My Testing Ground'
+
     topology
 
     technologies { YAML.load(<<-YML.strip_heredoc) }

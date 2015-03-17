@@ -76,7 +76,7 @@ class TestingGroundsController < ApplicationController
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:technologies, :technologies_csv,
+      .permit([:name, :technologies, :technologies_csv,
                { topology_attributes: :graph }])
 
     if tg_params[:technologies_csv]

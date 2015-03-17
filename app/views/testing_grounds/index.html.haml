@@ -5,9 +5,11 @@
   %span.or or
   = link_to 'Create testing ground imported from ETE', import_testing_grounds_path, class: 'button'
 
-%ul
+%ul.testing-grounds
   - @testing_grounds.each do |tg|
-    %li= link_to "Testing ground: #{ tg.created_at.to_formatted_s(:long) }", testing_ground_path(tg)
+    %li
+      = link_to tg.name, testing_ground_path(tg)
+      %span.date= tg.created_at.to_formatted_s(:long)
 
 %hr
 = link_to('Load Profiles', load_profiles_path, class: 'button')

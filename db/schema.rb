@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309112056) do
+ActiveRecord::Schema.define(version: 20150317095307) do
 
   create_table "load_profiles", force: true do |t|
     t.string   "key",                                null: false
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20150309112056) do
     t.integer  "topology_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name",                          null: false
   end
 
   create_table "topologies", force: true do |t|

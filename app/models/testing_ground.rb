@@ -9,6 +9,8 @@ class TestingGround < ActiveRecord::Base
   IMPORT_PROVIDERS = %w(beta.et-engine.com etengine.dev localhost:3000).freeze
 
   validates :topology, presence: true
+  validates :name, presence: true, length: { maximum: 100 }
+
   validate  :validate_technology_connections, if: :topology
   validate  :validate_technology_types
 
