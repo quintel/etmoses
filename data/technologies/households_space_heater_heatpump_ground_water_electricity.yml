@@ -1,0 +1,6 @@
+---
+name: Heat pump for space heating (ground)
+
+import_attributes:
+  capacity: input_capacity
+  demand: share_of demand

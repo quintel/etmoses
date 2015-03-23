@@ -1,4 +1,6 @@
 ---
+name: Residential PV panel
+
 import_attributes:
   capacity: electricity_output_capacity
   demand: share_of demand

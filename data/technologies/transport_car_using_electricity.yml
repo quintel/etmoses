@@ -1,4 +1,6 @@
 ---
+name: Electric car
+
 import_attributes:
-  capacity: electricity_output_capacity
+  capacity: input_capacity
   demand: share_of demand
