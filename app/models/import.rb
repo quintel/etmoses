@@ -91,7 +91,7 @@ class Import
       title   = target.name || target.key.to_s.titleize
 
       base_attrs = imports.each_with_object({}) do |(local, remote), base|
-        base[local] = data.key?(remote) ? data[remote]['future'] : 0.0
+        base[local] = extract_value(data, remote)
       end
 
       base_attrs['type'] = key
@@ -111,6 +111,19 @@ class Import
 
     topo.each_with_object({}) do |tech, hash|
       hash[tech[:key]] = tech[:techs]
+    end
+  end
+
+  # Internal: Given a hash of values for a converter imported from ETEngine,
+  # extracts the +name+d value.
+  def extract_value(data, name)
+    if name.start_with?('share_of ')
+      actual = name[9..-1]
+      value  = data.key?(actual) ? data[actual]['future'] : 0.0
+
+      value / data['number_of_units']['future'].round
+    else
+      data.key?(name) ? data[name]['future'] : 0.0
     end
   end
 end # Import

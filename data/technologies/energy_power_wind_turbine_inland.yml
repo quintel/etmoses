@@ -3,6 +3,6 @@ name: Wind Turbine
 
 import_attributes:
   capacity: electricity_output_capacity
-  demand: demand
+  demand: share_of demand
 
 export_to: number_of_energy_power_wind_turbine_inland
