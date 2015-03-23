@@ -15,8 +15,7 @@ module TestingGroundsHelper
   def import_topology_select_tag(form)
     topologies = Topology.all.reverse.map do |topo|
       if testing_ground = TestingGround.where(topology_id: topo.id).first
-        ["Topology from #{ testing_ground.created_at.to_formatted_s(:long) } " \
-         "testing ground", topo.id]
+        [testing_ground.name, topo.id]
       end
     end.compact
 
