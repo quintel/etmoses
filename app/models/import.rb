@@ -121,6 +121,12 @@ class Import
       actual = name[9..-1]
       value  = data.key?(actual) ? data[actual]['future'] : 0.0
 
+      # Special-case for demand; convert MJ to kWh.
+      #
+      # TODO Remove this special case and define imported attributes more
+      # flexibly elsewhere.
+      value = value * (1.0 / 3.6) if actual == 'demand'.freeze
+
       value / data['number_of_units']['future'].round
     else
       data.key?(name) ? data[name]['future'] : 0.0
