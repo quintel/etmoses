@@ -88,10 +88,12 @@ module Calculation
           load_curve: technology.profile_curve
         )
       else
+        instantaneous_load = technology.load || technology.capacity || 0.0
+
         # Consumer or a producer; again, we can't really be sure which.
         Merit::User.create(
           key:        [technology.name, SecureRandom.uuid],
-          load_curve: Merit::Curve.new([technology.load || 0.0] * @length)
+          load_curve: Merit::Curve.new(Array.new(@length, instantaneous_load))
         )
       end
     end
