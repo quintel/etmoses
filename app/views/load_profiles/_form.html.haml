@@ -20,6 +20,18 @@
     - unless @load_profile.new_record?
       %span.hint(style="display: block; margin: -10px 0 20px") Leave blank if you don't want to change the curve
 
+  %h6(style="font-weight: bold") Permitted Technologies
+
+  = form.fields_for :permitted_technologies do |task|
+    %div
+      = task.text_field :technology
+      %span(style="font-size: 12px; margin-left: 10px") Remove permitted technology:
+      = task.check_box :_destroy
+
+  - tech_length = @load_profile.permitted_technologies.length
+  - 3.times do |i|
+    %div= text_field_tag "load_profile[permitted_technologies_attributes][#{ tech_length + i }][technology]"
+
   .commit
     = form.submit class: 'button-primary'
     %span.or or

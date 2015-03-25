@@ -1,4 +1,6 @@
 class LoadProfile < ActiveRecord::Base
+  has_many :permitted_technologies
+
   has_attached_file :curve, styles: {
     demand_scaled:   { scale_by: :sum, processors: [:scaled_curve] },
     capacity_scaled: { scale_by: :max, processors: [:scaled_curve]}
@@ -15,6 +17,9 @@ class LoadProfile < ActiveRecord::Base
       self.key = File.basename(curve_file_name, File.extname(curve_file_name))
     end
   end
+
+  accepts_nested_attributes_for :permitted_technologies,
+    reject_if: :all_blank, allow_destroy: true
 
   # Public: Returns a hash containing the values to be serialised as JSON.
   # Includes the raw curve values.
