@@ -56,5 +56,34 @@ RSpec.describe Import do
         tech['name'].match(/tech two/i)
       end.length).to eq(2)
     end
+
+    context 'when tech_one has two available load profiles' do
+      let(:profile_one) { create(:load_profile, key: 'profile_one') }
+      let(:profile_two) { create(:load_profile, key: 'profile_two') }
+
+      before do
+        PermittedTechnology.create!(
+          technology: 'tech_one', load_profile: profile_one)
+
+        PermittedTechnology.create!(
+          technology: 'tech_one', load_profile: profile_two)
+      end
+
+      it 'assigns the profiles fairly to applicable technologies' do
+        techs = testing_ground.technologies.to_h.values.flatten
+          .select { |tech| tech.type == 'tech_one' }
+
+        expect(techs.select { |t| t.profile == 'profile_one' }.length).to eq(3)
+        expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(2)
+      end
+
+      it 'does not assign the profiles to inapplicable technologies' do
+        techs = testing_ground.technologies.to_h.values.flatten
+          .select { |tech| tech.type != 'tech_one' }
+
+        expect(techs.select { |t| t.profile == 'profile_one' }.length).to eq(0)
+        expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(0)
+      end
+    end
   end # with five coal heaters and three gas heaters
 end # describe Import

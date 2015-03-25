@@ -84,11 +84,14 @@ class Import
     # Combine the technologies into an array so that they can be distributed
     # evenly.
 
+    available_profiles = permitted_profiles(response.keys)
+
     techs = response.each_with_object([]) do |(key, data), list|
-      units   = data['number_of_units']['future'].round
-      target  = Library::Technology.find(key)
-      imports = target.import_attributes
-      title   = target.name || target.key.to_s.titleize
+      units    = data['number_of_units']['future'].round
+      target   = Library::Technology.find(key)
+      imports  = target.import_attributes
+      title    = target.name || target.key.to_s.titleize
+      profiles = available_profiles[key]
 
       base_attrs = imports.each_with_object({}) do |(local, remote), base|
         base[local] = extract_value(data, remote)
@@ -97,9 +100,16 @@ class Import
       base_attrs['type'] = key
 
       units.times do |index|
-        list.push(base_attrs.merge(
-          'name' => "#{ title } ##{ index + 1 }"
-        ))
+        tech_data = base_attrs.merge('name' => "#{ title } ##{ index + 1 }")
+
+        if profiles
+          tech_data['profile'] = profiles.first.key
+
+          # Move the profile we assigned to the bottom of the stack.
+          profiles.push(profiles.shift)
+        end
+
+        list.push(tech_data)
       end
     end
 
@@ -131,5 +141,20 @@ class Import
     else
       data.key?(name) ? data[name]['future'] : 0.0
     end
+  end
+
+  # Public: Given a list of technologies which appear in the testing ground,
+  # returns a hash of technology keys and the load profiles which may be
+  # assigned to them.
+  #
+  # Returns a hash.
+  def permitted_profiles(technologies)
+    permits = PermittedTechnology
+      .where(technology: technologies)
+      .includes(:load_profile)
+
+    Hash[permits.group_by(&:technology).map do |tech_key, techs|
+      [tech_key, techs.map(&:load_profile)]
+    end]
   end
 end # Import
