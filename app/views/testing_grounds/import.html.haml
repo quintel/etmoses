@@ -1,4 +1,4 @@
-%h5 Create topology with technologies from ETEngine
+%h3 Create topology with technologies from ETEngine
 
 - if @import.errors.any?
   %ul.errors
@@ -13,4 +13,5 @@
   = import_engine_select_tag(form)
 
   = form.text_field(:scenario_id, placeholder: 'Scenario ID', style: 'box-sizing: border-box')
-  = form.submit 'Continue&hellip;'.html_safe, class: 'button-primary'
+
+  %div= form.submit 'Continue&hellip;'.html_safe, class: 'btn btn-primary'

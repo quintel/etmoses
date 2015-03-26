@@ -2,11 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-body {
-  padding-top: 20px;
-}
-
-h5 .subtitle {
+h3 .subtitle {
   color: #777;
   font-size: 1.5rem;
   margin-left: 5px;
@@ -18,6 +14,11 @@ ul.testing-grounds {
     font-size: 1.2rem;
     margin-left: 5px;
   }
+}
+
+form label {
+  display: block;
+  margin: 10px 0;
 }
 
 .testing-ground-view {
