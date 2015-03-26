@@ -12,11 +12,12 @@ namespace :profiles do
     if dir.directory?
       Pathname.glob(dir.join('*.csv')).each do |path|
         begin
-          key        = path.basename(path.extname).to_s
+          name       = path.basename(path.extname).to_s
+          key        = path.basename(path.extname).to_s.downcase
           profile    = LoadProfile.by_key(key).first || LoadProfile.new(key: key)
           curve_file = File.open(path)
 
-          profile.attributes = { curve: curve_file }
+          profile.attributes = { curve: curve_file, name: name }
           profile.curve_content_type = 'text/csv'
 
           if profile.new_record?

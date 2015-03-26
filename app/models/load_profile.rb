@@ -15,7 +15,9 @@ class LoadProfile < ActiveRecord::Base
 
   before_validation on: :create do
     if key.blank? && curve_file_name
-      self.key = File.basename(curve_file_name, File.extname(curve_file_name))
+      self.key = File.basename(
+        curve_file_name, File.extname(curve_file_name)
+      ).downcase
     end
   end
 
