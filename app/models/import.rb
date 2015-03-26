@@ -39,7 +39,8 @@ class Import
   def testing_ground
     TestingGround.new(
       topology:     topology,
-      technologies: technologies_from(response))
+      technologies: technologies_from(response),
+      scenario_id:  @scenario_id)
   end
 
   # Internal: Required in order to use Import within +form_for+ view block.

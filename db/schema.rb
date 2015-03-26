@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150325134846) do
+ActiveRecord::Schema.define(version: 20150326170731) do
 
   create_table "load_profiles", force: true do |t|
     t.string   "key",                                           null: false
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(version: 20150325134846) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",                          null: false
+    t.integer  "scenario_id"
   end
 
   create_table "topologies", force: true do |t|
