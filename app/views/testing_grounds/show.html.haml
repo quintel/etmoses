@@ -1,8 +1,29 @@
-%h3
+%h1
+  %a.btn.btn-primary.pull-right{href: edit_testing_ground_path(@testing_ground)} Edit
+  = "Testing Ground ##{ @testing_ground.id }:"
   = @testing_ground.name
-  %span.subtitle= @testing_ground.created_at.to_formatted_s(:long)
+
+%table.table.table-bordered
+  %tr
+    %td Created by
+    %td Chael Kruip
+  %tr
+    %td Created at
+    %td= @testing_ground.created_at.to_formatted_s(:long)
+  %tr
+    %td National scenario:
+    %td
+      %a{href:'#'}123456 from beta.pro.et-model.com
+  %tr
+    %td Local scenario:
+    %td
+      %a{href:'#'}123456 from beta.pro.et-model.com
+  %tr
+    %td Description:
+    %td ...
 
 #testing-ground
+  %h2 Topology
   .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json, point: params[:point] || 0) }
     %span.loading
       %h5
@@ -17,21 +38,22 @@
 -#    %input{ type: 'submit', value: 'View' }
 
 .node-info
-  %a.button.download-curve Download curve
   %h5
   .load-graph.line-chart
+  %a.btn.btn-primary.download-curve Download curve
+
+%h2 Technologies
 
 #technologies
-  - @testing_ground.technologies.each do |key, techs|
-    .row{ "data-node" => key }
-      - techs.each do |tech|
-        .technology.three.columns{ "data-tech" => tech.name }
-          .inner
-            %h6= tech.name
-            %ul
-              - tech.attributes.except(:name, :type).compact.each do |akey, avalue|
-                %li{ class: akey }== #{ akey }: #{ avalue.inspect }
-
-= link_to '◄ All testing grounds', testing_grounds_path, class: 'btn btn-primary'
-= link_to 'Edit', edit_testing_ground_url(@testing_ground), class: 'btn btn-default'
-= link_to 'Download Tech. CSV', technologies_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-default'
+  - if @testing_ground.technologies.any?
+    - @testing_ground.technologies.each do |key, techs|
+      .row{ "data-node" => key }
+        - techs.each do |tech|
+          .technology.three.columns{ "data-tech" => tech.name }
+            .inner
+              %h6= tech.name
+              %ul
+                - tech.attributes.except(:name, :type).compact.each do |akey, avalue|
+                  %li{ class: akey }== #{ akey }: #{ avalue.inspect }
+  - else
+    No Technoglogies registered yet.
