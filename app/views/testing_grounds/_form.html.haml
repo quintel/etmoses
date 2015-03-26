@@ -28,9 +28,9 @@
   = f.text_area :technologies, value: technologies_field_value(testing_ground)
 
   .commit
-    = f.submit class: 'button-primary'
+    = f.submit class: 'btn btn-primary'
     %span.or or
     - if testing_ground.new_record?
-      = link_to 'Cancel', testing_grounds_path, class: 'button'
+      = link_to 'Cancel', testing_grounds_path, class: 'btn btn-default'
     - else
-      = link_to 'Cancel', testing_ground_path(testing_ground), class: 'button'
+      = link_to 'Cancel', testing_ground_path(testing_ground), class: 'btn btn-default'

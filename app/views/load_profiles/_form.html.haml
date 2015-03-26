@@ -21,9 +21,9 @@
       %span.hint(style="display: block; margin: -10px 0 20px") Leave blank if you don't want to change the curve
 
   .commit
-    = form.submit class: 'button-primary'
+    = form.submit class: 'btn btn-primary'
     %span.or or
     - if @load_profile.new_record?
-      = link_to 'Cancel', load_profiles_path, class: 'button'
+      = link_to 'Cancel', load_profiles_path, class: 'btn btn-default'
     - else
-      = link_to 'Cancel', load_profile_path(@load_profile), class: 'button'
+      = link_to 'Cancel', load_profile_path(@load_profile), class: 'btn btn-default'

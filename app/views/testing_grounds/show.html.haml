@@ -1,4 +1,4 @@
-%h5
+%h3
   = @testing_ground.name
   %span.subtitle= @testing_ground.created_at.to_formatted_s(:long)
 
@@ -32,6 +32,6 @@
               - tech.attributes.except(:name, :type).compact.each do |akey, avalue|
                 %li{ class: akey }== #{ akey }: #{ avalue.inspect }
 
-= link_to '◄ All testing grounds', testing_grounds_path, class: 'button button-primary'
-= link_to 'Edit', edit_testing_ground_url(@testing_ground), class: 'button'
-= link_to 'Download Tech. CSV', technologies_testing_ground_url(@testing_ground, format: :csv), class: 'button'
+= link_to '◄ All testing grounds', testing_grounds_path, class: 'btn btn-primary'
+= link_to 'Edit', edit_testing_ground_url(@testing_ground), class: 'btn btn-default'
+= link_to 'Download Tech. CSV', technologies_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-default'
