@@ -20,12 +20,18 @@
     - unless @load_profile.new_record?
       %span.hint(style="display: block; margin: -10px 0 20px") Leave blank if you don't want to change the curve
 
+  = form.label :capacity_group
+  = form.text_field :capacity_group
+
+  = form.label :min_capacity
+  = form.text_field :min_capacity
+
   %h6(style="font-weight: bold") Permitted Technologies
 
   = form.fields_for :permitted_technologies do |task|
     %div
       = task.text_field :technology
-      %span(style="font-size: 12px; margin-left: 10px") Remove permitted technology:
+      %span(style="font-size: 12px") Remove permitted technology:
       = task.check_box :_destroy
 
   - tech_length = @load_profile.permitted_technologies.length

@@ -84,6 +84,54 @@ RSpec.describe Import do
         expect(techs.select { |t| t.profile == 'profile_one' }.length).to eq(0)
         expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(0)
       end
-    end
+    end # when tech_one has two available load profiles
+
+    context 'when tech_one has three available capacity-limited load profiles' do
+      let(:profile_one) do
+        create(:load_profile, key: 'profile_one',
+               capacity_group: 'a', min_capacity: 10.0)
+      end
+
+      let(:profile_two) do
+        create(:load_profile, key: 'profile_two',
+               capacity_group: 'a', min_capacity: 20.0)
+      end
+
+      let(:profile_three) do
+        create(:load_profile, key: 'profile_three',
+               capacity_group: 'a', min_capacity: 30.0)
+      end
+
+      let(:profile_four) do
+        create(:load_profile, key: 'profile_four')
+      end
+
+      before do
+        [ profile_one, profile_two, profile_three, profile_four ].each do |prof|
+          PermittedTechnology.create!(
+            technology: 'tech_one', load_profile: prof)
+        end
+      end
+
+      let(:response) do
+        {
+          'tech_one' => {
+            'number_of_units' => { 'future' => 3 },
+            'electricity_output_capacity' => { 'future' => 20.0 }
+          },
+          'tech_two' => {
+            'number_of_units' => { 'future' => 2 },
+          }
+        }
+      end
+
+      it 'assigns an appropriate capacity-based profile' do
+        techs = testing_ground.technologies.to_h.values.flatten
+          .select { |tech| tech.type == 'tech_one' }
+
+        expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(2)
+        expect(techs.select { |t| t.profile == 'profile_four' }.length).to eq(1)
+      end
+    end # when tech_one has two available capacity-limited load profiles
   end # with five coal heaters and three gas heaters
 end # describe Import

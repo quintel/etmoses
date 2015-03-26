@@ -36,7 +36,7 @@ class LoadProfilesController < ApplicationController
 
   def load_profile_params
     params.require(:load_profile).permit(
-      :key, :name, :curve,
+      :key, :name, :curve, :capacity_group, :min_capacity,
       { permitted_technologies_attributes: [:id, :technology, :_destroy] }
     )
   end
