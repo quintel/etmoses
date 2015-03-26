@@ -16,4 +16,5 @@
 //= require d3
 //= require nv.d3
 //= require testing_grounds
+//= require bootstrap-sprockets
 //= require_tree .

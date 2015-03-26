@@ -1,0 +1,33 @@
+%h1 Welcome to the Testing Grounds
+
+%p
+  This application allows you to create, inspect and share calculations for a
+  small Testing Ground, based on the underlying data from the
+  %a{href:'http://et-model.com'} Energy Transition Model
+  and real life testing grounds from
+  %a{href:'http://alliander.com'} Alliander
+  = "."
+
+%p A Testing Ground consists of three components:
+
+.row
+  .col-md-4
+    %h2 1. ETM Scenarios
+    %p
+      Every testing ground starts with a national scenario from the ETM, and
+      a scaled down version of it.
+  .col-md-4
+    %h2 2. Network Topology
+    %p
+      A specific network structure needs to be defined. If none is defined,
+      a default one is chosen.
+  .col-md-4
+    %h2 3. Technologies
+    %p
+      The technologies used in a Testing Ground are taken from the ETM as
+      much as possible, and can be adapted to the specific situation by the
+      user.
+
+%p
+  %a.btn.btn-primary{href: new_testing_ground_path} Create your own
+  %a.btn{href: testing_grounds_path} Explore existing Testing Grounds

@@ -1,15 +1,12 @@
-%h5 Topologies
+%h1 Previously saved testing Grounds
 
-#choose-start
-  = link_to 'Create a new hand-made testing ground', new_testing_ground_path, class: 'button button-primary'
-  %span.or or
-  = link_to 'Create testing ground imported from ETE', import_testing_grounds_path, class: 'button'
+-# #choose-start
+-#   = link_to 'Create a new hand-made testing ground', new_testing_ground_path, class: 'button button-primary'
+-#   %span.or or
+-#   = link_to 'Create testing ground imported from ETE', import_testing_grounds_path, class: 'button'
 
-%ul.testing-grounds
+%table.table.table-striped
   - @testing_grounds.each do |tg|
-    %li
-      = link_to tg.name, testing_ground_path(tg)
-      %span.date= tg.created_at.to_formatted_s(:long)
-
-%hr
-= link_to('Load Profiles', load_profiles_path, class: 'button')
+    %tr
+      %td= link_to tg.name, testing_ground_path(tg)
+      %td= tg.created_at.to_formatted_s(:long)

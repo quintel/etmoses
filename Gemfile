@@ -7,6 +7,7 @@ gem 'mysql2', '~> 0.3.18'
 
 # Assets
 gem 'sass-rails',   '~> 4.0.3'
+gem 'bootstrap-sass'
 gem 'uglifier',     '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', '~> 0.12.1', platforms: :ruby
@@ -50,6 +51,9 @@ group :development do
   gem 'capistrano-rails',    '~> 1.1',   require: false
   gem 'capistrano-bundler',  '~> 1.1',   require: false
   gem 'capistrano3-unicorn', '~> 0.2',   require: false
+
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 # Application Gems.
