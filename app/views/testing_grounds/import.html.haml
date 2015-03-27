@@ -5,13 +5,15 @@
     - @import.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for(@import, url: import_testing_grounds_path, method: :post, html: { class: 'inline' }) do |form|
-  = form.label :topology_id
-  = import_topology_select_tag(form)
+= form_for(@import, url: import_testing_grounds_path, method: :post) do |form|
+  .form-group
+    = form.label :topology_id
+    = import_topology_select_tag(form)
 
-  = form.label :scenario_id
-  = import_engine_select_tag(form)
-
-  = form.text_field(:scenario_id, placeholder: 'Scenario ID', style: 'box-sizing: border-box')
+  .form-group
+    = form.label :scenario_id
+    .input-group
+      .input-group-addon= TestingGround::IMPORT_PROVIDERS.first
+      = form.text_field(:scenario_id, placeholder: 'Scenario ID', class: 'form-control')
 
   %div= form.submit 'Continue&hellip;'.html_safe, class: 'btn btn-primary'
