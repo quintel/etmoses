@@ -94,7 +94,7 @@ class Import
       title    = target.name || target.key.to_s.titleize
 
       attrs = imports.each_with_object({}) do |(local, remote), base|
-        base[local] = extract_value(data, remote)
+        base[local] = extract_value(data, local, remote)
       end
 
       attrs['type'] = key
@@ -127,20 +127,20 @@ class Import
 
   # Internal: Given a hash of values for a converter imported from ETEngine,
   # extracts the +name+d value.
-  def extract_value(data, name)
-    if name.start_with?('share_of ')
-      actual = name[9..-1]
-      value  = data.key?(actual) ? data[actual]['future'] : 0.0
-
-      # Special-case for demand; convert MJ to kWh.
-      #
-      # TODO Remove this special case and define imported attributes more
-      # flexibly elsewhere.
-      value = value * (1.0 / 3.6) if actual == 'demand'.freeze
+  def extract_value(data, local_name, name)
+    extracted = if name.start_with?('share_of ')
+      name  = name[9..-1]
+      value = data.key?(name) ? data[name]['future'] : 0.0
 
       value / data['number_of_units']['future'].round
     else
       data.key?(name) ? data[name]['future'] : 0.0
+    end
+
+    case local_name
+      when 'demand'.freeze   then extracted * (1.0 / 3.6)
+      when 'capacity'.freeze then extracted * 1000
+      else                        extracted
     end
   end
 
