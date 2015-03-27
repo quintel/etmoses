@@ -4,6 +4,9 @@
       %li= message
 
 = form_for(testing_ground) do |f|
+  - if @testing_ground.scenario_id
+    = f.hidden_field :scenario_id
+
   = f.label :name, 'Testing ground name'
   = f.text_field :name
 
