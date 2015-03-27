@@ -5,40 +5,45 @@
 
 = form_for @load_profile, html: { multipart: true } do |form|
   - if @load_profile.new_record?
-    = form.label :key
-    = form.text_field :key
-    %span.hint Optional
+    .form-group
+      = form.label :key
+      = form.text_field :key, class: 'form-control'
+      .help-block This field is optional.
 
-  = form.label :name
-  = form.text_field :name
-  %span.hint Optional
+  .form-group
+    = form.label :name
+    = form.text_field :name, class: 'form-control'
+    .help-block This field is optional.
 
   - unless @load_profile.locked?
-    = form.label :curve
-    = form.file_field :curve, accept: 'text/csv'
+    .form-group
+      = form.label :curve
+      = form.file_field :curve, accept: 'text/csv'
 
-    - unless @load_profile.new_record?
-      %span.hint(style="display: block; margin: -10px 0 20px") Leave blank if you don't want to change the curve
+      - unless @load_profile.new_record?
+        .help-block Leave blank if you don't want to change the curve.
 
-  = form.label :capacity_group
-  = form.text_field :capacity_group
+  .permitted-technologies-controls
+    %h5(style="font-weight: bold") Permitted Technologies
 
-  = form.label :min_capacity
-  = form.text_field :min_capacity
+    = form.fields_for :permitted_technologies do |task|
+      .form-group
+        .input-group.permitted-technology-control
+          = task.text_field :technology, class: 'form-control'
+          .input-group-addon
+            = task.label :_destroy, 'Remove'
+            = task.check_box :_destroy
 
-  %h6(style="font-weight: bold") Permitted Technologies
+    - tech_length = @load_profile.permitted_technologies.length
+    - 3.times do |i|
+      .form-group
+        = text_field_tag "load_profile[permitted_technologies_attributes][#{ tech_length + i }][technology]", '', placeholder: "Technology Key ##{ tech_length + i + 1 } (optional)", class: 'form-control'
 
-  = form.fields_for :permitted_technologies do |task|
-    %div
-      = task.text_field :technology
-      %span(style="font-size: 12px") Remove permitted technology:
-      = task.check_box :_destroy
+    .alert.alert-info.max-permitted-notice
+      Need to add more permitted technologies? Save the load profile and then
+      choose to edit it again to add more.
 
-  - tech_length = @load_profile.permitted_technologies.length
-  - 3.times do |i|
-    %div= text_field_tag "load_profile[permitted_technologies_attributes][#{ tech_length + i }][technology]"
-
-  .commit
+  .form-group
     = form.submit class: 'btn btn-primary'
     %span.or or
     - if @load_profile.new_record?

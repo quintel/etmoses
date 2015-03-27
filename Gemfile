@@ -8,6 +8,7 @@ gem 'mysql2', '~> 0.3.18'
 # Assets
 gem 'sass-rails',   '~> 4.0.3'
 gem 'bootstrap-sass'
+gem 'bootstrap-filestyle-rails'
 gem 'uglifier',     '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', '~> 0.12.1', platforms: :ruby

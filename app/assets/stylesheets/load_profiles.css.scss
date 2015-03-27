@@ -1,4 +1,24 @@
-.hint {
-  font-size: 1.1rem;
-  color: #777;
+.bootstrap-filestyle {
+  .group-span-filestyle:active {
+    // Prevent ugly outline when clicked.
+    outline: none;
+  }
+
+  .glyphicon {
+    margin-right: 4px;
+  }
+
+  .form-control {
+    border-left: none;
+  }
+}
+
+.permitted-technology-control {
+  label {
+    color: #777;
+    font-size: 12px;
+    font-weight: normal;
+    margin-bottom: 0;
+    margin-right: 3px;
+  }
 }

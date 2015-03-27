@@ -2,6 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on "page:change", ->
+  $('form #load_profile_curve').filestyle(buttonBefore: true)
+
   if (container = $('.profile-graph')).length
     $.getJSON(container.data('url')).success (profile) ->
       $('.profile-graph').empty().append('<svg></svg>')
