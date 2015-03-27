@@ -4,3 +4,5 @@ name: Electric car
 import_attributes:
   capacity: input_capacity
   demand: share_of demand
+
+export_to: transport_car_using_electricity_share

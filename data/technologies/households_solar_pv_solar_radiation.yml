@@ -4,3 +4,5 @@ name: Residential PV panel
 import_attributes:
   capacity: electricity_output_capacity
   demand: share_of demand
+
+export_to: households_solar_pv_solar_radiation_market_penetration

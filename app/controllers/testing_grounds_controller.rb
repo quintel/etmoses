@@ -2,6 +2,8 @@ class TestingGroundsController < ApplicationController
   respond_to :html, :json
   respond_to :csv, only: :technologies
 
+  before_filter :prepare_export, only: %i( export perform_export )
+
   # GET /topologies
   def index
     respond_with(@testing_grounds = TestingGround.all.order('created_at DESC'))
@@ -27,6 +29,16 @@ class TestingGroundsController < ApplicationController
     else
       render :import
     end
+  end
+
+  # GET /testing_grounds/:id/export
+  def export
+  end
+
+  # POST /testing_grounds/:id/export
+  def perform_export
+    redirect_to("http://beta.pro.et-model.com/scenarios/" +
+                "#{ @export.export['id'] }")
   end
 
   # POST /topologies
@@ -94,5 +106,12 @@ class TestingGroundsController < ApplicationController
   # string and converts it to a Ruby hash.
   def yamlize_attribute!(hash, attr)
     hash[attr] = YAML.load(hash[attr]) if hash[attr]
+  end
+
+  # Internal: Before filter which loads models required for export-to-ETEngine
+  # eactions.
+  def prepare_export
+    @testing_ground = TestingGround.find(params[:id])
+    @export         = Export.new(@testing_ground)
   end
 end # TestingGroundsController

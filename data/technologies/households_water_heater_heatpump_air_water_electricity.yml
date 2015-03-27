@@ -4,3 +4,5 @@ name: Heat pump for hot water (air)
 import_attributes:
   capacity: input_capacity
   demand: share_of demand
+
+export_to: households_water_heater_heatpump_air_water_electricity_share

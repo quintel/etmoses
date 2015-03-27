@@ -249,3 +249,20 @@ form.inline .field_with_errors {
     border-color: #a31c1c;
   }
 }
+
+.perform-export {
+  margin: 20px 0 20px;
+
+  form {
+    display: inline-block;
+  }
+}
+
+.exported-technologies {
+  margin-top: 10px;
+  overflow: hidden;
+
+  .input-name {
+    font-weight: bold;
+  }
+}

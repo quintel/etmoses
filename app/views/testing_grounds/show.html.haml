@@ -1,5 +1,9 @@
 %h1
-  %a.btn.btn-primary.pull-right{href: edit_testing_ground_path(@testing_ground)} Edit
+  - if Export.can_export?(@testing_ground)
+    = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
+
+  %a.btn.btn-default.pull-right{href: edit_testing_ground_path(@testing_ground), style: 'margin-right: 10px;'} Edit
+
   = "Testing Ground ##{ @testing_ground.id }:"
   = @testing_ground.name
 

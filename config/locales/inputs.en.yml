@@ -1,0 +1,9 @@
+---
+en:
+  inputs:
+    households_solar_pv_solar_radiation_market_penetration: PV panels potential
+    households_space_heater_heatpump_ground_water_electricity_share: Space heating - heat pump (ground)
+    households_space_heater_heatpump_air_water_electricity_share: Space heating - heat pump (air)
+    households_water_heater_heatpump_ground_water_electricity_share: Hot water - heat pump (ground)
+    households_water_heater_heatpump_air_water_electricity_share: Hot water - heat pump (air)
+    transport_car_using_electricity_share: Percentage of electric cars

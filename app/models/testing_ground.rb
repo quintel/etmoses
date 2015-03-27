@@ -6,7 +6,7 @@ class TestingGround < ActiveRecord::Base
 
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
 
-  IMPORT_PROVIDERS = %w(beta.et-engine.com etengine.dev localhost:3000).freeze
+  IMPORT_PROVIDERS = %w(beta.et-engine.com).freeze
 
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }

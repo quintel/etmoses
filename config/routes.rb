@@ -9,6 +9,9 @@ Rails.application.routes.draw do
 
     member do
       get 'technologies'
+
+      get  'export'
+      post 'export', to: :perform_export
     end
   end
 
