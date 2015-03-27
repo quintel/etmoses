@@ -17,11 +17,6 @@ ul.testing-grounds {
   }
 }
 
-form label {
-  display: block;
-  margin: 10px 0;
-}
-
 .testing-ground-view {
   border: 1px solid #ddd;
   border-top-color: #ccc;
@@ -174,7 +169,6 @@ form label {
   }
 
   .editor-wrap {
-    border: 1px solid #ccc;
     height: 400px;
     position: relative;
     width: 800px;
@@ -183,21 +177,6 @@ form label {
 
   input[type=text] {
     width: 500px;
-  }
-
-  .tech-choice {
-    label {
-      display: inline-block;
-      font-weight: normal;
-      margin-right: 10px;
-      font-size: 13px;
-
-      input {
-        margin-top: 0px;
-        margin-right: 2px;
-        vertical-align: text-top;
-      }
-    }
   }
 
   #testing_ground_technologies_csv {

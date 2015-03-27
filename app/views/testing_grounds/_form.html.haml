@@ -7,30 +7,33 @@
   - if @testing_ground.scenario_id
     = f.hidden_field :scenario_id
 
-  = f.label :name, 'Testing ground name'
-  = f.text_field :name
+  .form-group
+    = f.label :name, 'Testing ground name'
+    = f.text_field :name, class: 'form-control'
 
-  = f.fields_for :topology do |topo_form|
-    = f.label :graph, 'Testing ground as YAML'
-    = topo_form.text_area :graph, value: topology_field_value(testing_ground)
+  .form-group
+    = f.fields_for :topology do |topo_form|
+      = f.label :graph, 'Testing ground as YAML'
+      = topo_form.text_area :graph, value: topology_field_value(testing_ground)
 
   - if testing_ground.new_record? && request.get?
-    = f.label :technologies, 'Technologies as...'
+    .form-group
+      = f.label :technologies, 'Technologies as...'
 
-    .tech-choice
-      %label
-        = radio_button :js, :technologies_as, :yaml, checked: true
-        YAML
+      .tech-choice
+        %label.checkbox-inline
+          = radio_button :js, :technologies_as, :yaml, checked: true
+          YAML
 
-      %label
-        = radio_button :js, :technologies_as, :csv, checked: false
-        CSV Upload
+        %label.checkbox-inline
+          = radio_button :js, :technologies_as, :csv, checked: false
+          CSV Upload
 
-    = f.file_field :technologies_csv, accept: 'text/csv'
+      = f.file_field :technologies_csv, accept: 'text/csv'
 
   = f.text_area :technologies, value: technologies_field_value(testing_ground)
 
-  .commit
+  .form-group
     = f.submit class: 'btn btn-primary'
     %span.or or
     - if testing_ground.new_record?
