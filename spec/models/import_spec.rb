@@ -27,7 +27,7 @@ RSpec.describe Import do
       expect(testing_ground.topology.graph).to_not be_blank
     end
 
-    it 'saves the scenario ID on the testing ground', :focus do
+    it 'saves the scenario ID on the testing ground' do
       expect(testing_ground.scenario_id).to eq(1337)
     end
   end # with no existing topology
