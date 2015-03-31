@@ -121,7 +121,7 @@ RSpec.describe Import do
         {
           'tech_one' => {
             'number_of_units' => { 'future' => 3 },
-            'electricity_output_capacity' => { 'future' => 20.0 }
+            'electricity_output_capacity' => { 'future' => 0.02 }
           },
           'tech_two' => {
             'number_of_units' => { 'future' => 2 },
