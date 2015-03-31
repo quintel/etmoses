@@ -1,6 +1,6 @@
 class Import
   DemandAttribute =
-    Attribute.new('demand', 'demand') do |value, data, attribute|
+    Attribute.new('demand') do |value, data, attribute|
       units = attribute.future(data, 'number_of_units')
 
       # Convert the value from MJ to kWh (1 MWh = 3600 MJ).

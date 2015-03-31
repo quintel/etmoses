@@ -17,7 +17,7 @@ class Import
     #               data from ETEngine, and the Attribute instance.
     #
     # Returns an Import::Attribute
-    def initialize(local_name, remote_name, &extractor)
+    def initialize(local_name, remote_name = local_name, &extractor)
       @local_name  = local_name.freeze
       @remote_name = remote_name.freeze
       @extractor   = extractor || ->(value, *) { value }
