@@ -18,8 +18,8 @@ class Import
     #
     # Returns an Import::Attribute
     def initialize(local_name, remote_name, &extractor)
-      @local_name  = local_name
-      @remote_name = remote_name
+      @local_name  = local_name.freeze
+      @remote_name = remote_name.freeze
       @extractor   = extractor || ->(value, *) { value }
     end
 
