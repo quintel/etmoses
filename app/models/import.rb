@@ -8,6 +8,19 @@ class Import
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
 
+  # Internal: A hash of attributes which may be imported from ETEngine.
+  ATTRIBUTES = Hash[[ DemandAttribute,
+                      ElectricityOutputCapacityAttribute,
+                      InputCapacityAttribute ].map do |attribute|
+    [attribute.remote_name, attribute]
+  end].with_indifferent_access.freeze
+
+  # Public: Retrieves the Attribute responsible for importing the given ETEngine
+  # attribute key.
+  def self.attribute(key)
+    ATTRIBUTES[key]
+  end
+
   # Public: Returns a hash of technologies which we can import from ETEngine.
   #
   # Each key is the name of a tehnology in ETEngine, and each value a hash
@@ -89,12 +102,10 @@ class Import
       units     = data['number_of_units']['future'].round
       target    = Technology.by_key(key)
       title     = target.name || target.key.to_s.titleize
-      import_to = Technology::IMPORT_ATTRIBUTES[target.import_from.to_sym].to_s
+      attribute = self.class.attribute(target.import_from)
 
-      attrs = {
-        'type'    => key,
-        import_to => extract_value(data, import_to, target.import_from)
-      }
+      # Attributes common to all installed versions of this technology.
+      attrs = { 'type' => key, attribute.local_name => attribute.call(data) }
 
       # Filter the profiles leaving only those suitable for the technology.
       profiles = suitable_profiles(available_profiles[key], attrs['capacity'])
@@ -119,21 +130,6 @@ class Import
 
     topo.each_with_object({}) do |tech, hash|
       hash[tech[:key]] = tech[:techs]
-    end
-  end
-
-  # Internal: Given a hash of values for a converter imported from ETEngine,
-  # extracts the +name+d value.
-  def extract_value(data, local_name, name)
-    extracted = data.key?(name) ? data[name]['future'] : 0.0
-
-    case local_name
-    when 'demand'.freeze
-      extracted * (1.0 / 3.6) / data['number_of_units']['future'].round
-    when 'capacity'.freeze
-      extracted * 1000
-    else
-      extracted
     end
   end
 
