@@ -1,4 +1,4 @@
-class Technology
+class InstalledTechnology
   include Virtus.model
 
   attribute :name,     String

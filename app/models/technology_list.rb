@@ -6,7 +6,7 @@ class TechnologyList
 
   # Public: Given a hash containing node keys, and a list of technologies
   # attached to the node, converts this into a TechnologyList where each tech
-  # becomes a Technology instance.
+  # becomes an InstalledTechnology instance.
   #
   # Returns a TechnologyList.
   def self.load(data)
@@ -15,12 +15,12 @@ class TechnologyList
 
   # Public: Given a hash containing node keys, and a list of technologies
   # attached to the node, converts this into a TechnologyList where each tech
-  # becomes a Technology instance.
+  # becomes an InstalledTechnology instance.
   #
   # Returns a TechnologyList.
   def self.from_hash(data)
     new(Hash[data.map do |node_key, technologies|
-      [node_key, technologies.map(&Technology.method(:new))]
+      [node_key, technologies.map(&InstalledTechnology.method(:new))]
     end])
   end
 
@@ -76,7 +76,7 @@ class TechnologyList
 
   # Public: Converts the technology list to a CSV file.
   def to_csv
-    attributes = Technology.attribute_set.map(&:name)
+    attributes = InstalledTechnology.attribute_set.map(&:name)
     options    = { headers: [:connection, *attributes], write_headers: true }
 
     CSV.generate(options) do |csv|
