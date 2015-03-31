@@ -16,9 +16,7 @@ class Import
   #
   # Returns a hash.
   def self.import_targets
-    Rails.cache.fetch('import.import_targets') do
-      Library::Technology.all.select(&:import?)
-    end
+    Technology.where('import_from IS NOT NULL')
   end
 
   # Public: Creates a new Import with the given provider and scenario.
@@ -88,16 +86,15 @@ class Import
     available_profiles = permitted_profiles(response.keys)
 
     techs = response.each_with_object([]) do |(key, data), list|
-      units    = data['number_of_units']['future'].round
-      target   = Library::Technology.find(key)
-      imports  = target.import_attributes
-      title    = target.name || target.key.to_s.titleize
+      units     = data['number_of_units']['future'].round
+      target    = Technology.by_key(key)
+      title     = target.name || target.key.to_s.titleize
+      import_to = Technology::IMPORT_ATTRIBUTES[target.import_from.to_sym].to_s
 
-      attrs = imports.each_with_object({}) do |(local, remote), base|
-        base[local] = extract_value(data, local, remote)
-      end
-
-      attrs['type'] = key
+      attrs = {
+        'type'    => key,
+        import_to => extract_value(data, import_to, target.import_from)
+      }
 
       # Filter the profiles leaving only those suitable for the technology.
       profiles = suitable_profiles(available_profiles[key], attrs['capacity'])
@@ -128,19 +125,15 @@ class Import
   # Internal: Given a hash of values for a converter imported from ETEngine,
   # extracts the +name+d value.
   def extract_value(data, local_name, name)
-    extracted = if name.start_with?('share_of ')
-      name  = name[9..-1]
-      value = data.key?(name) ? data[name]['future'] : 0.0
-
-      value / data['number_of_units']['future'].round
-    else
-      data.key?(name) ? data[name]['future'] : 0.0
-    end
+    extracted = data.key?(name) ? data[name]['future'] : 0.0
 
     case local_name
-      when 'demand'.freeze   then extracted * (1.0 / 3.6)
-      when 'capacity'.freeze then extracted * 1000
-      else                        extracted
+    when 'demand'.freeze
+      extracted * (1.0 / 3.6) / data['number_of_units']['future'].round
+    when 'capacity'.freeze
+      extracted * 1000
+    else
+      extracted
     end
   end
 

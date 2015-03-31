@@ -39,8 +39,7 @@ gem 'unicorn'
 # gem 'debugger', group: [:development, :test]
 
 group :development, :test do
-  gem 'rspec-rails',        '~> 3.1'
-  gem 'factory_girl_rails', '~> 4.5'
+  gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'
 end
 
@@ -55,6 +54,11 @@ group :development do
 
   gem 'better_errors'
   gem 'binding_of_caller'
+end
+
+group :test do
+  gem 'factory_girl_rails', '~> 4.5'
+  gem 'shoulda-matchers', require: false
 end
 
 # Application Gems.

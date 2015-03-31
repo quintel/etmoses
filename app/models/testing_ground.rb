@@ -99,13 +99,6 @@ class TestingGround < ActiveRecord::Base
         errors.add(
           :technologies, "has an unknown technology type: #{ tech.type }")
       elsif tech.profile
-        unless tech.library.permitted_profile?(tech.profile)
-          errors.add(
-            :technologies,
-            "may not use the #{ tech.profile.inspect } profile " \
-            "with a #{ tech.type.inspect }")
-        end
-
         if tech.profile && tech.load
           errors.add(
             :technologies,

@@ -1,7 +1,0 @@
----
-profiles:
-  - one
-  - "t*"
-
-import_attributes:
-  capacity: electricity_output_capacity

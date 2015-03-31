@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe TestingGround do
+  let!(:technology) { create(:technology, key: 'tech_one') }
+
   it 'must have a topology set' do
     expect(TestingGround.new.errors_on(:topology)).to include("can't be blank")
   end
@@ -126,7 +128,7 @@ RSpec.describe TestingGround do
       end
     end # with a permitted load profile set
 
-    context 'with a non-permitted load profile set' do
+    pending 'with a non-permitted load profile set' do
       let(:tg) do
         build(:testing_ground, technologies: {
           'lv1' => [{

@@ -15,17 +15,16 @@ class InstalledTechnology
   #
   # Returns true or false.
   def exists?
-    type.blank? || Library::Technology.exists?(type)
+    type.blank? || type == 'generic'.freeze || Technology.exists?(key: type)
   end
 
-  # Public: Returns the matching "library" technology (as defined in
-  # data/technologies). Techs with no "type" will return the "generic" library
-  # tech.
+  # Public: Returns the associated technology (as defined in data/technologies).
+  # Techs with no "type" will return the "generic" library tech.
   #
-  # Returns a Library::Technology, or raises ActiveRecord::RecordNotFound if the
-  # tech does not exist.
-  def library
-    Library::Technology.find(type.presence || 'generic')
+  # Returns a Technology, or raises ActiveRecord::RecordNotFound if the tech
+  # does not exist.
+  def technology
+    type.present? ? Technology.by_key(type) : Technology.generic
   end
 
   # Public: Returns the load profile Curve, if the :profile attribute is set.

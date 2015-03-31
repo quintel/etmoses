@@ -10,10 +10,20 @@ RSpec.describe Import do
   let(:topology)       { create(:topology) }
   let(:testing_ground) { import.testing_ground }
 
+  before do
+    %w( tech_one tech_two ).each do |key|
+      Technology.create!(key: key, import_from: 'electricity_output_capacity')
+    end
+  end
+
   def build_response(techs)
     techs.each_with_object({}) do |(key, units), data|
       data[key] = { 'number_of_units' => { 'future' => units } }
     end
+  end
+
+  def find_techs(tg, key)
+    tg.technologies.to_h.values.flatten.select { |t| t.type == key }
   end
 
   context 'with no existing topology' do
@@ -74,21 +84,82 @@ RSpec.describe Import do
       end
 
       it 'assigns the profiles fairly to applicable technologies' do
-        techs = testing_ground.technologies.to_h.values.flatten
-          .select { |tech| tech.type == 'tech_one' }
+        techs = find_techs(testing_ground, 'tech_one')
 
         expect(techs.select { |t| t.profile == 'profile_one' }.length).to eq(3)
         expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(2)
       end
 
       it 'does not assign the profiles to inapplicable technologies' do
-        techs = testing_ground.technologies.to_h.values.flatten
-          .select { |tech| tech.type != 'tech_one' }
+        techs = find_techs(testing_ground, 'tech_two')
 
         expect(techs.select { |t| t.profile == 'profile_one' }.length).to eq(0)
         expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(0)
       end
     end # when tech_one has two available load profiles
+
+    context 'importing the electricity_output_capacity attribute' do
+      let(:response) { { 'tech_one' => {
+        'number_of_units' => { 'future' => 3 },
+        'electricity_output_capacity' => { 'future' => 0.02 }
+      } } }
+
+      let(:tech) { find_techs(testing_ground, 'tech_one').first }
+
+      it 'saves the attribute value as "capacity"' do
+        expect(tech.capacity).to be
+      end
+
+      it 'converts the value to KW' do
+        expect(tech.capacity).to eq(20.0)
+      end
+    end # importing the electricity_output_capacity attribute
+
+    context 'importing the input_capacity attribute' do
+      before do
+        Technology.by_key('tech_one').update_attributes!(
+          import_from: 'input_capacity'
+        )
+      end
+
+      let(:response) { { 'tech_one' => {
+        'number_of_units' => { 'future' => 3 },
+        'input_capacity' => { 'future' => 0.04 }
+      } } }
+
+      let(:tech) { find_techs(testing_ground, 'tech_one').first }
+
+      it 'saves the attribute value as "capacity"' do
+        expect(tech.capacity).to be
+      end
+
+      it 'converts the value to KW' do
+        expect(tech.capacity).to eq(40.0)
+      end
+    end # importing the input_capacity attribute
+
+    context 'importing the demand attribute' do
+      before do
+        Technology.by_key('tech_one').update_attributes!(
+          import_from: 'demand'
+        )
+      end
+
+      let(:response) { { 'tech_one' => {
+        'number_of_units' => { 'future' => 3 },
+        'demand' => { 'future' => 300.0 }
+      } } }
+
+      let(:tech) { find_techs(testing_ground, 'tech_one').first }
+
+      it 'saves the attribute value as "demand"' do
+        expect(tech.demand).to be
+      end
+
+      it 'divides the value by the number of units, converting to kwh' do
+        expect(tech.demand).to be_within(1e-9).of(100.0 / 3.6)
+      end
+    end # importing the demand attribute
 
     context 'when tech_one has three available capacity-limited load profiles' do
       let(:profile_one) do
@@ -130,8 +201,7 @@ RSpec.describe Import do
       end
 
       it 'assigns an appropriate capacity-based profile' do
-        techs = testing_ground.technologies.to_h.values.flatten
-          .select { |tech| tech.type == 'tech_one' }
+        techs = find_techs(testing_ground, 'tech_one')
 
         expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(2)
         expect(techs.select { |t| t.profile == 'profile_four' }.length).to eq(1)

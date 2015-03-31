@@ -1,7 +1,0 @@
----
-profiles:
-  - one
-  - two
-
-import_attributes:
-  capacity: electricity_output_capacity
