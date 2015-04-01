@@ -13,4 +13,18 @@ RSpec.describe Technology, type: :model do
          in_array(%w(demand electricity_output_capacity input_capacity)) }
 
   it { expect(subject).to validate_length_of(:export_to).is_at_most(100) }
-end
+
+  describe '#name' do
+    context 'when an name is assigned' do
+      it 'uses the assigned name' do
+        expect(Technology.new(name: 'Okay', key: 'this').name).to eq('Okay')
+      end
+    end # when an name is assigned
+
+    context 'when no name is assigned' do
+      it 'uses a variation of the key' do
+        expect(Technology.new(key: 'this_thing').name).to eq('This thing')
+      end
+    end # when an name is assigned
+  end # name
+end # Technology

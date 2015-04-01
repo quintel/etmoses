@@ -35,4 +35,9 @@ class Technology < ActiveRecord::Base
   def self.by_key(key)
     key == 'generic'.freeze ? generic : where(key: key).first!
   end
+
+  # Public: A nice, readable name for the technology.
+  def name
+    super || key.to_s.humanize
+  end
 end
