@@ -5,10 +5,10 @@ RSpec.describe Import::ProfileSelector do
   let(:profile_two) { create(:load_profile, key: 'profile_two') }
 
   before do
-    PermittedTechnology.create!(
+    TechnologyProfile.create!(
       technology: 'tech_one', load_profile: profile_one)
 
-    PermittedTechnology.create!(
+    TechnologyProfile.create!(
       technology: 'tech_one', load_profile: profile_two)
   end
 

@@ -35,7 +35,7 @@ class Import
     # profiles.
     def profiles
       @profiles ||= begin
-        permits = PermittedTechnology
+        permits = TechnologyProfile
           .where(technology: @technologies)
           .includes(:load_profile)
 

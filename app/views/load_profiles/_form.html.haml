@@ -23,21 +23,21 @@
       - unless @load_profile.new_record?
         .help-block Leave blank if you don't want to change the curve.
 
-  .permitted-technologies-controls
+  .technology-profiles-controls
     %h5(style="font-weight: bold") Permitted Technologies
 
-    = form.fields_for :permitted_technologies do |task|
+    = form.fields_for :technology_profiles do |task|
       .form-group
-        .input-group.permitted-technology-control
+        .input-group.technology-profile-control
           = task.text_field :technology, class: 'form-control'
           .input-group-addon
             = task.label :_destroy, 'Remove'
             = task.check_box :_destroy
 
-    - tech_length = @load_profile.permitted_technologies.length
+    - tech_length = @load_profile.technology_profiles.length
     - 3.times do |i|
       .form-group
-        = text_field_tag "load_profile[permitted_technologies_attributes][#{ tech_length + i }][technology]", '', placeholder: "Technology Key ##{ tech_length + i + 1 } (optional)", class: 'form-control'
+        = text_field_tag "load_profile[technology_profiles_attributes][#{ tech_length + i }][technology]", '', placeholder: "Technology Key ##{ tech_length + i + 1 } (optional)", class: 'form-control'
 
     .alert.alert-info.max-permitted-notice
       Need to add more permitted technologies? Save the load profile and then

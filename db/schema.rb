@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150401144252) do
+ActiveRecord::Schema.define(version: 20150401163412) do
 
   create_table "load_profiles", force: true do |t|
     t.string   "key",                                null: false
@@ -27,14 +27,6 @@ ActiveRecord::Schema.define(version: 20150401144252) do
 
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
 
-  create_table "permitted_technologies", force: true do |t|
-    t.integer "load_profile_id", null: false
-    t.string  "technology",      null: false
-  end
-
-  add_index "permitted_technologies", ["load_profile_id", "technology"], name: "index_permitted_technologies_on_load_profile_id_and_technology", unique: true, using: :btree
-  add_index "permitted_technologies", ["load_profile_id"], name: "index_permitted_technologies_on_load_profile_id", using: :btree
-
   create_table "technologies", force: true do |t|
     t.string "key",         limit: 100, null: false
     t.string "name",        limit: 100
@@ -43,6 +35,14 @@ ActiveRecord::Schema.define(version: 20150401144252) do
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
+
+  create_table "technology_profiles", force: true do |t|
+    t.integer "load_profile_id", null: false
+    t.string  "technology",      null: false
+  end
+
+  add_index "technology_profiles", ["load_profile_id", "technology"], name: "index_technology_profile_on_load_profile_id_and_technology", unique: true, using: :btree
+  add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profile_on_load_profile_id", using: :btree
 
   create_table "testing_grounds", force: true do |t|
     t.text     "technologies", limit: 16777215, null: false

@@ -1,5 +1,5 @@
 class LoadProfile < ActiveRecord::Base
-  has_many :permitted_technologies
+  has_many :technology_profiles
 
   has_attached_file :curve, styles: {
     demand_scaled:   { scale_by: :sum, processors: [:scaled_curve] },
@@ -20,7 +20,7 @@ class LoadProfile < ActiveRecord::Base
     end
   end
 
-  accepts_nested_attributes_for :permitted_technologies,
+  accepts_nested_attributes_for :technology_profiles,
     reject_if: :all_blank, allow_destroy: true
 
   # Public: Returns a hash containing the values to be serialised as JSON.
