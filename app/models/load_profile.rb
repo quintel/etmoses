@@ -46,13 +46,7 @@ class LoadProfile < ActiveRecord::Base
 
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.
-  def self.find_by_key(key)
-    by_key(key).first!
-  end
-
-  # Public: Given the unique key representing a load profile, returns the
-  # profile or raises ActiveRecord::RecordNotFound.
   def self.by_key(key)
-    where(key: key)
+    where(key: key).first!
   end
 end

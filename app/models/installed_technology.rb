@@ -31,7 +31,7 @@ class InstalledTechnology
   #
   # Returns a Merit::Curve.
   def profile_curve
-    load_profile = LoadProfile.find_by_key(profile)
+    load_profile = LoadProfile.by_key(profile)
 
     if capacity
       load_profile.merit_curve(:capacity_scaled) * capacity

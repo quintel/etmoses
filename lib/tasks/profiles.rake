@@ -14,7 +14,8 @@ namespace :profiles do
         begin
           name       = path.basename(path.extname).to_s
           key        = path.basename(path.extname).to_s.downcase
-          profile    = LoadProfile.by_key(key).first || LoadProfile.new(key: key)
+          profile    = LoadProfile.where(key: key).first ||
+                         LoadProfile.new(key: key)
           curve_file = File.open(path)
 
           profile.attributes = { curve: curve_file, name: name }
