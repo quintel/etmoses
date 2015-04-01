@@ -72,21 +72,13 @@ class Import
   #
   # Returns a hash.
   def technologies_from(response)
-    # Figure out which nodes are the "leaf" nodes.
-
+    techs = technology_units_from(response)
     graph = TreeToGraph.convert(topology.graph)
 
+    # Create an array containing the leaf nodes so that we may assign
+    # technologies.
     topo = graph.nodes.select { |n| n.edges(:out).empty? }.map do |node|
       { key: node.key, techs: [] }
-    end
-
-    # Combine the technologies into an array so that they can be distributed
-    # evenly.
-
-    available_profiles = ProfileSelector.new(response.keys)
-
-    techs = response.flat_map do |(key, data)|
-      TechnologyBuilder.build(key, data, available_profiles.for_tech(key))
     end
 
     techs.each_with_index do |tech, index|
@@ -94,9 +86,20 @@ class Import
     end
 
     # Convert the array of nodes back into one big technology hash.
-
     topo.each_with_object({}) do |tech, hash|
       hash[tech[:key]] = tech[:techs]
+    end
+  end
+
+  # Internal: Given the ETEngine response, returns an array containing all
+  # techologies which will exist in the testing ground.
+  #
+  # Returns an array.
+  def technology_units_from(response)
+    available_profiles = ProfileSelector.new(response.keys)
+
+    response.flat_map do |(key, data)|
+      TechnologyBuilder.build(key, data, available_profiles.for_tech(key))
     end
   end
 end # Import
