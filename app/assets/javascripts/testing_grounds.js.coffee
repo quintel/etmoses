@@ -170,13 +170,42 @@ showTopology = (jsonURL, container) ->
 # Uses nvd3 in order to create a "focus" area so the user may zoom on and view
 # the curve in greater detail.
 class LoadChart
-  constructor: (@data) ->
+  constructor: (@data, @label, @capacity) ->
     # pass
 
-  render: (intoSelector) =>
+  sampledData: (week) ->
+    if week
+      chunkSize = Math.floor(@data.length / 52)
+      zeroWeek  = week - 1
+
+      startAt = zeroWeek * chunkSize
+      endAt   = startAt + chunkSize
+
+      window.downsampleCurve(@data.slice(startAt, endAt), chunkSize)
+    else
+      window.downsampleCurve(@data, 365)
+
+  render: (intoSelector, week = 0) =>
+    @renderChart(intoSelector, week)
+    @drawDateSelect(intoSelector)
+
+  renderChart: (intoSelector, week) ->
     self = this
 
-    @data.forEach (series) ->
+    values = @sampledData(week)
+    data   = [{ key: @label, values: values, area: true }]
+
+    $(intoSelector).empty()
+
+    if @capacity
+      data.push({
+        key: 'Capacity',
+        color: 'darkred',
+        values: data[0].values.map((sample) -> { x: sample.x, y: @capacity })
+      })
+
+    # data.forEach (series) ->
+    for series in data
       if series.values.length == 1
         for point in [1..364]
           series.values.push(
@@ -185,7 +214,42 @@ class LoadChart
           )
 
     nv.addGraph =>
-      d3.select(intoSelector).datum(@data).call(@chart())
+      d3.select(intoSelector).datum(data).call(@chart())
+
+  drawDateSelect: (intoSelector) ->
+    epoch    = new Date(0)
+    msInWeek = 604800000
+
+    monthNames = [
+      "January", "February", "March",
+      "April", "May", "June", "July",
+      "August", "September", "October",
+      "November", "December"
+    ]
+
+    dateEl = $('<select name="date-select" class="form-control" style="max-width: 300px"></select>')
+    dateEl.append($('<option value="0">Whole year</option>'))
+
+    for week in [0...52]
+      startWeek = new Date(epoch.getDate() + (msInWeek * week))
+      endWeek   = new Date(startWeek.getDate() + (msInWeek * week) + msInWeek - (msInWeek / 7))
+
+      if week is 51
+        endWeek = new Date(endWeek.getDate() - 1000)
+
+      optionEl = $("<option value='#{ week + 1 }'></option>")
+
+      optionEl.text("#{ startWeek.getDate() } #{ monthNames[startWeek.getMonth()] } - " +
+                    "#{ endWeek.getDate() } #{ monthNames[endWeek.getMonth()] }")
+
+      dateEl.append(optionEl)
+
+    dateEl.change =>
+      value = parseInt(dateEl.val(), 10)
+      @renderChart(intoSelector, value)
+
+    $(intoSelector).after(dateEl)
+
 
   chart: ->
     chart = nv.models.lineWithFocusChart()

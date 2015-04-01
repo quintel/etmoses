@@ -130,6 +130,20 @@ ul.testing-grounds {
     float: right;
   }
 
+  .date-select {
+    label {
+      font-size: 13px;
+      margin-top: 1px;
+      margin-right: 10px;
+
+      input {
+        cursor: pointer;
+        margin-top: 0;
+        margin-right: 2px;
+        vertical-align: text-top;
+      }
+    }
+  }
 }
 
 .line-chart svg {

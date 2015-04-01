@@ -8,8 +8,6 @@ $(document).on "page:change", ->
     $.getJSON(container.data('url')).success (profile) ->
       $('.profile-graph').empty().append('<svg></svg>')
 
-      new (window.LoadChart)([{
-        key:    profile.name || profile.key
-        area:   true
-        values: window.downsampleCurve(profile.values, 365)
-      }]).render('.profile-graph svg')
+      new (window.LoadChart)(
+        profile.values, profile.name || profile.key
+      ).render('.profile-graph svg')

@@ -160,13 +160,13 @@ d3.json(url, function(error, treeData) {
         if (d3.event.defaultPrevented) return; // click suppressed
 
         // Load chart.
-        var values    = window.downsampleCurve(d.load, 365),
+        var values    = d.load,
             loadChart = window.LoadChart;
 
         var chartData = [{
-          key:    d.name,
-          area:   true,
-          values: values
+            key:    d.name,
+            area:   true,
+            values: values
         }]
 
         if (d.capacity) {
@@ -197,7 +197,7 @@ d3.json(url, function(error, treeData) {
                 event.preventDefault();
             });
 
-        new loadChart(chartData).render('.load-graph svg')
+        new loadChart(d.load, d.name, d.capacity).render('.load-graph svg')
     }
 
     function dblClick(d) {
