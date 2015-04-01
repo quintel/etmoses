@@ -47,13 +47,9 @@ class LoadProfilesController < ApplicationController
   end
 
   def load_profile_params
-    lp_params = params.require(:load_profile).permit(
-      :key, :name, :curve, :capacity_group, :min_capacity,
+    params.require(:load_profile).permit(
+      :key, :name, :curve,
       { permitted_technologies_attributes: [:id, :technology, :_destroy] }
     )
-
-    lp_params.delete(:capacity_group) if lp_params[:capacity_group].blank?
-
-    lp_params
   end
 end

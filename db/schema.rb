@@ -11,20 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150331121850) do
+ActiveRecord::Schema.define(version: 20150401144252) do
 
   create_table "load_profiles", force: true do |t|
-    t.string   "key",                                           null: false
+    t.string   "key",                                null: false
     t.string   "name"
-    t.boolean  "locked",                        default: false, null: false
+    t.boolean  "locked",             default: false, null: false
     t.string   "curve_file_name"
     t.string   "curve_content_type"
     t.integer  "curve_file_size"
     t.datetime "curve_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "capacity_group"
-    t.float    "min_capacity",       limit: 24
   end
 
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree

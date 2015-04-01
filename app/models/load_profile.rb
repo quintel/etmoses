@@ -11,7 +11,6 @@ class LoadProfile < ActiveRecord::Base
     size: { less_than: 100.megabytes }
 
   validates :key, presence: true, uniqueness: true
-  validates :min_capacity, presence: true, if: :capacity_group
 
   before_validation on: :create do
     if key.blank? && curve_file_name

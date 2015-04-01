@@ -160,52 +160,5 @@ RSpec.describe Import do
         expect(tech.demand).to be_within(1e-9).of(100.0 / 3.6)
       end
     end # importing the demand attribute
-
-    context 'when tech_one has three available capacity-limited load profiles' do
-      let(:profile_one) do
-        create(:load_profile, key: 'profile_one',
-               capacity_group: 'a', min_capacity: 10.0)
-      end
-
-      let(:profile_two) do
-        create(:load_profile, key: 'profile_two',
-               capacity_group: 'a', min_capacity: 20.0)
-      end
-
-      let(:profile_three) do
-        create(:load_profile, key: 'profile_three',
-               capacity_group: 'a', min_capacity: 30.0)
-      end
-
-      let(:profile_four) do
-        create(:load_profile, key: 'profile_four')
-      end
-
-      before do
-        [ profile_one, profile_two, profile_three, profile_four ].each do |prof|
-          PermittedTechnology.create!(
-            technology: 'tech_one', load_profile: prof)
-        end
-      end
-
-      let(:response) do
-        {
-          'tech_one' => {
-            'number_of_units' => { 'future' => 3 },
-            'electricity_output_capacity' => { 'future' => 0.02 }
-          },
-          'tech_two' => {
-            'number_of_units' => { 'future' => 2 },
-          }
-        }
-      end
-
-      it 'assigns an appropriate capacity-based profile' do
-        techs = find_techs(testing_ground, 'tech_one')
-
-        expect(techs.select { |t| t.profile == 'profile_two' }.length).to eq(2)
-        expect(techs.select { |t| t.profile == 'profile_four' }.length).to eq(1)
-      end
-    end # when tech_one has two available capacity-limited load profiles
   end # with five coal heaters and three gas heaters
 end # describe Import
