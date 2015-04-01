@@ -96,7 +96,7 @@ class Import
     # Combine the technologies into an array so that they can be distributed
     # evenly.
 
-    available_profiles = permitted_profiles(response.keys)
+    available_profiles = ProfileSelector.new(response.keys)
 
     techs = response.each_with_object([]) do |(key, data), list|
       units     = data['number_of_units']['future'].round
@@ -108,17 +108,14 @@ class Import
       attrs = { 'type' => key, attribute.local_name => attribute.call(data) }
 
       # Filter the profiles leaving only those suitable for the technology.
-      profiles = (available_profiles[key] || []).dup
+      profiles = available_profiles.for_tech(key)
 
       # Add each individual "unit" of the technology to the testing ground.
       units.times do |index|
-        tech_data = attrs.merge('name' => "#{ title } ##{ index + 1 }")
-
-        if profiles.any?
-          tech_data['profile'] = select_profile(profiles)
-        end
-
-        list.push(tech_data)
+        list.push(attrs.merge(
+          'name'    => "#{ title } ##{ index + 1 }",
+          'profile' => profiles.next
+        ).tap(&:compact!))
       end
     end
 
