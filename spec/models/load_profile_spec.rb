@@ -63,5 +63,16 @@ RSpec.describe LoadProfile, type: :model do
         expect(curve.reduce(:+)).to be_within(1e-8).of(1.0)
       end
     end
-  end
+  end # when saved
+
+  context 'when destroyed' do
+    let(:profile) { create(:load_profile) }
+
+    it 'removes associated TechnologyProfile records' do
+      TechnologyProfile.create!(
+        technology: 'tech_a', load_profile: profile)
+
+      expect { profile.destroy }.to change { TechnologyProfile.count }.by(-1)
+    end
+  end # when destroyed
 end # LoadProfile

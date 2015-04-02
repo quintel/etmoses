@@ -1,5 +1,5 @@
 class LoadProfile < ActiveRecord::Base
-  has_many :technology_profiles
+  has_many :technology_profiles, dependent: :destroy
 
   has_attached_file :curve, styles: {
     demand_scaled:   { scale_by: :sum, processors: [:scaled_curve] },
