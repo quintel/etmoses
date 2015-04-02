@@ -10,6 +10,16 @@ focusNone = (element, key) ->
   d3.select(element).selectAll('g.node').classed(focused: false)
   $('#technologies .row').removeClass('focused')
 
+formatDate = (date) ->
+  monthNames = [
+    "January", "February", "March",
+    "April", "May", "June", "July",
+    "August", "September", "October",
+    "November", "December"
+  ]
+
+  "#{ date.getDate() } #{ monthNames[date.getMonth()] }"
+
 # Creates the tree diagram. An experimental, top-down version of the diagram
 # which lacks pan-and-zoom.
 showTopology = (jsonURL, container) ->
@@ -181,7 +191,7 @@ class LoadChart
       startAt = zeroWeek * chunkSize
       endAt   = startAt + chunkSize
 
-      window.downsampleCurve(@data.slice(startAt, endAt), chunkSize)
+      window.downsampleCurve(@data.slice(startAt, endAt), chunkSize, startAt)
     else
       window.downsampleCurve(@data, 365)
 
@@ -216,16 +226,21 @@ class LoadChart
     nv.addGraph =>
       d3.select(intoSelector).datum(data).call(@chart())
 
+  formatDateFromPoint: (point) =>
+    multiplier =
+      switch @data.length
+        when 35040 then 900000
+        when 8760  then 3600000
+        else            -1
+
+    if multiplier is -1
+      point
+    else
+      formatDate(new Date(point * multiplier))
+
   drawDateSelect: (intoSelector) ->
     epoch    = new Date(0)
     msInWeek = 604800000
-
-    monthNames = [
-      "January", "February", "March",
-      "April", "May", "June", "July",
-      "August", "September", "October",
-      "November", "December"
-    ]
 
     dateEl = $('<select name="date-select" class="form-control" style="max-width: 300px"></select>')
     dateEl.append($('<option value="0">Whole year</option>'))
@@ -238,9 +253,7 @@ class LoadChart
         endWeek = new Date(endWeek.getDate() - 1000)
 
       optionEl = $("<option value='#{ week + 1 }'></option>")
-
-      optionEl.text("#{ startWeek.getDate() } #{ monthNames[startWeek.getMonth()] } - " +
-                    "#{ endWeek.getDate() } #{ monthNames[endWeek.getMonth()] }")
+      optionEl.text("#{ formatDate(startWeek) } - #{ formatDate(endWeek) }")
 
       dateEl.append(optionEl)
 
@@ -249,7 +262,6 @@ class LoadChart
       @renderChart(intoSelector, value)
 
     $(intoSelector).after(dateEl)
-
 
   chart: ->
     chart = nv.models.lineWithFocusChart()
@@ -266,10 +278,10 @@ class LoadChart
     chart.lines2.duration(0)
     chart.lines2.forceY([0.0])
 
-    chart.xAxis.tickFormat(d3.format(',f'))
-    chart.x2Axis.tickFormat(d3.format(',f'))
-    chart.yAxis.tickFormat(d3.format(',.2f'))
-    chart.y2Axis.tickFormat(d3.format(',.2f'))
+    chart.xAxis.tickFormat(@formatDateFromPoint)
+    chart.x2Axis.tickFormat(@formatDateFromPoint)
+    chart.yAxis.tickFormat(d3.format(',.1f'))
+    chart.y2Axis.tickFormat(d3.format(',.1f'))
 
     chart
 
@@ -282,12 +294,15 @@ window.LoadChart = LoadChart
 # For example:
 #
 #   downsampleCurve([2, 7, 4, 5, 2, 9], 2) # => [7, 9]
-downsampleCurve = (curve, outLength) ->
+downsampleCurve = (curve, outLength, startAt = 0) ->
   curveLength = curve.length
   chunkLength = Math.floor(curveLength / outLength) or 1
 
   for startIndex in [0...curveLength] by chunkLength
-    { x: startIndex, y: d3.max(curve[startIndex...(startIndex + chunkLength)]) }
+    {
+      x: startIndex + startAt
+      y: d3.max(curve[startIndex...(startIndex + chunkLength)])
+    }
 
 window.downsampleCurve = downsampleCurve
 

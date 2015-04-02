@@ -149,6 +149,16 @@ ul.testing-grounds {
 .line-chart svg {
   height: 500px;
   margin-bottom: 25px;
+
+  .nv-x .nv-axisMaxMin {
+    text {
+      text-anchor: start !important;
+    }
+
+    &:last-child text {
+      text-anchor: end !important;
+    }
+  }
 }
 
 .nvtooltip h3 {
