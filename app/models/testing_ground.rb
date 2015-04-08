@@ -28,11 +28,12 @@ class TestingGround < ActiveRecord::Base
       Calculation::Flows
     ]
 
-    graph = calculators.reduce(to_graph) do |graph, calculator|
-      calculator.call(graph)
-    end
+    context = calculators
+      .reduce(to_calculation_context) do |context, calculator|
+        calculator.call(context)
+      end
 
-    { graph: GraphToTree.convert(graph), technologies: technologies }
+    { graph: GraphToTree.convert(context.graph), technologies: technologies }
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies
@@ -41,6 +42,14 @@ class TestingGround < ActiveRecord::Base
   # Returns a Turbine::Graph.
   def to_graph(point = 0)
     TreeToGraph.convert(topology.graph, technologies, point)
+  end
+
+  # Public: Creates a Calculation::Context which contains all the information
+  # needed to calculate the testing ground.
+  #
+  # Returns a Calculation::Context.
+  def to_calculation_context
+    Calculation::Context.new(to_graph)
   end
 
   # Public: Given a calculated graph, returns the technologies JSON, injecting

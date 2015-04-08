@@ -14,10 +14,10 @@ module Calculation
     # calculated, the node will be skipped and returned to later.
     #
     # Returns the graph.
-    def call(graph)
-      graph.nodes.each { |node| node.set(:children, node.nodes(:out)) }
+    def call(context)
+      context.graph.nodes.each { |node| node.set(:children, node.nodes(:out)) }
 
-      leaves = graph.nodes.reject { |n| n.get(:children).any? }
+      leaves = context.graph.nodes.reject { |n| n.get(:children).any? }
       length = leaves.map { |n| n.get(:load).try(:length) || 1 }.max
 
       # Every leaf node should have a load by now. If it doesn't, set the load
@@ -32,13 +32,13 @@ module Calculation
       # Now we know in which order the nodes were calculated, we can use the
       # same order for each subsequent point, and gain a nice performance boost
       # from not having to shift/try/push onto a stack.
-      ordered_nodes = graph.nodes.sort_by { |n| n.get(:order) }
+      ordered_nodes = context.graph.nodes.sort_by { |n| n.get(:order) }
 
       (length - 1).times do |point|
         ordered_nodes.each { |node| calculate_node(node, point + 1) }
       end
 
-      graph
+      context
     end
 
     # Internal: Completely calculates a single point, without optimisations.
