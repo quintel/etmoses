@@ -1,100 +1,54 @@
 module Calculation
   # Given
   class TechnologyLoad
-    def self.call(graph)
-      new(graph).run
+    def self.call(context)
+      new(context).run
     end
 
-    def initialize(graph)
-      @graph = graph
-      @order = Merit::Order.new
-
-      @tech_nodes = graph.nodes.select { |node| node.get(:techs).any? }
-
-      @length = @tech_nodes.map { |n| n.get(:techs) }.flatten.map do |tech|
-        tech.profile ? tech.profile_curve.length : 1
-      end.max
+    def initialize(context)
+      @context = context
     end
 
     def run
-      add_participants!
-      @order.calculate if @order.participants.any?
-      assign_loads!
+      @context.technology_nodes.each do |node|
+        profiles = profiles_for(suitable_technologies(node))
 
-      @graph
+        @context.points do |point|
+          node.set_load(point, profiles.map { |p| p.at(point) }.sum)
+        end
+      end
+
+      @context
     end
 
     #######
     private
     #######
 
-    # Steps
-    # -----
-
-    # Internal: Iterates through all the technologies defined in the graph, and
-    # adds each one to the merit order.
-    def add_participants!
-      @tech_nodes.each do |node|
-        mo_techs = node.get(:techs).select do |tech|
-          merit_order_tech?(tech)
-        end
-
-        # We add each merit order participant to the order, but keep track of
-        # each participant and its associated technology so that we can
-        # correctly set the loads later.
-        node.set(:mo_techs, mo_techs.map do |tech|
-          @order.add(participant_for(tech))
-        end)
+    # Internal: Given a node, returns an array of technologies which may be used
+    # to determine the load on the node to which they belong.
+    #
+    # Returns an array of InstalledTechnology instances.
+    def suitable_technologies(node)
+      node.get(:techs).select do |technology|
+        technology.profile || technology.capacity || technology.load
       end
     end
 
-    # Internal: After the merit order has been run, assigns the technology load
-    # back to the node.
-    def assign_loads!
-      @tech_nodes.each do |node|
-        @length.times do |point|
-          node.set_load(point, node.get(:mo_techs).reduce(0.0) do |sum, parti|
-            # We use point zero, since we only calculated a single point.
-            amount = parti.load_curve.get(point)
-
-            # Producers need their load switching back to a negative.
-            sum + (parti.is_a?(Merit::Producer) ? -amount : amount)
-          end)
+    # Internal: Given a collection of technologies which may be used to
+    # determine end-point load, converts the load throughout the year to an
+    # array (or Merit::Curve) which describes the load.
+    #
+    # Returns an Array or Merit::Curve.
+    def profiles_for(technologies)
+      technologies.map do |technology|
+        if technology.profile
+          technology.profile_curve
+        else
+          # If the technology does not use a profile, but has a load or
+          # capacity, we assume its load is constant throughout the year.
+          Array.new(@length, technology.load || technology.capacity || 0.0)
         end
-      end
-    end
-
-    # Helpers
-    # -------
-
-    # Internal: Determines if the given technology should be included in the
-    # merit order calculation.
-    def merit_order_tech?(technology)
-      technology.profile || technology.capacity || technology.load
-    end
-
-    # Internal: Given a Technology, returns an appropriate Merit::Participant
-    # which may be used within the merit order.
-    def participant_for(technology)
-      if technology.profile
-        # Could be a consumer or producer; we can't tell without inspecting the
-        # curve. We *can* do that when calculating a single point, but there are
-        # occasions where the answer is ambigous (what is a load of 0?).
-        #
-        # We take the one point we care about from the original curve, and use
-        # a new curve -- containing only that one point -- in the participant.
-        Merit::User.create(
-          key:        [technology.name, SecureRandom.uuid],
-          load_curve: technology.profile_curve
-        )
-      else
-        instantaneous_load = technology.load || technology.capacity || 0.0
-
-        # Consumer or a producer; again, we can't really be sure which.
-        Merit::User.create(
-          key:        [technology.name, SecureRandom.uuid],
-          load_curve: Merit::Curve.new(Array.new(@length, instantaneous_load))
-        )
       end
     end
   end # TechLoad
