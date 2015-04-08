@@ -15,7 +15,9 @@ module Calculation
     #
     # Returns the graph.
     def call(graph)
-      leaves = graph.nodes.reject { |n| n.edges(:out).any? }
+      graph.nodes.each { |node| node.set(:children, node.nodes(:out)) }
+
+      leaves = graph.nodes.reject { |n| n.get(:children).any? }
       length = leaves.map { |n| n.get(:load).try(:length) || 1 }.max
 
       # Every leaf node should have a load by now. If it doesn't, set the load
@@ -65,7 +67,7 @@ module Calculation
       while node = nodes.shift
         next if visited.key?(node)
 
-        if node.nodes(:out).map { |n| n.load_at(point) }.any?(&:nil?)
+        if node.get(:children).map { |n| n.load_at(point) }.any?(&:nil?)
           # One or more children haven't yet got a load.
           nodes.push(node)
           next
@@ -86,9 +88,7 @@ module Calculation
     # calculated.
     def calculate_node(node, point)
       unless node.load_at(point)
-        node.set_load(point, node.edges(:out).sum do |edge|
-          edge.to.load_at(point)
-        end)
+        node.set_load(point, node.get(:children).sum { |node| node.load_at(point) })
       end
     end
   end # Flows
