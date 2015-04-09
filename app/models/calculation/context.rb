@@ -12,7 +12,9 @@ module Calculation
     #
     # Returns an array of Ivy::Node instances.
     def technology_nodes
-      @technology_nodes ||= graph.nodes.select { |node| node.get(:techs).any? }
+      @technology_nodes ||= graph.nodes.select do |node|
+        node.get(:installed_techs).any?
+      end
     end
 
     # Public: Determines how many time-steps are being calculated with this
@@ -20,7 +22,7 @@ module Calculation
     #
     # Returns an integer.
     def length
-      @length ||= technology_nodes.map { |n| n.get(:techs) }.flatten
+      @length ||= technology_nodes.map { |n| n.get(:installed_techs) }.flatten
         .map do |tech|
           tech.profile ? tech.profile_curve.length : 1
         end.max || 1

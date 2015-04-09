@@ -60,7 +60,7 @@ class TreeToGraph
     children = attrs.delete(:children) || []
     node     = graph.add(Ivy::Node.new(attrs.delete(:name), attrs))
 
-    node.set(:techs, @techs[node.key])
+    node.set(:installed_techs, @techs[node.key])
 
     parent.connect_to(node, :energy) if parent
     children.each { |c| build_node(c, node, graph) }

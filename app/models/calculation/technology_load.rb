@@ -1,5 +1,4 @@
 module Calculation
-  # Given
   class TechnologyLoad
     def self.call(context)
       new(context).run
@@ -11,11 +10,9 @@ module Calculation
 
     def run
       @context.technology_nodes.each do |node|
-        profiles = profiles_for(suitable_technologies(node))
-
-        @context.points do |point|
-          node.set_load(point, profiles.map { |p| p.at(point) }.sum)
-        end
+        node.set(:techs, suitable_technologies(node).map do |tech|
+          Calculation::Technology.new(tech, profile_for(tech))
+        end)
       end
 
       @context
@@ -30,26 +27,24 @@ module Calculation
     #
     # Returns an array of InstalledTechnology instances.
     def suitable_technologies(node)
-      node.get(:techs).select do |technology|
+      node.get(:installed_techs).select do |technology|
         technology.profile || technology.capacity || technology.load
       end
     end
 
-    # Internal: Given a collection of technologies which may be used to
-    # determine end-point load, converts the load throughout the year to an
-    # array (or Merit::Curve) which describes the load.
+    # Internal: Given a technology, retrieves the load profile which may be used
+    # to describe its load.
     #
     # Returns an Array or Merit::Curve.
-    def profiles_for(technologies)
-      technologies.map do |technology|
-        if technology.profile
-          technology.profile_curve
-        else
-          # If the technology does not use a profile, but has a load or
-          # capacity, we assume its load is constant throughout the year.
-          Array.new(@context.length, technology.load || technology.capacity || 0.0)
-        end
+    def profile_for(technology)
+      if technology.profile
+        technology.profile_curve
+      else
+        # If the technology does not use a profile, but has a load or
+        # capacity, we assume its load is constant throughout the year.
+        # Array.new(@length, technology.load || technology.capacity || 0.0)
+        Array.new(@context.length, 1.0)
       end
     end
-  end # TechLoad
+  end # TechnologyLoad
 end # Calculation

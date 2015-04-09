@@ -32,7 +32,7 @@ RSpec.describe TreeToGraph do
     let(:tree) { { name: :a } }
 
     it 'sets no technologies' do
-      expect(graph.node(:a).get(:techs)).to eq([])
+      expect(graph.node(:a).get(:installed_techs)).to eq([])
     end
   end # when a node has no children
 
@@ -78,7 +78,7 @@ RSpec.describe TreeToGraph do
     let(:techs) { { a: [{ load: 1.1 }, { load: 2.3 }] } }
 
     it 'sets both technologies' do
-      expect(graph.node(:a).get(:techs).length).to eq(2)
+      expect(graph.node(:a).get(:installed_techs).length).to eq(2)
     end
   end # when a node has two attached technologies
 end # describe TreeToGraph
