@@ -43,8 +43,8 @@ module Calculation
       else
         # If the technology does not use a profile, but has a load or
         # capacity, we assume its load is constant throughout the year.
-        # Array.new(@length, technology.load || technology.capacity || 0.0)
-        Array.new(@context.length, 1.0)
+        Array.new(@context.length,
+                  technology.load || technology.capacity || 0.0)
       end
     end
   end # TechnologyLoad
