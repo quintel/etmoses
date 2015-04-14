@@ -110,6 +110,7 @@ d3.json(url, function(error, treeData) {
         .attr('class', 'overlay')
         .call(zoomListener)
         // Disable double-click causing a zoom-in.
+        .on('wheel.zoom', null)
         .on('dblclick.zoom', null);
 
     // Listener which prevents the drag movement of the diagram when clicking on
