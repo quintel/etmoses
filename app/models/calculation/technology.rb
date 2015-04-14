@@ -22,7 +22,7 @@ module Calculation
     end
 
     def load_at(point)
-      @profile.at(point) * capacity
+      @profile.at(point)
     end
 
     def capacity
