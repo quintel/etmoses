@@ -29,12 +29,12 @@ module Calculation
       @installed.capacity || @installed.load
     end
 
-    def producer?
+    def consumer?
       capacity && capacity > 0
     end
 
     def supplier?
-      not producer?
+      not consumer?
     end
 
     def storage?
