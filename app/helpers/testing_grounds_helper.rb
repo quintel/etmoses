@@ -24,9 +24,19 @@ module TestingGroundsHelper
     if testing_ground.new_record? && testing_ground.technologies.blank?
       TestingGround::DEFAULT_TECHNOLOGIES
     else
+      defaults = Hash[InstalledTechnology.attribute_set.map do |attr|
+        [attr.name, attr.default_value.call]
+      end]
+
       YAML.dump(Hash[testing_ground.technologies.map do |node, techs|
-        [node, techs.map { |t| t.to_h.compact.stringify_keys }]
+        [node, techs.map { |t| technology_attributes(t, defaults) }]
       end])
     end
+  end
+
+  def technology_attributes(technology, defaults)
+    technology.attributes.reject do |key, value|
+      defaults.key?(key) && defaults[key] == value
+    end.stringify_keys
   end
 end
