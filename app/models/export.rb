@@ -31,7 +31,7 @@ class Export
   # Returns a Hash.
   def inputs
     Hash[technology_units.map do |tech_key, units|
-      [ Library::Technology.find(tech_key).export_to,
+      [ Technology.by_key(tech_key).export_to,
         (units / number_of_households) * 100 ]
     end]
   end
@@ -49,8 +49,8 @@ class Export
     all_techs.each { |technology| count[technology.type] += 1 }
 
     count.reject do |key, _|
-      (! Library::Technology.exists?(key)) ||
-        Library::Technology.find(key).export_to.blank?
+      (! Technology.exists?(key: key)) ||
+        Technology.by_key(key).export_to.blank?
     end
   end
 
