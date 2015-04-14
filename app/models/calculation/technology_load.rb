@@ -11,7 +11,7 @@ module Calculation
     def run
       @context.technology_nodes.each do |node|
         node.set(:techs, suitable_technologies(node).map do |tech|
-          Calculation::Technology.new(tech, profile_for(tech))
+          Calculation::Technology.build(tech, profile_for(tech))
         end)
       end
 
@@ -28,7 +28,8 @@ module Calculation
     # Returns an array of InstalledTechnology instances.
     def suitable_technologies(node)
       node.get(:installed_techs).select do |technology|
-        technology.profile || technology.capacity || technology.load
+        technology.profile || technology.capacity ||
+          technology.load || technology.storage
       end
     end
 

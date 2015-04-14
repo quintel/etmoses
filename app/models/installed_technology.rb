@@ -7,6 +7,7 @@ class InstalledTechnology
   attribute :profile,  String
   attribute :capacity, Float
   attribute :demand,   Float
+  attribute :storage,  Float
 
   # Public: Returns if the technology has been defined in the data/technologies
   # directory.

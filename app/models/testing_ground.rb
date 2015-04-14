@@ -25,6 +25,7 @@ class TestingGround < ActiveRecord::Base
   def as_json(*)
     calculators = [
       Calculation::TechnologyLoad,
+      Calculation::LocalStorage,
       Calculation::Flows
     ]
 
