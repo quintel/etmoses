@@ -7,7 +7,7 @@ RSpec.describe TestingGround do
     expect(TestingGround.new.errors_on(:topology)).to include("can't be blank")
   end
 
-  describe 'technolgies' do
+  describe 'technologies' do
     context 'when the user sets no value' do
       it 'is set to a TechnologyList when initialized' do
         expect(TestingGround.new.technologies).to be_a(TechnologyList)
@@ -143,5 +143,45 @@ RSpec.describe TestingGround do
           'may not use the "buildings_chp" profile with a "tech_one"')
       end
     end # with a non-permitted load profile set
+
+    # Number of units
+    # ---------------
+
+    context 'with units=0' do
+      let(:tg) do
+        build(:testing_ground, technologies: {
+          'lv1' => [{ 'name' => 'No Type', units: 0 }]
+        })
+      end
+
+      it 'is valid' do
+        expect(tg).to be_valid
+      end
+    end # with units=0
+
+    context 'with units=2.5' do
+      let(:tg) do
+        build(:testing_ground, technologies: {
+          'lv1' => [{ 'name' => 'No Type', units: 2.5 }]
+        })
+      end
+
+      it 'is valid' do
+        expect(tg).to be_valid
+      end
+    end # with units=2.5
+
+    context 'with units=-1' do
+      let(:tg) do
+        build(:testing_ground, technologies: {
+          'lv1' => [{ 'name' => 'No Type', units: -1 }]
+        })
+      end
+
+      it 'is not valid' do
+        expect(tg.errors_on(:technologies)).
+          to include('may not have fewer than zero units')
+      end
+    end # with units=2.5
   end # technologies
 end # describe TestingGround

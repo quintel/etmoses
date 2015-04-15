@@ -25,7 +25,7 @@ module Calculation
 
     # Public: Returns how much of the technology's capacity remains unused.
     def headroom_at(point)
-      installed.storage - stored_at(point)
+      (installed.storage * @units) - stored_at(point)
     end
 
     #######

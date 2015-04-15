@@ -6,27 +6,28 @@ module Calculation
     # InstalledTechnology in the network calculation.
     #
     # Returns a Technology.
-    def self.build(installed, profile)
+    def self.build(installed, profile, units = 1.0)
       if installed.storage
-        Storage.new(installed, profile)
+        Storage.new(installed, profile, units)
       else
-        Technology.new(installed, profile)
+        Technology.new(installed, profile, units)
       end
     end
 
-    attr_reader :installed, :profile
+    attr_reader :installed, :profile, :units
 
-    def initialize(installed, profile)
+    def initialize(installed, profile, units = 1.0)
       @installed = installed
       @profile   = profile
+      @units     = units
     end
 
     def load_at(point)
-      @profile.at(point)
+      @profile.at(point) * @units
     end
 
     def capacity
-      @installed.capacity || @installed.load
+      (@installed.capacity || @installed.load) * @units
     end
 
     def consumer?

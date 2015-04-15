@@ -4,6 +4,7 @@ class Topology < ActiveRecord::Base
   DEFAULT_GRAPH = Rails.root.join('db/default_topology.yml').read
 
   validate :validate_node_names
+  validate :validate_units
 
   # Traverses each node in the graph, yielding it's data.
   #
@@ -32,6 +33,22 @@ class Topology < ActiveRecord::Base
       end
 
       seen.add(name)
+    end
+  end
+
+  def validate_units
+    each_node do |node|
+      next unless node[:units]
+
+      if ! node[:units].is_a?(Numeric)
+        errors.add(:graph, "may not have a non-numeric \"units\" attribute")
+      elsif node[:children]
+        errors.add(:graph, "may not have a node with \"units\" and " \
+                           "\"children\" present: #{ node[:name].inspect }")
+      elsif node[:units] < 0
+        errors.add(:graph, "may not have a node with \"units\" less than " \
+                           "zero: #{ node[:name].inspect }")
+      end
     end
   end
 end

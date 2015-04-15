@@ -13,6 +13,7 @@ class TestingGround < ActiveRecord::Base
 
   validate  :validate_technology_connections, if: :topology
   validate  :validate_technology_types
+  validate  :validate_technology_units
 
   before_validation do
     self.technologies = {} unless technologies
@@ -115,6 +116,15 @@ class TestingGround < ActiveRecord::Base
             "may not have an explicitly set load, and also a load profile"
           )
         end
+      end
+    end
+  end
+
+  # Asserts that technology "units" is either undefined, or greater than zero.
+  def validate_technology_units
+    technologies.each_tech do |tech|
+      if tech.units && tech.units < 0
+        errors.add(:technologies, "may not have fewer than zero units")
       end
     end
   end

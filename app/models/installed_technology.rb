@@ -3,11 +3,12 @@ class InstalledTechnology
 
   attribute :name,     String
   attribute :type,     String, default: 'generic'
-  attribute :load,     Float
   attribute :profile,  String
+  attribute :load,     Float
   attribute :capacity, Float
   attribute :demand,   Float
   attribute :storage,  Float
+  attribute :units,    Float,  default: 1.0
 
   # Public: Returns if the technology has been defined in the data/technologies
   # directory.
@@ -35,11 +36,11 @@ class InstalledTechnology
     load_profile = LoadProfile.by_key(profile)
 
     if capacity
-      load_profile.merit_curve(:capacity_scaled) * capacity
+      load_profile.merit_curve(:capacity_scaled) * (capacity * units)
     elsif demand
-      load_profile.merit_curve(:demand_scaled) * demand
+      load_profile.merit_curve(:demand_scaled) * (demand * units)
     else
-      load_profile.merit_curve
+      load_profile.merit_curve * units
     end
   end
 end # end
