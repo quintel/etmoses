@@ -42,9 +42,6 @@ class Topology < ActiveRecord::Base
 
       if ! node[:units].is_a?(Numeric)
         errors.add(:graph, "may not have a non-numeric \"units\" attribute")
-      elsif node[:children]
-        errors.add(:graph, "may not have a node with \"units\" and " \
-                           "\"children\" present: #{ node[:name].inspect }")
       elsif node[:units] < 0
         errors.add(:graph, "may not have a node with \"units\" less than " \
                            "zero: #{ node[:name].inspect }")

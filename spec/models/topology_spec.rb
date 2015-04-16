@@ -46,14 +46,6 @@ RSpec.describe Topology do
   context 'with a node containing a "units" attribute' do
     let(:topology) { Topology.new(graph: { name: 'A', units: 1.0 }) }
 
-    it 'does not permit a "children" attribute' do
-      topology.graph['children'] = []
-
-      expect(topology.errors_on(:graph)).
-        to include('may not have a node with "units" '\
-                   'and "children" present: "A"')
-    end
-
     it 'allows "units" to be zero' do
       topology.graph['units'] = 0.0
       expect(topology).to be_valid
