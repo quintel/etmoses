@@ -62,6 +62,10 @@ class TreeToGraph
 
     node.set(:installed_techs, @techs[node.key])
 
+    if node.get(:capacity) && node.get(:units)
+      node.set(:capacity, node.get(:capacity) * node.get(:units))
+    end
+
     parent.connect_to(node, :energy) if parent
     children.each { |c| build_node(c, node, graph) }
   end

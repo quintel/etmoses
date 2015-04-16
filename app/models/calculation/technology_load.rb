@@ -10,10 +10,8 @@ module Calculation
 
     def run
       @context.technology_nodes.each do |node|
-        units = node.get(:units) || 1.0
-
         node.set(:techs, suitable_technologies(node).map do |tech|
-          Calculation::Technology.build(tech, profile_for(tech), units)
+          Calculation::Technology.build(tech, profile_for(tech))
         end)
       end
 
