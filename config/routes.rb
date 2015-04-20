@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-
-
   resources :testing_grounds do
     collection do
       get  'import'
@@ -15,10 +13,11 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :session, only: [:new, :create, :destroy]
+
   resources :load_profiles
 
   root to: redirect('/welcome')
 
   get ':id', to: 'pages#show', as: :page
-
 end
