@@ -1,0 +1,13 @@
+= form_for :session, url: session_path do |form|
+  .row
+    .col-sm-3
+      .form-group
+        = form.label :email
+        = form.email_field :email, class: "form-control"
+  .row
+    .col-sm-3
+      .form-group
+        = form.label :password
+        = form.password_field :password, class: "form-control"
+  %div
+    = form.submit "Sign in", class: "btn btn-default"
