@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150401163412) do
+ActiveRecord::Schema.define(version: 20150420120712) do
 
   create_table "load_profiles", force: true do |t|
     t.string   "key",                                null: false
@@ -41,20 +41,29 @@ ActiveRecord::Schema.define(version: 20150401163412) do
     t.string  "technology",      null: false
   end
 
-  add_index "technology_profiles", ["load_profile_id", "technology"], name: "index_technology_profile_on_load_profile_id_and_technology", unique: true, using: :btree
-  add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profile_on_load_profile_id", using: :btree
+  add_index "technology_profiles", ["load_profile_id", "technology"], name: "index_technology_profiles_on_load_profile_id_and_technology", unique: true, using: :btree
+  add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profiles_on_load_profile_id", using: :btree
 
   create_table "testing_grounds", force: true do |t|
     t.text     "technologies", limit: 16777215, null: false
     t.integer  "topology_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",                          null: false
+    t.string   "name",         limit: 100,      null: false
     t.integer  "scenario_id"
   end
 
   create_table "topologies", force: true do |t|
     t.text "graph", limit: 16777215, null: false
   end
+
+  create_table "users", force: true do |t|
+    t.string   "email",           null: false
+    t.string   "password_digest", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end
