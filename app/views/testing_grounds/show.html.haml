@@ -2,30 +2,30 @@
   - if Export.can_export?(@testing_ground)
     = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
 
-  %a.btn.btn-default.pull-right{href: edit_testing_ground_path(@testing_ground), style: 'margin-right: 10px;'} Edit
+  = link_to "Edit", edit_testing_ground_path(@testing_ground), style: "margin-right: 10px", class: "btn btn-default pull-right"
 
   = "Testing Ground ##{ @testing_ground.id }:"
   = @testing_ground.name
 
-%table.table.table-bordered
-  %tr
-    %td Created by
-    %td Chael Kruip
-  %tr
-    %td Created at
-    %td= @testing_ground.created_at.to_formatted_s(:long)
+%em.note
+  %span Created by
+  %span Chael Kruip
+  %span on
+  %span= @testing_ground.created_at.to_formatted_s(:long)
+
+%p
+  \...
+
+%table.table
   %tr
     %td National scenario:
     %td
-      %a{href:'#'}123456 from beta.pro.et-model.com
+      = link_to "#", "123456 from beta.pro.et-model.com"
   %tr
     %td Local scenario:
     %td
       %a{href: "http://beta.pro.et-model.com/scenarios/#{ @testing_ground.scenario_id }"}
         == #{ @testing_ground.scenario_id } from beta.pro.et-model.com
-  %tr
-    %td Description:
-    %td ...
 
 #testing-ground
   %h2 Topology
@@ -45,7 +45,7 @@
 .node-info
   %h5
   .load-graph.line-chart
-  %a.btn.btn-primary.download-curve Download curve
+  = link_to "Download curve", "#", class: "btn btn-primary download-curve"
 
 %h2 Technologies
 
@@ -62,4 +62,5 @@
                   %li{ class: akey }== #{ akey }: #{ avalue.inspect }
   - else
     No Technoglogies registered yet.
+
   = link_to 'Download Tech. CSV', technologies_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'
