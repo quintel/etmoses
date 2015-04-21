@@ -17,12 +17,12 @@
   %tr
     %td National scenario:
     %td
-      = link_to "123456 from beta.pro.et-model.com", "#"
+      = link_to "123456 from #{ ET_MODEL_URL }", "#"
   %tr
     %td Local scenario:
     %td
-      %a{href: "http://beta.pro.et-model.com/scenarios/#{ @testing_ground.scenario_id }"}
-        == #{ @testing_ground.scenario_id } from beta.pro.et-model.com
+      = link_to "http://#{ ET_MODEL_URL }/scenarios/#{ @testing_ground.scenario_id }" do
+        = "#{ @testing_ground.scenario_id } from #{ ET_MODEL_URL }"
 
 #testing-ground
   %h2 Topology
@@ -33,11 +33,6 @@
       %span.more
         Large testing grounds may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
-
--#  %form.point-changer
--#    Point:
--#    %input{ name: 'point', type: 'text', value: params[:point] || 0 }
--#    %input{ type: 'submit', value: 'View' }
 
 .node-info
   %h5
