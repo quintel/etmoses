@@ -160,6 +160,7 @@ d3.json(url, function(error, treeData) {
     function click(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
 
+        toggleSelectedNode.call(this);
         // Load chart.
         var values    = d.load,
             loadChart = window.LoadChart;
@@ -181,7 +182,6 @@ d3.json(url, function(error, treeData) {
         }
 
         $('.load-graph').empty().append('<svg></svg>');
-        $('.node-info h5').text(d.name);
 
         $('#technologies .row').hide();
         $('#technologies .row[data-node="' + d.name + '"]').show();
@@ -200,6 +200,15 @@ d3.json(url, function(error, treeData) {
 
         new loadChart(d.load, d.name, d.capacity).render('.load-graph svg')
     }
+
+    function toggleSelectedNode(){
+        d3.selectAll("circle").style("fill", "#fff");
+        d3.selectAll("text").style("font-weight", "normal");
+        d3.select(this).select("text").style("font-weight", "bold");
+        d3.select(this).select("circle").style("fill", function(){
+            return d3.select(this).style("stroke");
+        });
+    };
 
     function dblClick(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
@@ -233,7 +242,7 @@ d3.json(url, function(error, treeData) {
 
 
         childCount(0, root);
-        newHeight = d3.max(levelWidth) * 35; // 25 pixels per line  
+        newHeight = d3.max(levelWidth) * 35; // 25 pixels per line
 
         // Update the SVG height to fit the contents.
         $(baseSvg[0][0]).attr('height', '' + (newHeight + 50) + 'px');
@@ -391,5 +400,4 @@ d3.json(url, function(error, treeData) {
 
     duration = 250;
 });
-
 }
