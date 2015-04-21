@@ -202,12 +202,10 @@ function showTree(url, container) {
         }
 
         function toggleSelectedNode(){
-            d3.selectAll("circle").style("fill", "#fff");
             d3.selectAll("text").style("font-weight", "normal");
+            d3.selectAll("text").style("text-decoration", "none");
             d3.select(this).select("text").style("font-weight", "bold");
-            d3.select(this).select("circle").style("fill", function(){
-                return d3.select(this).style("stroke");
-            });
+            d3.select(this).select("text").style("text-decoration", "underline");
         };
 
         function dblClick(d) {
