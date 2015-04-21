@@ -2,3 +2,11 @@ etloader
 ========
 
 Calculation module to compute loads in a multi-level (LV, MV, HV, et cetera) electricity network
+
+
+## Creating a user
+
+This application uses te monban gem for authorization. In order to sign up a
+user, use the following command:
+
+`Monban::Services::SignUp.new({email: <email>, password: <password>}).perform`
