@@ -37,3 +37,7 @@
             %li.divider
             %li
               = link_to 'Show all', load_profiles_path
+
+    - if current_user
+      .pull-right
+        = link_to "Sign out", session_path, method: :delete, class: "btn btn-primary"
