@@ -9,7 +9,7 @@ RSpec.describe UsersController do
 
   describe "creating a user" do
     before do
-      post :create, user: {
+      post :create, registration_form: {
         email: "gerard@grdw.nl",
         password: "test123"
       }
@@ -30,7 +30,7 @@ RSpec.describe UsersController do
 
   describe "creating a faulty user" do
     it "posting a blank form" do
-      post :create, user: { email: "", password: "" }
+      post :create, registration_form: { email: "", password: "" }
 
       expect(response).to render_template(:new)
     end
