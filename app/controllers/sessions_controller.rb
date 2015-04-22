@@ -5,12 +5,18 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = authenticate_session(session_params)
+    user = User.find_by_email(params[:session][:email])
 
-    if sign_in(user) && user.activated?
-      redirect_to root_path
+    if user.activated?
+      user = authenticate_session(session_params)
+      if sign_in(user)
+        redirect_to root_path
+      else
+        flash.now[:alert] = "Wrong credentials"
+        render :new
+      end
     else
-      flash.now[:alert] = "Wrong credentials"
+      flash.now[:alert] = "Account is not activated"
       render :new
     end
   end

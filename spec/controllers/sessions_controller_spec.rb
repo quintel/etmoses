@@ -13,6 +13,7 @@ RSpec.describe SessionsController do
     post :create, session: { email: user.email, password: "test123" }
 
     expect(response).to render_template(:new)
+    expect(controller.current_user).to_not eq(user)
   end
 
   it "logs in a an ativated user" do
