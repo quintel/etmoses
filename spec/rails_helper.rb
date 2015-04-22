@@ -27,5 +27,6 @@ RSpec.configure do |config|
 
   config.after :each do
     Monban.test_reset!
+    ActionMailer::Base.deliveries.clear
   end
 end
