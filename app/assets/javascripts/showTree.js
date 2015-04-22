@@ -123,12 +123,13 @@ function showTree(url, container) {
     function centerNode(source, xOffset) {
       xOffset = xOffset || 0;
 
+      var height = Math.min(maxViewerHeight, viewerHeight);
       var scale = zoomListener.scale(),
       x = -source.y0 - xOffset,
       y = -source.x0;
 
       x = x * scale + viewerWidth  / 2;
-      y = y * scale + viewerHeight / 2;
+      y = y * scale + height / 2;
 
       d3.select('g').transition()
       .duration(duration).ease(ease)
