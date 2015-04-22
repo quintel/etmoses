@@ -43,7 +43,7 @@ class TestingGroundsController < ApplicationController
 
   # POST /topologies
   def create
-    respond_with(@testing_ground = TestingGround.create(testing_ground_params))
+    respond_with(@testing_ground = TestingGround::Creator.new(testing_ground_params).create)
   end
 
   # GET /topologies/:id
