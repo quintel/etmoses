@@ -7,9 +7,10 @@ class SessionsController < ApplicationController
   def create
     user = authenticate_session(session_params)
 
-    if sign_in(user)
+    if sign_in(user) && user.activated?
       redirect_to root_path
     else
+      flash.now[:alert] = "Wrong credentials"
       render :new
     end
   end
