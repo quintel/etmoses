@@ -49,6 +49,7 @@ GEM
     bootstrap-filestyle-rails (1.1.2)
     bootstrap-sass (3.2.0.2)
       sass (~> 3.2)
+    bootstrap_form (2.2.0)
     builder (3.2.2)
     capistrano (3.2.1)
       i18n
@@ -281,6 +282,7 @@ DEPENDENCIES
   binding_of_caller
   bootstrap-filestyle-rails
   bootstrap-sass
+  bootstrap_form (~> 2.2.0)
   capistrano-bundler (~> 1.1)
   capistrano-rails (~> 1.1)
   capistrano-rbenv (~> 2.0)
