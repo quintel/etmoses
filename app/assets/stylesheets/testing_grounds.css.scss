@@ -24,7 +24,14 @@ ul.testing-grounds {
   background: #eee;
   box-shadow: inset 0 1px 2px #ddd;
   margin: 20px 0;
-  padding: 20px 0;
+
+  svg{
+    cursor: grab;
+  }
+
+  svg:active{
+    cursor: grabbing;
+  }
 
   .error {
     padding: 0 20px;
