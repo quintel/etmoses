@@ -24,4 +24,3 @@ Call activate:
 ````ruby
 user.activate!
 ````
-
