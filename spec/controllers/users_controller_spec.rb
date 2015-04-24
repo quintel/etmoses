@@ -11,7 +11,8 @@ RSpec.describe UsersController do
     before do
       post :create, registration_form: {
         email: "gerard@grdw.nl",
-        password: "test123"
+        password: "test123",
+        password_confirmation: "test123"
       }
     end
 
