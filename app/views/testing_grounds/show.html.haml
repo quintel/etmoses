@@ -8,22 +8,16 @@
   = @testing_ground.name
 
 %em.note
-  %span Created by
-  %span Chael Kruip
-  %span on
-  %span= @testing_ground.created_at.to_formatted_s(:long)
+  Created by Chael Kruip on
+  = @testing_ground.created_at.to_formatted_s(:long)
 
   - if @testing_ground.parent_scenario_id
     %span.sep
-      %td
-        = link_to "http://#{ ET_MODEL_URL }/scenarios/#{ @testing_ground.parent_scenario_id }", title: "#{ @testing_ground.parent_scenario_id } from #{ ET_MODEL_URL }" do
-          National scenario
+      = link_to_etm_scenario('National scenario', @testing_ground.parent_scenario_id)
 
   - if @testing_ground.scenario_id
     %span.sep
-      %td
-        = link_to "http://#{ ET_MODEL_URL }/scenarios/#{ @testing_ground.scenario_id }", title: "#{ @testing_ground.scenario_id } from #{ ET_MODEL_URL }" do
-          Local scenario
+      = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
 
 #testing-ground
   .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json, point: params[:point] || 0) }
