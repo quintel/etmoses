@@ -10,7 +10,7 @@ Rails.application.configure do
   config.assets.debug                        = true
   config.assets.raise_runtime_errors         = true
 
-  config.smtp_settings = YAML.load_file(File.open(File.join("config", "email.yml")))[Rails.env].freeze
+  config.action_mailer.smtp_settings = YAML.load_file(File.open(File.join("config", "email.yml")))[Rails.env].freeze
 
   ET_MODEL_URL = "beta.pro.et-model.com"
 end
