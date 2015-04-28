@@ -4,6 +4,7 @@ capybara-*.html
 /log
 /tmp
 /config/database.yml
+/config/email.yml
 /db/*.sqlite3
 /db/*.sqlite3-journal
 /public/system
