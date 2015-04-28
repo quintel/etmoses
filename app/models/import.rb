@@ -36,9 +36,10 @@ class Import
   # Returns a TestingGround.
   def testing_ground
     TestingGround.new(
-      topology:     topology,
-      technologies: technologies_from(response),
-      scenario_id:  @scenario_id)
+      topology:           topology,
+      technologies:       technologies_from(response),
+      scenario_id:        @scenario_id,
+      parent_scenario_id: parent_scenario_id)
   end
 
   # Internal: Required in order to use Import within +form_for+ view block.
@@ -66,6 +67,15 @@ class Import
       { keys: self.class.import_targets.map(&:key) }.to_json,
       { content_type: :json, accept: :json }
     ))['nodes']
+  end
+
+  # Internal: Retrieves the ID of the national-scale preset or saved scenario.
+  #
+  # Returns a number, or nil if no national scenario was found.
+  def parent_scenario_id
+    JSON.parse(RestClient.get(scenario_url))['template'].try(:to_i)
+  rescue RestClient::ResourceNotFound
+    nil
   end
 
   # Internal: Given a response, splits out the nodes into discrete technologies.
