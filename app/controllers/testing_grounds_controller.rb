@@ -82,13 +82,19 @@ class TestingGroundsController < ApplicationController
     respond_with(@testing_ground)
   end
 
+  # POST /topologies/build_technology_toplogy
+  def build_technology_toplogy
+    render text: TestingGround::TechnologyProfileScheme.new(params).build,
+           content_type: "text/yaml"
+  end
+
   private
 
   # Internal: Returns the permitted parameters for creating a testing ground.
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:name, :technologies, :technologies_csv, :scenario_id,
+      .permit([:name, :technologies, :technology_profile, :technologies_csv, :scenario_id,
                { topology_attributes: :graph }])
 
     if tg_params[:technologies_csv]
@@ -97,6 +103,7 @@ class TestingGroundsController < ApplicationController
       yamlize_attribute!(tg_params, :technologies)
     end
 
+    yamlize_attribute!(tg_params, :technology_profile)
     yamlize_attribute!(tg_params[:topology_attributes], :graph)
 
     tg_params

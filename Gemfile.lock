@@ -35,6 +35,7 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    addressable (2.3.8)
     arel (5.0.1.20140414130214)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
@@ -86,6 +87,8 @@ GEM
       execjs
     coffee-script-source (1.8.0)
     colorize (0.7.3)
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
     daemons (1.2.2)
     debug_inspector (0.0.2)
     descendants_tracker (0.0.4)
@@ -232,6 +235,7 @@ GEM
     rspec-support (3.1.2)
     ruby_parser (3.1.3)
       sexp_processor (~> 4.1)
+    safe_yaml (1.0.3)
     sass (3.2.19)
     sass-rails (4.0.5)
       railties (>= 4.0.0, < 5.0)
@@ -300,6 +304,9 @@ GEM
       equalizer (~> 0.0, >= 0.0.9)
     warden (1.2.3)
       rack (>= 1.0)
+    webmock (1.18.0)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
 
 PLATFORMS
   ruby
@@ -341,3 +348,4 @@ DEPENDENCIES
   unicorn
   validates_email_format_of
   virtus
+  webmock

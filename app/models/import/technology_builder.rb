@@ -21,21 +21,15 @@ class Import
     # technology in the testing ground.
     #
     # Returns an array of hashes.
-    def self.build(key, data, profiles)
-      units     = NumberOfUnitsAttribute.call(data).round
-      target    = Technology.by_key(key)
-      attribute = attribute(target.import_from)
+    def self.build(key, data)
+      units      = NumberOfUnitsAttribute.call(data).round
+      technology = Technology.by_key(key)
+      attribute  = self.attribute(technology.import_from)
 
-      # Attributes common to all installed versions of this technology.
-      attrs = { 'type' => key, attribute.local_name => attribute.call(data) }
-
-      # Add each individual "unit" of the technology to the testing ground.
-      units.times.map do |index|
-        attrs.merge(
-          'name'    => "#{ target.name } ##{ index + 1 }",
-          'profile' => profiles.next
-        ).tap(&:compact!)
-      end
+      { 'type'               => key,
+        'name'               => technology.name,
+        'units'              => units,
+        attribute.local_name => attribute.call(data) }
     end
   end
 end
