@@ -15,7 +15,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'beta.et-engine.com', user: 'ubuntu', roles: %w{web app db}
+server 'ivy.et-engine.com', user: 'ubuntu', roles: %w{web app db}
 set :branch, 'staging'
 
 # Custom SSH Options
