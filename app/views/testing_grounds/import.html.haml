@@ -14,6 +14,6 @@
     = form.label :scenario_id
     .input-group
       .input-group-addon= TestingGround::IMPORT_PROVIDERS.first
-      = form.text_field(:scenario_id, placeholder: 'Scenario ID', class: 'form-control', value: params[:scenario_id])
+      = form.text_field(:scenario_id, placeholder: 'Scenario ID', class: 'form-control', value: @import.scenario_id)
 
   %div= form.submit 'Continue&hellip;'.html_safe, class: 'btn btn-primary'

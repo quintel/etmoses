@@ -16,7 +16,7 @@ class TestingGroundsController < ApplicationController
 
   # GET /topologies/import
   def import
-    @import = Import.new({scario_id: params[:scenario_id]})
+    @import = Import.new(params.slice(:scenario_id))
   end
 
   # POST /topologies/import
