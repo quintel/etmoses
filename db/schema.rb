@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421143513) do
+ActiveRecord::Schema.define(version: 20150422122246) do
 
   create_table "load_profiles", force: true do |t|
     t.string   "key",                                null: false
