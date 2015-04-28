@@ -10,7 +10,6 @@ Rails.application.configure do
   config.assets.raise_runtime_errors         = true
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: "localhost", port: 1025 }
 
   ET_MODEL_URL = "beta.pro.et-model.com"
 end
