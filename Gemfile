@@ -46,6 +46,7 @@ group :development do
 
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'mailcatcher'
 end
 
 group :test do
@@ -59,3 +60,5 @@ gem 'virtus'
 gem 'monban'
 gem 'turbine-graph', require: 'turbine'
 gem 'quintel_merit', github: 'quintel/merit', branch: 'arbitrary-length'
+gem 'validates_email_format_of'
+gem 'bootstrap_form', '~> 2.2.0'

@@ -1,3 +1,8 @@
+= render 'shared/flash', flash: flash
+%h1 Welcome
+
+%p Please sign in or sign up to continue.
+
 = form_for :session, url: session_path do |form|
   .row
     .col-sm-3
@@ -11,3 +16,5 @@
         = form.password_field :password, class: "form-control"
   %div
     = form.submit "Sign in", class: "btn btn-default"
+    %span or
+    = link_to "Sign up", new_user_path, class: "btn btn-primary"

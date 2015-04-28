@@ -7,8 +7,17 @@ RSpec.describe SessionsController do
     expect(response.status).to eq(200)
   end
 
-  it "logs in a user" do
+  it "does not login a non-activated user" do
     user = FactoryGirl.create(:user)
+
+    post :create, session: { email: user.email, password: "test123" }
+
+    expect(response).to render_template(:new)
+    expect(controller.current_user).to_not eq(user)
+  end
+
+  it "logs in a an ativated user" do
+    user = FactoryGirl.create(:user, activated: true)
 
     post :create, session: { email: user.email, password: "test123" }
 
