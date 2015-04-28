@@ -37,6 +37,8 @@ module Ivy
       path: ":rails_root/public/#{ paperclip_path }",
       url:  "/#{ paperclip_path }"
     }
+
+    config.smtp_settings = YAML.load_file(File.open(File.join("config", "email.yml")))[Rails.env].freeze
   end
 
   # Public: Path to the directory in which static data files files typically

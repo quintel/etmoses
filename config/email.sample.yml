@@ -1,0 +1,10 @@
+development: &development
+  address: "localhost"
+  port: 1025
+
+test:
+  <<: *development
+
+staging: &mailserver
+production:
+  <<: *mailserver
