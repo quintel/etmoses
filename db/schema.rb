@@ -14,7 +14,7 @@
 ActiveRecord::Schema.define(version: 20150422122246) do
 
   create_table "load_profiles", force: true do |t|
-    t.string   "key",                default: "",    null: false
+    t.string   "key",                                null: false
     t.string   "name"
     t.boolean  "locked",             default: false, null: false
     t.string   "curve_file_name"
@@ -37,19 +37,19 @@ ActiveRecord::Schema.define(version: 20150422122246) do
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
 
   create_table "technology_profiles", force: true do |t|
-    t.integer "load_profile_id",              null: false
-    t.string  "technology",      default: "", null: false
+    t.integer "load_profile_id", null: false
+    t.string  "technology",      null: false
   end
 
   add_index "technology_profiles", ["load_profile_id", "technology"], name: "index_technology_profiles_on_load_profile_id_and_technology", unique: true, using: :btree
   add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profiles_on_load_profile_id", using: :btree
 
   create_table "testing_grounds", force: true do |t|
-    t.text     "technologies", limit: 16777215,              null: false
+    t.text     "technologies", limit: 16777215, null: false
     t.integer  "topology_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",         limit: 100,      default: "", null: false
+    t.string   "name",         limit: 100,      null: false
     t.integer  "scenario_id"
   end
 
