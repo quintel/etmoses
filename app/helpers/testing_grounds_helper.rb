@@ -39,4 +39,8 @@ module TestingGroundsHelper
       defaults.key?(key) && defaults[key] == value
     end.stringify_keys
   end
+
+  def link_to_etm_scenario(title, scenario_id)
+    link_to(title, "http://#{ ET_MODEL_URL }/scenarios/#{ scenario_id }")
+  end
 end

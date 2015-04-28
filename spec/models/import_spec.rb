@@ -4,6 +4,7 @@ RSpec.describe Import do
   let(:import) do
     Import.new(topology_id: topology.id, scenario_id: 1337).tap do |import|
       allow(import).to receive(:response).and_return(response)
+      allow(import).to receive(:parent_scenario_id).and_return(nil)
     end
   end
 
@@ -69,6 +70,22 @@ RSpec.describe Import do
       expect(testing_ground.technologies['lv2'].select do |tech|
         tech['name'].match(/tech two/i)
       end.length).to eq(2)
+    end
+
+    context 'when the ETE scenario has no parent' do
+      it 'saves no parent scenario ID on the testing ground' do
+        expect(testing_ground.parent_scenario_id).to be_nil
+      end
+    end
+
+    context 'when the ETE scenario has a parent' do
+      before do
+        allow(import).to receive(:parent_scenario_id).and_return(42)
+      end
+
+      it 'saves no parent scenario ID on the testing ground' do
+        expect(testing_ground.parent_scenario_id).to eq(42)
+      end
     end
 
     context 'when tech_one has two available load profiles' do
