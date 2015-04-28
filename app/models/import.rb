@@ -74,7 +74,7 @@ class Import
   # Returns a number, or nil if no national scenario was found.
   def parent_scenario_id
     JSON.parse(RestClient.get(scenario_url))['template'].try(:to_i)
-  rescue RestClient::ResourceNotFound
+  rescue RestClient::ResourceNotFound, JSON::ParserError
     nil
   end
 
