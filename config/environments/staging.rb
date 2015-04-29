@@ -9,7 +9,6 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.default charset: 'utf-8'
-  config.action_mailer.smtp_settings = YAML.load_file(File.open(File.join("config", "email.yml")))[Rails.env]
 
   ET_MODEL_URL = "beta.pro.et-model.com"
 end
