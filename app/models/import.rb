@@ -112,4 +112,8 @@ class Import
       TechnologyBuilder.build(key, data, available_profiles.for_tech(key))
     end
   end
+
+  def scenario_url
+    [Export::API_BASE, scenario_id].join("/")
+  end
 end # Import
