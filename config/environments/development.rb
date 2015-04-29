@@ -8,9 +8,7 @@ Rails.application.configure do
   config.active_record.migration_error       = :page_load
   config.assets.debug                        = true
   config.assets.raise_runtime_errors         = true
-
-  config.action_mailer.smtp_settings = YAML.load_file(File.open(File.join("config", "email.yml")))[Rails.env].symbolize_keys
-  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.delivery_method       = :smtp
 
   ET_MODEL_URL = "beta.pro.et-model.com"
 end
