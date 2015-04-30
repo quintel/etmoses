@@ -15,8 +15,9 @@ module Calculation
     #
     # Returns the graph.
     def call(context)
-      source = context.graph.nodes.detect { |node| node.edges(:in).none? }
-      context.points { |point| source.load_at(point) }
+      context.points do |point|
+        context.graph.nodes.each { |n| n.load_at(point) }
+      end
 
       context
     end
