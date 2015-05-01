@@ -7,7 +7,7 @@ module Calculation
   module PullConsumption
     def self.call(context)
       root  = context.graph.nodes.detect { |node| node.edges(:in).none? }
-      paths = context.technology_nodes.map { |node| Ivy::Path.find(node) }
+      paths = context.technology_nodes.map { |node| Network::Path.find(node) }
 
       context.points do |point|
         paths.each do |path|

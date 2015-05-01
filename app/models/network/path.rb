@@ -1,4 +1,4 @@
-module Ivy
+module Network
   # Describes a path of nodes from a technology node, back to the root.
   class Path
     # Public: Given a source node, returns a Path which represents the route
@@ -44,4 +44,4 @@ module Ivy
       @path.each { |node| node.consume(point, amount) }
     end
   end # Path
-end # Ivy
+end # Network

@@ -10,7 +10,7 @@ module Calculation
 
     # Public: Determines which nodes in the graph have attached technologies.
     #
-    # Returns an array of Ivy::Node instances.
+    # Returns an array of Network::Node instances.
     def technology_nodes
       @technology_nodes ||= graph.nodes.select do |node|
         node.get(:installed_techs).any?

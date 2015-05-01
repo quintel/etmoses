@@ -1,4 +1,4 @@
-module Calculation
+module Network
   # Represents a generic technology within the testing ground, which may have a
   # capacity and profile, or a constant load.
   class Technology
@@ -24,8 +24,6 @@ module Calculation
     def load_at(point)
       @profile.at(point)
     end
-
-    # --
 
     alias_method :mandatory_consumption_at, :load_at
 

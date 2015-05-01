@@ -1,4 +1,4 @@
-module Calculation
+module Network
   # A technology which, instead of producing or consuming energy, may do either
   # depending on the load of the network. Storage may retain consumed energy for
   # release back to the network later.

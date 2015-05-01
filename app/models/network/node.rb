@@ -1,4 +1,4 @@
-module Ivy
+module Network
   class Node < Turbine::Node
     def initialize(*args)
       super
@@ -140,4 +140,4 @@ module Ivy
       end
     end
   end # Node
-end # Ivy
+end # Network
