@@ -7,7 +7,7 @@ module Calculation
   module PullConsumption
     def self.call(context)
       root  = context.graph.nodes.detect { |node| node.edges(:in).none? }
-      paths = context.technology_nodes.map { |node| Ivy::Path.find(node) }
+      paths = context.technology_nodes.map { |node| Network::Path.find(node) }
 
       context.points do |point|
         paths.each do |path|
@@ -21,13 +21,16 @@ module Calculation
         # consumers which may want more (storage).
         if excess > 0
           wanted = paths.sum { |path| path.conditional_consumption_at(point) }
-          assignable = excess < wanted ? excess : wanted
 
-          paths.each do |path|
-            share  = path.conditional_consumption_at(point) / wanted
-            amount = assignable * share
+          if wanted > 0
+            assignable = excess < wanted ? excess : wanted
 
-            path.consume(point, amount)
+            paths.each do |path|
+              share  = path.conditional_consumption_at(point) / wanted
+              amount = assignable * share
+
+              path.consume(point, amount)
+            end
           end
         end
       end

@@ -1,4 +1,4 @@
-module Ivy
+module Network
   class Node < Turbine::Node
     def initialize(*args)
       super
@@ -81,18 +81,6 @@ module Ivy
       @conditional[point] ||= recursively(:conditional_consumption_at, point)
     end
 
-    # Internal: Instructs the node that a mandatory load is being assigned to
-    # fulfil the load demands of its consumption technologies.
-    #
-    # Returns nothing.
-    def assign_mandatory_consumption(point, _)
-      get(:techs).each do |tech|
-        # Temporary work-around for storage needing to show a delta over
-        # whatever was assigned in the previous point.
-        tech.load[point] = -tech.stored_at(point) if tech.storage?
-      end
-    end
-
     # Internal: Instructs the node that a conditional load is being assigned to
     # fulfil the load demands of its consumption technologies. This load is the
     # result of an excess in the testing ground, and is kept in attached
@@ -110,8 +98,7 @@ module Ivy
         share  = tech.conditional_consumption_at(point) / wanted
         assign = amount * share
 
-        tech.load[point] ||= -tech.stored_at(point)
-        tech.load[point] += assign
+        tech.stored[point] += assign
       end
     end
 
@@ -140,4 +127,4 @@ module Ivy
       end
     end
   end # Node
-end # Ivy
+end # Network

@@ -8,6 +8,9 @@ class Technology < ActiveRecord::Base
   validates :name,
     length: { maximum: 100 }
 
+  validates :behavior,
+    inclusion: { in: %w( storage electric_vehicle ), allow_nil: true }
+
   validates :import_from,
     length: { maximum: 50 },
     inclusion: {

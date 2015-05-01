@@ -1,4 +1,4 @@
-module Calculation
+module Network
   # Represents a generic technology within the testing ground, which may have a
   # capacity and profile, or a constant load.
   class Technology
@@ -7,11 +7,17 @@ module Calculation
     #
     # Returns a Technology.
     def self.build(installed, profile)
-      if installed.storage
-        Storage.new(installed, profile)
-      else
-        Technology.new(installed, profile)
-      end
+      behaviors[installed.technology.behavior].new(installed, profile)
+    end
+
+    # Public: A hash containing the permitted behaviors which may be used by
+    # technologies in the testing ground.
+    def self.behaviors
+      @behaviors ||=
+        Hash.new { Technology }.tap do |behaviors|
+          behaviors['storage']          = Storage
+          behaviors['electric_vehicle'] = ElectricVehicle
+        end.freeze
     end
 
     attr_reader :installed, :profile
@@ -24,8 +30,6 @@ module Calculation
     def load_at(point)
       @profile.at(point)
     end
-
-    # --
 
     alias_method :mandatory_consumption_at, :load_at
 
