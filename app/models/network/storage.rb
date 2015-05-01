@@ -3,8 +3,29 @@ module Network
   # depending on the load of the network. Storage may retain consumed energy for
   # release back to the network later.
   class Storage < Technology
+    # Public: Using the amount of energy stored in the technology in each time
+    # step, determines the relative change in energy over time, giving the load
+    # of the technology.
+    #
+    # Returns an array.
+    def load
+      @load ||= [stored.first, *stored.each_cons(2).map { |a, b| b - a }]
+    end
+
     def load_at(point)
-      load[point] || 0.0
+      load[point]
+    end
+
+    # Public: An array where each element describes the total amount of energy
+    # stored in the technology in each time-step.
+    #
+    # Returns an array.
+    def stored
+      @stored ||= DefaultArray.new(&method(:mandatory_consumption_at))
+    end
+
+    def stored_at(point)
+      @stored[point - 1]
     end
 
     def production_at(point)
@@ -19,18 +40,6 @@ module Network
       installed.storage
     end
 
-    def load
-      @load ||= []
-    end
-
-    def stored_at(point)
-      if point < 0
-        0.0
-      else
-        stored[point] ||= stored_at(point - 1) + load_at(point - 1)
-      end
-    end
-
     def storage?
       true
     end
@@ -39,13 +48,5 @@ module Network
     def headroom_at(point)
       installed.storage - stored_at(point)
     end
-
-    #######
-    private
-    #######
-
-    def stored
-      @storage ||= []
-    end
-  end
-end
+  end # Storage
+end # Network

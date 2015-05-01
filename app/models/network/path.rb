@@ -37,8 +37,6 @@ module Network
     def consume(point, amount)
       if @source.consumption_at(point) >= mandatory_consumption_at(point)
         @source.assign_conditional_consumption(point, amount)
-      else
-        @source.assign_mandatory_consumption(point, amount)
       end
 
       @path.each { |node| node.consume(point, amount) }
