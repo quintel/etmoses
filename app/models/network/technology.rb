@@ -7,11 +7,17 @@ module Network
     #
     # Returns a Technology.
     def self.build(installed, profile)
-      if installed.storage
-        Storage.new(installed, profile)
-      else
-        Technology.new(installed, profile)
-      end
+      behaviors[installed.technology.behavior].new(installed, profile)
+    end
+
+    # Public: A hash containing the permitted behaviors which may be used by
+    # technologies in the testing ground.
+    def self.behaviors
+      @behaviors ||=
+        Hash.new { Technology }.tap do |behaviors|
+          behaviors['storage']          = Storage
+          behaviors['electric_vehicle'] = ElectricVehicle
+        end.freeze
     end
 
     attr_reader :installed, :profile
