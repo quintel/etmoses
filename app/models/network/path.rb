@@ -35,6 +35,8 @@ module Network
     #
     # Returns nothing.
     def consume(point, amount)
+      return if amount.zero?
+
       if @source.consumption_at(point) >= mandatory_consumption_at(point)
         @source.assign_conditional_consumption(point, amount)
       end

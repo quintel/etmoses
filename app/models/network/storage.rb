@@ -24,12 +24,8 @@ module Network
       @stored ||= DefaultArray.new(&method(:mandatory_consumption_at))
     end
 
-    def stored_at(point)
-      @stored[point - 1]
-    end
-
     def production_at(point)
-      stored_at(point)
+      point.zero? ? 0.0 : stored[point - 1]
     end
 
     def mandatory_consumption_at(point)
@@ -37,7 +33,7 @@ module Network
     end
 
     def conditional_consumption_at(point)
-      installed.storage
+      installed.storage - mandatory_consumption_at(point)
     end
 
     def storage?
@@ -46,7 +42,7 @@ module Network
 
     # Public: Returns how much of the technology's capacity remains unused.
     def headroom_at(point)
-      installed.storage - stored_at(point)
+      installed.storage - production_at(point)
     end
   end # Storage
 end # Network

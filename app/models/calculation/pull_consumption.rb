@@ -21,13 +21,16 @@ module Calculation
         # consumers which may want more (storage).
         if excess > 0
           wanted = paths.sum { |path| path.conditional_consumption_at(point) }
-          assignable = excess < wanted ? excess : wanted
 
-          paths.each do |path|
-            share  = path.conditional_consumption_at(point) / wanted
-            amount = assignable * share
+          if wanted > 0
+            assignable = excess < wanted ? excess : wanted
 
-            path.consume(point, amount)
+            paths.each do |path|
+              share  = path.conditional_consumption_at(point) / wanted
+              amount = assignable * share
+
+              path.consume(point, amount)
+            end
           end
         end
       end
