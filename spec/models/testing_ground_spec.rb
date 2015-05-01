@@ -144,6 +144,50 @@ RSpec.describe TestingGround do
       end
     end # with a non-permitted load profile set
 
+    context 'with an inline profile' do
+      let(:tg) do
+        build(:testing_ground, technologies: {
+          'lv1' => [{
+            'name' => 'No Type', 'type' => 'tech_one', 'profile' => profile
+          }]
+        })
+      end
+
+      context 'with float contents' do
+        let(:profile) { [1.0, 2.0, 3.0] }
+
+        it 'assigns the profile' do
+          expect(tg).to be_valid
+        end
+      end # with float contents
+
+      context 'with integer contents' do
+        let(:profile) { [1, 2, 3] }
+
+        it 'assigns the profile' do
+          expect(tg).to be_valid
+        end
+      end # with integer contents
+
+      context 'with an empty element' do
+        let(:profile) { [1, nil, 3] }
+
+        it 'is not valid' do 
+          expect(tg.errors_on(:technologies)).to include(
+            'may not have an inline curve with non-numeric values (on No Type)')
+        end
+      end # with an empty element
+
+      context 'with a non-numeric element' do
+        let(:profile) { [1, 'what', 3] }
+
+        it 'is not valid' do 
+          expect(tg.errors_on(:technologies)).to include(
+            'may not have an inline curve with non-numeric values (on No Type)')
+        end
+      end # with a non-numeric element
+    end # with an inline profile
+
     # Number of units
     # ---------------
 

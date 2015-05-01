@@ -7,6 +7,18 @@ module Calculation
       load[point] || 0.0
     end
 
+    def production_at(point)
+      stored_at(point)
+    end
+
+    def mandatory_consumption_at(point)
+      0.0
+    end
+
+    def conditional_consumption_at(point)
+      installed.storage
+    end
+
     def load
       @load ||= []
     end

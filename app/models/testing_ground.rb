@@ -14,6 +14,7 @@ class TestingGround < ActiveRecord::Base
   validate  :validate_technology_connections, if: :topology
   validate  :validate_technology_types
   validate  :validate_technology_units
+  validate  :validate_inline_technology_profiles
 
   before_validation do
     self.technologies = {} unless technologies
@@ -26,7 +27,7 @@ class TestingGround < ActiveRecord::Base
   def as_json(*)
     calculators = [
       Calculation::TechnologyLoad,
-      Calculation::LocalStorage,
+      Calculation::PullConsumption,
       Calculation::Flows
     ]
 
@@ -126,6 +127,19 @@ class TestingGround < ActiveRecord::Base
       if tech.units && tech.units < 0
         errors.add(:technologies, "may not have fewer than zero units")
       end
+    end
+  end
+
+  def validate_inline_technology_profiles
+    technologies.each_tech do |tech|
+      next unless tech.profile.is_a?(Array)
+      next unless tech.profile.any? { |value| ! value.is_a?(Numeric) }
+
+      errors.add(
+        :technologies,
+        "may not have an inline curve with non-numeric values " \
+        "(on #{ tech.name })"
+      )
     end
   end
 end # TestingGround

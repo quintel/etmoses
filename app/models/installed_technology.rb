@@ -33,14 +33,32 @@ class InstalledTechnology
   #
   # Returns a Merit::Curve.
   def profile_curve
-    load_profile = LoadProfile.by_key(profile)
-
     if capacity
-      load_profile.merit_curve(:capacity_scaled) * (capacity * units)
+      unscaled_profile_curve * (capacity * units)
     elsif demand
-      load_profile.merit_curve(:demand_scaled) * (demand * units)
+      unscaled_profile_curve * (demand * units)
     else
-      load_profile.merit_curve * units
+      unscaled_profile_curve * units
+    end
+  end
+
+  #######
+  private
+  #######
+
+  # Internal: Retrieves the Merit::Curve used by the technology, without any
+  # scaling applied for demand or capacity.
+  #
+  # Returns a Merit::Curve.
+  def unscaled_profile_curve
+    if profile.is_a?(Array)
+      Merit::Curve.new(profile)
+    elsif capacity
+      LoadProfile.by_key(profile).merit_curve(:capacity_scaled)
+    elsif demand
+      LoadProfile.by_key(profile).merit_curve(:demand_scaled)
+    else
+      LoadProfile.by_key(profile).merit_curve * units
     end
   end
 end # end
