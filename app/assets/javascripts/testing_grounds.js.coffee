@@ -278,11 +278,22 @@ class LoadChart
     chart.lines2.duration(0)
     chart.lines2.forceY([0.0])
 
-    chart.xAxis.tickFormat(@formatDateFromPoint)
-    chart.x2Axis.tickFormat(@formatDateFromPoint)
+    chart.xAxis
+         .tickFormat(@formatDateFromPoint)
 
-    chart.yAxis.tickFormat(d3.format(',.3r'))
-    chart.y2Axis.tickFormat(d3.format(',.3r'))
+    chart.x2Axis
+         .axisLabel("Time")
+         .tickFormat(@formatDateFromPoint)
+
+    chart.yAxis
+         .axisLabel("kW")
+         .axisLabelDistance(35)
+         .tickFormat(d3.format(',.3r'))
+
+    chart.y2Axis
+         .axisLabel("kW")
+         .axisLabelDistance(35)
+         .tickFormat(d3.format(',.3r'))
 
     chart
 
