@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_filter :require_login
+  skip_before_filter :authenticate_user!
 
   def new
     @registration_form = RegistrationForm.new(params[:registration_form])

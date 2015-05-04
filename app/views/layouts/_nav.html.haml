@@ -40,4 +40,4 @@
 
     - if current_user
       .pull-right
-        = link_to "Sign out", session_path, method: :delete, class: "btn btn-primary"
+        = link_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-primary"
