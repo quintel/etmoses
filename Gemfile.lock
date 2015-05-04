@@ -90,6 +90,12 @@ GEM
     debug_inspector (0.0.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    devise (3.2.4)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
     diff-lcs (1.2.5)
     equalizer (0.0.9)
     erubis (2.7.0)
@@ -156,16 +162,13 @@ GEM
     method_source (0.8.2)
     mime-types (2.4.3)
     minitest (5.5.1)
-    monban (0.2.0)
-      bcrypt
-      rails
-      warden
     multi_json (1.10.1)
     mysql2 (0.3.18)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
     nio4r (1.1.0)
+    orm_adapter (0.5.0)
     paperclip (4.2.1)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -312,6 +315,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.0)
   capistrano3-unicorn (~> 0.2)
   coffee-rails (~> 4.0.0)
+  devise
   factory_girl_rails (~> 4.5)
   guard
   guard-rspec
@@ -319,7 +323,6 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   mailcatcher
-  monban
   mysql2 (~> 0.3.18)
   paperclip (~> 4.2)
   pry-rails

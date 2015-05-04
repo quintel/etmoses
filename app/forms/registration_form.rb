@@ -13,7 +13,7 @@ class RegistrationForm
 
   def submit
     if self.valid?
-      user = Monban::Services::SignUp.new(attributes).perform
+      user = User.create!(attributes)
       RegistrationMailer.new_registration(user).deliver!
       true
     else

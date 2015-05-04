@@ -3,7 +3,7 @@
 
 %p Please sign in or sign up to continue.
 
-= form_for :session, url: session_path do |form|
+= form_for :session, url: user_session_path do |form|
   .row
     .col-sm-3
       .form-group
@@ -17,4 +17,4 @@
   %div
     = form.submit "Sign in", class: "btn btn-default"
     %span or
-    = link_to "Sign up", new_user_path, class: "btn btn-primary"
+    = link_to "Sign up", new_user_registration_path, class: "btn btn-primary"

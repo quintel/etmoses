@@ -8,12 +8,11 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
-Monban.test_mode!
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Ivy::Spec::Fixtures
-  config.include Monban::Test::ControllerHelpers, type: :controller
+  config.include Devise::TestHelpers, type: :controller
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -26,7 +25,6 @@ RSpec.configure do |config|
   end
 
   config.after :each do
-    Monban.test_reset!
     ActionMailer::Base.deliveries.clear
   end
 end
