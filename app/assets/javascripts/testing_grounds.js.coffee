@@ -280,8 +280,9 @@ class LoadChart
 
     chart.xAxis.tickFormat(@formatDateFromPoint)
     chart.x2Axis.tickFormat(@formatDateFromPoint)
-    chart.yAxis.tickFormat(d3.format(',.1f'))
-    chart.y2Axis.tickFormat(d3.format(',.1f'))
+
+    chart.yAxis.tickFormat(d3.format(',.3r'))
+    chart.y2Axis.tickFormat(d3.format(',.3r'))
 
     chart
 
