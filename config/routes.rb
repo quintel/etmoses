@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: { sessions: "sessions",
+                                    registrations: "users" }
+
   resources :testing_grounds do
     collection do
       get  'import'
@@ -12,9 +15,6 @@ Rails.application.routes.draw do
       post 'export', to: :perform_export
     end
   end
-
-  resource :session, only: [:new, :create, :destroy]
-  resources :users, only: [:new, :create]
 
   resources :load_profiles
 

@@ -5,6 +5,5 @@ FactoryGirl.define do
 
   factory :user do
     email { generate(:email) }
-    password_digest "test123"
   end
 end

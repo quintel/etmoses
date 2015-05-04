@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe SessionsController do
+  before do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+  end
+
   it 'visits new sessions path succesfully' do
     get :new
 
@@ -22,5 +26,14 @@ RSpec.describe SessionsController do
     post :create, session: { email: user.email, password: "test123" }
 
     expect(controller.current_user).to eq(user)
+  end
+
+  it "destroys a user session" do
+    user = FactoryGirl.create(:user, activated: true)
+    sign_in(:user, user)
+
+    delete :destroy
+
+    expect(controller.current_user).to eq(nil)
   end
 end

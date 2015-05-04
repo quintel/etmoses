@@ -57,7 +57,7 @@ end
 # Application Gems.
 gem 'rest-client'
 gem 'virtus'
-gem 'monban'
+gem 'devise'
 gem 'turbine-graph', require: 'turbine'
 gem 'quintel_merit', github: 'quintel/merit', branch: 'arbitrary-length'
 gem 'validates_email_format_of'
