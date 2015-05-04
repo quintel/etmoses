@@ -41,8 +41,6 @@ showTopology = (jsonURL, container) ->
   # Draw the diagram area.
   svg = d3.select(container)
     .append('svg')
-      # .attr('width', width + margin.right + margin.left)
-      # .attr('height', height + margin.top + margin.bottom)
       .attr('viewBox', "0 0 #{innerWidth} #{innerHeight}")
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .attr('pointer-events', 'all')
@@ -342,7 +340,6 @@ $(document).on "page:change", ->
   $('.testing-ground-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
       showTree($(viewEl).data('url'), viewEl)
-      # svg = showTopology($(viewEl).data('url'), viewEl)
 
   # Set up the network editors.
 
