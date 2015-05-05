@@ -76,4 +76,13 @@ RSpec.describe Network::Technology do
       expect(tech.capacity).to eq(2.0)
     end
   end # given a "load" instead of capacity
+
+  context 'given no "load" or capacity' do
+    let(:installed) { InstalledTechnology.new }
+    let(:profile)   { [2.0] }
+
+    it 'has a capacity of zero' do
+      expect(tech.capacity).to be_zero
+    end
+  end # given no "load" or capacity
 end
