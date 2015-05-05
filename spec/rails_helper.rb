@@ -8,10 +8,15 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
 
+FactoryGirl::SyntaxRunner.class_eval do
+  # Enables "allow" in factories.
+  include RSpec::Mocks::ExampleMethods
+end
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Ivy::Spec::Fixtures
+  config.include Ivy::Spec::Network
   config.include Devise::TestHelpers, type: :controller
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

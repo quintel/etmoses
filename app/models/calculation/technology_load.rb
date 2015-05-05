@@ -43,9 +43,16 @@ module Calculation
       else
         # If the technology does not use a profile, but has a load or
         # capacity, we assume its load is constant throughout the year.
-        Array.new(@context.length,
-                  technology.load || technology.capacity || 0.0)
+        self.class.constant_profile(technology, @context.length)
       end
+    end
+
+    # Public: Given an installed technology and a length, creates a profile
+    # which represents the load of the technology over time.
+    #
+    # An array with the given length will be returned.
+    def self.constant_profile(technology, length)
+      Array.new(length, technology.load || technology.capacity || 0.0)
     end
   end # TechnologyLoad
 end # Calculation
