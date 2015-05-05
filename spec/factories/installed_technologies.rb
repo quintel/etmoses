@@ -22,4 +22,16 @@ FactoryGirl.define do
       )
     end
   end
+
+  factory :installed_ev, class: InstalledTechnology do
+    name 'Electric Vehicle'
+    units 1
+    storage 1.0
+
+    after(:build) do |tech|
+      allow(tech).to receive(:technology).and_return(
+        build(:technology, behavior: 'electric_vehicle')
+      )
+    end
+  end
 end

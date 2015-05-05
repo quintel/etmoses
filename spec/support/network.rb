@@ -5,8 +5,8 @@ module Ivy
       # may represent it in Network specs.
       def network_technology(tech, profile_length = 2)
         ::Network::Technology.build(
-          tech,
-          Calculation::TechnologyLoad.constant_profile(tech, profile_length)
+          tech, tech.profile ||
+            Calculation::TechnologyLoad.constant_profile(tech, profile_length)
         )
       end
     end # Network
