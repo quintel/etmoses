@@ -8,8 +8,8 @@ RSpec.describe Network::Storage do
       expect(tech.capacity).to be_zero
     end
 
-    it 'is not a supplier' do
-      expect(tech).to_not be_supplier
+    it 'is not a producer' do
+      expect(tech).to_not be_producer
     end
 
     it 'is not a consumer' do

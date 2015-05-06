@@ -65,7 +65,7 @@ module Network
     #
     # Returns a numeric.
     def production_at(point)
-      supplier? ? load_at(point).abs : 0.0
+      producer? ? load_at(point).abs : 0.0
     end
 
     def capacity
@@ -76,7 +76,7 @@ module Network
       capacity && capacity > 0
     end
 
-    def supplier?
+    def producer?
       not consumer?
     end
 

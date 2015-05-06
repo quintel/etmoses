@@ -1,7 +1,7 @@
 module Calculation
   # Calculates consumption flows through the network.
   #
-  # Based on the production of suppliers, we can determine how much excess or
+  # Based on the output of producers, we can determine how much excess or
   # deficit is available in the network in a given time-step. This excess is
   # then distributed fairly between the storage technologies.
   module PullConsumption

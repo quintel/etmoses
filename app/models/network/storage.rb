@@ -40,7 +40,7 @@ module Network
       false
     end
 
-    def supplier?
+    def producer?
       false
     end
 
