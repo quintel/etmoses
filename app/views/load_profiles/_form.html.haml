@@ -15,6 +15,11 @@
     = form.text_field :name, class: 'form-control'
     .help-block This field is optional.
 
+  .form-group
+    = form.label :load_profile_category_id
+    = form.select :load_profile_category_id, load_profile_categories_select_options, {}, class: 'form-control'
+    .help-block This field is optional.
+
   - unless @load_profile.locked?
     .form-group
       = form.label :curve

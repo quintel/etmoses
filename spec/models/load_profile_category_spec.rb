@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe LoadProfileCategory do
   let(:parent){ LoadProfileCategory.create! }
   let!(:child){ LoadProfileCategory.create!(parent_id: parent.id) }
+  let(:subchild){ LoadProfileCategory.create!(parent_id: child.id) }
   let(:load_profile){
     FactoryGirl.create(:load_profile, load_profile_category: child)
   }
@@ -17,5 +18,9 @@ RSpec.describe LoadProfileCategory do
 
   it "has many load profiles" do
     expect(child.load_profiles).to include(load_profile)
+  end
+
+  it "prints out the parent count" do
+    expect(subchild.parent_count).to eq(2)
   end
 end
