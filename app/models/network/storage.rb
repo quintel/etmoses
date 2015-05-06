@@ -12,8 +12,8 @@ module Network
       @load ||= [stored.first, *stored.each_cons(2).map { |a, b| b - a }]
     end
 
-    def load_at(point)
-      load[point]
+    def load_at(frame)
+      load[frame]
     end
 
     # Public: An array where each element describes the total amount of energy
@@ -24,16 +24,16 @@ module Network
       @stored ||= DefaultArray.new(&method(:mandatory_consumption_at))
     end
 
-    def production_at(point)
-      point.zero? ? 0.0 : stored[point - 1]
+    def production_at(frame)
+      frame.zero? ? 0.0 : stored[frame - 1]
     end
 
-    def mandatory_consumption_at(point)
+    def mandatory_consumption_at(frame)
       0.0
     end
 
-    def conditional_consumption_at(point)
-      (installed.storage || 0.0) - mandatory_consumption_at(point)
+    def conditional_consumption_at(frame)
+      (installed.storage || 0.0) - mandatory_consumption_at(frame)
     end
 
     def consumer?
@@ -49,8 +49,8 @@ module Network
     end
 
     # Public: Returns how much of the technology's capacity remains unused.
-    def headroom_at(point)
-      installed.storage - production_at(point)
+    def headroom_at(frame)
+      installed.storage - production_at(frame)
     end
   end # Storage
 end # Network

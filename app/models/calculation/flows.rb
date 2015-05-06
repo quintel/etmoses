@@ -15,8 +15,8 @@ module Calculation
     #
     # Returns the graph.
     def call(context)
-      context.points do |point|
-        context.graph.nodes.each { |n| n.load_at(point) }
+      context.frames do |frame|
+        context.graph.nodes.each { |n| n.load_at(frame) }
       end
 
       context

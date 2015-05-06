@@ -215,16 +215,16 @@ class LoadChart
     # data.forEach (series) ->
     for series in data
       if series.values.length == 1
-        for point in [1..364]
+        for frame in [1..364]
           series.values.push(
-            x: series.values[0].x + point,
+            x: series.values[0].x + frame,
             y: series.values[0].y
           )
 
     nv.addGraph =>
       d3.select(intoSelector).datum(data).call(@chart())
 
-  formatDateFromPoint: (point) =>
+  formatDateFromFrame: (frame) =>
     multiplier =
       switch @data.length
         when 35040 then 900000
@@ -232,9 +232,9 @@ class LoadChart
         else            -1
 
     if multiplier is -1
-      point
+      frame
     else
-      formatDate(new Date(point * multiplier))
+      formatDate(new Date(frame * multiplier))
 
   drawDateSelect: (intoSelector) ->
     epoch    = new Date(0)
@@ -277,11 +277,11 @@ class LoadChart
     chart.lines2.forceY([0.0])
 
     chart.xAxis
-         .tickFormat(@formatDateFromPoint)
+         .tickFormat(@formatDateFromFrame)
 
     chart.x2Axis
          .axisLabel("Time")
-         .tickFormat(@formatDateFromPoint)
+         .tickFormat(@formatDateFromFrame)
 
     chart.yAxis
          .axisLabel("kW")

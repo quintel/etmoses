@@ -13,15 +13,15 @@ RSpec.describe Calculation::Context do
       expect(context.length).to eq(1)
     end
 
-    it 'permits iteration of each point' do
+    it 'permits iteration of each frame' do
       results = []
-      context.points { |point| results.push(point) }
+      context.frames { |frame| results.push(frame) }
 
       expect(results).to eq([0])
     end
 
-    it 'permits chained iteration of each point' do
-      expect(context.points.map.to_a).to eq([0])
+    it 'permits chained iteration of each frame' do
+      expect(context.frames.map.to_a).to eq([0])
     end
   end # with a graph containing no profiles
 
@@ -40,16 +40,16 @@ RSpec.describe Calculation::Context do
       expect(context.length).to eq(profile.merit_curve.length)
     end
 
-    it 'permits iteration of each point' do
+    it 'permits iteration of each frame' do
       results = []
-      context.points { |point| results.push(point) }
+      context.frames { |frame| results.push(frame) }
 
       expect(results.length).to eq(8760)
       expect(results.take(5)).to eq([0, 1, 2, 3, 4])
     end
 
-    it 'permits chained iteration of each point' do
-      results = context.points.map.to_a
+    it 'permits chained iteration of each frame' do
+      results = context.frames.map.to_a
 
       expect(results.length).to eq(8760)
       expect(results.take(5)).to eq([0, 1, 2, 3, 4])

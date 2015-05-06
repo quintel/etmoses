@@ -27,8 +27,8 @@ module Network
       @profile   = profile
     end
 
-    def load_at(point)
-      @profile.at(point)
+    def load_at(frame)
+      @profile.at(frame)
     end
 
     alias_method :mandatory_consumption_at, :load_at
@@ -43,8 +43,8 @@ module Network
     # total production, the deficit will be supplied from the external grid.
     #
     # Returns a numeric.
-    def mandatory_consumption_at(point)
-      consumer? ? load_at(point) : 0.0
+    def mandatory_consumption_at(frame)
+      consumer? ? load_at(frame) : 0.0
     end
 
     # Public: Determines the extra amount of energy the technology *may* consume
@@ -56,7 +56,7 @@ module Network
     # enough excess elsewhere.
     #
     # Returns a numeric.
-    def conditional_consumption_at(point)
+    def conditional_consumption_at(frame)
       0.0
     end
 
@@ -64,8 +64,8 @@ module Network
     # time-step.
     #
     # Returns a numeric.
-    def production_at(point)
-      producer? ? load_at(point).abs : 0.0
+    def production_at(frame)
+      producer? ? load_at(frame).abs : 0.0
     end
 
     def capacity

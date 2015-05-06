@@ -22,14 +22,14 @@ module Network
     # supplying energy to its parent.
     #
     # Returns a numeric.
-    def load_at(point)
-      load[point] ||= consumption_at(point) - production_at(point)
+    def load_at(frame)
+      load[frame] ||= consumption_at(frame) - production_at(frame)
     end
 
     # Public: Returns the deficit or surplus of energy of the node based only on
     # the technologies assigned to it.
-    def local_load_at(point)
-      (techs = get(:techs)) ? techs.sum { |tech| tech.load_at(point) } : 0.0
+    def local_load_at(frame)
+      (techs = get(:techs)) ? techs.sum { |tech| tech.load_at(frame) } : 0.0
     end
 
     # Public: Determines the production load of the node. This is the amount of
@@ -37,29 +37,29 @@ module Network
     # consumed by their technologies.
     #
     # Returns a numeric.
-    def production_at(point)
-      @production[point] ||= recursively(:production_at, point)
+    def production_at(frame)
+      @production[frame] ||= recursively(:production_at, frame)
     end
 
     # Public: The amount of energy currently assigned for the node to consume
-    # in the chosen time point.
+    # in the chosen time frame.
     #
     # Consumption cannot be simply calculated, like production, as these loads
     # will depend on how much excess -- if any -- is present in the testing
     # ground. Consumption is assigned by running the PullConsumption calculator.
     #
     # Returns a numeric.
-    def consumption_at(point)
-      @consumption[point] || 0.0
+    def consumption_at(frame)
+      @consumption[frame] || 0.0
     end
 
-    # Public: Increases the consumption of the node in the given point by the
+    # Public: Increases the consumption of the node in the frame by the given
     # amount.
     #
     # Returns the amount.
-    def consume(point, amount)
-      @consumption[point] ||= 0.0
-      @consumption[point] += amount
+    def consume(frame, amount)
+      @consumption[frame] ||= 0.0
+      @consumption[frame] += amount
     end
 
     # Public: Recurses through child nodes and technologies to determine the
@@ -67,8 +67,8 @@ module Network
     # from consumption technologies.
     #
     # Returns a numeric.
-    def mandatory_consumption_at(point)
-      @mandatory[point] ||= recursively(:mandatory_consumption_at, point)
+    def mandatory_consumption_at(frame)
+      @mandatory[frame] ||= recursively(:mandatory_consumption_at, frame)
     end
 
     # Public: Recurses through child nodes and technologies to determine the
@@ -77,8 +77,8 @@ module Network
     # storage).
     #
     # Returns a numeric.
-    def conditional_consumption_at(point)
-      @conditional[point] ||= recursively(:conditional_consumption_at, point)
+    def conditional_consumption_at(frame)
+      @conditional[frame] ||= recursively(:conditional_consumption_at, frame)
     end
 
     # Internal: Instructs the node that a conditional load is being assigned to
@@ -89,16 +89,16 @@ module Network
     # Evenly distributes the load among the storage technologies.
     #
     # Returns nothing.
-    def assign_conditional_consumption(point, amount)
-      wanted = conditional_consumption_at(point)
+    def assign_conditional_consumption(frame, amount)
+      wanted = conditional_consumption_at(frame)
 
       get(:techs).each do |tech|
         next unless tech.storage?
 
-        share  = tech.conditional_consumption_at(point) / wanted
+        share  = tech.conditional_consumption_at(frame) / wanted
         assign = amount * share
 
-        tech.stored[point] += assign
+        tech.stored[frame] += assign
       end
     end
 
@@ -117,11 +117,11 @@ module Network
     # technologies.
     #
     # Returns the sum of the value from the child nodes and techs.
-    def recursively(method, point)
-      from_children = memoized_out.sum { |node| node.__send__(method, point) }
+    def recursively(method, frame)
+      from_children = memoized_out.sum { |node| node.__send__(method, frame) }
 
       if get(:techs)
-        from_children + get(:techs).sum { |tech| tech.__send__(method, point) }
+        from_children + get(:techs).sum { |tech| tech.__send__(method, frame) }
       else
         from_children
       end
