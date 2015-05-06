@@ -1,22 +1,12 @@
 ---
-'LV #1':
 - name: Heat Pump Type 1
-  load: -2.5
-- name: Television
-  load: 1.1
-- name: Washing Machine
-  load: 0.4
-
-'LV #2':
-- name: Heat Pump Type 1
-  load: -2.5
-- name: Solar Panel
-  load: -1.5
-- name: Television
-  load: 1.1
-
-'LV #3':
+  capacity: 1.5
+  units: 2
+  type: households_space_heater_heatpump_air_water_electricity
 - name: Heat Pump Type 2
-  load: -3.5
+  capacity: 1.5
+  type: households_space_heater_heatpump_ground_water_electricity
 - name: Solar Panel
-  load: -1.5
+  capacity: -1.5
+  units: 200
+  type: households_solar_pv_solar_radiation

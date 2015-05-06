@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150504090315) do
+ActiveRecord::Schema.define(version: 20150507071454) do
+
+  create_table "load_profile_categories", force: true do |t|
+    t.string   "name"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "load_profiles", force: true do |t|
     t.string   "key",                default: "",    null: false
@@ -47,7 +54,7 @@ ActiveRecord::Schema.define(version: 20150504090315) do
 
   create_table "testing_grounds", force: true do |t|
     t.text     "technologies",       limit: 16777215,              null: false
-    t.text     "technology_profile"
+    t.text     "technology_profile", limit: 16777215
     t.integer  "topology_id"
     t.datetime "created_at"
     t.datetime "updated_at"

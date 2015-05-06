@@ -1,4 +1,20 @@
 module TestingGroundsHelper
+  def national_scenario_select_options
+    TestingGround.where('`parent_scenario_id` IS NOT NULL')
+                 .order(:parent_scenario_id)
+                 .pluck(:parent_scenario_id)
+                 .uniq
+                 .map{|s| [s,s]}
+  end
+
+  def local_scenario_select_options
+    TestingGround.where('`scenario_id` IS NOT NULL')
+                 .order(:scenario_id)
+                 .pluck(:scenario_id)
+                 .uniq
+                 .map{|s| [s,s]}
+  end
+
   def import_topology_select_tag(form)
     topologies = Topology.all.reverse.map do |topo|
       if testing_ground = TestingGround.where(topology_id: topo.id).first
@@ -24,20 +40,21 @@ module TestingGroundsHelper
     if testing_ground.new_record? && testing_ground.technologies.blank?
       TestingGround::DEFAULT_TECHNOLOGIES
     else
-      defaults = Hash[InstalledTechnology.attribute_set.map do |attr|
-        [attr.name, attr.default_value.call]
-      end]
-
-      YAML.dump(Hash[testing_ground.technologies.map do |node, techs|
-        [node, techs.map { |t| technology_attributes(t, defaults) }]
-      end])
+      YAML.dump(testing_ground_technologies(testing_ground))
     end
   end
 
-  def technology_attributes(technology, defaults)
-    technology.attributes.reject do |key, value|
-      defaults.key?(key) && defaults[key] == value
-    end.stringify_keys
+  def testing_ground_technologies(testing_ground)
+    testing_ground.technologies.map do |technology|
+      technology.reject do |unit, value|
+        InstalledTechnology.template[unit] == value &&
+        InstalledTechnology.template.key?(unit)
+      end
+    end
+  end
+
+  def technological_topology_field_value(testing_ground)
+
   end
 
   def link_to_etm_scenario(title, scenario_id)

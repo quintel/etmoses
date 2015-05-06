@@ -7,15 +7,28 @@
   - if @testing_ground.scenario_id
     = f.hidden_field :scenario_id
 
+  %h4 Step 1
   .form-group
     = f.label :name, 'Testing ground name'
     = f.text_field :name, class: 'form-control'
 
   .form-group
-    = f.fields_for :topology do |topo_form|
-      = f.label :graph, 'Testing ground as YAML'
-      = topo_form.text_area :graph, value: topology_field_value(testing_ground)
+    = f.label :parent_scenario_id, 'National scenario'
+    .form-inline
+      = f.select :parent_scenario_id, national_scenario_select_options, {}, class: "form-control"
+      %span
+        \/
+      = f.text_field :parent_scenario_id, class: "form-control inline"
 
+  .form-group
+    = f.label :scenario_id, 'Local scenario'
+    .form-inline
+      = f.select :scenario_id, local_scenario_select_options, {}, class: "form-control"
+      %span
+        \/
+      = f.text_field :scenario_id, class: "form-control inline"
+
+  %h4 Step 2
   - if testing_ground.new_record? && request.get?
     .form-group
       = f.label :technologies, 'Technologies as...'
@@ -32,6 +45,22 @@
       = f.file_field :technologies_csv, accept: 'text/csv'
 
   = f.text_area :technologies, value: technologies_field_value(testing_ground)
+
+  %h4 Step 3
+  .form-group
+    = f.fields_for :topology do |topo_form|
+      = f.label :graph, 'Testing ground as YAML'
+      = topo_form.text_area :graph, value: topology_field_value(testing_ground)
+
+  %h4 Step 4
+  .form-group
+    = f.label :technology_profile, "Profile selection"
+    .radio-button-group
+      = radio_button_tag 'differentiation', "min", true
+      = label_tag "Minimum concurrency"
+      = radio_button_tag 'differentiation', "max"
+      = label_tag "Maximum concurrency"
+    = f.text_area :technology_profile, value: technological_topology_field_value(testing_ground)
 
   .form-group
     = f.submit class: 'btn btn-primary'

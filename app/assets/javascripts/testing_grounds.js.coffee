@@ -331,8 +331,12 @@ createEditor = (textarea) ->
   editor.setHighlightActiveLine(false)
   editor.setShowPrintMargin(false)
 
-  textarea.parents('form').on 'submit', ->
+  editor.on 'change', ->
     textarea.text(editor.getSession().getValue())
+
+updateEtScenarioTextField = (object) ->
+  parentInput = $(object).parent().find("input");
+  parentInput.val($(object).val())
 
 $(document).on "page:change", ->
   $('.testing-ground-view').each (idx, viewEl) ->
@@ -340,8 +344,7 @@ $(document).on "page:change", ->
       showTree($(viewEl).data('url'), viewEl)
 
   # Set up the network editors.
-
-  for selector in ['textarea#testing_ground_topology_attributes_graph', 'textarea#testing_ground_technologies']
+  for selector in ['textarea#testing_ground_topology_attributes_graph', 'textarea#testing_ground_technologies', 'textarea#testing_ground_technology_profile']
     textarea = $(selector)
 
     if textarea.length and ! textarea.data('editor')
@@ -356,3 +359,8 @@ $(document).on "page:change", ->
     else
       $('#testing_ground_technologies_csv').show()
       editor.hide()
+
+  for selector in ["select#testing_ground_parent_scenario_id", "select#testing_ground_scenario_id"]
+    updateEtScenarioTextField(selector)
+    $(selector).change (event) ->
+      updateEtScenarioTextField(this)
