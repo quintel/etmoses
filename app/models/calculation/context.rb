@@ -28,15 +28,15 @@ module Calculation
         end.max || 1
     end
 
-    # Public: Iterates through each time-step point in the testing ground graph.
-    # If no block is given, an enumerable is returned.
+    # Public: Iterates through each frame in the testing ground graph. If no
+    # block is given, an enumerable is returned.
     #
     # Returns an enumerable, or the result of the block.
-    def points
+    def frames
       if block_given?
-        length.times.each { |point| yield point }
+        length.times.each { |frame| yield frame }
       else
-        to_enum(:points)
+        to_enum(:frames)
       end
     end
   end

@@ -11,8 +11,8 @@ RSpec.describe Network::Technology do
       expect(tech.capacity).to eq(2.0)
     end
 
-    it 'is not a supplier' do
-      expect(tech).to_not be_supplier
+    it 'is not a producer' do
+      expect(tech).to_not be_producer
     end
 
     it 'is a consumer' do
@@ -43,8 +43,8 @@ RSpec.describe Network::Technology do
       expect(tech.capacity).to eq(-2.0)
     end
 
-    it 'is a supplier' do
-      expect(tech).to be_supplier
+    it 'is a producer' do
+      expect(tech).to be_producer
     end
 
     it 'is not a consumer' do

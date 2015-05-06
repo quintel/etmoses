@@ -25,29 +25,29 @@ module Network
     # Public: The conditional consumption being created by the consumption node.
     #
     # Returns a numeric.
-    def conditional_consumption_at(point)
-      @leaf.conditional_consumption_at(point)
+    def conditional_consumption_at(frame)
+      @leaf.conditional_consumption_at(frame)
     end
 
     # Public: The mandatory consumption being created by the consumption node.
     #
     # Returns a numeric.
-    def mandatory_consumption_at(point)
-      @leaf.mandatory_consumption_at(point)
+    def mandatory_consumption_at(frame)
+      @leaf.mandatory_consumption_at(frame)
     end
 
     # Public: Sends a given amount of energy down the path, increasing the
     # consumption flow of each node.
     #
     # Returns nothing.
-    def consume(point, amount)
+    def consume(frame, amount)
       return if amount.zero?
 
-      if @leaf.consumption_at(point) >= mandatory_consumption_at(point)
-        @leaf.assign_conditional_consumption(point, amount)
+      if @leaf.consumption_at(frame) >= mandatory_consumption_at(frame)
+        @leaf.assign_conditional_consumption(frame, amount)
       end
 
-      @path.each { |node| node.consume(point, amount) }
+      @path.each { |node| node.consume(frame, amount) }
     end
   end # Path
 end # Network

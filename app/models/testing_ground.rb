@@ -43,8 +43,8 @@ class TestingGround < ActiveRecord::Base
   # defined in the topology.
   #
   # Returns a Turbine::Graph.
-  def to_graph(point = 0)
-    TreeToGraph.convert(topology.graph, technologies, point)
+  def to_graph(frame = 0)
+    TreeToGraph.convert(topology.graph, technologies, frame)
   end
 
   # Public: Creates a Calculation::Context which contains all the information

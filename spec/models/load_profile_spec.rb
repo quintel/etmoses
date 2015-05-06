@@ -32,7 +32,7 @@ RSpec.describe LoadProfile, type: :model do
         expect(File.file?(load_profile.curve.path(:capacity_scaled))).to be
       end
 
-      it 'has the same number of points as the original' do
+      it 'has the same number of members as the original' do
         expect(curve.length).to eq(original.length)
       end
 
@@ -55,7 +55,7 @@ RSpec.describe LoadProfile, type: :model do
         expect(File.file?(load_profile.curve.path(:demand_scaled))).to be
       end
 
-      it 'has the same number of points as the original' do
+      it 'has the same number of members as the original' do
         expect(curve.length).to eq(original.length)
       end
 

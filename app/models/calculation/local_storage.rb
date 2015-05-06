@@ -1,4 +1,4 @@
-module Calculation
+frame Calculation
   class LocalStorage
     # Public: Determines the behaviour of storage batteries during the year, and
     # calculates loads.
@@ -21,11 +21,11 @@ module Calculation
       storage_tech_nodes.each do |node|
         stores = node.get(:techs).select(&:storage?)
 
-        @context.points do |point|
-          if (deficit = node.local_load_at(point)) > 0
-            discharge!(stores, deficit, point)
+        @context.frames do |frame|
+          if (deficit = node.local_load_at(frame)) > 0
+            discharge!(stores, deficit, frame)
           elsif deficit < 0
-            charge!(stores, -deficit, point)
+            charge!(stores, -deficit, frame)
           end
         end
       end
@@ -40,11 +40,11 @@ module Calculation
     # Internal: The timestep being calculated has a deficit of energy. Discharge
     # the batteries until the deficit is eliminated, or all the batteries are
     # empty.
-    def discharge!(stores, deficit, point)
+    def discharge!(stores, deficit, frame)
       stores.each do |store|
-        load_from_store = min(deficit, store.stored_at(point))
+        load_from_store = min(deficit, store.stored_at(frame))
 
-        store.load[point] = -load_from_store
+        store.load[frame] = -load_from_store
         deficit           -= load_from_store
       end
     end
@@ -52,11 +52,11 @@ module Calculation
     # Internal: The timestep being calculated has a surplus of energy. Charge
     # the batteries until the surplus is eliminated, or all the batteries are
     # full.
-    def charge!(stores, excess, point)
+    def charge!(stores, excess, frame)
       stores.each do |store|
-        load_for_store = min(excess, store.headroom_at(point))
+        load_for_store = min(excess, store.headroom_at(frame))
 
-        store.load[point] = load_for_store
+        store.load[frame] = load_for_store
         excess           -= load_for_store
       end
     end
