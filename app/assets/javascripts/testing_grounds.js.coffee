@@ -221,6 +221,12 @@ class LoadChart
             y: series.values[0].y
           )
 
+    for datum in data
+      # Add an extra data point to make the "step-after" smoothing fit better
+      # (otherwise it appears that the last frame is not present).
+      last = datum.values[datum.values.length - 1]
+      datum.values.push(x: last.x + 1, y: last.y)
+
     nv.addGraph =>
       d3.select(intoSelector).datum(data).call(@chart())
 
@@ -275,6 +281,8 @@ class LoadChart
     chart.lines.duration(0)
     chart.lines2.duration(0)
     chart.lines2.forceY([0.0])
+
+    chart.lines.interpolate('step-after')
 
     chart.xAxis
          .tickFormat(@formatDateFromFrame)
