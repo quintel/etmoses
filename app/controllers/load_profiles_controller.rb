@@ -4,6 +4,10 @@ class LoadProfilesController < ApplicationController
 
   before_filter :fetch_load_profile, except: [:index, :new, :create]
 
+  def index
+    @load_profile_categories = LoadProfileCategory.where(parent_id: nil)
+  end
+
   # GET /load_profiles
   def show
     respond_with(@load_profile = LoadProfile.find(params[:id]))

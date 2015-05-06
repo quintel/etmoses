@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507071454) do
+ActiveRecord::Schema.define(version: 20150507084734) do
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
@@ -21,9 +21,10 @@ ActiveRecord::Schema.define(version: 20150507071454) do
   end
 
   create_table "load_profiles", force: true do |t|
-    t.string   "key",                default: "",    null: false
+    t.string   "key",                      default: "",    null: false
     t.string   "name"
-    t.boolean  "locked",             default: false, null: false
+    t.integer  "load_profile_category_id"
+    t.boolean  "locked",                   default: false, null: false
     t.string   "curve_file_name"
     t.string   "curve_content_type"
     t.integer  "curve_file_size"

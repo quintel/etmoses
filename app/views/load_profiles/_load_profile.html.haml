@@ -1,0 +1,6 @@
+%ul
+  - load_profile_category.load_profiles.order(:name).each do |profile|
+    %li
+      = link_to profile do
+        = profile.display_name
+      %span= I18n.l(profile.created_at, format: :short)

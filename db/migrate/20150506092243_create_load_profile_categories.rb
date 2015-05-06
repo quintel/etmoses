@@ -1,0 +1,9 @@
+class CreateLoadProfileCategories < ActiveRecord::Migration
+  def change
+    create_table :load_profile_categories do |t|
+      t.string :name
+      t.integer :parent_id
+      t.timestamps
+    end
+  end
+end
