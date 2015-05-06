@@ -33,7 +33,15 @@ module Network
     end
 
     def conditional_consumption_at(point)
-      installed.storage - mandatory_consumption_at(point)
+      (installed.storage || 0.0) - mandatory_consumption_at(point)
+    end
+
+    def consumer?
+      false
+    end
+
+    def supplier?
+      false
     end
 
     def storage?

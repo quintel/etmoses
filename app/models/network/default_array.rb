@@ -3,6 +3,10 @@ module Network
   # element in the array upon access.
   class DefaultArray < Array
     def initialize(*args, &block)
+      unless block
+        fail ArgumentError, 'Must supply a block which yields default values'
+      end
+
       super
       @default = block
     end

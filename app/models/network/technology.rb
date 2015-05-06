@@ -69,7 +69,7 @@ module Network
     end
 
     def capacity
-      @installed.capacity || @installed.load
+      @installed.capacity || @installed.load || 0.0
     end
 
     def consumer?
