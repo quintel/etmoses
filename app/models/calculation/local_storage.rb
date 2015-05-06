@@ -1,4 +1,4 @@
-frame Calculation
+module Calculation
   class LocalStorage
     # Public: Determines the behaviour of storage batteries during the year, and
     # calculates loads.
