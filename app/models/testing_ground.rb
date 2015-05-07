@@ -1,19 +1,20 @@
 class TestingGround < ActiveRecord::Base
-  serialize :technologies, TechnologyList
-
-  belongs_to :topology
-  accepts_nested_attributes_for :topology
-
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
 
   IMPORT_PROVIDERS = %w(beta.et-engine.com).freeze
 
+  serialize :technologies, Array
+  serialize :technology_profile, TechnologyList
+
+  belongs_to :topology
+  accepts_nested_attributes_for :topology
+
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }
 
-  validate  :validate_technology_connections, if: :topology
-  validate  :validate_technology_types
-  validate  :validate_technology_units
+  validate  :validate_technology_profile_connections, if: :topology
+  validate  :validate_technology_profile_types
+  validate  :validate_technology_profile_units
   validate  :validate_inline_technology_profiles
 
   before_validation do
@@ -44,7 +45,7 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Turbine::Graph.
   def to_graph(frame = 0)
-    TreeToGraph.convert(topology.graph, technologies, frame)
+    TreeToGraph.convert(topology.graph, technology_profile, frame)
   end
 
   # Public: Creates a Calculation::Context which contains all the information
@@ -73,7 +74,7 @@ class TestingGround < ActiveRecord::Base
   end
 
   # Public: Sets the list of technologies associated with the TestingGround.
-  def technologies=(techs)
+  def technology_profile=(techs)
     case techs
       when Hash   then super(TechnologyList.from_hash(techs))
       when String then super(TechnologyList.load(techs))
@@ -93,27 +94,27 @@ class TestingGround < ActiveRecord::Base
 
   # Asserts that the technologies used in the graph have all been defined in
   # the technologies collection.
-  def validate_technology_connections
+  def validate_technology_profile_connections
     node_keys = []
     topology.each_node { |node| node_keys.push(node[:name]) }
 
-    technologies.keys.reject { |key| node_keys.include?(key) }.each do |key|
-      errors.add(:technologies,
+    technology_profile.keys.reject { |key| node_keys.include?(key) }.each do |key|
+      errors.add(:technology_profile,
                  "includes a connection to missing node #{ key.inspect }")
     end
   end
 
   # Asserts that, whenever a user has defined that a technology uses a
   # pre-existing technology, that the technology actually exists.
-  def validate_technology_types
-    technologies.each_tech do |tech|
+  def validate_technology_profile_types
+    technology_profile.each_tech do |tech|
       if ! tech.exists?
         errors.add(
-          :technologies, "has an unknown technology type: #{ tech.type }")
+          :technology_profile, "has an unknown technology type: #{ tech.type }")
       elsif tech.profile
         if tech.profile && tech.load
           errors.add(
-            :technologies,
+            :technology_profile,
             "may not have an explicitly set load, and also a load profile"
           )
         end
@@ -122,21 +123,21 @@ class TestingGround < ActiveRecord::Base
   end
 
   # Asserts that technology "units" is either undefined, or greater than zero.
-  def validate_technology_units
-    technologies.each_tech do |tech|
+  def validate_technology_profile_units
+    technology_profile.each_tech do |tech|
       if tech.units && tech.units < 0
-        errors.add(:technologies, "may not have fewer than zero units")
+        errors.add(:technology_profile, "may not have fewer than zero units")
       end
     end
   end
 
   def validate_inline_technology_profiles
-    technologies.each_tech do |tech|
+    technology_profile.each_tech do |tech|
       next unless tech.profile.is_a?(Array)
       next unless tech.profile.any? { |value| ! value.is_a?(Numeric) }
 
       errors.add(
-        :technologies,
+        :technology_profile,
         "may not have an inline curve with non-numeric values " \
         "(on #{ tech.name })"
       )

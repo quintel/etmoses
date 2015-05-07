@@ -31,7 +31,7 @@ RSpec.describe Calculation::Context do
     let(:graph)   { tg.to_graph }
 
     before do
-      tg.technologies = { 'lv1' => [{
+      tg.technology_profile = { 'lv1' => [{
         'name' => 'Tech One', 'profile' => profile.key
       }]}
     end

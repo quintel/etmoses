@@ -36,8 +36,8 @@
 %h2 Technologies
 
 #technologies
-  - if @testing_ground.technologies.any?
-    - @testing_ground.technologies.each do |key, techs|
+  - if @testing_ground.technology_profile.any?
+    - @testing_ground.technology_profile.each do |key, techs|
       .row{ "data-node" => key }
         - techs.each do |tech|
           .technology.three.columns{ "data-tech" => tech.name }

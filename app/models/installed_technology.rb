@@ -10,6 +10,13 @@ class InstalledTechnology
   attribute :storage,  Float
   attribute :units,    Float,  default: 1.0
 
+  # Public: Returns a template for a technology. For evaluation purposes
+  def self.template
+    Hash[ self.attribute_set.map do |attr|
+      [attr.name.to_s, attr.default_value.call]
+    end ]
+  end
+
   # Public: Returns if the technology has been defined in the data/technologies
   # directory.
   #
