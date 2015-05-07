@@ -1,10 +1,4 @@
 %h1 List of all Load Profiles available
 
-%table.table.table-bordered
-  %tr
-    %th Name
-    %th Created
-  - LoadProfile.all.sort_by(&:display_name).each do |profile|
-    %tr
-      %td= link_to(profile.display_name, profile)
-      %td= profile.created_at
+.load_profiles
+  = render partial: "load_profile_categories/load_profile_categories", locals: { load_profile_categories: @load_profile_categories }

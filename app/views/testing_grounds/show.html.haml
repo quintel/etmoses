@@ -10,6 +10,8 @@
 %em.note
   Created by Chael Kruip on
   = @testing_ground.created_at.to_formatted_s(:long)
+  last updated on
+  = @testing_ground.updated_at.to_formatted_s(:long)
 
   - if @testing_ground.parent_scenario_id
     %span.sep

@@ -22,3 +22,17 @@
     margin-right: 3px;
   }
 }
+
+.load_profiles{
+  ul{
+    padding-left: 20px;
+
+    li{
+      padding: 3px 0;
+    }
+
+    li.category{
+      cursor: pointer;
+    }
+  }
+}
