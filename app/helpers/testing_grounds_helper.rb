@@ -32,7 +32,7 @@ module TestingGroundsHelper
     if testing_ground.new_record? && testing_ground.topology.graph.blank?
       Topology::DEFAULT_GRAPH
     else
-      YAML.dump(testing_ground.topology.graph)
+      YAML.dump(testing_ground.topology.graph.to_hash)
     end
   end
 
@@ -40,7 +40,7 @@ module TestingGroundsHelper
     if testing_ground.new_record? && testing_ground.technologies.blank?
       TestingGround::DEFAULT_TECHNOLOGIES
     else
-      YAML.dump(testing_ground_technologies(testing_ground))
+      YAML.dump(testing_ground_technologies(testing_ground).map(&:to_hash))
     end
   end
 
