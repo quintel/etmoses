@@ -268,7 +268,7 @@ class LoadChart
     $(intoSelector).after(dateEl)
 
   chart: ->
-    chart = nv.models.lineChart()
+    chart = nv.models.lineWithFocusChart()
 
     chart.options({
       duration:           0
@@ -279,14 +279,24 @@ class LoadChart
 
     chart.useVoronoi(false)
     chart.lines.duration(0)
+    chart.lines2.duration(0)
+    chart.lines2.forceY([0.0])
 
     chart.lines.interpolate('step-after')
 
     chart.xAxis
+         .tickFormat(@formatDateFromFrame)
+
+    chart.x2Axis
          .axisLabel("Time")
          .tickFormat(@formatDateFromFrame)
 
     chart.yAxis
+         .axisLabel("kW")
+         .axisLabelDistance(35)
+         .tickFormat(d3.format(',.3r'))
+
+    chart.y2Axis
          .axisLabel("kW")
          .axisLabelDistance(35)
          .tickFormat(d3.format(',.3r'))
