@@ -212,7 +212,6 @@ ul.testing-grounds {
   }
 
   #testing_ground_technologies_csv {
-    display: none;
     font-size: 12px;
   }
 }
@@ -292,4 +291,10 @@ table.table.scenarios{
 
 #new_testing_ground .form-group .form-inline .form-control.inline{
   width: 100px;
+}
+
+.container .tab-content{
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #DDD;
 }

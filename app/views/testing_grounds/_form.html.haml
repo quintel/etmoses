@@ -7,7 +7,12 @@
   - if @testing_ground.scenario_id
     = f.hidden_field :scenario_id
 
-  %h4 Step 1
+  - if @testing_ground.topology_id
+    = f.hidden_field :topology_id
+    .hidden
+      = f.fields_for :topology do |topo_form|
+        = topo_form.text_area :graph, value: @testing_ground.topology.graph.to_json
+
   .form-group
     = f.label :name, 'Testing ground name'
     = f.text_field :name, class: 'form-control'
@@ -15,10 +20,7 @@
   .form-group
     = f.label :parent_scenario_id, 'National scenario'
     .form-inline
-      = f.select :parent_scenario_id, national_scenario_select_options, {}, class: "form-control"
-      %span
-        \/
-      = f.text_field :parent_scenario_id, class: "form-control inline"
+      = f.select :parent_scenario_id, @national_scenarios, {}, class: "form-control"
 
   .form-group
     = f.label :scenario_id, 'Local scenario'
@@ -28,39 +30,40 @@
         \/
       = f.text_field :scenario_id, class: "form-control inline"
 
-  %h4 Step 2
-  - if testing_ground.new_record? && request.get?
-    .form-group
-      = f.label :technologies, 'Technologies as...'
+  %ul.nav.nav-tabs{role: "tablist"}
+    %li{role: "presentation", class: "active"}
+      = link_to "#technologies", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
+        Technologies
 
-      .tech-choice
-        %label.checkbox-inline
-          = radio_button :js, :technologies_as, :yaml, checked: true
-          YAML
+    %li{role: "presentation"}
+      = link_to "#topology", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
+        Topology
 
-        %label.checkbox-inline
-          = radio_button :js, :technologies_as, :csv, checked: false
-          CSV Upload
+    %li{role: "presentation"}
+      = link_to "#profiles", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
+        Profiles
 
-      = f.file_field :technologies_csv, accept: 'text/csv'
+  .tab-content
+    #technologies.tab-pane.active
+      = f.text_area :technologies, value: technologies_field_value(testing_ground)
+      - if testing_ground.new_record? && request.get?
+        .form-group
+          = f.label :technologies_csv, "CSV Upload"
+          = f.file_field :technologies_csv, accept: 'text/csv'
 
-  = f.text_area :technologies, value: technologies_field_value(testing_ground)
+    #topology.tab-pane
+      .form-group
+        = f.fields_for :topology do |topo_form|
+          = topo_form.text_area :graph, value: topology_field_value(testing_ground)
 
-  %h4 Step 3
-  .form-group
-    = f.fields_for :topology do |topo_form|
-      = f.label :graph, 'Testing ground as YAML'
-      = topo_form.text_area :graph, value: topology_field_value(testing_ground)
-
-  %h4 Step 4
-  .form-group
-    = f.label :technology_profile, "Profile selection"
-    .radio-button-group
-      = radio_button_tag 'differentiation', "min", true
-      = label_tag "Minimum concurrency"
-      = radio_button_tag 'differentiation', "max"
-      = label_tag "Maximum concurrency"
-    = f.text_area :technology_profile, value: technological_topology_field_value(testing_ground)
+    #profiles.tab-pane
+      .form-group
+        = f.text_area :technology_profile, value: technological_topology_field_value(testing_ground)
+        .radio-button-group
+          = radio_button_tag 'differentiation', "min", true
+          = label_tag "Minimum concurrency"
+          = radio_button_tag 'differentiation', "max"
+          = label_tag "Maximum concurrency"
 
   .form-group
     = f.submit class: 'btn btn-primary'

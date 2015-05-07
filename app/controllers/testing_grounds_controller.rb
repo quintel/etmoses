@@ -3,6 +3,7 @@ class TestingGroundsController < ApplicationController
   respond_to :csv, only: :technologies
 
   before_filter :prepare_export, only: %i( export perform_export )
+  before_filter :find_remote_scenarios, only: [:new, :perform_import, :edit, :create, :update]
 
   # GET /topologies
   def index
@@ -94,7 +95,8 @@ class TestingGroundsController < ApplicationController
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:name, :technologies, :technology_profile, :technologies_csv, :scenario_id,
+      .permit([:name, :technologies, :technology_profile, :technologies_csv,
+               :scenario_id, :parent_scenario_id, :topology_id,
                { topology_attributes: :graph }])
 
     if tg_params[:technologies_csv]
@@ -104,7 +106,6 @@ class TestingGroundsController < ApplicationController
     end
 
     yamlize_attribute!(tg_params, :technology_profile)
-    yamlize_attribute!(tg_params[:topology_attributes], :graph)
 
     tg_params
   end
@@ -120,5 +121,9 @@ class TestingGroundsController < ApplicationController
   def prepare_export
     @testing_ground = TestingGround.find(params[:id])
     @export         = Export.new(@testing_ground)
+  end
+
+  def find_remote_scenarios
+    @national_scenarios ||= Scenarios::RemoteFinder.new.find_remote_scenarios
   end
 end # TestingGroundsController

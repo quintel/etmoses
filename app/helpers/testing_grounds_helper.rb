@@ -1,39 +1,13 @@
 module TestingGroundsHelper
-  def national_scenario_select_options
-    TestingGround.where('`parent_scenario_id` IS NOT NULL')
-                 .order(:parent_scenario_id)
-                 .pluck(:parent_scenario_id)
-                 .uniq
-                 .map{|s| [s,s]}
-  end
-
-  def local_scenario_select_options
-    TestingGround.where('`scenario_id` IS NOT NULL')
-                 .order(:scenario_id)
-                 .pluck(:scenario_id)
-                 .uniq
-                 .map{|s| [s,s]}
-  end
-
   def import_topology_select_tag(form)
     topologies = Topology.all.reverse.map do |topo|
-      if testing_ground = TestingGround.where(topology_id: topo.id).first
-        [testing_ground.name, topo.id]
-      end
-    end.compact
+      [(topo.name || "No name specified"), topo.id]
+    end
 
     topologies.unshift(['- - -', '-', { disabled: true }])
     topologies.unshift(['Default topology', nil])
 
     form.select(:topology_id, topologies, {}, class: 'form-control')
-  end
-
-  def topology_field_value(testing_ground)
-    if testing_ground.new_record? && testing_ground.topology.graph.blank?
-      Topology::DEFAULT_GRAPH
-    else
-      YAML.dump(testing_ground.topology.graph.to_hash)
-    end
   end
 
   def technologies_field_value(testing_ground)

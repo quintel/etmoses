@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe TestingGround::TechnologyProfileScheme do
-  let(:topology){ FactoryGirl.build(:topology).graph.to_yaml }
+  let(:topology){ FactoryGirl.build(:topology).graph.to_json }
 
   describe "minimal concurrency" do
     describe "assiging the correct profiles" do
@@ -42,11 +42,11 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
         }
 
         it 'assigns the correct profiles' do
-          expect(YAML::load(testing_ground_topology).values.flatten.map{|t| t['profile']}.uniq.count).to eq(6)
+          expect(YAML::load(testing_ground_topology).values.flatten.map{|t| t['profile']}.uniq.count).to eq(2)
         end
 
         it "spreads the units correctly" do
-          expect(YAML::load(testing_ground_topology).values.flatten.size).to eq(20)
+          expect(YAML::load(testing_ground_topology).values.flatten.size).to eq(12)
         end
 
         it "sets the units correctly" do

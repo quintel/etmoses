@@ -13,8 +13,8 @@ buildTechnologyTopology = (differentiation)->
       $("textarea#testing_ground_technology_profile").text(data)
 
 $(document).on "page:change", ->
-  if $("#new_testing_ground").length > 0
-    buildTechnologyTopology("min")
+  if $("#new_testing_ground, .edit_testing_ground").length > 0
+    buildTechnologyTopology($("input[name=differentiation]").val())
 
     $("input[name=differentiation]").change ->
       buildTechnologyTopology($(this).val())
