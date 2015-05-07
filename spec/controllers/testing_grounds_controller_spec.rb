@@ -125,6 +125,15 @@ RSpec.describe TestingGroundsController do
 
       expect(response).to redirect_to(testing_ground_path(TestingGround.last))
     end
+
+    it "assings the testing ground to the current user" do
+      sign_in(user)
+
+      expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
+      post :create, TestingGroundsControllerTest.create_hash
+
+      expect(TestingGround.last.user).to eq(controller.current_user)
+    end
   end
 
   describe "#show.json" do

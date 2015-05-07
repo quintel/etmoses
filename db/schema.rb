@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150513113909) do
+ActiveRecord::Schema.define(version: 20150520082048) do
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
@@ -75,6 +75,7 @@ ActiveRecord::Schema.define(version: 20150513113909) do
   create_table "users", force: true do |t|
     t.string   "email",                              null: false
     t.string   "encrypted_password", default: "",    null: false
+    t.string   "name"
     t.boolean  "activated",          default: false
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false

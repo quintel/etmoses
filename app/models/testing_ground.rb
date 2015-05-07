@@ -7,6 +7,7 @@ class TestingGround < ActiveRecord::Base
   serialize :technology_profile, TechnologyList
 
   belongs_to :topology
+  belongs_to :user
 
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }

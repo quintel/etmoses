@@ -44,7 +44,8 @@ class TestingGroundsController < ApplicationController
 
   # POST /topologies
   def create
-    respond_with(@testing_ground = TestingGround.create(testing_ground_params))
+    respond_with(@testing_ground = current_user.testing_grounds
+                                     .create(testing_ground_params))
   end
 
   # GET /topologies/:id
