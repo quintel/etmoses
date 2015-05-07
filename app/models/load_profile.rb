@@ -9,7 +9,7 @@ class LoadProfile < ActiveRecord::Base
   }
 
   validates_attachment :curve, presence: true,
-    content_type: { content_type: 'text/csv' },
+    content_type: { content_type: /text\/(csv|plain)/ },
     size: { less_than: 100.megabytes }
 
   validates :key, presence: true, uniqueness: true
