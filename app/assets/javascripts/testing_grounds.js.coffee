@@ -283,6 +283,7 @@ class LoadChart
     chart.lines2.forceY([0.0])
 
     chart.lines.interpolate('step-after')
+    chart.lines2.interpolate('step-after')
 
     chart.xAxis
          .tickFormat(@formatDateFromFrame)
