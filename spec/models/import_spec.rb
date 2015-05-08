@@ -81,7 +81,11 @@ RSpec.describe Import do
       end
 
       it 'converts the value to KW' do
-        expect(tech['capacity']).to eq(20.0)
+        expect(tech['capacity'].abs).to eq(20.0)
+      end
+
+      it 'imports the value as a negative (indicating production)' do
+        expect(tech['capacity']).to be < 0
       end
     end # importing the electricity_output_capacity attribute
 
