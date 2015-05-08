@@ -20,3 +20,12 @@ def stub_scenario_request
        to_return(status: 200,
                  body: JSON.dump({template: 2}))
 end
+
+
+def stub_et_engine_templates
+   stub_request(:get, "http://et-engine.com/api/v3/scenarios/templates").
+      with(headers: {'Accept'=>'*/*; q=0.5, application/xml',
+                     'Accept-Encoding'=>'gzip, deflate',
+                     'User-Agent'=>'Ruby'}).
+      to_return(status: 200, body: JSON.dump({}), headers: {})
+end

@@ -43,10 +43,10 @@
       .form-group
         = f.text_area :technology_profile, value: technological_topology_field_value(testing_ground)
         .radio-button-group
-          = radio_button_tag 'differentiation', "min", true
-          = label_tag "Minimum concurrency"
-          = radio_button_tag 'differentiation', "max"
+          = radio_button_tag 'differentiation', "max", true
           = label_tag "Maximum concurrency"
+          = radio_button_tag 'differentiation', "min"
+          = label_tag "Minimum concurrency"
 
   .form-group
     = f.submit class: 'btn btn-primary'

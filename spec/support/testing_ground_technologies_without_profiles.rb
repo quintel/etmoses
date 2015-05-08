@@ -34,6 +34,10 @@ def testing_ground_technologies_without_profiles_subset
   [ { "type"=>"households_solar_pv_solar_radiation",
       "name"=>"Residential PV panel",
       "units"=>4,
+      "capacity"=>1.5 },
+    { "type"=>"transport_car_using_electricity",
+      "name"=>"Electric car",
+      "units"=>4,
       "capacity"=>1.5 }
   ]
 end

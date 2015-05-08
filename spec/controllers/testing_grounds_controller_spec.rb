@@ -23,6 +23,7 @@ RSpec.describe TestingGroundsController do
 
       stub_et_engine_request
       stub_scenario_request
+      stub_et_engine_templates
 
       post :perform_import, import: { scenario_id: 1 }
 
@@ -33,40 +34,30 @@ RSpec.describe TestingGroundsController do
   describe "#build_technology_toplogy" do
     let(:topology){ FactoryGirl.create(:topology) }
 
-    describe "minimum profile differentiation" do
+    describe "maximum profile differentiation" do
       it "combines a testing ground topology with a set of technologies" do
         sign_in(user)
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph,
-              profile_differentiation: 'min'
+              topology: topology.graph.to_json,
+              profile_differentiation: 'max'
 
-        expect(YAML.load(response.body)).to eq({
-          'lv1' => [{ "type"=>"households_solar_pv_solar_radiation",
-                      "name"=>"Residential PV panel",
-                      "units"=>2,
-                      "capacity"=>1.5,
-                      "profile"=> nil }],
-          'lv2' => [{ "type"=>"households_solar_pv_solar_radiation",
-                      "name"=>"Residential PV panel",
-                      "units"=>2,
-                      "capacity"=>1.5,
-                      "profile"=> nil }]
-        })
+        expect(YAML.load(response.body).values.flatten.count).to eq(4)
+        expect(YAML.load(response.body).keys.count).to eq(2)
       end
     end
 
-    describe "maximum profile differentiation" do
+    describe "minimum profile differentiation" do
       it "combines a testing ground topology with a set of technologies and no profiles" do
         sign_in(user)
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph,
-              profile_differentiation: 'max'
+              topology: topology.graph.to_json,
+              profile_differentiation: 'min'
 
-        expect(YAML.load(response.body).values.flatten.count).to eq(2)
+        expect(YAML.load(response.body).values.flatten.count).to eq(4)
         expect(YAML.load(response.body).keys.count).to eq(2)
       end
 
@@ -74,14 +65,17 @@ RSpec.describe TestingGroundsController do
         4.times{ FactoryGirl.create(:technology_profile,
                     technology: 'households_solar_pv_solar_radiation') }
 
+        4.times{ FactoryGirl.create(:technology_profile,
+                    technology: 'transport_car_using_electricity') }
+
         sign_in(user)
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph,
-              profile_differentiation: 'max'
+              topology: topology.graph.to_json,
+              profile_differentiation: 'min'
 
-        expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(4)
+        expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(8)
       end
 
       it "combines a testing ground topology with a set of technologies with less profiles than technologies" do
@@ -92,12 +86,12 @@ RSpec.describe TestingGroundsController do
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph,
-              profile_differentiation: 'max'
+              topology: topology.graph.to_json,
+              profile_differentiation: 'min'
 
 
-        expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(2)
-        expect(YAML.load(response.body).values.flatten.length).to eq(4)
+        expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(3)
+        expect(YAML.load(response.body).values.flatten.length).to eq(6)
       end
     end
   end

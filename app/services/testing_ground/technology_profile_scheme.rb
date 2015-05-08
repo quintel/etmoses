@@ -52,11 +52,11 @@ class TestingGround::TechnologyProfileScheme
       end
     end
 
-    # Groups technologies by type and profile
+    # Groups technologies by type
     # Returns a two-dimensional array of technology groups
     def technology_groups
       profile_differentiation
-        .group_by{|t| "#{t['type']}_#{t['profile']}" }
+        .group_by{|t| t['type'] }
         .values
     end
 

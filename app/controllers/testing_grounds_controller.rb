@@ -10,11 +10,6 @@ class TestingGroundsController < ApplicationController
     respond_with(@testing_grounds = TestingGround.all.order('created_at DESC'))
   end
 
-  # GET /topologies/new
-  def new
-    respond_with(@testing_ground = TestingGround.new(topology: Topology.new))
-  end
-
   # GET /topologies/import
   def import
     @import = Import.new(params.slice(:scenario_id))
@@ -40,6 +35,11 @@ class TestingGroundsController < ApplicationController
   def perform_export
     redirect_to("http://beta.pro.et-model.com/scenarios/" +
                 "#{ @export.export['id'] }")
+  end
+
+  # GET /topologies/new
+  def new
+    respond_with(@testing_ground = TestingGround.new(topology: Topology.new))
   end
 
   # POST /topologies

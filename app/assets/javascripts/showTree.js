@@ -9,7 +9,7 @@ function showTree(url, container) {
 
       $('.loading').remove();
 
-      $('.testing-ground-view').append(
+      container.append(
         errorEl.append(messageEl.text(errorData.error))
       );
 

@@ -18,7 +18,7 @@ class Import
     # Selects a profile from a list of profiles according to an index
     def select_profile(technology_type, index)
       if available_profiles = profiles[technology_type]
-        if @differentiation == "min"
+        if @differentiation == "max"
           available_profiles.first
         elsif profiles.any?
           available_profiles[index % available_profiles.length]
