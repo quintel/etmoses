@@ -34,4 +34,16 @@ FactoryGirl.define do
       )
     end
   end
+
+  factory :installed_p2h, class: InstalledTechnology do
+    name 'Power-to-heat'
+    units 1
+    storage 1.0
+
+    after(:build) do |tech|
+      allow(tech).to receive(:technology).and_return(
+        build(:technology, behavior: 'buffer')
+      )
+    end
+  end
 end

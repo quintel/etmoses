@@ -19,6 +19,7 @@ module Network
         Hash.new { Technology }.tap do |behaviors|
           behaviors['storage']          = Storage
           behaviors['electric_vehicle'] = ElectricVehicle
+          behaviors['buffer']           = Buffer
         end.freeze
     end
 
