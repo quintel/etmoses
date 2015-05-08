@@ -33,8 +33,6 @@ module Network
       @profile.at(frame)
     end
 
-    alias_method :mandatory_consumption_at, :load_at
-
     # Public: Determines the minimum amount of energy the technology consumes in
     # a given time-step.
     #
