@@ -100,6 +100,8 @@ RSpec.describe TestingGroundsController do
     it "creates a testing ground" do
       sign_in(user)
 
+      stub_et_engine_templates
+
       expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
       post :create, TestingGroundsControllerTest.create_hash
 
@@ -108,6 +110,8 @@ RSpec.describe TestingGroundsController do
 
     it "redirects to show page" do
       sign_in(user)
+
+      stub_et_engine_templates
 
       expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
       post :create, TestingGroundsControllerTest.create_hash

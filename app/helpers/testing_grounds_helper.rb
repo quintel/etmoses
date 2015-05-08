@@ -14,7 +14,7 @@ module TestingGroundsHelper
     if testing_ground.new_record? && testing_ground.technologies.blank?
       TestingGround::DEFAULT_TECHNOLOGIES
     else
-      YAML.dump(testing_ground_technologies(testing_ground).map(&:to_hash))
+      YAML.dump(JSON.parse(testing_ground.technology_profile.to_json).values.flatten)
     end
   end
 
@@ -28,7 +28,7 @@ module TestingGroundsHelper
   end
 
   def technological_topology_field_value(testing_ground)
-
+    YAML.dump(JSON.parse(testing_ground.technology_profile.to_json))
   end
 
   def link_to_etm_scenario(title, scenario_id)
