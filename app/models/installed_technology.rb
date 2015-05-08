@@ -3,6 +3,7 @@ class InstalledTechnology
 
   attribute :name,     String
   attribute :type,     String, default: 'generic'
+  attribute :behavior, String
   attribute :profile,  String
   attribute :load,     Float
   attribute :capacity, Float

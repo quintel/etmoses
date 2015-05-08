@@ -7,7 +7,9 @@ module Network
     #
     # Returns a Technology.
     def self.build(installed, profile)
-      behaviors[installed.technology.behavior].new(installed, profile)
+      behaviors[
+        installed.behavior.presence || installed.technology.behavior
+      ].new(installed, profile)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by
