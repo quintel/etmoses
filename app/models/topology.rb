@@ -6,6 +6,10 @@ class Topology < ActiveRecord::Base
   validate :validate_node_names
   validate :validate_units
 
+  def self.default
+    find_by_name("Default topology")
+  end
+
   # Traverses each node in the graph, yielding it's data.
   #
   # Returns nothing.
@@ -13,6 +17,14 @@ class Topology < ActiveRecord::Base
     nodes.map(&:symbolize_keys).each do |node|
       block.call(node)
       each_node(node[:children], &block) if node[:children]
+    end
+  end
+
+  def graph=(graph)
+    if graph.is_a?(String)
+      super YAML::load(graph)
+    else
+      super graph
     end
   end
 

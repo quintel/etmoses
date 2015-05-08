@@ -22,22 +22,10 @@
     .form-inline
       = f.select :parent_scenario_id, @national_scenarios, {}, class: "form-control"
 
-  .form-group
-    = f.label :scenario_id, 'Local scenario'
-    .form-inline
-      = f.select :scenario_id, local_scenario_select_options, {}, class: "form-control"
-      %span
-        \/
-      = f.text_field :scenario_id, class: "form-control inline"
-
   %ul.nav.nav-tabs{role: "tablist"}
     %li{role: "presentation", class: "active"}
       = link_to "#technologies", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
         Technologies
-
-    %li{role: "presentation"}
-      = link_to "#topology", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
-        Topology
 
     %li{role: "presentation"}
       = link_to "#profiles", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
@@ -50,11 +38,6 @@
         .form-group
           = f.label :technologies_csv, "CSV Upload"
           = f.file_field :technologies_csv, accept: 'text/csv'
-
-    #topology.tab-pane
-      .form-group
-        = f.fields_for :topology do |topo_form|
-          = topo_form.text_area :graph, value: topology_field_value(testing_ground)
 
     #profiles.tab-pane
       .form-group

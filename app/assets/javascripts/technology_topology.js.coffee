@@ -5,7 +5,7 @@ buildTechnologyTopology = (differentiation)->
     dataType: "text"
     data:
       technologies: $("textarea#testing_ground_technologies").text()
-      topology: $("textarea#testing_ground_topology_attributes_graph").text()
+      topology: $("textarea#testing_ground_topology_graph").text()
       profile_differentiation: differentiation
     success: (data)->
       editor = ace.edit("testing_ground_technology_profile_editor")

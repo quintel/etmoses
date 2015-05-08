@@ -39,7 +39,7 @@ RSpec.describe TestingGroundsController do
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_yaml,
+              topology: topology.graph,
               profile_differentiation: 'min'
 
         expect(YAML.load(response.body)).to eq({
@@ -63,7 +63,7 @@ RSpec.describe TestingGroundsController do
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_yaml,
+              topology: topology.graph,
               profile_differentiation: 'max'
 
         expect(YAML.load(response.body).values.flatten.count).to eq(2)
@@ -78,7 +78,7 @@ RSpec.describe TestingGroundsController do
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_yaml,
+              topology: topology.graph,
               profile_differentiation: 'max'
 
         expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(4)
@@ -92,7 +92,7 @@ RSpec.describe TestingGroundsController do
 
         post :build_technology_toplogy,
               technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_yaml,
+              topology: topology.graph,
               profile_differentiation: 'max'
 
 

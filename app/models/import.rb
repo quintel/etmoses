@@ -49,9 +49,9 @@ class Import
 
   def topology
     if @topology_id.blank?
-      Topology.new(graph: YAML.load(Topology::DEFAULT_GRAPH))
+      Topology.default
     else
-      Topology.new(graph: Topology.find(@topology_id).graph)
+      Topology.find(@topology_id)
     end
   end
 

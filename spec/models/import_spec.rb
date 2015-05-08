@@ -30,10 +30,6 @@ RSpec.describe Import do
   context 'with no existing topology' do
     let(:response) { build_response('tech_one' => 1.0) }
 
-    it 'builds a new topology' do
-      expect(testing_ground.topology).to be_new_record
-    end
-
     it 'uses the default graph layout' do
       expect(testing_ground.topology.graph).to_not be_blank
     end

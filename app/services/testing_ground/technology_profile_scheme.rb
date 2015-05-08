@@ -9,7 +9,7 @@ class TestingGround::TechnologyProfileScheme
     raise ArgumentError unless %w(min max).include?(params[:profile_differentiation])
 
     @technologies    = YAML::load(params[:technologies])
-    @topology        = YAML::load(params[:topology])
+    @topology        = JSON.parse(params[:topology])
     @differentiation = params[:profile_differentiation]
   end
 

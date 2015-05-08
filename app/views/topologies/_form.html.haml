@@ -1,0 +1,22 @@
+- if @topology.errors.any?
+  %ul.errors
+    - @topology.errors.full_messages.uniq.each do |message|
+      %li= message
+
+= form_for @topology, html: { multipart: true } do |form|
+  .form-group
+    = form.label :name
+    = form.text_field :name, class: 'form-control'
+    .help-block This field is optional.
+
+  .form-group
+    = form.label :graph
+    = form.text_area :graph, value: topology_field_value(@topology)
+
+  .form-group
+    = form.submit class: 'btn btn-primary'
+    %span.or or
+    - if @topology.new_record?
+      = link_to 'Cancel', topologies_path, class: 'btn btn-default'
+    - else
+      = link_to 'Cancel', topology_path(@topology), class: 'btn btn-default'

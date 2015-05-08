@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   end
 
   resources :load_profiles
+  resources :topologies
 
   root to: redirect('/welcome')
 
