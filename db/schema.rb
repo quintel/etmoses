@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150508091219) do
+ActiveRecord::Schema.define(version: 20150511091406) do
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
