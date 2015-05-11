@@ -17,11 +17,6 @@
     = f.label :name, 'Testing ground name'
     = f.text_field :name, class: 'form-control'
 
-  .form-group
-    = f.label :parent_scenario_id, 'National scenario'
-    .form-inline
-      = f.select :parent_scenario_id, @national_scenarios, {}, class: "form-control"
-
   %ul.nav.nav-tabs{role: "tablist"}
     %li{role: "presentation", class: "active"}
       = link_to "#technologies", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do

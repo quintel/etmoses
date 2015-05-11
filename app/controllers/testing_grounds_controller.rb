@@ -95,7 +95,7 @@ class TestingGroundsController < ApplicationController
     tg_params = params
       .require(:testing_ground)
       .permit([:name, :technologies, :technology_profile, :technologies_csv,
-               :scenario_id, :parent_scenario_id, :topology_id,
+               :scenario_id, :topology_id,
                { topology_attributes: :graph }])
 
     if tg_params[:technologies_csv]
