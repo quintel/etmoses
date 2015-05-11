@@ -3,7 +3,6 @@ class TestingGroundsController < ApplicationController
   respond_to :csv, only: :technologies
 
   before_filter :prepare_export, only: %i( export perform_export )
-  before_filter :find_remote_scenarios, only: [:new, :perform_import, :edit, :create, :update]
 
   # GET /topologies
   def index
@@ -121,9 +120,5 @@ class TestingGroundsController < ApplicationController
   def prepare_export
     @testing_ground = TestingGround.find(params[:id])
     @export         = Export.new(@testing_ground)
-  end
-
-  def find_remote_scenarios
-    @national_scenarios ||= Scenarios::RemoteFinder.new.find_remote_scenarios
   end
 end # TestingGroundsController
