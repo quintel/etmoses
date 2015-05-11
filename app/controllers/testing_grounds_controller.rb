@@ -51,6 +51,8 @@ class TestingGroundsController < ApplicationController
     respond_with(@testing_ground = TestingGround.find(params[:id]))
   rescue StandardError => ex
     if request.format.json?
+      notify_airbrake(ex) if defined?(Airbrake)
+
       result = { error: 'Sorry, your testing ground could not be calculated' }
 
       if Rails.env.development? || Rails.env.test?
