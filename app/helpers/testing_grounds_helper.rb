@@ -14,7 +14,7 @@ module TestingGroundsHelper
     if testing_ground.new_record? && testing_ground.technologies.blank?
       TestingGround::DEFAULT_TECHNOLOGIES
     else
-      YAML.dump(JSON.parse(testing_ground.technology_profile.to_json).values.flatten)
+      YAML.dump(testing_ground_technologies(testing_ground).map(&:to_hash))
     end
   end
 
