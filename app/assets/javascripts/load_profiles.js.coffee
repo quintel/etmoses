@@ -16,6 +16,6 @@ $(document).on "page:change", ->
     $.getJSON(container.data('url')).success (profile) ->
       $('.profile-graph').empty().append('<svg></svg>')
 
-      new (window.LoadChart)(
-        profile.values, profile.name || profile.key
-      ).render('.profile-graph svg')
+      new (window.LoadChart)([{
+        values: profile.values, name: profile.name || profile.key, area: true
+      }]).render('.profile-graph svg')

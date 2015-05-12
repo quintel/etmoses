@@ -11,7 +11,9 @@ module Calculation
     def run
       @context.technology_nodes.each do |node|
         node.set(:techs, suitable_technologies(node).map do |tech|
-          Network::Technology.from_installed(tech, profile_for(tech))
+          Network::Technology.from_installed(
+            tech, profile_for(tech), @context.options
+          )
         end)
       end
 

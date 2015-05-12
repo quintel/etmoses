@@ -49,7 +49,14 @@ class TestingGroundsController < ApplicationController
 
   # GET /topologies/:id
   def show
-    respond_with(@testing_ground = TestingGround.find(params[:id]))
+    @testing_ground = TestingGround.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: @testing_ground.to_json(storage: params[:storage] != '0')
+      end
+    end
   rescue StandardError => ex
     if request.format.json?
       notify_airbrake(ex) if defined?(Airbrake)

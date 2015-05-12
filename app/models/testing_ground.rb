@@ -24,7 +24,7 @@ class TestingGround < ActiveRecord::Base
   # important attributes from the techologies hash into the topology.
   #
   # This should be moved to a presenter after the prototype stage.
-  def as_json(*)
+  def as_json(opts = {})
     calculators = [
       Calculation::TechnologyLoad,
       Calculation::PullConsumption,
@@ -32,7 +32,7 @@ class TestingGround < ActiveRecord::Base
     ]
 
     context = calculators
-      .reduce(to_calculation_context) do |context, calculator|
+      .reduce(to_calculation_context(opts)) do |context, calculator|
         calculator.call(context)
       end
 
@@ -51,8 +51,8 @@ class TestingGround < ActiveRecord::Base
   # needed to calculate the testing ground.
   #
   # Returns a Calculation::Context.
-  def to_calculation_context
-    Calculation::Context.new(to_graph)
+  def to_calculation_context(options = {})
+    Calculation::Context.new(to_graph, options)
   end
 
   # Public: Given a calculated graph, returns the technologies JSON, injecting

@@ -22,7 +22,7 @@
       = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
 
 #testing-ground
-  .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json, point: params[:point] || 0) }
+  .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json) }
     %span.loading
       %h5
         %span.main Calculating your testing ground&hellip;

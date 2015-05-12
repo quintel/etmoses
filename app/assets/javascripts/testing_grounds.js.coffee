@@ -178,20 +178,20 @@ showTopology = (jsonURL, container) ->
 # Uses nvd3 in order to create a "focus" area so the user may zoom on and view
 # the curve in greater detail.
 class LoadChart
-  constructor: (@data, @label, @capacity) ->
+  constructor: (@data, @capacity) ->
     # pass
 
-  sampledData: (week) ->
+  sampledData: (loads, week) ->
     if week
-      chunkSize = Math.floor(@data.length / 52)
+      chunkSize = Math.floor(loads.length / 52)
       zeroWeek  = week - 1
 
       startAt = zeroWeek * chunkSize
       endAt   = startAt + chunkSize
 
-      window.downsampleCurve(@data.slice(startAt, endAt), chunkSize, startAt)
+      window.downsampleCurve(loads.slice(startAt, endAt), chunkSize, startAt)
     else
-      window.downsampleCurve(@data, 365)
+      window.downsampleCurve(loads, 365)
 
   render: (intoSelector, week = 0) =>
     @renderChart(intoSelector, week)
@@ -200,8 +200,9 @@ class LoadChart
   renderChart: (intoSelector, week) ->
     self = this
 
-    values = @sampledData(week)
-    data   = [{ key: @label, values: values, area: true }]
+    data = for datum, index in @data
+      console.log(datum)
+      { key: datum.name, values: @sampledData(datum.values, week), area: datum.area, color: datum.color}
 
     $(intoSelector).empty()
 

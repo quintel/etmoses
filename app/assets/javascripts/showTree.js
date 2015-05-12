@@ -1,6 +1,18 @@
 function showTree(url, container) {
   'use strict';
 
+  function eachNode(nodes, iterator) {
+    var length = nodes.length, i;
+
+    for (i = 0; i < length; i++) {
+      iterator.call(this, nodes[i]);
+
+      if (nodes[i]['children'] && nodes[i]['children'].length) {
+        eachNode(nodes[i]['children'], iterator);
+      }
+    }
+  }
+
   d3.json(url, function(error, treeData) {
     if (error) {
       var errorData = JSON.parse(error.response),
@@ -153,32 +165,44 @@ function showTree(url, container) {
       return d;
     };
 
+    function showChart(d) {
+      var loadChart = window.LoadChart;
+
+      console.log(d);
+
+      $('.load-graph').empty().append('<svg></svg>');
+
+      console.log(d.load, d.offLoad);
+
+      new loadChart([
+        { values: d.offLoad, name: d.name + ' (without storage)', color: '#95BB95', area: true },
+        { values: d.load,    name: d.name, area: true, color: '#1F77B4' }
+      ], d.capacity).render('.load-graph svg')
+    }
+
     // Toggle children on click.
     function click(d) {
       if (d3.event.defaultPrevented) return; // click suppressed
 
       toggleSelectedNode.call(this);
+
       // Load chart.
-      var values    = d.load,
-      loadChart = window.LoadChart;
+      var values = d.load;
 
-      var chartData = [{
-        key:    d.name,
-        area:   true,
-        values: values
-      }]
+      d3.json(url + '?storage=0', function(error, offData) {
+        var indexedLoads = {};
 
-      if (d.capacity) {
-        chartData.push({
-          key: 'Capacity',
-          color: 'darkred',
-          values: values.map(function(sample) {
-            return ({ x: sample.x, y: d.capacity });
-          })
+        eachNode([offData.graph], function(node) {
+          indexedLoads[node.name] = node.load;
         });
-      }
 
-      $('.load-graph').empty().append('<svg></svg>');
+        svgGroup.selectAll('g.node').data().forEach(function(datum) {
+          console.log(datum.name, indexedLoads[datum.name]);
+          datum.offLoad = indexedLoads[datum.name];
+        });
+
+        showChart(d);
+      });
 
       $('#technologies .row').hide();
       $('#technologies .row[data-node="' + d.name + '"]').show();
@@ -194,8 +218,6 @@ function showTree(url, container) {
 
         event.preventDefault();
       });
-
-      new loadChart(d.load, d.name, d.capacity).render('.load-graph svg')
     };
 
     function toggleSelectedNode(){

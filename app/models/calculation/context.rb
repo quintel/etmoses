@@ -4,8 +4,12 @@ module Calculation
     # Public: Returns the Turbine::Graph instance.
     attr_reader :graph
 
-    def initialize(graph)
-      @graph = graph
+    # Public: Options which change the behavior of the calculation.
+    attr_reader :options
+
+    def initialize(graph, options = {})
+      @graph   = graph
+      @options = options
     end
 
     # Public: Determines which nodes in the graph have attached technologies.
