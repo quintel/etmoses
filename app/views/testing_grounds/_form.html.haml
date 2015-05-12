@@ -10,38 +10,33 @@
   - if @testing_ground.topology_id
     = f.hidden_field :topology_id
     .hidden
-      = f.fields_for :topology do |topo_form|
-        = topo_form.text_area :graph, value: @testing_ground.topology.graph.to_json
+      = text_area_tag :topology_graph, @testing_ground.topology.graph.to_json
 
   .form-group
-    = f.label :name, 'Testing ground name'
+    = f.label :name, 'Local energy solution name'
     = f.text_field :name, class: 'form-control'
 
-  %ul.nav.nav-tabs{role: "tablist"}
-    %li{role: "presentation", class: "active"}
-      = link_to "#technologies", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
-        Technologies
+  %p
+    Use the interactive table below to:
+    %ul
+      %li Connect the technologies from your scaled scenario to the endpoints of your chosen network topology.
+      %li Edit the properties of the technologies
+      %li Attach profiles to technologies
 
-    %li{role: "presentation"}
-      = link_to "#profiles", data:{toggle: 'tab'}, role: "tab", class: "btn btn-primary" do
-        Profiles
+  #profiles-table
+    = render partial: "testing_grounds/profile_table", locals: {testing_ground_profile: @testing_ground.technology_profile.as_json}
 
-  .tab-content
-    #technologies.tab-pane.active
-      = f.text_area :technologies, value: technologies_field_value(testing_ground)
-      - if testing_ground.new_record? && request.get?
-        .form-group
-          = f.label :technologies_csv, "CSV Upload"
-          = f.file_field :technologies_csv, accept: 'text/csv'
+  - if testing_ground.new_record?
+    .radio-button-group
+      = radio_button_tag 'differentiation', "max", true
+      = label_tag "Maximum concurrency"
+      = radio_button_tag 'differentiation', "min"
+      = label_tag "Minimum concurrency"
 
-    #profiles.tab-pane
-      .form-group
-        = f.text_area :technology_profile, value: technological_topology_field_value(testing_ground)
-        .radio-button-group
-          = radio_button_tag 'differentiation', "max", true
-          = label_tag "Maximum concurrency"
-          = radio_button_tag 'differentiation', "min"
-          = label_tag "Minimum concurrency"
+  .hidden
+    = f.text_area :technology_profile
+
+  %br
 
   .form-group
     = f.submit class: 'btn btn-primary'

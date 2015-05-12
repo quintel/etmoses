@@ -1,6 +1,7 @@
 class TestingGroundsController < ApplicationController
   respond_to :html, :json
   respond_to :csv, only: :technologies
+  respond_to :js, only: :calculate_concurrency
 
   before_filter :prepare_export, only: %i( export perform_export )
 
@@ -38,7 +39,7 @@ class TestingGroundsController < ApplicationController
 
   # GET /topologies/new
   def new
-    respond_with(@testing_ground = TestingGround.new(topology: Topology.new))
+    respond_with(@testing_ground = TestingGround.new)
   end
 
   # POST /topologies
@@ -84,10 +85,14 @@ class TestingGroundsController < ApplicationController
     respond_with(@testing_ground)
   end
 
-  # POST /topologies/build_technology_toplogy
-  def build_technology_toplogy
-    render text: TestingGround::TechnologyProfileScheme.new(params).build,
-           content_type: "text/yaml"
+  # POST /topologies/calculate_concurrency
+  def calculate_concurrency
+    calculated_concurrency = TestingGround::ConcurrencyCalculator.new(
+                                params[:profile],
+                                params[:topology],
+                                params[:profile_differentiation]).calculate
+
+    @testing_ground_profile = TechnologyList.from_hash(calculated_concurrency)
   end
 
   private
@@ -97,8 +102,7 @@ class TestingGroundsController < ApplicationController
     tg_params = params
       .require(:testing_ground)
       .permit([:name, :technologies, :technology_profile, :technologies_csv,
-               :scenario_id, :topology_id,
-               { topology_attributes: :graph }])
+               :scenario_id, :topology_id])
 
     if tg_params[:technologies_csv]
       tg_params.delete(:technologies)

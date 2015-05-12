@@ -5,26 +5,20 @@ class TestingGround::TechnologyProfileScheme
   # amount of selected profiles
   #
 
-  def initialize(params)
-    raise ArgumentError unless %w(min max).include?(params[:profile_differentiation])
-
-    @technologies    = YAML::load(params[:technologies])
-    @topology        = JSON.parse(params[:topology])
-    @differentiation = params[:profile_differentiation]
+  def initialize(technologies, topology, differentiation = "max")
+    @technologies    = technologies
+    @topology        = topology
+    @differentiation = differentiation
   end
 
+  # Returns a hash with all edge nodes as keys and technologies as values
   def build
-    edge_nodes_hash.to_yaml
+    Hash[transformed_technologies.each_with_index.map do |technologies, index|
+      [edge_nodes[index].key, technologies]
+    end]
   end
 
   private
-
-    # Returns a hash with all edge nodes as keys and technologies as values
-    def edge_nodes_hash
-      Hash[transformed_technologies.each_with_index.map do |technologies, index|
-        [edge_nodes[index].key, technologies]
-      end]
-    end
 
     # Returns an array
     def edge_nodes
