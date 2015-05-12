@@ -1,0 +1,23 @@
+%table.table
+  %thead
+    %th Node
+    %th Name
+    %th Type
+    %th Profile
+    %th Capacity
+    %th Units
+
+  %tbody
+    - testing_ground_profile.each_pair do |node, technologies|
+      - technologies.each do |technology|
+        %tr
+          %td= node
+          - technology.slice(*InstalledTechnology::EDITABLES).values.each do |value|
+            %td.editable= value
+
+          %th
+            = link_to "#", class: "add-row text-success" do
+              %span.glyphicon.glyphicon-plus
+          %th
+            = link_to "#", class: "remove-row text-danger" do
+              %span.glyphicon.glyphicon-remove

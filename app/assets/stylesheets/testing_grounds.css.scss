@@ -207,7 +207,7 @@ ul.testing-grounds {
     margin: 0 0 2.5rem;
   }
 
-  input[type=text] {
+  input[type=text]:not(.input-sm) {
     width: 500px;
   }
 
@@ -298,3 +298,12 @@ table.table.scenarios{
   margin-bottom: 20px;
   border-bottom: 1px solid #DDD;
 }
+
+#profiles-table{
+  margin-bottom: 20px;
+
+  table.dataTable.no-footer{
+    border-bottom: none;
+  }
+}
+

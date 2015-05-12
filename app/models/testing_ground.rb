@@ -7,7 +7,6 @@ class TestingGround < ActiveRecord::Base
   serialize :technology_profile, TechnologyList
 
   belongs_to :topology
-  accepts_nested_attributes_for :topology
 
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }

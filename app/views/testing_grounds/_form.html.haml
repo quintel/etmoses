@@ -3,9 +3,6 @@
     - testing_ground.errors.full_messages.uniq.each do |message|
       %li= message
 
-%p
-  Specify the profiles and adjust the technologies to create your LES.
-
 = form_for(testing_ground) do |f|
   - if @testing_ground.scenario_id
     = f.hidden_field :scenario_id
@@ -13,44 +10,28 @@
   - if @testing_ground.topology_id
     = f.hidden_field :topology_id
     .hidden
-      = f.fields_for :topology do |topo_form|
-        = topo_form.text_area :graph, value: @testing_ground.topology.graph.to_json
+      = text_area_tag :topology_graph, @testing_ground.topology.graph.to_json
 
   .form-group
-    = f.label :name, 'Testing ground name'
+    = f.label :name, 'Local energy solution name'
     = f.text_field :name, class: 'form-control'
 
+  %p
+    Use the interactive table below to:
+    %ul
+      %li Connect the technologies from your scaled scenario to the endpoints of your chosen network topology.
+      %li Edit the properties of the technologies
+      %li Attach profiles to technologies
+
   #profiles-table
-    %table.table
-      %thead
-        %th Node
-        %th Type
-        %th Name
-        %th Units
-        %th Capacity
-        %th Profile
+    = render partial: "testing_grounds/profile_table", locals: {testing_ground_profile: @testing_ground.technology_profile.as_json}
 
-      %tbody
-        - @testing_ground_profile.each_pair do |node, technologies|
-          - technologies.each do |technology|
-            %tr
-              %td= node
-              - technology.values.each do |value|
-                %td.editable
-                  = value
-
-              %th
-                = link_to "#", class: "add-row" do
-                  %span.glyphicon.glyphicon-plus
-              %th
-                = link_to "#", class: "remove-row" do
-                  %span.glyphicon.glyphicon-remove
-
-  .radio-button-group
-    = radio_button_tag 'differentiation', "max", true
-    = label_tag "Maximum concurrency"
-    = radio_button_tag 'differentiation', "min"
-    = label_tag "Minimum concurrency"
+  - if testing_ground.new_record?
+    .radio-button-group
+      = radio_button_tag 'differentiation', "max", true
+      = label_tag "Maximum concurrency"
+      = radio_button_tag 'differentiation', "min"
+      = label_tag "Minimum concurrency"
 
   .hidden
     = f.text_area :technology_profile

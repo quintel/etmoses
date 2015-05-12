@@ -8,14 +8,13 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
       let!(:technology_profiles){
         5.times do
           FactoryGirl.create(:technology_profile,
-                                  technology: "households_solar_pv_solar_radiation")
+                              technology: "households_solar_pv_solar_radiation")
         end}
 
       let(:testing_ground_topology){
-        TestingGround::TechnologyProfileScheme.new({
-          technologies: testing_ground_technologies_without_profiles,
-          topology: topology
-        }).build
+        TestingGround::TechnologyProfileScheme.new(
+          testing_ground_technologies_without_profiles, topology
+        ).build
       }
 
       it 'assigns the correct profiles' do

@@ -11,6 +11,8 @@ class InstalledTechnology
   attribute :storage,  Float
   attribute :units,    Float,  default: 1.0
 
+  EDITABLES = %i(name type profile capacity units)
+
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
     Hash[ self.attribute_set.map do |attr|

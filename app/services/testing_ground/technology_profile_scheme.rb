@@ -5,12 +5,10 @@ class TestingGround::TechnologyProfileScheme
   # amount of selected profiles
   #
 
-  DEFAULT_CONCURRENY_SETTING = "max"
-
-  def initialize(params)
-    @technologies    = params[:technologies]
-    @topology        = params[:topology]
-    @differentiation = params[:profile_differentiation]
+  def initialize(technologies, topology, differentiation = "max")
+    @technologies    = technologies
+    @topology        = topology
+    @differentiation = differentiation
   end
 
   # Returns a hash with all edge nodes as keys and technologies as values
@@ -79,7 +77,7 @@ class TestingGround::TechnologyProfileScheme
     end
 
     def profile_selector
-      @profile_selector ||= Import::ProfileSelector.new(technology_keys, DEFAULT_CONCURRENY_SETTING)
+      @profile_selector ||= Import::ProfileSelector.new(technology_keys, @differentiation)
     end
 
     def technology_keys
