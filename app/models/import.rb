@@ -10,6 +10,7 @@ class Import
 
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
+  validate :is_scaled_scenario
 
   # Public: Returns a hash of technologies which we can import from ETEngine.
   #
@@ -73,6 +74,12 @@ class Import
   #######
   private
   #######
+
+  def is_scaled_scenario
+    unless etm_scenario["scaling"].present?
+      self.errors.add(:scenario_id, "is not scaled")
+    end
+  end
 
   # Internal: Imports the requested data from the remote provider and returns
   # the JSON response as a Hash.
