@@ -1,7 +1,10 @@
 class Import
   include ActiveModel::Validations
 
-  URL_TEMPLATE = 'http://%s/api/v3/scenarios/%d/converters/stats'.freeze
+  ETM_URLS = {
+    stats:    'http://%s/api/v3/scenarios/%d/converters/stats',
+    scenario: 'http://%s/api/v3/scenarios/%d'
+  }.freeze
 
   attr_reader :provider, :scenario_id, :topology_id
 
@@ -43,6 +46,10 @@ class Import
       parent_scenario_id: parent_scenario_id)
   end
 
+  def etm_title
+    etm_scenario['title'] || @scenario_id
+  end
+
   # Internal: Required in order to use Import within +form_for+ view block.
   def to_key
     nil
@@ -71,7 +78,7 @@ class Import
   # the JSON response as a Hash.
   def response
     @response ||= JSON.parse(RestClient.post(
-      URL_TEMPLATE % [@provider, @scenario_id],
+      ETM_URLS[:stats] % [@provider, @scenario_id],
       { keys: self.class.import_targets.map(&:key) }.to_json,
       { content_type: :json, accept: :json }
     ))['nodes']
@@ -81,9 +88,7 @@ class Import
   #
   # Returns a number, or nil if no national scenario was found.
   def parent_scenario_id
-    JSON.parse(RestClient.get(scenario_url))['template'].try(:to_i)
-  rescue RestClient::ResourceNotFound, JSON::ParserError
-    nil
+    etm_scenario['template'].try(:to_i)
   end
 
   # Internal: Given a response, splits out the nodes into discrete technologies.
@@ -95,7 +100,16 @@ class Import
     end
   end
 
+  # Internal: Retrieves the scenario from ETModel
+  #
+  # Returns a JSON object or nil if the scenario doesn't exist on ETModel
+  def etm_scenario
+    @etm_scenario ||= JSON.parse(RestClient.get(scenario_url))
+  rescue RestClient::ResourceNotFound, JSON::ParserError
+    nil
+  end
+
   def scenario_url
-    [Export::API_BASE, scenario_id].join("/")
+    ETM_URLS[:scenario] % [@provider, @scenario_id]
   end
 end # Import
