@@ -64,7 +64,10 @@ class TestingGround::TechnologyProfileScheme
     # Returns an array of technology-hashes with a profile assigned
     def profile_differentiation
       all_technologies.each_with_index.map do |technology,index|
-        technology['profile'] = select_profile(technology['type'], index)
+        unless technology['profile'].present?
+          technology['profile'] = select_profile(technology['type'], index)
+        end
+
         technology
       end
     end
