@@ -30,7 +30,7 @@ RSpec.describe Network::ElectricVehicle do
       end
 
       it 'has no mandatory consumption' do
-        expect(tech.conditional_consumption_at(1)).to eq(3.0)
+        expect(tech.mandatory_consumption_at(1)).to be_zero
       end
 
       it 'has conditional consumption of 3.0' do
