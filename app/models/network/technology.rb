@@ -6,10 +6,10 @@ module Network
     # InstalledTechnology in the network calculation.
     #
     # Returns a Technology.
-    def self.build(installed, profile)
+    def self.from_installed(installed, profile, options = {})
       behaviors[
         installed.behavior.presence || installed.technology.behavior
-      ].new(installed, profile)
+      ].build(installed, profile, options)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by
@@ -22,6 +22,10 @@ module Network
           behaviors['buffer']           = Buffer
           behaviors['siphon']           = Siphon
         end.freeze
+    end
+
+    def self.build(installed, profile, _options)
+      new(installed, profile)
     end
 
     attr_reader :installed, :profile
@@ -75,7 +79,10 @@ module Network
     end
 
     def consumer?
-      capacity.present? && capacity > 0
+      capacity.present? && capacity > 0 ||
+        # When storage is disabled, it may turn into a normal technology in
+        # order to draw load -- but NOT store -- from the network.
+        @installed.storage
     end
 
     def producer?

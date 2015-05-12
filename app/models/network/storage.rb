@@ -3,6 +3,12 @@ module Network
   # depending on the load of the network. Storage may retain consumed energy for
   # release back to the network later.
   class Storage < Technology
+    extend Disableable
+
+    def self.disabled?(options)
+      options[:storage] == false
+    end
+
     # Public: Using the amount of energy stored in the technology in each time
     # step, determines the relative change in energy over time, giving the load
     # of the technology.

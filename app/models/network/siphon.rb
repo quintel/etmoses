@@ -3,6 +3,12 @@ module Network
   # the maximum amount which may be consumed. If there is no excess, the Siphon
   # will be turned off and will receive nothing.
   class Siphon < Technology
+    extend Disableable
+
+    def self.disabled?(options)
+      Storage.disabled?(options)
+    end
+
     def load_at(frame)
       conditional_consumption_at(frame)
     end

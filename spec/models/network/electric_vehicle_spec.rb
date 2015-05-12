@@ -86,4 +86,94 @@ RSpec.describe Network::ElectricVehicle do
       expect(tech.conditional_consumption_at(1)).to eq(3.0)
     end
   end # when the previous frame was a disconnection
+
+  context 'when disabled' do
+    let(:profile) { [0.0, 0.0] }
+
+    let(:tech) do
+      network_technology(
+        build(:installed_ev, profile: profile, storage: 3.0), 2, storage: false)
+    end
+
+    it 'becomes a consumer' do
+      expect(tech).to be_consumer
+    end
+
+    context 'with a negative profile value in frame 0' do
+      let(:profile) { [-1.0, 0.0] }
+
+      it 'has no production in frame 0' do
+        expect(tech.production_at(0)).to be_zero
+      end
+
+      it 'has no mandatory consumption in frame 0' do
+        expect(tech.mandatory_consumption_at(0)).to be_zero
+      end
+
+      it 'has no conditional consumption in frame 0' do
+        expect(tech.conditional_consumption_at(0)).to be_zero
+      end
+
+      it 'has no production in frame 1' do
+        expect(tech.production_at(1)).to be_zero
+      end
+
+      it 'has no mandatory consumption in frame 1' do
+        expect(tech.mandatory_consumption_at(1)).to be_zero
+      end
+
+      it 'has no conditional consumption in frame 1' do
+        expect(tech.conditional_consumption_at(1)).to be_zero
+      end
+    end # with a negative profile value in frame 0
+
+    context 'and a profile value of zero' do
+      let(:profile) { [0.0, 0.0] }
+
+      it 'has no production' do
+        expect(tech.production_at(1)).to be_zero
+      end
+
+      it 'has no mandatory consumption' do
+        expect(tech.conditional_consumption_at(1)).to be_zero
+      end
+
+      it 'has no conditional consumption' do
+        expect(tech.conditional_consumption_at(1)).to be_zero
+      end
+    end # and a profile value of zero
+
+    context 'and a profile value of 1.0' do
+      let(:profile) { [0.0, 1.0] }
+
+      it 'has no production' do
+        expect(tech.production_at(1)).to be_zero
+      end
+
+      it 'has mandatory consumption of 1.0' do
+        expect(tech.mandatory_consumption_at(1)).to eq(1.0)
+      end
+
+      it 'has no conditional consumption' do
+        expect(tech.conditional_consumption_at(1)).to be_zero
+      end
+    end # and a profile value of 1.0
+
+    context 'with a value of -1' do
+      let(:profile) { [0.0, -1.0] }
+
+      it 'has production of zero' do
+        expect(tech.production_at(1)).to be_zero
+      end
+
+      it 'has no mandatory consumption' do
+        expect(tech.mandatory_consumption_at(1)).to be_zero
+      end
+
+      it 'has no conditional consumption' do
+        expect(tech.conditional_consumption_at(1)).to be_zero
+      end
+    end # with a profile -1.0
+
+  end # when disabled
 end

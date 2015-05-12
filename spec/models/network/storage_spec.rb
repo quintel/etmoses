@@ -64,4 +64,27 @@ RSpec.describe Network::Storage do
       expect(tech.conditional_consumption_at(0)).to be_zero
     end
   end # with no storage amount set
+
+  context 'when disabled' do
+    let(:tech) do
+      network_technology(
+        build(:installed_battery, storage: nil), 2, storage: false)
+    end
+
+    it 'has no production' do
+      expect(tech.production_at(0)).to be_zero
+    end
+
+    it 'has no mandatory consumption' do
+      expect(tech.mandatory_consumption_at(0)).to be_zero
+    end
+
+    it 'has no conditional consumption' do
+      expect(tech.conditional_consumption_at(0)).to be_zero
+    end
+
+    it 'has no load' do
+      expect(tech.load_at(0)).to be_zero
+    end
+  end # when disabled
 end

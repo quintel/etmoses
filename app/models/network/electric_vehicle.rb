@@ -6,6 +6,30 @@ module Network
   # may not supply or consume any energy until reconnected. An ElectricVehicle
   # reconnects with zero energy stored.
   class ElectricVehicle < Storage
+    # Internal:  With storage disabled, a car should consume energy from the
+    # network as and when needed, without storing excesses for later use.
+    def self.disabled_class
+      Technology
+    end
+
+    # Internal: EV profiles describe the minimum amount of load to be stored in
+    # each frame. Convert the profile to show the relative change over time,
+    # which will give us the per-frame load of the vehicle.
+    def self.disabled_profile(profile)
+      profile = profile.to_a
+      first   = profile[0] < 0 ? 0.0 : profile[0]
+
+      [first, *(profile.each_cons(2).map do |previous, now|
+        if now < 0
+          0.0
+        elsif previous < 0
+          now
+        else
+          now - previous
+        end
+      end)]
+    end
+
     def production_at(frame)
       disconnected?(frame) ? 0.0 : super
     end
