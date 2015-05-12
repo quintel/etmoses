@@ -1,41 +1,36 @@
 class TestingGround::ConcurrencyCalculator
-  def initialize(profile, differentiation = "max")
+  #
+  # Creates a profile with a maximum/minimum concurrency from another profile
+  #
+
+  def initialize(profile, topology, differentiation = "max")
     @profile = JSON.parse(profile)
+    @topology = JSON.parse(topology)
     @differentiation = differentiation
   end
 
   def calculate
-    @profile.each_pair do |node, technologies|
-      technologies.each_with_index.map do |technology|
-        technology['profile'] = select_profile(technology)
-        technology
-      end
-    end
+    TestingGround::TechnologyProfileScheme.new(
+      technologies, @topology, @differentiation
+    ).build
   end
 
   private
 
-    def index(technology)
-      all_technologies.index(technology)
+    #
+    # Extracts all unique technologies from a profile and sums the units
+    #
+    def technologies
+      grouped_technologies.values.map do |technologies|
+        technologies[0]['units'] = technologies.sum{|t| t['units'].to_i }
+        technologies[0].delete('node')
+        technologies[0]
+      end
     end
 
-    def select_profile(technology)
-      profile_selector.select_profile(technology['type'], index(technology))
-    end
-
-    def profile_selector
-      @profile_selector ||= Import::ProfileSelector.new(technology_keys, @differentiation)
-    end
-
-    def technology_keys
-      all_technologies.map do |technology|
+    def grouped_technologies
+      @profile.values.flatten.group_by do |technology|
         technology['type']
-      end.uniq
-    end
-
-    def all_technologies
-      @profile.values.flatten.sort do |technology_a, technology_b|
-        technology_a['type'] <=> technology_b['type']
       end
     end
 end

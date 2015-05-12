@@ -38,6 +38,7 @@ class Import
     TestingGround.new(
       topology:           topology,
       technologies:       technologies_from,
+      technology_profile: technology_profile,
       scenario_id:        @scenario_id,
       parent_scenario_id: parent_scenario_id)
   end
@@ -56,10 +57,10 @@ class Import
   end
 
   def technology_profile
-    TestingGround::TechnologyProfileScheme.new({
-      technologies: technologies_from,
-      topology: topology.graph
-    }).build
+    TestingGround::TechnologyProfileScheme.new(
+      technologies_from,
+      topology.graph
+    ).build
   end
 
   #######

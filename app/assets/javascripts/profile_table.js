@@ -4,40 +4,43 @@ var ProfileTable = (function(){
   ProfileTable.prototype = {
     append: function(){
       widget = $(selector).editableTableWidget();
-      widget.on('change', updateProfiles.bind(this));
+      widget.on('change', parseTableToJSON.bind(this));
+
       addClickListenersToAddRow();
       addClickListenersToDeleteRow();
-      updateProfiles();
+      parseTableToJSON();
     }
   };
 
-  function updateProfiles(){
-    var headers = tableHeaders();
-    var technologyProfile = [];
-    $.each(tableRows(), function(a,tableRow){
-      var technologyObject = {};
-      $.each(tableRow, function(b, technology){
-        technologyObject[headers[b].toLowerCase()] = technology
-      });
-      technologyProfile.push(technologyObject);
-    });
-
-    var object = _.groupBy(technologyProfile, 'node');
-    $("#testing_ground_technology_profile").text(JSON.stringify(object));
+  function parseTableToJSON(){
+    $("#testing_ground_technology_profile").text(tableToProfile());
   };
 
-  function tableHeaders(){
-    return $(selector).find("thead th").map(function(){
-      return $(this).text();
+  function tableToProfile(){
+    var technologyProfile = _.map(tableRows(), function(tableRow){
+      return rowToTechnologyObject(tableRow);
     });
+    return JSON.stringify(_.groupBy(technologyProfile, 'node'));
+  };
+
+  function rowToTechnologyObject(tableRow){
+    var technologyObject = {};
+    $.each(tableRow, function(i, technology){
+      technologyObject[tableHeader(i)] = technology
+    });
+    return technologyObject;
+  };
+
+  function tableHeader(index){
+    return $(selector).find("thead th")[index].innerHTML.toLowerCase();
   };
 
   function tableRows(){
     var rows = [];
     $(selector).find("tbody tr").each(function(){
-      var tableText = [];
-      $(this).find("td:first-child, td.editable").each(function(){
-        tableText.push($.trim($(this).text()));
+      var tableCells = $(this).find("td:first-child, td.editable");
+      var tableText = _.map(tableCells, function(cell){
+        return $.trim($(cell).text());
       });
 
       rows.push(tableText);
@@ -57,6 +60,7 @@ var ProfileTable = (function(){
   function addClickListenersToDeleteRow(){
     $("#profiles-table table tr th a.remove-row").on("click", function(){
       $(this).parents("tr").remove();
+      parseTableToJSON();
     });
   };
 
@@ -68,5 +72,6 @@ var ProfileTable = (function(){
 })();
 
 $(document).on("page:change", function(){
-  new ProfileTable("#profiles-table table").append();
+  window.currentProfileTable = new ProfileTable("#profiles-table table");
+  window.currentProfileTable.append();
 });
