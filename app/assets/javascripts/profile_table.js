@@ -17,10 +17,10 @@ var ProfileTable = (function(){
   };
 
   function tableToProfile(){
-    var technologyProfile = _.map(tableRows(), function(tableRow){
+    var technologyProfile = tableRows().map(function(tableRow){
       return rowToTechnologyObject(tableRow);
     });
-    return JSON.stringify(_.groupBy(technologyProfile, 'node'));
+    return JSON.stringify(ETHelper.groupBy(technologyProfile, 'node'));
   };
 
   function rowToTechnologyObject(tableRow){
@@ -39,7 +39,7 @@ var ProfileTable = (function(){
     var rows = [];
     $(selector).find("tbody tr").each(function(){
       var tableCells = $(this).find("td:first-child, td.editable");
-      var tableText = _.map(tableCells, function(cell){
+      var tableText = tableCells.toArray().map(function(cell){
         return $.trim($(cell).text());
       });
 
