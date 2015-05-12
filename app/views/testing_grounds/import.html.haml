@@ -5,6 +5,9 @@
     - @import.errors.full_messages.uniq.each do |message|
       %li= message
 
+- if params[:scenario_id]
+  Your ETModel scenario is #{params[:scenario_id]} created by #{current_user.email}
+
 = form_for(@import, url: import_testing_grounds_path, method: :post) do |form|
   .form-group
     = form.label :topology_id

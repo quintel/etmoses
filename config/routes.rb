@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     collection do
       get  'import'
       post 'import', to: :perform_import
-      post 'build_technology_toplogy'
+      post 'calculate_concurrency'
     end
 
     member do

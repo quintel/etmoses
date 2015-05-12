@@ -5,26 +5,22 @@ class TestingGround::TechnologyProfileScheme
   # amount of selected profiles
   #
 
-  def initialize(params)
-    raise ArgumentError unless %w(min max).include?(params[:profile_differentiation])
+  DEFAULT_CONCURRENY_SETTING = "max"
 
-    @technologies    = YAML::load(params[:technologies])
-    @topology        = JSON.parse(params[:topology])
+  def initialize(params)
+    @technologies    = params[:technologies]
+    @topology        = params[:topology]
     @differentiation = params[:profile_differentiation]
   end
 
+  # Returns a hash with all edge nodes as keys and technologies as values
   def build
-    edge_nodes_hash.to_yaml
+    Hash[transformed_technologies.each_with_index.map do |technologies, index|
+      [edge_nodes[index].key, technologies]
+    end]
   end
 
   private
-
-    # Returns a hash with all edge nodes as keys and technologies as values
-    def edge_nodes_hash
-      Hash[transformed_technologies.each_with_index.map do |technologies, index|
-        [edge_nodes[index].key, technologies]
-      end]
-    end
 
     # Returns an array
     def edge_nodes
@@ -83,7 +79,7 @@ class TestingGround::TechnologyProfileScheme
     end
 
     def profile_selector
-      @profile_selector ||= Import::ProfileSelector.new(technology_keys, @differentiation)
+      @profile_selector ||= Import::ProfileSelector.new(technology_keys, DEFAULT_CONCURRENY_SETTING)
     end
 
     def technology_keys

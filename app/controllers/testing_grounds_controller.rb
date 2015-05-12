@@ -20,6 +20,7 @@ class TestingGroundsController < ApplicationController
 
     if @import.valid?
       @testing_ground = @import.testing_ground
+      @testing_ground_profile = @import.technology_profile
       render :new
     else
       render :import
@@ -84,10 +85,13 @@ class TestingGroundsController < ApplicationController
     respond_with(@testing_ground)
   end
 
-  # POST /topologies/build_technology_toplogy
-  def build_technology_toplogy
-    render text: TestingGround::TechnologyProfileScheme.new(params).build,
-           content_type: "text/yaml"
+  # POST /topologies/calculate_concurrency
+  def calculate_concurrency
+    concurrency = TestingGround::ConcurrencyCalculator.new(
+                    params[:profile],
+                    params[:profile_differentiation]).calculate
+
+    render json: concurrency
   end
 
   private

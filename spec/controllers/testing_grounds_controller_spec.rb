@@ -14,6 +14,7 @@ RSpec.describe TestingGroundsController do
 
   describe "#perform_import" do
     let(:user){ FactoryGirl.create(:user) }
+    let!(:topology){ FactoryGirl.create(:topology, name: "Default topology")}
     let!(:technology){ FactoryGirl.create(:technology,
                         key: "magical_technology",
                         import_from: "input_capacity") }
@@ -30,20 +31,17 @@ RSpec.describe TestingGroundsController do
     end
   end
 
-  describe "#build_technology_toplogy" do
-    let(:topology){ FactoryGirl.create(:topology) }
-
+  describe "#calculate_concurrency" do
     describe "maximum profile differentiation" do
       it "combines a testing ground topology with a set of technologies" do
         sign_in(user)
 
-        post :build_technology_toplogy,
-              technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_json,
+        post :calculate_concurrency,
+              profile: profile_json,
               profile_differentiation: 'max'
 
-        expect(YAML.load(response.body).values.flatten.count).to eq(4)
-        expect(YAML.load(response.body).keys.count).to eq(2)
+        expect(JSON.parse(response.body).values.flatten.count).to eq(6)
+        expect(JSON.parse(response.body).keys.count).to eq(3)
       end
     end
 
@@ -51,30 +49,28 @@ RSpec.describe TestingGroundsController do
       it "combines a testing ground topology with a set of technologies and no profiles" do
         sign_in(user)
 
-        post :build_technology_toplogy,
-              technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_json,
+        post :calculate_concurrency,
+              profile: profile_json,
               profile_differentiation: 'min'
 
-        expect(YAML.load(response.body).values.flatten.count).to eq(4)
-        expect(YAML.load(response.body).keys.count).to eq(2)
+        expect(JSON.parse(response.body).values.flatten.count).to eq(6)
+        expect(JSON.parse(response.body).keys.count).to eq(3)
       end
 
       it "combines a testing ground topology with a set of technologies and the same amount of profiles as technologies" do
-        4.times{ FactoryGirl.create(:technology_profile,
+        3.times{ FactoryGirl.create(:technology_profile,
                     technology: 'households_solar_pv_solar_radiation') }
 
-        4.times{ FactoryGirl.create(:technology_profile,
+        3.times{ FactoryGirl.create(:technology_profile,
                     technology: 'transport_car_using_electricity') }
 
         sign_in(user)
 
-        post :build_technology_toplogy,
-              technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_json,
+        post :calculate_concurrency,
+              profile: profile_json,
               profile_differentiation: 'min'
 
-        expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(8)
+        expect(JSON.parse(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(6)
       end
 
       it "combines a testing ground topology with a set of technologies with less profiles than technologies" do
@@ -83,15 +79,17 @@ RSpec.describe TestingGroundsController do
 
         sign_in(user)
 
-        post :build_technology_toplogy,
-              technologies: testing_ground_technologies_without_profiles_subset.to_yaml,
-              topology: topology.graph.to_json,
+        post :calculate_concurrency,
+              profile: profile_json,
               profile_differentiation: 'min'
 
-
-        expect(YAML.load(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(3)
-        expect(YAML.load(response.body).values.flatten.length).to eq(6)
+        expect(JSON.parse(response.body).values.flatten.map{|t| t['profile']}.uniq.length).to eq(3)
+        expect(JSON.parse(response.body).values.flatten.length).to eq(6)
       end
+    end
+
+    def profile_json
+      '{"LV #1":[{"node":"LV #1","type":"households_solar_pv_solar_radiation","name":"Residential PV panel","units":"38","capacity":"-1.5","profile":"solar_pv_zwolle"},{"node":"LV #1","type":"transport_car_using_electricity","name":"Electric car","units":"7","capacity":"3.7","profile":"ev_profile_11_3.7_kw"}],"LV #2":[{"node":"LV #2","type":"households_solar_pv_solar_radiation","name":"Residential PV panel","units":"38","capacity":"-1.5","profile":"solar_pv_zwolle"},{"node":"LV #2","type":"transport_car_using_electricity","name":"Electric car","units":"7","capacity":"3.7","profile":"ev_profile_11_3.7_kw"}],"LV #3":[{"node":"LV #3","type":"households_solar_pv_solar_radiation","name":"Residential PV panel","units":"37","capacity":"-1.5","profile":"solar_pv_zwolle"},{"node":"LV #3","type":"transport_car_using_electricity","name":"Electric car","units":"7","capacity":"3.7","profile":"ev_profile_11_3.7_kw"}]}'
     end
   end
 

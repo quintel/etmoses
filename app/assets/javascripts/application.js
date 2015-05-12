@@ -18,4 +18,6 @@
 //= require testing_grounds
 //= require bootstrap-sprockets
 //= require bootstrap-filestyle
+//= require underscore.min
+//= require mindmup-editabletable
 //= require_tree .

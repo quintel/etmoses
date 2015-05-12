@@ -55,6 +55,13 @@ class Import
     end
   end
 
+  def technology_profile
+    TestingGround::TechnologyProfileScheme.new({
+      technologies: technologies_from,
+      topology: topology.graph
+    }).build
+  end
+
   #######
   private
   #######
