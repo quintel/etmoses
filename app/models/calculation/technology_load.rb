@@ -38,7 +38,7 @@ module Calculation
     #
     # Returns an Array or Merit::Curve.
     def profile_for(technology)
-      if technology.profile
+      if technology.profile.present?
         technology.profile_curve
       else
         # If the technology does not use a profile, but has a load or
@@ -52,7 +52,7 @@ module Calculation
     #
     # An array with the given length will be returned.
     def self.constant_profile(technology, length)
-      Array.new(length, technology.load || technology.capacity || 0.0)
+      Array.new(length, (technology.load || technology.capacity).presence || 1.0)
     end
   end # TechnologyLoad
 end # Calculation

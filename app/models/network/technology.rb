@@ -75,7 +75,7 @@ module Network
     end
 
     def consumer?
-      capacity && capacity > 0
+      capacity.present? && capacity > 0
     end
 
     def producer?
