@@ -49,6 +49,13 @@ def basic_technologies(units = '2.0')
      "units"=>units }]
 end
 
+def basic_houses(units = '2.0')
+  [{ "name"=>"Household",
+     "type"=>"base_load",
+     "demand"=>"5",
+     "units"=>units }]
+end
+
 def profile_json
   JSON.dump({
     "LV #1"=>[

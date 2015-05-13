@@ -15,6 +15,8 @@ RSpec.describe Import do
     %w(tech_one tech_two).each do |key|
       Technology.create!(key: key, import_from: 'electricity_output_capacity')
     end
+
+    stub_scenario_request(1337)
   end
 
   def build_response(techs)

@@ -9,9 +9,10 @@ class InstalledTechnology
   attribute :capacity, Float
   attribute :demand,   Float
   attribute :storage,  Float
-  attribute :units,    Float,  default: 1.0
+  attribute :units,    Float, default: 1.0
 
-  EDITABLES = %i(name type profile capacity storage units)
+
+  EDITABLES = %i(name type profile capacity storage demand units)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
@@ -27,7 +28,7 @@ class InstalledTechnology
   #
   # Returns true or false.
   def exists?
-    type.blank? || type == 'generic'.freeze || Technology.exists?(key: type)
+    type.blank? || type =~ Technology::GENERIC_REGEX || Technology.exists?(key: type)
   end
 
   # Public: Returns the associated technology (as defined in data/technologies).
