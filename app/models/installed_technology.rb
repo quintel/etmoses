@@ -11,7 +11,7 @@ class InstalledTechnology
   attribute :storage,  Float
   attribute :units,    Float,  default: 1.0
 
-  EDITABLES = %i(name type profile capacity units)
+  EDITABLES = %i(name type profile capacity storage units)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
