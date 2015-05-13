@@ -21,7 +21,7 @@ function showTree(url, container) {
 
       $('.loading').remove();
 
-      container.append(
+      $(container).append(
         errorEl.append(messageEl.text(errorData.error))
       );
 
