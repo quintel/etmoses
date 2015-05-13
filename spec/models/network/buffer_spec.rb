@@ -27,19 +27,19 @@ RSpec.describe Network::Buffer do
         end
       end
 
-      context 'and required load of 2.5' do
+      context 'and use of 2.5' do
         let(:profile) { [0.0, 2.5] }
 
         it 'has no production' do
           expect(tech.production_at(1)).to be_zero
         end
 
-        it 'has mandatory consumption of 2.5' do
-          expect(tech.mandatory_consumption_at(1)).to eq(2.5)
+        it 'has mandatory consumption of 0.0' do
+          expect(tech.mandatory_consumption_at(1)).to be_zero
         end
 
-        it 'has conditional consumption of 7.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(7.5)
+        it 'has conditional consumption of 12.5' do
+          expect(tech.conditional_consumption_at(1)).to eq(12.5)
         end
 
         it 'stores nothing' do
@@ -51,7 +51,7 @@ RSpec.describe Network::Buffer do
     context 'with 2.5 stored' do
       before { tech.stored[0] = 2.5 }
 
-      context 'and no required load' do
+      context 'and no use' do
         let(:profile) { [0.0, 0.0] }
 
         it 'has production of 2.5' do
@@ -69,9 +69,9 @@ RSpec.describe Network::Buffer do
         it 'has 2.5 remaining storage' do
           expect(tech.stored[1]).to eq(2.5)
         end
-      end # and no required load
+      end # and no use
 
-      context 'and a required load of 1.5' do
+      context 'and a use of 1.5' do
         let(:profile) { [0.0, 1.5] }
 
         it 'has production of 2.5' do
@@ -82,8 +82,8 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to eq(2.5)
         end
 
-        it 'has conditional consumption of 7.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(7.5)
+        it 'has conditional consumption of 9.0' do
+          expect(tech.conditional_consumption_at(1)).to eq(9.0)
         end
 
         it 'has 1.0 remaining storage' do
@@ -91,7 +91,7 @@ RSpec.describe Network::Buffer do
         end
       end # and a required load of 1.5
 
-      context 'and a required load of 2.5' do
+      context 'and a use of 2.5' do
         let(:profile) { [0.0, 2.5] }
 
         it 'has production of 2.5' do
@@ -102,8 +102,8 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to eq(2.5)
         end
 
-        it 'has conditional consumption of 7.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(7.5)
+        it 'has conditional consumption of 10.0' do
+          expect(tech.conditional_consumption_at(1)).to eq(10.0)
         end
 
         it 'has no remaining storage' do
@@ -111,25 +111,25 @@ RSpec.describe Network::Buffer do
         end
       end # and a required load of 2.5
 
-      context 'and a required load of 5.0' do
+      context 'and a use of 5.0' do
         let(:profile) { [0.0, 5.0] }
 
         it 'has production of 2.5' do
           expect(tech.production_at(1)).to eq(2.5)
         end
 
-        it 'has mandatory consumption of 5.0' do
-          expect(tech.mandatory_consumption_at(1)).to eq(5.0)
+        it 'has mandatory consumption of 2.5' do
+          expect(tech.mandatory_consumption_at(1)).to eq(2.5)
         end
 
-        it 'has conditional consumption of 5.0' do
-          expect(tech.conditional_consumption_at(1)).to eq(5.0)
+        it 'has conditional consumption of 12.5' do
+          expect(tech.conditional_consumption_at(1)).to eq(12.5)
         end
 
         it 'has no remaining storage' do
           expect(tech.stored[1]).to be_zero
         end
-      end # and a required load of 5.0
+      end # and a use of 5.0
     end # with 2.5 stored
   end # with a storage capacity of 10
 end # Buffer

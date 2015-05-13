@@ -20,6 +20,7 @@ module Network
           behaviors['storage']          = Storage
           behaviors['electric_vehicle'] = ElectricVehicle
           behaviors['buffer']           = Buffer
+          behaviors['siphon']           = Siphon
         end.freeze
     end
 

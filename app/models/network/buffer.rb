@@ -1,38 +1,36 @@
 module Network
   # Buffers are a hybrid consumption/storage technology. A profile is used to
   # define the energy consumed, but it may also store excess energy from the
-  # network for later use (this preventing the need to draw energy from the
-  # grid later). Energy stored in the buffer may only be used to satisfy its own
-  # consumption, and it not released back to the network.
+  # network for later use.
+  #
+  # If the buffer has insufficient energy stored to meet the demand defined by
+  # the profile, the deficit goes unmet. Buffers do not take energy from the
+  # grid. Energy stored in the buffer may only be used to satisfy its own
+  # consumption, and is not released back to the network.
   class Buffer < Storage
-    # Public: An array where each element describes the total amount of energy
-    # stored in the technology in each time-step.
+    # Public: The energy stored in the buffer after computing each frame.
     #
     # Returns a DefaultArray.
     def stored
       @stored ||= DefaultArray.new do |frame|
-        mandatory_consumption_at(frame) - profile.at(frame)
+        remaining = mandatory_consumption_at(frame) - @profile.at(frame)
+        remaining < 0 ? 0.0 : remaining
       end
     end
 
-    # Public: Determines the minimum amount of energy the technology consumes in
-    # a given time-step.
-    #
-    # The mandatory consumption of a buffer is the maxiumum of:
-    #
-    #   * The amount currently stored in the buffer, since we must "reclaim"
-    #     that which is emitted as production (as a buffer may not discharge
-    #     back into the network); or,
-    #   * The amount of energy the profile demands.
-    #
-    # See Network::Technology#mandatory_consumption_at
-    #
-    # Returns a numeric.
+    # Public: Buffers may not return their stored energy back to the network.
+    # Therefore, their consumption equals their output in order that the two
+    # balance out to zero
     def mandatory_consumption_at(frame)
-      production = production_at(frame)
-      required   = profile.at(frame)
+      production_at(frame)
+    end
 
-      production > required ? production : required
+    # Public: Theoretically, given no input capacity, a buffer may satisfy its
+    # own internal demand -- and store up to its full capacity -- in the same
+    # frame. It therefore requests the full amount needed to fill its unmet
+    # storage capacity, and whatever it will consume.
+    def conditional_consumption_at(frame)
+      super + @profile.at(frame)
     end
   end # Buffer
 end # Network

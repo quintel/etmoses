@@ -102,7 +102,7 @@ RSpec.describe TestingGroundsController do
         result = controller.instance_variable_get("@testing_ground_profile").as_json
 
         expect(result.values.flatten.map{|t| t[:profile]}.uniq.length).to eq(3)
-        expect(result.values.flatten.length).to eq(6)
+        expect(result.values.flatten.length).to eq(4)
       end
     end
   end

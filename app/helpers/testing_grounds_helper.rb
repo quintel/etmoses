@@ -5,7 +5,7 @@ module TestingGroundsHelper
     end
 
     topologies.unshift(['- - -', '-', { disabled: true }])
-    topologies.unshift(['Default topology', nil])
+    topologies.unshift(['Default topology', Topology.default.id])
 
     form.select(:topology_id, topologies, {}, class: 'form-control')
   end

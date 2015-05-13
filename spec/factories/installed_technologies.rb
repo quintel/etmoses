@@ -46,4 +46,15 @@ FactoryGirl.define do
       )
     end
   end
+
+  factory :installed_p2g, class: InstalledTechnology do
+    name 'Power-to-gas'
+    units 1
+
+    after(:build) do |tech|
+      allow(tech).to receive(:technology).and_return(
+        build(:technology, behavior: 'siphon')
+      )
+    end
+  end
 end
