@@ -98,7 +98,7 @@ module Network
         share  = tech.conditional_consumption_at(frame) / wanted
         assign = amount * share
 
-        tech.stored[frame] += assign
+        tech.store(frame, assign)
       end
     end
 

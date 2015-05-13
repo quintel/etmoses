@@ -3,7 +3,7 @@ module Ivy
     module Network
       # Public: Given an installed technology, creates a Network::Technology which
       # may represent it in Network specs.
-      def network_technology(tech, profile_length = 2, opts = {})
+      def network_technology(tech, profile_length = 8760, opts = {})
         profile = tech.profile ||
           Calculation::TechnologyLoad.constant_profile(tech, profile_length)
 

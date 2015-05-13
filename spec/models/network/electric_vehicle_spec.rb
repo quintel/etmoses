@@ -23,7 +23,7 @@ RSpec.describe Network::ElectricVehicle do
     before { tech.stored[0] = 0.5 }
 
     context 'and a profile value of zero' do
-      let(:profile) { [0.0, 0.0] }
+      let(:profile) { [0.0] * 8760 }
 
       it 'has production of 0.5' do
         expect(tech.production_at(1)).to eq(0.5)
@@ -39,7 +39,7 @@ RSpec.describe Network::ElectricVehicle do
     end # and a profile value of zero
 
     context 'and a profile value of 1.0' do
-      let(:profile) { [0.0, 1.0] }
+      let(:profile) { [0.0, 1.0] * 4380 }
 
       it 'has production of 0.5' do
         expect(tech.production_at(1)).to eq(0.5)
@@ -52,10 +52,38 @@ RSpec.describe Network::ElectricVehicle do
       it 'has conditional consumption of 2.0' do
         expect(tech.conditional_consumption_at(1)).to eq(2.0)
       end
+
+      it 'allows additions to storage' do
+        expect { tech.store(1, 2.0) }
+          .to change { tech.stored[1] }
+          .from(1.0).to(3.0)
+      end
     end # and a profile value of 1.0
 
+    context 'with a low-resolution curve' do
+      let(:profile) { [0.0, 1.0] * 2190 }
+
+      it 'scales production from kWh to kW' do
+        expect(tech.production_at(1)).to eq(0.5 / 2)
+      end
+
+      it 'scales mandatory consumption from kWh to kW' do
+        expect(tech.mandatory_consumption_at(1)).to eq(1.0 / 2)
+      end
+
+      it 'scales conditional consumption from kWh to kW' do
+        expect(tech.conditional_consumption_at(1)).to eq(2.0 / 2)
+      end
+
+      it 'scales additions to storage from kW to kWh' do
+        expect { tech.store(1, 1.0) }
+          .to change { tech.stored[1] }
+          .from(1.0).to(3.0) # 1kW delivered over 2 hours is 2kWh
+      end
+    end # with a low-resolution curve
+
     context 'with a value of -1' do
-      let(:profile) { [0.0, -1.0] }
+      let(:profile) { [0.0, -1.0] * 4380 }
 
       it 'has production of zero' do
         expect(tech.production_at(1)).to be_zero
@@ -72,7 +100,7 @@ RSpec.describe Network::ElectricVehicle do
   end # with a profile
 
   context 'when the previous frame was a disconnection' do
-    let(:profile) { [-1.0, 0.0] }
+    let(:profile) { [-1.0, 0.0] * 4380 }
 
     it 'has no production' do
       expect(tech.production_at(1)).to be_zero
@@ -88,7 +116,7 @@ RSpec.describe Network::ElectricVehicle do
   end # when the previous frame was a disconnection
 
   context 'when disabled' do
-    let(:profile) { [0.0, 0.0] }
+    let(:profile) { [0.0] * 8760 }
 
     let(:tech) do
       network_technology(
@@ -100,7 +128,7 @@ RSpec.describe Network::ElectricVehicle do
     end
 
     context 'with a negative profile value in frame 0' do
-      let(:profile) { [-1.0, 0.0] }
+      let(:profile) { [-1.0, 0.0] * 4380 }
 
       it 'has no production in frame 0' do
         expect(tech.production_at(0)).to be_zero
@@ -128,7 +156,7 @@ RSpec.describe Network::ElectricVehicle do
     end # with a negative profile value in frame 0
 
     context 'and a profile value of zero' do
-      let(:profile) { [0.0, 0.0] }
+      let(:profile) { [0.0] * 8760 }
 
       it 'has no production' do
         expect(tech.production_at(1)).to be_zero
@@ -144,7 +172,7 @@ RSpec.describe Network::ElectricVehicle do
     end # and a profile value of zero
 
     context 'and a profile value of 1.0' do
-      let(:profile) { [0.0, 1.0] }
+      let(:profile) { [0.0, 1.0] * 4380 }
 
       it 'has no production' do
         expect(tech.production_at(1)).to be_zero
@@ -160,7 +188,7 @@ RSpec.describe Network::ElectricVehicle do
     end # and a profile value of 1.0
 
     context 'with a value of -1' do
-      let(:profile) { [0.0, -1.0] }
+      let(:profile) { [0.0, -1.0] * 4380 }
 
       it 'has production of zero' do
         expect(tech.production_at(1)).to be_zero
@@ -174,6 +202,5 @@ RSpec.describe Network::ElectricVehicle do
         expect(tech.conditional_consumption_at(1)).to be_zero
       end
     end # with a profile -1.0
-
   end # when disabled
 end

@@ -54,7 +54,7 @@ module Calculation
     #
     # An array with the given length will be returned.
     def self.constant_profile(technology, length)
-      Array.new(length, (technology.load || technology.capacity).presence || 1.0)
+      Array.new(length, (technology.load || technology.capacity).presence || 0.0)
     end
   end # TechnologyLoad
 end # Calculation

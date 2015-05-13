@@ -8,7 +8,7 @@ RSpec.describe Network::Buffer do
 
     context 'with nothing stored' do
       context 'and no required load' do
-        let(:profile) { [0.0, 0.0] }
+        let(:profile) { [0.0] * 8760 }
 
         it 'has no production' do
           expect(tech.production_at(1)).to be_zero
@@ -28,7 +28,7 @@ RSpec.describe Network::Buffer do
       end
 
       context 'and use of 2.5' do
-        let(:profile) { [0.0, 2.5] }
+        let(:profile) { [0.0, 2.5] * 4380 }
 
         it 'has no production' do
           expect(tech.production_at(1)).to be_zero
@@ -52,7 +52,7 @@ RSpec.describe Network::Buffer do
       before { tech.stored[0] = 2.5 }
 
       context 'and no use' do
-        let(:profile) { [0.0, 0.0] }
+        let(:profile) { [0.0] * 8760 }
 
         it 'has production of 2.5' do
           expect(tech.production_at(1)).to eq(2.5)
@@ -72,7 +72,7 @@ RSpec.describe Network::Buffer do
       end # and no use
 
       context 'and a use of 1.5' do
-        let(:profile) { [0.0, 1.5] }
+        let(:profile) { [0.0, 1.5] * 4380 }
 
         it 'has production of 2.5' do
           expect(tech.production_at(1)).to eq(2.5)
@@ -92,7 +92,7 @@ RSpec.describe Network::Buffer do
       end # and a required load of 1.5
 
       context 'and a use of 2.5' do
-        let(:profile) { [0.0, 2.5] }
+        let(:profile) { [0.0, 2.5] * 4380 }
 
         it 'has production of 2.5' do
           expect(tech.production_at(1)).to eq(2.5)
@@ -112,7 +112,7 @@ RSpec.describe Network::Buffer do
       end # and a required load of 2.5
 
       context 'and a use of 5.0' do
-        let(:profile) { [0.0, 5.0] }
+        let(:profile) { [0.0, 5.0] * 4380 }
 
         it 'has production of 2.5' do
           expect(tech.production_at(1)).to eq(2.5)

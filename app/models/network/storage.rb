@@ -4,6 +4,7 @@ module Network
   # release back to the network later.
   class Storage < Technology
     extend Disableable
+    extend ProfileScaled
 
     def self.disabled?(options)
       options[:storage] == false
@@ -40,6 +41,10 @@ module Network
 
     def conditional_consumption_at(frame)
       (installed.storage || 0.0) - mandatory_consumption_at(frame)
+    end
+
+    def store(frame, amount)
+      stored[frame] += amount
     end
 
     def consumer?

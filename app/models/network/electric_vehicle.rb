@@ -17,15 +17,16 @@ module Network
     # which will give us the per-frame load of the vehicle.
     def self.disabled_profile(profile)
       profile = profile.to_a
+      to_kw   = profile.length.to_f / 8760.0
       first   = profile[0] < 0 ? 0.0 : profile[0]
 
-      [first, *(profile.each_cons(2).map do |previous, now|
+      [first * to_kw, *(profile.each_cons(2).map do |previous, now|
         if now < 0
           0.0
         elsif previous < 0
-          now
+          now * to_kw
         else
-          now - previous
+          (now - previous) * to_kw
         end
       end)]
     end
