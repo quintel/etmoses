@@ -8,7 +8,7 @@ class SessionsController < Devise::SessionsController
     user = User.find_by_email(params[:session][:email])
 
     if user && user.activated? && sign_in(user)
-      redirect_to root_path
+      redirect_to signed_in_redirect_path
     elsif user && !user.activated?
       flash.now[:alert] = "Account is not activated"
       render :new
@@ -24,6 +24,14 @@ class SessionsController < Devise::SessionsController
   end
 
   private
+
+    def signed_in_redirect_path
+      if request.env["HTTP_REFERER"]
+        request.env["HTTP_REFERER"]
+      else
+        root_path
+      end
+    end
 
     def session_params
       params.require(:session).permit(:email, :password)
