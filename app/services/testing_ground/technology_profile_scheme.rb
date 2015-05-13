@@ -58,21 +58,23 @@ class TestingGround::TechnologyProfileScheme
     # Returns an array of technology-hashes with a profile assigned
     def profile_differentiation
       all_technologies.each_with_index.map do |technology,index|
-        unless technology['profile'].present?
-          technology['profile'] = select_profile(technology['type'], index)
-        end
-
+        technology['profile'] = select_profile(technology['type'], index)
         technology
       end
     end
 
     # Duplicate all technologies according to the amount of units
+    # !! Needs some performance improvements !!
     def all_technologies
       @technologies.inject([]) do |collection, technology|
-        collection += (technology['units'] || 1).to_i.times.map do
+        collection += duplication_count(technology).to_i.times.map do
           technology.dup
         end
       end
+    end
+
+    def duplication_count(technology)
+      (technology['units'] || 1)
     end
 
     def select_profile(technology_type, index)
