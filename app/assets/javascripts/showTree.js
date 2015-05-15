@@ -189,20 +189,24 @@ function showTree(url, container) {
       // Load chart.
       var values = d.load;
 
-      d3.json(url + '?storage=0', function(error, offData) {
-        var indexedLoads = {};
+      if (!d.offLoad) {
+        d3.json(url + '?storage=0', function(error, offData) {
+          var indexedLoads = {};
 
-        eachNode([offData.graph], function(node) {
-          indexedLoads[node.name] = node.load;
+          eachNode([offData.graph], function(node) {
+            indexedLoads[node.name] = node.load;
+          });
+
+          svgGroup.selectAll('g.node').data().forEach(function(datum) {
+            console.log(datum.name, indexedLoads[datum.name]);
+            datum.offLoad = indexedLoads[datum.name];
+          });
+
+          showChart(d);
         });
-
-        svgGroup.selectAll('g.node').data().forEach(function(datum) {
-          console.log(datum.name, indexedLoads[datum.name]);
-          datum.offLoad = indexedLoads[datum.name];
-        });
-
+      } else {
         showChart(d);
-      });
+      }
 
       $('#technologies .row').hide();
       $('#technologies .row[data-node="' + d.name + '"]').show();
