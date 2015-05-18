@@ -44,13 +44,13 @@
         %table.table
           %thead
             %tr
-              - techs.first.attributes.except(:type).compact.keys.each do |akey|
+              - InstalledTechnology::EDITABLES.each do |akey|
                 %th= akey.to_s.titleize
           %tbody
             - techs.each do |tech|
               %tr{ "data-tech" => tech.name }
-                - tech.attributes.except(:type).compact.values.each do |avalue|
-                  %td= avalue
+                - InstalledTechnology::EDITABLES.each do |akey|
+                  %td= tech.send(akey)
 
   - else
     No Technologies registered yet.
