@@ -1,5 +1,5 @@
 %ul
-  - load_profile_category.load_profiles.order(:name).each do |profile|
+  - load_profile_category.load_profiles.order(:key).each do |profile|
     %li
       = link_to profile do
         = profile.display_name
