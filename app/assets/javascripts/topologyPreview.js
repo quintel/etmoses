@@ -1,12 +1,12 @@
 var TopologyPreviewer = (function(){
   var topologyGraph, svgGroup, data, root, tree, svgHeight, svgWidth;
 
-  var nodeIds = 0,
-      maxLabelLength = 20,
-      duration = 250,
+  var nodeIds         = 0,
+      maxLabelLength  = 20,
+      duration        = 250,
       endPointCounter = 0,
-      stepSize = 20,
-      ease = 'cubic-out';
+      stepSize        = 20,
+      ease            = 'cubic-out';
 
   var diagonal = d3.svg.diagonal()
       .projection(function(d) { return [d.y, d.x]; });
