@@ -1,7 +1,8 @@
-%ul
-  %li== Name: #{ @topology.name }
+%strong= @topology.name
 
-.topology-graph{ 'data-url' => topology_path(@topology, format: :json) }
+.topology-graph
+  .data.hidden
+    = @topology.graph.to_json
 
 .commit
   = link_to('Edit', edit_topology_path(@topology), class: 'button')
