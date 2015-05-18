@@ -41,7 +41,7 @@ class Import
   def testing_ground
     TestingGround.new(
       topology:           topology,
-      technologies:       technologies_from,
+      technologies:       technologies,
       technology_profile: technology_profile,
       scenario_id:        @scenario_id,
       parent_scenario_id: parent_scenario_id)
@@ -66,7 +66,7 @@ class Import
 
   def technology_profile
     TestingGround::TechnologyProfileScheme.new(
-      technologies_from,
+      technologies,
       topology.graph
     ).build
   end
@@ -98,13 +98,27 @@ class Import
     etm_scenario['template'].try(:to_i)
   end
 
+  # Internal: all technologies including houses
+  #
+  # Returns an array.
+  def technologies
+    technologies_from + households
+  end
+
   # Internal: Given a response, splits out the nodes into discrete technologies.
   #
-  # Returns a hash.
+  # Returns an array.
   def technologies_from
     response.flat_map do |key, data|
       TechnologyBuilder.build(key, data)
     end
+  end
+
+  # Internal: Given and etm scenario, creates a set of houses
+  #
+  # Returns an array.
+  def households
+    HouseBuilder.new(@scenario_id, etm_scenario["scaling"]).build
   end
 
   # Internal: Retrieves the scenario from ETModel

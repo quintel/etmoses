@@ -25,8 +25,11 @@ var ProfileTable = (function(){
 
   function rowToTechnologyObject(tableRow){
     var technologyObject = {};
-    $.each(tableRow, function(i, technology){
-      technologyObject[tableHeader(i)] = technology
+    $.each(tableRow, function(i, techAttribute){
+      var header = tableHeader(i);
+      if(!(/demand|capacity/.test(header) && techAttribute == "")){
+        technologyObject[header] = techAttribute;
+      }
     });
     return technologyObject;
   };

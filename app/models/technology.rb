@@ -1,4 +1,6 @@
 class Technology < ActiveRecord::Base
+  GENERIC_REGEX = /^(generic|base_load)$/
+
   validates :key,
     presence: true,
     length: { maximum: 100 },
@@ -31,7 +33,7 @@ class Technology < ActiveRecord::Base
   # Public: Retrieves the record with the matching +key+ or raises
   # ActiveRecord::RecordNotFound if no such record exists.
   def self.by_key(key)
-    key == 'generic'.freeze ? generic : where(key: key).first!
+    key =~ GENERIC_REGEX ? generic : where(key: key).first!
   end
 
   # Public: A nice, readable name for the technology.

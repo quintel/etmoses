@@ -13,8 +13,8 @@ def stub_et_engine_request
               }) )
 end
 
-def stub_scenario_request
-  stub_request(:get, "http://beta.et-engine.com/api/v3/scenarios/1").
+def stub_scenario_request(id = 1)
+  stub_request(:get, "http://beta.et-engine.com/api/v3/scenarios/#{id}").
        with(headers: {'Accept'=>'*/*; q=0.5, application/xml',
                       'Accept-Encoding'=>'gzip, deflate'}).
        to_return(status: 200,
@@ -28,4 +28,41 @@ def stub_et_engine_templates
                      'Accept-Encoding'=>'gzip, deflate',
                      'User-Agent'=>'Ruby'}).
       to_return(status: 200, body: JSON.dump({}), headers: {})
+end
+
+def stub_et_gquery
+  stub_request(:put, "http://beta.et-engine.com/api/v3/scenarios/1").
+    with(body: "{\"gqueries\":[\"final_demand_of_electricity_in_households\"]}",
+         headers: {'Accept'=>'application/json',
+                   'Accept-Encoding'=>'gzip, deflate',
+                   'Content-Length'=>'58',
+                   'Content-Type'=>'application/json',
+                   'User-Agent'=>'Ruby'}).
+    to_return(
+      status: 200,
+      body: JSON.dump({
+       "scenario"=> {
+         "id"=>123,
+         "title"=>"Martinus scenario run",
+         "area_code"=>"nl",
+         "start_year"=>2012,
+         "end_year"=>2030,
+         "url"=>"http://et-engine.com/api/v3/scenarios/123",
+         "ordering"=>nil,
+         "display_group"=>nil,
+         "source"=>nil,
+         "template"=>nil,
+         "created_at"=>"2010-06-14T17:23:00.000+02:00",
+         "scaling"=>nil
+        },
+        "gqueries"=>{
+          "final_demand_of_electricity_in_households"=>{
+            "present"=>90.11341999999999,
+            "future"=>99.05439142786325,
+            "unit"=>"PJ"
+          }
+        }
+      }),
+      headers: {}
+    )
 end

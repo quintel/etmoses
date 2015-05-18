@@ -57,7 +57,7 @@ class TestingGround::TechnologyProfileScheme
     # Sets a profile for each technology
     # Returns an array of technology-hashes with a profile assigned
     def profile_differentiation
-      all_technologies.each_with_index.map do |technology,index|
+      all_technologies.each_with_index.map do |technology, index|
         technology['profile'] = select_profile(technology['type'], index)
         technology
       end
@@ -86,6 +86,6 @@ class TestingGround::TechnologyProfileScheme
     end
 
     def technology_keys
-      @technologies.map{|t| t['type']}
+      @technologies.map{|t| t['type']}.uniq
     end
 end
