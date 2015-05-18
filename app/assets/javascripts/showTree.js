@@ -10,6 +10,10 @@ function showTree(url, container) {
       if (nodes[i]['children'] && nodes[i]['children'].length) {
         eachNode(nodes[i]['children'], iterator);
       }
+
+      if (nodes[i]['_children'] && nodes[i]['_children'].length) {
+        eachNode(nodes[i]['_children'], iterator);
+      }
     }
   }
 
@@ -254,8 +258,8 @@ function showTree(url, container) {
               storageLoads[node.name] = node.load;
             });
 
-            svgGroup.selectAll('g.node').data().forEach(function(datum) {
-              datum.altLoad = storageLoads[datum.name];
+            eachNode([treeData], function(node) {
+              node.altLoad = storageLoads[node.name];
             });
 
             $('#enable-storage')
