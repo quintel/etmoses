@@ -13,7 +13,7 @@ class TestingGround::TechnologyProfileScheme
 
   # Returns a hash with all edge nodes as keys and technologies as values
   def build
-    Hash[transformed_technologies.each_with_index.map do |technologies, index|
+    Hash[all_technologies.each_with_index.map do |technologies, index|
       [edge_nodes[index].key, technologies]
     end]
   end
@@ -25,56 +25,47 @@ class TestingGround::TechnologyProfileScheme
       @edge_nodes ||= Topologies::EdgeNodesFinder.new(@topology).find_edge_nodes
     end
 
-    # Counts all unique units per technology edge node
-    def transformed_technologies
-      technology_spread.map do |techs|
-        techs.compact.uniq{|t| "#{t['type']}_#{t['profile']}" }.map do |tech|
-          tech['units'] = techs.count(tech)
-          tech
-        end
-      end
-    end
-
-    # Divides the technologies evenly over each edge node
-    # Returns a two-dimensional array of evenly distributed technologies
-    def technology_spread
-      technology_groups.inject([[]] * edge_nodes.size) do |spread, group|
-        group.in_groups(edge_nodes.size).each_with_index do |tech_group, index|
-          spread[index] += tech_group
-        end
-        spread
-      end
-    end
-
-    # Groups technologies by type
-    # Returns a two-dimensional array of technology groups
-    def technology_groups
-      profile_differentiation
-        .group_by{|t| t['type'] }
-        .values
-    end
-
-    # Sets a profile for each technology
-    # Returns an array of technology-hashes with a profile assigned
-    def profile_differentiation
-      all_technologies.each_with_index.map do |technology, index|
-        technology['profile'] = select_profile(technology['type'], index)
-        technology
-      end
-    end
-
     # Duplicate all technologies according to the amount of units
-    # !! Needs some performance improvements !!
+    # Also assigns the profiles
+    #
+    # Returns a 2-dimensional Array of technologies per 'node'
     def all_technologies
-      @technologies.inject([]) do |collection, technology|
-        collection += duplication_count(technology).to_i.times.map do
-          technology.dup
+      @technologies.map do |technology|
+        technology_units(technology).each_with_index do |unit, index|
+          technology_bucket[index % edge_nodes.size] += [
+            duplicate_technology(technology, unit, index)
+          ]
         end
+      end
+      technology_bucket
+    end
+
+    def duplicate_technology(tech, unit, index)
+      duplicate_technology            = tech.dup
+      duplicate_technology['units']   = unit
+      duplicate_technology['profile'] = select_profile(tech['type'], index)
+      duplicate_technology
+    end
+
+    def technology_bucket
+      @technology_bucket ||= [[]] * edge_nodes.size
+    end
+
+    # Calculates the spread of units
+    #
+    # Returns an Array of Integers
+    def technology_units(technology)
+      group_size = group_size_for(technology['type'])
+      div, mod   = technology['units'].to_i.divmod(group_size)
+
+      (Array.new(mod, div + 1) +
+       Array.new(group_size - mod, div)).reject do |unit|
+        unit.zero?
       end
     end
 
-    def duplication_count(technology)
-      (technology['units'] || 1)
+    def group_size_for(tech_key)
+      profile_selector.profiles_size(tech_key) * edge_nodes.size
     end
 
     def select_profile(technology_type, index)

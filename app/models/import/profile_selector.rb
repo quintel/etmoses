@@ -11,6 +11,14 @@ class Import
       @differentiation = differentiation
     end
 
+    def profiles_size(technology_type)
+      if @differentiation == "min" && profiles[technology_type]
+        profiles[technology_type].size
+      else
+        1
+      end
+    end
+
     # Minimal differentiation
     # Selects the first profile for a certain technology
     #
