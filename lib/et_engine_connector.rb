@@ -9,7 +9,7 @@ class EtEngineConnector
     scenarios: 'http://%s/api/v3/scenarios'
   }.freeze
 
-  HEADERS = { content_type: :json, accept: :json }.freeze
+  HEADERS = { content_type: :json, accept: :json }
 
   def initialize(params = {})
     @params = params

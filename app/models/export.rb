@@ -13,7 +13,8 @@ class Export
   def number_of_households
     @households ||= EtEngineConnector.new(gqueries: [
       'households_number_of_residences'
-    ]).gquery['gqueries']['households_number_of_residences']['future']
+    ]).gquery(@testing_ground.scenario_id)\
+    ['gqueries']['households_number_of_residences']['future']
   end
 
   # Public: Creates a hash containing the inputs and values to be sent to
