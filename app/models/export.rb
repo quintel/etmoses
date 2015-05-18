@@ -38,7 +38,9 @@ class Export
     all_techs = @testing_ground.technology_profile.to_h.values.flatten
     count     = Hash.new { |hash, key| hash[key] = 0 }
 
-    all_techs.each { |technology| count[technology.type] += 1 }
+    all_techs.each do |technology|
+      count[technology.type] += technology.units
+    end
 
     count.reject do |key, _|
       (! Technology.exists?(key: key)) ||
