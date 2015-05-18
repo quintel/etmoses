@@ -138,4 +138,16 @@ RSpec.describe TestingGroundsController do
       expect(JSON.parse(response.body)).to eq(TestingGroundsControllerTest.show_hash)
     end
   end
+
+  describe "#export" do
+    it "visits export path" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground)
+
+      get :export, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+  end
 end

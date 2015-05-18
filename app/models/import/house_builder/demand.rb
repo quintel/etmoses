@@ -21,8 +21,7 @@ class Import
 
         def demand_for_scenario
           if scenario_demand_request
-            JSON.parse(scenario_demand_request)\
-              ["gqueries"]\
+            scenario_demand_request["gqueries"]\
               ["final_demand_of_electricity_in_households"]\
               ["future"]
           else
@@ -31,18 +30,9 @@ class Import
         end
 
         def scenario_demand_request
-          @scenario_demand_request ||= begin
-            RestClient.put(scenario_demand_url,
-              {gqueries: ["final_demand_of_electricity_in_households"]}.to_json,
-              {content_type: :json, accept: :json})
-          rescue RestClient::ResourceNotFound
-            nil
-          end
-        end
-
-        def scenario_demand_url
-          ETM_URLS[:scenario] % [ TestingGround::IMPORT_PROVIDERS.first,
-                                  @scenario_id ]
+          @scenario_demand_request ||= EtEngineConnector.new({
+            gqueries: ["final_demand_of_electricity_in_households"]
+          }).gquery(@scenario_id)
         end
     end
   end

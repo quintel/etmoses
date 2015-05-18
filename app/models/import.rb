@@ -84,11 +84,9 @@ class Import
   # Internal: Imports the requested data from the remote provider and returns
   # the JSON response as a Hash.
   def response
-    @response ||= JSON.parse(RestClient.post(
-      ETM_URLS[:stats] % [@provider, @scenario_id],
-      { keys: self.class.import_targets.map(&:key) }.to_json,
-      { content_type: :json, accept: :json }
-    ))['nodes']
+    @response ||= EtEngineConnector.new(
+      { keys: self.class.import_targets.map(&:key) }
+    ).stats(@scenario_id)['nodes']
   end
 
   # Internal: Retrieves the ID of the national-scale preset or saved scenario.
@@ -125,9 +123,7 @@ class Import
   #
   # Returns a JSON object or nil if the scenario doesn't exist on ETModel
   def etm_scenario
-    @etm_scenario ||= JSON.parse(RestClient.get(scenario_url))
-  rescue RestClient::ResourceNotFound, JSON::ParserError
-    nil
+    @etm_scenario ||= EtEngineConnector.new.scenario(@scenario_id)
   end
 
   def scenario_url

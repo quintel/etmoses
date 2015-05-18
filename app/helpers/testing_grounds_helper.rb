@@ -34,4 +34,10 @@ module TestingGroundsHelper
   def link_to_etm_scenario(title, scenario_id)
     link_to(title, "http://#{ ET_MODEL_URL }/scenarios/#{ scenario_id }")
   end
+
+  # Public: Determines if the given testing ground has enough information to
+  # permit exporting back to a national scenario.
+  def can_export?(testing_ground)
+    testing_ground.scenario_id.present?
+  end
 end

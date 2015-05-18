@@ -1,8 +1,42 @@
+def stub_et_engine_scenario_create_request
+  stub_request(:post, "http://beta.et-engine.com/api/v3/scenarios").with(
+    :body => {
+      "scenario"=>{"scenario_id"=>"",
+      "descale"=>"true"}
+    },
+    :headers => {
+      'Accept'=>'application/json',
+      'Accept-Encoding'=>'gzip, deflate',
+      'Content-Type'=>'application/x-www-form-urlencoded'
+    }
+  ).to_return(:status => 200, :body => JSON.dump({id: 2}), :headers => {})
+end
+
+def stub_et_engine_scenario_update_request(id = 2)
+  stub_request(:put, "http://beta.et-engine.com/api/v3/scenarios/#{id}").with(
+    :body => {
+      "autobalance"=>"true",
+      "force_balance"=>"true",
+      "scenario"=>{"title"=>"My Testing Ground"}
+    },
+    :headers => {
+      'Accept'=>'application/json',
+      'Accept-Encoding'=>'gzip, deflate',
+      'Content-Type'=>'application/x-www-form-urlencoded'
+    }
+  ).to_return(:status => 200, :body => JSON.dump({}), :headers => {})
+end
+
 def stub_et_engine_request
   stub_request(:post,
     "http://beta.et-engine.com/api/v3/scenarios/1/converters/stats").
-    with(body: "{\"keys\":[\"magical_technology\"]}",
-         headers: {'Content-Type'=>'application/json'}).
+    with(body: {"keys"=>["magical_technology"]},
+         headers: {
+          'Accept'=>'application/json',
+          'Accept-Encoding'=>'gzip, deflate',
+          'Content-Length'=>'25',
+          'Content-Type'=>'application/x-www-form-urlencoded'
+         }).
     to_return(status: 200,
               body: JSON.dump({
                 nodes: {
@@ -15,7 +49,7 @@ end
 
 def stub_scenario_request(id = 1)
   stub_request(:get, "http://beta.et-engine.com/api/v3/scenarios/#{id}").
-       with(headers: {'Accept'=>'*/*; q=0.5, application/xml',
+       with(headers: {'Accept'=>'application/json',
                       'Accept-Encoding'=>'gzip, deflate'}).
        to_return(status: 200,
                  body: JSON.dump({template: 2, scaling: {value: 1}}))
@@ -32,12 +66,12 @@ end
 
 def stub_et_gquery
   stub_request(:put, "http://beta.et-engine.com/api/v3/scenarios/1").
-    with(body: "{\"gqueries\":[\"final_demand_of_electricity_in_households\"]}",
-         headers: {'Accept'=>'application/json',
-                   'Accept-Encoding'=>'gzip, deflate',
-                   'Content-Length'=>'58',
-                   'Content-Type'=>'application/json',
-                   'User-Agent'=>'Ruby'}).
+    with(body: {
+      "gqueries"=>["final_demand_of_electricity_in_households"] },
+       headers: {
+        'Accept'=>'application/json',
+        'Accept-Encoding'=>'gzip, deflate',
+        'Content-Type'=>'application/x-www-form-urlencoded'}).
     to_return(
       status: 200,
       body: JSON.dump({

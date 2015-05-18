@@ -2,15 +2,6 @@
 # based on the original scaled-down scenario and accounting for changes made in
 # the testing ground.
 class Export
-  # Path to the scenarios section in ETEngine's API.
-  API_BASE = 'http://beta.et-engine.com/api/v3/scenarios'.freeze
-
-  # Public: Determines if the given testing ground has enough information to
-  # permit exporting back to a national scenario.
-  def self.can_export?(testing_ground)
-    testing_ground.scenario_id.present?
-  end
-
   def initialize(testing_ground)
     @testing_ground = testing_ground
   end
@@ -20,9 +11,9 @@ class Export
   #
   # Returns an Integer.
   def number_of_households
-    @households ||= scenario_request(:put, gqueries: [
+    @households ||= EtEngineConnector.new(gqueries: [
       'households_number_of_residences'
-    ])['gqueries']['households_number_of_residences']['future']
+    ]).gquery['gqueries']['households_number_of_residences']['future']
   end
 
   # Public: Creates a hash containing the inputs and values to be sent to
@@ -43,7 +34,7 @@ class Export
   #
   # Returns a Hash.
   def technology_units
-    all_techs = @testing_ground.technologies.to_h.values.flatten
+    all_techs = @testing_ground.technology_profile.to_h.values.flatten
     count     = Hash.new { |hash, key| hash[key] = 0 }
 
     all_techs.each { |technology| count[technology.type] += 1 }
@@ -61,14 +52,10 @@ class Export
     # Exporting is a two-step procedure in which we create a new national-scale
     # scenario based on the original, then send the input values with a second
     # request.
-    new_scenario = api_request(:post, nil, scenario: {
-      scenario_id: @testing_ground.scenario_id, descale: true
-    })
+    new_scenario = EtEngineConnector.new(scenario_params).create_scenario
 
-    api_request(:put, new_scenario['id'], {
-      autobalance: true, force_balance: true,
-      scenario: { title: @testing_ground.name, user_values: inputs }
-    })
+    EtEngineConnector.new(update_scenario_params)
+      .update_scenario(new_scenario['id'])
 
     new_scenario
   end
@@ -77,22 +64,21 @@ class Export
   private
   #######
 
-  # Internal: Sends a request to the scenario URL on ETEngine to query
-  # information about the original scenario.
-  #
-  # Returns the JSON response body as a hash.
-  def scenario_request(method, params = {})
-    api_request(method, @testing_ground.scenario_id.to_s, params)
-  end
+    def scenario_params
+      { scenario: {
+          scenario_id: @testing_ground.scenario_id,
+          descale: true
+        }
+      }
+    end
 
-  # Internal: Sends a request to the ETEngine scenarios section.
-  #
-  # Returns the JSON response body as a hash.
-  def api_request(method, suffix, params = {})
-    url = [ API_BASE, suffix ].compact.join('/')
-
-    JSON.parse(RestClient.public_send(
-      method, url, params.merge(accept: :json)
-    ))
-  end
+    def update_scenario_params
+      { autobalance: true,
+        force_balance: true,
+        scenario: {
+          title: @testing_ground.name,
+          user_values: inputs
+        }
+      }
+    end
 end
