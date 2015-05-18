@@ -10,6 +10,10 @@ class Topology < ActiveRecord::Base
     find_by_name("Default topology")
   end
 
+  def self.named
+    where("`name` IS NOT NULL").order(:name)
+  end
+
   # Traverses each node in the graph, yielding it's data.
   #
   # Returns nothing.

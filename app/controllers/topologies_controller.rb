@@ -5,7 +5,7 @@ class TopologiesController < ApplicationController
   before_filter :fetch_topology, except: [:index, :new, :create]
 
   def index
-    @topologies = Topology.all
+    @topologies = Topology.named
   end
 
   # GET /topologies
