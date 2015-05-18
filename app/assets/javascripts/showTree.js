@@ -63,7 +63,15 @@ function showTree(url, container) {
 
         // Define a d3 diagonal projection for use by the node paths later on.
         diagonal = d3.svg.diagonal()
-        .projection(function(d) { return [d.y, d.x]; });
+          .projection(function(d) { return [d.y, d.x]; }),
+
+        // Keep track of "storage on" data.
+        storageShown = false,
+        storageLoads = false,
+
+        // Most recently clicked node, so that we can update the load chart if
+        // the user opts to show storage.
+        lastClicked;
 
         treeData = treeData.graph;
 
@@ -168,45 +176,31 @@ function showTree(url, container) {
     function showChart(d) {
       var loadChart = window.LoadChart;
 
-      console.log(d);
-
       $('.load-graph').empty().append('<svg></svg>');
 
-      console.log(d.load, d.offLoad);
-
-      new loadChart([
-        { values: d.offLoad, name: d.name + ' (without storage)', color: '#95BB95', area: true },
-        { values: d.load,    name: d.name, area: true, color: '#1F77B4' }
-      ], d.capacity).render('.load-graph svg')
+      if (storageShown && storageLoads) {
+        new loadChart([
+          { values: d.load,    name: d.name + ' (with storage)', color: '#95BB95', area: true },
+          { values: d.altLoad, name: d.name, area: true, color: '#1F77B4' }
+        ], d.capacity).render('.load-graph svg')
+      } else {
+        new loadChart([
+          { values: d.load, name: d.name, area: true, color: '#1F77B4' }
+        ], d.capacity).render('.load-graph svg')
+      }
     }
 
     // Toggle children on click.
     function click(d) {
-      if (d3.event.defaultPrevented) return; // click suppressed
+      if (d3.event && d3.event.defaultPrevented) return; // click suppressed
 
       toggleSelectedNode.call(this);
+      lastClicked = d;
 
       // Load chart.
       var values = d.load;
 
-      if (!d.offLoad) {
-        d3.json(url + '?storage=0', function(error, offData) {
-          var indexedLoads = {};
-
-          eachNode([offData.graph], function(node) {
-            indexedLoads[node.name] = node.load;
-          });
-
-          svgGroup.selectAll('g.node').data().forEach(function(datum) {
-            console.log(datum.name, indexedLoads[datum.name]);
-            datum.offLoad = indexedLoads[datum.name];
-          });
-
-          showChart(d);
-        });
-      } else {
-        showChart(d);
-      }
+      showChart(d);
 
       $('#technologies .row-fluid').hide();
       $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
@@ -240,6 +234,57 @@ function showTree(url, container) {
         centerNode(d);
       }
     };
+
+    function toggleStorage() {
+      if (storageShown) {
+        if (storageLoads === true) {
+          // Already loading...
+          return false;
+        } else if (storageLoads) {
+          // immediately toggle storage on
+          swapLoads(root);
+        } else {
+          storageLoads = true;
+
+          d3.json(url + '?storage=1', function(error, offData) {
+            // fetch then toggle on
+            storageLoads = {};
+
+            eachNode([offData.graph], function(node) {
+              storageLoads[node.name] = node.load;
+            });
+
+            svgGroup.selectAll('g.node').data().forEach(function(datum) {
+              datum.altLoad = storageLoads[datum.name];
+            });
+
+            $('#enable-storage')
+              .text('Storage Enabled')
+              .addClass('btn-success')
+              .removeClass('disabled');
+
+            swapLoads(root);
+          });
+        }
+      } else {
+        swapLoads(root);
+      }
+    }
+
+    function swapLoads(root) {
+      eachNode([root], function(node) {
+        var otherLoad = node.altLoad;
+
+        node.altLoad = node.load;
+        node.load    = otherLoad;
+      });
+
+      if (lastClicked) {
+        click(lastClicked);
+      }
+
+      update(root);
+    }
 
     function update(source) {
       // Compute the new height, function counts total children of root node
@@ -294,22 +339,23 @@ function showTree(url, container) {
 
       // Enter any new nodes at the parent's previous position.
       nodeEnter = node.enter().append('g')
-      .call(dragListener)
-      .attr('class', 'node')
-      .classed('exceedance', function(d) {
+        .call(dragListener)
+        .attr('class', 'node')
+        .classed('collapsed', function(d) {
+                // We have to run the "collapsed" function again (it is already
+                // defined above), as the above version does not run the first
+                // time the update() function is called.
+                return d._children;
+              })
+        .attr('transform', function(d) {
+          return 'translate(' + source.y0 + ',' + source.x0 + ')';
+        })
+        .on('dblclick', dblClick)
+        .on('click', click);
+
+      node.classed('exceedance', function(d) {
         return d.capacity && d3.max(d.load) > d.capacity
-      })
-      .classed('collapsed', function(d) {
-              // We have to run the "collapsed" function again (it is already
-              // defined above), as the above version does not run the first
-              // time the update() function is called.
-              return d._children;
-            })
-      .attr('transform', function(d) {
-        return 'translate(' + source.y0 + ',' + source.x0 + ')';
-      })
-      .on('dblclick', dblClick)
-      .on('click', click);
+      });
 
       nodeEnter.append('circle')
       .attr('class', 'nodeCircle')
@@ -400,6 +446,31 @@ function showTree(url, container) {
 
     $('.loading').remove();
 
+    $('#enable-storage').click(function(event) {
+      event.preventDefault();
+
+      var element = $(this);
+
+      if (element.hasClass('disabled')) {
+        return true;
+      }
+
+      if (storageShown) {
+        storageShown = false;
+        element.text('Enable Storage').removeClass('btn-success');
+      } else {
+        storageShown = true;
+
+        if (!storageLoads || storageLoads === true) {
+          element.text('Loading...').addClass('disabled');
+        } else {
+          element.text('Storage Enabled').addClass('btn-success');
+        }
+      }
+
+      toggleStorage();
+    });
+
     // Show nodes from the top-most two levels of the tree; nodes beneath will
     // be hidden until the user chooses to view them.
     toggleChildren(treeData);
@@ -413,6 +484,11 @@ function showTree(url, container) {
     root = treeData;
     root.x0 = viewerHeight / 2;
     root.y0 = 0;
+
+    eachNode([root], function(node) {
+      node.loads = {};
+      node.loads[false] = node.load;
+    });
 
     // Layout the tree initially and center on the root node.
     update(root);

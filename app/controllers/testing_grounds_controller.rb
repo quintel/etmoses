@@ -54,7 +54,7 @@ class TestingGroundsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        render json: @testing_ground.to_json(storage: params[:storage] != '0')
+        render json: @testing_ground.to_json(storage: params[:storage] == '1')
       end
     end
   rescue StandardError => ex

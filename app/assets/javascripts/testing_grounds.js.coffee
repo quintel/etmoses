@@ -201,7 +201,6 @@ class LoadChart
     self = this
 
     data = for datum, index in @data
-      console.log(datum)
       { key: datum.name, values: @sampledData(datum.values, week), area: datum.area, color: datum.color}
 
     $(intoSelector).empty()
