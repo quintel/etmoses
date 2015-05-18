@@ -80,6 +80,7 @@ module Network
 
     def consumer?
       capacity.present? && capacity > 0 ||
+        @installed.demand ||
         # When storage is disabled, it may turn into a normal technology in
         # order to draw load -- but NOT store -- from the network.
         @installed.storage
