@@ -40,15 +40,19 @@
 #technologies
   - if @testing_ground.technology_profile.any?
     - @testing_ground.technology_profile.each do |key, techs|
-      .row{ "data-node" => key }
-        - techs.each do |tech|
-          .technology.three.columns{ "data-tech" => tech.name }
-            .inner
-              %h6= tech.name
-              %ul
-                - tech.attributes.except(:name, :type).compact.each do |akey, avalue|
-                  %li{ class: akey }== #{ akey }: #{ avalue.inspect }
+      .row-fluid{ "data-node" => key }
+        %table.table
+          %thead
+            %tr
+              - techs.first.attributes.except(:type).compact.keys.each do |akey|
+                %th= akey.to_s.titleize
+          %tbody
+            - techs.each do |tech|
+              %tr{ "data-tech" => tech.name }
+                - tech.attributes.except(:type).compact.values.each do |avalue|
+                  %td= avalue
+
   - else
-    No Technoglogies registered yet.
+    No Technologies registered yet.
 
   = link_to 'Download Tech. CSV', technologies_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'

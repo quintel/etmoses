@@ -208,8 +208,8 @@ function showTree(url, container) {
         showChart(d);
       }
 
-      $('#technologies .row').hide();
-      $('#technologies .row[data-node="' + d.name + '"]').show();
+      $('#technologies .row-fluid').hide();
+      $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
 
       $('.node-info .download-curve').show().unbind('click')
       .click(function(event) {
