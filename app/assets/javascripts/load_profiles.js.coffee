@@ -11,6 +11,7 @@ $(document).on "page:change", ->
   );
 
   $('form #load_profile_curve').filestyle(buttonBefore: true)
+  $('#testing_ground_technology_profile_csv').filestyle(buttonBefore: true)
 
   if (container = $('.profile-graph')).length
     $.getJSON(container.data('url')).success (profile) ->

@@ -1,6 +1,6 @@
 class TestingGroundsController < ApplicationController
   respond_to :html, :json
-  respond_to :csv, only: :technologies
+  respond_to :csv, only: :technology_profile
   respond_to :js, only: :calculate_concurrency
 
   before_filter :prepare_export, only: %i( export perform_export )
@@ -74,11 +74,6 @@ class TestingGroundsController < ApplicationController
     end
   end
 
-  # GET /testing_grounds/:id/technologies.csv
-  def technologies
-    respond_with(TestingGround.find(params[:id]).technologies)
-  end
-
   # GET /topologies/:id/edit
   def edit
     respond_with(@testing_ground = TestingGround.find(params[:id]))
@@ -102,28 +97,31 @@ class TestingGroundsController < ApplicationController
     @testing_ground_profile = TechnologyList.from_hash(calculated_concurrency)
   end
 
+  # GET /testing_grounds/:id/technology_profile.csv
+  def technology_profile
+    respond_with(TestingGround.find(params[:id]).technology_profile)
+  end
+
   private
 
   # Internal: Returns the permitted parameters for creating a testing ground.
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:name, :technologies, :technology_profile, :technologies_csv,
-               :scenario_id, :topology_id])
+      .permit([:name, :technologies, :technology_profile,
+               :technology_profile_csv, :scenario_id, :topology_id])
 
-    if tg_params[:technologies_csv]
-      tg_params.delete(:technologies)
-    else
-      yamlize_attribute!(tg_params, :technologies)
-    end
+    if tg_params[:technology_profile_csv]
+      tg_params.delete(:technology_profile)
+    elsif tg_params[:technology_profile]
+      yamlize_attribute!(tg_params, :technology_profile)
 
-    yamlize_attribute!(tg_params, :technology_profile)
-
-    # Some attributes which should be considered "not present" are submitted by
-    # the technology table as an empty string. Delete them.
-    tg_params[:technology_profile].each do |_, techs|
-      techs.each do |tech|
-        tech.delete_if { |_attr, value| value.blank? }
+      # Some attributes which should be considered "not present" are submitted by
+      # the technology table as an empty string. Delete them.
+      tg_params[:technology_profile].each do |_, techs|
+        techs.each do |tech|
+          tech.delete_if { |_attr, value| value.blank? }
+        end
       end
     end
 
