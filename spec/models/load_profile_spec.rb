@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe LoadProfile, type: :model do
   describe 'when saved' do
-    let(:load_profile) { create(:load_profile) }
+    let(:load_profile) { create(:load_profile_with_curve) }
 
     let(:original) do
       Merit::Curve.load_file("#{Rails.root}/spec/fixtures/data/curves/one.csv")

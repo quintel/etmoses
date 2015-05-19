@@ -39,7 +39,7 @@ RSpec.describe InstalledTechnology do
   end # technology
 
   describe '#profile_curve' do
-    let(:load_profile) { create(:load_profile) }
+    let(:load_profile) { create(:load_profile_with_curve) }
 
     %w(capacity load).each do |attribute|
       context "with #{ attribute }" do

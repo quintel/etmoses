@@ -26,7 +26,7 @@ RSpec.describe Calculation::Context do
   end # with a graph containing no profiles
 
   context 'with a graph containing a load profile' do
-    let(:profile) { create(:load_profile) }
+    let(:profile) { create(:load_profile_with_curve) }
     let(:tg)      { create(:testing_ground) }
     let(:graph)   { tg.to_graph }
 
