@@ -21,9 +21,7 @@ class Import
 
         def demand_for_scenario
           if scenario_demand_request
-            scenario_demand_request["gqueries"]\
-              ["final_demand_of_electricity_in_households"]\
-              ["future"]
+            scenario_demand_request["future"]
           else
             0
           end

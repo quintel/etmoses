@@ -34,7 +34,14 @@ class EtEngineConnector
     et_api_request(:put, url, @params, HEADERS)
   end
 
-  alias :gquery :update_scenario
+  def gquery(scenario_id)
+    if response = update_scenario(scenario_id)
+      gquery_key = @params[:gqueries].first
+      response["gqueries"][gquery_key]
+    else
+      nil
+    end
+  end
 
   def create_scenario
     url = ETM_URLS[:scenarios] % [@provider]
