@@ -9,7 +9,7 @@
   = @testing_ground.name
 
 %em.note
-  Created by Chael Kruip on
+  Created by #{@testing_ground.user.name} on
   = @testing_ground.created_at.to_formatted_s(:long)
   last updated on
   = @testing_ground.updated_at.to_formatted_s(:long)
