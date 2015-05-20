@@ -5,7 +5,7 @@
   = link_to "Enable Storage", '#', style: "margin-right: 10px", class: "btn btn-default pull-right", id: 'enable-storage'
   = link_to "Edit", edit_testing_ground_path(@testing_ground), style: "margin-right: 10px", class: "btn btn-default pull-right"
 
-  = "Testing Ground ##{ @testing_ground.id }:"
+  = "Local Energy Solution (LES) ##{ @testing_ground.id }:"
   = @testing_ground.name
 
 %em.note
@@ -26,9 +26,9 @@
   .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json) }
     %span.loading
       %h5
-        %span.main Calculating your testing ground&hellip;
+        %span.main Calculating your local energy solution&hellip;
       %span.more
-        Large testing grounds may take up to 30 seconds to display. Please be
+        Large local energy solutions may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
 
 .node-info
