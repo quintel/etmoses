@@ -44,7 +44,8 @@ RSpec.describe Topology do
   end # with symbol graph keys
 
   context 'with a node containing a "units" attribute' do
-    let(:topology) { Topology.new(graph: { name: 'A', units: 1.0 }) }
+    let(:topology) { Topology.new(name: "Topology",
+                                  graph: { name: 'A', units: 1.0 }) }
 
     it 'allows "units" to be zero' do
       topology.graph['units'] = 0.0

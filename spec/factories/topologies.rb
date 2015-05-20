@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :topology do
+    name "Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: :hv
@@ -12,6 +13,7 @@ FactoryGirl.define do
   end
 
   factory :large_topology, class: Topology do
+    name "Large Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: :hv
