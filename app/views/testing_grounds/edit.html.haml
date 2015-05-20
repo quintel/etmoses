@@ -1,3 +1,9 @@
+- if @testing_ground.user != current_user
+  .alert.alert-warning{role: 'alert'}
+    %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
+    %span.sr-only Warning:
+    You are now editing #{@testing_ground.user.name}'s Local Energy Solution (LES)!
+
 %h3
   Edit local energy solution:
   = @testing_ground.name
