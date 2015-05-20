@@ -1,26 +1,11 @@
-etloader
-========
+# ETMoses
 
-Calculation module to compute loads in a multi-level (LV, MV, HV, et cetera) electricity network
+Calculation module to compute loads in a multi-level (LV, MV, HV, et cetera)
+electricity network.
 
-### User administration
-#### Creating a user
+Project currently under development. Please check out the commits and the issues.
 
-This application uses te monban gem for authorization. In order to sign up a
-user, use the following command:
-
-`User.create!({email: <email>, password: <password>})`
-
-#### Activating a user
-
-Find the user by email:
-
-````ruby
-user = User.find_by_email("<email>")
-````
-
-Call activate:
-
-````ruby
-user.activate!
-````
+Documentation can be found on the Documenation repository:
+* [General use](https://github.com/quintel/documentation/blob/master/general/testing_grounds_overview.md)
+* [On topologies](https://github.com/quintel/documentation/blob/master/general/topology.md)
+* [On topologies](https://github.com/quintel/documentation/blob/master/general/topology_syntax.md)
