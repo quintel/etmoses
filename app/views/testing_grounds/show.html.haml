@@ -45,8 +45,13 @@
         %table.table
           %thead
             %tr
-              - InstalledTechnology::EDITABLES.each do |akey|
-                %th= akey.to_s.titleize
+              %th Name
+              %th Type
+              %th Profile
+              %th Capacity [kW]
+              %th Storage volume [kWh]
+              %th Yearly demand [kWh]
+              %th Units
           %tbody
             - techs.each do |tech|
               %tr{ "data-tech" => tech.name }

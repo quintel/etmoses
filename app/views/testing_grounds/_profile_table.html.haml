@@ -1,13 +1,13 @@
 %table.table
   %thead
-    %th Node
-    %th Name
-    %th Type
-    %th Profile
-    %th Capacity
-    %th Storage
-    %th Demand
-    %th Units
+    %th{data: {header: 'node'}} Node
+    %th{data: {header: 'name'}} Name
+    %th{data: {header: 'type'}} Type
+    %th{data: {header: 'profile'}} Profile
+    %th{data: {header: 'capacity'}} Capacity [kW]
+    %th{data: {header: 'storage'}} Storage volume [kWh]
+    %th{data: {header: 'demand'}} Yearly demand [kWh]
+    %th{data: {header: 'units'}} Units
 
   %tbody
     - testing_ground_profile.each_pair do |node, technologies|

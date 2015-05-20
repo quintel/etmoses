@@ -35,7 +35,7 @@ var ProfileTable = (function(){
   };
 
   function tableHeader(index){
-    return $(selector).find("thead th")[index].innerHTML.toLowerCase();
+    return $($(selector).find("thead th")[index]).data("header");
   };
 
   function tableRows(){
