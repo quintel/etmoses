@@ -159,4 +159,74 @@ RSpec.describe TestingGroundsController do
       expect(response.status).to eq(200)
     end
   end
+
+  describe "#technology_profile" do
+    it "exports csv file" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                           technology_profile: {"lv1" => []})
+
+      get :technology_profile, id: testing_ground.id, format: :csv
+
+      expect(response.status).to eq(200)
+    end
+  end
+
+  describe "#edit" do
+    it "visits edit path" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                           technology_profile: {"lv1" => []})
+
+      get :edit, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+  end
+
+  describe "#update" do
+    let!(:technologies){
+      FactoryGirl.create(:technology,
+        key: 'households_solar_pv_solar_radiation')
+
+      FactoryGirl.create(:technology,
+        key: 'transport_car_using_electricity')
+    }
+
+    let(:topology){
+      FactoryGirl.create(:large_topology)
+    }
+
+    let(:testing_ground){
+      FactoryGirl.create(:testing_ground, name: "Hello world",
+                                          topology: topology,
+                                          technology_profile: {"lv1" => []}) }
+
+    let(:update_hash){
+      TestingGroundsControllerTest.update_hash
+    }
+
+    it "updates testing ground" do
+      sign_in(user)
+
+      patch :update, id: testing_ground.id,
+                   testing_ground: update_hash
+
+      expect(testing_ground.reload.name).to eq("2015-08-02 - Test123")
+    end
+
+    it "updates testing ground with a csv" do
+      sign_in(user)
+
+      patch :update, id: testing_ground.id,
+        testing_ground: update_hash.merge({
+          technology_profile_csv: fixture_file_upload("technology_profile.csv",
+                                                      "text/csv")
+        })
+
+      expect(testing_ground.reload.technology_profile["lv1"][0].profile).to eq("solar_tv_zwolle")
+    end
+  end
 end

@@ -26,6 +26,15 @@
   #profiles-table
     = render partial: "testing_grounds/profile_table", locals: {testing_ground_profile: @testing_ground.technology_profile.as_json}
 
+  - unless testing_ground.new_record?
+    .form-group.pull-right
+      = link_to "Export to CSV", technology_profile_testing_ground_path(@testing_ground, format: :csv), class: "btn btn-primary"
+
+    .clearfix
+    .form-group
+      = f.label :technology_profile_csv, "Technology profile CSV"
+      = f.file_field :technology_profile_csv, accept: 'text/csv'
+
   - if testing_ground.new_record?
     .radio-button-group
       = radio_button_tag 'differentiation', "max", true

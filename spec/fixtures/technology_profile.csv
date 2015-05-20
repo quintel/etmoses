@@ -1,0 +1,10 @@
+connection,name,type,behavior,profile,load,capacity,demand,storage,units
+lv1,Residential PV panel,households_solar_pv_solar_radiation,,solar_tv_zwolle,,-1.5,,,38.0
+lv1,Electric car,transport_car_using_electricity,,ev_profile_11_3.7_kw,,3.7,,,7.0
+lv1,Household,base_load,,edsn_e1a,,,3950.53,,34.0
+lv2,Residential PV panel,households_solar_pv_solar_radiation,,solar_pv_zwolle,,-1.5,,,38.0
+lv2,Electric car,transport_car_using_electricity,,ev_profile_11_3.7_kw,,3.7,,,7.0
+lv2,Household,base_load,,edsn_e1a,,,3950.53,,33.0
+lv3,Residential PV panel,households_solar_pv_solar_radiation,,solar_pv_zwolle,,-1.5,,,37.0
+lv3,Electric car,transport_car_using_electricity,,ev_profile_11_3.7_kw,,3.7,,,7.0
+lv3,Household,base_load,,edsn_e1a,,,3950.53,,33.0
