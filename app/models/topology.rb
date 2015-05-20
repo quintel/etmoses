@@ -3,6 +3,8 @@ class Topology < ActiveRecord::Base
 
   DEFAULT_GRAPH = Rails.root.join('db/default_topology.yml').read
 
+  validates_presence_of :name
+
   validate :validate_node_names
   validate :validate_units
 
