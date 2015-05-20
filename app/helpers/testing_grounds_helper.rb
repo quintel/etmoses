@@ -1,6 +1,6 @@
 module TestingGroundsHelper
   def import_topology_select_tag(form)
-    topologies = Topology.all.reverse.map do |topo|
+    topologies = Topology.named.map do |topo|
       [(topo.name || "No name specified"), topo.id]
     end
 
