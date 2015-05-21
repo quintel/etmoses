@@ -318,9 +318,11 @@ downsampleCurve = (curve, outLength, startAt = 0) ->
   chunkLength = Math.floor(curveLength / outLength) or 1
 
   for startIndex in [0...curveLength] by chunkLength
+    [min, max] = d3.extent(curve[startIndex...(startIndex + chunkLength)])
+
     {
       x: startIndex + startAt
-      y: d3.max(curve[startIndex...(startIndex + chunkLength)])
+      y: (if Math.abs(min) > Math.abs(max) then min else max)
     }
 
 window.downsampleCurve = downsampleCurve
