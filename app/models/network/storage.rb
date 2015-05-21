@@ -10,6 +10,11 @@ module Network
       options[:storage] == false
     end
 
+    def initialize(*)
+      super
+      @capacity = CapacityLimit.new(self)
+    end
+
     # Public: Using the amount of energy stored in the technology in each time
     # step, determines the relative change in energy over time, giving the load
     # of the technology.
@@ -36,11 +41,12 @@ module Network
     end
 
     def mandatory_consumption_at(frame)
-      0.0
+      @capacity.limit_mandatory(frame, 0.0)
     end
 
     def conditional_consumption_at(frame)
-      (installed.storage || 0.0) - mandatory_consumption_at(frame)
+      @capacity.limit_conditional(
+        frame, installed.storage - mandatory_consumption_at(frame))
     end
 
     def store(frame, amount)

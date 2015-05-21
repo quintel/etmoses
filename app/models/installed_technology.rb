@@ -60,7 +60,7 @@ class InstalledTechnology
   # Returns a Merit::Curve.
   def profile_curve
     unscaled_profile_curve *
-      ((capacity || load || demand || storage || 1.0) * units)
+      ((storage || capacity || load || demand || 1.0) * units)
   end
 
   #######
@@ -74,7 +74,7 @@ class InstalledTechnology
   def unscaled_profile_curve
     if profile.is_a?(Array)
       Merit::Curve.new(profile)
-    elsif capacity || load
+    elsif storage.blank? && (capacity || load)
       LoadProfile.by_key(profile).merit_curve(:capacity_scaled)
     elsif demand
       LoadProfile.by_key(profile).merit_curve(:demand_scaled)

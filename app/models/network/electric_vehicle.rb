@@ -43,7 +43,7 @@ module Network
       if disconnected?(frame)
         0.0
       elsif profile
-        profile.at(frame)
+        @capacity.limit_mandatory(frame, profile.at(frame))
       else
         super
       end

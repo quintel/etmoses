@@ -8,14 +8,11 @@ module Network
   # grid. Energy stored in the buffer may only be used to satisfy its own
   # consumption, and is not released back to the network.
   class Buffer < Storage
-    # Public: The energy stored in the buffer after computing each frame.
-    #
-    # Returns a DefaultArray.
-    def stored
-      @stored ||= DefaultArray.new do |frame|
-        remaining = mandatory_consumption_at(frame) - @profile.at(frame)
-        remaining < 0 ? 0.0 : remaining
-      end
+    # Public: The amount of energy to be retained in the buffer at the end of
+    # the frame must decrease by the amount consumed (defined in the profile).
+    def production_at(frame)
+      prod = super - @profile.at(frame)
+      prod < 0 ? 0.0 : prod
     end
 
     # Public: Buffers may not return their stored energy back to the network.
@@ -23,14 +20,6 @@ module Network
     # balance out to zero
     def mandatory_consumption_at(frame)
       production_at(frame)
-    end
-
-    # Public: Theoretically, given no input capacity, a buffer may satisfy its
-    # own internal demand -- and store up to its full capacity -- in the same
-    # frame. It therefore requests the full amount needed to fill its unmet
-    # storage capacity, and whatever it will consume.
-    def conditional_consumption_at(frame)
-      super + @profile.at(frame)
     end
   end # Buffer
 end # Network

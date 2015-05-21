@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Network::Storage do
-  let(:tech) { network_technology(build(:installed_battery, storage: 2.0)) }
+  let(:capacity) { nil }
+
+  let(:tech) do
+    network_technology(build(
+      :installed_battery, capacity: capacity, storage: 2.0
+    ))
+  end
 
   context 'in frame 0' do
     it 'has no capacity' do
@@ -54,14 +60,38 @@ RSpec.describe Network::Storage do
       it 'has conditional consumption equal to the storage amount' do
         expect(tech.conditional_consumption_at(1)).to eq(2.0)
       end
+
+      context 'with capacity of 0.2' do
+        let(:capacity) { 0.2 }
+
+        it 'has mandatory consumption equal to stored - capacity' do
+          expect(tech.mandatory_consumption_at(1)).to eq(1.3)
+        end
+
+        it 'has conditional consumption equal to the 2x capacity' do
+          expect(tech.conditional_consumption_at(1)).to be_within(1e-9).of(0.4)
+        end
+      end # with capacity of 0.2
+
+      context 'with capacity of 3.0' do
+        let(:capacity) { 3.0 }
+
+        it 'has mandatory consumption of 0' do
+          expect(tech.mandatory_consumption_at(1)).to be_zero
+        end
+
+        it 'has conditional consumption equal to the storage amount' do
+          expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        end
+      end # with capacity of 3.0
     end # with 1.5 storage carried from frame 0
   end # in frame 1
 
   context 'with no storage amount set' do
     let(:tech) { network_technology(build(:installed_battery, storage: nil)) }
 
-    it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+    pending 'should raise an error' do
+      expect { tech }.to raise_error
     end
   end # with no storage amount set
 

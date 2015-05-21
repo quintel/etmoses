@@ -172,5 +172,39 @@ RSpec.describe InstalledTechnology do
         end
       end
     end # with neither capacity nor demand
+
+    context 'with storage' do
+      let(:tech) { InstalledTechnology.new(storage: 100.0) }
+
+      before do
+        expect(LoadProfile).to receive(:by_key).and_return(load_profile)
+      end
+
+      it 'scales without units' do
+        expect(tech.profile_curve.at(0)).to eq(200.0)
+      end
+
+      it 'scales with units' do
+        tech.units = 2.0
+        expect(tech.profile_curve.at(0)).to eq(400.0)
+      end
+    end # with storage
+
+    context 'with storage and capacity' do
+      let(:tech) { InstalledTechnology.new(storage: 100.0, capacity: 0.2) }
+
+      before do
+        expect(LoadProfile).to receive(:by_key).and_return(load_profile)
+      end
+
+      it 'scales without units' do
+        expect(tech.profile_curve.at(0)).to eq(200.0)
+      end
+
+      it 'scales with units' do
+        tech.units = 2.0
+        expect(tech.profile_curve.at(0)).to eq(400.0)
+      end
+    end # with storage and capacity
   end # profile_curve
 end # InstalledTechnology
