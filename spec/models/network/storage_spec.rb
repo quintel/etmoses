@@ -5,7 +5,7 @@ RSpec.describe Network::Storage do
 
   let(:tech) do
     network_technology(build(
-      :installed_battery, capacity: capacity, storage: 2.0
+      :installed_battery, capacity: capacity, volume: 2.0
     ))
   end
 
@@ -30,7 +30,7 @@ RSpec.describe Network::Storage do
       expect(tech.mandatory_consumption_at(0)).to be_zero
     end
 
-    it 'has conditional consumption equal to the storage amount' do
+    it 'has conditional consumption equal to the volume' do
       expect(tech.conditional_consumption_at(0)).to eq(2.0)
     end
   end # in frame 0
@@ -41,7 +41,7 @@ RSpec.describe Network::Storage do
         expect(tech.production_at(1)).to be_zero
       end
 
-      it 'has conditional consumption equal to the storage amount' do
+      it 'has conditional consumption equal to the volume' do
         expect(tech.conditional_consumption_at(1)).to eq(2.0)
       end
     end # with no storage carried from frame 0
@@ -53,7 +53,7 @@ RSpec.describe Network::Storage do
         expect(tech.production_at(1)).to eq(1.5)
       end
 
-      it 'has conditional consumption equal to the storage amount' do
+      it 'has conditional consumption equal to the volume' do
         expect(tech.conditional_consumption_at(1)).to eq(2.0)
       end
 
@@ -76,25 +76,25 @@ RSpec.describe Network::Storage do
           expect(tech.mandatory_consumption_at(1)).to be_zero
         end
 
-        it 'has conditional consumption equal to the storage amount' do
+        it 'has conditional consumption equal to the volume' do
           expect(tech.conditional_consumption_at(1)).to eq(2.0)
         end
       end # with capacity of 3.0
     end # with 1.5 storage carried from frame 0
   end # in frame 1
 
-  context 'with no storage amount set' do
-    let(:tech) { network_technology(build(:installed_battery, storage: nil)) }
+  context 'with no volume set' do
+    let(:tech) { network_technology(build(:installed_battery, volume: nil)) }
 
     pending 'should raise an error' do
       expect { tech }.to raise_error
     end
-  end # with no storage amount set
+  end # with no volume set
 
   context 'when disabled' do
     let(:tech) do
       network_technology(
-        build(:installed_battery, storage: nil), 2, storage: false)
+        build(:installed_battery, volume: nil), 2, storage: false)
     end
 
     it 'has no production' do

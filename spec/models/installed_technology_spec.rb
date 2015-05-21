@@ -173,8 +173,8 @@ RSpec.describe InstalledTechnology do
       end
     end # with neither capacity nor demand
 
-    context 'with storage' do
-      let(:tech) { InstalledTechnology.new(storage: 100.0) }
+    context 'with volume' do
+      let(:tech) { InstalledTechnology.new(volume: 100.0) }
 
       before do
         expect(LoadProfile).to receive(:by_key).and_return(load_profile)
@@ -188,10 +188,10 @@ RSpec.describe InstalledTechnology do
         tech.units = 2.0
         expect(tech.profile_curve.at(0)).to eq(400.0)
       end
-    end # with storage
+    end # with volume
 
-    context 'with storage and capacity' do
-      let(:tech) { InstalledTechnology.new(storage: 100.0, capacity: 0.2) }
+    context 'with volume and capacity' do
+      let(:tech) { InstalledTechnology.new(volume: 100.0, capacity: 0.2) }
 
       before do
         expect(LoadProfile).to receive(:by_key).and_return(load_profile)
@@ -205,6 +205,6 @@ RSpec.describe InstalledTechnology do
         tech.units = 2.0
         expect(tech.profile_curve.at(0)).to eq(400.0)
       end
-    end # with storage and capacity
+    end # with volume and capacity
   end # profile_curve
 end # InstalledTechnology

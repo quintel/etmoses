@@ -79,7 +79,7 @@ module Network
     end
 
     def volume
-      @installed.storage || Float::INFINITY
+      @installed.volume || Float::INFINITY
     end
 
     def consumer?
@@ -87,7 +87,7 @@ module Network
         @installed.demand ||
         # When storage is disabled, it may turn into a normal technology in
         # order to draw load -- but NOT store -- from the network.
-        @installed.storage
+        @installed.volume
     end
 
     def producer?

@@ -96,7 +96,7 @@ RSpec.describe Network::Path do
     context 'with conditional load' do
       before do
         child.set(:techs, [
-          network_technology(build(:installed_battery, storage: 10.0))
+          network_technology(build(:installed_battery, volume: 10.0))
         ])
       end
 

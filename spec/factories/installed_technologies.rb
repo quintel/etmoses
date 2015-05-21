@@ -14,7 +14,7 @@ FactoryGirl.define do
   factory :installed_battery, class: InstalledTechnology do
     name 'Battery'
     units 1
-    storage 1.0
+    volume 1.0
     capacity Float::INFINITY
 
     after(:build) do |tech|
@@ -27,7 +27,7 @@ FactoryGirl.define do
   factory :installed_ev, class: InstalledTechnology do
     name 'Electric Vehicle'
     units 1
-    storage 1.0
+    volume 1.0
     capacity Float::INFINITY
 
     after(:build) do |tech|
@@ -40,7 +40,7 @@ FactoryGirl.define do
   factory :installed_p2h, class: InstalledTechnology do
     name 'Power-to-heat'
     units 1
-    storage 1.0
+    volume 1.0
     capacity Float::INFINITY
 
     after(:build) do |tech|

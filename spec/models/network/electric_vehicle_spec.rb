@@ -5,7 +5,7 @@ RSpec.describe Network::ElectricVehicle do
 
   let(:tech) do
     network_technology(build(
-      :installed_ev, capacity: capacity, profile: profile, storage: 3.0
+      :installed_ev, capacity: capacity, profile: profile, volume: 3.0
     ))
   end
 
@@ -20,7 +20,7 @@ RSpec.describe Network::ElectricVehicle do
       expect(tech.mandatory_consumption_at(0)).to be_zero
     end
 
-    it 'has conditional consumption equal to the storage amount' do
+    it 'has conditional consumption equal to the volume' do
       expect(tech.conditional_consumption_at(0)).to eq(3.0)
     end
   end # in frame 0
@@ -204,7 +204,7 @@ RSpec.describe Network::ElectricVehicle do
       expect(tech.mandatory_consumption_at(1)).to be_zero
     end
 
-    it 'has conditional consumption equal to the storage amount' do
+    it 'has conditional consumption equal to the volume' do
       expect(tech.conditional_consumption_at(1)).to eq(3.0)
     end
   end # when the previous frame was a disconnection
@@ -214,7 +214,7 @@ RSpec.describe Network::ElectricVehicle do
 
     let(:tech) do
       network_technology(
-        build(:installed_ev, profile: profile, storage: 3.0), 2, storage: false)
+        build(:installed_ev, profile: profile, volume: 3.0), 2, storage: false)
     end
 
     it 'becomes a consumer' do

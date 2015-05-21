@@ -123,7 +123,7 @@ RSpec.describe Network::Node do
 
     it 'does not include conditional load from consumption technologies' do
       node.get(:techs).push(
-        network_technology(build(:installed_battery, storage: 2.0)))
+        network_technology(build(:installed_battery, volume: 2.0)))
 
       expect(node.mandatory_consumption_at(0)).to eq(2.0)
     end
@@ -132,7 +132,7 @@ RSpec.describe Network::Node do
   describe 'conditional_consumption_at' do
     before do
       node.set(:techs, [
-        network_technology(build(:installed_battery, storage: 1.5))
+        network_technology(build(:installed_battery, volume: 1.5))
       ])
     end
 
@@ -158,8 +158,8 @@ RSpec.describe Network::Node do
   describe 'assigning conditional consumption' do
     before do
       node.set(:techs, [
-        network_technology(build(:installed_battery, storage: 1.0)),
-        network_technology(build(:installed_battery, storage: 3.0))
+        network_technology(build(:installed_battery, volume: 1.0)),
+        network_technology(build(:installed_battery, volume: 3.0))
       ])
     end
 

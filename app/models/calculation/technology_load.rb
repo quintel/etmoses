@@ -31,7 +31,7 @@ module Calculation
     def suitable_technologies(node)
       node.get(:installed_techs).select do |technology|
         technology.profile || technology.capacity ||
-          technology.load || technology.storage
+          technology.load || technology.volume
       end
     end
 

@@ -6,7 +6,7 @@ RSpec.describe Network::Buffer do
 
     let(:tech) do
       network_technology(build(
-        :installed_p2h, profile: profile, storage: 10.0, capacity: capacity
+        :installed_p2h, profile: profile, volume: 10.0, capacity: capacity
       ))
     end
 
@@ -22,7 +22,7 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to be_zero
         end
 
-        it 'has conditional consumption equal to the storage amount' do
+        it 'has conditional consumption equal to the volume' do
           expect(tech.conditional_consumption_at(1)).to eq(10.0)
         end
 
