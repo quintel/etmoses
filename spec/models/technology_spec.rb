@@ -9,7 +9,7 @@ RSpec.describe Technology, type: :model do
   it { expect(subject).to validate_length_of(:name).is_at_most(100) }
 
   it { expect(subject).to validate_inclusion_of(:behavior).
-         in_array(%w(storage electric_vehicle)) }
+         in_array(%w(storage electric_vehicle siphon buffer)) }
 
   it { expect(subject).to validate_length_of(:import_from).is_at_most(50) }
   it { expect(subject).to validate_inclusion_of(:import_from).
