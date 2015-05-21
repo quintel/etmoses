@@ -21,6 +21,21 @@ class InstalledTechnology
     end ]
   end
 
+  # Pbblic: Set the profile to be used to describe the technology load over
+  # time.
+  #
+  # profile - A string describing the profile: either a load profile key, or a
+  #           JSON-style array as a string.
+  #
+  # Returns the profile name.
+  def profile=(profile)
+    if profile && profile.is_a?(String) && profile.match(/\A\[.*\]\z/)
+      super(JSON.parse(profile))
+    else
+      super
+    end
+  end
+
   # Public: Returns if the technology has been defined in the data/technologies
   # directory.
   #

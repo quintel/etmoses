@@ -38,6 +38,40 @@ RSpec.describe InstalledTechnology do
     end
   end # technology
 
+  describe '#profile=' do
+    context 'with nil' do
+      let(:tech) { InstalledTechnology.new(profile: nil) }
+
+      it 'sets the profile to be blank' do
+        expect(tech.profile).to be_nil
+      end
+    end
+
+    context 'with load profile key' do
+      let(:tech) { InstalledTechnology.new(profile: 'my_little_profile') }
+
+      it 'sets an inline array profile' do
+        expect(tech.profile).to eq('my_little_profile')
+      end
+    end
+
+    context 'with an array-like string' do
+      let(:tech) { InstalledTechnology.new(profile: '[1, 2, 3]') }
+
+      it 'sets an inline array profile' do
+        expect(tech.profile).to eq([1, 2, 3])
+      end
+    end
+
+    context 'with an array' do
+      let(:tech) { InstalledTechnology.new(profile: [1, 2, 3]) }
+
+      it 'sets an inline array profile' do
+        expect(tech.profile).to eq([1, 2, 3])
+      end
+    end
+  end # profile=
+
   describe '#profile_curve' do
     let(:load_profile) { create(:load_profile_with_curve) }
 
