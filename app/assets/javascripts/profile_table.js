@@ -27,11 +27,23 @@ var ProfileTable = (function(){
     var technologyObject = {};
     $.each(tableRow, function(i, techAttribute){
       var header = tableHeader(i);
+
+      if(header == "name"){
+        technologyObject["type"] = getTypeForName(techAttribute);
+      };
+
       if(!(/demand|capacity/.test(header) && techAttribute == "")){
         technologyObject[header] = techAttribute;
-      }
+      };
     });
     return technologyObject;
+  };
+
+  function getTypeForName(name){
+    var selectedOption = $("select.name").find("option").filter(function(){
+      return $(this).text() == name;
+    });
+    return selectedOption.val();
   };
 
   function tableHeader(index){

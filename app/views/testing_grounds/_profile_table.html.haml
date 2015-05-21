@@ -1,21 +1,33 @@
 %table.table
   %thead
-    %th{data: {header: 'node'}} Node
-    %th{data: {header: 'name'}} Name
-    %th{data: {header: 'type'}} Type
-    %th{data: {header: 'profile'}} Profile
+    %th.col-sm-1{data: {header: 'node'}} Node
+    %th.col-sm-3{data: {header: 'name'}} Name
+    %th.col-sm-3{data: {header: 'profile'}} Profile
     %th{data: {header: 'capacity'}} Capacity [kW]
     %th{data: {header: 'volume'}} Storage volume [kWh]
     %th{data: {header: 'demand'}} Yearly demand [kWh]
     %th{data: {header: 'units'}} Units
 
   %tbody
+    .hidden.name
+      %select.name
+        = profile_table_options_for_name
+
+    .hidden.nodes
+      %select.nodes
+        = node_options(testing_ground_profile)
+
+    .hidden.profile
+      - @technologies.each do |technology|
+        %select{class: technology.key}
+          = profile_table_options_for_profile(technology)
+
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|
         %tr
-          %td= node
-          - technology.slice(*InstalledTechnology::EDITABLES).values.each do |value|
-            %td.editable= value
+          %td.editable{data: {"edit-type" => "select", "edit-options" => 'nodes', "edit-selected" => node.gsub(/\.|\#/, '_')}}= node
+          - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
+            %td.editable{data: profile_table_data(key, technology)}= value
 
           %th
             = link_to "#", class: "add-row text-success" do

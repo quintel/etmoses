@@ -30,11 +30,6 @@
     .form-group.pull-right
       = link_to "Export to CSV", technology_profile_testing_ground_path(@testing_ground, format: :csv), class: "btn btn-primary"
 
-    .clearfix
-    .form-group
-      = f.label :technology_profile_csv, "Technology profile CSV"
-      = f.file_field :technology_profile_csv, accept: 'text/csv'
-
   - if testing_ground.new_record?
     .radio-button-group
       = radio_button_tag 'differentiation', "max", true
@@ -42,10 +37,14 @@
       = radio_button_tag 'differentiation', "min"
       = label_tag "Minimum concurrency"
 
+    %br
+
+  .form-group
+    = f.label :technology_profile_csv, "Technology profile CSV"
+    = f.file_field :technology_profile_csv, accept: 'text/csv'
+
   .hidden
     = f.text_area :technology_profile
-
-  %br
 
   .form-group
     = f.submit class: 'btn btn-primary'
