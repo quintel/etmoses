@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Network::ElectricVehicle do
-  let(:capacity) { nil }
+  let(:capacity) { Float::INFINITY }
 
   let(:tech) do
     network_technology(build(

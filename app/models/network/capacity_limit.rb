@@ -11,8 +11,8 @@ module Network
 
     def initialize(technology = technology)
       @technology = technology
-      @volume     = technology.installed.storage
-      @capacity   = technology.installed.capacity || Float::INFINITY
+      @volume     = technology.volume
+      @capacity   = technology.capacity || Float::INFINITY
     end
 
     # Public: Limit the mandatory consumption of a technology so that is does

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Network::Buffer do
   context 'with a storage volume of 10' do
-    let(:capacity) { nil }
+    let(:capacity) { Float::INFINITY }
 
     let(:tech) do
       network_technology(build(

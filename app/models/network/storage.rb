@@ -46,7 +46,7 @@ module Network
 
     def conditional_consumption_at(frame)
       @capacity.limit_conditional(
-        frame, installed.storage - mandatory_consumption_at(frame))
+        frame, volume - mandatory_consumption_at(frame))
     end
 
     def store(frame, amount)
@@ -67,7 +67,7 @@ module Network
 
     # Public: Returns how much of the technology's capacity remains unused.
     def headroom_at(frame)
-      installed.storage - production_at(frame)
+      volume - production_at(frame)
     end
   end # Storage
 end # Network

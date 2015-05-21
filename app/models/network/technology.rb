@@ -78,6 +78,10 @@ module Network
       @installed.capacity || @installed.load || 0.0
     end
 
+    def volume
+      @installed.storage || Float::INFINITY
+    end
+
     def consumer?
       capacity.present? && capacity > 0 ||
         @installed.demand ||

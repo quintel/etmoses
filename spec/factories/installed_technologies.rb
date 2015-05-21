@@ -15,6 +15,7 @@ FactoryGirl.define do
     name 'Battery'
     units 1
     storage 1.0
+    capacity Float::INFINITY
 
     after(:build) do |tech|
       allow(tech).to receive(:technology).and_return(
@@ -27,6 +28,7 @@ FactoryGirl.define do
     name 'Electric Vehicle'
     units 1
     storage 1.0
+    capacity Float::INFINITY
 
     after(:build) do |tech|
       allow(tech).to receive(:technology).and_return(
@@ -39,6 +41,7 @@ FactoryGirl.define do
     name 'Power-to-heat'
     units 1
     storage 1.0
+    capacity Float::INFINITY
 
     after(:build) do |tech|
       allow(tech).to receive(:technology).and_return(
@@ -50,6 +53,7 @@ FactoryGirl.define do
   factory :installed_p2g, class: InstalledTechnology do
     name 'Power-to-gas'
     units 1
+    capacity Float::INFINITY
 
     after(:build) do |tech|
       allow(tech).to receive(:technology).and_return(

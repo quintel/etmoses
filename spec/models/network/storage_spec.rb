@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Network::Storage do
-  let(:capacity) { nil }
+  let(:capacity) { Float::INFINITY }
 
   let(:tech) do
     network_technology(build(
@@ -10,10 +10,6 @@ RSpec.describe Network::Storage do
   end
 
   context 'in frame 0' do
-    it 'has no capacity' do
-      expect(tech.capacity).to be_zero
-    end
-
     it 'is not a producer' do
       expect(tech).to_not be_producer
     end
