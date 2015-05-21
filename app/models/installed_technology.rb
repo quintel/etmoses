@@ -21,7 +21,7 @@ class InstalledTechnology
     end ]
   end
 
-  # Pbblic: Set the profile to be used to describe the technology load over
+  # Public: Set the profile to be used to describe the technology load over
   # time.
   #
   # profile - A string describing the profile: either a load profile key, or a
