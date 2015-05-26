@@ -72,6 +72,7 @@ function showTree(url, container) {
         // Keep track of "storage on" data.
         storageShown = false,
         storageLoads = false,
+        forceReload = false,
 
         // Most recently clicked node, so that we can update the load chart if
         // the user opts to show storage.
@@ -178,6 +179,8 @@ function showTree(url, container) {
     };
 
     function showChart(d) {
+      reloadCharts();
+
       var uniqueId = "chart-id-" + d.id;
       var existingLoadPlatform = $(".load-graph ." + uniqueId);
 
@@ -188,6 +191,13 @@ function showTree(url, container) {
       }
       else{
         addNewLoadChartPlatform(uniqueId, d);
+      };
+    };
+
+    function reloadCharts(){
+      if(forceReload){
+        $(".load-graph .chart").remove();
+        forceReload = false;
       };
     };
 
@@ -297,6 +307,8 @@ function showTree(url, container) {
         node.altLoad = node.load;
         node.load    = otherLoad;
       });
+
+      forceReload = true
 
       if (lastClicked) {
         click(lastClicked);
