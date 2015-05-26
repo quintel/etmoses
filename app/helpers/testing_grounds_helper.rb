@@ -43,25 +43,29 @@ module TestingGroundsHelper
 
   def profile_table_data(type, technology)
     case type
+    when :node
+      { edit_type:    'select',
+        edit_options: 'nodes',
+        edit_selected: technology.jquery_safe }
     when :name
-      { 'edit-type'     => 'select',
-        'edit-options'  => 'name',
-        'edit-selected' => technology[:type] }
+      { edit_type:     'select',
+        edit_options:  'name',
+        edit_selected: technology[:type] }
     when :profile
-      { 'edit-type'     => 'select',
-        'edit-options'  => technology[:type],
-        'edit-selected' => technology[:profile].gsub(/\.|\#/, '_') }
+      { edit_type:     'select',
+        edit_options:  technology[:type],
+        edit_selected: (technology[:profile] || '').jquery_safe }
     else
-      {'edit-type' => 'text'}
+      { edit_type: 'text' }
     end
   end
 
   def profile_table_options_for_profile(technology)
-    @load_profiles ||= technology.load_profiles.map do |load_profile|
-      [load_profile.key, load_profile.key.gsub(/\.|\#/, '_')]
+    load_profiles = technology.load_profiles.map do |load_profile|
+      [load_profile.key, load_profile.key.jquery_safe]
     end
 
-    options_for_select(@load_profiles)
+    options_for_select(load_profiles)
   end
 
   def profile_table_options_for_name
@@ -74,7 +78,7 @@ module TestingGroundsHelper
 
   def node_options(profile)
     node_options = profile.keys.map do |key|
-      [key, key.gsub(/\.|\#/, '_')]
+      [key, key.jquery_safe]
     end
 
     options_for_select(node_options)

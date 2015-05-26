@@ -34,8 +34,7 @@ $.fn.editableTableWidget = function (options) {
         if (active.length) {
           var edittype = getEditType();
           if (edittype == "select") {
-            selectBox = $(".hidden select." + active.data('edit-options'));
-            editors.select.html(selectBox.clone(true, true).html());
+            cloneSelectBox.call(active);
           }
           editor = editors[edittype];
           editor.val(editorValue.call(active, edittype))
@@ -50,6 +49,11 @@ $.fn.editableTableWidget = function (options) {
             editor.select();
           }
         }
+      },
+      cloneSelectBox = function(){
+        var sel = editors.select;
+        selectBox = $(".hidden select." + $(this).data('edit-options'));
+        sel.html(selectBox.clone(true, true).html());
       },
       editorValue = function (edittype) {
         if(edittype == "select"){
@@ -104,6 +108,19 @@ $.fn.editableTableWidget = function (options) {
           active.html(originalContent);
         }
       },
+      updateNextSelectBox = function(selectValue){
+        if(active.data('edit-options') != 'nodes'){
+          var nextCell     = active.next();
+          var selectBoxVal = $("select." + selectValue).val();
+
+          active.data('edit-selected', selectValue);
+          nextCell.text(selectBoxVal);
+          nextCell.data({
+            'edit-selected': selectBoxVal,
+            'edit-options': selectValue
+          });
+        };
+      },
       movement = function (element, keycode) {
         if (keycode === ARROW_RIGHT) {
           return element.next('td');
@@ -128,7 +145,6 @@ $.fn.editableTableWidget = function (options) {
           e.preventDefault();
           e.stopPropagation();
         } else if (e.which === ESC) {
-          editor.val(active.text());
           e.preventDefault();
           e.stopPropagation();
           editor.hide();
@@ -153,10 +169,6 @@ $.fn.editableTableWidget = function (options) {
           editor.removeClass('error');
         }
       })
-      .on('changeDate', function(e) {
-        active.text(e.format());
-        editor.datepicker('hide');
-      });
     });
     element.on('click keypress dblclick', showEditor)
     .css('cursor', 'pointer')

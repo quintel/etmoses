@@ -301,5 +301,8 @@ table.table.scenarios{
 
 #profiles-table{
   margin-bottom: 20px;
-}
 
+  td:focus{
+    outline: 1px dotted #477caa;
+  }
+}

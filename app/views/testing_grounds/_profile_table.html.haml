@@ -25,7 +25,7 @@
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|
         %tr
-          %td.editable{data: {"edit-type" => "select", "edit-options" => 'nodes', "edit-selected" => node.gsub(/\.|\#/, '_')}}= node
+          %td.editable{data: profile_table_data(:node, node)}= node
           - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
             %td.editable{data: profile_table_data(key, technology)}= value
 
