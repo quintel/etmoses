@@ -178,21 +178,36 @@ function showTree(url, container) {
     };
 
     function showChart(d) {
-      var loadChart = window.LoadChart;
+      var uniqueId = "chart-id-" + d.id;
+      var existingLoadPlatform = $(".load-graph ." + uniqueId);
 
-      $('.load-graph').empty().append('<svg></svg>');
+      $(".load-graph .chart").hide();
+
+      if(existingLoadPlatform.length > 0){
+        existingLoadPlatform.show();
+      }
+      else{
+        addNewLoadChartPlatform(uniqueId, d);
+      };
+    };
+
+    function addNewLoadChartPlatform(uniqueId, d){
+      var loadChart = window.LoadChart;
+      var loadPlatform = $("<div>").addClass(uniqueId).addClass("chart");
+      loadPlatform.html('<svg></svg>');
+      $(".load-graph").prepend(loadPlatform);
 
       if (storageShown && storageLoads) {
         new loadChart([
           { values: d.load,    name: d.name + ' (with storage)', color: '#95BB95', area: true },
           { values: d.altLoad, name: d.name, area: true, color: '#1F77B4' }
-        ], d.capacity).render('.load-graph svg')
+        ], d.capacity).render('.' + uniqueId + ' svg')
       } else {
         new loadChart([
           { values: d.load, name: d.name, area: true, color: '#1F77B4' }
-        ], d.capacity).render('.load-graph svg')
+        ], d.capacity).render('.' + uniqueId + ' svg')
       }
-    }
+    };
 
     // Toggle children on click.
     function click(d) {
