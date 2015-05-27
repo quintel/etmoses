@@ -1,7 +1,7 @@
 class Technology < ActiveRecord::Base
   GENERIC_REGEX = /^(generic|base_load)$/
 
-  has_many :importable_attributes
+  has_many :importable_attributes, dependent: :delete_all
 
   validates :key,
     presence: true,
