@@ -13,7 +13,10 @@ RSpec.describe Import do
 
   before do
     %w(tech_one tech_two).each do |key|
-      Technology.create!(key: key, import_from: 'electricity_output_capacity')
+      ImportableAttribute.create!(
+        technology: Technology.create!(key: key),
+        name: 'electricity_output_capacity'
+      )
     end
 
     stub_scenario_request(1337)
@@ -89,9 +92,9 @@ RSpec.describe Import do
 
     context 'importing the input_capacity attribute' do
       before do
-        Technology.by_key('tech_one').update_attributes!(
-          import_from: 'input_capacity'
-        )
+        Technology.by_key('tech_one')
+          .importable_attributes.first
+          .update_attributes!(name: 'input_capacity')
       end
 
       let(:response) { { 'tech_one' => {
@@ -112,9 +115,9 @@ RSpec.describe Import do
 
     context 'importing the demand attribute' do
       before do
-        Technology.by_key('tech_one').update_attributes!(
-          import_from: 'demand'
-        )
+        Technology.by_key('tech_one')
+          .importable_attributes.first
+          .update_attributes!(name: 'demand')
       end
 
       let(:response) { { 'tech_one' => {

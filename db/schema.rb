@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150521130223) do
+ActiveRecord::Schema.define(version: 20150527112525) do
+
+  create_table "importable_attributes", force: true do |t|
+    t.integer "technology_id"
+    t.string  "name",          limit: 50
+  end
+
+  add_index "importable_attributes", ["technology_id", "name"], name: "index_importable_attributes_on_technology_id_and_name", unique: true, using: :btree
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
@@ -36,11 +43,10 @@ ActiveRecord::Schema.define(version: 20150521130223) do
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
 
   create_table "technologies", force: true do |t|
-    t.string "key",         limit: 100, null: false
-    t.string "name",        limit: 100
-    t.string "import_from", limit: 50
-    t.string "export_to",   limit: 100
-    t.string "behavior",    limit: 50
+    t.string "key",       limit: 100, null: false
+    t.string "name",      limit: 100
+    t.string "export_to", limit: 100
+    t.string "behavior",  limit: 50
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree

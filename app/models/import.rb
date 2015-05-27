@@ -20,7 +20,8 @@ class Import
   #
   # Returns a hash.
   def self.import_targets
-    Technology.where('import_from IS NOT NULL')
+    Technology.joins(:importable_attributes)
+      .group('importable_attributes.technology_id')
   end
 
   # Public: Creates a new Import with the given provider and scenario.

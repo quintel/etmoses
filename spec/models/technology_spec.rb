@@ -11,10 +11,6 @@ RSpec.describe Technology, type: :model do
   it { expect(subject).to validate_inclusion_of(:behavior).
          in_array(%w(storage electric_vehicle siphon buffer)) }
 
-  it { expect(subject).to validate_length_of(:import_from).is_at_most(50) }
-  it { expect(subject).to validate_inclusion_of(:import_from).
-         in_array(%w(demand electricity_output_capacity input_capacity)) }
-
   it { expect(subject).to validate_length_of(:export_to).is_at_most(100) }
 
   describe '#name' do

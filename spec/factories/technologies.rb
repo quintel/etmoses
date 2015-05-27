@@ -5,4 +5,8 @@ FactoryGirl.define do
     # key  "MyString"
     # name "MyString"
   end
+
+  factory :importable_technology, class: :technology do
+    importable_attributes { build_list(:importable_attribute, 1) }
+  end
 end

@@ -22,14 +22,15 @@ class Import
     #
     # Returns an array of hashes.
     def self.build(key, data)
-      units      = NumberOfUnitsAttribute.call(data).round
-      technology = Technology.by_key(key)
-      attribute  = self.attribute(technology.import_from)
+      units = NumberOfUnitsAttribute.call(data).round
+      tech  = Technology.by_key(key)
+      attrs = { 'type' => key, 'name' => tech.name, 'units' => units }
 
-      { 'type'               => key,
-        'name'               => technology.name,
-        'units'              => units,
-        attribute.local_name => attribute.call(data) }
+      tech.importable_attributes
+        .map  { |attr| attribute(attr.name) }
+        .each { |attr| attrs[attr.local_name] = attr.call(data) }
+
+      attrs
     end
   end
 end

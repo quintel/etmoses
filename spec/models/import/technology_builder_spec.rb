@@ -4,8 +4,8 @@ RSpec.describe Import::TechnologyBuilder do
   let(:techs)    { Import::TechnologyBuilder.build('tech', data) }
 
   before do
-    allow(Technology).to receive(:by_key).and_return(build(
-      :technology, key: 'tech', import_from: 'electricity_output_capacity'
+    allow(Technology).to receive(:by_key).and_return(build_stubbed(
+      :importable_technology, key: 'tech'
     ))
   end
 

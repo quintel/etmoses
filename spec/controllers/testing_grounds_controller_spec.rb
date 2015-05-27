@@ -15,9 +15,8 @@ RSpec.describe TestingGroundsController do
   describe "#perform_import" do
     let(:user){ FactoryGirl.create(:user) }
     let!(:topology){ FactoryGirl.create(:topology, name: "Default topology")}
-    let!(:technology){ FactoryGirl.create(:technology,
-                        key: "magical_technology",
-                        import_from: "input_capacity") }
+    let!(:technology){ FactoryGirl.create(:importable_technology,
+                        key: "magical_technology") }
 
     it "renders the new template after performs an import" do
       sign_in(user)
