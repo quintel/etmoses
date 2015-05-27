@@ -174,138 +174,6 @@ showTopology = (jsonURL, container) ->
 
     update(node)
 
-# Creates a line chart to represent the load of a network component over time.
-# Uses nvd3 in order to create a "focus" area so the user may zoom on and view
-# the curve in greater detail.
-class LoadChart
-  constructor: (@data, @capacity) ->
-    # pass
-
-  sampledData: (loads, week) ->
-    if week
-      chunkSize = Math.floor(loads.length / 52)
-      zeroWeek  = week - 1
-
-      startAt = zeroWeek * chunkSize
-      endAt   = startAt + chunkSize
-
-      window.downsampleCurve(loads.slice(startAt, endAt), chunkSize, startAt)
-    else
-      window.downsampleCurve(loads, 365)
-
-  render: (intoSelector, week = 0) =>
-    @renderChart(intoSelector, week)
-    @drawDateSelect(intoSelector)
-
-  renderChart: (intoSelector, week) ->
-    self = this
-
-    data = for datum, index in @data
-      { key: datum.name, values: @sampledData(datum.values, week), area: datum.area, color: datum.color}
-
-    $(intoSelector).empty()
-
-    if @capacity
-      data.push({
-        key: 'Capacity',
-        color: 'darkred',
-        values: data[0].values.map((sample) => { x: sample.x, y: @capacity })
-      })
-
-    # data.forEach (series) ->
-    for series in data
-      if series.values.length == 1
-        for frame in [1..364]
-          series.values.push(
-            x: series.values[0].x + frame,
-            y: series.values[0].y
-          )
-
-    for datum in data
-      # Add an extra data point to make the "step-after" smoothing fit better
-      # (otherwise it appears that the last frame is not present).
-      last = datum.values[datum.values.length - 1]
-      datum.values.push(x: last.x + 1, y: last.y)
-
-    nv.addGraph =>
-      d3.select(intoSelector).datum(data).call(@chart())
-
-  formatDateFromFrame: (frame) =>
-    multiplier =
-      switch @data.length
-        when 35040 then 900000
-        when 8760  then 3600000
-        else            -1
-
-    if multiplier is -1
-      frame
-    else
-      formatDate(new Date(frame * multiplier))
-
-  drawDateSelect: (intoSelector) ->
-    epoch    = new Date(0)
-    msInWeek = 604800000
-
-    dateEl = $('<select name="date-select" class="form-control" style="max-width: 300px"></select>')
-    dateEl.append($('<option value="0">Whole year</option>'))
-
-    for week in [0...52]
-      startWeek = new Date(epoch.getDate() + (msInWeek * week))
-      endWeek   = new Date(startWeek.getDate() + (msInWeek * week) + msInWeek - (msInWeek / 7))
-
-      if week is 51
-        endWeek = new Date(endWeek.getDate() - 1000)
-
-      optionEl = $("<option value='#{ week + 1 }'></option>")
-      optionEl.text("#{ formatDate(startWeek) } - #{ formatDate(endWeek) }")
-
-      dateEl.append(optionEl)
-
-    dateEl.change =>
-      value = parseInt(dateEl.val(), 10)
-      @renderChart(intoSelector, value)
-
-    $(intoSelector).after(dateEl)
-
-  chart: ->
-    chart = nv.models.lineWithFocusChart()
-
-    chart.options({
-      duration:           0
-      transitionDuration: 0
-      interpolate:        'linear'
-      forceY:             [0.0]
-    })
-
-    chart.useVoronoi(false)
-    chart.lines.duration(0)
-    chart.lines2.duration(0)
-    chart.lines2.forceY([0.0])
-
-    chart.lines.interpolate('step-after')
-    chart.lines2.interpolate('step-after')
-
-    chart.xAxis
-         .tickFormat(@formatDateFromFrame)
-
-    chart.x2Axis
-         .axisLabel("Time")
-         .tickFormat(@formatDateFromFrame)
-
-    chart.yAxis
-         .axisLabel("kW")
-         .axisLabelDistance(35)
-         .tickFormat(d3.format(',.3r'))
-
-    chart.y2Axis
-         .axisLabel("kW")
-         .axisLabelDistance(35)
-         .tickFormat(d3.format(',.3r'))
-
-    chart
-
-window.LoadChart = LoadChart
-
 # Public: Given an array of values, downsamples the array to the given
 # +outLength+. The array is split into "chunks", and the maximum value of each
 # chunk is selected.
@@ -327,39 +195,12 @@ downsampleCurve = (curve, outLength, startAt = 0) ->
 
 window.downsampleCurve = downsampleCurve
 
-createEditor = (textarea) ->
-  id = textarea.attr('id')
-
-  textarea.hide()
-  textarea.data('editor', true)
-
-  textarea.after($("""
-    <div class="editor-wrap"><pre id='#{ id }_editor'></pre></div>
-  """))
-
-  editor = ace.edit("#{ id }_editor")
-  editor.getSession().setValue(textarea.text())
-  editor.getSession().setMode('ace/mode/yaml')
-  editor.setTheme('ace/theme/github')
-  editor.setHighlightActiveLine(false)
-  editor.setShowPrintMargin(false)
-
-  editor.on 'change', ->
-    textarea.text(editor.getSession().getValue())
-
 $(document).on "page:change", ->
   $('.testing-ground-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
-      showTree($(viewEl).data('url'), viewEl)
+      new TopologyTree($(viewEl).data('url'), viewEl).showTree()
 
   $("#testing_ground_technologies_csv").filestyle(buttonBefore: true)
-
-  # Set up the network editors.
-  for selector in ['textarea#topology_graph', 'textarea#testing_ground_technologies', 'textarea#testing_ground_technology_profile']
-    textarea = $(selector)
-
-    if textarea.length and ! textarea.data('editor')
-      createEditor(textarea)
 
   $('#js_technologies_as_yaml, #js_technologies_as_csv').click (event) ->
     editor = $('#testing_ground_technologies_editor').parent()
@@ -370,5 +211,3 @@ $(document).on "page:change", ->
     else
       $('#testing_ground_technologies_csv').show()
       editor.hide()
-
-  $('[data-toggle="tooltip"]').tooltip()
