@@ -6,7 +6,8 @@ class Import
     # Internal: A hash of attributes which may be imported from ETEngine.
     ATTRIBUTES = Hash[[ DemandAttribute,
                         ElectricityOutputCapacityAttribute,
-                        InputCapacityAttribute ].map do |attribute|
+                        InputCapacityAttribute,
+                        StorageVolumeAttribute ].map do |attribute|
       [attribute.remote_name, attribute]
     end].with_indifferent_access.freeze
 

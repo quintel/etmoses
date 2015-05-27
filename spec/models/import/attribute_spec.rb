@@ -62,4 +62,40 @@ RSpec.describe Import::Attribute do
       expect(attribute.inspect).to include('attr2')
     end
   end # given two names
+
+  context 'given a nested hash name' do
+    let(:attribute) { Import::Attribute.new('to', 'attr.thing') }
+
+    context 'when the key is missing' do
+      let(:data) { {} }
+
+      it 'returns 0.0' do
+        expect(attribute.call(data)).to eq(0.0)
+      end
+    end
+
+    context 'when the nested hash is missing' do
+      let(:data) { { 'attr' => {} } }
+
+      it 'returns 0.0' do
+        expect(attribute.call(data)).to eq(0.0)
+      end
+    end
+
+    context 'when the subkey is missing' do
+      let(:data) { { 'attr' => { 'future' => {} } } }
+
+      it 'returns 0.0' do
+        expect(attribute.call(data)).to eq(0.0)
+      end
+    end
+
+    context 'when valid data is given' do
+      let(:data) { { 'attr' => { 'future' => { 'thing' => 1.5 } } } }
+
+      it 'returns the value' do
+        expect(attribute.call(data)).to eq(1.5)
+      end
+    end
+  end # given a nested hash name
 end # describe Import::Attribute

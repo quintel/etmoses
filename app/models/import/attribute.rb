@@ -53,7 +53,18 @@ class Import
     #######
 
     def extract_subkey(data, subkey, period)
-      data.key?(subkey) ? data[subkey][period] : 0.0
+      if subkey.include?('.')
+        # Deal with attributes which map to a value inside a hash. Only one-
+        # hash-deep is supported.
+        subkey, rest = subkey.split('.', 2)
+
+        value     = extract_subkey(data, subkey, period)
+        extracted = value.is_a?(Hash) ? value[rest] : value
+
+        extracted || 0.0
+      else
+        data.key?(subkey) ? data[subkey][period] : 0.0
+      end
     end
   end
 end
