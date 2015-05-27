@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150527112525) do
+ActiveRecord::Schema.define(version: 20150527131134) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
