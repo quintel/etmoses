@@ -1,4 +1,4 @@
-module Ivy
+module Moses
   module Spec
     # Included into RSpec examples and groups when they ask for it. Changes
     # the fixture directory and creates a copy of the fixtures.
@@ -18,7 +18,7 @@ module Ivy
 
       # Sets up the RSpec hooks.
       def self.included(klass)
-        dir = Ivy::Spec::Fixtures.working_dir
+        dir = Moses::Spec::Fixtures.working_dir
 
         klass.before(:each) do
           dir.children.each { |subdir| FileUtils.rm_rf(subdir) }
@@ -26,9 +26,9 @@ module Ivy
         end
 
         klass.around(:each) do |example|
-          Ivy.with_data_dir(dir) { example.run }
+          Moses.with_data_dir(dir) { example.run }
         end
       end
     end # Fixtures
   end # Spec
-end # Ivy
+end # Moses

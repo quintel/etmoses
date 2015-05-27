@@ -5,8 +5,7 @@ class Import
 
     attr_reader :local_name, :remote_name
 
-    # Public: Creates an attribute which converts ETEngine data to ETLoader
-    # data.
+    # Public: Creates an attribute which converts ETEngine data to ETMoses data.
     #
     # local_name  - The name of the InstalledTechnology attribute to which we
     #               will write.
@@ -23,7 +22,7 @@ class Import
       @extractor   = extractor || ->(value, *) { value }
     end
 
-    # Public: Given data from ETEngine, extracts the value for use in ETLoader.
+    # Public: Given data from ETEngine, extracts the value for use in ETMoses.
     #
     # Returns a numeric.
     def call(data)

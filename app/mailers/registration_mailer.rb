@@ -4,6 +4,6 @@ class RegistrationMailer < ActionMailer::Base
   def new_registration(user)
     @user = user
     mail(to: 'chael.kruip@quintel.com',
-         subject: "New registration ETLoader")
+         subject: "New registration ETMoses")
   end
 end

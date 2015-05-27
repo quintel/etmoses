@@ -1,4 +1,4 @@
-module Ivy
+module Moses
   module Spec
     module Network
       # Public: Given an installed technology, creates a Network::Technology which
@@ -11,4 +11,4 @@ module Ivy
       end
     end # Network
   end # Spec
-end # Ivy
+end # Moses

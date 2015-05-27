@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Network::Node do
-  include Ivy::Spec::Network
+  include Moses::Spec::Network
 
   let(:node) { Network::Node.new(:a) }
 

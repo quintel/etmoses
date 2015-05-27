@@ -1,8 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.2.1'
 
-set :application, 'etloader'
-set :repo_url, 'https://github.com/quintel/etloader.git'
+set :application, 'etmoses'
+set :repo_url, 'https://github.com/quintel/etmoses.git'
 
 # Set up rbenv
 set :rbenv_type, :user

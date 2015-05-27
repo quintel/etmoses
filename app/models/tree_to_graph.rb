@@ -7,22 +7,6 @@ class TreeToGraph
   # techs - A hash where each key matches the key of a node, and each value is
   #         an array of technologies connected to the node. Optional.
   #
-  # For example:
-  #
-  #   nodes = YAML.load(<<-EOS.gsub(/  /, ''))
-  #     ---
-  #     name: HV Network
-  #     children:
-  #     - name: MV Network
-  #       children:
-  #       - name: "LV #1"
-  #       - name: "LV #2"
-  #       - name: "LV #3"
-  #   EOS
-  #
-  #   ETLoader.build(structure)
-  #   # => #<Turbine::Graph (5 nodes, 4 edges)>
-  #
   # Returns a Turbine::Graph.
   def self.convert(tree, techs = TechnologyList.new, frame = 0)
     new(tree, techs, frame).to_graph
