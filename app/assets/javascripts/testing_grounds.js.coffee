@@ -10,16 +10,6 @@ focusNone = (element, key) ->
   d3.select(element).selectAll('g.node').classed(focused: false)
   $('#technologies .row').removeClass('focused')
 
-formatDate = (date) ->
-  monthNames = [
-    "January", "February", "March",
-    "April", "May", "June", "July",
-    "August", "September", "October",
-    "November", "December"
-  ]
-
-  "#{ date.getDate() } #{ monthNames[date.getMonth()] }"
-
 # Creates the tree diagram. An experimental, top-down version of the diagram
 # which lacks pan-and-zoom.
 showTopology = (jsonURL, container) ->

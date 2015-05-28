@@ -69,7 +69,7 @@ class LoadChart
     if multiplier is -1
       frame
     else
-      @formatDate(new Date(frame * multiplier))
+      LoadChartHelper.formatDate(new Date(frame * multiplier))
 
   drawDateSelect: (intoSelector) ->
     epoch    = new Date(0)
@@ -86,13 +86,14 @@ class LoadChart
         endWeek = new Date(endWeek.getDate() - 1000)
 
       optionEl = $("<option value='#{ week + 1 }'></option>")
-      optionEl.text("#{ @formatDate(startWeek) } - #{ @formatDate(endWeek) }")
+      optionEl.text("#{ LoadChartHelper.formatDate(startWeek) } - #{ LoadChartHelper.formatDate(endWeek) }")
 
       dateEl.append(optionEl)
 
     dateEl.change =>
       value = parseInt(dateEl.val(), 10)
       @renderChart(intoSelector, value)
+      LoadChartHelper.clearBrush(value)
 
     $(intoSelector).after(dateEl)
 
