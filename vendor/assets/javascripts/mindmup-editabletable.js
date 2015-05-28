@@ -54,6 +54,10 @@ $.fn.editableTableWidget = function (options) {
         var sel = editors.select;
         selectBox = $(".hidden select." + $(this).data('edit-options'));
         sel.html(selectBox.clone(true, true).html());
+        sel.on('change', selectBoxChange.bind(this));
+      },
+      selectBoxChange = function(e){
+        updateNextSelectBox($(e.target).val());
       },
       editorValue = function (edittype) {
         if(edittype == "select"){
@@ -66,8 +70,8 @@ $.fn.editableTableWidget = function (options) {
       editorOffset = function (edittype) {
         if(edittype == "select"){
           return {
-            left: $(this).offset().left - 1,
-            top: $(this).offset().top + 8
+            left: $(this).offset().left - 9,
+            top: $(this).offset().top + 2
           }
         }
         else{
@@ -211,7 +215,7 @@ $.fn.editableTableWidget.defaultOptions = {
             'border', 'border-top', 'border-bottom', 'border-left', 'border-right'],
   editors: {
     text: $('<input type="text">'),
-    select: $('<select>')
+    select: $('<select>').addClass('form-control')
   },
   editor: null,
   active: null,
