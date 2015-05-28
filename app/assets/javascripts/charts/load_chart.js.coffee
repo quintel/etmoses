@@ -93,7 +93,7 @@ class LoadChart
     dateEl.change =>
       value = parseInt(dateEl.val(), 10)
       @renderChart(intoSelector, value)
-      LoadChartHelper.clearBrush(value)
+      LoadChartHelper.clearBrush()
 
     $(intoSelector).after(dateEl)
 

@@ -17,7 +17,7 @@ LoadChartHelper = {
     }
   },
 
-  clearBrush: function(dateValue){
+  clearBrush: function(){
     for(var i = 0; i < this.charts.length; i++){
       if(this.charts[i]){
         this.charts[i].dispatch.brush('');
