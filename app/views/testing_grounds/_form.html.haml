@@ -16,12 +16,25 @@
     = f.label :name, 'Local energy solution name'
     = f.text_field :name, class: 'form-control'
 
-  %p
-    Use the interactive table below to:
-    %ul
-      %li Connect the technologies from your scaled scenario to the endpoints of your chosen network topology.
-      %li Edit the properties of the technologies
-      %li Attach profiles to technologies
+  .form-group
+    = f.label :permissions, "Permissions"
+    %a.tool{href: "#", title: I18n.t("testing_grounds.form.permissions.tooltip"), data: {toggle: "tooltip", placement: "right"}}
+      %span.glyphicon.glyphicon-info-sign
+
+    .radio-buttons
+      = f.radio_button :permissions, "public"
+      = f.label :permissions, "Public", class: "radio-label"
+      = f.radio_button :permissions, "private"
+      = f.label :permissions, "Private", class: "radio-label"
+
+  = f.label :technology_profile, "Technology profile"
+  .help-block
+    %p
+      Use the interactive table below to:
+      %ul
+        %li Connect the technologies from your scaled scenario to the endpoints of your chosen network topology.
+        %li Edit the properties of the technologies
+        %li Attach profiles to technologies
 
   #profiles-table
     = render partial: "testing_grounds/profile_table", locals: {testing_ground_profile: @testing_ground.technology_profile.as_json}

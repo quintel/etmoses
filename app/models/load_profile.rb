@@ -2,6 +2,7 @@ class LoadProfile < ActiveRecord::Base
   has_many :technology_profiles, dependent: :destroy
 
   belongs_to :load_profile_category
+  belongs_to :user
 
   has_attached_file :curve, styles: {
     demand_scaled:   { scale_by: :sum, processors: [:scaled_curve] },
@@ -24,6 +25,15 @@ class LoadProfile < ActiveRecord::Base
 
   accepts_nested_attributes_for :technology_profiles,
     reject_if: :all_blank, allow_destroy: true
+
+  def self.overview(user)
+    where("`user_id` = ? OR `permissions` = 'public'", user).
+    order('`permissions`, `key` ASC')
+  end
+
+  def private?
+    permissions == "private"
+  end
 
   # Public: Returns a hash containing the values to be serialised as JSON.
   # Includes the raw curve values.

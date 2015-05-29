@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529074627) do
+ActiveRecord::Schema.define(version: 20150529122843) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -28,10 +28,12 @@ ActiveRecord::Schema.define(version: 20150529074627) do
   end
 
   create_table "load_profiles", force: true do |t|
-    t.string   "key",                      default: "",    null: false
+    t.string   "key",                      default: "",       null: false
     t.string   "name"
+    t.string   "permissions",              default: "public"
+    t.string   "user_id"
     t.integer  "load_profile_category_id"
-    t.boolean  "locked",                   default: false, null: false
+    t.boolean  "locked",                   default: false,    null: false
     t.string   "curve_file_name"
     t.string   "curve_content_type"
     t.integer  "curve_file_size"
@@ -74,7 +76,9 @@ ActiveRecord::Schema.define(version: 20150529074627) do
 
   create_table "topologies", force: true do |t|
     t.string   "name"
-    t.text     "graph",      limit: 16777215, null: false
+    t.text     "graph",       limit: 16777215,                    null: false
+    t.string   "permissions",                  default: "public"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

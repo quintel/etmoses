@@ -10,7 +10,7 @@ class LoadProfilesController < ApplicationController
 
   # GET /load_profiles
   def show
-    respond_with(@load_profile = LoadProfile.find(params[:id]))
+    PrivatePolicy.new(self, @load_profile).authorize
   end
 
   # GET /load_profiles/new
@@ -20,26 +20,34 @@ class LoadProfilesController < ApplicationController
 
   # POST /load_profiles
   def create
-    respond_with(@load_profile = LoadProfile.create(load_profile_params))
+    respond_with(@load_profile = current_user.load_profiles
+                                  .create(load_profile_params))
   end
 
   # GET /load_profiles/:id/edit
   def edit
-    # @load_profile = LoadProfile.find(params[:id])
+    PrivatePolicy.new(self, @load_profile).authorize
   end
 
   # PATCH /load_profiles/:id
   def update
-    # @load_profile = LoadProfile.find(params[:id])
-    @load_profile.update_attributes(load_profile_params)
+    if PrivatePolicy.new(self, @load_profile).authorized?
+      @load_profile.update_attributes(load_profile_params)
 
-    respond_with(@load_profile)
+      respond_with(@load_profile)
+    else
+      redirect_to load_profiles_path
+    end
   end
 
   # DELETE /load_profiles/:id
   def destroy
-    @load_profile.destroy
-    redirect_to(load_profiles_url)
+    if PrivatePolicy.new(self, @load_profile).authorized?
+      @load_profile.destroy
+      redirect_to(load_profiles_url)
+    else
+      redirect_to load_profiles_path
+    end
   end
 
   #######

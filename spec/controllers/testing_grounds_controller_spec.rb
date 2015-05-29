@@ -153,7 +153,7 @@ RSpec.describe TestingGroundsController do
 
       get :data, format: :json, id: testing_ground.id
 
-      expect(JSON.parse(response.body)).to eq({"message" => "Permission denied"})
+      expect(response.status).to eq(403)
     end
   end
 
@@ -271,6 +271,11 @@ RSpec.describe TestingGroundsController do
                                           topology: topology,
                                           technology_profile: {"lv1" => []}) }
 
+    let(:private_testing_ground){
+      testing_ground.update_column(:permissions, "private")
+      testing_ground
+    }
+
     let(:update_hash){
       TestingGroundsControllerTest.update_hash
     }
@@ -282,6 +287,15 @@ RSpec.describe TestingGroundsController do
                    testing_ground: update_hash
 
       expect(testing_ground.reload.name).to eq("2015-08-02 - Test123")
+    end
+
+    it "doesn't update a private testing ground" do
+      sign_in(user)
+
+      patch :update, id: private_testing_ground.id,
+                   testing_ground: update_hash
+
+      expect(response).to redirect_to testing_grounds_path
     end
 
     it "updates testing ground with a csv" do

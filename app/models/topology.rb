@@ -3,6 +3,8 @@ class Topology < ActiveRecord::Base
 
   DEFAULT_GRAPH = Rails.root.join('db/default_topology.yml').read
 
+  belongs_to :user
+
   validates_presence_of :name
 
   validate :validate_node_names
@@ -12,8 +14,18 @@ class Topology < ActiveRecord::Base
     find_by_name("Default topology")
   end
 
+  def self.overview(user)
+    where("`name` IS NOT NULL").
+    where("`user_id` = ? OR `permissions` = 'public'", user).
+    order("`permissions`, `name` ASC")
+  end
+
   def self.named
     where("`name` IS NOT NULL").order(:name)
+  end
+
+  def private?
+    permissions == "private"
   end
 
   # Traverses each node in the graph, yielding it's data.

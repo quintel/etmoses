@@ -21,6 +21,15 @@ class TestingGround < ActiveRecord::Base
     self.technologies = {} unless technologies
   end
 
+  def self.overview(user)
+    where("`user_id` = ? OR `permissions` = 'public'", user).
+    order('`permissions`, `created_at` DESC')
+  end
+
+  def private?
+    permissions == "private"
+  end
+
   # Creates a hash representing the full topology to be rendered by D3. Copies
   # important attributes from the techologies hash into the topology.
   #

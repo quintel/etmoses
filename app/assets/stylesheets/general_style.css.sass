@@ -1,4 +1,24 @@
+$tooltip-color: #eee
+
 em.note span.sep
   border-left: 1px solid #999
   padding: 0 0 0 12px
   margin: 0 0 0 8px
+
+a.tool
+  color: black
+
+  &:hover
+    color: black
+
+.tool + .tooltip
+  &.right .tooltip-arrow
+    border-right-color: $tooltip-color
+
+  > .tooltip-inner
+    color: black
+    background-color: $tooltip-color
+    opacity: 1
+    max-width: 400px
+    text-align: left
+    padding: 10px 10px 10px 15px
