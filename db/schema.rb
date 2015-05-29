@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150527131134) do
+ActiveRecord::Schema.define(version: 20150529074627) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -60,13 +60,14 @@ ActiveRecord::Schema.define(version: 20150527131134) do
   add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profiles_on_load_profile_id", using: :btree
 
   create_table "testing_grounds", force: true do |t|
-    t.text     "technologies",       limit: 16777215,              null: false
+    t.text     "technologies",       limit: 16777215,                    null: false
     t.text     "technology_profile", limit: 16777215
     t.integer  "user_id"
     t.integer  "topology_id"
+    t.string   "permissions",                         default: "public"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",               limit: 100,      default: "", null: false
+    t.string   "name",               limit: 100,      default: "",       null: false
     t.integer  "scenario_id"
     t.integer  "parent_scenario_id"
   end

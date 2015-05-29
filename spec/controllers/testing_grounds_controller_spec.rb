@@ -135,15 +135,60 @@ RSpec.describe TestingGroundsController do
     end
   end
 
-  describe "#show.json" do
+  describe "#data.json" do
     it "shows the data of a testing ground" do
       sign_in(user)
 
       testing_ground = FactoryGirl.create(:testing_ground)
 
-      get :show, format: :json, id: testing_ground.id
+      get :data, format: :json, id: testing_ground.id
 
       expect(JSON.parse(response.body)).to eq(TestingGroundsControllerTest.show_hash)
+    end
+
+    it "denies permission for the data of a private testing grounds" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground, permissions: 'private')
+
+      get :data, format: :json, id: testing_ground.id
+
+      expect(JSON.parse(response.body)).to eq({"message" => "Permission denied"})
+    end
+  end
+
+  describe "#show" do
+    it "shows a testing ground" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground)
+
+      get :show, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+
+    it "doesn't show a testing ground when it's private" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                          permissions: 'private')
+
+      get :show, id: testing_ground.id
+
+      expect(response).to redirect_to(testing_grounds_path)
+    end
+
+    it "shows a testing ground when it's private" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                          user: user,
+                                          permissions: 'private')
+
+      get :show, id: testing_ground.id
+
+      expect(response.status).to eq(200)
     end
   end
 
@@ -178,6 +223,29 @@ RSpec.describe TestingGroundsController do
 
       testing_ground = FactoryGirl.create(:testing_ground,
                                            technology_profile: {"lv1" => []})
+
+      get :edit, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+
+    it "doesn't show the edit page of a testing ground when it's private" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                          permissions: 'private')
+
+      get :edit, id: testing_ground.id
+
+      expect(response).to redirect_to(testing_grounds_path)
+    end
+
+    it "shows the edit page of a testing ground when it's private" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                          user: user,
+                                          permissions: 'private')
 
       get :edit, id: testing_ground.id
 
