@@ -28,12 +28,12 @@ ActiveRecord::Schema.define(version: 20150529122843) do
   end
 
   create_table "load_profiles", force: true do |t|
-    t.string   "key",                      default: "",       null: false
+    t.string   "key",                      default: "",    null: false
     t.string   "name"
-    t.string   "permissions",              default: "public"
+    t.boolean  "public",                   default: true,  null: false
     t.string   "user_id"
     t.integer  "load_profile_category_id"
-    t.boolean  "locked",                   default: false,    null: false
+    t.boolean  "locked",                   default: false, null: false
     t.string   "curve_file_name"
     t.string   "curve_content_type"
     t.integer  "curve_file_size"
@@ -62,22 +62,22 @@ ActiveRecord::Schema.define(version: 20150529122843) do
   add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profiles_on_load_profile_id", using: :btree
 
   create_table "testing_grounds", force: true do |t|
-    t.text     "technologies",       limit: 16777215,                    null: false
+    t.text     "technologies",       limit: 16777215,                null: false
     t.text     "technology_profile", limit: 16777215
     t.integer  "user_id"
     t.integer  "topology_id"
-    t.string   "permissions",                         default: "public"
+    t.boolean  "public",                              default: true, null: false
+    t.integer  "parent_scenario_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",               limit: 100,      default: "",       null: false
+    t.string   "name",               limit: 100,      default: "",   null: false
     t.integer  "scenario_id"
-    t.integer  "parent_scenario_id"
   end
 
   create_table "topologies", force: true do |t|
     t.string   "name"
-    t.text     "graph",       limit: 16777215,                    null: false
-    t.string   "permissions",                  default: "public"
+    t.text     "graph",      limit: 16777215,                null: false
+    t.boolean  "public",                      default: true, null: false
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"

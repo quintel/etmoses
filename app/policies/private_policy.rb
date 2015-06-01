@@ -13,14 +13,12 @@ class PrivatePolicy
   end
 
   def authorized?
-    return true if @entity.permissions == "public"
-    return true if @entity.private? &&
-                   @controller.current_user == @entity.user
+    @entity.public? || @controller.current_user == @entity.user
   end
 
   private
 
-    def redirect_path
-      @controller.url_for([@entity.class])
-    end
+  def redirect_path
+    @controller.url_for([@entity.class])
+  end
 end

@@ -1,4 +1,6 @@
 class Topology < ActiveRecord::Base
+  include Privacy
+
   serialize :graph, JSON
 
   DEFAULT_GRAPH = Rails.root.join('db/default_topology.yml').read
@@ -15,17 +17,11 @@ class Topology < ActiveRecord::Base
   end
 
   def self.overview(user)
-    where("`name` IS NOT NULL").
-    where("`user_id` = ? OR `permissions` = 'public'", user).
-    order("`permissions`, `name` ASC")
+    visible_to(user).where("`name` IS NOT NULL").order(:name)
   end
 
   def self.named
     where("`name` IS NOT NULL").order(:name)
-  end
-
-  def private?
-    permissions == "private"
   end
 
   # Traverses each node in the graph, yielding it's data.

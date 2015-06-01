@@ -1,4 +1,6 @@
 class LoadProfile < ActiveRecord::Base
+  include Privacy
+
   has_many :technology_profiles, dependent: :destroy
 
   belongs_to :load_profile_category
@@ -27,12 +29,7 @@ class LoadProfile < ActiveRecord::Base
     reject_if: :all_blank, allow_destroy: true
 
   def self.overview(user)
-    where("`user_id` = ? OR `permissions` = 'public'", user).
-    order('`permissions`, `key` ASC')
-  end
-
-  def private?
-    permissions == "private"
+    visible_to(user).order(:key)
   end
 
   # Public: Returns a hash containing the values to be serialised as JSON.

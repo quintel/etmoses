@@ -10,15 +10,15 @@
     .help-block This field is optional.
 
   .form-group
-    = form.label :permissions, "Permissions"
-    %a.tool{href: "#", title: I18n.t("topologies.form.permissions.tooltip"), data: {toggle: "tooltip", placement: "right"}}
+    = form.label :public, "Permissions"
+    %a.tool{href: "#", title: I18n.t("topologies.form.public.tooltip"), data: {toggle: "tooltip", placement: "right"}}
       %span.glyphicon.glyphicon-info-sign
 
     .radio-buttons
-      = form.radio_button :permissions, "public"
-      = form.label :permissions, "Public", class: "radio-label"
-      = form.radio_button :permissions, "private"
-      = form.label :permissions, "Private", class: "radio-label"
+      = form.radio_button :public, true
+      = form.label :public, "Public", class: "radio-label"
+      = form.radio_button :public, false
+      = form.label :public, "Private", class: "radio-label"
 
   .form-group
     = form.label :graph

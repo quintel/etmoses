@@ -23,10 +23,10 @@ en:
   testing_grounds:
     data:
       error: 'Sorry, your local energy solution could not be calculated'
-      permission_denied: "You don't have the correct permissions to view this data"
+      permission_denied: "You don't have permission to view this"
 
     form:
-      permissions:
+      public:
         tooltip: >
           Please select if this is a private or public local energy
           solution. A private local energy solution can only be edited and
@@ -34,14 +34,14 @@ en:
 
   topologies:
     form:
-      permissions:
+      public:
         tooltip: >
           Please select if this is a private or public topology. A private
           topology can only be edited, used and viewed by you.
 
   load_profiles:
     form:
-      permissions:
+      public:
         tooltip: >
           Please select if this is a private or public load profile. A private
           load profile can only be edited, used and viewed by you.

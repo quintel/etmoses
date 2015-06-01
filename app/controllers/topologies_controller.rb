@@ -56,6 +56,6 @@ class TopologiesController < ApplicationController
     end
 
     def topology_params
-      params.require(:topology).permit(:name, :graph, :permissions)
+      params.require(:topology).permit(:name, :graph, :public)
     end
 end

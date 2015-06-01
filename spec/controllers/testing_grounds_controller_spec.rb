@@ -149,7 +149,7 @@ RSpec.describe TestingGroundsController do
     it "denies permission for the data of a private testing grounds" do
       sign_in(user)
 
-      testing_ground = FactoryGirl.create(:testing_ground, permissions: 'private')
+      testing_ground = FactoryGirl.create(:testing_ground, public: false)
 
       get :data, format: :json, id: testing_ground.id
 
@@ -171,8 +171,7 @@ RSpec.describe TestingGroundsController do
     it "doesn't show a testing ground when it's private" do
       sign_in(user)
 
-      testing_ground = FactoryGirl.create(:testing_ground,
-                                          permissions: 'private')
+      testing_ground = FactoryGirl.create(:testing_ground, public: false)
 
       get :show, id: testing_ground.id
 
@@ -183,8 +182,7 @@ RSpec.describe TestingGroundsController do
       sign_in(user)
 
       testing_ground = FactoryGirl.create(:testing_ground,
-                                          user: user,
-                                          permissions: 'private')
+                                          user: user, public: false)
 
       get :show, id: testing_ground.id
 
@@ -232,8 +230,7 @@ RSpec.describe TestingGroundsController do
     it "doesn't show the edit page of a testing ground when it's private" do
       sign_in(user)
 
-      testing_ground = FactoryGirl.create(:testing_ground,
-                                          permissions: 'private')
+      testing_ground = FactoryGirl.create(:testing_ground, public: false)
 
       get :edit, id: testing_ground.id
 
@@ -244,8 +241,7 @@ RSpec.describe TestingGroundsController do
       sign_in(user)
 
       testing_ground = FactoryGirl.create(:testing_ground,
-                                          user: user,
-                                          permissions: 'private')
+                                          user: user, public: false)
 
       get :edit, id: testing_ground.id
 
@@ -272,7 +268,7 @@ RSpec.describe TestingGroundsController do
                                           technology_profile: {"lv1" => []}) }
 
     let(:private_testing_ground){
-      testing_ground.update_column(:permissions, "private")
+      testing_ground.update_column(:public, false)
       testing_ground
     }
 
