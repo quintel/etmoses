@@ -40,4 +40,47 @@ module TestingGroundsHelper
   def can_export?(testing_ground)
     testing_ground.scenario_id.present?
   end
+
+  def profile_table_data(type, technology)
+    case type
+    when :node
+      { edit_type:    'select',
+        edit_options: 'nodes',
+        edit_selected: technology.jquery_safe }
+    when :name
+      { edit_type:     'select',
+        edit_options:  'name',
+        edit_selected: technology[:type] }
+    when :profile
+      { edit_type:     'select',
+        edit_options:  technology[:type],
+        edit_selected: (technology[:profile] || '').jquery_safe }
+    else
+      { edit_type: 'text' }
+    end
+  end
+
+  def profile_table_options_for_profile(technology)
+    load_profiles = technology.load_profiles.map do |load_profile|
+      [load_profile.key, load_profile.key.jquery_safe]
+    end
+
+    options_for_select(load_profiles)
+  end
+
+  def profile_table_options_for_name
+    technologies = @technologies.map do |technology|
+      [technology.name, technology.key]
+    end
+
+    options_for_select(technologies)
+  end
+
+  def node_options(profile)
+    node_options = profile.keys.map do |key|
+      [key, key.jquery_safe]
+    end
+
+    options_for_select(node_options)
+  end
 end

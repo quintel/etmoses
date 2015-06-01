@@ -2,6 +2,8 @@ class Technology < ActiveRecord::Base
   GENERIC_REGEX = /^(generic|base_load)$/
 
   has_many :importable_attributes, dependent: :delete_all
+  has_many :technology_profiles, foreign_key: "technology", primary_key: "key"
+  has_many :load_profiles, through: :technology_profiles
 
   validates :key,
     presence: true,

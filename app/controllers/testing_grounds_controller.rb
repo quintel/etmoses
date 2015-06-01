@@ -4,6 +4,8 @@ class TestingGroundsController < ApplicationController
   respond_to :js, only: :calculate_concurrency
 
   before_filter :prepare_export, only: %i( export perform_export )
+  before_filter :load_technologies, only: [:perform_import, :update, :create,
+                                           :edit, :new, :calculate_concurrency]
 
   # GET /topologies
   def index
@@ -140,5 +142,9 @@ class TestingGroundsController < ApplicationController
   def prepare_export
     @testing_ground = TestingGround.find(params[:id])
     @export         = Export.new(@testing_ground)
+  end
+
+  def load_technologies
+    @technologies = Technology.all
   end
 end # TestingGroundsController
