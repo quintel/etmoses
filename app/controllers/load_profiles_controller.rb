@@ -1,8 +1,8 @@
 class LoadProfilesController < ResourceController
   RESOURCE_ACTIONS = %i(show edit update destroy)
 
-  before_filter :fetch_load_profile, only: self::RESOURCE_ACTIONS
-  before_filter :authorize_generic, except: self::RESOURCE_ACTIONS
+  before_filter :fetch_load_profile, only: RESOURCE_ACTIONS
+  before_filter :authorize_generic, except: RESOURCE_ACTIONS
 
   respond_to :html
   respond_to :json, only: :show
