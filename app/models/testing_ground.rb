@@ -23,8 +23,8 @@ class TestingGround < ActiveRecord::Base
     self.technologies = {} unless technologies
   end
 
-  def self.overview(user)
-    visible_to(user).order(created_at: :desc)
+  def self.latest_first
+    order(created_at: :desc)
   end
 
   # Creates a hash representing the full topology to be rendered by D3. Copies

@@ -28,8 +28,8 @@ class LoadProfile < ActiveRecord::Base
   accepts_nested_attributes_for :technology_profiles,
     reject_if: :all_blank, allow_destroy: true
 
-  def self.overview(user)
-    visible_to(user).order(:key)
+  def self.in_name_order
+    order('COALESCE(`name`, `key`), `name`, `key`')
   end
 
   # Public: Returns a hash containing the values to be serialised as JSON.

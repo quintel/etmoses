@@ -1,16 +1,18 @@
-class TopologiesController < ApplicationController
+class TopologiesController < ResourceController
+  RESOURCE_ACTIONS = %i(show edit update destroy)
+
   respond_to :html
   respond_to :json, only: :show
 
-  before_filter :fetch_topology, except: [:index, :new, :create]
+  before_filter :fetch_topology, only: RESOURCE_ACTIONS
+  before_filter :authorize_generic, except: RESOURCE_ACTIONS
 
   def index
-    @topologies = Topology.overview(current_user)
+    @topologies = policy_scope(Topology).in_name_order
   end
 
   # GET /topologies
   def show
-    PrivatePolicy.new(self, @topology).authorize
   end
 
   # GET /topologies/new
@@ -25,37 +27,28 @@ class TopologiesController < ApplicationController
 
   # GET /topologies/:id/edit
   def edit
-    PrivatePolicy.new(self, @topology).authorize
   end
 
   # PATCH /topologies/:id
   def update
-    if PrivatePolicy.new(self, @topology).authorized?
-      @topology.update_attributes(topology_params)
-
-      respond_with(@topology)
-    else
-      redirect_to topologies_path
-    end
+    @topology.update_attributes(topology_params)
+    respond_with(@topology)
   end
 
   # DELETE /topologies/:id
   def destroy
-    if PrivatePolicy.new(self, @topology).authorize
-      @topology.destroy
-      redirect_to(topologies_url)
-    else
-      redirect_to topologies_path
-    end
+    @topology.destroy
+    redirect_to(topologies_url)
   end
 
   private
 
-    def fetch_topology
-      @topology = Topology.find(params[:id])
-    end
+  def fetch_topology
+    @topology = Topology.find(params[:id])
+    authorize @topology
+  end
 
-    def topology_params
-      params.require(:topology).permit(:name, :graph, :public)
-    end
+  def topology_params
+    params.require(:topology).permit(:name, :graph, :public)
+  end
 end

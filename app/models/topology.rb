@@ -16,12 +16,12 @@ class Topology < ActiveRecord::Base
     find_by_name("Default topology")
   end
 
-  def self.overview(user)
-    visible_to(user).where("`name` IS NOT NULL").order(:name)
+  def self.in_name_order
+    order(:name)
   end
 
   def self.named
-    where("`name` IS NOT NULL").order(:name)
+    where("`name` IS NOT NULL").in_name_order
   end
 
   # Traverses each node in the graph, yielding it's data.

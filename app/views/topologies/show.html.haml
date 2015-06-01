@@ -5,8 +5,8 @@
     = @topology.graph.to_json
 
 .commit
-  = link_to('Edit', edit_topology_path(@topology), class: 'button')
+  = link_to_if(policy(@topology).edit?, 'Edit', edit_topology_path(@topology), class: 'button')
   %span.or or
-  = link_to('Delete', topology_path(@topology), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this topology?' })
+  = link_to_if(policy(@topology).destroy?, 'Delete', topology_path(@topology), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this topology?' })
 
 = link_to '◄ All topologies', topologies_path, class: 'button button-primary'

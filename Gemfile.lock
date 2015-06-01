@@ -186,6 +186,8 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.2)
       pry (>= 0.9.10)
+    pundit (1.0.1)
+      activesupport (>= 3.0.0)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -337,6 +339,7 @@ DEPENDENCIES
   mysql2 (~> 0.3.18)
   paperclip (~> 4.2)
   pry-rails
+  pundit (~> 1.0)
   quintel_merit!
   rails (= 4.1.8)
   rest-client

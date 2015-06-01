@@ -2,7 +2,8 @@
   - if can_export?(@testing_ground)
     = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
 
-  = link_to "Edit", edit_testing_ground_path(@testing_ground), style: "margin-right: 10px", class: "btn btn-default pull-right"
+  - if policy(@testing_ground).edit?
+    = link_to "Edit", edit_testing_ground_path(@testing_ground), style: "margin-right: 10px", class: "btn btn-default pull-right"
 
   = "Local Energy Solution (LES) ##{ @testing_ground.id }:"
   = @testing_ground.name

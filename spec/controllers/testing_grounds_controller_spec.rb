@@ -175,7 +175,7 @@ RSpec.describe TestingGroundsController do
 
       get :show, id: testing_ground.id
 
-      expect(response).to redirect_to(testing_grounds_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it "shows a testing ground when it's private" do
@@ -216,7 +216,19 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#edit" do
-    it "visits edit path" do
+    it "visits edit path of owned testing ground" do
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground,
+                                           user: user,
+                                           technology_profile: {"lv1" => []})
+
+      get :edit, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+
+    it "visits edit path of another users testing ground" do
       sign_in(user)
 
       testing_ground = FactoryGirl.create(:testing_ground,
@@ -224,7 +236,7 @@ RSpec.describe TestingGroundsController do
 
       get :edit, id: testing_ground.id
 
-      expect(response.status).to eq(200)
+      expect(response).to redirect_to(root_path)
     end
 
     it "doesn't show the edit page of a testing ground when it's private" do
@@ -234,7 +246,7 @@ RSpec.describe TestingGroundsController do
 
       get :edit, id: testing_ground.id
 
-      expect(response).to redirect_to(testing_grounds_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it "shows the edit page of a testing ground when it's private" do
@@ -264,11 +276,12 @@ RSpec.describe TestingGroundsController do
 
     let(:testing_ground){
       FactoryGirl.create(:testing_ground, name: "Hello world",
+                                          user: user,
                                           topology: topology,
                                           technology_profile: {"lv1" => []}) }
 
     let(:private_testing_ground){
-      testing_ground.update_column(:public, false)
+      testing_ground.update_attributes(public: false, user_id: 999999)
       testing_ground
     }
 
@@ -291,7 +304,7 @@ RSpec.describe TestingGroundsController do
       patch :update, id: private_testing_ground.id,
                    testing_ground: update_hash
 
-      expect(response).to redirect_to testing_grounds_path
+      expect(response).to redirect_to(root_path)
     end
 
     it "updates testing ground with a csv" do

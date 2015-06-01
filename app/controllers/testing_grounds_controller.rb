@@ -1,17 +1,21 @@
-class TestingGroundsController < ApplicationController
+class TestingGroundsController < ResourceController
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy)
+
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
   respond_to :js, only: :calculate_concurrency
 
-  before_filter :find_testing_ground, only: [:edit, :update, :show,
-    :technology_profile, :data, :destroy]
-  before_filter :prepare_export, only: %i( export perform_export )
+  before_filter :find_testing_ground, only: RESOURCE_ACTIONS
+  before_filter :authorize_generic, except: RESOURCE_ACTIONS
+
+  before_filter :prepare_export, only: %i(export perform_export)
+
   before_filter :load_technologies, only: [:perform_import, :update, :create,
                                            :edit, :new, :calculate_concurrency]
 
   # GET /topologies
   def index
-    respond_with(@testing_grounds = TestingGround.overview(current_user))
+    @testing_grounds = policy_scope(TestingGround).latest_first
   end
 
   # GET /topologies/import
@@ -54,48 +58,31 @@ class TestingGroundsController < ApplicationController
 
   # GET /topologies/:id
   def show
-    PrivatePolicy.new(self, @testing_ground).authorize
   end
 
   def data
-    begin
-      if PrivatePolicy.new(self, @testing_ground).authorized?
-        render json: @testing_ground.to_json(storage: params[:storage] == '1')
-      else
-        render json: {
-                 message: I18n.t("testing_grounds.data.permission_denied")
-               },
-               status: 403
-      end
-    rescue StandardError => ex
-      notify_airbrake(ex) if defined?(Airbrake)
+    render json: @testing_ground.to_json(storage: params[:storage] == '1')
+  rescue StandardError => ex
+    notify_airbrake(ex) if defined?(Airbrake)
 
-      result = { error: I18n.t("testing_grounds.data.error") }
+    result = { error: I18n.t("testing_grounds.data.error") }
 
-      if Rails.env.development? || Rails.env.test?
-        result[:message]   = "#{ ex.class }: #{ ex.message }"
-        result[:backtrace] = ex.backtrace
-      end
-
-      render json: result,
-             status: 500
+    if Rails.env.development? || Rails.env.test?
+      result[:message]   = "#{ ex.class }: #{ ex.message }"
+      result[:backtrace] = ex.backtrace
     end
+
+    render json: result, status: 500
   end
 
   # GET /topologies/:id/edit
   def edit
-    PrivatePolicy.new(self, @testing_ground).authorize
   end
 
   # PATCH /topologies/:id
   def update
-    if PrivatePolicy.new(self, @testing_ground).authorized?
-      @testing_ground.update_attributes(testing_ground_params)
-
-      respond_with(@testing_ground)
-    else
-      redirect_to testing_grounds_path
-    end
+    @testing_ground.update_attributes(testing_ground_params)
+    respond_with(@testing_ground)
   end
 
   # POST /topologies/calculate_concurrency
@@ -110,9 +97,7 @@ class TestingGroundsController < ApplicationController
 
   # GET /testing_grounds/:id/technology_profile.csv
   def technology_profile
-    if PrivatePolicy.new(self, @testing_ground).authorized?
-      respond_with(@testing_ground.technology_profile)
-    end
+    respond_with(@testing_ground.technology_profile)
   end
 
   private
@@ -149,6 +134,7 @@ class TestingGroundsController < ApplicationController
 
   def find_testing_ground
     @testing_ground = TestingGround.find(params[:id])
+    authorize @testing_ground
   end
 
   # Internal: Before filter which loads models required for export-to-ETEngine

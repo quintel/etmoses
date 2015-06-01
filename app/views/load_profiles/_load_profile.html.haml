@@ -1,5 +1,5 @@
 %ul
-  - load_profile_category.load_profiles.overview(current_user).each do |profile|
+  - policy_scope(load_profile_category.load_profiles).in_name_order.each do |profile|
     %li
       = link_to profile do
         - if profile.private?
