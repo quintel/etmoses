@@ -5,12 +5,12 @@ class TopologiesController < ApplicationController
   before_filter :fetch_topology, except: [:index, :new, :create]
 
   def index
-    @topologies = Topology.named
+    @topologies = Topology.overview(current_user)
   end
 
   # GET /topologies
   def show
-    respond_with(@topology = Topology.find(params[:id]))
+    PrivatePolicy.new(self, @topology).authorize
   end
 
   # GET /topologies/new
@@ -20,26 +20,33 @@ class TopologiesController < ApplicationController
 
   # POST /topologies
   def create
-    respond_with(@topology = Topology.create(topology_params))
+    respond_with(@topology = current_user.topologies.create(topology_params))
   end
 
   # GET /topologies/:id/edit
   def edit
-    # @topology = Topology.find(params[:id])
+    PrivatePolicy.new(self, @topology).authorize
   end
 
   # PATCH /topologies/:id
   def update
-    # @topology = Topology.find(params[:id])
-    @topology.update_attributes(topology_params)
+    if PrivatePolicy.new(self, @topology).authorized?
+      @topology.update_attributes(topology_params)
 
-    respond_with(@topology)
+      respond_with(@topology)
+    else
+      redirect_to topologies_path
+    end
   end
 
   # DELETE /topologies/:id
   def destroy
-    @topology.destroy
-    redirect_to(topologies_url)
+    if PrivatePolicy.new(self, @topology).authorize
+      @topology.destroy
+      redirect_to(topologies_url)
+    else
+      redirect_to topologies_path
+    end
   end
 
   private
@@ -49,6 +56,6 @@ class TopologiesController < ApplicationController
     end
 
     def topology_params
-      params.require(:topology).permit(:name, :graph)
+      params.require(:topology).permit(:name, :graph, :public)
     end
 end

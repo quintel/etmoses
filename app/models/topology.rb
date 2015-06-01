@@ -1,7 +1,11 @@
 class Topology < ActiveRecord::Base
+  include Privacy
+
   serialize :graph, JSON
 
   DEFAULT_GRAPH = Rails.root.join('db/default_topology.yml').read
+
+  belongs_to :user
 
   validates_presence_of :name
 
@@ -10,6 +14,10 @@ class Topology < ActiveRecord::Base
 
   def self.default
     find_by_name("Default topology")
+  end
+
+  def self.overview(user)
+    visible_to(user).where("`name` IS NOT NULL").order(:name)
   end
 
   def self.named

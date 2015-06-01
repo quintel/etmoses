@@ -1,7 +1,12 @@
 %h1 Previously saved Local Energy Solutions
 
 %table.table.table-striped
-  - @testing_grounds.each do |tg|
+  - @testing_grounds.each do |testing_ground|
     %tr
-      %td= link_to tg.name, testing_ground_path(tg)
-      %td= tg.created_at.to_formatted_s(:long)
+      %td
+        = link_to testing_ground_path(testing_ground) do
+          - if testing_ground.private?
+            %span.glyphicon.glyphicon-lock
+          = testing_ground.name
+
+      %td= testing_ground.created_at.to_formatted_s(:long)

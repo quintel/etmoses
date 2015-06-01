@@ -1,4 +1,6 @@
 class TestingGround < ActiveRecord::Base
+  include Privacy
+
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
 
   IMPORT_PROVIDERS = %w(beta.et-engine.com).freeze
@@ -19,6 +21,10 @@ class TestingGround < ActiveRecord::Base
 
   before_validation do
     self.technologies = {} unless technologies
+  end
+
+  def self.overview(user)
+    visible_to(user).order(created_at: :desc)
   end
 
   # Creates a hash representing the full topology to be rendered by D3. Copies

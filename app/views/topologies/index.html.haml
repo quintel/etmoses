@@ -11,6 +11,8 @@
         %tr
           %td
             = link_to topology do
+              - if topology.private?
+                %span.glyphicon.glyphicon-lock
               = (topology.name || "No name specified")
 
           %td= I18n.l(topology.created_at, format: :short)

@@ -2,17 +2,18 @@
   - if can_export?(@testing_ground)
     = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
 
-  = link_to "Enable Storage", '#', style: "margin-right: 10px", class: "btn btn-default pull-right", id: 'enable-storage'
   = link_to "Edit", edit_testing_ground_path(@testing_ground), style: "margin-right: 10px", class: "btn btn-default pull-right"
 
   = "Local Energy Solution (LES) ##{ @testing_ground.id }:"
   = @testing_ground.name
 
 %em.note
+  - if @testing_ground.private?
+    %span.glyphicon.glyphicon-lock
+
   Created by #{@testing_ground.user.name} on
-  = @testing_ground.created_at.to_formatted_s(:long)
-  last updated on
-  = @testing_ground.updated_at.to_formatted_s(:long)
+  %span.date{title: "last updated on #{@testing_ground.updated_at.to_formatted_s(:long)}"}
+    = @testing_ground.created_at.to_formatted_s(:long)
 
   - if @testing_ground.parent_scenario_id
     %span.sep
@@ -23,13 +24,18 @@
       = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
 
 #testing-ground
-  .testing-ground-view{ "data-url" => testing_ground_url(@testing_ground, format: :json) }
+  .testing-ground-view{ "data-url" => data_testing_ground_url(@testing_ground, format: :json) }
     %span.loading
       %h5
         %span.main Calculating your local energy solution&hellip;
       %span.more
         Large local energy solutions may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
+
+  = link_to "Enable Storage", '#', style: "margin-right: 10px", class: "btn btn-default", id: 'enable-storage'
+  = link_to topology_path(@testing_ground.topology), class: "pull-right btn btn-default", target: "_blank" do
+    View
+    = "'#{truncate(@testing_ground.topology.name, length: 20)}'"
 
 .node-info
   %h5

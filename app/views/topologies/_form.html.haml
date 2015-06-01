@@ -10,6 +10,17 @@
     .help-block This field is optional.
 
   .form-group
+    = form.label :public, "Permissions"
+    %a.tool{href: "#", title: I18n.t("topologies.form.public.tooltip"), data: {toggle: "tooltip", placement: "right"}}
+      %span.glyphicon.glyphicon-info-sign
+
+    .radio-buttons
+      = form.radio_button :public, true
+      = form.label :public, "Public", class: "radio-label"
+      = form.radio_button :public, false
+      = form.label :public, "Private", class: "radio-label"
+
+  .form-group
     = form.label :graph
     = form.text_area :graph, value: topology_field_value(@topology)
 
