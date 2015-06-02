@@ -36,7 +36,7 @@
   = link_to "Enable Storage", '#', style: "margin-right: 10px", class: "btn btn-default", id: 'enable-storage'
   = link_to topology_path(@testing_ground.topology), class: "pull-right btn btn-default", target: "_blank" do
     View
-    = "'#{truncate(@testing_ground.topology.name, length: 20)}'"
+    = truncate(@testing_ground.topology.name, length: 25)
 
 .node-info
   %h5
