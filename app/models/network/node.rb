@@ -23,7 +23,11 @@ module Network
     #
     # Returns a numeric.
     def load_at(frame)
-      load[frame] ||= consumption_at(frame) - production_at(frame)
+      consumption_at(frame) - production_at(frame)
+    end
+
+    def cache_load_at!(frame)
+      load[frame] = load_at(frame)
     end
 
     # Public: Determines the production load of the node. This is the amount of
@@ -94,6 +98,26 @@ module Network
 
         tech.store(frame, assign)
       end
+    end
+
+    # Public: If the node has a capacity restriction, returns by how much the
+    # load may be increased before reaching the limit. Returns infinity if no
+    # capacity is present.
+    def available_capacity_at(frame)
+      capacity = get(:capacity)
+
+      return Float::INFINITY if capacity.nil?
+
+      available = capacity - load_at(frame)
+      available <= 0 ? 0.0 : available
+    end
+
+    # Public: Determines if the load of the node exceeds its capacity.
+    #
+    # Returns true or false.
+    def congested_at?(frame)
+      capacity = get(:capacity)
+      capacity && load_at(frame) > capacity
     end
 
     #######

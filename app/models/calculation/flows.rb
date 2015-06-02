@@ -16,7 +16,7 @@ module Calculation
     # Returns the graph.
     def call(context)
       context.frames do |frame|
-        context.graph.nodes.each { |n| n.load_at(frame) }
+        context.graph.nodes.each { |n| n.cache_load_at!(frame) }
       end
 
       context

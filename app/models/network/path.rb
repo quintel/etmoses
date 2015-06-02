@@ -36,6 +36,23 @@ module Network
       @leaf.mandatory_consumption_at(frame)
     end
 
+    # Public: Returns the minimum available capacity of the nodes in the path.
+    # If capacity has been exceeded, 0.0 will be returned, while no set capacity
+    # will return Infinity.
+    #
+    # Returns a numeric.
+    def available_capacity_at(frame)
+      @path.map { |node| node.available_capacity_at(frame) }.min
+    end
+
+    # Public: Determines if the load of the any node in the path node exceeds
+    # its capacity.
+    #
+    # Returns true or false.
+    def congested_at?(frame)
+      @path.any? { |node| node.congested_at?(frame) }
+    end
+
     # Public: Sends a given amount of energy down the path, increasing the
     # consumption flow of each node.
     #
