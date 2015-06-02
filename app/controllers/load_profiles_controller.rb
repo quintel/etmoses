@@ -14,6 +14,7 @@ class LoadProfilesController < ResourceController
 
   # GET /load_profiles
   def show
+    respond_with(@load_profile)
   end
 
   # GET /load_profiles/new
