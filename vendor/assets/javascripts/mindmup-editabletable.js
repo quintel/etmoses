@@ -14,10 +14,6 @@ $.fn.editableTableWidget = function (options) {
           .css('position', 'absolute')
           .hide()
           .appendTo(element.parent()),
-        select: activeOptions.editors.select
-          .css('position', 'absolute')
-          .hide()
-          .appendTo(element.parent())
       },
       editor = null,
       selectBox = null,
@@ -31,7 +27,7 @@ $.fn.editableTableWidget = function (options) {
       },
       showEditor = function (select) {
         active = element.find('td:focus');
-        if (active.length) {
+        if (active.length && !active.hasClass("select")) {
           var edittype = getEditType();
           editor = editors[edittype];
           editor.val(editorValue.call(active, edittype))
@@ -92,13 +88,6 @@ $.fn.editableTableWidget = function (options) {
           originalContent;
 
         var edittype = getEditType();
-        if (edittype == 'select') {
-          if (text !== '') {
-            updateNextSelectBox(text);
-            text = selectBox.find("option[value='"+text+"']").text();
-          }
-        }
-
         if (active.text() === text || editor.hasClass('error')) {
           return true;
         }
@@ -108,19 +97,6 @@ $.fn.editableTableWidget = function (options) {
         if (evt.result === false) {
           active.html(originalContent);
         }
-      },
-      updateNextSelectBox = function(selectValue){
-        if(active.data('edit-options') != 'nodes'){
-          var nextCell     = active.next();
-          var selectBoxVal = $("select." + selectValue).val();
-
-          active.data('edit-selected', selectValue);
-          nextCell.text(selectBoxVal);
-          nextCell.data({
-            'edit-selected': selectBoxVal,
-            'edit-options': selectValue
-          });
-        };
       },
       movement = function (element, keycode) {
         if (keycode === ARROW_RIGHT) {
@@ -211,8 +187,7 @@ $.fn.editableTableWidget.defaultOptions = {
   cloneProperties: ['text-align', 'font', 'font-size', 'font-family', 'font-weight',
             'border', 'border-top', 'border-bottom', 'border-left', 'border-right'],
   editors: {
-    text: $('<input type="text">'),
-    select: $('<select>').addClass('form-control')
+    text: $('<input type="text">')
   },
   editor: null,
   active: null,

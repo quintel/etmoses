@@ -6,35 +6,45 @@ class Import
   class ProfileSelector
     # Public: Creates a ProfileSelector which selects profiles for the given
     # +technologies+ keys.
-    def initialize(technologies, differentiation)
+    def initialize(technologies, max_concurrency)
       @technologies = technologies
-      @differentiation = differentiation
+      @max_concurrency = max_concurrency
     end
 
     def profiles_size(technology_type)
-      if @differentiation == "min" && profiles[technology_type]
+      if !@max_concurrency && profiles[technology_type]
         profiles[technology_type].size
       else
         1
       end
     end
 
-    # Minimal differentiation
-    # Selects the first profile for a certain technology
-    #
-    # Maximum differentiation
-    # Selects a profile from a list of profiles according to an index
-    def select_profile(technology_type, index)
-      if available_profiles = profiles[technology_type]
-        if @differentiation == "max"
-          available_profiles.first
-        elsif profiles.any?
-          available_profiles[index % available_profiles.length]
-        end
+    def select(technology)
+      if @max_concurrency
+        first(technology)
+      else
+        for_tech(technology).next
       end
     end
 
     private
+
+      def for_tech(technology)
+        Enumerator.new do |yielder|
+          tech_profiles = (profiles[technology] || [])
+
+          loop do
+            element = tech_profiles.shift
+            tech_profiles.push(element)
+
+            yielder.yield(element)
+          end
+        end
+      end
+
+      def first(technology)
+        profiles[technology].try(:first)
+      end
 
       # Creates a hash of technologies associated with the load profile keys
       def profiles

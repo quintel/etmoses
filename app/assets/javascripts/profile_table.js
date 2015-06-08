@@ -29,6 +29,7 @@ var ProfileTable = (function(){
   function cloneAndAppendProfileSelect(){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone();
+    profileSelectbox.val($(this).data('profile'));
     $(this).parent().next().html(profileSelectbox);
   };
 
@@ -49,21 +50,21 @@ var ProfileTable = (function(){
       var header = tableHeader(i);
 
       if(header == "name"){
-        technologyObject["type"] = getTypeForName(techAttribute);
-      };
-
-      if(!(/demand|capacity/.test(header) && techAttribute == "")){
+        technologyObject["name"] = getNameForType(techAttribute);
+        technologyObject["type"] = techAttribute;
+      }
+      else if(!(/demand|capacity/.test(header) && techAttribute == "")){
         technologyObject[header] = techAttribute;
       };
     });
     return technologyObject;
   };
 
-  function getTypeForName(name){
-    var selectedOption = $("select.name").find("option").filter(function(){
-      return $(this).text() == name;
+  function getNameForType(type){
+    var selectedOption = $("select.name").first().find("option").filter(function(){
+      return $(this).val() == type;
     });
-    return selectedOption.val();
+    return selectedOption.text();
   };
 
   function tableHeader(index){

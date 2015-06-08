@@ -3,15 +3,15 @@ class TestingGround::ConcurrencyCalculator
   # Creates a profile with a maximum/minimum concurrency from another profile
   #
 
-  def initialize(profile, topology, differentiation = "max")
+  def initialize(profile, topology, max_concurrency = true)
     @profile = JSON.parse(profile)
     @topology = JSON.parse(topology)
-    @differentiation = differentiation
+    @max_concurrency = max_concurrency
   end
 
   def calculate
     TestingGround::TechnologyProfileScheme.new(
-      technologies, @topology, @differentiation
+      technologies, @topology, @max_concurrency
     ).build
   end
 

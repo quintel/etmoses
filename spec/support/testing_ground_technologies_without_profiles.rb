@@ -1,7 +1,7 @@
 def testing_ground_technologies_without_profiles
   [ { "type"=>"households_solar_pv_solar_radiation",
       "name"=>"Residential PV panel",
-      "units"=>200,
+      "units"=>8,
       "capacity"=>1.5 },
     { "type"=>"households_space_heater_heatpump_air_water_electricity",
       "name"=>"Heat pump for space heating (air)",
