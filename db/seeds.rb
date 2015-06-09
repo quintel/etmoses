@@ -51,6 +51,16 @@ Technology.create!(
   export_to:   'transport_car_using_electricity_share'
 )
 
+Technology.create!(
+  key:         'base_load',
+  name:        'Household'
+)
+
+Technology.create!(
+  key:         'generic',
+  name:        'Other'
+)
+
 # Example Testing Ground
 # ----------------------
 
