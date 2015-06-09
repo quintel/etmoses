@@ -305,4 +305,9 @@ table.table.scenarios{
   td:focus{
     outline: 1px dotted #477caa;
   }
+
+  select{
+    border: none;
+    box-shadow: none;
+  }
 }

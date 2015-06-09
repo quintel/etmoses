@@ -6,7 +6,7 @@ calculateConcurrency = (differentiation)->
     data:
       profile: $("textarea#testing_ground_technology_profile").text(),
       topology: $("textarea#topology_graph").text(),
-      profile_differentiation: differentiation
+      profile_differentiation: (differentiation == "max")
 
 $(document).on "page:change", ->
   if $("#new_testing_ground, .edit_testing_ground").length > 0

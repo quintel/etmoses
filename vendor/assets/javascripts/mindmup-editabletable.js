@@ -33,9 +33,6 @@ $.fn.editableTableWidget = function (options) {
         active = element.find('td:focus');
         if (active.length) {
           var edittype = getEditType();
-          if (edittype == "select") {
-            cloneSelectBox.call(active);
-          }
           editor = editors[edittype];
           editor.val(editorValue.call(active, edittype))
             .removeClass('error')

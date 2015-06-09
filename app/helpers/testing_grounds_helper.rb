@@ -76,19 +76,19 @@ module TestingGroundsHelper
     options_for_select(load_profiles)
   end
 
-  def profile_table_options_for_name
+  def profile_table_options_for_name(selected_technology)
     technologies = @technologies.map do |technology|
       [technology.name, technology.key]
     end
 
-    options_for_select(technologies)
+    options_for_select(technologies, selected: selected_technology[:type])
   end
 
-  def node_options(profile)
+  def node_options(profile, node)
     node_options = profile.keys.map do |key|
       [key, key.jquery_safe]
     end
 
-    options_for_select(node_options)
+    options_for_select(node_options, selected: node.jquery_safe)
   end
 end

@@ -8,8 +8,28 @@ var ProfileTable = (function(){
 
       addClickListenersToAddRow();
       addClickListenersToDeleteRow();
+      addProfileSelectBoxes();
+      addChangeListenerToNameBox();
       parseTableToJSON();
     }
+  };
+
+  function addProfileSelectBoxes(){
+    $("select.name").each(function(){
+      cloneAndAppendProfileSelect.call(this);
+    });
+  };
+
+  function addChangeListenerToNameBox(){
+    $("select.name").off().on("change", function(){
+      cloneAndAppendProfileSelect.call(this);
+    });
+  };
+
+  function cloneAndAppendProfileSelect(){
+    var technology = $(this).val();
+    var profileSelectbox = $(".hidden.profile select." + technology).clone();
+    $(this).parent().next().html(profileSelectbox);
   };
 
   function parseTableToJSON(){
@@ -51,23 +71,25 @@ var ProfileTable = (function(){
   };
 
   function tableRows(){
-    var rows = [];
-    $(selector).find("tbody tr").each(function(){
-      var tableCells = $(this).find("td:first-child, td.editable");
-      var tableText = tableCells.toArray().map(function(cell){
-        return $.trim($(cell).text());
-      });
+    return $(selector).find("tbody tr").toArray().map(extractTextfromCells);
+  };
 
-      rows.push(tableText);
+  function extractTextfromCells(row){
+    return $(row).find("td.editable").toArray().map(function(cell){
+      if($(cell).hasClass("select")){
+        return $.trim($(cell).find("select").val());
+      }
+      else{
+        return $.trim($(cell).text());
+      }
     });
-    return rows;
   };
 
   function addClickListenersToAddRow(){
     $("#profiles-table table tr th a.add-row").on("click", function(){
       var row = $(this).parents("tr");
       var clonedRow = row.clone(true, true);
-      clonedRow.find("td.editable").text("");
+      clonedRow.find("td.editable:not(.select)").text("");
       clonedRow.insertAfter(row);
     });
   };

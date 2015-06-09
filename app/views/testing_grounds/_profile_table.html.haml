@@ -1,6 +1,6 @@
 %table.table
   %thead
-    %th.col-sm-1{data: {header: 'node'}} Node
+    %th.col-sm-2{data: {header: 'node'}} Node
     %th.col-sm-3{data: {header: 'name'}} Name
     %th.col-sm-3{data: {header: 'profile'}} Profile
     %th{data: {header: 'capacity'}} Capacity [kW]
@@ -9,17 +9,9 @@
     %th{data: {header: 'units'}} Units
 
   %tbody
-    .hidden.name
-      %select.name
-        = profile_table_options_for_name
-
-    .hidden.nodes
-      %select.nodes
-        = node_options(testing_ground_profile)
-
     .hidden.profile
       - @technologies.each do |technology|
-        %select{class: technology.key}
+        %select.form-control{class: technology.key}
           - if technology.key == "generic"
             = options_for_load_profiles
           - else
@@ -28,9 +20,21 @@
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|
         %tr
-          %td.editable{data: profile_table_data(:node, node)}= node
+          %td.editable.select
+            %select.nodes.form-control
+              = node_options(testing_ground_profile, node)
+
           - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
-            %td.editable{data: profile_table_data(key, technology)}= value
+            - if key == :name
+              %td.editable.select
+                %select.name.form-control
+                  = profile_table_options_for_name(technology)
+
+            - elsif key == :profile
+              %td.editable.select
+
+            - else
+              %td.editable{data: profile_table_data(key, technology)}= value
 
           %th
             = link_to "#", class: "add-row text-success" do
