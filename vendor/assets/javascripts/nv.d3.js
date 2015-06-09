@@ -6194,6 +6194,7 @@ nv.models.lineWithFocusChart = function() {
     chart.yAxis = yAxis;
     chart.x2Axis = x2Axis;
     chart.y2Axis = y2Axis;
+    chart.brush = brush;
 
     chart.options = nv.utils.optionsFunc.bind(chart);
 
