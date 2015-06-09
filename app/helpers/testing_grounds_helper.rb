@@ -68,6 +68,14 @@ module TestingGroundsHelper
     options_for_select(load_profiles)
   end
 
+  def options_for_load_profiles
+    load_profiles = LoadProfile.all.map do |load_profile|
+      [load_profile.key, load_profile.key.jquery_safe]
+    end
+
+    options_for_select(load_profiles)
+  end
+
   def profile_table_options_for_name
     technologies = @technologies.map do |technology|
       [technology.name, technology.key]

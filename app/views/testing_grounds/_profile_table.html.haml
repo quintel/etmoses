@@ -20,7 +20,10 @@
     .hidden.profile
       - @technologies.each do |technology|
         %select{class: technology.key}
-          = profile_table_options_for_profile(technology)
+          - if technology.key == "generic"
+            = options_for_load_profiles
+          - else
+            = profile_table_options_for_profile(technology)
 
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|
