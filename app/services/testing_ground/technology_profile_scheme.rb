@@ -5,9 +5,8 @@ class TestingGround::TechnologyProfileScheme
   # amount of selected profiles
   #
 
-  def initialize(technology_distribution, max_concurrency = true)
-    @technology_distribution = technology_distribution
-    @max_concurrency         = max_concurrency
+  def initialize(distribution)
+    @distribution = distribution
   end
 
   # Returns a hash with all edge nodes as keys and technologies as values
@@ -19,9 +18,12 @@ class TestingGround::TechnologyProfileScheme
 
   private
 
+    #
+    # Removes duplicates when going from a minimum concurrency to a maximum
+    #
     def technology_profile_scheme
       grouped_profiles.values.map do |techs|
-        techs.first.update('units' => techs.sum{|b| b['units']})
+        techs.first.update('units' => techs.sum{|b| b['units'].to_i })
       end
     end
 
@@ -33,23 +35,31 @@ class TestingGround::TechnologyProfileScheme
 
     def assigned_profiles
       expanded_distribution.flatten.map do |tech|
-        tech.dup.update('profile' => profile_selector.select(tech['type']))
+        tech.dup.update('profile' => profile_selector(tech).select_profile)
       end
     end
 
-    def profile_selector
-      @profile_selector ||= Import::ProfileSelector.new(technology_keys, @max_concurrency)
-    end
-
-    def technology_keys
-      @technology_distribution.map{|t| t['type']}.uniq
-    end
-
+    #
+    # Expands the technology distribution depending on a technology's
+    # concurrency setting and amount of profiles
+    #
     def expanded_distribution
-      @technology_distribution.map do |tech|
-        TestingGround::TechnologyPartitioner.new(tech,
-          profile_selector.profiles_size(tech['type'])
+      @distribution.map do |technology|
+        TestingGround::TechnologyPartitioner.new(
+          technology, profile_selector(technology).size
         ).partition
       end
+    end
+
+    #
+    # Profile selection part
+    # Initiates a Profile::Selector object
+    #
+    def profile_selector(technology)
+      TestingGround::Profile::Selector.new(available_profiles, technology)
+    end
+
+    def available_profiles
+      @available_profiles ||= TestingGround::Profile::Query.new(@distribution).query
     end
 end

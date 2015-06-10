@@ -45,13 +45,21 @@
       = link_to "Export to CSV", technology_profile_testing_ground_path(@testing_ground, format: :csv), class: "btn btn-primary"
 
   - if testing_ground.new_record?
-    .radio-button-group
-      = radio_button_tag 'differentiation', "max", true
-      = label_tag "Maximum concurrency"
-      = radio_button_tag 'differentiation', "min"
-      = label_tag "Minimum concurrency"
+    .concurrency
+      %strong Select the technologies to switch concurrency
+      .checkboxes
+        - 3.times do
+          %span.check_box
+            %strong= "Max/min"
+        - @technologies.each do |technology|
+          %span.check_box
+            = radio_button_tag technology.key, "max", true
+            = radio_button_tag technology.key, "min"
+            %span= technology.name
 
-    %br
+      .buttons
+        = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"
+        = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary"
 
   .form-group
     = f.label :technology_profile_csv, "Technology profile CSV"

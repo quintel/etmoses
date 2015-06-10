@@ -27,7 +27,8 @@ class TestingGround::TechnologyDistributor
     def all_technologies
       @technologies.map do |technology|
         technology_units(technology).each_with_index.map do |tech, index|
-          tech.dup.update('node' => edge_nodes[index].key)
+          tech.dup.update({'node' => edge_nodes[index].key,
+                           'concurrency' => 'max' })
         end
       end
     end
