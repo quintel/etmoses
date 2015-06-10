@@ -11,6 +11,12 @@ var ProfileTable = (function(){
       addProfileSelectBoxes();
       addChangeListenerToNameBox();
       parseTableToJSON();
+    },
+
+    updateProfiles: function(){
+      $("select.name").each(function(){
+        $(this).parent().next().find("select").val($(this).data('profile'));
+      });
     }
   };
 
@@ -29,7 +35,6 @@ var ProfileTable = (function(){
   function cloneAndAppendProfileSelect(){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone();
-    profileSelectbox.val($(this).data('profile'));
     $(this).parent().next().html(profileSelectbox);
   };
 

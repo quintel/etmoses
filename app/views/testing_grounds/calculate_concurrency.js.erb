@@ -1,3 +1,4 @@
 $("#profiles-table").html("<%= escape_javascript(render partial: 'testing_grounds/profile_table', locals: {testing_ground_profile: @testing_ground_profile.as_json } ) %>")
 
 window.currentProfileTable.append();
+window.currentProfileTable.updateProfiles();

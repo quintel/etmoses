@@ -27,14 +27,14 @@
           - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
             - if key == :name
               %td.editable.select
-                %select.name.form-control{data: {profile: technology[:profile].jquery_safe}}
+                %select.name.form-control{data: {profile: (technology[:profile] || "").jquery_safe}}
                   = profile_table_options_for_name(technology)
 
             - elsif key == :profile
               %td.editable.select
 
             - else
-              %td.editable{data: profile_table_data(key, technology)}= value
+              %td.editable{data: { edit_type: 'text' }}= value
 
           %th
             = link_to "#", class: "add-row text-success" do
