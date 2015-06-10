@@ -306,8 +306,13 @@ table.table.scenarios{
     outline: 1px dotted #477caa;
   }
 
+  td.editable.select{
+    padding-left: 0px;
+  }
+
   select{
     border: none;
     box-shadow: none;
+    padding-left: 6px;
   }
 }
