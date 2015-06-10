@@ -90,7 +90,7 @@ class TestingGroundsController < ResourceController
     calculated_concurrency = TestingGround::ConcurrencyCalculator.new(
                                 params[:profile],
                                 params[:topology],
-                                params[:profile_differentiation]).calculate
+                                params[:profile_differentiation] == 'max').calculate
 
     @testing_ground_profile = TechnologyList.from_hash(calculated_concurrency)
   end

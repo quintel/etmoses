@@ -11,7 +11,7 @@ RSpec.describe TestingGround::ConcurrencyCalculator do
 
   it 'minimizes concurrency' do
     new_profile = TestingGround::ConcurrencyCalculator.new(
-                    profile, topology, "min"
+                    profile, topology, false
                   ).calculate
 
     expect(new_profile.values.flatten.map{|t| t['profile'] }.uniq.count).to eq(2)
