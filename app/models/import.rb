@@ -41,11 +41,11 @@ class Import
   # Returns a TestingGround.
   def testing_ground
     TestingGround.new(
-      topology:           topology,
-      technologies:       technologies,
-      technology_profile: technology_profile,
-      scenario_id:        @scenario_id,
-      parent_scenario_id: parent_scenario_id)
+      topology:                topology,
+      technology_distribution: technology_distribution,
+      technology_profile:      technology_profile,
+      scenario_id:             @scenario_id,
+      parent_scenario_id:      parent_scenario_id)
   end
 
   def etm_title
@@ -66,10 +66,11 @@ class Import
   end
 
   def technology_profile
-    TestingGround::TechnologyProfileScheme.new(
-      technologies,
-      topology.graph
-    ).build
+    TestingGround::TechnologyProfileScheme.new(technology_distribution).build
+  end
+
+  def technology_distribution
+    TestingGround::TechnologyDistributor.new(technologies, topology.graph).build
   end
 
   #######

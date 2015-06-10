@@ -7,8 +7,9 @@ RSpec.describe Export do
     FactoryGirl.create(:technology, key: "transport_car_using_electricity")
   }
   let(:testing_ground){
-    FactoryGirl.create(:testing_ground, topology: topology,
-      technology_profile: profile_json)
+    FactoryGirl.create(:testing_ground,
+      topology: topology,
+      technology_profile: fake_technology_profile)
   }
 
   it "exports an export" do

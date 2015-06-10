@@ -1,30 +1,39 @@
 class TestingGround::TechnologyProfileScheme
   #
-  # Given a list of technologies, a topology and a differentiation setting
+  # Given a distributed set of technologies and a differentiation setting
   # Creates a Hash with the maximum amount of selected profiles or minimum
   # amount of selected profiles
   #
 
-  def initialize(technologies, topology, max_concurrency = true)
-    @technologies    = technologies
-    @topology        = topology
-    @max_concurrency = max_concurrency
+  def initialize(technology_distribution, max_concurrency = true)
+    @technology_distribution = technology_distribution
+    @max_concurrency         = max_concurrency
   end
 
   # Returns a hash with all edge nodes as keys and technologies as values
   def build
-    assigned_profiles.group_by do |technology|
+    technology_profile_scheme.group_by do |technology|
       technology['node']
     end
   end
 
   private
 
+    def technology_profile_scheme
+      grouped_profiles.values.map do |techs|
+        techs.first.update('units' => techs.sum{|b| b['units']})
+      end
+    end
+
+    def grouped_profiles
+      assigned_profiles.group_by do |tech|
+        [tech['node'], tech['profile']].join
+      end
+    end
+
     def assigned_profiles
-      expanded_distribution.flatten.map do |technology|
-        technology.dup.update(
-          'profile' => profile_selector.select(technology['type'])
-        )
+      expanded_distribution.flatten.map do |tech|
+        tech.dup.update('profile' => profile_selector.select(tech['type']))
       end
     end
 
@@ -33,19 +42,14 @@ class TestingGround::TechnologyProfileScheme
     end
 
     def technology_keys
-      @technologies.map{|t| t['type']}.uniq
+      @technology_distribution.map{|t| t['type']}.uniq
     end
 
     def expanded_distribution
-      technology_distribution.map do |tech|
+      @technology_distribution.map do |tech|
         TestingGround::TechnologyPartitioner.new(tech,
           profile_selector.profiles_size(tech['type'])
         ).partition
       end
-    end
-
-    def technology_distribution
-      @technology_distribution ||= TestingGround::TechnologyDistributor.new(
-                                     @technologies, @topology).build
     end
 end

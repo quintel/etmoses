@@ -5,7 +5,6 @@ class TestingGround < ActiveRecord::Base
 
   IMPORT_PROVIDERS = %w(beta.et-engine.com).freeze
 
-  serialize :technologies, JSON
   serialize :technology_profile, TechnologyList
 
   belongs_to :topology
@@ -19,9 +18,7 @@ class TestingGround < ActiveRecord::Base
   validate  :validate_technology_profile_units
   validate  :validate_inline_technology_profiles
 
-  before_validation do
-    self.technologies = {} unless technologies
-  end
+  attr_accessor :technology_distribution
 
   def self.latest_first
     order(created_at: :desc)
@@ -43,7 +40,7 @@ class TestingGround < ActiveRecord::Base
         calculator.call(context)
       end
 
-    { graph: GraphToTree.convert(context.graph), technologies: technologies }
+    { graph: GraphToTree.convert(context.graph), technologies: technology_profile }
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies
@@ -67,7 +64,7 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Hash.
   def technologies_json(graph)
-    original = technologies.as_json
+    original = technology_profile.as_json
 
     original.each do |key, techs|
       (graph.node(key).get(:mo_techs) || []).each do |mo_tech|

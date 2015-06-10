@@ -15,8 +15,11 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
   # Maximum concurrency
   describe "maximum concurrency" do
     it "maximizes profile concurrency by counting the keys in sequence" do
+      technology_distribution = TestingGround::TechnologyDistributor.new(
+        testing_ground_technologies_without_profiles, topology).build
+
       technology_profile_scheme = TestingGround::TechnologyProfileScheme.new(
-        testing_ground_technologies_without_profiles, topology, false
+        technology_distribution, false
       ).build
 
       expect(

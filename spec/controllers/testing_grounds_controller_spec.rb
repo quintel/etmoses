@@ -38,14 +38,13 @@ RSpec.describe TestingGroundsController do
         sign_in(user)
 
         post :calculate_concurrency,
-              profile: profile_json,
-              topology: topology,
+              technology_distribution: profile_json,
               profile_differentiation: 'max',
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
 
-        expect(result.values.flatten.count).to eq(4)
+        expect(result.values.flatten.count).to eq(2)
         expect(result.keys.count).to eq(2)
       end
     end
@@ -55,14 +54,13 @@ RSpec.describe TestingGroundsController do
         sign_in(user)
 
         post :calculate_concurrency,
-              profile: profile_json,
-              topology: topology,
+              technology_distribution: profile_json,
               profile_differentiation: 'min',
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
 
-        expect(result.values.flatten.count).to eq(4)
+        expect(result.values.flatten.count).to eq(2)
         expect(result.keys.count).to eq(2)
       end
 
@@ -76,8 +74,7 @@ RSpec.describe TestingGroundsController do
         sign_in(user)
 
         post :calculate_concurrency,
-              profile: profile_json,
-              topology: topology,
+              technology_distribution: profile_json,
               profile_differentiation: 'min',
               format: :js
 
@@ -93,8 +90,7 @@ RSpec.describe TestingGroundsController do
         sign_in(user)
 
         post :calculate_concurrency,
-              profile: profile_json,
-              topology: topology,
+              technology_distribution: profile_json,
               profile_differentiation: 'min',
               format: :js
 

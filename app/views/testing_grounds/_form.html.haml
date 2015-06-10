@@ -7,10 +7,11 @@
   - if @testing_ground.scenario_id
     = f.hidden_field :scenario_id
 
-  - if @testing_ground.topology_id
-    = f.hidden_field :topology_id
+  = f.hidden_field :topology_id, value: testing_ground.topology_id
+
+  - if testing_ground.new_record?
     .hidden
-      = text_area_tag :topology_graph, @testing_ground.topology.graph.to_json
+      = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json
 
   .form-group
     = f.label :name, 'Local energy solution name'

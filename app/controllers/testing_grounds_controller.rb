@@ -88,9 +88,8 @@ class TestingGroundsController < ResourceController
   # POST /topologies/calculate_concurrency
   def calculate_concurrency
     calculated_concurrency = TestingGround::ConcurrencyCalculator.new(
-                                params[:profile],
-                                params[:topology],
-                                params[:profile_differentiation] == 'max').calculate
+                               params[:technology_distribution],
+                               params[:profile_differentiation] == 'max').calculate
 
     @testing_ground_profile = TechnologyList.from_hash(calculated_concurrency)
   end
@@ -106,7 +105,7 @@ class TestingGroundsController < ResourceController
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:name, :technologies, :technology_profile, :public,
+      .permit([:name, :technology_profile, :public,
                :technology_profile_csv, :scenario_id, :topology_id])
 
     if tg_params[:technology_profile_csv]

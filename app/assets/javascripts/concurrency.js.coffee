@@ -4,8 +4,7 @@ calculateConcurrency = (differentiation)->
     type: "POST"
     dataType: "script"
     data:
-      profile: $("textarea#testing_ground_technology_profile").text(),
-      topology: $("textarea#topology_graph").text(),
+      technology_distribution: $("textarea#technology_distribution").text(),
       profile_differentiation: differentiation
 
 $(document).on "page:change", ->

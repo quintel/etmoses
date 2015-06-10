@@ -29,7 +29,9 @@ RSpec.describe Import do
   end
 
   def find_techs(tg, key)
-    tg.technologies.select { |t| t['type'] == key }
+    tg.technology_profile.list.values.flatten.select do |t|
+      t.type == key
+    end
   end
 
   context 'with no existing topology' do
@@ -50,7 +52,7 @@ RSpec.describe Import do
     end
 
     it 'adds three coal heaters' do
-      expect(testing_ground.technologies[0]['name']).to eq("Tech one")
+      expect(testing_ground.technology_profile.list["lv2"][0]["units"]).to eq(3.0)
     end
 
     context 'when the ETE scenario has no parent' do

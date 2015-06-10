@@ -39,14 +39,17 @@ var ProfileTable = (function(){
   };
 
   function parseTableToJSON(){
-    $("#testing_ground_technology_profile").text(tableToProfile());
+    var tableProfile = tableToProfile();
+    var groupedByNode = ETHelper.groupBy(tableProfile, 'node');
+
+    $("#technology_distribution").text(JSON.stringify(tableProfile));
+    $("#testing_ground_technology_profile").text(JSON.stringify(groupedByNode));
   };
 
   function tableToProfile(){
-    var technologyProfile = tableRows().map(function(tableRow){
+    return tableRows().map(function(tableRow){
       return rowToTechnologyObject(tableRow);
     });
-    return JSON.stringify(ETHelper.groupBy(technologyProfile, 'node'));
   };
 
   function rowToTechnologyObject(tableRow){

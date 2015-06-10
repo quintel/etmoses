@@ -56,15 +56,19 @@ def basic_houses(units = '2.0')
      "units"=>units }]
 end
 
+def fake_technology_profile
+  JSON.dump(fake_profile_data.group_by{|t| t['node']})
+end
+
 def profile_json
-  JSON.dump({
-    "lv1"=>[
-      {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0"},
-      {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0"}
-    ],
-    "lv2"=>[
-      {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0"},
-      {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0"}
-    ]
-  })
+  JSON.dump(fake_profile_data)
+end
+
+def fake_profile_data
+  [
+    {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0", 'node' => 'lv1'},
+    {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0", 'node' => 'lv1'},
+    {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0", 'node' => 'lv2'},
+    {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0", 'node' => 'lv2'}
+  ]
 end
