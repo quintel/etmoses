@@ -7,6 +7,7 @@
     %th{data: {header: 'volume'}} Storage volume [kWh]
     %th{data: {header: 'demand'}} Yearly demand [kWh]
     %th{data: {header: 'units'}} Units
+    %th.hidden{data: {header: 'concurrency'}} Concurrency
 
   %tbody
     .hidden.profile
@@ -25,13 +26,17 @@
               = node_options(testing_ground_profile, node)
 
           - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
-            - if key == :name
+            - case key
+            - when :name
               %td.editable.select
                 %select.name.form-control{data: {profile: technology[:profile]}}
                   = profile_table_options_for_name(technology)
 
-            - elsif key == :profile
+            - when :profile
               %td.editable.select
+
+            - when :concurrency
+              %td.editable.hidden= value
 
             - else
               %td.editable{data: { edit_type: 'text' }}= value
