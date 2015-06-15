@@ -474,11 +474,6 @@ var TreeGraph = (function(){
     });
 
     forceReload = true
-
-    if (lastClicked) {
-      click(lastClicked);
-    }
-
     update(root);
   };
 
