@@ -5,6 +5,7 @@ RSpec.describe Import do
     Import.new(topology_id: topology.id, scenario_id: 1337).tap do |import|
       allow(import).to receive(:response).and_return(response)
       allow(import).to receive(:parent_scenario_id).and_return(nil)
+      allow(import).to receive(:buildings).and_return([])
     end
   end
 

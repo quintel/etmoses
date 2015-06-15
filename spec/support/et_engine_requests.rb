@@ -64,14 +64,14 @@ def stub_et_engine_templates
       to_return(status: 200, body: JSON.dump({}), headers: {})
 end
 
-def stub_et_gquery
+def stub_et_gquery(gqueries)
   stub_request(:put, "http://beta.et-engine.com/api/v3/scenarios/1").
-    with(body: {
-      "gqueries"=>["final_demand_of_electricity_in_households"] },
-       headers: {
-        'Accept'=>'application/json',
-        'Accept-Encoding'=>'gzip, deflate',
-        'Content-Type'=>'application/x-www-form-urlencoded'}).
+    with(body: { "gqueries"=>gqueries.keys.map(&:to_s) },
+         headers: {
+          'Accept'=>'application/json',
+          'Accept-Encoding'=>'gzip, deflate',
+          'Content-Type'=>'application/x-www-form-urlencoded'
+         }).
     to_return(
       status: 200,
       body: JSON.dump({
@@ -89,13 +89,7 @@ def stub_et_gquery
          "created_at"=>"2010-06-14T17:23:00.000+02:00",
          "scaling"=>nil
         },
-        "gqueries"=>{
-          "final_demand_of_electricity_in_households"=>{
-            "present"=>90.11341999999999,
-            "future"=>99.05439142786325,
-            "unit"=>"PJ"
-          }
-        }
+        "gqueries"=> gqueries
       }),
       headers: {}
     )

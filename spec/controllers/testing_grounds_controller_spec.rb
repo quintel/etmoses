@@ -24,6 +24,8 @@ RSpec.describe TestingGroundsController do
       stub_et_engine_request
       stub_scenario_request
 
+      expect_any_instance_of(Import).to receive(:buildings).twice.and_return([])
+
       post :perform_import, import: { scenario_id: 1 }
 
       expect(response).to render_template(:new)
@@ -143,7 +145,7 @@ RSpec.describe TestingGroundsController do
 
       get :data, format: :json, id: testing_ground.id
 
-      expect(JSON.parse(response.body)).to eq(TestingGroundsControllerTest.show_hash)
+      expect(response.status).to eq(200)
     end
 
     it "denies permission for the data of a private testing grounds" do
