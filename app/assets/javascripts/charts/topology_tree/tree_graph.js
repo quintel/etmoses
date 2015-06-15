@@ -474,6 +474,8 @@ var TreeGraph = (function(){
     });
 
     forceReload = true
+
+    showChart(lastClicked);
     update(root);
   };
 
