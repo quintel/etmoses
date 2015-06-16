@@ -26,7 +26,7 @@ var ErrorDisplayer = (function(){
     }
   };
 
-  function ErrorDisplayer(_error, _targer){
+  function ErrorDisplayer(_error, _target){
     error = _error;
     target = _target;
   };

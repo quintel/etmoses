@@ -1,15 +1,12 @@
 LoadChartHelper = {
   globalBrushExtent: undefined,
+  currentWeek: undefined,
+  forceReload: false,
   charts: [],
 
   updateBrush: function(currentChartId){
     if(this.globalBrushExtent){
-      for(var i = 0; i < this.charts.length; i++){
-        if(this.charts[i]){
-          this.charts[i].brushExtent(this.globalBrushExtent);
-        }
-      };
-
+      this.setBrushExtent();
       currentChart = this.charts[currentChartId - 1];
       if(currentChart && currentChart.update){
         currentChart.update();
@@ -17,10 +14,21 @@ LoadChartHelper = {
     }
   },
 
-  clearBrush: function(){
+  setBrushExtent: function(){
     for(var i = 0; i < this.charts.length; i++){
       if(this.charts[i]){
-        this.charts[i].dispatch.brush('');
+        this.charts[i].brushExtent(this.globalBrushExtent);
+      }
+    };
+  },
+
+  clearBrush: function(){
+    this.globalBrushExtent = undefined;
+    for(var i = 0; i < this.charts.length; i++){
+      if(this.charts[i]){
+        d3.select(".brush").call(this.charts[i].brush.clear());
+        this.charts[i].brushExtent([0,0]);
+        this.charts[i].update();
       }
     };
   },
