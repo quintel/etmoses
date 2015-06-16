@@ -105,5 +105,6 @@ technologies = <<-YML
 YML
 
 TestingGround.create!(
-  topology:     Topology.create!(graph: YAML.load(graph))
+  name:     "Testing ground",
+  topology: Topology.create!(name: "Testing ground", graph: YAML.load(graph))
 )

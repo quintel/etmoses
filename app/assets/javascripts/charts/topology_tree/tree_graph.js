@@ -474,10 +474,7 @@ var TreeGraph = (function(){
 
     LoadChartHelper.forceReload = true
 
-    if (lastClicked) {
-      click(lastClicked);
-    }
-
+    showChart(lastClicked);
     update(root);
   };
 

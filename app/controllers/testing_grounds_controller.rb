@@ -87,11 +87,11 @@ class TestingGroundsController < ResourceController
 
   # POST /topologies/calculate_concurrency
   def calculate_concurrency
-    calculated_concurrency = TestingGround::ConcurrencyCalculator.new(
-                               params[:technology_distribution],
-                               params[:profile_differentiation] == 'max').calculate
+    concurrency = TestingGround::TechnologyProfileScheme.new(
+                    JSON.parse(params[:technology_distribution])
+                  ).build
 
-    @testing_ground_profile = TechnologyList.from_hash(calculated_concurrency)
+    @testing_ground_profile = TechnologyList.from_hash(concurrency)
   end
 
   # GET /testing_grounds/:id/technology_profile.csv

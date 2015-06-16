@@ -39,7 +39,6 @@ RSpec.describe TestingGroundsController do
 
         post :calculate_concurrency,
               technology_distribution: profile_json,
-              profile_differentiation: 'max',
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -55,7 +54,6 @@ RSpec.describe TestingGroundsController do
 
         post :calculate_concurrency,
               technology_distribution: profile_json,
-              profile_differentiation: 'min',
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -71,11 +69,14 @@ RSpec.describe TestingGroundsController do
         5.times{ FactoryGirl.create(:technology_profile,
                     technology: 'transport_car_using_electricity') }
 
+        tech_distribution = JSON.parse(profile_json).map do |t|
+          t.update('concurrency' => 'min')
+        end
+
         sign_in(user)
 
         post :calculate_concurrency,
-              technology_distribution: profile_json,
-              profile_differentiation: 'min',
+              technology_distribution: JSON.dump(tech_distribution),
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -85,13 +86,16 @@ RSpec.describe TestingGroundsController do
 
       it "combines a testing ground topology with a set of technologies with less profiles than technologies" do
         2.times{ FactoryGirl.create(:technology_profile,
-                  technology: 'households_solar_pv_solar_radiation') }
+                  technology: 'transport_car_using_electricity') }
 
         sign_in(user)
 
+        tech_distribution = JSON.parse(profile_json).map do |t|
+          t.update('concurrency' => 'min')
+        end
+
         post :calculate_concurrency,
-              technology_distribution: profile_json,
-              profile_differentiation: 'min',
+              technology_distribution: JSON.dump(tech_distribution),
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json

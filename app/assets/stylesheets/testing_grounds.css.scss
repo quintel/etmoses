@@ -316,3 +316,18 @@ table.table.scenarios{
     padding-left: 6px;
   }
 }
+
+.concurrency{
+  margin-bottom: 20px;
+
+  .checkboxes{
+    .check_box{
+      width: 285px;
+      display: inline-block;
+    }
+  }
+
+  .buttons{
+    margin-top: 10px;
+  }
+}

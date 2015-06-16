@@ -40,7 +40,8 @@ class TestingGround < ActiveRecord::Base
         calculator.call(context)
       end
 
-    { graph: GraphToTree.convert(context.graph), technologies: technology_profile }
+    { graph: GraphToTree.convert(context.graph),
+      technologies: technology_profile.as_json }
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies

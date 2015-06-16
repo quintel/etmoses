@@ -66,9 +66,70 @@ end
 
 def fake_profile_data
   [
-    {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0", 'node' => 'lv1'},
-    {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0", 'node' => 'lv1'},
-    {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0", 'node' => 'lv2'},
-    {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0", 'node' => 'lv2'}
+    {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0", 'node' => 'lv1', "concurrency" => "max"},
+    {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0", 'node' => 'lv1', "concurrency" => "min"},
+    {"name"=>"Residential PV panel", "type"=>"households_solar_pv_solar_radiation", "profile"=>"solar_pv_zwolle", "capacity"=>"-1.5", "units"=>"7.0", 'node' => 'lv2', "concurrency" => "max"},
+    {"name"=>"Electric car", "type"=>"transport_car_using_electricity", "profile"=>"ev_profile_11_3.7_kw", "capacity"=>"3.7", "units"=>"32.0", 'node' => 'lv2', "concurrency" => "min"}
   ]
+end
+
+def minimized_technology_distribution
+  JSON.dump([{
+    "name"=>"Residential PV panel",
+    "type"=>"households_solar_pv_solar_radiation",
+    "profile"=>"solar_pv_zwolle",
+    "capacity"=>"-1.5",
+    "units"=>"1.0",
+    "node"=>"lv1",
+    "concurrency" => "max"
+  },
+  {
+    "name"=>"Residential PV panel",
+    "type"=>"households_solar_pv_solar_radiation",
+    "profile"=>"solar_pv_ameland",
+    "capacity"=>"-1.5",
+    "units"=>"1.0",
+    "node"=>"lv1",
+    "concurrency" => "max"
+  },
+  {
+    "name"=>"Residential PV panel",
+    "type"=>"households_solar_pv_solar_radiation",
+    "profile"=>"solar_pv_zwolle",
+    "capacity"=>"-1.5",
+    "units"=>"1.0",
+    "node"=>"lv2",
+    "concurrency" => "max"
+  },
+  {
+    "name"=>"Residential PV panel",
+    "type"=>"households_solar_pv_solar_radiation",
+    "profile"=>"solar_pv_ameland",
+    "capacity"=>"-1.5",
+    "units"=>"1.0",
+    "node"=>"lv2",
+    "concurrency" => "max"
+  }
+  ])
+end
+
+def technology_distribution
+  JSON.dump([{
+    "name"=>"Residential PV panel",
+    "type"=>"households_solar_pv_solar_radiation",
+    "profile"=>"solar_pv_zwolle",
+    "capacity"=>"-1.5",
+    "units"=>"1.0",
+    "node"=>"lv1",
+    "concurrency" => "min"
+  },
+  {
+    "name"=>"Residential PV panel",
+    "type"=>"households_solar_pv_solar_radiation",
+    "profile"=>"solar_pv_zwolle",
+    "capacity"=>"-1.5",
+    "units"=>"1.0",
+    "node"=>"lv2",
+    "concurrency" => "min"
+  }])
 end
