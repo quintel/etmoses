@@ -7,10 +7,10 @@ class LoadChart
   constructor: (@data, @capacity) ->
     # pass
 
-  sampledData: (loads, week) ->
-    if week
+  sampledData: (loads) ->
+    if LoadChartHelper.currentWeek && LoadChartHelper.currentWeek != 0
       chunkSize = Math.floor(loads.length / 52)
-      zeroWeek  = week - 1
+      zeroWeek  = LoadChartHelper.currentWeek - 1
 
       startAt = zeroWeek * chunkSize
       endAt   = startAt + chunkSize
@@ -28,7 +28,7 @@ class LoadChart
     self = this
 
     data = for datum, index in @data
-      { key: datum.name, values: @sampledData(datum.values, week), area: datum.area, color: datum.color}
+      { key: datum.name, values: @sampledData(datum.values), area: datum.area, color: datum.color}
 
     $(intoSelector).empty()
 
@@ -92,10 +92,17 @@ class LoadChart
 
     dateEl.change =>
       value = parseInt(dateEl.val(), 10)
-      @renderChart(intoSelector, value)
+      LoadChartHelper.currentWeek = value
+      LoadChartHelper.forceReload = true
       LoadChartHelper.clearBrush()
 
+      $("select[name=date-select]").val(value)
+      @renderChart(intoSelector, value)
+
     $(intoSelector).after(dateEl)
+
+    if LoadChartHelper.currentWeek
+      $("select[name=date-select]").val(LoadChartHelper.currentWeek)
 
   chart: ->
     chart = nv.models.lineWithFocusChart()
@@ -132,15 +139,15 @@ class LoadChart
          .axisLabelDistance(35)
          .tickFormat(d3.format(',.3r'))
 
-    chart.dispatch.on('brush.end', @setGlobalBrushFocus.bind(this))
+    chart.brush.on('brushend', @setGlobalBrushFocus)
 
     LoadChartHelper.charts[@loadChartLocation() - 1] = chart
     LoadChartHelper.updateBrush(@loadChartLocation())
 
     chart
 
-  setGlobalBrushFocus: (b)->
-    LoadChartHelper.globalBrushExtent = b.extent
+  setGlobalBrushFocus: ()->
+    LoadChartHelper.globalBrushExtent = d3.event.target.extent();
 
   loadChartLocation: ->
     parseInt(@intoSelector.replace(/\D/g, ''))

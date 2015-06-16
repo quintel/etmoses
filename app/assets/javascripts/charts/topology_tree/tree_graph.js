@@ -9,8 +9,7 @@ var TreeGraph = (function(){
       duration        = 250,
       ease            = 'cubic-out',
       storageShown    = false,
-      storageLoads    = false,
-      forceReload     = false;
+      storageLoads    = false;
 
   TreeGraph.prototype = {
     showGraph: function(){
@@ -178,9 +177,9 @@ var TreeGraph = (function(){
   };
 
   function reloadCharts(){
-    if(forceReload){
+    if(LoadChartHelper.forceReload){
       $(".load-graph .chart").remove();
-      forceReload = false;
+      LoadChartHelper.forceReload = false;
     };
   };
 
@@ -473,7 +472,7 @@ var TreeGraph = (function(){
       node.load    = otherLoad;
     });
 
-    forceReload = true
+    LoadChartHelper.forceReload = true
 
     showChart(lastClicked);
     update(root);
