@@ -26,6 +26,7 @@ class house:
         
         print "House properties:"
         print "thermostate_temperature ", self.thermostate_temperature
+        print "floor_area ", self.floor_area
         print "wall_area ", self.wall_area
         print "outside_area ", self.outside_area
         print "volume ", self.volume

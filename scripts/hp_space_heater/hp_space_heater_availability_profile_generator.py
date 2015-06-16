@@ -22,15 +22,14 @@ plt.close()
 # Global constants
  
 # Specs of heat-pump
-capacity_in_kW = 3
+capacity_in_kW = 10
  
 # Specs of storage tank
-leakage_fraction_per_hour = 0.02
-liters = 300
+liters = 100
 max_temperature = 90
 min_temperature = 30
 energy_per_liter_per_degree = 0.00116
- 
+
 # Output the capacity of the storage tank
 max_content_in_kWh = liters * energy_per_liter_per_degree * max_temperature
  
@@ -108,9 +107,9 @@ for temperature in temperatures:
     i += 1
     
     # Effect of a time-dependent thermostate:
-    # Only between 08:00 and 00:00 to we heat the house
-    #if 8 < (i % 24):
-    #   temperature = thermostat_temperature
+    # Only between 08:00 and 00:00 do we heat the house
+    if 8 < (i % 24):
+       temperature = thermostat_temperature
 
     # Leak heat from the house (if it is indeed colder outside than inside) 
     # Also allow sunlight to shine in and heat the house
@@ -135,7 +134,7 @@ filename = 'hp_sh_availability_profile.csv'
 #plt.savetxt(availability_filename, availability_profile, fmt='%.3f', delimiter=',')    
     
 plt.plot(demand_profile)
-plt.plot(availability_profile)
+plt.plot(availability_profile/np.max(availability_profile))
     
 # bin all events per day and display these
 #plt.plot(pattern.reshape(-1, 96).sum(axis=1), 'k-')
