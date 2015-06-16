@@ -170,6 +170,7 @@ var TreeGraph = (function(){
     if(existingLoadPlatform.length > 0){
       existingLoadPlatform.show();
       LoadChartHelper.updateBrush(d.id);
+      LoadChartHelper.toggleCapacity(d.id);
     }
     else{
       addNewLoadChartPlatform(uniqueId, d);

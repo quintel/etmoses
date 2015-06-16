@@ -2,7 +2,16 @@ LoadChartHelper = {
   globalBrushExtent: undefined,
   currentWeek: undefined,
   forceReload: false,
+  disableCapacity: false,
   charts: [],
+
+  toggleCapacity: function(currentChartId){
+    currentChart = this.charts[currentChartId - 1];
+    d3Chart = d3.select(".chart-id-" + currentChartId + " svg");
+    d3ChartData = d3Chart.data();
+    d3ChartData[0][1]["disabled"] = this.disableCapacity;
+    currentChart.update();
+  },
 
   updateBrush: function(currentChartId){
     if(this.globalBrushExtent){

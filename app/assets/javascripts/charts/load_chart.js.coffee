@@ -36,7 +36,8 @@ class LoadChart
       data.push({
         key: 'Capacity',
         color: 'darkred',
-        values: data[0].values.map((sample) => { x: sample.x, y: @capacity })
+        values: data[0].values.map((sample) => { x: sample.x, y: @capacity }),
+        disabled: LoadChartHelper.disableCapacity
       })
 
     # data.forEach (series) ->

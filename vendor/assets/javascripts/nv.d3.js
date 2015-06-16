@@ -4317,6 +4317,9 @@ nv.models.ohlcBarChart = function() {
                             d.disabled = false;
                         }
                         else {
+                            /* Custom */
+                            LoadChartHelper.disableCapacity = !d.disabled;
+                            /* END Custom */
                             d.disabled = !d.disabled;
                             if (data.every(function(series) { return series.disabled})) {
                                 //the default behavior of NVD3 legends is, if every single series
