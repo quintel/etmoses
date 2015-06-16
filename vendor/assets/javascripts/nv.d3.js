@@ -4318,7 +4318,9 @@ nv.models.ohlcBarChart = function() {
                         }
                         else {
                             /* Custom */
-                            LoadChartHelper.disableCapacity = !d.disabled;
+                            if(d.key == "Capacity"){
+                                LoadChartHelper.disableCapacity = !d.disabled;
+                            }
                             /* END Custom */
                             d.disabled = !d.disabled;
                             if (data.every(function(series) { return series.disabled})) {
