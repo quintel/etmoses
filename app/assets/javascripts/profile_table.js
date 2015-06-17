@@ -1,10 +1,10 @@
 var ProfileTable = (function(){
   var widget, selector;
+  var defaultCells = ["Capacity", "Volume", "Demand"];
 
   ProfileTable.prototype = {
     append: function(){
-      widget = $(selector).editableTableWidget();
-      widget.on('change', parseTableToJSON.bind(this));
+      $(selector).on('change', parseTableToJSON.bind(this));
 
       addClickListenersToAddRow();
       addClickListenersToDeleteRow();
@@ -22,21 +22,37 @@ var ProfileTable = (function(){
 
   function addProfileSelectBoxes(){
     $("select.name").each(function(){
-      cloneAndAppendProfileSelect.call(this);
+      cloneAndAppendProfileSelect.call(this, false);
     });
   };
 
   function addChangeListenerToNameBox(){
     $("select.name").off().on("change", function(){
-      cloneAndAppendProfileSelect.call(this);
+      cloneAndAppendProfileSelect.call(this, true);
     });
   };
 
-  function cloneAndAppendProfileSelect(){
+  function cloneAndAppendProfileSelect(isChanged){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone();
-    profileSelectbox.val($(this).data('profile'));
+
     $(this).parent().next().html(profileSelectbox);
+
+    if(isChanged){
+      updateTextCells(profileSelectbox, $(this).parents("tr"));
+    }
+    else{
+      profileSelectbox.val($(this).data('profile'));
+    }
+  };
+
+  function updateTextCells(profileSelectbox, currentRow){
+    for(var i = 0; i < defaultCells.length; i++){
+      var cell = defaultCells[i];
+      currentRow.find("." + cell.toLowerCase() + " input").val(
+        profileSelectbox.data("defaults" + cell)
+      );
+    };
   };
 
   function parseTableToJSON(){
@@ -90,7 +106,7 @@ var ProfileTable = (function(){
         return $.trim($(cell).find("select").val());
       }
       else{
-        return $.trim($(cell).text());
+        return $.trim($(cell).find("input").val());
       }
     });
   };
