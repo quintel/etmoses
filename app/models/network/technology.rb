@@ -17,7 +17,7 @@ module Network
     def self.behaviors
       @behaviors ||=
         Hash.new { Technology }.tap do |behaviors|
-          behaviors['storage']          = Storage
+          behaviors['storage']          = Battery
           behaviors['electric_vehicle'] = ElectricVehicle
           behaviors['buffer']           = Buffer
           behaviors['siphon']           = Siphon
