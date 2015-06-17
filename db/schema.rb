@@ -49,6 +49,7 @@ ActiveRecord::Schema.define(version: 20150616094342) do
     t.string "name",      limit: 100
     t.string "export_to", limit: 100
     t.string "behavior",  limit: 50
+    t.text   "defaults"
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree

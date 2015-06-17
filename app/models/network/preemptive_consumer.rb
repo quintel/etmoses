@@ -8,10 +8,6 @@ module Network
       Technology
     end
 
-    def capacity_constrained?
-      true
-    end
-
     def stored
       @stored ||= DefaultArray.new(&method(:production_at))
     end
