@@ -21,10 +21,11 @@ module Network
           behaviors['electric_vehicle'] = ElectricVehicle
           behaviors['buffer']           = Buffer
           behaviors['siphon']           = Siphon
+          behaviors['preemptive']       = PreemptiveConsumer
         end.freeze
     end
 
-    def self.build(installed, profile, _options)
+    def self.build(installed, profile, options)
       new(installed, profile)
     end
 

@@ -4,7 +4,6 @@ module Network
   # release back to the network later.
   class Storage < Technology
     extend Disableable
-    extend ProfileScaled
 
     def self.disabled?(options)
       options[:storage] == false

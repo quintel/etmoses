@@ -61,4 +61,16 @@ FactoryGirl.define do
       )
     end
   end
+
+  factory :installed_heat_pump, class: InstalledTechnology do
+    name 'Heat pump'
+    units 1
+    capacity Float::INFINITY
+
+    after(:build) do |tech|
+      allow(tech).to receive(:technology).and_return(
+        build(:technology, behavior: 'preemptive')
+      )
+    end
+  end
 end

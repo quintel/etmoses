@@ -6,6 +6,8 @@ module Network
   # may not supply or consume any energy until reconnected. An ElectricVehicle
   # reconnects with zero energy stored.
   class ElectricVehicle < Storage
+    extend ProfileScaled
+
     # Internal:  With storage disabled, a car should consume energy from the
     # network as and when needed, without storing excesses for later use.
     def self.disabled_class
