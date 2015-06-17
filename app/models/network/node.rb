@@ -26,12 +26,6 @@ module Network
       load[frame] ||= consumption_at(frame) - production_at(frame)
     end
 
-    # Public: Returns the deficit or surplus of energy of the node based only on
-    # the technologies assigned to it.
-    def local_load_at(frame)
-      (techs = get(:techs)) ? techs.sum { |tech| tech.load_at(frame) } : 0.0
-    end
-
     # Public: Determines the production load of the node. This is the amount of
     # energy produced by all child nodes, without considering any which will be
     # consumed by their technologies.

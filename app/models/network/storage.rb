@@ -64,10 +64,5 @@ module Network
     def storage?
       true
     end
-
-    # Public: Returns how much of the technology's capacity remains unused.
-    def headroom_at(frame)
-      volume - production_at(frame)
-    end
   end # Storage
 end # Network
