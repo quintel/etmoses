@@ -1,6 +1,11 @@
 module Network
   # Describes a path of nodes from a technology node, back to the root.
   class Path
+    extend Forwardable
+    include Enumerable
+
+    def_delegator :@path, :each
+
     # Public: Given a leaf node, returns a Path which represents the route
     # back to the root node.
     #
@@ -20,6 +25,14 @@ module Network
     # leading to the root.
     def to_a
       @path.to_a
+    end
+
+    def inspect
+      "#<#{ self.class.name } #{ to_s }>"
+    end
+
+    def to_s
+      "{#{ @path.map(&:key).join(', ') }}"
     end
 
     # Public: The conditional consumption being created by the consumption node.
