@@ -7,7 +7,7 @@ module Calculation
   module PullConsumption
     def self.call(context)
       root  = context.graph.nodes.detect { |node| node.edges(:in).none? }
-      paths = context.technology_nodes.map { |node| Network::Path.find(node) }
+      paths = context.paths
 
       context.frames do |frame|
         paths.each do |path|
@@ -17,21 +17,15 @@ module Calculation
 
         excess = root.production_at(frame) - root.consumption_at(frame)
 
-        # If there is an excess, push as much of it as possible towards
-        # consumers which may want more (storage).
-        if excess > 0
-          wanted = paths.sum { |path| path.conditional_consumption_at(frame) }
+        paths.each do |path|
+          break if excess <= 0.0
 
-          if wanted > 0
-            assignable = excess < wanted ? excess : wanted
+          wanted     = path.conditional_consumption_at(frame)
+          assignable = excess < wanted ? excess : wanted
 
-            paths.each do |path|
-              share  = path.conditional_consumption_at(frame) / wanted
-              amount = assignable * share
+          path.consume(frame, assignable)
 
-              path.consume(frame, amount)
-            end
-          end
+          excess -= assignable
         end
       end
 
