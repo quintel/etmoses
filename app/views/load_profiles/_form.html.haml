@@ -7,6 +7,7 @@
   - if @load_profile.new_record?
     .form-group
       = form.label :key
+      = tooltip_tag("CHAEL TEXT HERE")
       = form.text_field :key, class: 'form-control'
       .help-block This field is optional.
 
@@ -23,14 +24,15 @@
   - unless @load_profile.locked?
     .form-group
       = form.label :curve
+      = tooltip_tag("CHAEL TEXT HERE")
       = form.file_field :curve, accept: 'text/csv'
 
       - unless @load_profile.new_record?
         .help-block Leave blank if you don't want to change the curve.
 
   .technology-profiles-controls
-    %h5(style="font-weight: bold") Permitted Technologies
-
+    = form.label :permitted_technologies, "Permitted technologies"
+    = tooltip_tag("CHAEL TEXT HERE")
     = form.fields_for :technology_profiles do |task|
       .form-group
         .input-group.technology-profile-control

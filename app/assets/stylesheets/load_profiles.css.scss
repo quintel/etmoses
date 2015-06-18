@@ -14,12 +14,14 @@
 }
 
 .technology-profiles-controls {
-  label {
-    color: #777;
-    font-size: 12px;
-    font-weight: normal;
-    margin-bottom: 0;
-    margin-right: 3px;
+  .technology-profiles-control{
+    label {
+      color: #777;
+      font-size: 12px;
+      font-weight: normal;
+      margin-bottom: 0;
+      margin-right: 3px;
+    }
   }
 }
 
