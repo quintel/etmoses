@@ -19,14 +19,14 @@
 
   .form-group
     = f.label :public, "Permissions"
-    %a.tool{href: "#", title: I18n.t("testing_grounds.form.public.tooltip"), data: {toggle: "tooltip", placement: "right"}}
-      %span.glyphicon.glyphicon-info-sign
 
     .radio-buttons
       = f.radio_button :public, true
       = f.label :public, "Public", class: "radio-label"
       = f.radio_button :public, false
       = f.label :public, "Private", class: "radio-label"
+
+    = tooltip_tag("CHAEL TEXT HERE")
 
   = f.label :technology_profile, "Technology profile"
   .help-block
@@ -63,6 +63,7 @@
 
   .form-group
     = f.label :technology_profile_csv, "Technology profile CSV"
+    = tooltip_tag("CHAEL TEXT HERE")
     = f.file_field :technology_profile_csv, accept: 'text/csv'
 
   .hidden
