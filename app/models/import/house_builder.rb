@@ -20,8 +20,11 @@ class Import
     end
 
     def average_demand
-      @average_demand ||= Demand.new(@scenario_id,
-                                     @scaling["value"].to_i).calculate
+      @average_demand ||= Import::DemandCalculator.new(
+        @scenario_id,
+        @scaling["value"].to_i,
+        "final_demand_of_electricity_in_households"
+      ).calculate
     end
 
     private

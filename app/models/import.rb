@@ -1,11 +1,6 @@
 class Import
   include ActiveModel::Validations
 
-  ETM_URLS = {
-    stats:    'http://%s/api/v3/scenarios/%d/converters/stats',
-    scenario: 'http://%s/api/v3/scenarios/%d'
-  }.freeze
-
   attr_reader :provider, :scenario_id, :topology_id
 
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
@@ -102,7 +97,7 @@ class Import
   #
   # Returns an array.
   def technologies
-    technologies_from + households
+    technologies_from + households + buildings
   end
 
   # Internal: Given a response, splits out the nodes into discrete technologies.
@@ -112,6 +107,10 @@ class Import
     response.flat_map do |key, data|
       TechnologyBuilder.build(key, data)
     end
+  end
+
+  def buildings
+    BuildingsBuilder.new(@scenario_id).build
   end
 
   # Internal: Given and etm scenario, creates a set of houses
@@ -126,9 +125,5 @@ class Import
   # Returns a JSON object or nil if the scenario doesn't exist on ETModel
   def etm_scenario
     @etm_scenario ||= EtEngineConnector.new.scenario(@scenario_id)
-  end
-
-  def scenario_url
-    ETM_URLS[:scenario] % [@provider, @scenario_id]
   end
 end # Import

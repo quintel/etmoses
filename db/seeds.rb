@@ -51,6 +51,11 @@ Technology.create!(
 )
 
 Technology.create!(
+  key:         'base_load_buildings',
+  name:        'Buildings'
+)
+
+Technology.create!(
   key:         'generic',
   name:        'Other'
 )
