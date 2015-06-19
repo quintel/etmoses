@@ -5,10 +5,6 @@ import random
 
 random.seed(33)
 
-file_name = "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_not_normalized_1.csv"
-data = genfromtxt(file_name, delimiter=',')
-data = 4.0 * data / 1000.0 # converting from Wh/15 min to kW
-
 def write_profile(profile, name):
     
     time_steps = 8760 * 4
@@ -88,71 +84,77 @@ for technology in technologies:
 lower_threshold_capacity = 0.5 #kW
 mimimal_peak_capacity = 0.5 #kW
 
-# Main loop
-flexible_demand = [0]
-peak_mode = False
-current_peak_hight = 0
-base_level = 0
-
-for i in range(1, len(data)):
+for j in range(1,76):
     
-    current_load = data[i]    
-    previous_load = data[i - 1]
-    jump = current_load - previous_load
+    # Main loop
+    flexible_demand = [0]
+    peak_mode = False
+    current_peak_hight = 0
+    base_level = 0
     
-    if current_load <= lower_threshold_capacity:
-        peak_mode = False
-
-    elif jump < 0 and np.abs(jump) >= 0.7 * current_peak_hight:
-        peak_mode = False
+    file_name = "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_not_normalized_"+str(j)+".csv"
+    data = genfromtxt(file_name, delimiter=',')
+    data = 4.0 * data / 1000.0 # converting from Wh/15 min to kW
+    
+    
+    for i in range(1, len(data)):
         
-    elif jump < 0 and current_load <= base_level:
-        peak_mode = False
-
-    elif jump > mimimal_peak_capacity:
-        peak_mode = True
-        current_peak_hight = jump
-        base_level = previous_load
+        current_load = data[i]    
+        previous_load = data[i - 1]
+        jump = current_load - previous_load
         
-        if current_peak_hight <= mimimal_peak_capacity:
-        
-            selected_technology = weighted_choice(tech_choices_low)
-            #print selected_technology.name
-        
-        elif current_peak_hight > mimimal_peak_capacity:
+        if current_load <= lower_threshold_capacity:
+            peak_mode = False
+    
+        elif jump < 0 and np.abs(jump) >= 0.7 * current_peak_hight:
+            peak_mode = False
             
-            selected_technology = weighted_choice(tech_choices_high)
-            #print selected_technology.name
+        elif jump < 0 and current_load <= base_level:
+            peak_mode = False
     
-    # Are we currently in a peak?
-    if peak_mode:
-
-        # Is the selected technology flexible?
-        if selected_technology.flexible:
+        elif jump > mimimal_peak_capacity:
+            peak_mode = True
+            current_peak_hight = jump
+            base_level = previous_load
+            
+            if current_peak_hight <= mimimal_peak_capacity:
+            
+                selected_technology = weighted_choice(tech_choices_low)
+                #print selected_technology.name
+            
+            elif current_peak_hight > mimimal_peak_capacity:
+                
+                selected_technology = weighted_choice(tech_choices_high)
+                #print selected_technology.name
+        
+        # Are we currently in a peak?
+        if peak_mode:
+    
+            # Is the selected technology flexible?
+            if selected_technology.flexible:
+           
+                flexible_demand.append(current_load)
        
-            flexible_demand.append(current_load)
-   
+            else:
+                
+                flexible_demand.append(0)
         else:
             
             flexible_demand.append(0)
-    else:
-        
-        flexible_demand.append(0)
-        
-
-mini = 1500
-maxi = 1600
-
-inflexible_demand = data - flexible_demand
+            
+    inflexible_demand = data - flexible_demand
     
-plt.close()
-plt.figure(figsize=(15,10))
-plt.plot(data[mini:maxi], 'r--', linewidth=3.0, label="original")
-plt.plot(flexible_demand[mini:maxi], label="flex")
-plt.plot(inflexible_demand[mini:maxi], label="in-flex")
-plt.legend()
-plt.show()
-
-# Write data to file
-write_profile(flexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_1_flex.csv")
-write_profile(inflexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_1_inflex.csv")
+#    mini = 1500
+#    maxi = 1600
+#        
+#    plt.close()
+#    plt.figure(figsize=(10,7))
+#    plt.plot(data[mini:maxi], 'r--', linewidth=3.0, label="original")
+#    plt.plot(flexible_demand[mini:maxi], label="flex")
+#    plt.plot(inflexible_demand[mini:maxi], label="in-flex")
+#    plt.legend()
+#    plt.show()
+    
+    # Write data to file
+    write_profile(flexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_"+str(j)+"_flex.csv")
+    write_profile(inflexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_"+str(j)+"_inflex.csv")
