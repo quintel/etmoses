@@ -52,50 +52,9 @@ energy_per_liter_per_degree = 0.00116
 # Output the capacity of the storage tank
 max_content_in_kWh = liters * energy_per_liter_per_degree * (max_temperature - min_temperature)
 
-# This function creates an 'availability profile' from a 'use profile'. 
-# 
-# Input: use profile (the use of hot water as a function of time) [fraction of storage tank for every 15 minutes]
-# Output: availability profile (which fraction of the total storage volume of the heat pump boiler should be full for every 15 minutes)
-# [fraction of storage tank for every 15 minutes]
-#
-def create_availability_profile(use_profile):
-
-    # Calculate which fraction of the boilers capacity you can fill in 15 minute    
-    time_steps_per_hour = 4.0 # currently we work with 15 minute intervals
-    max_added_energy_per_time_step = capacity_in_kW / time_steps_per_hour / max_content_in_kWh
-    print max_added_energy_per_time_step
-
-    # start at the end of the year and works backwards
-    backwards_use_profile = use_profile[::-1]
-
-    # create a backwards availability profile
-    backwards_availability_profile = np.zeros(len(use_profile))
-
-    # at the last quarter of the year, the boiler needs to contain enough energy
-    # to supply the required hot water at this last quarter
-    backwards_availability_profile[0] = backwards_use_profile[0]
-
-    # using the amount of energy that can be added to the boiler per quarter,
-    # we can iteratively calculate how much energy should be in the boiler at
-    # the second to last quarter and so on    
-    for i in range(1, len(use_profile)):
-    
-        required_energy = backwards_availability_profile[i-1] - max_added_energy_per_time_step
-    
-        if required_energy >= 0:
-            backwards_availability_profile[i] = required_energy + backwards_use_profile[i]
-        else:
-            backwards_availability_profile[i] = backwards_use_profile[i]
-
-    availability_profile = backwards_availability_profile[::-1]
-    
-    return availability_profile
- 
 # create the demand profiles
-
 # Initialise profiles
 heat_demand_profile = []
-
 
 # Main loop
 i = 0
@@ -140,4 +99,3 @@ plt.plot(demand_profile[mini:maxi])
 plt.xlabel('time (15 minutes)')
 plt.ylabel('Fraction of buffer extracted')
 plt.show()
-
