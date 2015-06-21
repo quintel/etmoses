@@ -35,16 +35,25 @@ class house:
         print "heat_loss_parameter ", self.heat_loss_parameter, " (1.1 is 'sustainable' pag. 295 SEWTHA)"
         print ""
         
-    def exchange_heat_with_outside(self, outside_temperature, irradiance_per_m2):
+    def exchange_heat_with_outside(self, outside_temperature, irradiance_per_m2_per_15_minutes):
         
         temperature_difference = self.thermostate_temperature - outside_temperature
 
-        # This works also if it is warmer outside than inside
-        self.heat_demand = self.kWh_leaked_per_hour_per_Kelvin * temperature_difference - irradiance_per_m2 * self.window_area
+        # 0.25 because the time step is 15 minutes (so only 1/4 of the leaking)
+        leaked_heat_per_time_step = 0.25 * self.kWh_leaked_per_hour_per_Kelvin * temperature_difference
+        irradiated_heat = irradiance_per_m2_per_15_minutes * self.window_area
+        self.heat_demand = leaked_heat_per_time_step - irradiated_heat
+        
+#        print "leaked: ", leaked_heat_per_time_step
+#        print "irradiated: ", irradiated_heat
        
     def get_heat_demand(self):
         
         return self.heat_demand
+        
+    def set_thermostate_temperature(self, new_temperature):
+        
+        self.thermostate_temperature = new_temperature
 
 
 ### Class for a storage tank
@@ -63,7 +72,6 @@ class tank:
         print "Min energy content of tank:", self.min_content, " kWh"
         print "Max energy content of tank:", self.max_content, " kWh"
         print ""
-
 
     def extract(self, amount_in_kWh):
         if self.content > amount_in_kWh:
