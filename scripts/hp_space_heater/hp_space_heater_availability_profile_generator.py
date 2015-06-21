@@ -46,7 +46,7 @@ capacity_in_kW = 6
 # Specs of storage tank
 liters = 100
 max_temperature = 40
-min_temperature = thermostat_temperature
+min_temperature = thermostat_temperature_day
 energy_per_liter_per_degree = 0.00116
 
 # Output the capacity of the storage tank
@@ -99,3 +99,5 @@ plt.plot(demand_profile[mini:maxi])
 plt.xlabel('time (15 minutes)')
 plt.ylabel('Fraction of buffer extracted')
 plt.show()
+
+plt.savetxt("/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/heat_pumps/space_heating_10kW_day_night/hp_space_heating_10kW_100m2_100liter.csv", demand_profile, fmt='%.3f', delimiter=',') 
