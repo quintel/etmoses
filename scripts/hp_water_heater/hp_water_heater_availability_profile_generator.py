@@ -187,7 +187,7 @@ def create_availability_profile(use_profile):
     # using the amount of energy that can be added to the boiler per quarter,
     # we can iteratively calculate how much energy should be in the boiler at
     # the second to last quarter and so on    
-    for i in range(1, len(use_profile)-1):
+    for i in range(1, len(use_profile)):
     
         required_extra_energy = backwards_availability_profile[i-1] - maximum_added_energy + backwards_use_profile[i]
     
