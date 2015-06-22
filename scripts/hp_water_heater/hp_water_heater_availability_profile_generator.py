@@ -2,7 +2,7 @@
 """
 Created on Wed Apr 29 11:09:48 2015
 
-@author: jorisberkhout
+@author: joris.berkhout@quintel.com & chael.kruip@quintel.com
 """
 
 #==============================================================================
@@ -76,7 +76,7 @@ P2H_boiler_volume = 100 # liters
 temp_diff = 95 - 15 # degrees
 
 # HP capacity
-capacity = 2000 #W
+capacity = 10000 #W
 
 # The factor 1000 is to convert from liters to grams
 P2H_storage_volume = specific_heat_H20 * P2H_boiler_volume * 1000 * temp_diff # Joule
@@ -158,12 +158,11 @@ def annual_probability_curve(prob_day, prob_week, prob_year):
     # return the normalized probability function
     return annual_probability / sum(annual_probability)     
             
-    
+# Create the probabilities
 prob_year_A = annual_probability_curve(prob_day_AB, prob_week_ABD, prob_year_ABCD)
 prob_year_B = annual_probability_curve(prob_day_AB, prob_week_ABD, prob_year_ABCD)
 prob_year_C = annual_probability_curve(prob_day_C, prob_week_C, prob_year_ABCD)
 prob_year_D = annual_probability_curve(prob_day_D, prob_week_ABD, prob_year_ABCD)
-
 
 def create_availability_profile(use_profile):
     # This profile creates an availability profile from a use profile. The use
@@ -172,8 +171,8 @@ def create_availability_profile(use_profile):
     # storage volume of the heat pump boiler should be full
 
     # Calculate which fraction of the boilers capacity you can fill in 15 minute
-    # 3600 is the conversion factor J / Wh    
-    added_energy = capacity / 4.0 * 3600 / P2H_storage_volume
+    # 3600 is the conversion factor J / Wh  
+    maximum_added_energy = (capacity / 4.0) * (3600 / P2H_storage_volume)
 
     # start at the end of the year and works backwards
     backwards_use_profile = use_profile[::-1]
@@ -188,22 +187,21 @@ def create_availability_profile(use_profile):
     # using the amount of energy that can be added to the boiler per quarter,
     # we can iteratively calculate how much energy should be in the boiler at
     # the second to last quarter and so on    
-    for i in range(1, len(use_profile)):
+    for i in range(1, len(use_profile)-1):
     
-        required_energy = backwards_availability_profile[i-1] - added_energy + backwards_use_profile[i]  
+        required_extra_energy = backwards_availability_profile[i-1] - maximum_added_energy + backwards_use_profile[i]
     
-        if required_energy >= 0:
-            backwards_availability_profile[i] = required_energy
+        if required_extra_energy > 0:
+            backwards_availability_profile[i] = required_extra_energy + backwards_use_profile[i]
         else:
-            backwards_availability_profile[i] = 0
+            backwards_availability_profile[i] =  backwards_use_profile[i]
 
     availability_profile = backwards_availability_profile[::-1]
     
     return availability_profile
     
-# main loop    
-    
-for j in range(0,1):
+# main loop 
+for j in range(0,10):
 
     pattern_A = np.zeros(len(prob_year_A))
     pattern_B = np.zeros(len(prob_year_B))
@@ -215,8 +213,7 @@ for j in range(0,1):
     for i in range(0, len(pattern_A)):
         
         # construct the random pattern for each type of event by taking onto account
-        # their probability, the number of events per day and the volume per event
-        
+        # their probability, the number of events per day and the volume per event    
         pattern_A[i] = volume_A * np.random.choice((0,1),p=[1-prob_year_A[i]*occ_A*365, prob_year_A[i]*occ_A*365])
         pattern_B[i] = volume_B * np.random.choice((0,1),p=[1-prob_year_B[i]*occ_B*365, prob_year_B[i]*occ_B*365])
         pattern_C[i] = volume_C * np.random.choice((0,1),p=[1-prob_year_C[i]*occ_C*365, prob_year_C[i]*occ_C*365])
@@ -231,22 +228,21 @@ for j in range(0,1):
     # calculate the pattern in relative terms by dividing by the maximum storage volume of the P2H boiler
     pattern = pattern / P2H_storage_volume
     
-    use_filename = 'dhw_use_profile_' + str(j+1) + '.csv'
-    #plt.savetxt(use_filename, pattern, fmt='%.3f', delimiter=',')    
-    
+    use_filename = '../output_data/dhw_use_profile_' + str(j+1) + '.csv'
+    plt.savetxt(use_filename, pattern, fmt='%.3f', delimiter=',')    
+
     # calculate the availability profile from the use profile
     availability_profile = create_availability_profile(pattern)    
     
-    filename = 'dhw_availability_profile_' + str(j+1) + '.csv'
-    #plt.savetxt(availability_filename, availability_profile, fmt='%.3f', delimiter=',')  
-    
-#plt.plot(pattern)
-    
-
-# bin all events per day and display these
-plt.plot(pattern.reshape(-1, 96).sum(axis=1), 'k-')
-plt.xlabel('time (days)')
-plt.ylabel('daily energy use for DHW consumption (kWh)')
-plt.title('pattern ' + str(j+1))
-
-plt.show()
+    availability_filename = '../output_data/dhw_availability_profile_' + str(j+1) + '.csv'
+    plt.savetxt(availability_filename, availability_profile, fmt='%.3f', delimiter=',')  
+ 
+    mini = 0
+    maxi = 8760 * 4
+    x = np.arange(mini,maxi)
+    plt.step(x,pattern[mini:maxi],linewidth=3.0)  
+    plt.step(x,availability_profile[mini:maxi])
+    plt.xlabel('time (15 minutes steps)')
+    plt.ylabel('daily energy use for DHW consumption (fraction of tank)')
+    plt.title('pattern ' + str(j+1))
+    plt.show()
