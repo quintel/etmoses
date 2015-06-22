@@ -192,11 +192,14 @@ def create_availability_profile(use_profile):
         required_extra_energy = backwards_availability_profile[i-1] - maximum_added_energy + backwards_use_profile[i]
     
         if required_extra_energy > 0:
-            backwards_availability_profile[i] = required_extra_energy + backwards_use_profile[i]
+            backwards_availability_profile[i] = required_extra_energy
         else:
-            backwards_availability_profile[i] =  backwards_use_profile[i]
+            backwards_availability_profile[i] =  0.0
 
     availability_profile = backwards_availability_profile[::-1]
+    
+    # Adding the demand to the extra demand
+    availability_profile += use_profile
     
     return availability_profile
     
