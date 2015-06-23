@@ -51,7 +51,7 @@
         - 3.times do
           %span.check_box
             %strong= "Max/min"
-        - @technologies.each do |technology|
+        - @technologies.with_load_profiles.each do |technology|
           %span.check_box
             = radio_button_tag technology.key, "max", true
             = radio_button_tag technology.key, "min"

@@ -22,6 +22,11 @@ class Technology < ActiveRecord::Base
   validates :export_to,
     length: { maximum: 100 }
 
+
+  def self.with_load_profiles
+    joins(:load_profiles).uniq
+  end
+
   # Public: Returns a "generic" technology, which represents an installed
   # technology with no explicit type.
   def self.generic
