@@ -23,8 +23,11 @@ en:
   not_authorized: "You don't have permission to view that."
 
   testing_grounds:
-    data:
-      error: 'Sorry, your local energy solution could not be calculated'
+    error:
+      data: 'Sorry, your local energy solution could not be calculated'
+      profile_not_found: >
+        You are using a non-existent profile called '%{profile}',
+        please check your technologies.
 
     form:
       public:

@@ -27,7 +27,7 @@ var ErrorDisplayer = (function(){
   };
 
   function ErrorDisplayer(_error, _target){
-    error = _error;
+    error = JSON.parse(_error.response);
     target = _target;
   };
 

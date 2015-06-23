@@ -56,6 +56,10 @@ class LoadProfile < ActiveRecord::Base
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.
   def self.by_key(key)
-    where(key: key).first!
+    begin
+      where(key: key).first!
+    rescue ActiveRecord::RecordNotFound
+      raise TestingGround::DataError, I18n.t("testing_grounds.error.profile_not_found", profile: key)
+    end
   end
 end
