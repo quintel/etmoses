@@ -8,7 +8,7 @@ class TopologiesController < ResourceController
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
 
   def index
-    @topologies = policy_scope(Topology).in_name_order
+    @topologies = policy_scope(Topology.named).in_name_order
   end
 
   # GET /topologies
