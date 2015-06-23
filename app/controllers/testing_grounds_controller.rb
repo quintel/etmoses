@@ -61,18 +61,24 @@ class TestingGroundsController < ResourceController
   end
 
   def data
-    render json: @testing_ground.to_json(storage: params[:storage] == '1')
-  rescue StandardError => ex
-    notify_airbrake(ex) if defined?(Airbrake)
+    begin
+      render json: @testing_ground.to_json(storage: params[:storage] == '1')
+    rescue StandardError => ex
+      notify_airbrake(ex) if defined?(Airbrake)
 
-    result = { error: I18n.t("testing_grounds.data.error") }
+      result = if ex.class == TestingGround::DataError
+                 { error: ex.message }
+               else
+                 { error: I18n.t("testing_grounds.error.data") }
+               end
 
-    if Rails.env.development? || Rails.env.test?
-      result[:message]   = "#{ ex.class }: #{ ex.message }"
-      result[:backtrace] = ex.backtrace
+      if Rails.env.development? || Rails.env.test?
+        result[:message]   = "#{ ex.class }: #{ ex.message }"
+        result[:backtrace] = ex.backtrace
+      end
+
+      render json: result, status: 500
     end
-
-    render json: result, status: 500
   end
 
   # GET /topologies/:id/edit

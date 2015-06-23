@@ -1,4 +1,6 @@
 class TestingGround < ActiveRecord::Base
+  class DataError < StandardError; end;
+
   include Privacy
 
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
