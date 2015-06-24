@@ -35,6 +35,7 @@ var ProfileTable = (function(){
   function cloneAndAppendProfileSelect(){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone();
+    profileSelectbox.val($(this).data('profile'));
     $(this).parent().next().html(profileSelectbox);
   };
 
