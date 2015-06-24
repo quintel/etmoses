@@ -57,7 +57,8 @@
 
       .buttons
         = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"
-        = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary"
+        - edit_class = (testing_ground.new_record? ? "" : "edit")
+        = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary #{edit_class}"
 
   .form-group
     = f.label :technology_profile_csv, "Technology profile CSV"
