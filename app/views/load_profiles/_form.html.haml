@@ -7,7 +7,7 @@
   - if @load_profile.new_record?
     .form-group
       = form.label :key
-      = tooltip_tag("CHAEL TEXT HERE")
+      = tooltip_tag("This \'key\' will be the unique identifier for your profile. If not specified, the filename is used.")
       = form.text_field :key, class: 'form-control'
       .help-block This field is optional.
 
@@ -24,7 +24,7 @@
   - unless @load_profile.locked?
     .form-group
       = form.label :curve
-      = tooltip_tag("CHAEL TEXT HERE")
+      = tooltip_tag("Please upload CSV files containing a single column of 35040 values (one for every 15 minutes of the year).")
       = form.file_field :curve, accept: 'text/csv'
 
       - unless @load_profile.new_record?
@@ -32,7 +32,7 @@
 
   .technology-profiles-controls
     = form.label :permitted_technologies, "Permitted technologies"
-    = tooltip_tag("CHAEL TEXT HERE")
+    = tooltip_tag("Please specify to which technologies your profiles applies. ETMoses will automatically assign your profile to the specified technologies using the unique ETM-technology names.")
     = form.fields_for :technology_profiles do |task|
       .form-group
         .input-group.technology-profile-control

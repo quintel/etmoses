@@ -18,11 +18,11 @@
       = form.radio_button :public, false
       = form.label :public, "Private", class: "radio-label"
 
-    = tooltip_tag('CHAEL TEXT HERE')
+    = tooltip_tag('You can choose to make your Topology private or public. A private Topology can be viewed only by you. A public Topology can be viewed by anyone but only edited by you.')
 
   .form-group
     = form.label :graph
-    = tooltip_tag('CHAEL TEXT HERE')
+    = tooltip_tag('Here you can specify the structure, capacity and cost parameters of your network topology. Please refer to the [topology syntax page](https://github.com/quintel/documentation/blob/master/general/topology_syntax.md) for details.')
     = form.text_area :graph, value: topology_field_value(@topology)
 
   .form-group

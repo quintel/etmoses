@@ -25,7 +25,7 @@
       = f.radio_button :public, false
       = f.label :public, "Private", class: "radio-label"
 
-    = tooltip_tag("CHAEL TEXT HERE")
+    = tooltip_tag("You can choose to make your LES private or public. A private LES can be viewed only by you. A public LES can be viewed by anyone but only edited by you.")
 
   = f.label :technology_profile, "Technology profile"
   .help-block
@@ -61,7 +61,7 @@
 
   .form-group
     = f.label :technology_profile_csv, "Technology profile CSV"
-    = tooltip_tag("CHAEL TEXT HERE")
+    = tooltip_tag("CHere you can upload a CSV file that contains the technology table from another LES (you can save the LES as a CSV once it has been created).")
     = f.file_field :technology_profile_csv, accept: 'text/csv'
 
   .hidden

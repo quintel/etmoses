@@ -66,11 +66,11 @@ ActiveRecord::Schema.define(version: 20150616094342) do
     t.integer  "user_id"
     t.integer  "topology_id"
     t.boolean  "public",                              default: true, null: false
-    t.integer  "parent_scenario_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",               limit: 100,      default: "",   null: false
     t.integer  "scenario_id"
+    t.integer  "parent_scenario_id"
   end
 
   create_table "topologies", force: true do |t|
