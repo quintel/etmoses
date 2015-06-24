@@ -23,6 +23,7 @@ module Network
           behaviors['siphon']           = Siphon
           behaviors['preemptive']       = PreemptiveConsumer
           behaviors['deferrable']       = DeferrableConsumer
+          behaviors['conserving']       = ConservingProducer
         end.freeze
     end
 

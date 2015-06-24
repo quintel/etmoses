@@ -55,9 +55,9 @@ module Calculation
     #######
 
     def path_order
-      # TODO Solar PV and heat-pumps need to be added.
-      [ Network::ElectricVehicle, Network::PreemptiveConsumer,
-        Network::Battery, Network::Buffer, Network::Siphon ].map do |klass|
+      [ Network::ConservingProducer, Network::ElectricVehicle,
+        Network::PreemptiveConsumer, Network::Battery,
+        Network::Buffer, Network::Siphon ].map do |klass|
         ->(p) { p.technology.is_a?(klass) }
       end
     end
