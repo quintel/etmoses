@@ -93,6 +93,7 @@ GEM
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     daemons (1.2.2)
+    database_cleaner (1.4.1)
     debug_inspector (0.0.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -328,6 +329,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.0)
   capistrano3-unicorn (~> 0.2)
   coffee-rails (~> 4.0.0)
+  database_cleaner
   devise
   factory_girl_rails (~> 4.5)
   guard

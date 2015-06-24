@@ -1,6 +1,4 @@
 class Technology < ActiveRecord::Base
-  GENERIC_REGEX = /^(generic|base_load)$/
-
   has_many :importable_attributes, dependent: :delete_all
   has_many :technology_profiles, foreign_key: "technology", primary_key: "key"
   has_many :load_profiles, through: :technology_profiles
@@ -8,8 +6,7 @@ class Technology < ActiveRecord::Base
   validates :key,
     presence: true,
     length: { maximum: 100 },
-    uniqueness: true,
-    exclusion: { in: %w( generic ) }
+    uniqueness: true
 
   validates :name,
     length: { maximum: 100 }
@@ -30,13 +27,13 @@ class Technology < ActiveRecord::Base
   # Public: Returns a "generic" technology, which represents an installed
   # technology with no explicit type.
   def self.generic
-    @@generic ||= Technology.new(key: 'generic'.freeze)
+    @@generic ||= Technology.find_by_key('generic')
   end
 
   # Public: Retrieves the record with the matching +key+ or raises
   # ActiveRecord::RecordNotFound if no such record exists.
   def self.by_key(key)
-    key =~ GENERIC_REGEX ? generic : where(key: key).first!
+    key == 'generic' ? generic : where(key: key).first!
   end
 
   # Public: A nice, readable name for the technology.

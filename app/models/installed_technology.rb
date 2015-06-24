@@ -43,7 +43,7 @@ class InstalledTechnology
   #
   # Returns true or false.
   def exists?
-    type.blank? || type =~ Technology::GENERIC_REGEX || Technology.exists?(key: type)
+    type.blank? || Technology.exists?(key: type)
   end
 
   # Public: Returns the associated technology (as defined in data/technologies).

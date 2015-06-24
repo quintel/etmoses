@@ -17,7 +17,13 @@ def stub_et_engine_scenario_update_request(id = 2)
     :body => {
       "autobalance"=>"true",
       "force_balance"=>"true",
-      "scenario"=>{"title"=>"My Testing Ground"}
+      "scenario"=>{
+        "title"=>"My Testing Ground",
+        "user_values"=>{
+          "households_solar_pv_solar_radiation_market_penetration"=>"350.0",
+          "transport_car_using_electricity_share"=>"3200.0"
+        }
+      }
     },
     :headers => {
       'Accept'=>'application/json',

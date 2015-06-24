@@ -52,6 +52,7 @@ end
 group :test do
   gem 'factory_girl_rails', '~> 4.5'
   gem 'shoulda-matchers', require: false
+  gem 'database_cleaner'
   gem 'webmock'
 end
 

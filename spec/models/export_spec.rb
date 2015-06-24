@@ -2,10 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Export do
   let(:topology){ FactoryGirl.create(:topology) }
-  let!(:technologies){
-    FactoryGirl.create(:technology, key: "households_solar_pv_solar_radiation")
-    FactoryGirl.create(:technology, key: "transport_car_using_electricity")
-  }
   let(:testing_ground){
     FactoryGirl.create(:testing_ground,
       topology: topology,
@@ -13,9 +9,14 @@ RSpec.describe Export do
   }
 
   it "exports an export" do
+    export = Export.new(testing_ground)
+
     stub_et_engine_scenario_create_request
     stub_et_engine_scenario_update_request
 
-    expect(Export.new(testing_ground).export).to eq({"id" => 2})
+    expect(export).to receive(:solar_panel_units_factor).and_return(2)
+    expect(export).to receive(:number_of_households).twice.and_return(2)
+
+    expect(export.export).to eq({"id" => 2})
   end
 end

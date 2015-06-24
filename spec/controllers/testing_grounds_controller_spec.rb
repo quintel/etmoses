@@ -264,14 +264,6 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#update" do
-    let!(:technologies){
-      FactoryGirl.create(:technology,
-        key: 'households_solar_pv_solar_radiation')
-
-      FactoryGirl.create(:technology,
-        key: 'transport_car_using_electricity')
-    }
-
     let(:topology){
       FactoryGirl.create(:large_topology)
     }
