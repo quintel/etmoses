@@ -24,7 +24,7 @@ class Technology < ActiveRecord::Base
 
 
   def self.with_load_profiles
-    joins(:load_profiles).uniq
+    joins(:load_profiles).uniq + where(key: 'generic')
   end
 
   # Public: Returns a "generic" technology, which represents an installed
