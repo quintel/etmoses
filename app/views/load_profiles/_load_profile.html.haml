@@ -1,4 +1,4 @@
-%ul
+%ul{style: ("display:none;" if collapsed)}
   - policy_scope(load_profile_category.load_profiles).in_name_order.each do |profile|
     %li
       = link_to profile do
