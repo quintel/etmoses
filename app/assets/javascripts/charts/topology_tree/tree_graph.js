@@ -9,7 +9,8 @@ var TreeGraph = (function(){
       duration        = 250,
       ease            = 'cubic-out',
       storageShown    = false,
-      storageLoads    = false;
+      storageLoads    = false,
+      defaultStrategy = "storage_strategy_1";
 
   TreeGraph.prototype = {
     showGraph: function(){
@@ -17,7 +18,8 @@ var TreeGraph = (function(){
       createBaseSvg();
 
       $('.loading').remove();
-      $('#enable-storage').click(enableStorage);
+      $("input[value=no_storage]").prop('checked', true);
+      $("input[name=storage]").on('change', toggleStorageRadio.bind(this));
 
       transformData();
 
@@ -404,65 +406,9 @@ var TreeGraph = (function(){
     }
   };
 
-  function enableStorage(event){
-    event.preventDefault();
-
-    var element = $(this);
-
-    if (element.hasClass('disabled')) {
-      return true;
-    }
-
-    if (storageShown) {
-      storageShown = false;
-      element.text('Enable Storage').removeClass('btn-success');
-    } else {
-      storageShown = true;
-
-      if (!storageLoads || storageLoads === true) {
-        element.text('Loading...').addClass('disabled');
-      } else {
-        element.text('Storage Enabled').addClass('btn-success');
-      }
-    }
-
-    toggleStorage();
-  };
-
-  function toggleStorage() {
-    if (storageShown) {
-      if (storageLoads === true) {
-        // Already loading...
-        return false;
-      } else if (storageLoads) {
-        // immediately toggle storage on
-        swapLoads(root);
-      } else {
-        storageLoads = true;
-
-        d3.json(url + '?storage=1', function(error, offData) {
-          // fetch then toggle on
-          storageLoads = {};
-
-          ETHelper.eachNode([offData.graph], function(node) {
-            storageLoads[node.name] = node.load;
-          });
-
-          ETHelper.eachNode([treeData], function(node) {
-            node.altLoad = storageLoads[node.name];
-          });
-
-          $('#enable-storage')
-            .text('Storage Enabled')
-            .addClass('btn-success')
-            .removeClass('disabled');
-
-          swapLoads(root);
-        });
-      }
-    } else {
-      swapLoads(root);
-    }
+  function toggleStorageRadio(e){
+    storageShown = !($(e.target).val() == "no_storage");
+    storages[$(e.target).val()]();
   };
 
   function swapLoads(root) {
@@ -477,6 +423,44 @@ var TreeGraph = (function(){
 
     showChart(lastClicked);
     update(root);
+  };
+
+  var storages = {
+    storage_strategy_1: function(){
+      if (storageLoads === true) {
+        // Already loading...
+        return false;
+      } else if (storageLoads) {
+        // immediately toggle storage on
+        swapLoads(root);
+      } else {
+        storageLoads = true;
+
+        $(".loading-spinner").addClass("on");
+        $("input[name=storage]:not(.disabled)").prop('disabled', true);
+
+        d3.json(url + '?storage=1', function(error, offData) {
+          // fetch then toggle on
+          storageLoads = {};
+
+          ETHelper.eachNode([offData.graph], function(node) {
+            storageLoads[node.name] = node.load;
+          });
+
+          ETHelper.eachNode([treeData], function(node) {
+            node.altLoad = storageLoads[node.name];
+          });
+
+          $(".loading-spinner").removeClass("on");
+          $("input[name=storage]:not(.disabled)").prop('disabled', false);
+          swapLoads(root);
+        });
+      }
+    },
+
+    no_storage: function(){
+      swapLoads(root);
+    }
   };
 
   function TreeGraph(_url, _treeData, _container){

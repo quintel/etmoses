@@ -5,20 +5,25 @@ em.note span.sep
   padding: 0 0 0 12px
   margin: 0 0 0 8px
 
-a.tool
-  color: black
+.form-group
+  position: relative
+  max-width: 620px
 
-  &:hover
-    color: black
+  .radio-buttons, select
+    display: inline-block
 
-.tool + .tooltip
-  &.right .tooltip-arrow
-    border-right-color: $tooltip-color
-
-  > .tooltip-inner
-    color: black
-    background-color: $tooltip-color
-    opacity: 1
-    max-width: 400px
-    text-align: left
-    padding: 10px 10px 10px 15px
+.tooltip-link
+  margin: 0 0 0 5px
+  font-size: 14px
+  color: #bbb
+  display: inline-block
+  + .tooltip
+    &.right .tooltip-arrow
+      border-right-color: $tooltip-color
+    > .tooltip-inner
+      color: black
+      background-color: $tooltip-color
+      opacity: 1
+      width: 400px
+      text-align: left
+      padding: 10px 10px 10px 15px

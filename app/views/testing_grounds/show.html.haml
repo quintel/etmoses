@@ -33,10 +33,19 @@
         Large local energy solutions may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
 
-  = link_to "Enable Storage", '#', style: "margin-right: 10px", class: "btn btn-default", id: 'enable-storage'
   = link_to topology_path(@testing_ground.topology), class: "pull-right btn btn-default", target: "_blank" do
     View
     = truncate(@testing_ground.topology.name, length: 25)
+
+.storage-capabilities
+  %span.loading-spinner
+    = image_tag 'wait.gif'
+  = radio_button_tag :storage, 'storage_strategy_1', false
+  = label_tag :storage, 'Storage strategy #1', class: 'disabled'
+  = radio_button_tag :storage, 'storage_strategy_2', false, disabled: true, class: 'disabled'
+  = label_tag :storage, 'Storage strategy #2'
+  = radio_button_tag :storage, 'no_storage', true
+  = label_tag :storage, 'No storage'
 
 .node-info
   %h5

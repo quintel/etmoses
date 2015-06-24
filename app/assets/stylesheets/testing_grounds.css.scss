@@ -300,7 +300,7 @@ table.table.scenarios{
 }
 
 #profiles-table{
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   td:focus{
     outline: 1px dotted #477caa;
@@ -318,7 +318,7 @@ table.table.scenarios{
 }
 
 .concurrency{
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   .checkboxes{
     .check_box{
@@ -330,4 +330,16 @@ table.table.scenarios{
   .buttons{
     margin-top: 10px;
   }
+}
+
+span.loading-spinner{
+  display: none;
+
+  img{
+    height: 24px;
+  }
+}
+
+span.loading-spinner.on{
+  display: inline;
 }
