@@ -112,7 +112,9 @@ var ProfileTable = (function(){
   };
 
   function addClickListenersToAddRow(){
-    $("#profiles-table table tr th a.add-row").on("click", function(){
+    $("#profiles-table table tr th a.add-row").on("click", function(e){
+      e.preventDefault();
+
       var row = $(this).parents("tr");
       var clonedRow = row.clone(true, true);
       clonedRow.find("td.editable:not(.select)").text("");
@@ -121,7 +123,9 @@ var ProfileTable = (function(){
   };
 
   function addClickListenersToDeleteRow(){
-    $("#profiles-table table tr th a.remove-row").on("click", function(){
+    $("#profiles-table table tr th a.remove-row").on("click", function(e){
+      e.preventDefault();
+
       $(this).parents("tr").remove();
       parseTableToJSON();
     });
