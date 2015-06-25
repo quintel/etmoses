@@ -24,6 +24,7 @@ module Network
           behaviors['preemptive']       = PreemptiveConsumer
           behaviors['deferrable']       = DeferrableConsumer
           behaviors['conserving']       = ConservingProducer
+          behaviors['optional']         = OptionalConsumer
         end.freeze
     end
 
