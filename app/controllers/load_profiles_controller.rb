@@ -55,7 +55,7 @@ class LoadProfilesController < ResourceController
 
   def load_profile_params
     params.require(:load_profile).permit(
-      :key, :name, :curve, :load_profile_category_id,
+      :key, :name, :curve, :public, :load_profile_category_id,
       { technology_profiles_attributes: [:id, :technology, :_destroy] }
     )
   end

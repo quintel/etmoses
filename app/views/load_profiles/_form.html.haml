@@ -17,6 +17,15 @@
     .help-block This field is optional.
 
   .form-group
+    = form.label :public, "Permissions"
+
+    .radio-buttons
+      = form.radio_button :public, true
+      = form.label :public, "Public", class: "radio-label"
+      = form.radio_button :public, false
+      = form.label :public, "Private", class: "radio-label"
+
+  .form-group
     = form.label :load_profile_category_id
     = form.select :load_profile_category_id, load_profile_categories_select_options, {}, class: 'form-control'
     .help-block This field is optional.
