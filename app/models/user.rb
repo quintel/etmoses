@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :testing_grounds
   has_many :topologies
   has_many :load_profiles
+  has_many :market_models
 
   def activate!
     update_column(:activated, true)

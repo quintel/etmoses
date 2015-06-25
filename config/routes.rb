@@ -17,6 +17,7 @@ Rails.application.routes.draw do
 
   resources :load_profiles
   resources :topologies
+  resources :market_models
 
   root to: redirect('/welcome')
 

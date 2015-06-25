@@ -1,0 +1,10 @@
+= form_for @market_model do |form|
+  .form-group
+    = form.label :name
+    = form.text_field :name, class: "form-control"
+
+  .hidden
+    = form.text_area :interactions
+
+  = form.submit 'Save', class: "btn btn-primary"
+
