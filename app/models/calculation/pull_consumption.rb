@@ -18,14 +18,18 @@ module Calculation
         excess = root.production_at(frame) - root.consumption_at(frame)
 
         paths.each do |path|
-          break if excess <= 0.0
+          if excess <= 0
+            # Some technologies need to be explicitly told that they received
+            # nothing, as they have further actions to take.
+            path.consume(frame, 0.0)
+          else
+            wanted     = path.conditional_consumption_at(frame)
+            assignable = excess < wanted ? excess : wanted
 
-          wanted     = path.conditional_consumption_at(frame)
-          assignable = excess < wanted ? excess : wanted
+            path.consume(frame, assignable)
 
-          path.consume(frame, assignable)
-
-          excess -= assignable
+            excess -= assignable
+          end
         end
       end
 

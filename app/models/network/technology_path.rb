@@ -55,7 +55,9 @@ module Network
     #
     # Returns nothing.
     def consume(frame, amount)
-      return if amount.zero?
+      # Some technologies need to be explicitly told that they received no
+      # (conditional) consumption.
+      return if amount.zero? && ! @technology.respond_to?(:store)
 
       currently = @technology.consumption[frame] || 0.0
 
