@@ -453,6 +453,7 @@ var TreeGraph = (function(){
 
           $(".loading-spinner").removeClass("on");
           $("input[name=storage]:not(.disabled)").prop('disabled', false);
+
           swapLoads(root);
         });
       }

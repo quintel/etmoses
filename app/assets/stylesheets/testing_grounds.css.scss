@@ -333,13 +333,23 @@ table.table.scenarios{
 }
 
 span.loading-spinner{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -16px;
+  margin-top: -17px;
   display: none;
-
-  img{
-    height: 24px;
-  }
 }
 
 span.loading-spinner.on{
   display: inline;
+}
+
+.load-graph{
+  position: relative;
+}
+
+label.disabled{
+  color: #ccc;
+  font-weight: normal;
 }
