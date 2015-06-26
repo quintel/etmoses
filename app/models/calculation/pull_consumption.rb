@@ -21,12 +21,12 @@ module Calculation
           if excess <= 0
             # Some technologies need to be explicitly told that they received
             # nothing, as they have further actions to take.
-            path.consume(frame, 0.0)
+            path.consume(frame, 0.0, true)
           else
             wanted     = path.conditional_consumption_at(frame)
             assignable = excess < wanted ? excess : wanted
 
-            path.consume(frame, assignable)
+            path.consume(frame, assignable, true)
 
             excess -= assignable
           end

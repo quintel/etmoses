@@ -30,6 +30,7 @@ module Network
 
       @deferreds  = []
       @last_frame = @profile.length - 1
+      @capacity   = CapacityLimit.new(self)
     end
 
     def capacity_constrained?
@@ -65,8 +66,11 @@ module Network
       # All loads are mandatory in the final frame.
       return 0.0 if frame == @last_frame
 
-      @profile.at(frame) +
-        @deferreds.sum { |d| d.mandatory_at == frame ? 0.0 : d.amount }
+      @capacity.limit_conditional(
+        frame,
+        @profile.at(frame) +
+          @deferreds.sum { |d| d.mandatory_at == frame ? 0.0 : d.amount }
+      )
     end
 
     # Public: Informs the Deferrable that some or all of its conditional
@@ -93,6 +97,8 @@ module Network
     #######
 
     def defer!(frame, amount)
+      return if amount.zero?
+
       mandatory_at = @last_frame < (frame + 12) ? @last_frame : (frame + 12)
       @deferreds.push(DeferrableLoad.new(amount, mandatory_at))
     end

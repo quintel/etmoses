@@ -54,18 +54,15 @@ module Network
     # consumption flow of each node.
     #
     # Returns nothing.
-    def consume(frame, amount)
+    def consume(frame, amount, conditional = false)
       # Some technologies need to be explicitly told that they received no
       # (conditional) consumption.
       return if amount.zero? && ! @technology.respond_to?(:store)
 
+      # TODO "store" should be renamed to "consume_conditional"
+      @technology.store(frame, amount) if conditional
+
       currently = @technology.consumption[frame] || 0.0
-
-      if currently >= @technology.mandatory_consumption_at(frame)
-        # TODO "store" should be renamed to "consume_conditional"
-        @technology.store(frame, amount)
-      end
-
       @technology.consumption[frame] = currently + amount
 
       @path.each { |node| node.consume(frame, amount) }
