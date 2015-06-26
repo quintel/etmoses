@@ -1,9 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Network::OptionalConsumer do
-  let(:installed) { InstalledTechnology.new(capacity: profile.first, behavior: 'optional') }
-  let(:tech)      { Network::Technology.from_installed(installed, profile) }
-  let(:profile)   { [2.0] }
+  let(:installed) do
+    InstalledTechnology.new(capacity: profile.first, behavior: 'optional')
+  end
+
+  let(:tech) do
+    Network::Technology.from_installed(installed, profile, flexibility: true)
+  end
+
+  let(:profile) { [2.0] }
 
   it 'sets the capacity' do
     expect(tech.capacity).to eq(2.0)

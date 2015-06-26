@@ -4,7 +4,7 @@ module Network
   #
   # "I don't need to run my heater, I'll wear another layer of clothes..."
   class OptionalConsumer < Technology
-    include Disableable
+    extend Disableable
 
     def self.disabled_class
       Technology
