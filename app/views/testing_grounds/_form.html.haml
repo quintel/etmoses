@@ -56,8 +56,8 @@
           %span= technology.name
 
       .buttons
-        = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"
-        = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary"
+        %button.toggle-whitelist.btn.btn-default Toggle All
+        %button.toggle-concurrency.btn.btn-primary Apply
 
   .form-group
     = f.label :technology_profile_csv, "Technology profile CSV"
