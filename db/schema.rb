@@ -44,12 +44,25 @@ ActiveRecord::Schema.define(version: 20150626123929) do
 
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
 
+  create_table "market_models", force: true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.text     "interactions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "stakeholders", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "technologies", force: true do |t|
     t.string "key",       limit: 100, null: false
     t.string "name",      limit: 100
     t.string "export_to", limit: 100
     t.string "behavior",  limit: 50
-    t.text   "defaults"
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
@@ -67,11 +80,11 @@ ActiveRecord::Schema.define(version: 20150626123929) do
     t.integer  "user_id"
     t.integer  "topology_id"
     t.boolean  "public",                              default: true, null: false
+    t.integer  "parent_scenario_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",               limit: 100,      default: "",   null: false
     t.integer  "scenario_id"
-    t.integer  "parent_scenario_id"
   end
 
   create_table "topologies", force: true do |t|
