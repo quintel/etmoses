@@ -61,7 +61,7 @@
 
     %div
       = radio_button_tag :storage, 'storage_strategy_1', false
-      = label_tag :storage, 'Storage strategy #1'
+      = label_tag :storage, 'Prioritize use of local solar production'
 
     %div
       = radio_button_tag :storage, 'storage_strategy_2', false, disabled: true, class: 'disabled'
@@ -72,7 +72,7 @@
     = link_to "Load management strategies", "#collapse-load-management-strategies", data: {toggle: 'collapse'}
 
   #collapse-load-management-strategies.collapse
-    To be continued
+    To be implemented
 
 #technologies
   %h2
