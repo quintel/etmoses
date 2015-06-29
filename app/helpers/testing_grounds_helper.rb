@@ -47,4 +47,10 @@ module TestingGroundsHelper
   def node_options(profile, node)
     options_for_select(profile.keys, selected: node)
   end
+
+  def technology_defaults(technology, profile)
+    if tech_profile = profile.values.flatten.detect{|t| t[:type] == technology.key }
+      tech_profile.slice(:capacity, :volume, :demand)
+    end
+  end
 end

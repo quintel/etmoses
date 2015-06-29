@@ -24,6 +24,11 @@
     %span.sep
       = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
 
+  %span.sep
+    = link_to topology_path(@testing_ground.topology), target: "_blank" do
+      View
+      = truncate(@testing_ground.topology.name, length: 25)
+
 #testing-ground
   .testing-ground-view{ "data-url" => data_testing_ground_url(@testing_ground, format: :json) }
     %span.loading
@@ -33,47 +38,66 @@
         Large local energy solutions may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
 
-  = link_to topology_path(@testing_ground.topology), class: "pull-right btn btn-default", target: "_blank" do
-    View
-    = truncate(@testing_ground.topology.name, length: 25)
-
-.storage-capabilities
-  %span.loading-spinner
-    = image_tag 'wait.gif'
-  = radio_button_tag :storage, 'storage_strategy_1', false
-  = label_tag :storage, 'Storage strategy #1', class: 'disabled'
-  = radio_button_tag :storage, 'storage_strategy_2', false, disabled: true, class: 'disabled'
-  = label_tag :storage, 'Storage strategy #2'
-  = radio_button_tag :storage, 'no_storage', true
-  = label_tag :storage, 'No storage'
+.clearfix
 
 .node-info
   %h5
   .load-graph.line-chart
+    %span.loading-spinner
+      = image_tag 'wait.gif'
+
   = link_to "Download curve", "#", class: "btn btn-primary download-curve"
 
-%h2 Technologies
+.clearfix
+
+.storage-capabilities
+  %h2
+    = link_to "Storage strategies", "#collapse-strategies", data: {toggle: 'collapse'}
+
+  #collapse-strategies.collapse
+    %div
+      = radio_button_tag :storage, 'no_storage', true
+      = label_tag :storage, 'No storage'
+
+    %div
+      = radio_button_tag :storage, 'storage_strategy_1', false
+      = label_tag :storage, 'Prioritize use of local solar production'
+
+    %div
+      = radio_button_tag :storage, 'storage_strategy_2', false, disabled: true, class: 'disabled'
+      = label_tag :storage, 'Storage strategy #2', class: 'disabled'
+
+.load-strategies
+  %h2
+    = link_to "Load management strategies", "#collapse-load-management-strategies", data: {toggle: 'collapse'}
+
+  #collapse-load-management-strategies.collapse
+    To be implemented
 
 #technologies
-  - if @testing_ground.technology_profile.any?
-    - @testing_ground.technology_profile.each do |key, techs|
-      .row-fluid{ "data-node" => key }
-        %table.table
-          %thead
-            %tr
-              %th Name
-              %th Profile
-              %th Capacity [kW]
-              %th Storage volume [kWh]
-              %th Yearly demand [kWh]
-              %th Units
-          %tbody
-            - techs.each do |tech|
-              %tr{ "data-tech" => tech.name }
-                - InstalledTechnology::EDITABLES.each do |akey|
-                  %td= tech.send(akey)
+  %h2
+    = link_to "Technologies", "#collapse-technologies", data: {toggle: 'collapse'}
 
-  - else
-    No Technologies registered yet.
+  #collapse-technologies.collapse
+    - if @testing_ground.technology_profile.any?
+      - @testing_ground.technology_profile.each do |key, techs|
+        .row-fluid{ "data-node" => key }
+          %table.table
+            %thead
+              %tr
+                %th Name
+                %th Profile
+                %th Capacity [kW]
+                %th Storage volume [kWh]
+                %th Yearly demand [kWh]
+                %th Units
+            %tbody
+              - techs.each do |tech|
+                %tr{ "data-tech" => tech.name }
+                  - InstalledTechnology::EDITABLES.each do |akey|
+                    %td= tech.send(akey)
 
-  = link_to 'Download Tech. CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'
+    - else
+      No Technologies registered yet.
+
+    = link_to 'Download Tech. CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'

@@ -8,6 +8,8 @@ module Network
   # grid. Energy stored in the buffer may only be used to satisfy its own
   # consumption, and is not released back to the network.
   class Buffer < Storage
+    extend ProfileScaled
+
     # Public: The amount of energy to be retained in the buffer at the end of
     # the frame must decrease by the amount consumed (defined in the profile).
     def production_at(frame)

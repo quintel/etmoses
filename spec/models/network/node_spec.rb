@@ -189,4 +189,85 @@ RSpec.describe Network::Node do
       expect { node.assign_conditional_consumption(0, 4.0) }.to_not raise_error
     end
   end # assigning conditional consumption
+
+  context 'available_capacity_at' do
+    before { allow(node).to receive(:load_at).and_return(2.0) }
+
+    context 'when no capacity is set' do
+      it 'has unlimited available capacity' do
+        expect(node.available_capacity_at(0)).to eq(Float::INFINITY)
+      end
+
+      context 'when no load is set' do
+        before { allow(node).to receive(:load_at).and_return(0.0) }
+
+        it 'has unlimited available capacity' do
+          expect(node.available_capacity_at(0)).to eq(Float::INFINITY)
+        end
+      end
+    end
+
+    context 'when no load is set' do
+      before do
+        allow(node).to receive(:load_at).and_return(0.0)
+        node.set(:capacity, 3.0)
+      end
+
+      it 'returns the capacity' do
+        expect(node.available_capacity_at(0)).to eq(3.0)
+      end
+    end
+
+    context 'when capacity is greater than the load' do
+      before { node.set(:capacity, 3.0) }
+
+      it 'has available capacity' do
+        expect(node.available_capacity_at(0)).to eq(1.0)
+      end
+    end
+
+    context 'when the capacity is less than the load' do
+      before { node.set(:capacity, 1.0) }
+
+      it 'has no available capacity' do
+        expect(node.available_capacity_at(0)).to be_zero
+      end
+    end
+  end # available_capacity_at
+
+  context '#congested_at? with a load of 7.5' do
+    before { allow(node).to receive(:load_at).and_return(7.5) }
+
+    context 'and no capacity on the node' do
+      before { node.set(:capacity, nil) }
+
+      it 'returns false' do
+        expect(node).to_not be_congested_at(0)
+      end
+    end
+
+    context 'and a capacity of 5.0' do
+      before { node.set(:capacity, 5.0) }
+
+      it 'returns true' do
+        expect(node).to be_congested_at(0)
+      end
+    end
+
+    context 'and a capacity of 7.5' do
+      before { node.set(:capacity, 7.5) }
+
+      it 'returns false' do
+        expect(node).to_not be_congested_at(0)
+      end
+    end
+
+    context 'and a capacity of 10.0' do
+      before { node.set(:capacity, 10.0) }
+
+      it 'returns false' do
+        expect(node).to_not be_congested_at(0)
+      end
+    end
+  end # congested_at?
 end

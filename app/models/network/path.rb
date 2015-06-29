@@ -1,6 +1,11 @@
 module Network
   # Describes a path of nodes from a technology node, back to the root.
   class Path
+    extend Forwardable
+    include Enumerable
+
+    def_delegator :@path, :each
+
     # Public: Given a leaf node, returns a Path which represents the route
     # back to the root node.
     #
@@ -22,6 +27,14 @@ module Network
       @path.to_a
     end
 
+    def inspect
+      "#<#{ self.class.name } #{ to_s }>"
+    end
+
+    def to_s
+      "{#{ @path.map(&:key).join(', ') }}"
+    end
+
     # Public: The conditional consumption being created by the consumption node.
     #
     # Returns a numeric.
@@ -34,6 +47,23 @@ module Network
     # Returns a numeric.
     def mandatory_consumption_at(frame)
       @leaf.mandatory_consumption_at(frame)
+    end
+
+    # Public: Returns the minimum available capacity of the nodes in the path.
+    # If capacity has been exceeded, 0.0 will be returned, while no set capacity
+    # will return Infinity.
+    #
+    # Returns a numeric.
+    def available_capacity_at(frame)
+      @path.map { |node| node.available_capacity_at(frame) }.min
+    end
+
+    # Public: Determines if the load of the any node in the path node exceeds
+    # its capacity.
+    #
+    # Returns true or false.
+    def congested_at?(frame)
+      @path.any? { |node| node.congested_at?(frame) }
     end
 
     # Public: Sends a given amount of energy down the path, increasing the

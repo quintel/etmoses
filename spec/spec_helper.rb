@@ -1,3 +1,12 @@
+if ENV['COVERAGE']
+  require 'simplecov'
+
+  SimpleCov.start do
+    add_group('Network', 'app/models/network')
+    add_filter('/spec/')
+  end
+end
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

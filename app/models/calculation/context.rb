@@ -21,6 +21,12 @@ module Calculation
       end
     end
 
+    def paths
+      @paths ||= Network::PathCollection.new(
+        technology_nodes.map(&Network::TechnologyPath.method(:find)).flatten,
+        path_order)
+    end
+
     # Public: Determines how many time-steps are being calculated with this
     # testing ground.
     #
@@ -41,6 +47,24 @@ module Calculation
         length.times.each { |frame| yield frame }
       else
         to_enum(:frames)
+      end
+    end
+
+    #######
+    private
+    #######
+
+    def path_order
+      [ Network::OptionalConsumer,
+        Network::ConservingProducer,
+        Network::ElectricVehicle,
+        Network::PreemptiveConsumer,
+        Network::DeferrableConsumer,
+        Network::Battery,
+        Network::Buffer,
+        Network::Siphon
+      ].map do |klass|
+        ->(p) { p.technology.is_a?(klass) }
       end
     end
   end
