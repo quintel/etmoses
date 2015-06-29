@@ -19,8 +19,4 @@ RSpec.describe LoadProfileCategory do
   it "has many load profiles" do
     expect(child.load_profiles).to include(load_profile)
   end
-
-  it "prints out the parent count" do
-    expect(subchild.parent_count).to eq(2)
-  end
 end

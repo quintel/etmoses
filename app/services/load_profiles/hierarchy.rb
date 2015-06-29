@@ -29,7 +29,7 @@ module LoadProfiles
       def full_path(category, path = [])
         if category
           full_path(parent_category(category.parent_id),
-                    path.unshift("#{category.name.first.downcase}#{category.id}"))
+                    path.unshift("#{category.name.downcase}#{category.id}"))
         else
           path
         end
