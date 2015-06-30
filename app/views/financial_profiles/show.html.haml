@@ -1,7 +1,6 @@
 %ul
   %li== Key: #{ @profile.key }
   %li== Curve file name: #{ @profile.curve_file_name }
-  %li== Permitted Technologies: #{ @profile.technology_profiles.map(&:technology).join(", ") }
 
 .profile-graph.line-chart{ 'data-url' => financial_profile_path(@profile, format: :json) }
 

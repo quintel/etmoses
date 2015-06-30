@@ -23,7 +23,6 @@ class ProfilesController < ResourceController
 
   # POST /profiles
   def create
-    @profile = current_user.profiles.create(profile_params)
     respond_with(@profile)
   end
 

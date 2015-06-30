@@ -43,7 +43,7 @@ var EditableTable = (function(){
 
   function extractTextfromCells(row){
     return $(row).find("td.editable").toArray().map(function(cell){
-      if($(cell).hasClass("select")){
+      if($(cell).find("select:visible").length > 0){
         return $.trim($(cell).find("select").val());
       }
       else{

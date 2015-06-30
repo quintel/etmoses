@@ -6,7 +6,7 @@ class MarketModelsController < ApplicationController
   end
 
   def new
-    @market_model = current_user.market_models.new
+    @market_model = current_user.market_models.new(interactions: MarketModel::DEFAULT_INTERACTIONS)
   end
 
   def create

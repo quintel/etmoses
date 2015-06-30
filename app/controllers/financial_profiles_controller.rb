@@ -3,6 +3,11 @@ class FinancialProfilesController < ProfilesController
     @profile = FinancialProfile.new
   end
 
+  def create
+    @profile = current_user.financial_profiles.create(profile_params)
+    super
+  end
+
   #######
   private
   #######

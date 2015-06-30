@@ -3,6 +3,11 @@ class LoadProfilesController < ProfilesController
     @profile = LoadProfile.new
   end
 
+  def create
+    @profile = current_user.load_profiles.create(profile_params)
+    super
+  end
+
   #######
   private
   #######
