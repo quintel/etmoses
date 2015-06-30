@@ -36,7 +36,7 @@ module Calculation
     # Internal: Given a technology, retrieves the load profile which may be used
     # to describe its load.
     #
-    # Returns an Array or Merit::Curve.
+    # Returns an Array or Network::Curve.
     def profile_for(technology)
       if technology.profile.present?
         technology.profile_curve

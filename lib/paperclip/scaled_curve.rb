@@ -32,7 +32,7 @@ module Paperclip
       format   = File.extname(file.path)
       basename = File.basename(file.path, format)
 
-      curve    = Merit::Curve.load_file(file.path)
+      curve    = Network::Curve.load_file(file.path)
       scaled   = self.class.scale(curve, @options[:scale_by])
 
       Tempfile.new([basename, format ? ".#{format}" : '']).tap do |dest|
