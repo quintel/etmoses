@@ -57,6 +57,7 @@ var EditableTable = (function(){
       var row = $(this).parents("tr");
       var clonedRow = row.clone(true, true);
       clonedRow.insertAfter(row);
+      changeListener.call();
     });
   };
 
