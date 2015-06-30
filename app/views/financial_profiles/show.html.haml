@@ -1,0 +1,14 @@
+%ul
+  %li== Key: #{ @profile.key }
+  %li== Curve file name: #{ @profile.curve_file_name }
+  %li== Permitted Technologies: #{ @profile.technology_profiles.map(&:technology).join(", ") }
+
+.profile-graph.line-chart{ 'data-url' => financial_profile_path(@profile, format: :json) }
+
+.commit
+  = link_to('Download', @profile.curve.url, class: 'button')
+  %span.or or
+  = link_to_if(policy(@profile).edit?, 'Edit', edit_financial_profile_path(@profile), class: 'button')
+  = link_to_if(policy(@profile).destroy?, 'Delete', financial_profile_path(@profile), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this profile?' })
+
+= link_to '◄ All load profiles', financial_profiles_path, class: 'button button-primary'

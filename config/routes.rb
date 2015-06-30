@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   end
 
   resources :load_profiles
+  resources :financial_profiles
   resources :topologies
   resources :market_models
 
