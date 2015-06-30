@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe Network::ConservingProducer do
+RSpec.describe Network::Technologies::ConservingProducer do
   let(:installed) do
     InstalledTechnology.new(capacity: -1.5, behavior: 'conserving')
   end
 
   let(:tech) do
-    Network::Technology.from_installed(installed, profile, options)
+    Network::Technologies.from_installed(installed, profile, options)
   end
 
   describe "default profile" do

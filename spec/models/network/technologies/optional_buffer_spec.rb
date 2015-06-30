@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::OptionalBuffer do
+RSpec.describe Network::Technologies::OptionalBuffer do
   context 'with a storage volume of 10' do
     let(:capacity) { Float::INFINITY }
 

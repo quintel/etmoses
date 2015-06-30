@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::ElectricVehicle do
+RSpec.describe Network::Technologies::ElectricVehicle do
   let(:capacity) { Float::INFINITY }
   let(:units)    { 1 }
 

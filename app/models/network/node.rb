@@ -112,7 +112,8 @@ module Network
       available <= 0 ? 0.0 : available
     end
 
-    # Public: Determines if the consumption or production of the node exceeds its capacity.
+    # Public: Determines if the consumption or production of the node exceeds
+    # its capacity.
     #
     # Returns true or false.
     def congested_at?(frame)

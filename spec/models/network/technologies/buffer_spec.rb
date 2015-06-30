@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::Buffer do
+RSpec.describe Network::Technologies::Buffer do
   context 'with a storage volume of 10' do
     let(:capacity) { 5.0 }
 

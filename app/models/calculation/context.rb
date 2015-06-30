@@ -55,14 +55,14 @@ module Calculation
     #######
 
     def path_order
-      [ Network::OptionalConsumer,
-        Network::ConservingProducer,
-        Network::ElectricVehicle,
-        Network::Buffer,
-        Network::DeferrableConsumer,
-        Network::Battery,
-        Network::OptionalBuffer,
-        Network::Siphon
+      [ Network::Technologies::OptionalConsumer,
+        Network::Technologies::ConservingProducer,
+        Network::Technologies::ElectricVehicle,
+        Network::Technologies::Buffer,
+        Network::Technologies::DeferrableConsumer,
+        Network::Technologies::Battery,
+        Network::Technologies::OptionalBuffer,
+        Network::Technologies::Siphon
       ].map do |klass|
         ->(p) { p.technology.is_a?(klass) }
       end
