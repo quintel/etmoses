@@ -33,6 +33,14 @@ RSpec.describe Network::Curve do
     end
   end
 
+  context 'with an array of 1,460 values' do
+    let(:curve) { Network::Curve.new([1] * 1460) }
+
+    it 'has a resolution of 6' do
+      expect(curve.resolution).to eq(6)
+    end
+  end
+
   context 'with an empty array and no custom length' do
     let(:curve) { Network::Curve.new([]) }
 
