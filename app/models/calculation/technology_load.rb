@@ -9,6 +9,12 @@ module Calculation
     end
 
     def run
+      resolution = 8760.0 / @context.length
+
+      @context.graph.nodes.each do |node|
+        node.set(:resolution, resolution)
+      end
+
       @context.technology_nodes.each do |node|
         node.set(:techs, techs_for(node).flatten)
       end

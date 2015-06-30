@@ -270,4 +270,27 @@ RSpec.describe Network::Node do
       end
     end
   end # congested_at?
+
+  describe 'energy_at, with a load of 2.0' do
+    before do
+      allow(node).to receive(:load_at).and_return(2.0)
+      node.cache_load_at!(0)
+    end
+
+    context 'with a resolution of 1.0' do
+      before { node.set(:resolution, 1.0) }
+
+      it 'has energy of 2.0' do
+        expect(node.energy_at(0)).to eq(2.0)
+      end
+    end # with a resolution of 1.0
+
+    context 'with a resolution of 0.25' do
+      before { node.set(:resolution, 0.25) }
+
+      it 'has energy of 0.5' do
+        expect(node.energy_at(0)).to eq(0.5)
+      end
+    end # with a resolution of 0.25
+  end # energy_at
 end

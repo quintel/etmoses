@@ -30,6 +30,15 @@ module Network
       load[frame] = load_at(frame)
     end
 
+    # Public: Determines how much energy the node receives or emits in a chosen
+    # frame. Requires first that the entire frame has been calculated, and the
+    # load cached.
+    #
+    # Returns a float.
+    def energy_at(frame)
+      load[frame] * get(:resolution)
+    end
+
     # Public: Determines the production load of the node. This is the amount of
     # energy produced by all child nodes, without considering any which will be
     # consumed by their technologies.
