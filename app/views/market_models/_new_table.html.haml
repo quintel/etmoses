@@ -1,0 +1,31 @@
+%table.table.interactions
+  %thead
+    %th{data: {header: 'stakeholder_from' }} Stakeholder from
+    %th{data: {header: 'stakeholder_to' }} Stakeholder to
+    %th{data: {header: 'tariff' }} Tariff
+    %th.col-sm-2{data: {header: 'price' }} Price
+    %th
+    %th
+  %tbody
+    %tr
+      %td.editable.select
+        %select.form-control
+          = stakeholder_options
+
+      %td.editable.select
+        %select.form-control
+          = stakeholder_options
+
+      %td.editable.select
+        %select.form-control
+          = tariff_options
+
+      %td.editable
+        %input.form-control
+      %td
+        = link_to "#", class: "add-row text-success" do
+          %span.glyphicon.glyphicon-plus
+      %td
+        = link_to "#", class: "remove-row text-danger" do
+          %span.glyphicon.glyphicon-remove
+
