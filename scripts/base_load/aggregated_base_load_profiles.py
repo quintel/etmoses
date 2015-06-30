@@ -39,11 +39,13 @@ for filename in glob.glob(os.path.join(dir_name, 'edsn*.csv')):
     maxi = 1600
         
     plt.close()
-    plt.figure(figsize=(10,7))
+    plt.figure(figsize=(10,4))
     plt.plot(data[mini:maxi], 'r--', linewidth=3.0, label="original")
     plt.plot(flexible_demand[mini:maxi], label="flex")
     plt.plot(inflexible_demand[mini:maxi], label="in-flex")
     plt.legend()
+    plt.xlabel("time step (15 minutes)")
+    plt.ylabel("load [normalized]")
     plt.show()
     
     outfile_name = filename.split("/")[-1].split(".")[0]

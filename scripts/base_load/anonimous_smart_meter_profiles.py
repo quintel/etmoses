@@ -84,7 +84,7 @@ for technology in technologies:
 lower_threshold_capacity = 0.5 #kW
 mimimal_peak_capacity = 0.5 #kW
 
-for j in range(1,76):
+for j in range(1,2):
     
     # Main loop
     flexible_demand = [0]
@@ -144,16 +144,25 @@ for j in range(1,76):
             
     inflexible_demand = data - flexible_demand
     
-#    mini = 1500
-#    maxi = 1600
-#        
-#    plt.close()
-#    plt.figure(figsize=(10,7))
-#    plt.plot(data[mini:maxi], 'r--', linewidth=3.0, label="original")
-#    plt.plot(flexible_demand[mini:maxi], label="flex")
-#    plt.plot(inflexible_demand[mini:maxi], label="in-flex")
-#    plt.legend()
-#    plt.show()
+    mini = 1500
+    maxi = 1600
+        
+    plt.close()
+    plt.figure(figsize=(10,7))
+
+    plt.subplot(2, 1, 1)
+    plt.plot(data[mini:maxi], 'r', label="original")
+    plt.legend()
+    plt.xlabel("time step (15 minutes)")
+    plt.ylabel("load [kW]")
+    
+    plt.subplot(2, 1, 2)
+    plt.plot(flexible_demand[mini:maxi], label="flex")
+    plt.plot(inflexible_demand[mini:maxi], label="in-flex")
+    plt.legend()
+    plt.xlabel("time step (15 minutes)")
+    plt.ylabel("load [kW]")
+    plt.show()
     
     # Write data to file
     write_profile(flexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_"+str(j)+"_flex.csv")
