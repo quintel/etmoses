@@ -2,7 +2,7 @@
   %thead
     %th{data: {header: 'stakeholder_from' }} Stakeholder from
     %th{data: {header: 'stakeholder_to' }} Stakeholder to
-    %th{data: {header: 'base' }} Base
+    %th{data: {header: 'foundation' }} Foundation
     %th.col-sm-2{data: {header: 'tariff' }} Tariff
     %th
     %th
@@ -19,9 +19,9 @@
 
         %td.editable.select
           %select.form-control
-            = tariff_options(selected: interaction["tariff"])
+            = foundation_options(selected: interaction["foundation"])
 
-        %td.editable.input-switch{data: {price: interaction["price"]}}
+        %td.editable.input-switch{data: {price: interaction["tariff"]}}
           .input-group
             .input-group-btn
               %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}

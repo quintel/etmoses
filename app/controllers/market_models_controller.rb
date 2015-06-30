@@ -1,5 +1,8 @@
-class MarketModelsController < ApplicationController
-  before_filter :find_market_model, only: [:show, :edit, :update, :destroy]
+class MarketModelsController < ResourceController
+  RESOURCE_ACTIONS = %i(show edit update destroy)
+
+  before_filter :find_market_model, only: RESOURCE_ACTIONS
+  before_filter :authorize_generic, except: RESOURCE_ACTIONS
 
   def index
     @market_models = MarketModel.all
@@ -41,9 +44,10 @@ class MarketModelsController < ApplicationController
 
     def find_market_model
       @market_model = MarketModel.find(params[:id])
+      authorize(@market_model)
     end
 
     def market_model_params
-      params.require(:market_model).permit(:name, :interactions)
+      params.require(:market_model).permit(:name, :public, :interactions)
     end
 end
