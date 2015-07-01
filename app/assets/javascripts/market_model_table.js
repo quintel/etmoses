@@ -1,14 +1,14 @@
 var MarketModelTable = (function(){
-  var selector;
+  var selector, editableTable;
 
   MarketModelTable.prototype = {
     append: function(){
-      editableTable.append(parseTableToJSON);
-    }
-  };
+      editableTable.append(this.updateTable);
+    },
 
-  function parseTableToJSON(){
-    $("#market_model_interactions").text(JSON.stringify(editableTable.getData()));
+    updateTable: function(){
+      $("#market_model_interactions").text(JSON.stringify(editableTable.getData()));
+    }
   };
 
   function MarketModelTable(_selector){
@@ -20,5 +20,6 @@ var MarketModelTable = (function(){
 })();
 
 $(document).on("page:change", function(){
-  new MarketModelTable("table.table.interactions").append();
+  window.currentMarketTable = new MarketModelTable("table.table.interactions");
+  window.currentMarketTable.append();
 });

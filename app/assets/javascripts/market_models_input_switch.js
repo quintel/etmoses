@@ -6,6 +6,8 @@ $(document).on("page:change", function(){
         buttonGlyph.removeClass().addClass(spanClass);
 
     cell.find(".financial-profiles, .fixed-price").toggle();
+
+    window.currentMarketTable.updateTable();
   });
 
   $("td.editable.input-switch").each(function(){
