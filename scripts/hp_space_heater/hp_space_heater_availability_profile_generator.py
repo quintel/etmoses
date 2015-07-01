@@ -143,5 +143,6 @@ plt.xlabel('time (15 minutes)')
 plt.ylabel('Fraction of buffer extracted')
 plt.show()
 
-plt.savetxt("../output_data/hp_space_heating_10kW_100m2_100liter_use.csv", demand_profile, fmt='%.3f', delimiter=',') 
-plt.savetxt("../output_data/hp_space_heating_10kW_100m2_100liter_availability.csv", availability_profile, fmt='%.3f', delimiter=',') 
+print "../output_data/hp_space_heating_" + str(capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter"
+plt.savetxt("../output_data/hp_space_heating_" + str(capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter_use.csv", demand_profile, fmt='%.3f', delimiter=',') 
+plt.savetxt("../output_data/hp_space_heating_" + str(capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter_availability.csv", availability_profile, fmt='%.3f', delimiter=',') 
