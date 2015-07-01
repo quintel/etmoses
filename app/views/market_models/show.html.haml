@@ -1,0 +1,15 @@
+%h1
+  = @market_model.name
+%table.interactions.table
+  %tr
+    %th Steakholder from
+    %th Steakholder To
+    %th Tariff
+    %th Price
+  - @market_model.interactions.each do |interaction|
+    %tr
+      - interaction.each_value do |value|
+        %td= value
+
+= link_to "Edit", edit_market_model_path(@market_model)
+= link_to "Destroy", market_model_path(@market_model), method: :delete, data: { confirm: "Are you sure?" }

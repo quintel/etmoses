@@ -56,10 +56,10 @@ class TestingGround::TechnologyProfileScheme
     # Initiates a Profile::Selector object
     #
     def profile_selector(technology)
-      TestingGround::Profile::Selector.new(available_profiles, technology)
+      LoadProfiles::Selector.new(available_profiles, technology)
     end
 
     def available_profiles
-      @available_profiles ||= TestingGround::Profile::Query.new(@distribution).query
+      @available_profiles ||= TechnologyProfiles::Query.new(@distribution).query
     end
 end

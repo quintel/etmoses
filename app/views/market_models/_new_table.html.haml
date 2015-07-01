@@ -1,0 +1,52 @@
+%table.table.interactions
+  %thead
+    %th{data: {header: 'stakeholder_from' }} Stakeholder from
+    %th{data: {header: 'stakeholder_to' }} Stakeholder to
+    %th{data: {header: 'foundation' }} Foundation
+    %th.col-sm-2{data: {header: 'tariff' }} Tariff
+    %th
+    %th
+  %tbody
+    - @market_model.interactions.each do |interaction|
+      %tr
+        %td.editable.select
+          %select.form-control
+            = stakeholder_options(selected: interaction["stakeholder_from"])
+
+        %td.editable.select
+          %select.form-control
+            = stakeholder_options(selected: interaction["stakeholder_to"])
+
+        %td.editable.select
+          %select.form-control
+            = foundation_options(selected: interaction["foundation"])
+
+        %td.editable.input-switch{data: {price: interaction["tariff"]}}
+          .input-group
+            .input-group-btn
+              %button.btn.btn-default.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
+                %span.glyphicon.glyphicon-euro
+                %span.caret
+              %ul.dropdown-menu
+                %li
+                  %a{:href => "#"}
+                    %span.glyphicon.glyphicon-euro
+                    Fixed price
+                %li
+                  %a{:href => "#"}
+                    %span.glyphicon.glyphicon-signal
+                    Financial profile
+
+            .fixed-price
+              %input.form-control
+            .financial-profiles
+              %select.form-control
+                = financial_profile_options
+
+        %td
+          = link_to "#", class: "add-row text-success" do
+            %span.glyphicon.glyphicon-plus
+        %td
+          = link_to "#", class: "remove-row text-danger" do
+            %span.glyphicon.glyphicon-remove
+
