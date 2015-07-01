@@ -8,6 +8,7 @@
     = f.hidden_field :scenario_id
 
   = f.hidden_field :topology_id, value: testing_ground.topology_id
+  = f.hidden_field :market_model_id, value: testing_ground.market_model_id
 
   .hidden
     = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json

@@ -40,6 +40,11 @@ en:
           Here you can upload a CSV file that contains the technology table from
           another LES (you can save the LES as a CSV once it has been created).
 
+    strategies:
+      no_storage: 'No storage'
+      storage_strategy_1: 'Prioritize use of local solar production'
+      storage_strategy_2: 'Storage strategy #2'
+
   import:
     form:
       topology_id:
@@ -48,6 +53,9 @@ en:
           existing topologies you can visit the topology page in the main menu.
           You can also create a new topology using the "create new" submenu of
           the topology menu item.
+      market_model_id:
+        tooltip: >
+          Lorum ipsum
       scenario_id:
         tooltip: >
           This unique identifier is linked to your scaled ETM scenario. The

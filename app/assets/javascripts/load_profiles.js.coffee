@@ -7,11 +7,8 @@ $(document).on "page:change", ->
   )
 
   $("li.category").children().on("click", (e)->
-    e.stopPropagation();
-  );
-
-  $('form #load_profile_curve').filestyle(buttonBefore: true)
-  $('#testing_ground_technology_profile_csv').filestyle(buttonBefore: true)
+    e.stopPropagation()
+  )
 
   if (container = $('.profile-graph')).length
     $.getJSON(container.data('url')).success (profile) ->

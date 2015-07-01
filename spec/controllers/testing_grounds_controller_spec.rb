@@ -18,7 +18,7 @@ RSpec.describe TestingGroundsController do
     let!(:technology){ FactoryGirl.create(:importable_technology,
                         key: "magical_technology") }
 
-    it "renders the new template after performs an import" do
+    before do
       sign_in(user)
 
       stub_et_engine_request
@@ -26,9 +26,15 @@ RSpec.describe TestingGroundsController do
 
       expect_any_instance_of(Import).to receive(:buildings).twice.and_return([])
 
-      post :perform_import, import: { scenario_id: 1 }
+      post :perform_import, import: { scenario_id: 1, market_model_id: 5 }
+    end
 
+    it "renders the new template after performs an import" do
       expect(response).to render_template(:new)
+    end
+
+    it "assigns a market model id to the testing ground" do
+      expect(assigns(:testing_ground).market_model_id).to eq(5)
     end
   end
 

@@ -1,7 +1,7 @@
 class Import
   include ActiveModel::Validations
 
-  attr_reader :provider, :scenario_id, :topology_id
+  attr_reader :provider, :scenario_id, :topology_id, :market_model_id
 
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
@@ -28,6 +28,7 @@ class Import
 
     @scenario_id = attributes[:scenario_id]
     @topology_id = attributes[:topology_id]
+    @market_model_id = attributes[:market_model_id]
   end
 
   # Public: Import data from the remote provider and return a TestingGround with
@@ -40,7 +41,8 @@ class Import
       technology_distribution: technology_distribution,
       technology_profile:      technology_profile,
       scenario_id:             @scenario_id,
-      parent_scenario_id:      parent_scenario_id)
+      parent_scenario_id:      parent_scenario_id,
+      market_model_id:         market_model_id)
   end
 
   def etm_title

@@ -10,6 +10,12 @@ module TestingGroundsHelper
     form.select(:topology_id, topologies, {}, class: 'form-control')
   end
 
+  def market_model_options
+    MarketModel.all.map do |market_model|
+      [market_model.name, market_model.id]
+    end
+  end
+
   def link_to_etm_scenario(title, scenario_id)
     link_to(title, "http://#{ ET_MODEL_URL }/scenarios/#{ scenario_id }")
   end

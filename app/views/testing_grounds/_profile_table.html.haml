@@ -1,12 +1,13 @@
 %table.table
   %thead
     %th.col-sm-2{data: {header: 'node'}} Node
-    %th.col-sm-3{data: {header: 'name'}} Name
+    %th.col-sm-2{data: {header: 'name'}} Name
     %th.col-sm-3{data: {header: 'profile'}} Profile
     %th{data: {header: 'capacity'}} Capacity [kW]
     %th{data: {header: 'volume'}} Storage volume [kWh]
     %th{data: {header: 'demand'}} Yearly demand [kWh]
     %th{data: {header: 'units'}} Units
+    %th{data: {header: 'in_cooperation'}} Include in cooperation
     %th.hidden{data: {header: 'concurrency'}} Concurrency
 
   %tbody
@@ -38,13 +39,17 @@
             - when :concurrency
               %td.editable.hidden= value
 
+            - when :in_cooperation
+              %td.editable
+                = check_box_tag :in_cooperation
+
             - else
               %td.editable.text{class: key, data: { edit_type: 'text' }}
                 %input.form-control{type: 'text', value: value }
 
-          %th
+          %td
             = link_to "#!", class: "add-row text-success" do
               %span.glyphicon.glyphicon-plus
-          %th
+          %td
             = link_to "#!", class: "remove-row text-danger" do
               %span.glyphicon.glyphicon-remove
