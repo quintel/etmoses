@@ -84,7 +84,7 @@ for technology in technologies:
 lower_threshold_capacity = 0.5 #kW
 mimimal_peak_capacity = 0.5 #kW
 
-for j in range(1,2):
+for j in range(1,76):
     
     # Main loop
     flexible_demand = [0]
@@ -92,7 +92,7 @@ for j in range(1,2):
     current_peak_hight = 0
     base_level = 0
     
-    file_name = "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_not_normalized_"+str(j)+".csv"
+    file_name = "../input_data/anonimous_base_load_not_normalized_"+str(j)+".csv"
     data = genfromtxt(file_name, delimiter=',')
     data = 4.0 * data / 1000.0 # converting from Wh/15 min to kW
     
@@ -165,5 +165,5 @@ for j in range(1,2):
     plt.show()
     
     # Write data to file
-    write_profile(flexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_"+str(j)+"_flex.csv")
-    write_profile(inflexible_demand, "/Users/kruip/Dropbox (Quintel)/shared_with_partners/201405_alliander_model_shared/profiles/base_load/anonimous_smart_meter_data/anonimous_base_load_"+str(j)+"_inflex.csv")
+    write_profile(flexible_demand, "../output_data/anonimous_base_load_"+str(j)+"_flex.csv")
+    write_profile(inflexible_demand, "../output_data/anonimous_base_load_"+str(j)+"_inflex.csv")
