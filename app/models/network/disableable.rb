@@ -16,9 +16,9 @@ module Network
     # storage technology.
     def build(installed, profile, options)
       if disabled?(options)
-        disabled_class.new(installed, disabled_profile(profile))
+        disabled_class.new(installed, disabled_profile(profile), options)
       else
-        new(installed, profile)
+        new(installed, profile, options)
       end
     end
 

@@ -4,12 +4,11 @@
       %li= message
 
 = form_for @price_curve, url: form_path, html: { multipart: true } do |form|
-  - if @price_curve.new_record?
-    .form-group
-      = form.label :key
-      = tooltip_tag(t(:'load_profiles.form.key.tooltip'))
-      = form.text_field :key, class: 'form-control'
-      .help-block This field is optional.
+  .form-group
+    = form.label :key
+    = tooltip_tag(t(:'load_profiles.form.key.tooltip'))
+    = form.text_field :key, class: 'form-control'
+    .help-block This field is optional.
 
   .form-group
     = form.label :name

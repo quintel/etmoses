@@ -16,7 +16,7 @@ module Network
       instance = super
 
       unless disabled?(options)
-        instance.capacity_constrained = options[:flexibility]
+        instance.capacity_constrained = options[:buffering_electric_car]
       end
 
       instance

@@ -18,7 +18,7 @@ module Network
     DeferrableLoad = Struct.new(:amount, :mandatory_at)
 
     def self.disabled?(options)
-      ! options[:flexibility]
+      options[:storage]
     end
 
     def self.disabled_class
@@ -34,7 +34,7 @@ module Network
     end
 
     def capacity_constrained?
-      true
+      options[:postponing_base_load]
     end
 
     # Public: The amount of energy which must be satisfied in the given frame.

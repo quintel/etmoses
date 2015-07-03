@@ -22,7 +22,7 @@ RSpec.describe Network::Siphon do
   context 'when disabled' do
     let(:tech) do
       network_technology(
-        build(:installed_p2g, capacity: 10.0), 2, storage: false)
+        build(:installed_p2g, capacity: 10.0), 2, solar_storage: 'false')
     end
 
     it 'should be a Null' do

@@ -7,5 +7,9 @@ module Network
   # inherit from the Storage class.
   class Battery < Storage
     extend ProfileScaled
+
+    def self.disabled?(options)
+      options.has_key?(:battery_storage) && !options[:battery_storage]
+    end
   end # Battery
 end # Network

@@ -6,7 +6,7 @@ module Network
     extend Disableable
 
     def self.disabled?(options)
-      options[:storage] == false
+      options[:solar_storage]
     end
 
     def initialize(*)

@@ -214,7 +214,7 @@ RSpec.describe Network::ElectricVehicle do
 
     let(:tech) do
       network_technology(
-        build(:installed_ev, profile: profile, volume: 3.0), 2, storage: false)
+        build(:installed_ev, profile: profile, volume: 3.0), 2, solar_storage: 'false')
     end
 
     it 'becomes a consumer' do

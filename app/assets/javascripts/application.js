@@ -19,4 +19,5 @@
 //= require bootstrap-sprockets
 //= require bootstrap-filestyle
 //= require bootstrap-toggle.min
+//= require bootstrap-slider
 //= require_tree .

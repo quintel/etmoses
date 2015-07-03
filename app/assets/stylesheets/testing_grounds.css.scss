@@ -364,6 +364,26 @@ label.disabled{
   color: #ccc;
   font-weight: normal;
 }
+
 select#stakeholders{
   width: 300px;
+}
+
+.slider-wrapper{
+  padding: 30px 0 10px 0;
+
+  .slider{
+    .slider-handle{
+      background-image: none;
+    }
+
+    .slider-selection {
+      background: #BABABA;
+    }
+  }
+
+  p.note{
+    padding-top: 10px;
+    font-style: italic;
+  }
 }
