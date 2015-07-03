@@ -69,7 +69,7 @@
     = f.text_area :technology_profile
 
   .form-group
-    = f.submit class: 'btn btn-primary'
+    = f.submit "Create Local Energy Solution", class: 'btn btn-primary'
     %span.or or
     - if testing_ground.new_record?
       = link_to 'Cancel', testing_grounds_path, class: 'btn btn-default'
