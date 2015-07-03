@@ -2,7 +2,6 @@ class LoadProfilesController < ProfilesController
   before_filter :fetch_technologies, only: %i(new create edit update)
 
   respond_to :html
-  respond_to :json, only: :show
 
   def index
     skip_policy_scope

@@ -10,6 +10,18 @@ $(document).on "page:change", ->
     e.stopPropagation()
   )
 
+  $('#load_profile_load_profile_category_id').on 'change', ->
+    loadCurveFields = []
+    value = $(this).val()
+    option_data = $(this).find("option[value='"+value+"']")
+    for i in [0...option_data.data('numberOfRows')]
+      loadCurveFields.push($(".load-curve-file-field").clone())
+
+    $(".load-curve-wrapper").empty()
+
+    for loadCurveField in loadCurveFields
+    	$(".load-curve-wrapper").append(loadCurveField)
+
   if (container = $('.profile-graph')).length
     $.getJSON(container.data('url')).success (profile) ->
       $('.profile-graph').empty().append('<svg></svg>')
