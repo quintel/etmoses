@@ -34,7 +34,8 @@
     .form-group
       = form.label :curve
       = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
-      = form.file_field :curve, accept: 'text/csv'
+      = form.fields_for :load_curves do |load_curve|
+        = load_curve.file_field :curve, accept: 'text/csv', class: 'load-curve'
 
       - unless @profile.new_record?
         .help-block Leave blank if you don't want to change the curve.

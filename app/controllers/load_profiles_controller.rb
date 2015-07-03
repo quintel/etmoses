@@ -11,7 +11,8 @@ class LoadProfilesController < ProfilesController
 
   # GET /load_profiles/new
   def new
-    @profile = LoadProfile.new
+    @load_profile = LoadProfile.new
+    @load_profile.load_curves.build
   end
 
   def create
@@ -38,8 +39,9 @@ class LoadProfilesController < ProfilesController
 
   def load_profile_params
     params.require(:load_profile).permit(
-      :key, :name, :curve, :public, :load_profile_category_id,
-      { technology_profiles_attributes: [:id, :technology, :_destroy] }
+      :key, :name, :public, :load_profile_category_id,
+      { technology_profiles_attributes: [:id, :technology, :_destroy] },
+      { load_profiles_attributes: [:curve]}
     )
   end
 end

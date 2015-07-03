@@ -18,7 +18,7 @@ RSpec.describe LoadProfilesController do
     let(:create_load_profile){
       post :create, load_profile: {
         key: "name_1",
-        curve: fixture_file_upload("technology_profile.csv", "text/csv")
+        load_profile_components: [{ curve: fixture_file_upload("technology_profile.csv", "text/csv") }]
       }
     }
 
