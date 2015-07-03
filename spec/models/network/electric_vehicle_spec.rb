@@ -2,10 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Network::ElectricVehicle do
   let(:capacity) { Float::INFINITY }
+  let(:units)    { 1 }
 
   let(:tech) do
     network_technology(build(
-      :installed_ev, capacity: capacity, profile: profile, volume: 3.0
+      :installed_ev,
+      capacity: capacity, profile: profile,
+      volume: 3.0, units: units
     ))
   end
 
@@ -64,6 +67,25 @@ RSpec.describe Network::ElectricVehicle do
           .to change { tech.stored[1] }
           .from(1.0).to(3.0)
       end
+
+      context 'with two units' do
+        let(:units) { 2 }
+
+        it 'has production of 0.5' do
+          expect(tech.production_at(1)).to eq(0.5)
+        end
+
+        it 'has mandatory consumption of 1.0' do
+          # Mandatory consumption is dictated by the profile, which is already
+          # scaled to the number of units.
+          expect(tech.mandatory_consumption_at(1)).to eq(1.0)
+        end
+
+        it 'has conditional consumption equal to the volume * units' do
+          # Total volume is 6.0; 1.0 assigned as mandatory. 5.0 remains.
+          expect(tech.conditional_consumption_at(1)).to eq(5.0)
+        end
+      end # with two units
     end # and a profile value of 1.0
 
     context 'with a low-resolution curve' do
@@ -86,6 +108,25 @@ RSpec.describe Network::ElectricVehicle do
           .to change { tech.stored[1] }
           .from(1.0).to(3.0) # 1kW delivered over 2 hours is 2kWh
       end
+
+      context 'with two units' do
+        let(:units) { 2 }
+
+        it 'has production of 0.5' do
+          expect(tech.production_at(1)).to eq(0.5 / 2)
+        end
+
+        it 'has mandatory consumption of 1.0' do
+          # Mandatory consumption is dictated by the profile, which is already
+          # scaled to the number of units.
+          expect(tech.mandatory_consumption_at(1)).to eq(1.0 / 2)
+        end
+
+        it 'has conditional consumption equal to the volume * units' do
+          # volume is 6, minus 1.0 mandatory
+          expect(tech.conditional_consumption_at(1)).to eq(5.0 / 2)
+        end
+      end # with two units
     end # with a low-resolution curve
 
     context 'with a value of -1' do
@@ -121,6 +162,23 @@ RSpec.describe Network::ElectricVehicle do
         it 'has conditional consumption of 0.4' do
           expect(tech.conditional_consumption_at(1)).to be_within(1e-9).of(0.4)
         end
+
+        context 'with two units' do
+          let(:units) { 2 }
+
+          it 'has production of 0.5' do
+            expect(tech.production_at(1)).to eq(0.5)
+          end
+
+          it 'has mandatory consumption of stored - capacity' do
+            expect(tech.mandatory_consumption_at(1)).to be_within(1e-9).of(0.1)
+          end
+
+          it 'has conditional consumption equal to the volume * units' do
+            # No capacity remains
+            expect(tech.conditional_consumption_at(1)).to eq(0.8)
+          end
+        end # with two units
       end # and a profile value of zero
 
       context 'and a profile value of 0.8' do
@@ -137,7 +195,30 @@ RSpec.describe Network::ElectricVehicle do
         it 'has conditional consumption of zero' do
           expect(tech.conditional_consumption_at(1)).to be_zero
         end
-      end # and a profile value of 0.8
+      end
+
+      context 'and a profile value of 0.9' do
+        let(:profile) { [0.0, 0.9] * 4380 }
+
+        context 'with two units' do
+          let(:units) { 2 }
+
+          it 'has production of 0.5' do
+            expect(tech.production_at(1)).to eq(0.5)
+          end
+
+          it 'has mandatory consumption of stored + capacity' do
+            # Mandatory consumption is dictated by the profile, which is already
+            # scaled to the number of units.
+            expect(tech.mandatory_consumption_at(1)).to eq(0.9)
+          end
+
+          it 'has conditional consumption equal to the volume * units' do
+            # No capacity remains
+            expect(tech.conditional_consumption_at(1)).to be_zero
+          end
+        end # with two units
+      end # and a profile value of 1.0
     end # with capacity of 0.2
 
     context 'with capacity of 5.0' do
