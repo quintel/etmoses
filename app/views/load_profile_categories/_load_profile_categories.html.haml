@@ -1,9 +1,10 @@
-%ul
+%ul{style: ("display:none;" if collapsed)}
   - load_profile_categories.each do |load_profile_category|
     %li.category
       = load_profile_category.name
 
-      = render partial: "load_profiles/load_profile", locals: {load_profile_category: load_profile_category}
-
       - if load_profile_category.children.any?
-        = render partial: "load_profile_categories/load_profile_categories", locals: { load_profile_categories: load_profile_category.children }
+        = render partial: "load_profile_categories/load_profile_categories", locals: { load_profile_categories: load_profile_category.children, collapsed: load_profile_category.parent_id == 1 }
+
+      = render partial: "load_profiles/load_profile", locals: {load_profile_category: load_profile_category, collapsed: load_profile_category.parent_id == 1 }
+

@@ -18,11 +18,13 @@ technology_distribution = ->
 
 $(document).on "page:change", ->
   if $("#new_testing_ground, .edit_testing_ground").length > 0
-    $(".toggle-concurrency").click ->
+    $(".toggle-concurrency").click (event) ->
+      event.preventDefault()
       if $(this).hasClass("edit") && confirm("Are you sure? Changing concurrency might cause unwanted changes")
         calculateConcurrency()
       else
         calculateConcurrency()
 
-    $(".toggle-whitelist").click ->
+    $(".toggle-whitelist").click (event) ->
+      event.preventDefault()
       $(".check_box input").not(":checked").prop("checked", true)

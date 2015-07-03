@@ -300,7 +300,7 @@ table.table.scenarios{
 }
 
 #profiles-table{
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   td:focus{
     outline: 1px dotted #477caa;
@@ -315,10 +315,15 @@ table.table.scenarios{
     box-shadow: none;
     padding-left: 6px;
   }
+
+  input{
+    border: none;
+    width: 60px;
+  }
 }
 
 .concurrency{
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   .checkboxes{
     .check_box{
@@ -330,4 +335,26 @@ table.table.scenarios{
   .buttons{
     margin-top: 10px;
   }
+}
+
+span.loading-spinner{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -16px;
+  margin-top: -17px;
+  display: none;
+}
+
+span.loading-spinner.on{
+  display: inline;
+}
+
+.load-graph{
+  position: relative;
+}
+
+label.disabled{
+  color: #ccc;
+  font-weight: normal;
 }

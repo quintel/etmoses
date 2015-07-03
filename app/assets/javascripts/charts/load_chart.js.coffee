@@ -53,7 +53,8 @@ class LoadChart
       # Add an extra data point to make the "step-after" smoothing fit better
       # (otherwise it appears that the last frame is not present).
       last = datum.values[datum.values.length - 1]
-      datum.values.push(x: last.x + 1, y: last.y)
+      if last
+        datum.values.push(x: last.x + 1, y: last.y)
 
     nv.addGraph =>
       chart = @chart()

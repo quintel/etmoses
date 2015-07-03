@@ -12,7 +12,7 @@
   %tbody
     .hidden.profile
       - @technologies.each do |technology|
-        %select.form-control{class: technology.key}
+        %select.form-control{class: technology.key, data: { defaults: technology_defaults(technology, testing_ground_profile) }}
           - if technology.key == "generic"
             = options_for_load_profiles
           - else
@@ -20,7 +20,7 @@
 
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|
-        %tr
+        %tr{class: technology[:type]}
           %td.editable.select
             %select.nodes.form-control
               = node_options(testing_ground_profile, node)
@@ -39,11 +39,12 @@
               %td.editable.hidden= value
 
             - else
-              %td.editable{data: { edit_type: 'text' }}= value
+              %td.editable.text{class: key, data: { edit_type: 'text' }}
+                %input.form-control{type: 'text', value: value }
 
           %th
-            = link_to "#", class: "add-row text-success" do
+            = link_to "#!", class: "add-row text-success" do
               %span.glyphicon.glyphicon-plus
           %th
-            = link_to "#", class: "remove-row text-danger" do
+            = link_to "#!", class: "remove-row text-danger" do
               %span.glyphicon.glyphicon-remove

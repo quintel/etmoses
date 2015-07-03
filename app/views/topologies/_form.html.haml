@@ -11,8 +11,6 @@
 
   .form-group
     = form.label :public, "Permissions"
-    %a.tool{href: "#", title: I18n.t("topologies.form.public.tooltip"), data: {toggle: "tooltip", placement: "right"}}
-      %span.glyphicon.glyphicon-info-sign
 
     .radio-buttons
       = form.radio_button :public, true
@@ -20,8 +18,11 @@
       = form.radio_button :public, false
       = form.label :public, "Private", class: "radio-label"
 
+    = tooltip_tag(t(:'topologies.form.public.tooltip'))
+
   .form-group
     = form.label :graph
+    = tooltip_tag(t(:'topologies.form.graph.tooltip'))
     = form.text_area :graph, value: topology_field_value(@topology)
 
   .form-group

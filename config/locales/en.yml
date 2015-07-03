@@ -32,19 +32,57 @@ en:
     form:
       public:
         tooltip: >
-          Please select if this is a private or public local energy
-          solution. A private local energy solution can only be edited and
-          viewed by you.
+          You can choose to make your LES private or public. A private LES can
+          be viewed only by you. A public LES can be viewed by anyone but only
+          edited by you.
+      technology_profile_csv:
+        tooltip: >
+          Here you can upload a CSV file that contains the technology table from
+          another LES (you can save the LES as a CSV once it has been created).
+
+  import:
+    form:
+      topology_id:
+        tooltip: >
+          Select a network topology for your local energy solution. To inspect
+          existing topologies you can visit the topology page in the main menu.
+          You can also create a new topology using the "create new" submenu of
+          the topology menu item.
+      scenario_id:
+        tooltip: >
+          This unique identifier is linked to your scaled ETM scenario. The
+          technologies and base-loads from this scaled scenario will be imported
+          into your local energy solution and connected to the end-points of the
+          local network.
 
   topologies:
     form:
       public:
         tooltip: >
-          Please select if this is a private or public topology. A private
-          topology can only be edited, used and viewed by you.
+          You can choose to make your topology private or public. A private
+          topology can be viewed only by you. A public topology can be viewed by
+          anyone but only edited by you.
+      graph:
+        tooltip: >
+          Here you can specify the structure, capacity and cost parameters of
+          your network topology. Please refer to the topology syntax page for
+          details.
 
   load_profiles:
     form:
+      key:
+        tooltip: >
+          This "key" will be the unique identifier for your profile. If not
+          specified, the filename is used.
+      curve:
+        tooltip: >
+          Please upload CSV files containing a single column of 35040 values
+          (one for each 15 minutes of the year).
+      permitted_technologies:
+        tooltip: >
+          Please specify to which technologies your profiles applies. ETMoses
+          will automatically assign your profile to the specified technologies
+          using the unique ETM-technology names.
       public:
         tooltip: >
           Please select if this is a private or public load profile. A private

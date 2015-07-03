@@ -33,6 +33,8 @@ gem 'unicorn'
 group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'
+
+  gem 'simplecov', require: false
 end
 
 group :development do

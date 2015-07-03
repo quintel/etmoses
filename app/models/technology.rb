@@ -13,12 +13,12 @@ class Technology < ActiveRecord::Base
 
   validates :behavior,
     inclusion: {
-      in: %w( storage electric_vehicle siphon buffer ),
+      in: %w( storage electric_vehicle siphon buffer
+              preemptive deferrable conserving ),
       allow_nil: true }
 
   validates :export_to,
     length: { maximum: 100 }
-
 
   def self.with_load_profiles
     joins(:load_profiles).uniq + where(key: 'generic')

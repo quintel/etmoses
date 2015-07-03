@@ -1,4 +1,4 @@
-%h3 Create topology with technologies from ETEngine
+%h3 Combine topology with technologies from ETEngine
 
 - if @import.errors.any?
   %ul.errors
@@ -11,10 +11,12 @@
 = form_for(@import, url: import_testing_grounds_path, method: :post) do |form|
   .form-group
     = form.label :topology_id
+    = tooltip_tag(t('import.form.topology_id.tooltip'))
     = import_topology_select_tag(form)
 
   .form-group
     = form.label :scenario_id
+    = tooltip_tag(t('import.form.scenario_id.tooltip'))
     .input-group
       .input-group-addon= TestingGround::IMPORT_PROVIDERS.first
       = form.text_field(:scenario_id, placeholder: 'Scenario ID', class: 'form-control', value: @import.scenario_id)

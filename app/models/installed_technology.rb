@@ -21,6 +21,14 @@ class InstalledTechnology
     end ]
   end
 
+  def inspect
+    "#<#{ self.class.name } #{ to_s }>"
+  end
+
+  def to_s
+    "#{ name } (#{ type })"
+  end
+
   # Public: Set the profile to be used to describe the technology load over
   # time.
   #

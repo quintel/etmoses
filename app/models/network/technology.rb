@@ -17,14 +17,18 @@ module Network
     def self.behaviors
       @behaviors ||=
         Hash.new { Technology }.tap do |behaviors|
-          behaviors['storage']          = Storage
+          behaviors['storage']          = Battery
           behaviors['electric_vehicle'] = ElectricVehicle
           behaviors['buffer']           = Buffer
           behaviors['siphon']           = Siphon
+          behaviors['preemptive']       = PreemptiveConsumer
+          behaviors['deferrable']       = DeferrableConsumer
+          behaviors['conserving']       = ConservingProducer
+          behaviors['optional']         = OptionalConsumer
         end.freeze
     end
 
-    def self.build(installed, profile, _options)
+    def self.build(installed, profile, options)
       new(installed, profile)
     end
 
@@ -35,8 +39,19 @@ module Network
       @profile   = profile
     end
 
+    # TODO The name of this method suggests it checks to see if there is a
+    # capacity restriction preventing fulfilment; that's not the case. Find a
+    # better name.
+    def capacity_constrained?
+      false
+    end
+
     def load_at(frame)
       @profile.at(frame)
+    end
+
+    def consumption
+      @consumption ||= []
     end
 
     # Public: Determines the minimum amount of energy the technology consumes in

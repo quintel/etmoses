@@ -4,7 +4,6 @@ module Network
   # release back to the network later.
   class Storage < Technology
     extend Disableable
-    extend ProfileScaled
 
     def self.disabled?(options)
       options[:storage] == false
@@ -63,11 +62,6 @@ module Network
 
     def storage?
       true
-    end
-
-    # Public: Returns how much of the technology's capacity remains unused.
-    def headroom_at(frame)
-      volume - production_at(frame)
     end
   end # Storage
 end # Network

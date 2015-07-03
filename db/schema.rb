@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616094342) do
+ActiveRecord::Schema.define(version: 20150626123929) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -43,6 +43,20 @@ ActiveRecord::Schema.define(version: 20150616094342) do
   end
 
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
+
+  create_table "market_models", force: true do |t|
+    t.string   "name"
+    t.integer  "user_id"
+    t.text     "interactions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "stakeholders", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "technologies", force: true do |t|
     t.string "key",       limit: 100, null: false
