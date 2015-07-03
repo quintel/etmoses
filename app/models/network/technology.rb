@@ -90,11 +90,11 @@ module Network
     end
 
     def capacity
-      @installed.capacity || @installed.load || 0.0
+      (@installed.capacity || @installed.load || 0.0) * @installed.units
     end
 
     def volume
-      @installed.volume || Float::INFINITY
+      (@installed.volume || Float::INFINITY) * @installed.units
     end
 
     def consumer?
