@@ -64,7 +64,7 @@ class TestingGroundsController < ResourceController
     begin
       render json: @testing_ground.to_json(
         storage: params[:storage] == '1',
-        flexibility: true
+        flexibility: false
       )
     rescue StandardError => ex
       notify_airbrake(ex) if defined?(Airbrake)
