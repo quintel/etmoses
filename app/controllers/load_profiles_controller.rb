@@ -3,6 +3,7 @@ class LoadProfilesController < ResourceController
 
   before_filter :fetch_load_profile, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
+  before_filter :fetch_technologies, only: %i(new create edit update)
 
   respond_to :html
   respond_to :json, only: :show
@@ -51,6 +52,10 @@ class LoadProfilesController < ResourceController
   def fetch_load_profile
     @load_profile = LoadProfile.find(params[:id])
     authorize @load_profile
+  end
+
+  def fetch_technologies
+    @technologies = Technology.all
   end
 
   def load_profile_params
