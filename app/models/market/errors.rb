@@ -31,4 +31,8 @@ module Market
   NoSuchStakeholderError = error_class do |key|
     "No such stakeholder: #{ key.inspect }"
   end
+
+  NoSuchFoundationError = error_class do |name|
+    "No such foundation: #{ name.inspect }"
+  end
 end

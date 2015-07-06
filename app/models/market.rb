@@ -1,6 +1,10 @@
 require_relative 'market/errors'
 
 module Market
+  FOUNDATIONS = {
+    kwh: ->(node, frame) { node.energy_at(frame) }
+  }.freeze
+
   class << self
     # Public: Creates a new market graph.
     #
@@ -43,10 +47,7 @@ module Market
 
     def build_stakeholders!(market, stakeholders)
       stakeholders.each do |stakeholder|
-        market.add(Turbine::Node.new(
-          stakeholder[:name],
-          stakeholder: Market::Stakeholder.new(stakeholder[:name]),
-        ))
+        market.add(Market::Stakeholder.new(stakeholder[:name]))
       end
     end
 
@@ -61,7 +62,7 @@ module Market
         from.connect_to(
           to, relation[:name] || relation[:foundation],
           rule: Market::PaymentRule.new(
-            foundation_from(relation), relation[:tariff]))
+            foundation_from(relation), tariff_from(relation[:tariff])))
       end
     end
 
@@ -76,6 +77,10 @@ module Market
       fail NoSuchFoundationError, relation[:foundation] unless foundation
 
       foundation
+    end
+
+    def tariff_from(tariff)
+      tariff.is_a?(Numeric) ? Market::Tariff.new(tariff) : tariff
     end
   end # class << self
 end # Market

@@ -9,7 +9,7 @@ RSpec.describe Network do
           { name: 'Stakeholder 2' }
         ],
         relations: [
-          { from: 'Stakeholder 1', to: 'Stakeholder 2' }
+          { from: 'Stakeholder 1', to: 'Stakeholder 2', foundation: ->{} }
         ]
       }
     end
@@ -23,10 +23,6 @@ RSpec.describe Network do
         it 'exists' do
           expect(node).to be
         end
-
-        it 'has a stakeholder assigned' do
-          expect(node.get(:stakeholder).name).to eq('Stakeholder 1')
-        end
       end # the first node
 
       context 'the second node' do
@@ -34,10 +30,6 @@ RSpec.describe Network do
 
         it 'exists' do
           expect(node).to be
-        end
-
-        it 'has a stakeholder assigned' do
-          expect(node.get(:stakeholder).name).to eq('Stakeholder 2')
         end
       end # the second node
 
