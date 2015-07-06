@@ -376,16 +376,9 @@ var TreeGraph = (function(){
     $('#technologies .row-fluid').hide();
     $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
 
-    $('.node-info .download-curve').show().unbind('click')
-    .click(function(event) {
-      var file = $("<a>");
-
-      file.setAttribute('download', d.name + ' Curve.csv');
-      file.setAttribute('href', 'data:text/csv;charset=utf-8,' +
-       encodeURIComponent(d.load.join("\n")));
-      file.click();
-
-      event.preventDefault();
+    $('.node-info .download-curve').show().off('click').on('click', function(event) {
+      CSV.download(d.load.join("\n"),
+        (d.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
     });
   };
 
