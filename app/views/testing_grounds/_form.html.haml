@@ -51,8 +51,9 @@
           %strong= "Max/min"
       - @technologies.with_load_profiles.each do |technology|
         %span.check_box
-          = radio_button_tag technology.key, "max", true
-          = radio_button_tag technology.key, "min"
+          - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
+          = radio_button_tag technology.key, "max", max
+          = radio_button_tag technology.key, "min", !max
           %span= technology.name
 
       .buttons

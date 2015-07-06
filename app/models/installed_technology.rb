@@ -10,7 +10,7 @@ class InstalledTechnology
   attribute :demand,   Float
   attribute :volume,   Float
   attribute :units,    Integer, default: 1
-  attribute :concurrency, String
+  attribute :concurrency, String, default: 'max'
 
   EDITABLES = %i(name profile capacity volume demand units concurrency)
 
