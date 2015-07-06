@@ -1,5 +1,5 @@
 class TestingGroundsController < ResourceController
-  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy)
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -106,6 +106,13 @@ class TestingGroundsController < ResourceController
   # GET /testing_grounds/:id/technology_profile.csv
   def technology_profile
     respond_with(@testing_ground.technology_profile)
+  end
+
+  def save_as
+    testing_ground = @testing_ground.dup
+    testing_ground.save
+
+    redirect_to(testing_ground)
   end
 
   private

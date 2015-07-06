@@ -69,7 +69,9 @@
     = f.text_area :technology_profile
 
   .form-group
-    = f.submit "Create Local Energy Solution", class: 'btn btn-primary'
+    = f.submit "#{submit_text} Local Energy Solution", class: 'btn btn-success'
+    - unless testing_ground.new_record?
+      = link_to "Save As New Local Energy Solution", save_as_testing_ground_path(testing_ground), method: :post, class: "btn btn-primary"
     %span.or or
     - if testing_ground.new_record?
       = link_to 'Cancel', testing_grounds_path, class: 'btn btn-default'
