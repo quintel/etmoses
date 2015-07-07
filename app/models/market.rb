@@ -14,9 +14,15 @@ module Market
     #       { name: 'Stakeholder 1' },
     #       { name: 'Stakeholder 2' }
     #     ],
-    #     relations: [
-    #       { from: 'Stakeholder 1', to: 'Stakeholder 2' }
-    #     ]
+    #     relations: {
+    #       {
+    #         name: :kwh, # Optional
+    #         from: 'Stakeholder 1',
+    #         to: 'Stakeholder 2',
+    #         foundation: :kwh,
+    #         tariff: 10.0
+    #       }
+    #     }
     #   }
     #
     # Returns a Turbine::Graph.
@@ -52,8 +58,24 @@ module Market
         fail NoSuchStakeholderError, relation[:from] unless from
         fail NoSuchStakeholderError, relation[:to]   unless to
 
-        from.connect_to(to)
+        from.connect_to(
+          to, relation[:name] || relation[:foundation],
+          rule: Market::PaymentRule.new(
+            foundation_from(relation), relation[:tariff]))
       end
+    end
+
+    def foundation_from(relation)
+      foundation =
+        if relation[:foundation].respond_to?(:call)
+          relation[:foundation]
+        else
+          FOUNDATIONS[relation[:foundation]]
+        end
+
+      fail NoSuchFoundationError, relation[:foundation] unless foundation
+
+      foundation
     end
   end # class << self
 end # Market
