@@ -36,7 +36,7 @@ module TestingGroundsHelper
 
   def profile_table_options_for_households(household)
     load_profiles = household.load_profiles.map do |profile|
-      [profile.key, profile.key, data: { edsn: !!(profile.key =~ /edsn/) }]
+      [profile.key, profile.key, data: { edsn: profile.is_edsn? }]
     end
 
     options_for_select(load_profiles)
