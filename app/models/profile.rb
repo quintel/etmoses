@@ -3,11 +3,7 @@ class Profile < ActiveRecord::Base
 
   belongs_to :user
 
-  has_attached_file :curve
-
-  validates_attachment :curve, presence: true,
-    content_type: { content_type: /text\/(csv|plain)/ },
-    size: { less_than: 100.megabytes }
+  has_many :profile_curves, class: ProfileCurve, dependent: :destroy
 
   validates :key, presence: true, uniqueness: true
 
@@ -18,6 +14,8 @@ class Profile < ActiveRecord::Base
       ).downcase
     end
   end
+
+  accepts_nested_attributes_for :profile_curves
 
   def self.in_name_order
     order('COALESCE(`name`, `key`), `name`, `key`')

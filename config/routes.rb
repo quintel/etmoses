@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   resources :load_profiles
   resources :financial_profiles
   resources :load_profiles do
-    resources :load_curve, only: :show
+    resources :profile_curve, only: :show
   end
   resources :topologies
   resources :market_models

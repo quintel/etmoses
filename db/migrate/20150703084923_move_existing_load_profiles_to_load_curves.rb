@@ -5,7 +5,7 @@ class MoveExistingLoadProfilesToLoadCurves < ActiveRecord::Migration
         load_curve = LoadCurve.new
         load_curve.load_profile_id = load_profile.id
         load_curve.curve = File.new(load_profile.curve.path)
-        load_curve.curve_type = 'Flexible'
+        load_curve.curve_type = 'flex'
         load_curve.save
       rescue Errno::ENOENT
       end

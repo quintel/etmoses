@@ -3,7 +3,6 @@ class LoadProfile < Profile
   belongs_to :user
 
   has_many :technology_profiles, dependent: :destroy
-  has_many :load_curves, class: LoadCurve, dependent: :destroy
 
   validates :key, presence: true, uniqueness: true
 
@@ -12,15 +11,6 @@ class LoadProfile < Profile
 
   def is_edsn?
     !!(key =~ /edsn/)
-  end
-
-  def self.in_name_order
-    order('COALESCE(`name`, `key`), `name`, `key`')
-  end
-
-  # Public: The human-readable name of the curve.
-  def display_name
-    name.presence || key
   end
 
   # Public: Given the unique key representing a load profile, returns the

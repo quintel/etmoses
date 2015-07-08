@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150703102539) do
+ActiveRecord::Schema.define(version: 20150708102753) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -19,17 +19,6 @@ ActiveRecord::Schema.define(version: 20150703102539) do
   end
 
   add_index "importable_attributes", ["technology_id", "name"], name: "index_importable_attributes_on_technology_id_and_name", unique: true, using: :btree
-
-  create_table "load_curves", force: true do |t|
-    t.integer  "load_profile_id"
-    t.string   "curve_type"
-    t.string   "curve_file_name"
-    t.string   "curve_content_type"
-    t.integer  "curve_file_size"
-    t.datetime "curve_updated_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
@@ -44,6 +33,17 @@ ActiveRecord::Schema.define(version: 20150703102539) do
     t.boolean  "public",       default: false
     t.integer  "user_id"
     t.text     "interactions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "profile_curves", force: true do |t|
+    t.integer  "profile_id"
+    t.string   "curve_type"
+    t.string   "curve_file_name"
+    t.string   "curve_content_type"
+    t.integer  "curve_file_size"
+    t.datetime "curve_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

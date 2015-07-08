@@ -1,10 +1,10 @@
 %ul
   %li== Key: #{ @profile.key }
-  %li== Curve file name: #{ @profile.load_curves.map(&:curve_file_name).join(", ") }
+  %li== Curve file name: #{ @profile.profile_curves.map(&:curve_file_name).join(", ") }
   %li== Permitted Technologies: #{ @profile.technology_profiles.map(&:technology).join(", ") }
 
-- @profile.load_curves.each do |load_curve|
-  .profile-graph.line-chart{ 'data-url' => load_profile_load_curve_path(@profile, load_curve, format: :json) }
+- @profile.profile_curves.each do |load_curve|
+  .profile-graph.line-chart{ class: "id-#{load_curve.id}", data: { url: load_profile_profile_curve_path(@profile, load_curve, format: :json) } }
 
   .commit
     = link_to('Download', load_curve.curve.url, class: 'button')

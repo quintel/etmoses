@@ -1,5 +1,7 @@
-class LoadCurve < ActiveRecord::Base
-  belongs_to :load_profile
+class ProfileCurve < ActiveRecord::Base
+  CURVE_TYPES = %w(flex inflex)
+
+  belongs_to :profile
 
   has_attached_file :curve, styles: {
     demand_scaled:   { scale_by: :sum, processors: [:scaled_curve] },

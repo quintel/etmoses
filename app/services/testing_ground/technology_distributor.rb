@@ -28,14 +28,14 @@ class TestingGround::TechnologyDistributor
       @technologies.map do |technology|
         @technology = technology
         technology_units.each_with_index.map do |tech, index|
-          tech.dup.update({'node' => edge_nodes[edge_nodes_index(index)].key,
+          tech.dup.update({'node' => edge_nodes[index + edge_nodes_index].key,
                            'concurrency' => 'max' })
         end
       end
     end
 
-    def edge_nodes_index(index)
-      less_buildings_than_nodes? ? index + households['units'] : index
+    def edge_nodes_index
+      less_buildings_than_nodes? ? households['units'] : 0
     end
 
     def less_buildings_than_nodes?

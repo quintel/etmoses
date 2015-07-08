@@ -84,11 +84,11 @@ class InstalledTechnology
     if profile.is_a?(Array)
       Merit::Curve.new(profile)
     elsif volume.blank? && (capacity || load)
-      LoadProfile.by_key(profile).load_curves.first.merit_curve(:capacity_scaled)
+      LoadProfile.by_key(profile).profile_curves.first.merit_curve(:capacity_scaled)
     elsif demand
-      LoadProfile.by_key(profile).load_curves.first.merit_curve(:demand_scaled)
+      LoadProfile.by_key(profile).profile_curves.first.merit_curve(:demand_scaled)
     else
-      LoadProfile.by_key(profile).load_curves.first.merit_curve
+      LoadProfile.by_key(profile).profile_curves.first.merit_curve
     end
   end
 end # end

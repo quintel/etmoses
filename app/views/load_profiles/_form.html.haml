@@ -34,13 +34,15 @@
     .form-group
       = form.label :curve
       = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
-      .load-curve-wrapper
-        = form.fields_for :load_curves do |load_curve|
-          .load-curve-file-field
-            = load_curve.file_field :curve, accept: 'text/csv', class: 'load-curve'
+      .profile-curve-wrapper
+        = form.fields_for :profile_curves do |profile_curve|
+          .profile-curve-file-field
+            - curve_type = ProfileCurve::CURVE_TYPES[profile_curve.index]
+            = profile_curve.file_field :curve, accept: 'text/csv', class: 'load-curve', data: { button_name: "Choose file for #{curve_type} profile" }
+            = profile_curve.hidden_field :curve_type, value: curve_type
 
       - unless @profile.new_record?
-        .help-block Leave blank if you don't want to change the curve.
+        .help-block Leave blank if you don't want to change the curve(s).
 
   .technology-profiles-controls
     = form.label :permitted_technologies, "Permitted technologies"
@@ -48,7 +50,7 @@
     = form.fields_for :technology_profiles do |task|
       .form-group
         .input-group.technology-profile-control
-          = task.select :technology, Technology.all.map(&:name), {}, class: 'form-control'
+          = task.select :technology, technologies_select_options(task.object.technology), {}, class: 'form-control'
           .input-group-addon
             = task.label :_destroy, 'Remove'
             = task.check_box :_destroy
@@ -56,7 +58,7 @@
     - tech_length = @profile.technology_profiles.length
     - 3.times do |i|
       .form-group
-        = select_tag "profile[technology_profiles_attributes][#{ tech_length + i }][technology]", technologies_select_options, {class: 'form-control', prompt: "Technology Key ##{ tech_length + i + 1 } (optional)"}
+        = select_tag "load_profile[technology_profiles_attributes][#{ tech_length + i }][technology]", technologies_select_options, {class: 'form-control', prompt: "Technology Key ##{ tech_length + i + 1 } (optional)"}
 
     .alert.alert-info.max-permitted-notice
       Need to add more permitted technologies? Save the load profile and then
