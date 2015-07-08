@@ -47,14 +47,10 @@
   .concurrency
     %strong Select the technologies to switch concurrency
     .checkboxes
-      - 3.times do
-        %span.check_box
-          %strong= "Max/min"
       - @technologies.with_load_profiles.each do |technology|
         %span.check_box
           - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
-          = radio_button_tag technology.key, "max", max
-          = radio_button_tag technology.key, "min", !max
+          = check_box_tag technology.key, "max", max, {data: {toggle: "toggle", on: "Max", off: "Min"}}
           %span= technology.name
 
       .buttons
