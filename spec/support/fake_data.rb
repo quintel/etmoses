@@ -53,7 +53,8 @@ def basic_houses(units = '2.0')
   [{ "name"=>"Household",
      "type"=>"base_load",
      "demand"=>"5",
-     "units"=>units }]
+     "units"=>units,
+     "concurrency" => 'min' }]
 end
 
 def fake_technology_profile
