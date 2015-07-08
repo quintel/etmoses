@@ -5,4 +5,8 @@ module LoadProfilesHelper
         l[:load_profile_category].id]
     end)
   end
+
+  def technologies_select_options
+    options_for_select(@technologies.map{|t| [t.name, t.key]})
+  end
 end

@@ -14,4 +14,5 @@ class TestingGroundPolicy < ApplicationPolicy
   alias_method :import?, :new?
   alias_method :perform_import?, :import?
   alias_method :perform_export?, :export?
+  alias_method :save_as?, :edit?
 end

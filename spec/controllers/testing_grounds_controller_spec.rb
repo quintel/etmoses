@@ -319,4 +319,21 @@ RSpec.describe TestingGroundsController do
       expect(testing_ground.reload.technology_profile["lv1"][0].profile).to eq("solar_tv_zwolle")
     end
   end
+
+  describe "#save_as" do
+    let!(:sign_in_user){ sign_in(user) }
+    let(:testing_ground){ FactoryGirl.create(:testing_ground, user: user) }
+
+    it "clones an existing testing ground" do
+      post :save_as, id: testing_ground.id
+
+      expect(response).to redirect_to(testing_ground_path(TestingGround.last))
+    end
+
+    it "counts 2 testing grounds" do
+      post :save_as, id: testing_ground.id
+
+      expect(TestingGround.count).to eq(2)
+    end
+  end
 end

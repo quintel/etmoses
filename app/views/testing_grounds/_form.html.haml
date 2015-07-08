@@ -52,13 +52,15 @@
           %strong= "Max/min"
       - @technologies.with_load_profiles.each do |technology|
         %span.check_box
-          = radio_button_tag technology.key, "max", true
-          = radio_button_tag technology.key, "min"
+          - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
+          = radio_button_tag technology.key, "max", max
+          = radio_button_tag technology.key, "min", !max
           %span= technology.name
 
       .buttons
-        %button.toggle-whitelist.btn.btn-default Toggle All
-        %button.toggle-concurrency.btn.btn-primary Apply
+        = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"
+        - edit_class = (testing_ground.new_record? ? "" : "edit")
+        = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary #{edit_class}"
 
   .form-group
     = f.label :technology_profile_csv, "Technology profile CSV"
@@ -69,7 +71,9 @@
     = f.text_area :technology_profile
 
   .form-group
-    = f.submit class: 'btn btn-primary'
+    = f.submit "#{submit_text} Local Energy Solution", class: 'btn btn-success'
+    - unless testing_ground.new_record?
+      = link_to "Save As New Local Energy Solution", save_as_testing_ground_path(testing_ground), method: :post, class: "btn btn-primary"
     %span.or or
     - if testing_ground.new_record?
       = link_to 'Cancel', testing_grounds_path, class: 'btn btn-default'

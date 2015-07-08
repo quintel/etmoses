@@ -37,7 +37,8 @@
               %td.editable.select
 
             - when :concurrency
-              %td.editable.hidden= value
+              %td.editable.hidden
+                %input{type: 'text', value: value}
 
             - when :in_cooperation
               %td.editable

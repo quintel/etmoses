@@ -59,4 +59,10 @@ module TestingGroundsHelper
       tech_profile.slice(:capacity, :volume, :demand)
     end
   end
+
+  def maximum_concurrency?(technology_key, profile)
+    technology = profile.as_json.values.flatten.detect{|t| t[:type] == technology_key }
+
+    technology ? (technology[:concurrency] == "max") : true
+  end
 end

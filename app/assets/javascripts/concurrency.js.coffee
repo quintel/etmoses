@@ -20,7 +20,10 @@ $(document).on "page:change", ->
   if $("#new_testing_ground, .edit_testing_ground").length > 0
     $(".toggle-concurrency").click (event) ->
       event.preventDefault()
-      calculateConcurrency()
+      if $(this).hasClass("edit") && confirm("Are you sure? Changing concurrency might cause unwanted changes")
+        calculateConcurrency()
+      else
+        calculateConcurrency()
 
     $(".toggle-whitelist").click (event) ->
       event.preventDefault()

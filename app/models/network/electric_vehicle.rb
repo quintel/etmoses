@@ -75,7 +75,7 @@ module Network
 
     # Public: EVs should not overload the network.
     def capacity_constrained?
-      @capacity_constained
+      @capacity_constrained
     end
 
     #######

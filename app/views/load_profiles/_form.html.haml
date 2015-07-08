@@ -45,7 +45,7 @@
     = form.fields_for :technology_profiles do |task|
       .form-group
         .input-group.technology-profile-control
-          = task.text_field :technology, class: 'form-control'
+          = task.select :technology, Technology.all.map(&:name), {}, class: 'form-control'
           .input-group-addon
             = task.label :_destroy, 'Remove'
             = task.check_box :_destroy
@@ -53,7 +53,7 @@
     - tech_length = @profile.technology_profiles.length
     - 3.times do |i|
       .form-group
-        = text_field_tag "profile[technology_profiles_attributes][#{ tech_length + i }][technology]", '', placeholder: "Technology Key ##{ tech_length + i + 1 } (optional)", class: 'form-control'
+        = select_tag "profile[technology_profiles_attributes][#{ tech_length + i }][technology]", technologies_select_options, {class: 'form-control', prompt: "Technology Key ##{ tech_length + i + 1 } (optional)"}
 
     .alert.alert-info.max-permitted-notice
       Need to add more permitted technologies? Save the load profile and then
