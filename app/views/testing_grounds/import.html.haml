@@ -15,6 +15,11 @@
     = import_topology_select_tag(form)
 
   .form-group
+    = form.label :market_model_id
+    = tooltip_tag(t('import.form.market_model_id.tooltip'))
+    = form.select :market_model_id, market_model_options, {}, class: "form-control"
+
+  .form-group
     = form.label :scenario_id
     = tooltip_tag(t('import.form.scenario_id.tooltip'))
     .input-group

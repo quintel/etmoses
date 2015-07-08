@@ -1,88 +1,33 @@
 var ProfileTable = (function(){
-  var widget, selector;
-  var defaultCells = ["Capacity", "Volume", "Demand"];
+  var widget, selector, profileSelectBoxes;
 
   ProfileTable.prototype = {
     append: function(){
-      $(selector).on('change', parseTableToJSON.bind(this));
-
-      addClickListenersToAddRow();
-      addClickListenersToDeleteRow();
-      addProfileSelectBoxes();
-      addChangeListenerToNameBox();
-      parseTableToJSON();
+      profileSelectBoxes.add();
+      editableTable.append(parseTableToJSON, changeData);
     },
 
     updateProfiles: function(){
-      $("select.name").each(function(){
-        $(this).parent().next().find("select").val($(this).data('profile'));
-      });
+      profileSelectBoxes.update();
     }
-  };
-
-  function addProfileSelectBoxes(){
-    $("select.name").each(function(){
-      cloneAndAppendProfileSelect.call(this, false);
-    });
-  };
-
-  function addChangeListenerToNameBox(){
-    $("select.name").off().on("change", function(){
-      cloneAndAppendProfileSelect.call(this, true);
-    });
-  };
-
-  function cloneAndAppendProfileSelect(isChanged){
-    var technology = $(this).val();
-    var profileSelectbox = $(".hidden.profile select." + technology).clone();
-
-    $(this).parent().next().html(profileSelectbox);
-
-    if(isChanged){
-      updateTextCells(profileSelectbox, $(this).parents("tr"));
-    }
-    else{
-      profileSelectbox.val($(this).data('profile'));
-    }
-  };
-
-  function updateTextCells(profileSelectbox, currentRow){
-    for(var i = 0; i < defaultCells.length; i++){
-      var cell = defaultCells[i];
-      currentRow.find("." + cell.toLowerCase() + " input").val(
-        profileSelectbox.data("defaults" + cell)
-      );
-    };
   };
 
   function parseTableToJSON(){
-    var tableProfile = tableToProfile();
+    var tableProfile = editableTable.getData();
     var groupedByNode = ETHelper.groupBy(tableProfile, 'node');
 
     $("#technology_distribution").text(JSON.stringify(tableProfile));
     $("#testing_ground_technology_profile").text(JSON.stringify(groupedByNode));
   };
 
-  function tableToProfile(){
-    return tableRows().map(function(tableRow){
-      return rowToTechnologyObject(tableRow);
-    });
-  };
-
-  function rowToTechnologyObject(tableRow){
-    var technologyObject = {};
-    $.each(tableRow, function(i, techAttribute){
-      var header = tableHeader(i);
-
-      if(header == "name"){
-        technologyObject["name"] = getNameForType(techAttribute);
-        technologyObject["type"] = techAttribute;
-      }
-      else if(!(/demand|capacity/.test(header) && techAttribute == "")){
-        technologyObject[header] = techAttribute;
-      };
-    });
-    return technologyObject;
+  function changeData(){
+    if(this.header == "name"){
+      this.tableData["name"] = getNameForType(this.attribute);
+      this.tableData["type"] = this.attribute;
+    }
+    else if(!(/demand|capacity/.test(this.header) && this.attribute == "")){
+      this.tableData[this.header] = this.attribute
+    };
   };
 
   function getNameForType(type){
@@ -92,53 +37,18 @@ var ProfileTable = (function(){
     return selectedOption.text();
   };
 
-  function tableHeader(index){
-    return $($(selector).find("thead th")[index]).data("header");
-  };
-
-  function tableRows(){
-    return $(selector).find("tbody tr").toArray().map(extractTextfromCells);
-  };
-
-  function extractTextfromCells(row){
-    return $(row).find("td.editable").toArray().map(function(cell){
-      if($(cell).hasClass("select")){
-        return $.trim($(cell).find("select").val());
-      }
-      else{
-        return $.trim($(cell).find("input").val());
-      }
-    });
-  };
-
-  function addClickListenersToAddRow(){
-    $("#profiles-table table tr th a.add-row").on("click", function(e){
-      e.preventDefault();
-
-      var row = $(this).parents("tr");
-      var clonedRow = row.clone(true, true);
-      clonedRow.find("td.editable:not(.select)").text("");
-      clonedRow.insertAfter(row);
-    });
-  };
-
-  function addClickListenersToDeleteRow(){
-    $("#profiles-table table tr th a.remove-row").on("click", function(e){
-      e.preventDefault();
-
-      $(this).parents("tr").remove();
-      parseTableToJSON();
-    });
-  };
-
   function ProfileTable(_selector){
     selector = _selector;
+    profileSelectBoxes = new ProfileSelectBoxes();
+    editableTable = new EditableTable(_selector);
   };
 
   return ProfileTable;
 })();
 
 $(document).on("page:change", function(){
-  window.currentProfileTable = new ProfileTable("#profiles-table table");
-  window.currentProfileTable.append();
+  if($("#profiles-table table").length > 0){
+    window.currentProfileTable = new ProfileTable("#profiles-table table");
+    window.currentProfileTable.append();
+  }
 });

@@ -1,4 +1,4 @@
-class LoadProfilesController < ResourceController
+class LoadProfilesController < ProfilesController
   RESOURCE_ACTIONS = %i(show edit update destroy)
 
   before_filter :fetch_load_profile, only: RESOURCE_ACTIONS
@@ -20,38 +20,20 @@ class LoadProfilesController < ResourceController
 
   # GET /load_profiles/new
   def new
-    @load_profile = LoadProfile.new
+    @profile = LoadProfile.new
   end
 
-  # POST /load_profiles
   def create
-    @load_profile = current_user.load_profiles.create(load_profile_params)
-    respond_with(@load_profile)
-  end
-
-  # GET /load_profiles/:id/edit
-  def edit
-  end
-
-  # PATCH /load_profiles/:id
-  def update
-    @load_profile.update_attributes(load_profile_params)
-    respond_with(@load_profile)
-  end
-
-  # DELETE /load_profiles/:id
-  def destroy
-    @load_profile.destroy
-    redirect_to(load_profiles_url)
+    @profile = current_user.load_profiles.create(profile_params)
+    super
   end
 
   #######
   private
   #######
 
-  def fetch_load_profile
-    @load_profile = LoadProfile.find(params[:id])
-    authorize @load_profile
+  def profile_scope
+    :load_profile
   end
 
   def fetch_technologies

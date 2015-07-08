@@ -10,6 +10,7 @@ class TestingGround < ActiveRecord::Base
   serialize :technology_profile, TechnologyList
 
   belongs_to :topology
+  belongs_to :market_model
   belongs_to :user
 
   validates :topology, presence: true

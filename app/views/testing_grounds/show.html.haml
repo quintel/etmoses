@@ -55,17 +55,10 @@
     = link_to "Storage strategies", "#collapse-strategies", data: {toggle: 'collapse'}
 
   #collapse-strategies.collapse
-    %div
-      = radio_button_tag :storage, 'no_storage', true
-      = label_tag :storage, 'No storage'
-
-    %div
-      = radio_button_tag :storage, 'storage_strategy_1', false
-      = label_tag :storage, 'Prioritize use of local solar production'
-
-    %div
-      = radio_button_tag :storage, 'storage_strategy_2', false, disabled: true, class: 'disabled'
-      = label_tag :storage, 'Storage strategy #2', class: 'disabled'
+    - Strategies.all.each do |strategy|
+      %div
+        = radio_button_tag :storage, strategy[:name], true, { disabled: !strategy[:enabled] }
+        = label_tag :storage, I18n.t("testing_grounds.strategies.#{strategy[:name]}"), class: ("disabled" unless strategy[:enabled])
 
 .load-strategies
   %h2

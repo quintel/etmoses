@@ -1,0 +1,21 @@
+= form_for @market_model do |form|
+  .form-group
+    = form.label :name
+    = form.text_field :name, class: "form-control"
+
+  .form-group
+    = form.label :public, "Permissions"
+
+    .radio-buttons
+      = form.radio_button :public, true
+      = form.label :public, "Public", class: "radio-label"
+      = form.radio_button :public, false
+      = form.label :public, "Private", class: "radio-label"
+
+  .hidden
+    = form.text_area :interactions
+
+  = render table
+
+  = form.submit 'Save', class: "btn btn-primary"
+

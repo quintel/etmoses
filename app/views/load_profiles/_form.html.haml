@@ -1,10 +1,10 @@
-- if @load_profile.errors.any?
+- if @profile.errors.any?
   %ul.errors
-    - @load_profile.errors.full_messages.uniq.each do |message|
+    - @profile.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for @load_profile, html: { multipart: true } do |form|
-  - if @load_profile.new_record?
+= form_for @profile, html: { multipart: true } do |form|
+  - if @profile.new_record?
     .form-group
       = form.label :key
       = tooltip_tag(t(:'load_profiles.form.key.tooltip'))
@@ -30,13 +30,13 @@
     = form.select :load_profile_category_id, load_profile_categories_select_options, {}, class: 'form-control'
     .help-block This field is optional.
 
-  - unless @load_profile.locked?
+  - unless @profile.locked?
     .form-group
       = form.label :curve
       = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
       = form.file_field :curve, accept: 'text/csv'
 
-      - unless @load_profile.new_record?
+      - unless @profile.new_record?
         .help-block Leave blank if you don't want to change the curve.
 
   .technology-profiles-controls
@@ -50,10 +50,10 @@
             = task.label :_destroy, 'Remove'
             = task.check_box :_destroy
 
-    - tech_length = @load_profile.technology_profiles.length
+    - tech_length = @profile.technology_profiles.length
     - 3.times do |i|
       .form-group
-        = select_tag "load_profile[technology_profiles_attributes][#{ tech_length + i }][technology]", technologies_select_options, {class: 'form-control', prompt: "Technology Key ##{ tech_length + i + 1 } (optional)"}
+        = select_tag "profile[technology_profiles_attributes][#{ tech_length + i }][technology]", technologies_select_options, {class: 'form-control', prompt: "Technology Key ##{ tech_length + i + 1 } (optional)"}
 
     .alert.alert-info.max-permitted-notice
       Need to add more permitted technologies? Save the load profile and then
@@ -62,7 +62,7 @@
   .form-group
     = form.submit class: 'btn btn-primary'
     %span.or or
-    - if @load_profile.new_record?
+    - if @profile.new_record?
       = link_to 'Cancel', load_profiles_path, class: 'btn btn-default'
     - else
-      = link_to 'Cancel', load_profile_path(@load_profile), class: 'btn btn-default'
+      = link_to 'Cancel', load_profile_path(@profile), class: 'btn btn-default'

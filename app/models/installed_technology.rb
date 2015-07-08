@@ -10,9 +10,10 @@ class InstalledTechnology
   attribute :demand,   Float
   attribute :volume,   Float
   attribute :units,    Integer, default: 1
+  attribute :in_cooperation, Boolean
   attribute :concurrency, String, default: 'max'
 
-  EDITABLES = %i(name profile capacity volume demand units concurrency)
+  EDITABLES = %i(name profile capacity volume demand units in_cooperation concurrency)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
