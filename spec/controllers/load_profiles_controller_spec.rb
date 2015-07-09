@@ -34,4 +34,14 @@ RSpec.describe LoadProfilesController do
       expect(LoadProfile.last.user).to eq(user)
     end
   end
+
+  describe "destroy a load profile" do
+    it "destroys a load profile" do
+      load_profile = FactoryGirl.create(:load_profile, user: user)
+
+      delete :destroy, id: load_profile.id
+
+      expect(LoadProfile.count).to eq(0)
+    end
+  end
 end

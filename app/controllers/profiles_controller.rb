@@ -39,7 +39,7 @@ class ProfilesController < ResourceController
   # DELETE /profiles/:id
   def destroy
     @profile.destroy
-    redirect_to(profiles_url)
+    redirect_to(load_profiles_url)
   end
 
   #######

@@ -1,8 +1,4 @@
 class LoadProfilesController < ProfilesController
-  RESOURCE_ACTIONS = %i(show edit update destroy)
-
-  before_filter :fetch_profile, only: RESOURCE_ACTIONS
-  before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :fetch_technologies, only: %i(new create edit update)
 
   respond_to :html
@@ -11,11 +7,6 @@ class LoadProfilesController < ProfilesController
   def index
     skip_policy_scope
     @load_profile_categories = LoadProfileCategory.where(parent_id: nil)
-  end
-
-  # GET /load_profiles
-  def show
-    respond_with(@profile)
   end
 
   # GET /load_profiles/new
