@@ -6,3 +6,10 @@
   = render partial: "load_profile_categories/load_profile_categories", locals: { load_profile_categories: @load_profile_categories, collapsed: false }
 
 %h2 Financial Profiles
+
+.price_curves
+  %ul
+    - @price_curves.each do |price_curve|
+      %li
+        = link_to price_curve.key, price_curve_path(price_curve)
+        %span= I18n.l(price_curve.created_at, format: :short)

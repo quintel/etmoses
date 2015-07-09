@@ -46,5 +46,3 @@ bower.json
 
 # Temporary Paperclip test files.
 /public/test_files
-.zedstate
-.DS_Store

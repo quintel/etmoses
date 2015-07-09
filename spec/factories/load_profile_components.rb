@@ -1,8 +1,8 @@
 include ActionDispatch::TestProcess
 
 FactoryGirl.define do
-  factory :profile_curve do
-    curve_type 'Flexible'
+  factory :load_profile_component do
+    curve_type 'flex'
     curve {
       fixture_file_upload("#{Rails.root}/spec/fixtures/data/curves/one.csv", "text/csv")
     }

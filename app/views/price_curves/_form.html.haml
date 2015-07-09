@@ -1,10 +1,10 @@
-- if @profile.errors.any?
+- if @price_curve.errors.any?
   %ul.errors
-    - @profile.errors.full_messages.uniq.each do |message|
+    - @price_curve.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for @profile, html: { multipart: true } do |form|
-  - if @profile.new_record?
+= form_for @price_curve, url: price_curve_index_path, html: { multipart: true } do |form|
+  - if @price_curve.new_record?
     .form-group
       = form.label :key
       = tooltip_tag(t(:'load_profiles.form.key.tooltip'))
@@ -25,19 +25,18 @@
       = form.radio_button :public, false
       = form.label :public, "Private", class: "radio-label"
 
-  - unless @profile.locked?
-    .form-group
-      = form.label :curve
-      = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
-      = form.file_field :curve, accept: 'text/csv'
+  .form-group
+    = form.label :curve
+    = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
+    = form.file_field :curve, accept: 'text/csv'
 
-      - unless @profile.new_record?
-        .help-block Leave blank if you don't want to change the curve.
+    - unless @price_curve.new_record?
+      .help-block Leave blank if you don't want to change the curve.
 
   .form-group
     = form.submit class: 'btn btn-primary'
     %span.or or
-    - if @profile.new_record?
-      = link_to 'Cancel', financial_profiles_path, class: 'btn btn-default'
+    - if @price_curve.new_record?
+      = link_to 'Cancel', price_curve_index_path, class: 'btn btn-default'
     - else
-      = link_to 'Cancel', financial_profile_path(@profile), class: 'btn btn-default'
+      = link_to 'Cancel', price_curve_path(@price_curve), class: 'btn btn-default'

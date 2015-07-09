@@ -10,11 +10,11 @@ RSpec.describe LoadProfile, type: :model do
 
     context 'the original file' do
       let(:curve) do
-        Merit::Curve.load_file(load_profile.profile_curves.first.curve.path(:original))
+        Merit::Curve.load_file(load_profile.load_profile_components.first.curve.path(:original))
       end
 
       it 'is saved' do
-        expect(File.file?(load_profile.profile_curves.first.curve.path)).to be
+        expect(File.file?(load_profile.load_profile_components.first.curve.path)).to be
       end
 
       it 'is identical to the uploaded file' do
@@ -25,11 +25,11 @@ RSpec.describe LoadProfile, type: :model do
 
     context 'the capacity-scaled profile' do
       let(:curve) do
-        Merit::Curve.load_file(load_profile.profile_curves.first.curve.path(:capacity_scaled))
+        Merit::Curve.load_file(load_profile.load_profile_components.first.curve.path(:capacity_scaled))
       end
 
       it 'is saved' do
-        expect(File.file?(load_profile.profile_curves.first.curve.path(:capacity_scaled))).to be
+        expect(File.file?(load_profile.load_profile_components.first.curve.path(:capacity_scaled))).to be
       end
 
       it 'has the same number of members as the original' do
@@ -48,11 +48,11 @@ RSpec.describe LoadProfile, type: :model do
 
     context 'the demand-scaled profile' do
       let(:curve) do
-        Merit::Curve.load_file(load_profile.profile_curves.first.curve.path(:demand_scaled))
+        Merit::Curve.load_file(load_profile.load_profile_components.first.curve.path(:demand_scaled))
       end
 
       it 'is saved' do
-        expect(File.file?(load_profile.profile_curves.first.curve.path(:demand_scaled))).to be
+        expect(File.file?(load_profile.load_profile_components.first.curve.path(:demand_scaled))).to be
       end
 
       it 'has the same number of members as the original' do

@@ -37,7 +37,7 @@ RSpec.describe Calculation::Context do
     end
 
     it 'has a length equal to the load curve' do
-      expect(context.length).to eq(profile.profile_curves.first.merit_curve.length)
+      expect(context.length).to eq(profile.load_profile_components.first.merit_curve.length)
     end
 
     it 'permits iteration of each frame' do

@@ -9,7 +9,7 @@
       = form.label :key
       = tooltip_tag(t(:'load_profiles.form.key.tooltip'))
       = form.text_field :key, class: 'form-control'
-      .help-block This field is optional.
+      .help-block This field is mandatory
 
   .form-group
     = form.label :name
@@ -35,11 +35,11 @@
       = form.label :curve
       = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
       .profile-curve-wrapper
-        = form.fields_for :profile_curves do |profile_curve|
+        = form.fields_for :load_profile_components do |load_profile_component|
           .profile-curve-file-field
-            - curve_type = ProfileCurve::CURVE_TYPES[profile_curve.index]
-            = profile_curve.file_field :curve, accept: 'text/csv', class: 'load-curve', data: { button_name: "Choose file for #{curve_type} profile" }
-            = profile_curve.hidden_field :curve_type, value: curve_type
+            - curve_type = LoadProfileComponent::CURVE_TYPES[load_profile_component.index]
+            = load_profile_component.file_field :curve, accept: 'text/csv', class: 'load-curve', data: { button_name: "Choose file for #{curve_type} profile" }
+            = load_profile_component.hidden_field :curve_type, value: curve_type
 
       - unless @profile.new_record?
         .help-block Leave blank if you don't want to change the curve(s).

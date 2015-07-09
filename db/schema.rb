@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150708102753) do
+ActiveRecord::Schema.define(version: 20150710063517) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -28,17 +28,8 @@ ActiveRecord::Schema.define(version: 20150708102753) do
     t.datetime "updated_at"
   end
 
-  create_table "market_models", force: true do |t|
-    t.string   "name"
-    t.boolean  "public",       default: false
-    t.integer  "user_id"
-    t.text     "interactions"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "profile_curves", force: true do |t|
-    t.integer  "profile_id"
+  create_table "load_profile_components", force: true do |t|
+    t.integer  "load_profile_id"
     t.string   "curve_type"
     t.string   "curve_file_name"
     t.string   "curve_content_type"
@@ -48,8 +39,7 @@ ActiveRecord::Schema.define(version: 20150708102753) do
     t.datetime "updated_at"
   end
 
-  create_table "profiles", force: true do |t|
-    t.string   "type"
+  create_table "load_profiles", force: true do |t|
     t.string   "key",                      default: "",    null: false
     t.string   "name"
     t.boolean  "public",                   default: true,  null: false
@@ -60,7 +50,29 @@ ActiveRecord::Schema.define(version: 20150708102753) do
     t.datetime "updated_at"
   end
 
-  add_index "profiles", ["key"], name: "index_profiles_on_key", unique: true, using: :btree
+  add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
+
+  create_table "market_models", force: true do |t|
+    t.string   "name"
+    t.boolean  "public",       default: false
+    t.integer  "user_id"
+    t.text     "interactions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "price_curves", force: true do |t|
+    t.string   "name"
+    t.string   "key"
+    t.boolean  "public",             default: true
+    t.integer  "user_id"
+    t.string   "curve_file_name"
+    t.string   "curve_content_type"
+    t.integer  "curve_file_size"
+    t.datetime "curve_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "technologies", force: true do |t|
     t.string "key",       limit: 100, null: false

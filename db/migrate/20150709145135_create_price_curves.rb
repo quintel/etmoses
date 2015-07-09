@@ -1,8 +1,6 @@
-class CreateLoadCurves < ActiveRecord::Migration
+class CreatePriceCurves < ActiveRecord::Migration
   def change
-    create_table :profile_curves do |t|
-      t.integer :profile_id
-      t.string :curve_type
+    create_table :price_curves do |t|
       t.string :curve_file_name
       t.string :curve_content_type
       t.integer :curve_file_size
