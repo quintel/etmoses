@@ -29,7 +29,7 @@ irradiance_in_kW = genfromtxt(os.getcwd() + "/../input_data/irradiance_in_kW_per
 # Global constants
  
 # Specs of house
-floor_area = 100
+floor_area = 200
 window_area = 20
 thermostat_temperature_day = 20
 thermostat_temperature_night = 10
@@ -42,6 +42,8 @@ house.print_info()
 
 # Specs of heat-pump
 capacity_in_kW = 10
+COP = 4.5
+effective_capacity_in_kW = capacity_in_kW * COP
 
 # Specs of storage tank
 liters = 100
@@ -91,7 +93,7 @@ demand_profile = demand_profile / max_content_in_kWh
 # If the tank should be more than 100% full, we expect the gas-boiler to kick in and save the day
 demand_profile = [x if x < 1 else 1 for x in demand_profile]
 
-def create_availability_profile(use_profile, capacity_in_kW, max_content_in_kWh):
+def create_availability_profile(use_profile, effective_capacity_in_kW, max_content_in_kWh):
     # This profile creates an availability profile from a use profile. The use
     # of hot water determines when the heat pump needs to start heating. The
     # output profile of this function indicates which fraction of the total 
@@ -99,7 +101,7 @@ def create_availability_profile(use_profile, capacity_in_kW, max_content_in_kWh)
 
     # Calculate which fraction of the boilers capacity you can fill in 15 minute
     # 3600 is the conversion factor J / Wh  
-    maximum_added_energy = (capacity_in_kW / 4.0) / max_content_in_kWh
+    maximum_added_energy = (effective_capacity_in_kW / 4.0) / max_content_in_kWh
     print maximum_added_energy
 
     # start at the end of the year and works backwards
@@ -131,7 +133,7 @@ def create_availability_profile(use_profile, capacity_in_kW, max_content_in_kWh)
     
     return availability_profile
     
-availability_profile = create_availability_profile(demand_profile, capacity_in_kW, max_content_in_kWh)
+availability_profile = create_availability_profile(demand_profile, effective_capacity_in_kW, max_content_in_kWh)
 availability_profile = [x if x < 1 else 1 for x in availability_profile]
    
 mini = 8 * 4 * 24

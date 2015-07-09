@@ -77,6 +77,8 @@ temp_diff = 95 - 15 # degrees
 
 # HP capacity
 capacity = 10000 #W
+COP = 3.0
+effective_capacity = capacity * COP
 
 # The factor 1000 is to convert from liters to grams
 P2H_storage_volume = specific_heat_H20 * P2H_boiler_volume * 1000 * temp_diff # Joule
@@ -170,9 +172,9 @@ def create_availability_profile(use_profile):
     # output profile of this function indicates which fraction of the total 
     # storage volume of the heat pump boiler should be full
 
-    # Calculate which fraction of the boilers capacity you can fill in 15 minute
+    # Calculate which fraction of the heat pumps capacity you can fill in 15 minute
     # 3600 is the conversion factor J / Wh  
-    maximum_added_energy = (capacity / 4.0) * (3600 / P2H_storage_volume)
+    maximum_added_energy = (effective_capacity / 4.0) * (3600 / P2H_storage_volume)
 
     # start at the end of the year and works backwards
     backwards_use_profile = use_profile[::-1]
