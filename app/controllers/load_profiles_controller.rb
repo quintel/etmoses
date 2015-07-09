@@ -1,7 +1,7 @@
 class LoadProfilesController < ProfilesController
   RESOURCE_ACTIONS = %i(show edit update destroy)
 
-  before_filter :fetch_load_profile, only: RESOURCE_ACTIONS
+  before_filter :fetch_profile, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :fetch_technologies, only: %i(new create edit update)
 
@@ -15,7 +15,7 @@ class LoadProfilesController < ProfilesController
 
   # GET /load_profiles
   def show
-    respond_with(@load_profile)
+    respond_with(@profile)
   end
 
   # GET /load_profiles/new
@@ -34,6 +34,11 @@ class LoadProfilesController < ProfilesController
 
   def profile_scope
     :load_profile
+  end
+
+  def fetch_profile
+    @profile = LoadProfile.find(params[:id])
+    authorize @profile
   end
 
   def fetch_technologies
