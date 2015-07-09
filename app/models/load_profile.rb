@@ -10,4 +10,8 @@ class LoadProfile < Profile
 
   accepts_nested_attributes_for :technology_profiles,
     reject_if: :all_blank, allow_destroy: true
+
+  def is_edsn?
+    !!(key =~ /edsn/)
+  end
 end

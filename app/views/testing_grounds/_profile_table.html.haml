@@ -14,8 +14,11 @@
     .hidden.profile
       - @technologies.each do |technology|
         %select.form-control{class: technology.key, data: { defaults: technology_defaults(technology, testing_ground_profile) }}
-          - if technology.key == "generic"
+          - case technology.key
+          - when 'generic'
             = options_for_load_profiles
+          - when 'base_load'
+            = profile_table_options_for_households(technology)
           - else
             = profile_table_options_for_profile(technology)
 
@@ -46,7 +49,7 @@
 
             - else
               %td.editable.text{class: key, data: { edit_type: 'text' }}
-                %input.form-control{type: 'text', value: value }
+                %input.form-control{type: 'text', value: value.to_i }
 
           %td
             = link_to "#!", class: "add-row text-success" do

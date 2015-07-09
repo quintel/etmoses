@@ -9,8 +9,8 @@ calculateConcurrency = ()->
 technology_distribution = ->
   tech_distribution = JSON.parse($("textarea#technology_distribution").text())
   for tech in tech_distribution
-    concurrency = $(".check_box input[name='" + tech.type + "']:checked").val();
-    tech.concurrency = concurrency
+    concurrency = $(".check_box input[name='" + tech.type + "']")
+    tech.concurrency = (if concurrency.prop('checked') then 'max' else 'min')
 
   tech_distribution_json = JSON.stringify(tech_distribution)
   $("textarea#technology_distribution").text(tech_distribution_json)
@@ -27,4 +27,5 @@ $(document).on "page:change", ->
 
     $(".toggle-whitelist").click (event) ->
       event.preventDefault()
-      $(".check_box input").not(":checked").prop("checked", true)
+      $(this).toggleClass("all-max")
+      $(".check_box input").prop("checked", !$(this).hasClass("all-max")).change()

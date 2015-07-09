@@ -49,4 +49,43 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
       expect(new_profile.values.flatten.length).to eq(12)
     end
   end
+
+  describe "EDSN profile usage" do
+    let!(:profiles){
+      5.times do |i|
+        FactoryGirl.create(:technology_profile,
+          technology: 'base_load',
+          load_profile: FactoryGirl.create(:load_profile, key: "anonimous_#{i + 1}"))
+
+        FactoryGirl.create(:technology_profile,
+          technology: 'base_load',
+          load_profile: FactoryGirl.create(:load_profile, key: "edsn_#{i + 1}"))
+      end
+    }
+
+    describe "minimizes concurrency only with EDSN profiles" do
+      let(:new_profile){
+        TestingGround::TechnologyProfileScheme.new(
+          basic_houses(11.0)
+        ).build
+      }
+
+      it 'expects only EDSN profiles' do
+        expect(new_profile.values.flatten.first["profile"]).to eq("anonimous_1")
+      end
+    end
+
+    describe "minimizes concurrency only with non-EDSN profiles" do
+      let(:new_profile){
+        TestingGround::TechnologyProfileScheme.new(
+          basic_houses(9.0)
+        ).build
+      }
+
+      it 'only makes use of non-EDSN profiles' do
+        expect(new_profile.values.flatten.first["profile"]).to eq("anonimous_1")
+      end
+    end
+  end
 end
+
