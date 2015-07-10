@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :testing_grounds
   has_many :topologies
   has_many :load_profiles
-  has_many :financial_profiles
+  has_many :price_curves, class: PriceCurve
   has_many :market_models
 
   def activate!

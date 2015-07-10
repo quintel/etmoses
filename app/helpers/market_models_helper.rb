@@ -8,6 +8,6 @@ module MarketModelsHelper
   end
 
   def financial_profile_options(options = {})
-    options_for_select(FinancialProfile.all.map(&:key), options)
+    options_for_select(PriceCurve.all.map(&:key), options)
   end
 end

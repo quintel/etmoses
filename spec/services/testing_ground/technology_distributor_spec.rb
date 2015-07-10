@@ -67,6 +67,34 @@ RSpec.describe TestingGround::TechnologyDistributor do
           t['profile'] }.uniq.count).to eq(1)
       end
     end
+
+    describe 'houses and buildings' do
+      describe "less edge nodes than houses and buildings" do
+        let(:new_profile){ TestingGround::TechnologyDistributor.new(
+            [{ "name" => "Household", "type" => "base_load", "units" => 2 },
+            { "name" => "Buildings", "type" => "base_load_buildings", "units" => 1 }],
+            large_topology
+          ).build
+        }
+
+        it "distributes houses and buildings as though they are one technology" do
+          expect(new_profile.map{|t| t["node"] }.uniq).to eq([:lv1, :lv2, :lv3])
+        end
+      end
+
+      describe 'one building more than edge nodes' do
+        let(:new_profile){ TestingGround::TechnologyDistributor.new(
+            [{ "name" => "Household", "type" => "base_load", "units" => 3 },
+            { "name" => "Buildings", "type" => "base_load_buildings", "units" => 3 }],
+            large_topology
+          ).build
+        }
+
+        it "distributes houses and buildings as though they are one technology" do
+          expect(new_profile.map{|t| t["node"] }.uniq).to eq([:lv1, :lv2, :lv3])
+        end
+      end
+    end
   end
 
   # Minimum concurrency

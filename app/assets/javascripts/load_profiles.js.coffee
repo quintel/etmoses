@@ -11,9 +11,11 @@ $(document).on "page:change", ->
   )
 
   if (container = $('.profile-graph')).length
-    $.getJSON(container.data('url')).success (profile) ->
-      $('.profile-graph').empty().append('<svg></svg>')
+    $(".profile-graph").each ->
+      $(this).empty().append('<svg></svg>')
+      render_class = ("." + $(this).attr("class").replace(/\s/g, '.') + " svg")
 
-      new (window.LoadChart)([{
-        values: profile.values, name: profile.name || profile.key, area: true
-      }]).render('.profile-graph svg')
+      $.getJSON($(this).data('url')).success (profile) ->
+        new (window.LoadChart)([{
+          values: profile.values, name: profile.name || profile.key, area: true
+        }]).render(render_class)

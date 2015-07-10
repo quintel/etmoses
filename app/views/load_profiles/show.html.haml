@@ -1,14 +1,18 @@
 %ul
   %li== Key: #{ @profile.key }
-  %li== Curve file name: #{ @profile.curve_file_name }
+  %li== Curve file name: #{ @profile.load_profile_components.map(&:curve_file_name).join(", ") }
   %li== Permitted Technologies: #{ @profile.technology_profiles.map(&:technology).join(", ") }
 
-.profile-graph.line-chart{ 'data-url' => load_profile_path(@profile, format: :json) }
+- @profile.load_profile_components.each do |load_profile_component|
+  .profile-graph.line-chart{ class: "id-#{load_profile_component.id}", data: { url: load_profile_load_profile_component_path(@profile, load_profile_component, format: :json) } }
 
-.commit
-  = link_to('Download', @profile.curve.url, class: 'button')
-  %span.or or
-  = link_to_if(policy(@profile).edit?, 'Edit', edit_load_profile_path(@profile), class: 'button')
-  = link_to_if(policy(@profile).destroy?, 'Delete', load_profile_path(@profile), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this profile?' })
+  .commit.pull-right
+    = link_to('Download', load_profile_component.curve.url, class: 'btn btn-default')
+  .clearfix
+  %br
 
+= link_to_if(policy(@profile).edit?, 'Edit', edit_load_profile_path(@profile), class: 'button')
+%span.or or
+= link_to_if(policy(@profile).destroy?, 'Delete', load_profile_path(@profile), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this profile?' })
+%br
 = link_to '◄ All load profiles', load_profiles_path, class: 'button button-primary'

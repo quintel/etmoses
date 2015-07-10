@@ -26,18 +26,35 @@ class TestingGround::TechnologyDistributor
     # Returns a 2-dimensional Array of technologies and their 'node'
     def all_technologies
       @technologies.map do |technology|
-        technology_units(technology).each_with_index.map do |tech, index|
-          tech.dup.update({'node' => edge_nodes[index].key,
+        @technology = technology
+        technology_units.each_with_index.map do |tech, index|
+          tech.dup.update({'node' => edge_nodes[index + edge_nodes_index].key,
                            'concurrency' => 'max' })
         end
       end
     end
 
+    def edge_nodes_index
+      less_buildings_than_nodes? ? households['units'] : 0
+    end
+
+    def less_buildings_than_nodes?
+      is_building? && (@technology['units'] + households['units']) < edge_nodes.size
+    end
+
+    def is_building?
+      @technology['type'] == 'base_load_buildings'
+    end
+
+    def households
+      @technologies.detect{|t| t['type'] == 'base_load' }
+    end
+
     # Calculates the spread of units
     #
     # Returns an Array of Integers
-    def technology_units(technology)
-      TestingGround::TechnologyPartitioner.new(technology, edge_nodes.size)
+    def technology_units
+      TestingGround::TechnologyPartitioner.new(@technology, edge_nodes.size)
         .partition
     end
 end

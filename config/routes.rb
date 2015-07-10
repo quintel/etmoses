@@ -16,8 +16,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :load_profiles
-  resources :financial_profiles
+  resources :price_curves, as: :price_curve
+  resources :load_profiles do
+    resources :load_profile_component, only: :show
+  end
   resources :topologies
   resources :market_models
 
