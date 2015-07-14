@@ -1,8 +1,20 @@
 FactoryGirl.define do
+  factory :installed_base_load, class: InstalledTechnology do
+    type 'base_load'
+    units 1
+    demand 8760
+  end
+
+  factory :installed_base_load_building, class: InstalledTechnology do
+    type 'base_load_buildings'
+    units 1
+    demand 8760
+  end
+
   factory :installed_pv, class: InstalledTechnology do
     name 'PV Panel'
     units 1
-    capacity -2.0
+    capacity(-2.0)
   end
 
   factory :installed_tv, class: InstalledTechnology do
