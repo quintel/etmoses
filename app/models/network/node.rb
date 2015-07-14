@@ -99,7 +99,7 @@ module Network
     def assign_conditional_consumption(frame, amount)
       wanted = conditional_consumption_at(frame)
 
-      get(:techs).each do |tech|
+      techs.each do |tech|
         next unless tech.storage?
 
         share  = tech.conditional_consumption_at(frame) / wanted
@@ -139,6 +139,13 @@ module Network
       end
     end
 
+    # Public: An array of technologies attached to this node.
+    #
+    # Returns an array.
+    def techs
+      get(:techs) || set(:techs, [])
+    end
+
     private
 
     # Internal: A memoized list of child nodes. Since the graph never changes
@@ -154,12 +161,7 @@ module Network
     # Returns the sum of the value from the child nodes and techs.
     def recursively(method, frame)
       from_children = memoized_out.sum { |node| node.__send__(method, frame) }
-
-      if get(:techs)
-        from_children + get(:techs).sum { |tech| tech.__send__(method, frame) }
-      else
-        from_children
-      end
+      from_children + techs.sum { |tech| tech.__send__(method, frame) }
     end
   end # Node
 end # Network

@@ -12,7 +12,7 @@ module Network
     # of the graph.
     def self.find(leaf)
       path = Path.find(leaf)
-      leaf.get(:techs).map { |tech| new(tech, path) }
+      leaf.techs.map { |tech| new(tech, path) }
     end
 
     attr_reader :technology
