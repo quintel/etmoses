@@ -32,11 +32,11 @@ module Network
     end
 
     def inspect
-      "#<#{ self.class.name } #{ to_s }>"
+      "#<#{ self.class.name } #{ self }>"
     end
 
     def to_s
-      "#{ @technology.to_s } | {#{ @path.map(&:key).join(', ') }}"
+      "#{ @technology } | {#{ @path.map(&:key).join(', ') }}"
     end
 
     def congested_at?(frame, correction = 0)
@@ -59,7 +59,7 @@ module Network
       # (conditional) consumption.
       return if amount.zero? && ! @technology.respond_to?(:store)
 
-      # TODO "store" should be renamed to "consume_conditional"
+      # TODO: "store" should be renamed to "consume_conditional"
       @technology.store(frame, amount) if conditional
 
       currently = @technology.consumption[frame] || 0.0
