@@ -47,9 +47,13 @@
               %td.editable
                 = check_box_tag :in_cooperation
 
+            - when :demand
+              %td.editable.text{class: key, data: {edit_type: 'text'}}
+                %input.form-control{type: 'text', value: (value.to_i if value) }
+
             - else
               %td.editable.text{class: key, data: { edit_type: 'text' }}
-                %input.form-control{type: 'text', value: value.to_i }
+                %input.form-control{type: 'text', value: value }
 
           %td
             = link_to "#!", class: "add-row text-success" do

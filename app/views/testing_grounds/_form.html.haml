@@ -64,7 +64,7 @@
     = f.file_field :technology_profile_csv, accept: 'text/csv'
 
   .hidden
-    = f.text_area :technology_profile
+    = f.text_area :technology_profile, value: @testing_ground.technology_profile.to_json
 
   .form-group
     = f.submit "#{submit_text} Local Energy Solution", class: 'btn btn-success'
