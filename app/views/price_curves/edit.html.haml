@@ -1,2 +1,2 @@
 %h3== Edit profile #{ @price_curve.key }
-= render partial: 'form'
+= render partial: 'form', locals: { form_path: price_curve_path(@price_curve) }

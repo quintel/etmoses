@@ -3,7 +3,7 @@
     - @price_curve.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for @price_curve, url: price_curve_index_path, html: { multipart: true } do |form|
+= form_for @price_curve, url: form_path, html: { multipart: true } do |form|
   - if @price_curve.new_record?
     .form-group
       = form.label :key
