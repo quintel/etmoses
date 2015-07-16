@@ -1,5 +1,6 @@
 class Stakeholder
   def self.all
-    %w(stakeholder_1 stakeholder_2)
+    [ "customer", "cooperation", "aggregator", "government", "supplier", "producer",
+      "system operator"]
   end
 end
