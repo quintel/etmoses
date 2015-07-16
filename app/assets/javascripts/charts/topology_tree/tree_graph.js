@@ -249,15 +249,16 @@ var TreeGraph = (function(){
       });
 
     // Update the nodes…
-    node = svgGroup.selectAll('g.node')
-    .data(nodes, function(d) { return d.id || (d.id = ++nodeIds); });
+    node = svgGroup.selectAll('g.node').data(nodes, function(d) {
+             return d.id || (d.id = ++nodeIds);
+           });
 
     node.classed('collapsed', function(d) { return d._children; });
 
     // Enter any new nodes at the parent's previous position.
     nodeEnter = node.enter().append('g')
       .call(dragListener)
-      .attr('class', 'node')
+      .attr('class', setNodeClass)
       .classed('collapsed', function(d) {
               // We have to run the "collapsed" function again (it is already
               // defined above), as the above version does not run the first
@@ -359,6 +360,12 @@ var TreeGraph = (function(){
       d.x0 = d.x;
       d.y0 = d.y;
     });
+  };
+
+  function setNodeClass(data){
+    var c = ("node " + data.stakeholder);
+    if(data.node_selected){ c += " selected" }
+    return c;
   };
 
   // Toggle children on click.

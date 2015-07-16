@@ -73,4 +73,12 @@ module TestingGroundsHelper
 
     technology ? (technology[:concurrency] == "max") : true
   end
+
+  def options_for_stakeholders
+    options = []
+    @testing_ground.topology.each_node do |n|
+      (options << n[:stakeholder] if n[:stakeholder])
+    end
+    options_for_select options
+  end
 end

@@ -96,6 +96,10 @@ ul.testing-grounds {
     stroke-width: 1.5px;
   }
 
+  .node.selected circle{
+    fill: #ddd;
+  }
+
   .node.collapsed circle {
     fill: lightsteelblue;
   }
@@ -359,4 +363,7 @@ span.loading-spinner.on{
 label.disabled{
   color: #ccc;
   font-weight: normal;
+}
+select#stakeholders{
+  width: 300px;
 }
