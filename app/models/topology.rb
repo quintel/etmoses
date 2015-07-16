@@ -11,6 +11,7 @@ class Topology < ActiveRecord::Base
 
   validate :validate_node_names
   validate :validate_units
+  validate :validate_stakeholders
 
   def self.default
     find_by_name("Default topology")
@@ -71,6 +72,16 @@ class Topology < ActiveRecord::Base
       elsif node[:units] < 0
         errors.add(:graph, "may not have a node with \"units\" less than " \
                            "zero: #{ node[:name].inspect }")
+      end
+    end
+  end
+
+  def validate_stakeholders
+    each_node do |node|
+      next unless node[:stakeholder]
+
+      unless Stakeholder.all.include?(node[:stakeholder])
+        errors.add(:graph, "contains a non existing stakeholder")
       end
     end
   end

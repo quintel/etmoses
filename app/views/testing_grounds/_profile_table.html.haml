@@ -7,7 +7,6 @@
     %th{data: {header: 'volume'}} Storage volume [kWh]
     %th{data: {header: 'demand'}} Yearly demand [kWh]
     %th{data: {header: 'units'}} Units
-    %th{data: {header: 'in_cooperation'}} Include in cooperation
     %th.hidden{data: {header: 'concurrency'}} Concurrency
 
   %tbody
@@ -42,10 +41,6 @@
             - when :concurrency
               %td.editable.hidden
                 %input{type: 'text', value: value}
-
-            - when :in_cooperation
-              %td.editable
-                = check_box_tag :in_cooperation
 
             - when :demand
               %td.editable.text{class: key, data: {edit_type: 'text'}}

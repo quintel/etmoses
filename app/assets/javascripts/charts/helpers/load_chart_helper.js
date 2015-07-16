@@ -9,7 +9,9 @@ LoadChartHelper = {
     currentChart = this.charts[currentChartId - 1];
     d3Chart = d3.select(".chart-id-" + currentChartId + " svg");
     d3ChartData = d3Chart.data();
-    d3ChartData[0][1]["disabled"] = this.disableCapacity;
+    if(d3ChartData[0] && d3ChartData[0][1]){
+      d3ChartData[0][1]["disabled"] = this.disableCapacity;
+    }
     currentChart.update();
   },
 

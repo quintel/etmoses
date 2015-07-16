@@ -94,3 +94,11 @@
       No Technologies registered yet.
 
     = link_to 'Download Tech. CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'
+
+#stakeholders
+  %h2
+    = link_to "Stakeholders", "#collapse-stakeholders", data: {toggle: 'collapse'}
+
+  #collapse-stakeholders.collapse
+    = select_tag("stakeholders", options_for_stakeholders, {include_blank: '-----', class: "form-control"})
+
