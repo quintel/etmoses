@@ -24,8 +24,11 @@ class PriceCurvesController < ResourceController
   end
 
   def update
-    @price_curve.update_attributes(profile_params)
-    respond_with(@price_curve)
+    if @price_curve.update_attributes(profile_params)
+      redirect_to price_curve_path(@price_curve)
+    else
+      render :edit
+    end
   end
 
   def destroy
