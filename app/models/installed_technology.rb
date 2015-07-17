@@ -83,11 +83,27 @@ class InstalledTechnology
     if profile.is_a?(Array)
       Merit::Curve.new(profile)
     elsif volume.blank? && (capacity || load)
-      LoadProfile.by_key(profile).load_profile_components.first.merit_curve(:capacity_scaled)
+      combined_curves(:capacity_scaled)
     elsif demand
-      LoadProfile.by_key(profile).load_profile_components.first.merit_curve(:demand_scaled)
+      combined_curves(:demand_scaled)
     else
-      LoadProfile.by_key(profile).load_profile_components.first.merit_curve
+      combined_curves
     end
+  end
+
+  def combined_curves(scaling = nil)
+    profiles = LoadProfile.by_key(profile).load_profile_components
+
+    return profiles.first.merit_curve(scaling) if profiles.length == 1
+
+    combined = profiles.map { |component| component.merit_curve}.reduce(:+)
+
+    Merit::Curve.new(
+      case scaling
+        when :capacity_scaled then Paperclip::ScaledCurve.scale(combined, :max)
+        when :demand_scaled   then Paperclip::ScaledCurve.scale(combined, :sum)
+        else combined
+      end.to_a
+    )
   end
 end # end

@@ -17,29 +17,27 @@ module Paperclip
   #   Becomes: [0.5, 1.0, 0.5, 0.25, 0.25]
   #
   class ScaledCurve < Processor
+    def self.scale(curve, scale_by)
+      divisor =
+        case scale_by
+          when :sum then curve.reduce(:+)
+          when :max then curve.max
+          else           1.0
+        end
+
+      curve.map { |value| value / divisor }
+    end
+
     def make
       format   = File.extname(file.path)
       basename = File.basename(file.path, format)
 
       curve    = Merit::Curve.load_file(file.path)
-      divisor  = scaler_for(curve)
-      scaled   = curve.map { |value| value / divisor }
+      scaled   = self.class.scale(curve, @options[:scale_by])
 
       Tempfile.new([basename, format ? ".#{format}" : '']).tap do |dest|
         dest.puts(scaled.map(&:to_s).join("\n"))
         dest.rewind
-      end
-    end
-
-    #######
-    private
-    #######
-
-    def scaler_for(curve)
-      case @options[:scale_by]
-        when :sum then curve.reduce(:+)
-        when :max then curve.max
-        else           1.0
       end
     end
   end # ScaledCurve
