@@ -5,10 +5,6 @@ module Network
   class Storage < Technology
     extend Disableable
 
-    def self.disabled?(options)
-      options[:solar_storage]
-    end
-
     def initialize(*)
       super
       @capacity = CapacityLimit.new(self)

@@ -10,6 +10,10 @@ module Network
   class Buffer < Storage
     extend ProfileScaled
 
+    def self.disabled?(options)
+      !options[:solar_power_to_heat]
+    end
+
     # Public: The amount of energy to be retained in the buffer at the end of
     # the frame must decrease by the amount consumed (defined in the profile).
     def production_at(frame)

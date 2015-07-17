@@ -10,7 +10,7 @@ module Network
     end
 
     def self.disabled?(options)
-      options.has_key?(:capping_solar_pv) && !options[:capping_solar_pv]
+      !options[:capping_solar_pv]
     end
 
     def self.disabled_class

@@ -22,6 +22,10 @@ module Network
       instance
     end
 
+    def self.disabled?(options)
+      options[:solar_storage]
+    end
+
     # Internal:  With storage disabled, a car should consume energy from the
     # network as and when needed, without storing excesses for later use.
     def self.disabled_class
