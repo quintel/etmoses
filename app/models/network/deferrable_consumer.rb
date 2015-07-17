@@ -18,7 +18,7 @@ module Network
     DeferrableLoad = Struct.new(:amount, :mandatory_at)
 
     def self.disabled?(options)
-      ! options[:flexibility]
+      !options[:postponing_base_load]
     end
 
     def self.disabled_class

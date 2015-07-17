@@ -8,18 +8,13 @@ module Network
   class ElectricVehicle < Storage
     extend ProfileScaled
 
-    # Electric vehicles are only capacity-constrained when load management is
-    # turned on.
-    attr_writer :capacity_constrained
+    def initialize(installed, profile, buffering_electric_car: false, **)
+      super
+      @buffering = buffering_electric_car
+    end
 
-    def self.build(installed, profile, options)
-      instance = super
-
-      unless disabled?(options)
-        instance.capacity_constrained = options[:flexibility]
-      end
-
-      instance
+    def self.disabled?(options)
+      options[:solar_storage]
     end
 
     # Internal:  With storage disabled, a car should consume energy from the
@@ -75,7 +70,7 @@ module Network
 
     # Public: EVs should not overload the network.
     def capacity_constrained?
-      @capacity_constrained
+      @buffering
     end
 
     #######

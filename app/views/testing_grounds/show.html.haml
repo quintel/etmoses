@@ -30,6 +30,9 @@
       = truncate(@testing_ground.topology.name, length: 25)
 
 #testing-ground
+  .strategies.hidden
+    = default_strategies.to_json
+
   .testing-ground-view{ "data-url" => data_testing_ground_url(@testing_ground, format: :json) }
     %span.loading
       %h5
@@ -50,22 +53,22 @@
 
 .clearfix
 
-.storage-capabilities
+.load-strategies
   %h2
-    = link_to "Storage strategies", "#collapse-strategies", data: {toggle: 'collapse'}
+    = link_to "Flexibility strategies", "#collapse-strategies", data: {toggle: 'collapse'}
 
   #collapse-strategies.collapse
     - Strategies.all.each do |strategy|
       %div
-        = radio_button_tag :storage, strategy[:name], true, { disabled: !strategy[:enabled] }
+        = check_box_tag strategy[:name], nil, false, class: "strategy_option", data: { ajax_prop: strategy[:ajax_prop]}, disabled: !strategy[:enabled]
         = label_tag :storage, I18n.t("testing_grounds.strategies.#{strategy[:name]}"), class: ("disabled" unless strategy[:enabled])
 
-.load-strategies
-  %h2
-    = link_to "Load management strategies", "#collapse-load-management-strategies", data: {toggle: 'collapse'}
+    .slider-wrapper.hidden
+      %input#solar_pv_capping{type: 'text', data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => 10}}
+      .clearfix
+      %p.note Specify which percentage of solar production can be capped
 
-  #collapse-load-management-strategies.collapse
-    To be implemented
+    %button.btn.btn-primary.apply_strategies Apply
 
 #technologies
   %h2
@@ -88,7 +91,8 @@
               - techs.each do |tech|
                 %tr{ "data-tech" => tech.name }
                   - InstalledTechnology::EDITABLES.each do |akey|
-                    %td= tech.send(akey)
+                    - unless %i(concurrency in_cooperation).include?(akey)
+                      %td= tech.send(akey)
 
     - else
       No Technologies registered yet.

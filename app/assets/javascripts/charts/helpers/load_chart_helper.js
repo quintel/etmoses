@@ -2,7 +2,7 @@ LoadChartHelper = {
   globalBrushExtent: undefined,
   currentWeek: undefined,
   forceReload: false,
-  disableCapacity: false,
+  disableCapacity: true,
   charts: [],
 
   toggleCapacity: function(currentChartId){

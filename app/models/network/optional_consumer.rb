@@ -11,7 +11,7 @@ module Network
     end
 
     def self.disabled?(options)
-      ! options[:flexibility]
+      !options[:saving_base_load]
     end
 
     alias_method :conditional_consumption_at, :mandatory_consumption_at

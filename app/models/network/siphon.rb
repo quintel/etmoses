@@ -6,7 +6,7 @@ module Network
     extend Disableable
 
     def self.disabled?(options)
-      Storage.disabled?(options)
+      !options[:solar_power_to_gas]
     end
 
     def load_at(frame)

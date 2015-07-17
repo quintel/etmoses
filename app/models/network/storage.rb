@@ -5,10 +5,6 @@ module Network
   class Storage < Technology
     extend Disableable
 
-    def self.disabled?(options)
-      options[:storage] == false
-    end
-
     def initialize(*)
       super
       @capacity = CapacityLimit.new(self)

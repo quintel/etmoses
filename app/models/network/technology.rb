@@ -7,9 +7,11 @@ module Network
     #
     # Returns a Technology.
     def self.from_installed(installed, profile, options = {})
-      behaviors[
+      behavior = behaviors[
         installed.behavior.presence || installed.technology.behavior
-      ].build(installed, profile, options)
+      ]
+
+      behavior.build(installed, profile, options)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by
@@ -29,12 +31,12 @@ module Network
     end
 
     def self.build(installed, profile, options)
-      new(installed, profile)
+      new(installed, profile, **options)
     end
 
     attr_reader :installed, :profile
 
-    def initialize(installed, profile)
+    def initialize(installed, profile, **)
       @installed = installed
       @profile   = profile
     end

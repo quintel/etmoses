@@ -6,7 +6,8 @@ RSpec.describe Network::OptionalConsumer do
   end
 
   let(:tech) do
-    Network::Technology.from_installed(installed, profile, flexibility: true)
+    Network::Technology.from_installed(
+      installed, profile, saving_base_load: true)
   end
 
   let(:profile) { [2.0] }

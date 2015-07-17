@@ -79,6 +79,10 @@ module TestingGroundsHelper
     @testing_ground.topology.each_node do |n|
       (options << n[:stakeholder] if n[:stakeholder])
     end
-    options_for_select options
+    options_for_select options.uniq
+  end
+
+  def default_strategies
+    Hash[Strategies.all.map{|s| [s[:ajax_prop], false] }].symbolize_keys
   end
 end

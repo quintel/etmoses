@@ -1,7 +1,7 @@
 module Network
   class PreemptiveConsumer < Storage
     def self.disabled?(options)
-      ! options[:flexibility]
+      options.has_key?(:buffering_heat_pumps) && !options[:buffering_heat_pumps]
     end
 
     def self.disabled_class

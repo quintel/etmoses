@@ -94,7 +94,7 @@ RSpec.describe Network::Battery do
   context 'when disabled' do
     let(:tech) do
       network_technology(
-        build(:installed_battery, volume: nil), 2, storage: false)
+        build(:installed_battery, volume: nil), 2, battery_storage: false)
     end
 
     it 'has no production' do
