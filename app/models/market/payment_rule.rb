@@ -14,19 +14,36 @@ module Market
     def initialize(foundation, tariff)
       @foundation = foundation
       @tariff     = tariff
+
+      @arity =
+        if foundation.respond_to?(:arity)
+          foundation.arity
+        else
+          foundation.method(:call).arity
+        end
     end
 
     # Public: Run the payment rule on a given relation.
-    def call(relation)
-      Array(value(relation)).sum(&@tariff.method(:price_of))
+    def call(relation, variants = {})
+      Array(value(relation, variants)).sum(&@tariff.method(:price_of))
     end
 
     #######
     private
     #######
 
-    def value(relation)
-      relation.measurables.sum { |node| @foundation.call(node) }
+    def value(relation, variants)
+      relation.measurables.sum do |measurable|
+        if @arity > 1
+          @foundation.call(measurable, variants_for(measurable, variants))
+        else
+          @foundation.call(measurable)
+        end
+      end
+    end
+
+    def variants_for(measurable, variants)
+      Hash[variants.map { |name, variant| [name, variant.call(measurable)] }]
     end
   end # PaymentRule
 end # Market

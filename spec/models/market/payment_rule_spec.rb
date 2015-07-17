@@ -73,5 +73,28 @@ module Market
         end
       end # and a measurable of [1.0, 2.0, 3.0] and a tariff of 2.0
     end # with a per-unit foundation
+
+    context 'with variants' do
+      before { market.node(:customer).set(:measurables, [1.0]) }
+      let(:rule) { PaymentRule.new(foundation, Tariff.new(2.0)) }
+      let(:relation) { market.node(:retailer).out_edges.first }
+      let(:variants) { { other: ->*{ ->{ 4.0 } } } }
+
+      context 'and a foundation with arity=1' do
+        let(:foundation) { ->(m) { m } }
+
+        it 'has a price of 2.0' do
+          expect(rule.call(relation, variants)).to eq(2.0)
+        end
+      end
+
+      context 'and a foundation with arity=2' do
+        let(:foundation) { ->(m, variants) { m * variants[:other].call } }
+
+        it 'sends the variant to the foundation' do
+          expect(rule.call(relation, variants)).to eq(8.0)
+        end
+      end
+    end # with variants
   end
 end
