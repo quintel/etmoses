@@ -31,12 +31,12 @@ module Network
     end
 
     def self.build(installed, profile, options)
-      new(installed, profile, options)
+      new(installed, profile, **options)
     end
 
     attr_reader :installed, :profile
 
-    def initialize(installed, profile, options = {})
+    def initialize(installed, profile, **)
       @installed = installed
       @profile   = profile
     end

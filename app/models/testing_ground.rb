@@ -39,8 +39,8 @@ class TestingGround < ActiveRecord::Base
     ]
 
     context = calculators
-      .reduce(to_calculation_context(opts)) do |context, calculator|
-        calculator.call(context)
+      .reduce(to_calculation_context(opts.symbolize_keys)) do |cxt, calculator|
+        calculator.call(cxt)
       end
 
     { graph: GraphToTree.convert(context.graph),

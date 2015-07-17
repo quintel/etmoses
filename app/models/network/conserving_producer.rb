@@ -4,9 +4,13 @@ module Network
   class ConservingProducer < Technology
     extend Disableable
 
-    def initialize(installed, profile, options)
+    # Creates a new ConservingProducer.
+    #
+    # installed - The InstalledTechnology which this represents.
+    # profile   - The profile which describes
+    def initialize(installed, profile, capping_fraction: 0.0, **)
       super
-      @capping_fraction = options.fetch(:capping_fraction)
+      @capping_fraction = capping_fraction
     end
 
     def self.disabled?(options)
