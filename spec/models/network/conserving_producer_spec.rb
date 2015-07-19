@@ -23,11 +23,11 @@ RSpec.describe Network::ConservingProducer do
     let(:options){ { capping_solar_pv: true, capping_fraction: '0.5' } }
 
     it 'expects -200.0 not to be capped at all' do
-      expect(tech.production_at(0)).to eq(0.75)
+      expect(tech.conservable_production_at(0)).to eq(0.25)
     end
 
     it 'expects capping to fix the congestion' do
-      expect(tech.production_at(1)).to eq(0.75)
+      expect(tech.conservable_production_at(1)).to eq(0.75)
     end
   end
 end

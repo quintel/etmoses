@@ -7,11 +7,8 @@ module Network
     #
     # Returns a Technology.
     def self.from_installed(installed, profile, options = {})
-      behavior = behaviors[
-        installed.behavior.presence || installed.technology.behavior
-      ]
-
-      behavior.build(installed, profile, options)
+      behaviors[installed.behavior.presence || installed.technology.behavior]
+        .build(installed, profile, options)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by
@@ -80,6 +77,10 @@ module Network
     #
     # Returns a numeric.
     def conditional_consumption_at(frame)
+      0.0
+    end
+
+    def conservable_production_at(frame)
       0.0
     end
 

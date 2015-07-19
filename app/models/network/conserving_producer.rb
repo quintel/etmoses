@@ -21,11 +21,12 @@ module Network
       Technology
     end
 
-    def production_at(frame)
-      production = super
-      capping = (capacity * @capping_fraction.to_f).abs
+    def conservable_production_at(frame)
+      production = production_at(frame)
 
-      production > capping ? capping : production
+      capping = (capacity * ( 1.0 - @capping_fraction.to_f) ).abs
+
+      production > capping ? production - capping : 0
     end
 
     def store(_frame, _amount)
