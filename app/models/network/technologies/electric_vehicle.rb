@@ -15,7 +15,7 @@ module Network
       end
 
       def self.disabled?(options)
-        options[:solar_storage]
+        !options[:solar_storage]
       end
 
       # Internal:  With storage disabled, a car should consume energy from the

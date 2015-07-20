@@ -3,6 +3,7 @@ module Moses
     module Network
       DEFAULT_OPTS = {
         battery_storage: true,
+        solar_storage: true,
         solar_power_to_heat: true,
         capping_solar_pv: true,
         postponing_base_load: true,
