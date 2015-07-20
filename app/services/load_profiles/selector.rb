@@ -4,7 +4,7 @@ module LoadProfiles
   # technologies.
   #
 
-  EDSN_THRESHOLD = 10
+  EDSN_THRESHOLD = 30
 
   class Selector
     # Public: Creates a ProfileSelector which selects profiles for the given
