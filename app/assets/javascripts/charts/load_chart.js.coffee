@@ -152,6 +152,8 @@ class LoadChart
     LoadChartHelper.charts[@loadChartLocation() - 1] = chart
     LoadChartHelper.updateBrush(@loadChartLocation())
 
+    $("g.tick.zero text").text("0.00")
+
     chart
 
   setGlobalBrushFocus: ()->
