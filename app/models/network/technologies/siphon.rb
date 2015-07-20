@@ -21,6 +21,10 @@ module Network
       def conditional_consumption_at(frame)
         @profile.at(frame)
       end
+
+      def excess_constrained?
+        true
+      end
     end # Siphon
   end
 end

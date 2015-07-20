@@ -21,6 +21,10 @@ module Network
         false
       end
 
+      def excess_constrained?
+        false
+      end
+
       def load_at(frame)
         @profile.at(frame)
       end

@@ -74,6 +74,11 @@ module Network
         @buffering
       end
 
+      # Public: EV conditional load may come from the grid.
+      def excess_constrained?
+        false
+      end
+
       private
 
       def disconnected?(frame)

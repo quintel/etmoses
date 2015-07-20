@@ -50,6 +50,10 @@ module Network
         stored[frame] += amount
       end
 
+      def excess_constrained?
+        true
+      end
+
       def consumer?
         false
       end

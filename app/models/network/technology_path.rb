@@ -1,6 +1,12 @@
 module Network
   # Represents a path from a specific technology in a node to the root node.
   class TechnologyPath
+    extend Forwardable
+
+    def_delegators :@technology,
+      :production_at, :mandatory_consumption_at,
+      :capacity_constrained?, :excess_constrained?
+
     # Public: Given a leaf node with one or more technologies, returns a
     # TechnologyPath for each technology present, and a path back to the source
     # of the graph.
@@ -14,23 +20,6 @@ module Network
     def initialize(technology, path)
       @technology = technology
       @path       = path
-    end
-
-    # Public: The amount of energy produced by the technology.
-    #
-    # TODO Production should be capacity-constrained also if we are to support
-    # curtailing production of solar PV.
-    #
-    # Returns a numeric.
-    def production_at(frame)
-      @technology.production_at(frame)
-    end
-
-    # Public: The mandatory consumption of the technology.
-    #
-    # Returns a numeric.
-    def mandatory_consumption_at(frame)
-      @technology.mandatory_consumption_at(frame)
     end
 
     # Public: Returns the conditional consumption required by the technology in

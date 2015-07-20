@@ -55,6 +55,10 @@ module Network
         true
       end
 
+      def excess_constrained?
+        false
+      end
+
       # Public: Defines how much energy may be stored by the consumer without
       # the need to consume. Arbitrarily chosen to be four times the capacity.
       def volume

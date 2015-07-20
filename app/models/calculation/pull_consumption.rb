@@ -10,14 +10,26 @@ module Calculation
       paths = context.paths
 
       context.frames do |frame|
+        # Push mandatory flows through the network.
         paths.each do |path|
-          # Push mandatory flows through the network.
           path.consume(frame, path.mandatory_consumption_at(frame))
         end
 
+        # Technologies which are do not care about excesses, and may take energy
+        # from the grid, come next.
+        paths.each do |path|
+          unless path.excess_constrained?
+            path.consume(frame, path.conditional_consumption_at(frame), true)
+          end
+        end
+
+        # Finally, compute the loads of technologies whose conditional loads are
+        # only satisfied when there is enough production in the LES.
         excess = root.production_at(frame) - root.consumption_at(frame)
 
         paths.each do |path|
+          next unless path.excess_constrained?
+
           if excess <= 0
             # Some technologies need to be explicitly told that they received
             # nothing, as they have further actions to take.
