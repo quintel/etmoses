@@ -27,6 +27,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
 
   it "determines the rows of the business case" do
     expect(business_case).to receive(:headers).twice.and_return(["customer"])
+
     expect(business_case.rows).to eq([{ "customer" => [0.0] }])
   end
 end
