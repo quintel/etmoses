@@ -12,7 +12,7 @@ module Network
       end
 
       def self.disabled_class
-        Technology
+        Generic
       end
 
       def stored
