@@ -58,7 +58,9 @@ class LoadChart
 
   generateCapacity: (data) =>
     top_line = data[0].values.map((sample) => { x: sample.x, y: @capacity })
-    bottom_line = data[0].values.map((sample) => { x: sample.x, y: (@capacity * -1) })
+    bottom_line = data[0].values.reverse().map((sample) => { x: sample.x, y: (@capacity * -1) })
+
+    bottom_line.unshift(x: bottom_line[0].x + 1, y: bottom_line[0].y)
 
     total = bottom_line.concat top_line
 
