@@ -29,8 +29,8 @@ class Import
 
     private
 
-      def valid_scaling?
-        @scaling && @scaling['area_attribute'] == 'number_of_residences'
-      end
+    def valid_scaling?
+      @scaling && @scaling['area_attribute'] == 'number_of_residences'
+    end
   end
 end

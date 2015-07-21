@@ -133,8 +133,8 @@ class TestingGroundsController < ResourceController
     elsif tg_params[:technology_profile]
       yamlize_attribute!(tg_params, :technology_profile)
 
-      # Some attributes which should be considered "not present" are submitted by
-      # the technology table as an empty string. Delete them.
+      # Some attributes which should be considered "not present" are submitted
+      # by the technology table as an empty string. Delete them.
       tg_params[:technology_profile].each do |_, techs|
         techs.each do |tech|
           tech.delete_if { |_attr, value| value.blank? }

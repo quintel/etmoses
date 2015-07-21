@@ -24,41 +24,41 @@ module LoadProfiles
 
     private
 
-      def for_tech
-        Enumerator.new do |yielder|
-          tech_profiles = (@profiles || [])
+    def for_tech
+      Enumerator.new do |yielder|
+        tech_profiles = (@profiles || [])
 
-          loop do
-            element = tech_profiles.shift
-            tech_profiles.push(element)
+        loop do
+          element = tech_profiles.shift
+          tech_profiles.push(element)
 
-            yielder.yield(element)
-          end
+          yielder.yield(element)
         end
       end
+    end
 
-      def first
-        @profiles.try(:first)
-      end
+    def first
+      @profiles.try(:first)
+    end
 
-      def minimize_concurrency?
-        @technology["concurrency"] == 'min'
-      end
+    def minimize_concurrency?
+      @technology["concurrency"] == 'min'
+    end
 
-      #
-      # Selection of profiles is different for households due to the fact that EDSN
-      # profiles are only picked when the units are above a certain threshold
-      #
-      def selected_profiles(profiles)
-        profiles[(is_household? ? household_type : @technology['type'])]
-      end
+    #
+    # Selection of profiles is different for households due to the fact that EDSN
+    # profiles are only picked when the units are above a certain threshold
+    #
+    def selected_profiles(profiles)
+      profiles[(is_household? ? household_type : @technology['type'])]
+    end
 
-      def is_household?
-        @technology['type'] == 'base_load'
-      end
+    def is_household?
+      @technology['type'] == 'base_load'
+    end
 
-      def household_type
-        (@technology['units'].to_i > EDSN_THRESHOLD ? 'base_load_edsn' : 'base_load')
-      end
+    def household_type
+      (@technology['units'].to_i > EDSN_THRESHOLD ? 'base_load_edsn' : 'base_load')
+    end
   end
 end

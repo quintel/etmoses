@@ -17,30 +17,30 @@ class Import
 
     private
 
-      def calculation_data
-        { "demand" => {
-            "future" => demand_for_scenario * 1_000_000_000
-          },
-          "number_of_units" => {
-            "future" => @number_of_units
-          }
+    def calculation_data
+      { "demand" => {
+          "future" => demand_for_scenario * 1_000_000_000
+        },
+        "number_of_units" => {
+          "future" => @number_of_units
         }
-      end
+      }
+    end
 
-      def demand_for_scenario
-        if demand_gquery
-          demand_gquery["future"]
-        else
-          0
-        end
+    def demand_for_scenario
+      if demand_gquery
+        demand_gquery["future"]
+      else
+        0
       end
+    end
 
-      def demand_gquery
-        @demand_gquery ||= EtEngineConnector.new(gquery).gquery(@scenario_id)
-      end
+    def demand_gquery
+      @demand_gquery ||= EtEngineConnector.new(gquery).gquery(@scenario_id)
+    end
 
-      def gquery
-        { gqueries: [@gquery_key] }
-      end
+    def gquery
+      { gqueries: [@gquery_key] }
+    end
   end
 end

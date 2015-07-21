@@ -23,14 +23,14 @@ class RegistrationForm
 
   private
 
-    def attributes
-      { email: email,
-        password: password }
-    end
+  def attributes
+    { email: email,
+      password: password }
+  end
 
-    def email_uniqueness
-      if User.where(email: self.email).any?
-        self.errors.add(:email, "is already taken")
-      end
+  def email_uniqueness
+    if User.where(email: self.email).any?
+      self.errors.add(:email, "is already taken")
     end
+  end
 end
