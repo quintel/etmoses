@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Network::Buffer do
   context 'with a storage volume of 10' do
-    let(:capacity) { Float::INFINITY }
+    let(:capacity) { 5.0 }
 
     let(:tech) do
       network_technology(build(
-        :installed_p2h, profile: profile, volume: 10.0, capacity: capacity
-      ))
+        :installed_heat_pump, profile: profile, capacity: capacity
+      ), 8760, flexibility: true)
     end
 
     context 'with nothing stored' do
@@ -22,8 +22,8 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to be_zero
         end
 
-        it 'has conditional consumption equal to the volume' do
-          expect(tech.conditional_consumption_at(1)).to eq(10.0)
+        it 'has conditional consumption equal to the capacity' do
+          expect(tech.conditional_consumption_at(1)).to eq(5.0)
         end
 
         it 'stores nothing' do
@@ -39,11 +39,11 @@ RSpec.describe Network::Buffer do
         end
 
         it 'has mandatory consumption of 0.0' do
-          expect(tech.mandatory_consumption_at(1)).to be_zero
+          expect(tech.mandatory_consumption_at(1)).to eq(2.5)
         end
 
-        it 'has conditional consumption of 10' do
-          expect(tech.conditional_consumption_at(1)).to eq(10)
+        it 'has conditional consumption of 2.5' do
+          expect(tech.conditional_consumption_at(1)).to eq(2.5)
         end
 
         it 'stores nothing' do
@@ -66,8 +66,8 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to eq(2.5)
         end
 
-        it 'has conditional consumption of 7.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(7.5)
+        it 'has conditional consumption of 5.0' do
+          expect(tech.conditional_consumption_at(1)).to eq(5.0)
         end
 
         it 'has 2.5 remaining storage' do
@@ -86,8 +86,8 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to eq(1.0)
         end
 
-        it 'has conditional consumption of 9.0' do
-          expect(tech.conditional_consumption_at(1)).to eq(9.0)
+        it 'has conditional consumption of 5.0' do
+          expect(tech.conditional_consumption_at(1)).to eq(5.0)
         end
 
         it 'has 1.0 remaining storage' do
@@ -138,8 +138,8 @@ RSpec.describe Network::Buffer do
           expect(tech.mandatory_consumption_at(1)).to be_zero
         end
 
-        it 'has conditional consumption of 10' do
-          expect(tech.conditional_consumption_at(1)).to eq(10)
+        it 'has conditional consumption of 5' do
+          expect(tech.conditional_consumption_at(1)).to eq(5)
         end
 
         it 'has no remaining storage' do
@@ -154,31 +154,31 @@ RSpec.describe Network::Buffer do
           expect(tech.production_at(1)).to be_zero
         end
 
-        it 'has mandatory consumption of 0.0' do
-          expect(tech.mandatory_consumption_at(1)).to be_zero
+        it 'has mandatory consumption of 2.5' do
+          expect(tech.mandatory_consumption_at(1)).to eq(2.5)
         end
 
-        it 'has conditional consumption of 10' do
-          expect(tech.conditional_consumption_at(1)).to eq(10)
+        it 'has conditional consumption of 2.5' do
+          expect(tech.conditional_consumption_at(1)).to eq(2.5)
         end
 
         it 'has no remaining storage' do
           expect(tech.stored[1]).to be_zero
         end
 
-        context 'and a capacity of 2.0' do
+        context 'and a capacity of 4.0' do
           let(:capacity) { 4.0 }
 
           it 'has production of 0.0' do
             expect(tech.production_at(1)).to be_zero
           end
 
-          it 'has mandatory consumption of zero' do
-            expect(tech.mandatory_consumption_at(1)).to be_zero
+          it 'has mandatory consumption of 2.5' do
+            expect(tech.mandatory_consumption_at(1)).to eq(2.5)
           end
 
-          it 'has conditional consumption of 4.0' do
-            expect(tech.conditional_consumption_at(1)).to eq(4.0)
+          it 'has conditional consumption of 1.5' do
+            expect(tech.conditional_consumption_at(1)).to eq(1.5)
           end
         end # and a capacity of 2.0
 
@@ -189,15 +189,15 @@ RSpec.describe Network::Buffer do
             expect(tech.production_at(1)).to be_zero
           end
 
-          it 'has mandatory consumption of zero' do
-            expect(tech.mandatory_consumption_at(1)).to be_zero
+          it 'has mandatory consumption of 2.5' do
+            expect(tech.mandatory_consumption_at(1)).to eq(2.5)
           end
 
-          it 'has conditional consumption of 10' do
-            expect(tech.conditional_consumption_at(1)).to eq(10)
+          it 'has conditional consumption of 47.5' do
+            expect(tech.conditional_consumption_at(1)).to eq(47.5)
           end
         end # and a capacity of 50
       end # and a use of 5.0
     end # with 2.5 stored
-  end # with a storage volume of 10
-end # Buffer
+  end # with a storage volume of 5
+end

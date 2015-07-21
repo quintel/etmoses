@@ -18,9 +18,9 @@ module Network
         Hash.new { Technology }.tap do |behaviors|
           behaviors['storage']          = Battery
           behaviors['electric_vehicle'] = ElectricVehicle
-          behaviors['buffer']           = Buffer
+          behaviors['optional_buffer']  = OptionalBuffer
           behaviors['siphon']           = Siphon
-          behaviors['preemptive']       = PreemptiveConsumer
+          behaviors['buffer']           = Buffer
           behaviors['deferrable']       = DeferrableConsumer
           behaviors['conserving']       = ConservingProducer
           behaviors['optional']         = OptionalConsumer

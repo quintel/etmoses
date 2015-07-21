@@ -1,31 +1,63 @@
 module Network
-  # Buffers are a hybrid consumption/storage technology. A profile is used to
-  # define the energy consumed, but it may also store excess energy from the
-  # network for later use.
+  # Buffers are a hybrid load-management/storage feature which will apply a load
+  # to the network in times when there is available capacity. The energy
+  # provided is stored in the buffer until it is needed by the technology.
   #
-  # If the buffer has insufficient energy stored to meet the demand defined by
-  # the profile, the deficit goes unmet. Buffers do not take energy from the
-  # grid. Energy stored in the buffer may only be used to satisfy its own
-  # consumption, and is not released back to the network.
+  # The principle is to load the network in times of available capacity in hope
+  # of avoiding exceedances later.
   class Buffer < Storage
-    extend ProfileScaled
-
     def self.disabled?(options)
-      !options[:solar_power_to_heat]
+      options.has_key?(:buffering_heat_pumps) && !options[:buffering_heat_pumps]
     end
 
-    # Public: The amount of energy to be retained in the buffer at the end of
-    # the frame must decrease by the amount consumed (defined in the profile).
+    def self.disabled_class
+      Technology
+    end
+
+    def stored
+      @stored ||= DefaultArray.new(&method(:production_at))
+    end
+
+    # Keep the original production_at which tells us how much energy is stored
+    # and available for use.
+    alias_method :available_storage_at, :production_at
+
     def production_at(frame)
       prod = super - @profile.at(frame)
       prod < 0 ? 0.0 : prod
     end
 
-    # Public: Buffers may not return their stored energy back to the network.
-    # Therefore, their consumption equals their output in order that the two
-    # balance out to zero
+    # Public: The mandatory consumption of a pre-emptive consumer may be reduced
+    # by the amount currently stored within the technology (from a period when
+    # there was no excess).
+    #
+    # Returns a numeric.
     def mandatory_consumption_at(frame)
-      production_at(frame)
+      production = production_at(frame)
+      required   = @profile.at(frame)
+
+      if production.zero? && required > 0
+        stored   = available_storage_at(frame)
+        unfilled = required - stored
+
+        unfilled > 0 ? unfilled : 0.0
+      else
+        production
+      end
     end
-  end # Buffer
-end # Network
+
+    def consumer?
+      true
+    end
+
+    def capacity_constrained?
+      true
+    end
+
+    # Public: Defines how much energy may be stored by the consumer without the
+    # need to consume. Arbitrarily chosen to be four times the capacity.
+    def volume
+      capacity * 4
+    end
+  end
+end

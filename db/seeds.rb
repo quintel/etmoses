@@ -20,28 +20,28 @@ Technology.create!(
   key:         'households_space_heater_heatpump_air_water_electricity',
   name:        'Heat pump for space heating (air)',
   export_to:   'households_space_heater_heatpump_air_water_electricity_share',
-  behavior:    'preemptive'
+  behavior:    'buffer'
 )
 
 Technology.create!(
   key:         'households_space_heater_heatpump_ground_water_electricity',
   name:        'Heat pump for space heating (ground)',
   export_to:   'households_space_heater_heatpump_ground_water_electricity_share',
-  behavior:    'preemptive'
+  behavior:    'buffer'
 )
 
 Technology.create!(
   key:         'households_water_heater_heatpump_air_water_electricity',
   name:        'Heat pump for hot water (air)',
   export_to:   'households_water_heater_heatpump_air_water_electricity_share',
-  behavior:    'preemptive'
+  behavior:    'buffer'
 )
 
 Technology.create!(
   key:         'households_water_heater_heatpump_ground_water_electricity',
   name:        'Heat pump for hot water (ground)',
   export_to:   'households_water_heater_heatpump_ground_water_electricity_share',
-  behavior:    'preemptive'
+  behavior:    'buffer'
 )
 
 Technology.create!(
@@ -75,7 +75,7 @@ Technology.create!(
   key:         'households_flexibility_p2h_electricity',
   name:        'Power-To-Heat',
   export_to:   'households_flexibility_p2h_electricity_market_penetration',
-  behavior:    'buffer'
+  behavior:    'optional_buffer'
 )
 
 Technology.create!(

@@ -58,10 +58,10 @@ module Calculation
       [ Network::OptionalConsumer,
         Network::ConservingProducer,
         Network::ElectricVehicle,
-        Network::PreemptiveConsumer,
+        Network::Buffer,
         Network::DeferrableConsumer,
         Network::Battery,
-        Network::Buffer,
+        Network::OptionalBuffer,
         Network::Siphon
       ].map do |klass|
         ->(p) { p.technology.is_a?(klass) }
