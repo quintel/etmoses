@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.formatCurrency-1.4.0.min
 //= require turbolinks
 //= require d3
 //= require nv.d3
