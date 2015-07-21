@@ -71,9 +71,7 @@ class InstalledTechnology
       ((volume || capacity || load || demand || 1.0) * units)
   end
 
-  #######
   private
-  #######
 
   # Internal: Retrieves the Merit::Curve used by the technology, without any
   # scaling applied for demand or capacity.

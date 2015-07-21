@@ -36,9 +36,7 @@ class PriceCurvesController < ResourceController
     redirect_to(price_curves_index_path)
   end
 
-  #######
   private
-  #######
 
   def authorize_generic
     authorize PriceCurve

@@ -50,9 +50,7 @@ module Calculation
       end
     end
 
-    #######
     private
-    #######
 
     def path_order
       [ Network::Technologies::OptionalConsumer,

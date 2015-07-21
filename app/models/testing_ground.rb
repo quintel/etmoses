@@ -95,9 +95,7 @@ class TestingGround < ActiveRecord::Base
     self.technology_profile = TechnologyList.from_csv(csv)
   end
 
-  #######
   private
-  #######
 
   # Asserts that the technologies used in the graph have all been defined in
   # the technologies collection.

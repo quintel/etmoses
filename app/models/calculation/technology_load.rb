@@ -20,9 +20,7 @@ module Calculation
       @context
     end
 
-    #######
     private
-    #######
 
     # Internal: Given a node, returns an array of technologies which may be used
     # to determine the load on the node to which they belong.

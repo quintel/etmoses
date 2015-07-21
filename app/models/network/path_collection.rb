@@ -20,9 +20,7 @@ module Network
       ordered.each(&block)
     end
 
-    #######
     private
-    #######
 
     def ordered
       return @ordered if @ordered

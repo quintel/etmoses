@@ -14,9 +14,7 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  #######
   private
-  #######
 
   def load_recent_testing_grounds
     @recent_testing_grounds = policy_scope(TestingGround).latest_first.limit(5)

@@ -94,9 +94,7 @@ module Network
         end
       end
 
-      #######
       private
-      #######
 
       def defer!(frame, amount)
         return if amount.zero?

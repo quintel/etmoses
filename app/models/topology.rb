@@ -43,9 +43,7 @@ class Topology < ActiveRecord::Base
     end
   end
 
-  #######
   private
-  #######
 
   def validate_node_names
     seen = Set.new

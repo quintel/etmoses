@@ -76,9 +76,7 @@ module Network
       @path.each { |node| node.consume(frame, amount) }
     end
 
-    #######
     private
-    #######
 
     def constrain(frame, amount)
       return amount unless @technology.capacity_constrained?

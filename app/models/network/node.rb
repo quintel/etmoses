@@ -130,9 +130,7 @@ module Network
       end
     end
 
-    #######
     private
-    #######
 
     # Internal: A memoized list of child nodes. Since the graph never changes
     # during calculation, this is faster then getting the a fresh child list

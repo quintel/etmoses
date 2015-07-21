@@ -74,9 +74,7 @@ module Network
         @buffering
       end
 
-      #######
       private
-      #######
 
       def disconnected?(frame)
         profile && profile.at(frame) < 0

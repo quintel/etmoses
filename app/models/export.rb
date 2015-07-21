@@ -24,9 +24,7 @@ class Export
     NationalScenarioCreator.new(@testing_ground, inputs).create
   end
 
-  #######
   private
-  #######
 
   # Private: Creates a hash desribing each technology and the number of units of
   # said technology in the testing ground.

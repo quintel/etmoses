@@ -70,9 +70,7 @@ class Import
     TestingGround::TechnologyDistributor.new(technologies, topology.graph).build
   end
 
-  #######
   private
-  #######
 
   def is_scaled_scenario
     unless etm_scenario["scaling"].present?
