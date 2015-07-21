@@ -31,6 +31,28 @@ module Calculation
             excess -= assignable
           end
         end
+
+        # Method for solar capping
+        if context.options[:capping_solar_pv]
+          paths.each do |path|
+            conservable = path.technology.conservable_production_at(frame)
+
+            #
+            # Check if path is congested and if conservable production is higher than 0
+            # Conservable defaults to 0 for non-solar-PV
+
+            if path.congested_at?(frame) && conservable > 0
+              #
+              # Exceedance is the largest exceedance in the current path
+
+              exceedance = path.production_exceedance_at(frame)
+
+              amount = conservable < exceedance ? conservable : exceedance
+
+              path.consume(frame, amount, true)
+            end
+          end
+        end
       end
 
       context
