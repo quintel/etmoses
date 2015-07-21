@@ -71,7 +71,7 @@ class LoadChart
 
   formatDateFromFrame: (frame) =>
     multiplier =
-      switch @data.length
+      switch @data[0].values.length
         when 35040 then 900000
         when 8760  then 3600000
         else            -1
