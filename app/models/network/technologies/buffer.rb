@@ -8,8 +8,7 @@ module Network
     # hope of avoiding exceedances later.
     class Buffer < Storage
       def self.disabled?(options)
-        options.has_key?(:buffering_heat_pumps) &&
-          !options[:buffering_heat_pumps]
+        !options[:buffering_heat_pumps]
       end
 
       def self.disabled_class
