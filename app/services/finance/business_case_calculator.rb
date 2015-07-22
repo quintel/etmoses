@@ -10,7 +10,6 @@ module Finance
       end
     end
 
-
     def headers
       Stakeholder.all.sort
     end
