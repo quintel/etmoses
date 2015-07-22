@@ -21,6 +21,11 @@ module Calculation
       end
     end
 
+    # Public: The top-most node in the network.
+    def head
+      @head ||= @graph.nodes.detect { |node| node.edges(:in).none? }
+    end
+
     def paths
       @paths ||= Network::PathCollection.new(
         technology_nodes.map(&Network::TechnologyPath.method(:find)).flatten,
