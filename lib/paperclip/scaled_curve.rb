@@ -32,13 +32,19 @@ module Paperclip
       format   = File.extname(file.path)
       basename = File.basename(file.path, format)
 
-      curve    = Merit::Curve.load_file(file.path)
+      curve    = Merit::Curve.new(values(file.path))
       scaled   = self.class.scale(curve, @options[:scale_by])
 
       Tempfile.new([basename, format ? ".#{format}" : '']).tap do |dest|
         dest.puts(scaled.map(&:to_s).join("\n"))
         dest.rewind
       end
+    end
+
+    protected
+
+    def values(file)
+      CSV.read(file).flatten.map(&:to_f)
     end
   end # ScaledCurve
 end # Paperclip

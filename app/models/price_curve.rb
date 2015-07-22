@@ -6,6 +6,6 @@ class PriceCurve < ActiveRecord::Base
 
   has_attached_file :curve
   validates_attachment :curve, presence: true,
-    content_type: { content_type: /text\/(csv|plain)/ },
+    content_type: { content_type: CurveComponent::VALID_CSV_TYPES },
     size: { less_than: 100.megabytes }
 end
