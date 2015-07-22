@@ -11,7 +11,9 @@ module CurveComponent
     cache_key = "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ scaling }"
 
     Rails.cache.fetch(cache_key) do
-      Merit::Curve.load_file(curve.path(scaling))
+      csv_file = CSV.read(curve.path(scaling))
+
+      Merit::Curve.new(csv_file.flatten.map(&:to_f))
     end
   end
 end
