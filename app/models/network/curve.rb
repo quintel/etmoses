@@ -16,5 +16,9 @@ module Network
       fail 'Curve must not be empty' if length.zero?
       @resolution = HOURS_PER_YEAR.to_f / length
     end
+
+    def frames_per_hour
+      1.0 / @resolution
+    end
   end
 end

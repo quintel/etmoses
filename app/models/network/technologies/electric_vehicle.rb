@@ -7,8 +7,6 @@ module Network
     # and may not supply or consume any energy until reconnected. An
     # ElectricVehicle reconnects with zero energy stored.
     class ElectricVehicle < Storage
-      extend ProfileScaled
-
       def initialize(installed, profile, buffering_electric_car: false, **)
         super
         @buffering = buffering_electric_car
@@ -55,7 +53,8 @@ module Network
         if disconnected?(frame)
           0.0
         elsif profile
-          @capacity.limit_mandatory(frame, profile.at(frame))
+          @capacity.limit_mandatory(
+            frame, profile.at(frame) * @profile.frames_per_hour)
         else
           super
         end

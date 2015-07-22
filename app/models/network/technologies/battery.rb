@@ -7,8 +7,6 @@ module Network
     # to more easily differentiate batteries from other technologies which also
     # inherit from the Storage class.
     class Battery < Storage
-      extend ProfileScaled
-
       def self.disabled?(options)
         !options[:battery_storage]
       end

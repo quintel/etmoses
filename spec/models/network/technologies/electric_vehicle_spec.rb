@@ -3,12 +3,13 @@ require 'rails_helper'
 RSpec.describe Network::Technologies::ElectricVehicle do
   let(:capacity) { Float::INFINITY }
   let(:units)    { 1 }
+  let(:volume)   { 3.0 }
 
   let(:tech) do
     network_technology(build(
       :installed_ev,
       capacity: capacity, profile: profile,
-      volume: 3.0, units: units
+      volume: volume, units: units
     ))
   end
 
@@ -28,7 +29,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     end
   end # in frame 0
 
-  context 'with stored energy 0.5' do
+  context 'with stored energy 0.5 kWh' do
     before { tech.stored[0] = 0.5 }
 
     context 'and a profile value of zero' do
@@ -90,6 +91,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
 
     context 'with a low-resolution curve' do
       let(:profile) { [0.0, 1.0] * 2190 }
+      before { tech.stored[0] = 0.25 } # 0.5 kW in 2 hours is 0.25 kWf
 
       it 'scales production from kWh to kW' do
         expect(tech.production_at(1)).to eq(0.5 / 2)
@@ -106,7 +108,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       it 'scales additions to storage from kW to kWh' do
         expect { tech.store(1, 1.0) }
           .to change { tech.stored[1] }
-          .from(1.0).to(3.0) # 1kW delivered over 2 hours is 2kWh
+          .from(0.5).to(1.5)
       end
 
       context 'with two units' do
@@ -128,6 +130,33 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
       end # with two units
     end # with a low-resolution curve
+
+    context 'with a high-resolution curve' do
+      let(:profile) { [0.0, 1.0] * 17520 }
+      before { tech.stored[0] = 2.0 } # 0.5 kWh in 0.25 hours is 2.0 kWf
+
+      it 'increases volume in accordance with the curve resolution' do
+        expect(tech.volume).to eq(volume * 4)
+      end
+
+      it 'has production of 2.0' do
+        expect(tech.production_at(1)).to eq(2.0)
+      end
+
+      it 'has mandatory consumption of 4.0' do
+        expect(tech.mandatory_consumption_at(1)).to eq(4.0)
+      end
+
+      it 'has conditional consumption of 8.0' do
+        expect(tech.conditional_consumption_at(1)).to eq(8.0)
+      end
+
+      it 'scales additions to storage from kW to kWh' do
+        expect { tech.store(1, 1.0) }
+          .to change { tech.stored[1] }
+          .from(4.0).to(5.0)
+      end
+    end # with a high-resolution curve
 
     context 'with a value of -1' do
       let(:profile) { [0.0, -1.0] * 4380 }

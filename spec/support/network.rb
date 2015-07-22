@@ -16,12 +16,14 @@ module Moses
       # Public: Given an installed technology, creates a Network::Technology which
       # may represent it in Network specs.
       def network_technology(tech, profile_length = 8760, opts = {})
-        opts = DEFAULT_OPTS.merge(opts)
+        ::Network::Technologies.from_installed(
+          tech, network_curve(tech, profile_length), DEFAULT_OPTS.merge(opts))
+      end
 
-        profile = tech.profile ||
-          Calculation::TechnologyLoad.constant_profile(tech, profile_length)
-
-        ::Network::Technologies.from_installed(tech, profile, opts)
+      # Internal: Creates a Network::Curve from the given values.
+      def network_curve(tech, length)
+        tech.profile && ::Network::Curve.new(tech.profile) ||
+          Calculation::TechnologyLoad.constant_profile(tech, length)
       end
     end # Network
   end # Spec

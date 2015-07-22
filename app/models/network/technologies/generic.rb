@@ -77,8 +77,26 @@ module Network
         (@installed.capacity || @installed.load || 0.0) * @installed.units
       end
 
+      # Public: If this technology may store/buffer energy for later use, how
+      # much may it keep at once?
+      #
+      # In the front-end, volume is defined in kilowatt-hours. Here in the
+      # Network we instead model the volume as kilowatt-frames. If the curve
+      # resolution is one frame-per-hour, the two values are identical.
+      #
+      # For example, if we have one frame-per-hour, and a volume of 10 kWh, the
+      # `volume` method returns 10. If the tech then stores ten consecutive 1 kW
+      # loads the volume will be full.
+      #
+      # If we have four frames-per-hour (one per-15-minutes), the `volume`
+      # method now returns 40. It can store 40 consecutive 1kW loads; this is
+      # the exact same load-over-time as the previous example except now we are
+      # measuring 15 minute periods instead of 60.
+      #
+      # Returns a numeric.
       def volume
-        (@installed.volume || Float::INFINITY) * @installed.units
+        (@installed.volume || Float::INFINITY) *
+          @installed.units * @profile.frames_per_hour
       end
 
       def consumer?
