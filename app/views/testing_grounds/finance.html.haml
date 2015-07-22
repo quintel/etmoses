@@ -27,8 +27,14 @@
               %strong= column_header.titleize
             - row_values.each do |row_value|
               %td.row_value
-                - if row_value
-                  %span{data: { value: row_value } }
-                    = number_to_currency(row_value, unit: '€')
-
+                - if row_value && row_value.tariff
+                  %span{data: { value: row_value.tariff } }
+                    = number_to_currency(row_value.tariff, unit: '€')
             %td.incoming_total
+
+    %tr
+      %td Freeform
+      - @business_case.rows.each do |row|
+        %td.row_value
+          %input.free-form.form-control{value: ''}
+

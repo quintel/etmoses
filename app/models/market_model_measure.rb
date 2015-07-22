@@ -11,6 +11,8 @@ class MarketModelMeasure
   private
 
   def tariff
+    return if @attributes.nil?
+
     @attributes['tariff']
   end
 end
