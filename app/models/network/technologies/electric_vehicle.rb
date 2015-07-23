@@ -7,9 +7,13 @@ module Network
     # and may not supply or consume any energy until reconnected. An
     # ElectricVehicle reconnects with zero energy stored.
     class ElectricVehicle < Storage
-      def initialize(installed, profile, solar_storage: false, **)
+      def initialize(installed, profile,
+                     buffering_electric_car: true,
+                     solar_storage: false, **)
         super
+
         @storage = solar_storage
+        @buffering = buffering_electric_car
       end
 
       def self.disabled?(options)
@@ -80,7 +84,7 @@ module Network
 
       # Public: EV conditional load may come from the grid.
       def excess_constrained?
-        true
+        ! @buffering
       end
 
       private
