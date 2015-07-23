@@ -7,13 +7,13 @@ module Network
     # and may not supply or consume any energy until reconnected. An
     # ElectricVehicle reconnects with zero energy stored.
     class ElectricVehicle < Storage
-      def initialize(installed, profile, buffering_electric_car: false, **)
+      def initialize(installed, profile, solar_storage: false, **)
         super
-        @buffering = buffering_electric_car
+        @storage = solar_storage
       end
 
       def self.disabled?(options)
-        !options[:solar_storage]
+        !options[:solar_storage] && !options[:buffering_electric_car]
       end
 
       # Internal:  With storage disabled, a car should consume energy from the
@@ -52,11 +52,16 @@ module Network
       def mandatory_consumption_at(frame)
         if disconnected?(frame)
           0.0
-        elsif profile
-          @capacity.limit_mandatory(
-            frame, profile.at(frame) * @profile.frames_per_hour)
         else
-          super
+          required = profile.at(frame) * @profile.frames_per_hour
+          stored   = production_at(frame)
+
+          # When storage mode is turned off, the EV is not allowed to
+          # discharge energy for use in other technologies; it is exclusively
+          # for its own use.
+          required = stored if ! @storage && stored > required
+
+          @capacity.limit_mandatory(frame, required)
         end
       end
 
@@ -70,12 +75,12 @@ module Network
 
       # Public: EVs should not overload the network.
       def capacity_constrained?
-        @buffering
+        true
       end
 
       # Public: EV conditional load may come from the grid.
       def excess_constrained?
-        false
+        true
       end
 
       private

@@ -4,13 +4,14 @@ RSpec.describe Network::Technologies::ElectricVehicle do
   let(:capacity) { Float::INFINITY }
   let(:units)    { 1 }
   let(:volume)   { 3.0 }
+  let(:opts)     { {} }
 
   let(:tech) do
     network_technology(build(
       :installed_ev,
       capacity: capacity, profile: profile,
       volume: volume, units: units
-    ))
+    ), profile.length, opts)
   end
 
   context 'in frame 0' do
@@ -35,17 +36,35 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     context 'and a profile value of zero' do
       let(:profile) { [0.0] * 8760 }
 
-      it 'has production of 0.5' do
-        expect(tech.production_at(1)).to eq(0.5)
-      end
+      context 'with storage on' do
+        it 'has production of 0.5' do
+          expect(tech.production_at(1)).to eq(0.5)
+        end
 
-      it 'has no mandatory consumption' do
-        expect(tech.mandatory_consumption_at(1)).to be_zero
-      end
+        it 'has no mandatory consumption' do
+          expect(tech.mandatory_consumption_at(1)).to be_zero
+        end
 
-      it 'has conditional consumption of 3.0' do
-        expect(tech.conditional_consumption_at(1)).to eq(3.0)
-      end
+        it 'has conditional consumption of 3.0' do
+          expect(tech.conditional_consumption_at(1)).to eq(3.0)
+        end
+      end # with storage on
+
+      context 'with storage off' do
+        let(:opts) { { solar_storage: false } }
+
+        it 'has production of 0.5' do
+          expect(tech.production_at(1)).to eq(0.5)
+        end
+
+        it 'has mandatory consumption of 0.5' do
+          expect(tech.mandatory_consumption_at(1)).to eq(0.5)
+        end
+
+        it 'has conditional consumption of 2.5' do
+          expect(tech.conditional_consumption_at(1)).to eq(2.5)
+        end
+      end # with storage off
     end # and a profile value of zero
 
     context 'and a profile value of 1.0' do
@@ -325,7 +344,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     let(:tech) do
       network_technology(
         build(:installed_ev, profile: profile, volume: 3.0),
-        2, solar_storage: false)
+        2, solar_storage: false, buffering_electric_car: false)
     end
 
     it 'becomes a consumer' do

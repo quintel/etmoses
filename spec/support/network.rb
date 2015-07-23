@@ -7,7 +7,7 @@ module Moses
         solar_power_to_heat: true,
         capping_solar_pv: true,
         postponing_base_load: true,
-        buffering_electric_car: false,
+        buffering_electric_car: true,
         saving_base_load: true,
         buffering_heat_pumps: true,
         solar_power_to_gas: true
