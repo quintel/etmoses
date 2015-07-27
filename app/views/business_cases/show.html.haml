@@ -1,0 +1,26 @@
+%h2= "Business case for #{@testing_ground.name}"
+
+%table.table.table-bordered.finance-table
+  %thead
+    %tr
+      %th
+      %th Total incoming
+      %th Total outgoing
+      %th Freeform
+
+  %tfoot
+    %tr
+      %td
+      - 3.times do |total_cell|
+        %td.total
+
+  %tbody
+    - @business_case_calculator.stakeholders.each do |stakeholder|
+      %tr
+        %td
+          %strong= stakeholder.titleize
+        %td= 0.00
+        %td= 0.00
+        %td= 0.00
+
+= link_to "Edit", edit_testing_ground_business_case_path(@testing_ground, @business_case), class: "btn btn-primary"

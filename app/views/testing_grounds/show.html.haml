@@ -28,6 +28,10 @@
     = link_to topology_path(@testing_ground.topology), target: "_blank" do
       View
       = truncate(@testing_ground.topology.name, length: 25)
+  .clearfix
+
+- if policy(@testing_ground).edit?
+  = link_to "Create business case", testing_ground_business_cases_path(@testing_ground), method: :post, style: "margin-right: 11px", class: "btn btn-primary"
 
 #testing-ground
   .strategies.hidden

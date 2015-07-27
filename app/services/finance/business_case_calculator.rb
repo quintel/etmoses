@@ -1,23 +1,23 @@
 module Finance
   class BusinessCaseCalculator
-    def initialize(testing_ground)
-      @testing_ground = testing_ground
+    def initialize(business_case)
+      @business_case = business_case
     end
 
     def rows
-      headers.map do |column_header|
+      stakeholders.map do |column_header|
         Hash[ column_header, cells(column_header) ]
       end
     end
 
-    def headers
+    def stakeholders
       Stakeholder.all.sort
     end
 
     private
 
     def cells(column_header)
-      headers.map do |stakeholder|
+      stakeholders.map do |stakeholder|
         row(column_header, stakeholder)
       end
     end
