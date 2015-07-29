@@ -11,7 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150721124057) do
+ActiveRecord::Schema.define(version: 20150729080029) do
+
+  create_table "business_cases", force: true do |t|
+    t.integer  "testing_ground_id"
+    t.text     "financials"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -22,8 +29,8 @@ ActiveRecord::Schema.define(version: 20150721124057) do
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
+    t.string   "key"
     t.integer  "parent_id"
-    t.integer  "number_of_curves", default: 1
     t.datetime "created_at"
     t.datetime "updated_at"
   end

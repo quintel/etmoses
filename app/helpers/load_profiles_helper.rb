@@ -3,7 +3,7 @@ module LoadProfilesHelper
     options_for_select(LoadProfiles::Hierarchy.new.tree_sort.map do |category|
       [ "#{ "- " * category[:path_size] }#{ category[:load_profile_category].name }",
         category[:load_profile_category].id,
-        { data: { number_of_curves: category[:load_profile_category].number_of_curves } }
+        { data: { curve_type: category[:load_profile_category].key } }
       ]
     end)
   end
