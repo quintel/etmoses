@@ -1,29 +1,69 @@
 require 'rails_helper'
 
-RSpec.describe TestingGroundsController do
-  describe "applying strategies" do
-    let!(:profiles){
-      solar_load_profile = FactoryGirl.create(:load_profile_with_curve, key: "solar_pv_zwolle")
-      ev_load_profile = FactoryGirl.create(:load_profile_with_curve, key: "ev_profile_11_3.7_kw")
-      FactoryGirl.create(:technology_profile, technology: 'households_solar_pv_solar_radiation', load_profile: solar_load_profile)
-      FactoryGirl.create(:technology_profile, technology: 'transport_car_using_electricity', load_profile: ev_load_profile)
-    }
-    let(:testing_ground){ FactoryGirl.create(:testing_ground, technology_profile: fake_technology_profile) }
+#
+# Separate tests for load management issues
+#
 
-    it "applies storage" do
-      get :data, format: :json, id: testing_ground.id, strategies: {
-        "storage"=>true,
-        "battery_storage"=>false,
-        "solar_power_to_heat"=>false,
-        "solar_power_to_gas"=>false,
-        "buffering_electric_car"=>false,
-        "buffering_space_heating"=>false,
-        "buffering_hot_water"=>false,
-        "postponing_base_load"=>false,
-        "saving_base_load"=>false,
-        "capping_solar_pv"=>false,
-        'capping_fraction'=> 0.5
+RSpec.describe TestingGroundsController do
+  let(:user){ FactoryGirl.create(:user) }
+
+  let!(:sign_in_user) { sign_in(:user, user) }
+
+  let(:topology_graph){ FakeLoadManagement.topology_graph }
+
+  let(:topology){ FactoryGirl.create(:topology, graph: topology_graph) }
+
+  let(:testing_ground){
+    FactoryGirl.create(:testing_ground, technology_profile: technology_profile,
+                                        topology: topology)
+  }
+
+  #
+  # Testing of the saving of the base load strategy
+  # - Using one congested node in the topology
+  #
+  describe "applying saving of base load strategy" do
+    let!(:load_profiles){
+      load_profile = FactoryGirl.create(:load_profile, key: 'edsn_in_flex_and_flex_parts')
+      FactoryGirl.create(:load_profile_component, curve_type: 'flex', load_profile: load_profile)
+      FactoryGirl.create(:load_profile_component, curve_type: 'inflex', load_profile: load_profile)
+
+      expect_any_instance_of(InstalledTechnology).to receive(:profile_curves)
+        .at_least(1).times.and_return({
+          flex:   Network::Curve.new([0.1, 0.2, 0.3]),
+          inflex: Network::Curve.new([0.9, 1.8, 2.7])
+        })
+    }
+
+    let(:technology_profile){
+      {
+        "CONGESTED_END_POINT_1"=> [{
+          "name"        => "Buildings",
+          "type"        => "base_load_buildings",
+          "behavior"    => nil,
+          "profile"     => "edsn_in_flex_and_flex_parts",
+          "load"        => nil,
+          "capacity"    => nil,
+          "demand"      => 2,
+          "volume"      => nil,
+          "units"       => 1,
+          "concurrency" => "max"
+        }]
       }
+    }
+
+    it "applies no saving of base load - just returns the load profile" do
+      get :data, format: :json, id: testing_ground.id,
+                 strategies: FakeLoadManagement.strategies
+
+      expect(JSON.parse(response.body)["graph"]["load"]).to eq([1.0, 2.0, 3.0])
+    end
+
+    it "applies saving of base load (i.e. shaving of the flex profile)" do
+      get :data, format: :json, id: testing_ground.id,
+                 strategies: FakeLoadManagement.strategies(saving_base_load: true)
+
+      expect(JSON.parse(response.body)["graph"]["load"]).to eq([1.0, 1.8, 2.7])
     end
   end
 end
