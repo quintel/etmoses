@@ -58,6 +58,7 @@ module Network
     def consume(frame, amount)
       @consumption[frame] ||= 0.0
       @consumption[frame] += amount
+      @consumption[frame] = @consumption[frame].round(5)
     end
 
     # Public: Recurses through child nodes and technologies to determine the
@@ -116,10 +117,10 @@ module Network
     # its capacity.
     #
     # Returns true or false.
-    def congested_at?(frame)
+    def congested_at?(frame, correction = 0)
       capacity = get(:capacity)
 
-      capacity && load_at(frame).abs > capacity
+      capacity && load_at(frame).abs + correction > capacity
     end
 
     def production_exceedance_at(frame)

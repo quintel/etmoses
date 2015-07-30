@@ -22,7 +22,8 @@ module Calculation
       suitable_technologies(node).map do |tech|
         tech.profile_curve.each_pair.map do |curve_type, curve|
           Network::Technologies.from_installed(
-            tech, profile_for(tech, curve), @context.options.merge(curve_type: curve_type)
+            tech, profile_for(tech, curve),
+            @context.options.merge(curve_type: curve_type)
           )
         end
       end

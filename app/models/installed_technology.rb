@@ -65,10 +65,10 @@ class InstalledTechnology
 
   # Public: Returns the load profile Curve, if the :profile attribute is set.
   #
-  # Returns a Network::Curve.
+  # Returns a Hash[{ <curve_type> => Network::Curve }]
   def profile_curve
     if profile.is_a?(Array)
-      { default: Network::Curve.new(profile) }
+      { default: Network::Curve.new(profile) * component_factor }
     elsif volume.blank? && (capacity || load)
       profile_curves(:capacity_scaled)
     elsif demand
@@ -80,36 +80,37 @@ class InstalledTechnology
 
   private
 
-  # Internal: Retrieves the Network::Curve used by the technology, without any
-  # scaling applied for demand or capacity.
+  # Internal: Retrieves the Network::Curve used by the technology, with
+  # scaling applied for demand or capacity and a ratio.
   #
-  # Returns a Network::Curve.
+  # Returns a Hash[{ <curve_type> => Network::Curve }].
   def profile_curves(scaling = nil)
+    Hash[profile_components.map do |component|
+      [ component.curve_type,
+        component.scaled_network_curve(scaling) *
+          component_factor * ratio(component) ]
+    end]
+  end
+
+  def component_factor
     multiplier = volume || capacity || load
 
     if multiplier.nil?
       multiplier = (demand && demand * curve.frames_per_hour) || 1.0
     end
 
-    multiplier = multiplier * units
+    multiplier * units
+  end
 
-    Hash[profile_components.map do |profile_component|
-      [ profile_component.curve_type,
-        scaled_curve(profile_component.network_curve, scaling) * multiplier ]
-    end]
+  def ratio(component)
+    component.network_curve.reduce(:+) / combined_components.reduce(:+)
+  end
+
+  def combined_components
+    @combined_components ||= profile_components.map{|com| com.network_curve }.reduce(:+)
   end
 
   def profile_components
     @profile_components ||= LoadProfile.by_key(profile).load_profile_components
-  end
-
-  def scaled_curve(curve, scaling = nil)
-    Network::Curve.new(
-      case scaling
-        when :capacity_scaled then Paperclip::ScaledCurve.scale(curve, :max)
-        when :demand_scaled   then Paperclip::ScaledCurve.scale(curve, :sum)
-        else curve
-      end.to_a
-    )
   end
 end # end

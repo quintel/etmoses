@@ -83,12 +83,12 @@ RSpec.describe InstalledTechnology do
           before { tech.profile = [2.0] }
 
           it 'scales without units' do
-            expect(tech.profile_curve.at(0)).to eq(4.0)
+            expect(tech.profile_curve[:default].at(0)).to eq(4.0)
           end
 
           it 'scales with units' do
             tech.units = 2.0
-            expect(tech.profile_curve.at(0)).to eq(8.0)
+            expect(tech.profile_curve[:default].at(0)).to eq(8.0)
           end
         end # and an inline curve
 
@@ -98,12 +98,12 @@ RSpec.describe InstalledTechnology do
           end
 
           it 'scales without units' do
-            expect(tech.profile_curve.at(0)).to eq(1.0)
+            expect(tech.profile_curve['flex'].at(0)).to eq(1.0)
           end
 
           it 'scales with units' do
             tech.units = 2.0
-            expect(tech.profile_curve.at(0)).to eq(2.0)
+            expect(tech.profile_curve['flex'].at(0)).to eq(2.0)
           end
         end
       end # with {attribute}
@@ -116,12 +116,12 @@ RSpec.describe InstalledTechnology do
         before { tech.profile = [1 / 8760.0] * 8760 }
 
         it 'scales without units' do
-          expect(tech.profile_curve.at(0)).to eq(1.0)
+          expect(tech.profile_curve[:default].at(0)).to eq(1.0)
         end
 
         it 'scales with units' do
           tech.units = 2.0
-          expect(tech.profile_curve.at(0)).to eq(2.0)
+          expect(tech.profile_curve[:default].at(0)).to eq(2.0)
         end
 
         context 'with a curve containing 35,040 frames' do
@@ -129,12 +129,12 @@ RSpec.describe InstalledTechnology do
           before { tech.profile = [1.0 / 35_040] * 35_040 }
 
           it 'converts kWh to the respective kW load' do
-            expect(tech.profile_curve.at(0)).to eq(1.0)
+            expect(tech.profile_curve[:default].at(0)).to eq(1.0)
           end
 
           it 'scales with units' do
             tech.units = 2.0
-            expect(tech.profile_curve.at(0)).to eq(2.0)
+            expect(tech.profile_curve[:default].at(0)).to eq(2.0)
           end
         end
       end
@@ -144,7 +144,7 @@ RSpec.describe InstalledTechnology do
           expect(LoadProfile).to receive(:by_key).and_return(load_profile)
         end
 
-        let(:curve) { tech.profile_curve }
+        let(:curve) { tech.profile_curve['flex'] }
 
         it 'scales without units' do
           expect(curve.at(0)).to be_within(1e-3).of(0.5)
@@ -167,12 +167,12 @@ RSpec.describe InstalledTechnology do
         before { tech.profile = [2.0] }
 
         it 'scales without units' do
-          expect(tech.profile_curve.at(0)).to eq(2.0)
+          expect(tech.profile_curve[:default].at(0)).to eq(2.0)
         end
 
         it 'scales with units' do
           tech.units = 2.0
-          expect(tech.profile_curve.at(0)).to eq(4.0)
+          expect(tech.profile_curve[:default].at(0)).to eq(4.0)
         end
       end
 
@@ -182,12 +182,12 @@ RSpec.describe InstalledTechnology do
         end
 
         it 'scales without units' do
-          expect(tech.profile_curve.at(0)).to eq(2.0)
+          expect(tech.profile_curve['flex'].at(0)).to eq(2.0)
         end
 
         it 'scales with units' do
           tech.units = 2.0
-          expect(tech.profile_curve.at(0)).to eq(4.0)
+          expect(tech.profile_curve['flex'].at(0)).to eq(4.0)
         end
       end
     end # with neither capacity nor demand
@@ -200,12 +200,12 @@ RSpec.describe InstalledTechnology do
       end
 
       it 'scales without units' do
-        expect(tech.profile_curve.at(0)).to eq(200.0)
+        expect(tech.profile_curve['flex'].at(0)).to eq(200.0)
       end
 
       it 'scales with units' do
         tech.units = 2.0
-        expect(tech.profile_curve.at(0)).to eq(400.0)
+        expect(tech.profile_curve['flex'].at(0)).to eq(400.0)
       end
     end # with volume
 
@@ -217,12 +217,12 @@ RSpec.describe InstalledTechnology do
       end
 
       it 'scales without units' do
-        expect(tech.profile_curve.at(0)).to eq(200.0)
+        expect(tech.profile_curve['flex'].at(0)).to eq(200.0)
       end
 
       it 'scales with units' do
         tech.units = 2.0
-        expect(tech.profile_curve.at(0)).to eq(400.0)
+        expect(tech.profile_curve['flex'].at(0)).to eq(400.0)
       end
     end # with volume and capacity
   end # profile_curve
