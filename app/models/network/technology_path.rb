@@ -39,8 +39,8 @@ module Network
       "#{ @technology.to_s } | {#{ @path.map(&:key).join(', ') }}"
     end
 
-    def congested_at?(frame)
-      @path.congested_at?(frame)
+    def congested_at?(frame, correction = 0)
+      @path.congested_at?(frame, correction)
     end
 
     def production_exceedance_at(frame)

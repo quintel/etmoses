@@ -7,7 +7,7 @@ module Network
     def self.from_installed(installed, profile, options = {})
       behavior = (installed.behavior.presence || installed.technology.behavior)
 
-      if options[:curve_type] != 'default'
+      if options[:curve_type] && options[:curve_type] != 'default'
         behavior = [behavior, options[:curve_type]].join("_")
       end
 
@@ -24,8 +24,8 @@ module Network
           behaviors['optional_buffer']  = OptionalBuffer
           behaviors['siphon']           = Siphon
           behaviors['buffer']           = Buffer
-          behaviors['deferrable']       = DeferrableConsumer
           behaviors['conserving']       = ConservingProducer
+          behaviors['deferrable_flex']  = DeferrableConsumer
           behaviors['optional_flex']    = OptionalConsumer
         end.freeze
     end

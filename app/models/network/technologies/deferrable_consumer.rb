@@ -19,7 +19,7 @@ module Network
       DeferrableLoad = Struct.new(:amount, :mandatory_at)
 
       def self.disabled?(options)
-        !options[:postponing_base_load]
+        true
       end
 
       def self.disabled_class
@@ -44,7 +44,7 @@ module Network
       #
       # Returns a numeric.
       def mandatory_consumption_at(frame)
-        if frame == @last_frame
+        if must_solve?(frame)
           return @deferreds.sum(&:amount) + @profile.at(frame)
         end
 
@@ -64,14 +64,23 @@ module Network
       #
       # Returns a numeric.
       def conditional_consumption_at(frame)
-        # All loads are mandatory in the final frame.
-        return 0.0 if frame == @last_frame
+        # All loads are mandatory every 12th frame
+        if must_solve?(frame)
+          @deferreds.clear
+          return 0.0
+        end
 
         @capacity.limit_conditional(
           frame,
-          @profile.at(frame) +
-            @deferreds.sum { |d| d.mandatory_at == frame ? 0.0 : d.amount }
+          @profile.at(frame) + @deferreds.sum { |d|
+            d.mandatory_at == frame ? 0.0 : d.amount
+          }
         )
+      end
+
+      def must_solve?(frame)
+        !frame.zero? && ((frame % 12).zero? ||
+        @node_capacity > (@inflex_profile.at(frame) + @deferreds.sum(&:amount)))
       end
 
       # Public: Informs the Deferrable that some or all of its conditional
@@ -79,8 +88,6 @@ module Network
       #
       # Returns nothing.
       def store(frame, amount)
-        @deferreds.delete_if { |deferred| deferred.mandatory_at == frame }
-
         if @deferreds.any?
           # If there are any deferred loads waiting to be satisfied; reduce
           # their loads first, before satisfying the demands of the current
@@ -88,7 +95,7 @@ module Network
           amount = reduce_deferred!(amount)
         end
 
-        if amount <= @profile.at(frame)
+        if amount < @profile.at(frame)
           # When there is unsatisfied load, we have to defer it until later.
           defer!(frame, @profile.at(frame) - amount)
         end

@@ -7,6 +7,8 @@ module Calculation
   module PullConsumption
     module_function
 
+    CONGESTIONS = {}
+
     # Public: Computes energy flows through the network.
     #
     # Returns the context.
@@ -16,6 +18,7 @@ module Calculation
         non_excess_conditional_consumption!(frame, context)
         excess_conditional_consumption!(frame, context)
         conservable_production!(frame, context)
+        shifting_consumption!(frame, context)
       end
 
       context
@@ -96,5 +99,36 @@ module Calculation
     end
 
     private_class_method :conservable_production!
+
+    # Write a method that loops through the paths (grab the overal load every 15 minutes)
+    # If in that 15 minute there's congestion, save the flex part in an array
+    # if there's a possible moment where the flex part can be pasted
+    # (where flex + total load < congestion_limit) than put it there. Else put it max 12
+    # frames into the future.
+    #
+    #
+    def shifting_consumption!(frame, context)
+      return unless context.options[:postponing_base_load]
+
+      context.paths.each do |path|
+        CONGESTIONS.each_pair do |max_delay, exceedance|
+          if !path.congested_at?(frame, exceedance) ||
+            (path.congested_at?(frame, exceedance) && frame == max_delay)
+            path.consume(frame, path.technology.profile.at(frame) - exceedance)
+            CONGESTIONS.delete(max_delay)
+          end
+        end
+
+        binding.pry
+        if path.congested_at?(frame) #&& path.technology.is_a?(Network::Technologies::DeferrableConsumer)
+          flex_part = path.technology.profile.at(frame)
+
+          CONGESTIONS[frame + 12] = flex_part
+          #path.consume(frame, -flex_part)
+        end
+      end
+    end
+
+    private_class_method :shifting_consumption!
   end # PullConsumption
 end # Calculation
