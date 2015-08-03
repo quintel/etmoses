@@ -54,7 +54,7 @@ module Network
     def consume(frame, amount, conditional = false)
       # Some technologies need to be explicitly told that they received no
       # (conditional) consumption.
-      return if amount.zero? && ! @technology.respond_to?(:store)
+      return if amount.nil? || (amount.zero? && ! @technology.respond_to?(:store))
 
       # TODO "store" should be renamed to "consume_conditional"
       @technology.store(frame, amount) if conditional

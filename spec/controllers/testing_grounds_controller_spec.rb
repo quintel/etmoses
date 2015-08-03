@@ -147,7 +147,7 @@ RSpec.describe TestingGroundsController do
     let!(:sign_in_user){ sign_in(user) }
 
     it "shows the data of a testing ground" do
-      testing_ground = FactoryGirl.create(:testing_ground)
+      testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 
       get :data, format: :json, id: testing_ground.id
 
