@@ -18,6 +18,80 @@ RSpec.describe TestingGroundsController do
                                         topology: topology)
   }
 
+  # Testing of the buffering of local PV excess in heat pumps
+  #
+  describe "testing of buffering of local pv excess in heat pumps" do
+    let!(:load_profiles){
+      curves = [
+        Network::Curve.new([-1.5, -1.5, -1.5, -1.5, 0,    0]),
+        Network::Curve.new([   0,    0,    0,    0, 10.0, 0])
+        #Network::Curve.new([-0.1, -0.1, -1.0, -1.5, -1.5, -1.5, -1.0, -0.1, -0.1, -0.1]),
+        #Network::Curve.new([0, 0, 0, 10.0, 10.0, 10.0, 10.0, 10.0, 0, 0])
+      ]
+
+      allow_any_instance_of(Calculation::TechnologyLoad).to receive(:profile_for)
+        .and_return(*curves)
+
+      solar_load_profile = FactoryGirl.create(:load_profile, key: 'solar_pv_test')
+      FactoryGirl.create(:load_profile_component,
+                         curve_type: 'default', load_profile: solar_load_profile)
+
+      heat_pump_load_profile = FactoryGirl.create(:load_profile, key: 'heat_pump_test')
+      FactoryGirl.create(:load_profile_component,
+                         curve_type: 'default', load_profile: heat_pump_load_profile)
+
+    }
+
+    let(:technology_profile){
+      {
+        "CONGESTED_END_POINT_1" => [{
+          "name"        => "Solar PV",
+          "type"        => "households_solar_pv_solar_radiation",
+          "behavior"    => nil,
+          "profile"     => "solar_pv_test",
+          "load"        => nil,
+          "capacity"    => -1.5,
+          "demand"      => nil,
+          "volume"      => nil,
+          "units"       => 1,
+          "concurrency" => "max"
+        },
+        {
+          "name"        => "Heat pump",
+          "type"        => "households_space_heater_heatpump_air_water_electricity",
+          "behavior"    => nil,
+          "profile"     => "heat_pump_test",
+          "load"        => nil,
+          "capacity"    => 3.0,
+          "demand"      => nil,
+          "volume"      => nil,
+          "units"       => 1,
+          "concurrency" => "max"
+        }]
+      }
+    }
+
+    describe "#buffering_heat_pumps" do
+      it "no strategy applied" do
+        get :data, format: :json, id: testing_ground.id,
+                  strategies: FakeLoadManagement.strategies
+
+        expect(JSON.parse(response.body)["graph"]["load"].reject{|t| t.zero?}).to eq([
+          -1.5, -1.5, -1.5, -1.5, 10
+        ])
+      end
+
+      it "buffering heat pumps strategy applied" do
+        get :data, format: :json, id: testing_ground.id,
+                  strategies: FakeLoadManagement.strategies(buffering_space_heating: true)
+
+        expect(JSON.parse(response.body)["graph"]["load"].reject{|t| t.zero? }).to eq(
+          [1.0] * 16
+        )
+      end
+    end
+  end
+
   # Testing of the postponing of base load
   #
   describe "applying postponing of base load" do
