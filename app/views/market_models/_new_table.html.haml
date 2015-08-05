@@ -3,6 +3,7 @@
     %th{data: {header: 'stakeholder_from' }} Stakeholder from
     %th{data: {header: 'stakeholder_to' }} Stakeholder to
     %th{data: {header: 'foundation' }} Foundation
+    %th{data: {header: 'measure' }} Measure
     %th.col-sm-2{data: {header: 'tariff' }} Tariff
     %th
     %th
@@ -20,6 +21,10 @@
         %td.editable.select
           %select.form-control
             = foundation_options(selected: interaction["foundation"])
+
+        %td.editable.select
+          %select.form-control
+            = measure_options(selected: interaction["measure"])
 
         %td.editable.input-switch{data: {price: interaction["tariff"]}}
           .input-group

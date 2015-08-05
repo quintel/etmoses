@@ -19,26 +19,26 @@ class Export
 
     private
 
-      def new_scenario
-        EtEngineConnector.new(scenario_params).create_scenario
-      end
-
-      def scenario_params
-        { scenario: {
-            scenario_id: @testing_ground.scenario_id,
-            descale: true
-          }
-        }
-      end
-
-      def update_scenario_params
-        { autobalance: true,
-          force_balance: true,
-          scenario: {
-            title: @testing_ground.name,
-            user_values: @user_values
-          }
-        }
-      end
+    def new_scenario
+      EtEngineConnector.new(scenario_params).create_scenario
     end
+
+    def scenario_params
+      { scenario: {
+          scenario_id: @testing_ground.scenario_id,
+          descale: true
+        }
+      }
+    end
+
+    def update_scenario_params
+      { autobalance: true,
+        force_balance: true,
+        scenario: {
+          title: @testing_ground.name,
+          user_values: @user_values
+        }
+      }
+    end
+  end
 end

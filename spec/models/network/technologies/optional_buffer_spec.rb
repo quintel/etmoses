@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::Buffer do
+RSpec.describe Network::Technologies::OptionalBuffer do
   context 'with a storage volume of 10' do
     let(:capacity) { Float::INFINITY }
 
@@ -200,4 +200,4 @@ RSpec.describe Network::Buffer do
       end # and a use of 5.0
     end # with 2.5 stored
   end # with a storage volume of 10
-end # Buffer
+end # OptionalBuffer

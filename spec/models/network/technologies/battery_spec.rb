@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::Battery do
+RSpec.describe Network::Technologies::Battery do
   let(:capacity) { Float::INFINITY }
 
   let(:tech) do

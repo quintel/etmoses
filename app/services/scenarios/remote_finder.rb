@@ -11,16 +11,16 @@ module Scenarios
 
     private
 
-      # Internal: Map only the title and the id from the scenarios from +request+
-      def scenarios
-        request.map do |scenario|
-          [scenario['title'], scenario['id']]
-        end
+    # Internal: Map only the title and the id from the scenarios from +request+
+    def scenarios
+      request.map do |scenario|
+        [scenario['title'], scenario['id']]
       end
+    end
 
-      # Internal: request all templates from et-engine
-      def request
-        JSON.parse(RestClient.get(SCENARIO_PATH))
-      end
+    # Internal: request all templates from et-engine
+    def request
+      JSON.parse(RestClient.get(SCENARIO_PATH))
+    end
   end
 end

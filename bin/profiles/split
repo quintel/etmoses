@@ -64,9 +64,7 @@ class Splitter
     @open_files.values.each(&:close)
   end
 
-  #######
   private
-  #######
 
   def file(name)
     @open_files[name] ||= File.open(@destination.join("#{ name }.csv"), 'w')

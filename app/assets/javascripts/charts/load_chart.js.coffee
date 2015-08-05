@@ -60,6 +60,8 @@ class LoadChart
     top_line = data[0].values.map((sample) => { x: sample.x, y: @capacity })
     bottom_line = data[0].values.map((sample) => { x: sample.x, y: (@capacity * -1) })
 
+    bottom_line.reverse().unshift(x: bottom_line[0].x + 1, y: bottom_line[0].y)
+
     total = bottom_line.concat top_line
 
     key:      "Capacity",
@@ -69,7 +71,7 @@ class LoadChart
 
   formatDateFromFrame: (frame) =>
     multiplier =
-      switch @data.length
+      switch @data[0].values.length
         when 35040 then 900000
         when 8760  then 3600000
         else            -1
@@ -151,6 +153,8 @@ class LoadChart
 
     LoadChartHelper.charts[@loadChartLocation() - 1] = chart
     LoadChartHelper.updateBrush(@loadChartLocation())
+
+    $("g.tick.zero text").text("0.00")
 
     chart
 

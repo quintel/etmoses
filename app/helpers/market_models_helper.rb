@@ -7,6 +7,10 @@ module MarketModelsHelper
     options_for_select(MarketModel::FOUNDATIONS, options)
   end
 
+  def measure_options(options = {})
+    options_for_select(MarketModel::MEASURES, options)
+  end
+
   def financial_profile_options(options = {})
     options_for_select(PriceCurve.all.map(&:key), options)
   end

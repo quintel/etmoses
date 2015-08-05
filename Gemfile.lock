@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/quintel/merit.git
-  revision: b21c9e8cf1af81f1f837c1487b029d05bbb3377e
+  revision: 10749241c9afd6c83cff27b8af950c1198b4aa6d
   branch: arbitrary-length
   specs:
     quintel_merit (0.1.0)
@@ -283,7 +283,7 @@ GEM
       colorize
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
-    terminal-table (1.4.5)
+    terminal-table (1.5.2)
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
       ref

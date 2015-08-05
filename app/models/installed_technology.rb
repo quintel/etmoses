@@ -65,23 +65,21 @@ class InstalledTechnology
 
   # Public: Returns the load profile Curve, if the :profile attribute is set.
   #
-  # Returns a Merit::Curve.
+  # Returns a Network::Curve.
   def profile_curve
     unscaled_profile_curve *
       ((volume || capacity || load || demand || 1.0) * units)
   end
 
-  #######
   private
-  #######
 
-  # Internal: Retrieves the Merit::Curve used by the technology, without any
+  # Internal: Retrieves the Network::Curve used by the technology, without any
   # scaling applied for demand or capacity.
   #
-  # Returns a Merit::Curve.
+  # Returns a Network::Curve.
   def unscaled_profile_curve
     if profile.is_a?(Array)
-      Merit::Curve.new(profile)
+      Network::Curve.new(profile)
     elsif volume.blank? && (capacity || load)
       combined_curves(:capacity_scaled)
     elsif demand
@@ -94,11 +92,11 @@ class InstalledTechnology
   def combined_curves(scaling = nil)
     profiles = LoadProfile.by_key(profile).load_profile_components
 
-    return profiles.first.merit_curve(scaling) if profiles.length == 1
+    return profiles.first.network_curve(scaling) if profiles.length == 1
 
-    combined = profiles.map { |component| component.merit_curve}.reduce(:+)
+    combined = profiles.map { |component| component.network_curve }.reduce(:+)
 
-    Merit::Curve.new(
+    Network::Curve.new(
       case scaling
         when :capacity_scaled then Paperclip::ScaledCurve.scale(combined, :max)
         when :demand_scaled   then Paperclip::ScaledCurve.scale(combined, :sum)

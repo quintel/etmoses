@@ -15,11 +15,11 @@ class TestingGround::TechnologyPartitioner
 
   private
 
-    def duplicate_technology(units)
-      @technology.dup.update('units' => units)
-    end
+  def duplicate_technology(units)
+    @technology.dup.update('units' => units)
+  end
 
-    def divmod
-      @technology['units'].to_i.divmod(@size)
-    end
+  def divmod
+    @technology['units'].to_i.divmod(@size)
+  end
 end

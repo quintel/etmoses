@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::DeferrableConsumer do
+RSpec.describe Network::Technologies::DeferrableConsumer do
   let(:capacity) { 5.0 }
 
   let(:tech) do

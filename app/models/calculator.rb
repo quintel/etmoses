@@ -44,9 +44,7 @@ class Calculator
     @graph
   end
 
-  #######
   private
-  #######
 
   # Internal: Computed the load of a single node.
   #

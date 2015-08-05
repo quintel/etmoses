@@ -17,9 +17,7 @@ class TreeToGraph
     @graph ||= build_graph
   end
 
-  #######
   private
-  #######
 
   def initialize(tree, techs, frame = 0)
     @tree  = tree || {}
