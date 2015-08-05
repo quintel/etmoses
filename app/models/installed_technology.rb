@@ -67,8 +67,14 @@ class InstalledTechnology
   #
   # Returns a Network::Curve.
   def profile_curve
-    unscaled_profile_curve *
-      ((volume || capacity || load || demand || 1.0) * units)
+    curve      = unscaled_profile_curve
+    multiplier = volume || capacity || load
+
+    if multiplier.nil?
+      multiplier = (demand && demand * curve.frames_per_hour) || 1.0
+    end
+
+    curve * (multiplier * units)
   end
 
   private

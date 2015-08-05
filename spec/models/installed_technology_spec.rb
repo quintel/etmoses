@@ -110,18 +110,32 @@ RSpec.describe InstalledTechnology do
     end # [capacity load] each
 
     context 'with demand' do
-      let(:tech) { InstalledTechnology.new(demand: 100.0) }
+      let(:tech) { InstalledTechnology.new(demand: 8760.0) }
 
       context 'and an inline profile' do
-        before { tech.profile = [2.0] }
+        before { tech.profile = [1 / 8760.0] * 8760 }
 
         it 'scales without units' do
-          expect(tech.profile_curve.at(0)).to eq(200.0)
+          expect(tech.profile_curve.at(0)).to eq(1.0)
         end
 
         it 'scales with units' do
           tech.units = 2.0
-          expect(tech.profile_curve.at(0)).to eq(400.0)
+          expect(tech.profile_curve.at(0)).to eq(2.0)
+        end
+
+        context 'with a curve containing 35,040 frames' do
+          # before { tech.profile = (tech.profile * 4) } #[2.0] * 35_040 }
+          before { tech.profile = [1.0 / 35_040] * 35_040 }
+
+          it 'converts kWh to the respective kW load' do
+            expect(tech.profile_curve.at(0)).to eq(1.0)
+          end
+
+          it 'scales with units' do
+            tech.units = 2.0
+            expect(tech.profile_curve.at(0)).to eq(2.0)
+          end
         end
       end
 
@@ -130,13 +144,18 @@ RSpec.describe InstalledTechnology do
           expect(LoadProfile).to receive(:by_key).and_return(load_profile)
         end
 
+        let(:curve) { tech.profile_curve }
+
         it 'scales without units' do
-          expect(tech.profile_curve.at(0)).to be_within(1e-5).of(50.0 / 8760)
+          expect(curve.at(0)).to be_within(1e-3).of(0.5)
+          expect(curve.at(1)).to be_within(1e-3).of(1)
         end
 
         it 'scales with units' do
           tech.units = 2.0
-          expect(tech.profile_curve.at(0)).to be_within(1e-5).of(100.0 / 8760)
+
+          expect(curve.at(0)).to be_within(1e-3).of(1)
+          expect(curve.at(1)).to be_within(1e-3).of(2)
         end
       end
     end # with demand
