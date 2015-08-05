@@ -21,6 +21,11 @@ module Calculation
       end
     end
 
+    # Public: The top-most node in the network.
+    def head
+      @head ||= @graph.nodes.detect { |node| node.edges(:in).none? }
+    end
+
     def paths
       @paths ||= Network::PathCollection.new(
         technology_nodes.map(&Network::TechnologyPath.method(:find)).flatten,
@@ -50,19 +55,17 @@ module Calculation
       end
     end
 
-    #######
     private
-    #######
 
     def path_order
-      [ Network::OptionalConsumer,
-        Network::ConservingProducer,
-        Network::ElectricVehicle,
-        Network::PreemptiveConsumer,
-        Network::DeferrableConsumer,
-        Network::Battery,
-        Network::Buffer,
-        Network::Siphon
+      [ Network::Technologies::OptionalConsumer,
+        Network::Technologies::ConservingProducer,
+        Network::Technologies::ElectricVehicle,
+        Network::Technologies::Buffer,
+        Network::Technologies::DeferrableConsumer,
+        Network::Technologies::Battery,
+        Network::Technologies::OptionalBuffer,
+        Network::Technologies::Siphon
       ].map do |klass|
         ->(p) { p.technology.is_a?(klass) }
       end

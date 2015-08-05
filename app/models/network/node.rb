@@ -112,17 +112,25 @@ module Network
       available <= 0 ? 0.0 : available
     end
 
-    # Public: Determines if the load of the node exceeds its capacity.
+    # Public: Determines if the consumption or production of the node exceeds
+    # its capacity.
     #
     # Returns true or false.
     def congested_at?(frame)
       capacity = get(:capacity)
-      capacity && load_at(frame) > capacity
+
+      capacity && load_at(frame).abs > capacity
     end
 
-    #######
+    def production_exceedance_at(frame)
+      if congested_at?(frame)
+        production_at(frame) - (get(:capacity) || 0)
+      else
+        0
+      end
+    end
+
     private
-    #######
 
     # Internal: A memoized list of child nodes. Since the graph never changes
     # during calculation, this is faster then getting the a fresh child list

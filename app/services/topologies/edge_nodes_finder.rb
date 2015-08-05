@@ -16,8 +16,8 @@ module Topologies
 
     private
 
-      def all_topology_nodes
-        TreeToGraph.convert(@topology).nodes
-      end
+    def all_topology_nodes
+      TreeToGraph.convert(@topology).nodes
+    end
   end
 end

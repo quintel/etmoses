@@ -45,7 +45,7 @@ FactoryGirl.define do
 
     after(:build) do |tech|
       allow(tech).to receive(:technology).and_return(
-        build(:technology, behavior: 'buffer')
+        build(:technology, behavior: 'optional_buffer')
       )
     end
   end
@@ -69,7 +69,7 @@ FactoryGirl.define do
 
     after(:build) do |tech|
       allow(tech).to receive(:technology).and_return(
-        build(:technology, behavior: 'preemptive')
+        build(:technology, behavior: 'buffer')
       )
     end
   end

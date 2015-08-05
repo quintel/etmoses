@@ -10,7 +10,8 @@ Rails.application.routes.draw do
     end
 
     member do
-      get  'export', 'technology_profile', 'data'
+      get  'export', 'technology_profile'
+      post 'data'
       post 'export', to: :perform_export
       post 'save_as'
     end

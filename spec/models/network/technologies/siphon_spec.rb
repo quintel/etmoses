@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Network::Siphon do
+RSpec.describe Network::Technologies::Siphon do
   context 'with a capacity of 10' do
     let(:tech) do
       network_technology(build(:installed_p2g, capacity: 10.0))
@@ -22,11 +22,11 @@ RSpec.describe Network::Siphon do
   context 'when disabled' do
     let(:tech) do
       network_technology(
-        build(:installed_p2g, capacity: 10.0), 2, storage: false)
+        build(:installed_p2g, capacity: 10.0), 2, solar_power_to_gas: false)
     end
 
     it 'should be a Null' do
-      expect(tech).to be_a(Network::Null)
+      expect(tech).to be_a(Network::Technologies::Null)
     end
 
     it 'has no production' do
@@ -41,4 +41,4 @@ RSpec.describe Network::Siphon do
       expect(tech.conditional_consumption_at(0)).to be_zero
     end
   end # when disabled
-end # Network::Siphon
+end

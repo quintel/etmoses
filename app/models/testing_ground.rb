@@ -39,8 +39,8 @@ class TestingGround < ActiveRecord::Base
     ]
 
     context = calculators
-      .reduce(to_calculation_context(opts)) do |context, calculator|
-        calculator.call(context)
+      .reduce(to_calculation_context(opts.symbolize_keys)) do |cxt, calculator|
+        calculator.call(cxt)
       end
 
     { graph: GraphToTree.convert(context.graph),
@@ -95,9 +95,7 @@ class TestingGround < ActiveRecord::Base
     self.technology_profile = TechnologyList.from_csv(csv)
   end
 
-  #######
   private
-  #######
 
   # Asserts that the technologies used in the graph have all been defined in
   # the technologies collection.

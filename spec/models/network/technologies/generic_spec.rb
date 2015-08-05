@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe Network::Technology do
+RSpec.describe Network::Technologies::Generic do
   let(:installed) { InstalledTechnology.new(capacity: profile.first) }
-  let(:tech)      { Network::Technology.from_installed(installed, profile) }
+  let(:tech)      { Network::Technologies.from_installed(installed, profile) }
 
   context 'with a positive capacity' do
     let(:profile) { [2.0] }

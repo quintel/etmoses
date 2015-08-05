@@ -38,9 +38,7 @@ module Network
       min(value, max_at(frame) - @technology.mandatory_consumption_at(frame))
     end
 
-    #######
     private
-    #######
 
     def max(a, b)
       a > b ? a : b

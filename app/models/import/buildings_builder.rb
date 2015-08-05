@@ -22,26 +22,26 @@ class Import
 
     private
 
-      def demand
-        Import::DemandCalculator.new(
-          @scenario_id,
-          number_of_buildings,
-          "present_demand_in_source_of_electricity_in_buildings"
-        ).calculate
-      end
+    def demand
+      Import::DemandCalculator.new(
+        @scenario_id,
+        number_of_buildings,
+        "present_demand_in_source_of_electricity_in_buildings"
+      ).calculate
+    end
 
-      def number_of_buildings
-        buildings_gquery['present'].to_i
-      end
+    def number_of_buildings
+      buildings_gquery['present'].to_i
+    end
 
-      def no_buildings?
-        buildings_gquery.blank?
-      end
+    def no_buildings?
+      buildings_gquery.blank?
+    end
 
-      def buildings_gquery
-        @buildings_gquery ||= EtEngineConnector.new({
-          gqueries: ["number_of_buildings"]
-        }).gquery(@scenario_id)
-      end
+    def buildings_gquery
+      @buildings_gquery ||= EtEngineConnector.new({
+        gqueries: ["number_of_buildings"]
+      }).gquery(@scenario_id)
+    end
   end
 end

@@ -25,15 +25,15 @@ class SessionsController < Devise::SessionsController
 
   private
 
-    def signed_in_redirect_path
-      if request.env["HTTP_REFERER"]
-        request.env["HTTP_REFERER"]
-      else
-        root_path
-      end
+  def signed_in_redirect_path
+    if request.env["HTTP_REFERER"]
+      request.env["HTTP_REFERER"]
+    else
+      root_path
     end
+  end
 
-    def session_params
-      params.require(:session).permit(:email, :password)
-    end
+  def session_params
+    params.require(:session).permit(:email, :password)
+  end
 end

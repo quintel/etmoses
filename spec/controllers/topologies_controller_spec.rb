@@ -24,4 +24,46 @@ RSpec.describe TopologiesController do
       expect(Topology.last.user).to eq(user)
     end
   end
+
+  describe "creating a topology with stakeholders" do
+    let!(:sign_in_user){ sign_in(:user, user) }
+    let(:perform_post){
+      post :create, "topology"=>{
+        "name"=>"Hello",
+        "graph"=> YAML::dump(graph)
+      }
+    }
+
+    describe 'wrongly' do
+      let(:graph){
+        {'name' => "HV Network", 'children' => [
+          { 'name' => 'MV Network', 'children' => [
+            {'name' => "LV #1", 'stakeholder' => 'not_a_stakeholder'}
+          ]}
+        ]}
+      }
+
+      it 'does not create a topology' do
+        perform_post
+
+        expect(Topology.count).to eq(0)
+      end
+    end
+
+    describe 'correctly' do
+      let(:graph){
+        {'name' => "HV Network", 'children' => [
+          { 'name' => 'MV Network', 'children' => [
+            {'name' => "LV #1", 'stakeholder' => 'customer'}
+          ]}
+        ]}
+      }
+
+      it "does create a topology" do
+        perform_post
+
+        expect(Topology.count).to eq(1)
+      end
+    end
+  end
 end

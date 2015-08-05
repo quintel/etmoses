@@ -5,12 +5,13 @@ RSpec.describe LoadProfile, type: :model do
     let(:load_profile) { create(:load_profile_with_curve) }
 
     let(:original) do
-      Merit::Curve.load_file("#{Rails.root}/spec/fixtures/data/curves/one.csv")
+      Network::Curve.load_file(
+        "#{Rails.root}/spec/fixtures/data/curves/one.csv")
     end
 
     context 'the original file' do
       let(:curve) do
-        Merit::Curve.load_file(load_profile.load_profile_components.first.curve.path(:original))
+        Network::Curve.load_file(load_profile.load_profile_components.first.curve.path(:original))
       end
 
       it 'is saved' do
@@ -25,7 +26,7 @@ RSpec.describe LoadProfile, type: :model do
 
     context 'the capacity-scaled profile' do
       let(:curve) do
-        Merit::Curve.load_file(load_profile.load_profile_components.first.curve.path(:capacity_scaled))
+        Network::Curve.load_file(load_profile.load_profile_components.first.curve.path(:capacity_scaled))
       end
 
       it 'is saved' do
@@ -48,7 +49,7 @@ RSpec.describe LoadProfile, type: :model do
 
     context 'the demand-scaled profile' do
       let(:curve) do
-        Merit::Curve.load_file(load_profile.load_profile_components.first.curve.path(:demand_scaled))
+        Network::Curve.load_file(load_profile.load_profile_components.first.curve.path(:demand_scaled))
       end
 
       it 'is saved' do

@@ -3,7 +3,10 @@ var TopologyTree = (function(){
 
   TopologyTree.prototype = {
     showTree: function() {
-      d3.json(url, d3Callback);
+      d3.json(url)
+        .header("Content-Type", "application/json")
+        .header("Accept", "application/json")
+        .post(TopologyTreeHelper.strategies(), d3Callback);
     }
   };
 
@@ -23,3 +26,12 @@ var TopologyTree = (function(){
 
   return TopologyTree;
 })();
+
+var TopologyTreeHelper = {
+  strategies: function(){
+    var strategies = JSON.parse($(".strategies.hidden").text());
+        strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
+
+    return JSON.stringify({ strategies: strategies });
+  }
+};

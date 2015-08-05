@@ -47,9 +47,7 @@ class Import
       "#<#{ self.class.name }: #{ to_s }>"
     end
 
-    #######
     private
-    #######
 
     def extract_subkey(data, subkey, period)
       if subkey.include?('.')

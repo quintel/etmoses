@@ -10,10 +10,9 @@ class InstalledTechnology
   attribute :demand,   Float
   attribute :volume,   Float
   attribute :units,    Integer, default: 1
-  attribute :in_cooperation, Boolean
   attribute :concurrency, String, default: 'max'
 
-  EDITABLES = %i(name profile capacity volume demand units in_cooperation concurrency)
+  EDITABLES = %i(name profile capacity volume demand units concurrency)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
@@ -66,29 +65,43 @@ class InstalledTechnology
 
   # Public: Returns the load profile Curve, if the :profile attribute is set.
   #
-  # Returns a Merit::Curve.
+  # Returns a Network::Curve.
   def profile_curve
     unscaled_profile_curve *
       ((volume || capacity || load || demand || 1.0) * units)
   end
 
-  #######
   private
-  #######
 
-  # Internal: Retrieves the Merit::Curve used by the technology, without any
+  # Internal: Retrieves the Network::Curve used by the technology, without any
   # scaling applied for demand or capacity.
   #
-  # Returns a Merit::Curve.
+  # Returns a Network::Curve.
   def unscaled_profile_curve
     if profile.is_a?(Array)
-      Merit::Curve.new(profile)
+      Network::Curve.new(profile)
     elsif volume.blank? && (capacity || load)
-      LoadProfile.by_key(profile).load_profile_components.first.merit_curve(:capacity_scaled)
+      combined_curves(:capacity_scaled)
     elsif demand
-      LoadProfile.by_key(profile).load_profile_components.first.merit_curve(:demand_scaled)
+      combined_curves(:demand_scaled)
     else
-      LoadProfile.by_key(profile).load_profile_components.first.merit_curve
+      combined_curves
     end
+  end
+
+  def combined_curves(scaling = nil)
+    profiles = LoadProfile.by_key(profile).load_profile_components
+
+    return profiles.first.network_curve(scaling) if profiles.length == 1
+
+    combined = profiles.map { |component| component.network_curve }.reduce(:+)
+
+    Network::Curve.new(
+      case scaling
+        when :capacity_scaled then Paperclip::ScaledCurve.scale(combined, :max)
+        when :demand_scaled   then Paperclip::ScaledCurve.scale(combined, :sum)
+        else combined
+      end.to_a
+    )
   end
 end # end

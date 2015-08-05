@@ -33,12 +33,7 @@ class LoadChart
     $(intoSelector).empty()
 
     if @capacity
-      data.push({
-        key: 'Capacity',
-        color: 'darkred',
-        values: data[0].values.map((sample) => { x: sample.x, y: @capacity }),
-        disabled: LoadChartHelper.disableCapacity
-      })
+      data.push(@generateCapacity(data))
 
     # data.forEach (series) ->
     for series in data
@@ -61,9 +56,22 @@ class LoadChart
       d3.select(intoSelector).datum(data).call(chart)
       chart.update()
 
+  generateCapacity: (data) =>
+    top_line = data[0].values.map((sample) => { x: sample.x, y: @capacity })
+    bottom_line = data[0].values.map((sample) => { x: sample.x, y: (@capacity * -1) })
+
+    bottom_line.reverse().unshift(x: bottom_line[0].x + 1, y: bottom_line[0].y)
+
+    total = bottom_line.concat top_line
+
+    key:      "Capacity",
+    color:    "darkred",
+    values:   total,
+    disabled: LoadChartHelper.disableCapacity
+
   formatDateFromFrame: (frame) =>
     multiplier =
-      switch @data.length
+      switch @data[0].values.length
         when 35040 then 900000
         when 8760  then 3600000
         else            -1
@@ -146,10 +154,12 @@ class LoadChart
     LoadChartHelper.charts[@loadChartLocation() - 1] = chart
     LoadChartHelper.updateBrush(@loadChartLocation())
 
+    $("g.tick.zero text").text("0.00")
+
     chart
 
   setGlobalBrushFocus: ()->
-    LoadChartHelper.globalBrushExtent = d3.event.target.extent();
+    LoadChartHelper.globalBrushExtent = d3.event.target.extent()
 
   loadChartLocation: ->
     parseInt(@intoSelector.replace(/\D/g, ''))

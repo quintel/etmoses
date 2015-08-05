@@ -12,10 +12,11 @@ class GraphToTree
 
   # Internal: Converts a single Turbine::Node an a hash of attributes.
   def self.convert_node(node)
-    { name:     node.key,
-      children: node.out_edges.map(&:to).to_a.map(&method(:convert_node)),
-      capacity: node.get(:capacity),
-      load:     node.get(:load).to_a }
+    { name:        node.key,
+      children:    node.out_edges.map(&:to).to_a.map(&method(:convert_node)),
+      capacity:    node.get(:capacity),
+      stakeholder: node.get(:stakeholder),
+      load:        node.get(:load).to_a }
   end
 
   private_class_method :convert_node

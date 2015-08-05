@@ -1,6 +1,6 @@
 var ProfileTable = (function(){
   var widget, selector, profileSelectBoxes;
-  var EDSN_THRESHOLD = 10;
+  var EDSN_THRESHOLD = 30;
 
   ProfileTable.prototype = {
     append: function(){

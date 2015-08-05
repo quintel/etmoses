@@ -13,6 +13,8 @@ class TestingGroundsController < ResourceController
   before_filter :load_technologies, only: [:perform_import, :update, :create,
                                            :edit, :new, :calculate_concurrency]
 
+  skip_before_filter :verify_authenticity_token, only: [:data]
+
   # GET /topologies
   def index
     @testing_grounds = policy_scope(TestingGround).latest_first
@@ -60,12 +62,10 @@ class TestingGroundsController < ResourceController
   def show
   end
 
+  # POST /testing_grounds/:id/data
   def data
     begin
-      render json: @testing_ground.to_json(
-        storage: params[:storage] == '1',
-        flexibility: false
-      )
+      render json: @testing_ground.to_json(params[:strategies])
     rescue StandardError => ex
       notify_airbrake(ex) if defined?(Airbrake)
 
@@ -75,9 +75,13 @@ class TestingGroundsController < ResourceController
                  { error: I18n.t("testing_grounds.error.data") }
                end
 
+
       if Rails.env.development? || Rails.env.test?
         result[:message]   = "#{ ex.class }: #{ ex.message }"
         result[:backtrace] = ex.backtrace
+
+        Rails.logger.debug(ex.message)
+        Rails.logger.debug(ex.backtrace.join("\n"))
       end
 
       render json: result, status: 500
@@ -129,8 +133,8 @@ class TestingGroundsController < ResourceController
     elsif tg_params[:technology_profile]
       yamlize_attribute!(tg_params, :technology_profile)
 
-      # Some attributes which should be considered "not present" are submitted by
-      # the technology table as an empty string. Delete them.
+      # Some attributes which should be considered "not present" are submitted
+      # by the technology table as an empty string. Delete them.
       tg_params[:technology_profile].each do |_, techs|
         techs.each do |tech|
           tech.delete_if { |_attr, value| value.blank? }

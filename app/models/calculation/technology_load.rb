@@ -11,7 +11,7 @@ module Calculation
     def run
       @context.technology_nodes.each do |node|
         node.set(:techs, suitable_technologies(node).map do |tech|
-          Network::Technology.from_installed(
+          Network::Technologies.from_installed(
             tech, profile_for(tech), @context.options
           )
         end)
@@ -20,9 +20,7 @@ module Calculation
       @context
     end
 
-    #######
     private
-    #######
 
     # Internal: Given a node, returns an array of technologies which may be used
     # to determine the load on the node to which they belong.
@@ -38,7 +36,7 @@ module Calculation
     # Internal: Given a technology, retrieves the load profile which may be used
     # to describe its load.
     #
-    # Returns an Array or Merit::Curve.
+    # Returns an Array or Network::Curve.
     def profile_for(technology)
       if technology.profile.present?
         technology.profile_curve
@@ -54,7 +52,8 @@ module Calculation
     #
     # An array with the given length will be returned.
     def self.constant_profile(technology, length)
-      Array.new(length, (technology.load || technology.capacity).presence || 0.0)
+      Network::Curve.new(
+        [], length, technology.capacity || technology.load || 0.0)
     end
   end # TechnologyLoad
 end # Calculation

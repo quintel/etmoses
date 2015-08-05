@@ -42,12 +42,12 @@ class MarketModelsController < ResourceController
 
   private
 
-    def find_market_model
-      @market_model = MarketModel.find(params[:id])
-      authorize(@market_model)
-    end
+  def find_market_model
+    @market_model = MarketModel.find(params[:id])
+    authorize(@market_model)
+  end
 
-    def market_model_params
-      params.require(:market_model).permit(:name, :public, :interactions)
-    end
+  def market_model_params
+    params.require(:market_model).permit(:name, :public, :interactions)
+  end
 end

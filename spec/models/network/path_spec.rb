@@ -91,7 +91,7 @@ RSpec.describe Network::Path do
     context 'when a node has an excess of production' do
       before do
         allow(parent).to receive(:load_at).and_return(-2.0)
-        parent.set(:capacity, 1.9)
+        parent.set(:capacity, 2.1)
       end
 
       it 'is false' do
