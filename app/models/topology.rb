@@ -37,7 +37,7 @@ class Topology < ActiveRecord::Base
 
   def graph=(graph)
     if graph.is_a?(String)
-      super YAML::load(graph.gsub(/\t/, '    '))
+      super YAML.load(graph.gsub(/\t/, '    '))
     else
       super graph
     end
