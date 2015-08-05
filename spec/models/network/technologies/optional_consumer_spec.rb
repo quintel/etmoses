@@ -29,11 +29,11 @@ RSpec.describe Network::Technologies::OptionalConsumer do
   end
 
   it 'has reads conditional consumption from the profile' do
-    expect(tech.conditional_consumption_at(0)).to eq(2.0)
+    expect(tech.conditional_consumption_at(0)).to eq(0.0)
   end
 
   it 'has has no mandatory consumption' do
-    expect(tech.mandatory_consumption_at(0)).to be_zero
+    expect(tech.mandatory_consumption_at(0)).to eq(2.0)
   end
 
   it 'has no production' do

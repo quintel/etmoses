@@ -65,43 +65,45 @@ class InstalledTechnology
 
   # Public: Returns the load profile Curve, if the :profile attribute is set.
   #
-  # Returns a Network::Curve.
+  # Returns a Hash[{ <curve_type> => Network::Curve }]
   def profile_curve
-    unscaled_profile_curve *
-      ((volume || capacity || load || demand || 1.0) * units)
+    if profile.is_a?(Array)
+      { default: Network::Curve.new(profile) * component_factor }
+    elsif volume.blank? && (capacity || load)
+      profile_curves(:capacity_scaled)
+    elsif demand
+      profile_curves(:demand_scaled)
+    else
+      profile_curves
+    end
   end
 
   private
 
-  # Internal: Retrieves the Network::Curve used by the technology, without any
-  # scaling applied for demand or capacity.
+  # Internal: Retrieves the Network::Curve used by the technology, with
+  # scaling applied for demand or capacity and a ratio.
   #
-  # Returns a Network::Curve.
-  def unscaled_profile_curve
-    if profile.is_a?(Array)
-      Network::Curve.new(profile)
-    elsif volume.blank? && (capacity || load)
-      combined_curves(:capacity_scaled)
-    elsif demand
-      combined_curves(:demand_scaled)
-    else
-      combined_curves
-    end
+  # Returns a Hash[{ <curve_type> => Network::Curve }].
+  def profile_curves(scaling = nil)
+    Hash[profile_components.map do |component|
+      [ component.curve_type,
+        component.scaled_network_curve(scaling) * component_factor * ratio(component) ]
+    end]
   end
 
-  def combined_curves(scaling = nil)
-    profiles = LoadProfile.by_key(profile).load_profile_components
+  def component_factor
+    (volume || capacity || load || demand || 1.0) * units
+  end
 
-    return profiles.first.network_curve(scaling) if profiles.length == 1
+  def ratio(component)
+    component.network_curve.reduce(:+) / combined_components.reduce(:+)
+  end
 
-    combined = profiles.map { |component| component.network_curve }.reduce(:+)
+  def combined_components
+    @combined_components ||= profile_components.map{|com| com.network_curve }.reduce(:+)
+  end
 
-    Network::Curve.new(
-      case scaling
-        when :capacity_scaled then Paperclip::ScaledCurve.scale(combined, :max)
-        when :demand_scaled   then Paperclip::ScaledCurve.scale(combined, :sum)
-        else combined
-      end.to_a
-    )
+  def profile_components
+    @profile_components ||= LoadProfile.by_key(profile).load_profile_components
   end
 end # end

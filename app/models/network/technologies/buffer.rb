@@ -8,7 +8,7 @@ module Network
     # hope of avoiding exceedances later.
     class Buffer < Storage
       def self.disabled?(options)
-        !options[:buffering_heat_pumps]
+        ! options[:buffering_space_heating]
       end
 
       def self.disabled_class

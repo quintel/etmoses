@@ -16,6 +16,7 @@ module Calculation
         non_excess_conditional_consumption!(frame, context)
         excess_conditional_consumption!(frame, context)
         conservable_production!(frame, context)
+        shifting_consumption!(frame, context)
       end
 
       context
@@ -96,5 +97,19 @@ module Calculation
     end
 
     private_class_method :conservable_production!
+
+    #
+    # Shifting consumption is a method that moves consumption around for base loads
+    #
+
+    def shifting_consumption!(frame, context)
+      return unless context.options[:postponing_base_load]
+
+      context.paths.each do |path|
+        ShiftConsumption.instance.shift_consumption(frame, path)
+      end
+    end
+
+    private_class_method :shifting_consumption!
   end # PullConsumption
 end # Calculation

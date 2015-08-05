@@ -5,9 +5,13 @@ module Network
     #
     # Returns a Technology.
     def self.from_installed(installed, profile, options = {})
-      behaviors[
-        installed.behavior.presence || installed.technology.behavior
-      ].build(installed, profile, options)
+      behavior = (installed.behavior.presence || installed.technology.behavior)
+
+      if options[:curve_type] && options[:curve_type] != 'default'
+        behavior = [behavior, options[:curve_type]].join("_")
+      end
+
+      behaviors[behavior].build(installed, profile, options)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by
@@ -20,9 +24,9 @@ module Network
           behaviors['optional_buffer']  = OptionalBuffer
           behaviors['siphon']           = Siphon
           behaviors['buffer']           = Buffer
-          behaviors['deferrable']       = DeferrableConsumer
           behaviors['conserving']       = ConservingProducer
-          behaviors['optional']         = OptionalConsumer
+          behaviors['deferrable_flex']  = DeferrableConsumer
+          behaviors['optional_flex']    = OptionalConsumer
         end.freeze
     end
   end
