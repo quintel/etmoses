@@ -58,7 +58,6 @@ module Network
     def consume(frame, amount)
       @consumption[frame] ||= 0.0
       @consumption[frame] += amount
-      @consumption[frame] = @consumption[frame].round(5)
     end
 
     # Public: Recurses through child nodes and technologies to determine the

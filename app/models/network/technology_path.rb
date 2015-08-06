@@ -52,9 +52,12 @@ module Network
     #
     # Returns nothing.
     def consume(frame, amount, conditional = false)
+      # Don't assign remnants of floating point errors.
+      amount = 0.0 if amount < 1e-10
+
       # Some technologies need to be explicitly told that they received no
       # (conditional) consumption.
-      return if amount.nil? || (amount.zero? && ! @technology.respond_to?(:store))
+      return if amount.zero? && ! @technology.respond_to?(:store)
 
       # TODO "store" should be renamed to "consume_conditional"
       @technology.store(frame, amount) if conditional
