@@ -124,16 +124,17 @@ RSpec.describe TestingGroundsController do
       }
     }
 
-    describe "with no possibility to fix the problem" do
+    describe "with no possibility to fix the problem within 12 frames" do
       let(:flex_curve){   [0.2, [0.0] * 14].flatten }
-      let(:inflex_curve){ [0.9] * 15 }
+      let(:inflex_curve){ [1.0] * 15 }
 
       it "applies no postponing of base load - just returns the load profile" do
         get :data, format: :json, id: testing_ground.id,
                   strategies: FakeLoadManagement.strategies
 
         expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          1.1, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9
+          1.2, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+          1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ])
       end
 
@@ -142,35 +143,52 @@ RSpec.describe TestingGroundsController do
                   strategies: FakeLoadManagement.strategies(postponing_base_load: true)
 
         expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 1.1, 0.9, 0.9
+          1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+          1.0, 1.0, 1.0, 1.0, 1.2, 1.0, 1.0
         ])
       end
     end
 
     describe "with a possibility to fix the problem" do
-      let(:flex_curve){   [0.2, [0.0] * 14].flatten }
-      let(:inflex_curve){ [0.9, 0.9, 0.9, 0.6, [0.9] * 11].flatten }
+      let(:flex_curve){   [0.2, [0.0] * 16].flatten }
+      let(:inflex_curve){ [1.0, 1.0, 1.0, 0.6, [1.0] * 13].flatten }
 
       it "applies postponing of base load" do
         get :data, format: :json, id: testing_ground.id,
                   strategies: FakeLoadManagement.strategies(postponing_base_load: true)
 
         expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          0.9, 0.9, 0.9, 0.8, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9
+          1.0, 1.0, 1.0, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0,
+          1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ])
       end
     end
 
-    describe "with no possibility to fix the problem at the end of the curve" do
-      let(:flex_curve){   [[0.0] * 13, 0.2, 0.0].flatten }
-      let(:inflex_curve){ [0.9] * 15 }
+    describe "with a possibility to fix the across multiple frames" do
+      let(:flex_curve){   [0.2, [0.0] * 16].flatten }
+      let(:inflex_curve){ [1.0, 1.0, 1.0, 0.9, 0.9, [0.0] * 12].flatten }
 
-      it "applies postponing of base load, puts flex part at last frame" do
+      it "applies postponing of base load" do
         get :data, format: :json, id: testing_ground.id,
                   strategies: FakeLoadManagement.strategies(postponing_base_load: true)
 
         expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 0.9, 1.1
+          1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+        ])
+      end
+    end
+
+    describe "with no possibility to fix the problem before the end" do
+      let(:flex_curve){   [0.2, [0.0] * 3].flatten }
+      let(:inflex_curve){ [1.0] * 4 }
+
+      it "applies postponing in the final frame" do
+        get :data, format: :json, id: testing_ground.id,
+          strategies: FakeLoadManagement.strategies(postponing_base_load: true)
+
+        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
+          1.0, 1.0, 1.0, 1.2
         ])
       end
     end

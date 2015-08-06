@@ -14,6 +14,8 @@ class InstalledTechnology
 
   EDITABLES = %i(name profile capacity volume demand units concurrency)
 
+  BASE_LOAD_BEHAVIORS = %w(base_load base_load_buildings).freeze
+
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
     Hash[ self.attribute_set.map do |attr|
@@ -63,12 +65,35 @@ class InstalledTechnology
     type.present? ? Technology.by_key(type) : Technology.generic
   end
 
+  # Public: Determines the network behavior of this technology with a particular
+  # curve type. Base load technologies will behave differently depending on the
+  # use of a flexible or inflexible curve.
+  #
+  # Returns a string.
+  def behavior_with_curve(curve_type = nil)
+    behavior = self.behavior.presence || technology.behavior
+
+    if curve_type.nil? || ! BASE_LOAD_BEHAVIORS.include?(behavior)
+      return behavior
+    end
+
+    case curve_type
+      when :flex
+        behavior == 'base_load' ? 'deferrable'.freeze : 'optional'.freeze
+      when :inflex
+        'generic'.freeze
+      else
+        behavior
+    end
+  end
+
   # Public: Returns the load profile Curve, if the :profile attribute is set.
   #
   # Returns a Hash[{ <curve_type> => Network::Curve }]
   def profile_curve
     if profile.is_a?(Array)
-      { default: Network::Curve.new(profile) * component_factor }
+      curve = Network::Curve.new(profile)
+      { default: curve * component_factor(curve) }
     elsif volume.blank? && (capacity || load)
       profile_curves(:capacity_scaled)
     elsif demand
@@ -86,13 +111,12 @@ class InstalledTechnology
   # Returns a Hash[{ <curve_type> => Network::Curve }].
   def profile_curves(scaling = nil)
     Hash[profile_components.map do |component|
-      [ component.curve_type,
-        component.scaled_network_curve(scaling) *
-          component_factor * ratio(component) ]
+      curve = component.scaled_network_curve(scaling)
+      [component.curve_type, curve * component_factor(curve) * ratio(component)]
     end]
   end
 
-  def component_factor
+  def component_factor(curve)
     multiplier = volume || capacity || load
 
     if multiplier.nil?

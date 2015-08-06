@@ -14,7 +14,8 @@ class Technology < ActiveRecord::Base
   validates :behavior,
     inclusion: {
       in: %w( storage electric_vehicle siphon optional_buffer
-              buffer deferrable conserving optional),
+              buffer deferrable conserving optional
+              base_load base_load_buildings),
       allow_nil: true }
 
   validates :export_to,

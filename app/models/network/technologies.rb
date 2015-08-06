@@ -5,12 +5,7 @@ module Network
     #
     # Returns a Technology.
     def self.from_installed(installed, profile, options = {})
-      behavior = (installed.behavior.presence || installed.technology.behavior)
-
-      if options[:curve_type] && options[:curve_type] != 'default'
-        behavior = [behavior, options[:curve_type]].join("_")
-      end
-
+      behavior = installed.behavior_with_curve(options[:curve_type])
       behaviors[behavior].build(installed, profile, options)
     end
 

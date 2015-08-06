@@ -81,13 +81,13 @@ Technology.create!(
 Technology.create!(
   key:         'base_load',
   name:        'Household',
-  behavior:    'deferrable'
+  behavior:    'base_load'
 )
 
 Technology.create!(
   key:         'base_load_buildings',
   name:        'Buildings',
-  behavior:    'optional'
+  behavior:    'base_load_buildings'
 )
 
 Technology.create!(
