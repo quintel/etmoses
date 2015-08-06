@@ -11,14 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150729080029) do
-
-  create_table "business_cases", force: true do |t|
-    t.integer  "testing_ground_id"
-    t.text     "financials"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(version: 20150806144018) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
