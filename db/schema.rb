@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150806144018) do
+ActiveRecord::Schema.define(version: 20150806145209) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -82,6 +82,14 @@ ActiveRecord::Schema.define(version: 20150806144018) do
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
+
+  create_table "technology_component_behaviors", force: true do |t|
+    t.integer "technology_id",            null: false
+    t.string  "curve_type",    limit: 50, null: false
+    t.string  "behavior",      limit: 50, null: false
+  end
+
+  add_index "technology_component_behaviors", ["technology_id", "curve_type"], name: "index_technology_curve_type", unique: true, using: :btree
 
   create_table "technology_profiles", force: true do |t|
     t.integer "load_profile_id",              null: false

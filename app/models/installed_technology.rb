@@ -14,8 +14,6 @@ class InstalledTechnology
 
   EDITABLES = %i(name profile capacity volume demand units concurrency)
 
-  BASE_LOAD_BEHAVIORS = %w(base_load base_load_buildings).freeze
-
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
     Hash[ self.attribute_set.map do |attr|
@@ -73,18 +71,10 @@ class InstalledTechnology
   def behavior_with_curve(curve_type = nil)
     behavior = self.behavior.presence || technology.behavior
 
-    if curve_type.nil? || ! BASE_LOAD_BEHAVIORS.include?(behavior)
-      return behavior
-    end
+    return behavior if curve_type.nil? || curve_type == 'default'.freeze
 
-    case curve_type
-      when :flex
-        behavior == 'base_load' ? 'deferrable'.freeze : 'optional'.freeze
-      when :inflex
-        'generic'.freeze
-      else
-        behavior
-    end
+    component_behavior = technology.component_behaviors.for_type(curve_type)
+    component_behavior.try(:behavior) || behavior
   end
 
   # Public: Returns the load profile Curve, if the :profile attribute is set.
