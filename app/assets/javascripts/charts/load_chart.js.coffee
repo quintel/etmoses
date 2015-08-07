@@ -72,14 +72,16 @@ class LoadChart
   formatDateFromFrame: (frame) =>
     multiplier =
       switch @data[0].values.length
-        when 35040 then 900000
-        when 8760  then 3600000
+        when 35040 then 15
+        when 8760  then 60
         else            -1
 
     if multiplier is -1
       frame
     else
-      LoadChartHelper.formatDate(new Date(frame * multiplier))
+      LoadChartHelper.formatDate(
+        new Date(new Date().getFullYear(), 0, 1, 0, (frame * multiplier), 0)
+      )
 
   drawDateSelect: (intoSelector) ->
     epoch    = new Date(0)

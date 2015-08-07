@@ -45,13 +45,17 @@ LoadChartHelper = {
   },
 
   formatDate: function(date){
-    var monthNames = [
-      "January", "February", "March",
-      "April", "May", "June", "July",
-      "August", "September", "October",
-      "November", "December"
-    ];
+    var monthName = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ][ date.getMonth() ];
 
-    return [date.getDate(), monthNames[date.getMonth()]].join(" ");
+    var hours = date.getHours();
+        hours = hours < 10 ? ('0' + hours) : hours;
+
+    var minutes = date.getMinutes();
+        minutes = minutes < 10 ? ('0' + minutes) : minutes; 
+
+    return [ date.getDate(), monthName, (hours + ":" + minutes) ].join(" ");
   }
 };
