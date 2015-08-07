@@ -1,7 +1,9 @@
 class LoadProfileComponent < ActiveRecord::Base
   include CurveComponent
 
-  CURVE_TYPES = %w(flex inflex)
+  CURVE_TYPES = { base_load: %w(flex inflex),
+                  heat_pump: %w(use availability),
+                  default:   %w(default) }
 
   belongs_to :load_profile
 

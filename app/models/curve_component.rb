@@ -12,4 +12,14 @@ module CurveComponent
       Network::Curve.load_file(curve.path(scaling))
     end
   end
+
+  def scaled_network_curve(scaling)
+    Network::Curve.new(
+      case scaling
+        when :capacity_scaled then Paperclip::ScaledCurve.scale(network_curve, :max)
+        when :demand_scaled   then Paperclip::ScaledCurve.scale(network_curve, :sum)
+        else network_curve
+      end.to_a
+    )
+  end
 end

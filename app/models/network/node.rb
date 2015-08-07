@@ -116,10 +116,10 @@ module Network
     # its capacity.
     #
     # Returns true or false.
-    def congested_at?(frame)
+    def congested_at?(frame, correction = 0)
       capacity = get(:capacity)
 
-      capacity && load_at(frame).abs > capacity
+      capacity && load_at(frame).abs + correction > capacity
     end
 
     def production_exceedance_at(frame)

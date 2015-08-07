@@ -5,9 +5,8 @@ module Network
     #
     # Returns a Technology.
     def self.from_installed(installed, profile, options = {})
-      behaviors[
-        installed.behavior.presence || installed.technology.behavior
-      ].build(installed, profile, options)
+      behavior = installed.behavior_with_curve(options[:curve_type])
+      behaviors[behavior].build(installed, profile, options)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by

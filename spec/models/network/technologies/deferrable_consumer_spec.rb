@@ -6,7 +6,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
   let(:tech) do
     network_technology(build(
       :installed_deferred, profile: profile, capacity: capacity
-    ), 8760, flexibility: true)
+    ), 8760, curve_type: :flex)
   end
 
   context 'with no stored amount' do

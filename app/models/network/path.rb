@@ -62,8 +62,8 @@ module Network
     # its capacity.
     #
     # Returns true or false.
-    def congested_at?(frame)
-      @path.any? { |node| node.congested_at?(frame) }
+    def congested_at?(frame, correction = 0)
+      @path.any? { |node| node.congested_at?(frame, correction) }
     end
 
     # Public: Sends a given amount of energy down the path, increasing the

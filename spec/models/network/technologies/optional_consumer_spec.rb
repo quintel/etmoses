@@ -39,4 +39,16 @@ RSpec.describe Network::Technologies::OptionalConsumer do
   it 'has no production' do
     expect(tech.production_at(0)).to be_zero
   end
+
+  describe 'with a profile containing a negative' do
+    let(:profile) { [-2.0] }
+
+    it 'has has no conditional consumption' do
+      expect(tech.conditional_consumption_at(0)).to be_zero
+    end
+
+    it 'has has no mandatory consumption' do
+      expect(tech.mandatory_consumption_at(0)).to be_zero
+    end
+  end
 end

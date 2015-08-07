@@ -48,7 +48,9 @@ class LoadProfilesController < ResourceController
   private
 
   def build_load_profile_components
-    2.times{ @profile.load_profile_components.build }
+    LoadProfileComponent::CURVE_TYPES.values.flatten.each do |curve_type|
+      @profile.load_profile_components.build(curve_type: curve_type)
+    end
   end
 
   def fetch_profile

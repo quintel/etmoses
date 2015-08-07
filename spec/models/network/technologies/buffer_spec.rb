@@ -7,7 +7,7 @@ RSpec.describe Network::Technologies::Buffer do
     let(:tech) do
       network_technology(build(
         :installed_heat_pump, profile: profile, capacity: capacity
-      ), 8760, flexibility: true)
+      ), 8760, buffering_space_heating: true)
     end
 
     context 'with nothing stored' do
