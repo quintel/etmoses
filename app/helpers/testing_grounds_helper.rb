@@ -48,12 +48,6 @@ module TestingGroundsHelper
     options_for_select(@edges.map(&:key), selected: node)
   end
 
-  def technology_defaults(technology, profile)
-    if tech_profile = profile.values.flatten.detect{|t| t[:type] == technology.key }
-      tech_profile.slice(:capacity, :volume, :demand)
-    end
-  end
-
   def maximum_concurrency?(technology_key, profile)
     technology = profile.as_json.values.flatten.detect{|t| t[:type] == technology_key }
 

@@ -47,12 +47,15 @@ ActiveRecord::Schema.define(version: 20150828134229) do
   end
 
   create_table "load_profiles", force: true do |t|
-    t.string   "key",                      default: "",    null: false
+    t.string   "key",                                 default: "",    null: false
     t.string   "name"
-    t.boolean  "public",                   default: true,  null: false
+    t.boolean  "public",                              default: true,  null: false
     t.string   "user_id"
     t.integer  "load_profile_category_id"
-    t.boolean  "locked",                   default: false, null: false
+    t.boolean  "locked",                              default: false, null: false
+    t.float    "default_capacity",         limit: 24
+    t.float    "default_volume",           limit: 24
+    t.float    "default_demand",           limit: 24
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -82,11 +85,14 @@ ActiveRecord::Schema.define(version: 20150828134229) do
   end
 
   create_table "technologies", force: true do |t|
-    t.string  "key",       limit: 100,                null: false
-    t.string  "name",      limit: 100
-    t.string  "export_to", limit: 100
-    t.string  "behavior",  limit: 50
-    t.boolean "visible",               default: true
+    t.string  "key",              limit: 100,                null: false
+    t.string  "name",             limit: 100
+    t.string  "export_to",        limit: 100
+    t.string  "behavior",         limit: 50
+    t.float   "default_capacity", limit: 24
+    t.float   "default_volume",   limit: 24
+    t.float   "default_demand",   limit: 24
+    t.boolean "visible",                      default: true
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree

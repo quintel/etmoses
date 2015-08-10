@@ -17,6 +17,21 @@
     .help-block This field is optional.
 
   .form-group
+    = form.label :default_capacity
+    = form.number_field :default_capacity, class: 'form-control'
+    .help-block This field is optional.
+
+  .form-group
+    = form.label :default_volume
+    = form.number_field :default_volume, class: 'form-control'
+    .help-block This field is optional.
+
+  .form-group
+    = form.label :default_demand
+    = form.number_field :default_demand, class: 'form-control'
+    .help-block This field is optional.
+
+  .form-group
     = form.label :public, "Permissions"
 
     .radio-buttons
