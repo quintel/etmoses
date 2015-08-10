@@ -71,7 +71,9 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
       }
 
       it 'expects only EDSN profiles' do
-        expect(new_profile.values.flatten.first["profile"]).to eq("anonimous_1")
+        load_profile_id = new_profile.values.flatten.first["profile"]
+
+        expect(LoadProfile.find(load_profile_id).key).to eq("anonimous_1")
       end
     end
 
@@ -83,7 +85,9 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
       }
 
       it 'only makes use of non-EDSN profiles' do
-        expect(new_profile.values.flatten.first["profile"]).to eq("anonimous_1")
+        load_profile_id = new_profile.values.flatten.first["profile"]
+
+        expect(LoadProfile.find(load_profile_id).key).to eq("anonimous_1")
       end
     end
   end

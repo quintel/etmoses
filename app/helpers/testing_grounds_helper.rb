@@ -28,7 +28,7 @@ module TestingGroundsHelper
 
   def profile_table_options_for_profile(technology)
     load_profiles = technology.load_profiles.map do |load_profile|
-      load_profile.key
+      [load_profile.key, load_profile.id]
     end
 
     options_for_select(load_profiles)
@@ -36,7 +36,7 @@ module TestingGroundsHelper
 
   def profile_table_options_for_households(household)
     load_profiles = household.load_profiles.map do |profile|
-      [profile.key, profile.key, data: { edsn: profile.is_edsn? }]
+      [profile.key, profile.id, data: { edsn: profile.is_edsn? }]
     end
 
     options_for_select(load_profiles)
@@ -44,7 +44,7 @@ module TestingGroundsHelper
 
   def options_for_load_profiles
     load_profiles = LoadProfile.all.map do |load_profile|
-      load_profile.key
+      [load_profile.key, load_profile.id]
     end
 
     options_for_select(load_profiles)
