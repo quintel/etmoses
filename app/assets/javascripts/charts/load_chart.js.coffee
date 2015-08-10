@@ -7,12 +7,11 @@ class LoadChart
   constructor: (@data, @capacity) ->
     # pass
 
-  sampledData: (loads) ->
-    if LoadChartHelper.currentWeek && LoadChartHelper.currentWeek != 0
+  sampledData: (loads, week) ->
+    if week != 0
       chunkSize = Math.floor(loads.length / 52)
-      zeroWeek  = LoadChartHelper.currentWeek - 1
 
-      startAt = zeroWeek * chunkSize
+      startAt = (week - 1) * chunkSize
       endAt   = startAt + chunkSize
 
       window.downsampleCurve(loads.slice(startAt, endAt), chunkSize, startAt)
@@ -22,13 +21,15 @@ class LoadChart
   render: (intoSelector, week = 0) =>
     @intoSelector = intoSelector
     @renderChart(intoSelector, week)
-    @drawDateSelect(intoSelector)
+
+    if week > 0
+      @drawDateSelect(intoSelector)
 
   renderChart: (intoSelector, week) ->
     self = this
 
     data = for datum, index in @data
-      { key: datum.name, values: @sampledData(datum.values), area: datum.area, color: datum.color}
+      { key: datum.name, values: @sampledData(datum.values, week), raw: datum.values, area: datum.area, color: datum.color }
 
     $(intoSelector).empty()
 
@@ -88,7 +89,6 @@ class LoadChart
     msInWeek = 604800000
 
     dateEl = $('<select name="date-select" class="form-control" style="max-width: 300px"></select>')
-    dateEl.append($('<option value="0">Whole year</option>'))
 
     for week in [0...52]
       startWeek = new Date(epoch.getDate() + (msInWeek * week))
@@ -111,7 +111,7 @@ class LoadChart
       $("select[name=date-select]").val(value)
       @renderChart(intoSelector, value)
 
-    $(intoSelector).after(dateEl)
+    $(intoSelector).parent().find("h2").append(dateEl)
 
     if LoadChartHelper.currentWeek
       $("select[name=date-select]").val(LoadChartHelper.currentWeek)
@@ -153,8 +153,9 @@ class LoadChart
 
     chart.brush.on('brushend', @setGlobalBrushFocus)
 
-    LoadChartHelper.charts[@loadChartLocation() - 1] = chart
-    LoadChartHelper.updateBrush(@loadChartLocation())
+    if /week/.test(@intoSelector)
+      LoadChartHelper.charts[@loadChartLocation() - 1] = chart
+      LoadChartHelper.updateBrush(@loadChartLocation())
 
     $("g.tick.zero text").text("0.00")
 
