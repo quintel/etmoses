@@ -46,12 +46,19 @@ RSpec.describe Network do
     context 'with a named foundation' do
       let(:relation) { market.node('Stakeholder 1').out_edges.first }
 
+      let(:measurable) do
+        Network::Node.new(:fake).tap do |measurable|
+          allow(measurable).to receive(:energy_at).and_return(4.0)
+        end
+      end
+
       before do
         data[:relations].first[:foundation] = :kwh
+        data[:measurables] = { 'Stakeholder 2' => [measurable] }
       end
 
       it 'sets the foundation' do
-        expect(relation.price).to be_zero
+        expect(relation.price).to eq(8.0)
       end
     end # with a named foundation
 

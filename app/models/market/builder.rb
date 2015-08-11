@@ -39,6 +39,8 @@ module Market
         build_relation!(relation_data)
       end
 
+      set_measurables!
+
       @market
     end
 
@@ -61,6 +63,15 @@ module Market
         to, relation[:name] || relation[:foundation],
         rule: Market::PaymentRule.new(
           foundation_from(relation), tariff_from(relation[:tariff])))
+    end
+
+    # Internal: Sets the market nodes which are measured by the relation.
+    def set_measurables!
+      return unless @data[:measurables]
+
+      @data[:measurables].each do |key, measurables|
+        @market.node(key) && @market.node(key).set(:measurables, measurables)
+      end
     end
 
     # Internal: Given data about a relation, determines the foundation object
