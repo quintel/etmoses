@@ -39,8 +39,8 @@ module Network
       "#{ @technology.to_s } | {#{ @path.map(&:key).join(', ') }}"
     end
 
-    def congested_at?(frame)
-      @path.congested_at?(frame)
+    def congested_at?(frame, correction = 0)
+      @path.congested_at?(frame, correction)
     end
 
     def production_exceedance_at(frame)
@@ -52,6 +52,9 @@ module Network
     #
     # Returns nothing.
     def consume(frame, amount, conditional = false)
+      # Don't assign remnants of floating point errors.
+      amount = 0.0 if amount < 1e-10
+
       # Some technologies need to be explicitly told that they received no
       # (conditional) consumption.
       return if amount.zero? && ! @technology.respond_to?(:store)

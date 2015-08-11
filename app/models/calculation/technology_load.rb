@@ -10,17 +10,24 @@ module Calculation
 
     def run
       @context.technology_nodes.each do |node|
-        node.set(:techs, suitable_technologies(node).map do |tech|
-          Network::Technologies.from_installed(
-            tech, profile_for(tech), @context.options
-          )
-        end)
+        node.set(:techs, techs_for(node).flatten)
       end
 
       @context
     end
 
     private
+
+    def techs_for(node)
+      suitable_technologies(node).map do |tech|
+        tech.profile_curve.each_pair.map do |curve_type, curve|
+          Network::Technologies.from_installed(
+            tech, profile_for(tech, curve),
+            @context.options.merge(curve_type: curve_type)
+          )
+        end
+      end
+    end
 
     # Internal: Given a node, returns an array of technologies which may be used
     # to determine the load on the node to which they belong.
@@ -37,14 +44,12 @@ module Calculation
     # to describe its load.
     #
     # Returns an Array or Network::Curve.
-    def profile_for(technology)
-      if technology.profile.present?
-        technology.profile_curve
-      else
-        # If the technology does not use a profile, but has a load or
-        # capacity, we assume its load is constant throughout the year.
-        self.class.constant_profile(technology, @context.length)
-      end
+    def profile_for(technology, curve = nil)
+      return curve if curve.present?
+
+      # If the technology does not use a profile, but has a load or
+      # capacity, we assume its load is constant throughout the year.
+      self.class.constant_profile(technology, @context.length)
     end
 
     # Public: Given an installed technology and a length, creates a profile

@@ -1,7 +1,13 @@
 class Technology < ActiveRecord::Base
+  BEHAVIORS = %w(
+    generic storage electric_vehicle siphon optional_buffer
+    buffer deferrable conserving optional base_load base_load_buildings
+  ).freeze
+
   has_many :importable_attributes, dependent: :delete_all
   has_many :technology_profiles, foreign_key: "technology", primary_key: "key"
   has_many :load_profiles, through: :technology_profiles
+  has_many :component_behaviors, class_name: 'TechnologyComponentBehavior'
 
   validates :key,
     presence: true,
@@ -11,11 +17,7 @@ class Technology < ActiveRecord::Base
   validates :name,
     length: { maximum: 100 }
 
-  validates :behavior,
-    inclusion: {
-      in: %w( storage electric_vehicle siphon optional_buffer
-              buffer deferrable conserving ),
-      allow_nil: true }
+  validates :behavior, inclusion: { in: BEHAVIORS, allow_nil: true }
 
   validates :export_to,
     length: { maximum: 100 }

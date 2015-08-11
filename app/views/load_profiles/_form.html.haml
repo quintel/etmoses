@@ -31,13 +31,16 @@
     .help-block This field is optional.
 
   - unless @profile.locked?
+    .curve_types.hidden
+      = LoadProfileComponent::CURVE_TYPES.to_json
+
     .form-group
       = form.label :curve
       = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
       .profile-curve-wrapper
         = form.fields_for :load_profile_components do |load_profile_component|
-          .profile-curve-file-field
-            - curve_type = LoadProfileComponent::CURVE_TYPES[load_profile_component.index]
+          - curve_type = load_profile_component.object.curve_type
+          .profile-curve-file-field{class: curve_type }
             = load_profile_component.file_field :curve, accept: 'text/csv', class: 'load-curve', data: { button_name: "Choose file for #{curve_type} profile" }
             = load_profile_component.hidden_field :curve_type, value: curve_type
 

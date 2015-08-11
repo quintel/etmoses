@@ -78,14 +78,40 @@ Technology.create!(
   behavior:    'optional_buffer'
 )
 
-Technology.create!(
+base_load = Technology.create!(
   key:         'base_load',
-  name:        'Household'
+  name:        'Household',
+  behavior:    'base_load'
 )
 
-Technology.create!(
+TechnologyComponentBehavior.create!(
+  technology:  base_load,
+  curve_type: 'flex',
+  behavior:   'deferrable'
+)
+
+TechnologyComponentBehavior.create!(
+  technology:  base_load,
+  curve_type: 'inflex',
+  behavior:   'generic'
+)
+
+base_load_buildings = Technology.create!(
   key:         'base_load_buildings',
   name:        'Buildings',
+  behavior:    'base_load_buildings'
+)
+
+TechnologyComponentBehavior.create!(
+  technology:  base_load_buildings,
+  curve_type: 'flex',
+  behavior:   'optional'
+)
+
+TechnologyComponentBehavior.create!(
+  technology:  base_load_buildings,
+  curve_type: 'inflex',
+  behavior:   'generic'
 )
 
 Technology.create!(

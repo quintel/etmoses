@@ -39,7 +39,7 @@ module Calculation
     def length
       @length ||= technology_nodes.map { |n| n.get(:installed_techs) }.flatten
         .map do |tech|
-          tech.profile.present? ? tech.profile_curve.length : 1
+          tech.profile.present? ? tech.profile_curve.first.last.length : 1
         end.max || 1
     end
 

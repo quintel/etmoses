@@ -38,6 +38,14 @@ module Network
         true
       end
 
+      def capacity
+        # FIXME: Defaulting to infinity is something of a hack to support
+        # postponable base-loads. It ought to be the responsibility of the
+        # InstalledTechnology to define this. This should be changed when
+        # extracting Network/Markets into a separate gem.
+        super.zero? ? Float::INFINITY : super
+      end
+
       # Public: The amount of energy which must be satisfied in the given frame.
       # Deferred loads become mandatory upon reaching their expiry date, or the
       # final frame of the calculation: whichever occurs first.
