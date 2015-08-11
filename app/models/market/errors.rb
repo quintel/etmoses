@@ -35,4 +35,9 @@ module Market
   InvalidTariffError = error_class do |tariff|
     "Invalid tariff: #{ tariff.inspect }"
   end
+
+  NoLoadError = error_class do |node|
+    "Tried to fetch load on #{ node.key }, but none is set. Has the network " \
+    "been calculated?"
+  end
 end

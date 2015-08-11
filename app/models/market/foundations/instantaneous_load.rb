@@ -1,3 +1,5 @@
 module Market::Foundations
-  InstantaneousLoad = -> node { node.load }
+  InstantaneousLoad = lambda do |node|
+    node.load.blank? ? fail(Market::NoLoadError, node) : node.load
+  end
 end

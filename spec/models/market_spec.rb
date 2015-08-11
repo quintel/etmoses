@@ -49,6 +49,7 @@ RSpec.describe Network do
       let(:measurable) do
         Network::Node.new(:fake).tap do |measurable|
           allow(measurable).to receive(:energy_at).and_return(4.0)
+          allow(measurable).to receive(:load).and_return([4.0])
         end
       end
 
