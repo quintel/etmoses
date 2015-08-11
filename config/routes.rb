@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get  'export', 'technology_profile', 'finance'
+      get  'export', 'technology_profile', 'finance', 'compare'
       post 'data'
       post 'export', to: :perform_export
       post 'save_as'

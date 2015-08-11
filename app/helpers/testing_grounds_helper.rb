@@ -82,6 +82,14 @@ module TestingGroundsHelper
     options_for_select options.uniq
   end
 
+  def options_for_testing_grounds
+    options = policy_scope(TestingGround).order(:name).map do |testing_ground|
+      [testing_ground.name, testing_ground.id]
+    end
+
+    options_for_select options
+  end
+
   def default_strategies
     Hash[Strategies.all.map{|s| [s[:ajax_prop], false] }].symbolize_keys
   end

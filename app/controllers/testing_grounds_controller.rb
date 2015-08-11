@@ -1,5 +1,5 @@
 class TestingGroundsController < ResourceController
-  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as finance)
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as finance compare)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -121,6 +121,9 @@ class TestingGroundsController < ResourceController
 
   def finance
     @business_case = Finance::BusinessCaseCalculator.new(@testing_ground)
+  end
+
+  def compare
   end
 
   private
