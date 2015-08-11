@@ -125,6 +125,6 @@ class InstalledTechnology
   end
 
   def profile_components
-    @profile_components ||= LoadProfile.by_key(profile).load_profile_components
+    @profile_components ||= LoadProfile.find_by_id(profile).load_profile_components
   end
 end # end
