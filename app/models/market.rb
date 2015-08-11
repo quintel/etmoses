@@ -9,6 +9,9 @@ module Market
   # Expects a hash in the form:
   #
   #   {
+  #     measurables: {
+  #       'Stakeholder 2' => [Network::Node, Network::Node, ...]
+  #     },
   #     relations: {
   #       {
   #         name: :kwh, # Optional
@@ -21,8 +24,36 @@ module Market
   #   }
   #
   # Returns a Market::Graph.
-  def self.build(data)#, network)
-    fail Error, "Invalid data: #{ data.inspect }" if data.blank?
+  def self.build(data)
     Market::Builder.new(data).to_market
+  end
+
+  # Public: Like +build+, creates a new Market graph, but does so based on a
+  # given MarketModel record and calculated network graph.
+  #
+  # For example:
+  #
+  #   market = Market.from_market_model(
+  #     MarketModel.last,
+  #     TestingGround.last.to_calculated_graph
+  #   )
+  #
+  #   # Show the price of each relation.
+  #   market.relations.each do |relation|
+  #     puts [relation, relation.price]
+  #   end
+  #
+  #   # Relations contain information about who is paying whom, and the
+  #   # foundation used.
+  #   relation = market.relations.first
+  #
+  #   relation.from.key  # The payer.
+  #   relation.to.key    # The payee.
+  #   relation.label     # The name of the tariff.
+  #   relation.price     # The price to be paid.
+  #
+  # Returns a Market::Graph
+  def self.from_market_model(model, les)
+    Market::FromMarketModelBuilder.new(model, les).to_market
   end
 end # Market

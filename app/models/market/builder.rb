@@ -36,6 +36,8 @@ module Market
     # Public: Creates a builder, which converts a "set-up hash" into a market
     # model.
     def initialize(data)
+      fail Error, "Invalid data: #{ data.inspect }" if data.blank?
+
       @market = Graph.new
       @data   = data
     end

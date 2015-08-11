@@ -31,14 +31,15 @@ FactoryGirl.define do
     name "Topology stakeholders"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
-      name: :hv
+      name: hv
+      stakeholder: system operator
       children:
-      - name: :mv
+      - name: mv
         children:
-        - name: :lv1
+        - name: lv1
           stakeholder: customer
-        - name: :lv2
-          stakeholder: system operator
+        - name: lv2
+          stakeholder: customer
     YML
   end
 end
