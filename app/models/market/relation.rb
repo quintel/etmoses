@@ -18,12 +18,11 @@ module Market
         .get(:measurables).uniq.to_a
     end
 
-    # Public: Determines the price of the relation. Provide the frames to be
-    # calculated.
+    # Public: Determines the price of the relation.
     #
     # Returns a numeric.
-    def price(frames = nil)
-      get(:rule).call(self, frames)
+    def price
+      get(:rule).call(self)
     end
   end
 end
