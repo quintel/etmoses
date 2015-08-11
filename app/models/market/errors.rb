@@ -28,11 +28,11 @@ module Market
     Class.new(superclass) { define_method(:make_message, &block) }
   end
 
-  NoSuchStakeholderError = error_class do |key|
-    "No such stakeholder: #{ key.inspect }"
-  end
-
   NoSuchFoundationError = error_class do |name|
     "No such foundation: #{ name.inspect }"
+  end
+
+  InvalidTariffError = error_class do |tariff|
+    "Invalid tariff: #{ tariff.inspect }"
   end
 end

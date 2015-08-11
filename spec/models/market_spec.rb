@@ -4,12 +4,9 @@ RSpec.describe Network do
   describe '.build' do
     let(:data) do
       {
-        stakeholders: [
-          { name: 'Stakeholder 1' },
-          { name: 'Stakeholder 2' }
-        ],
         relations: [
-          { from: 'Stakeholder 1', to: 'Stakeholder 2', foundation: ->{} }
+          { from: 'Stakeholder 1', to: 'Stakeholder 2',
+            foundation: ->{ 2 }, tariff: 2 }
         ]
       }
     end
@@ -39,28 +36,24 @@ RSpec.describe Network do
         it 'exists' do
           expect(relation.to.key).to eq('Stakeholder 2')
         end
+
+        it 'sets the foundation' do
+          expect(relation.price).to be_zero
+        end
       end # the relation
     end # with a simple two-node market
 
-    context 'where the :from end of a relation does not exist' do
+    context 'with a named foundation' do
+      let(:relation) { market.node('Stakeholder 1').out_edges.first }
+
       before do
-        data[:relations].first[:from] = '_invalid_'
+        data[:relations].first[:foundation] = :kwh
       end
 
-      it 'raises an error' do
-        expect { market }.to raise_error(Market::NoSuchStakeholderError)
+      it 'sets the foundation' do
+        expect(relation.price).to be_zero
       end
-    end # where the :from end of a relation does not exist
-
-    context 'where the :to end of a relation does not exist' do
-      before do
-        data[:relations].first[:to] = '_invalid_'
-      end
-
-      it 'raises an error' do
-        expect { market }.to raise_error(Market::NoSuchStakeholderError)
-      end
-    end # where the :to end of a relation does not exist
+    end # with a named foundation
 
     context 'with nil' do
       let(:data) { nil }
@@ -77,5 +70,15 @@ RSpec.describe Network do
         expect { market }.to raise_error(/invalid data: {}/i)
       end
     end # with no data
-  end # with a simple two-node market
+
+    context 'with no tariff' do
+      before do
+        data[:relations].first.delete(:tariff)
+      end
+
+      it 'raises an error' do
+        expect { market }.to raise_error(/invalid tariff: nil/i)
+      end
+    end
+  end # with no tariff
 end
