@@ -26,4 +26,19 @@ FactoryGirl.define do
         - name: :lv4
     YML
   end
+
+  factory :topology_with_stakeholders, class: Topology do
+    name "Topology stakeholders"
+    graph { YAML.load(<<-YML.strip_heredoc) }
+      ---
+      name: :hv
+      children:
+      - name: :mv
+        children:
+        - name: :lv1
+          stakeholder: customer
+        - name: :lv2
+          stakeholder: system operator
+    YML
+  end
 end

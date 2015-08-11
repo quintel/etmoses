@@ -1,0 +1,30 @@
+%h2= "Business case for #{@testing_ground.name}"
+
+%table.table.finance-table
+  %thead
+    %tr
+      %th
+      - @business_case.headers.each do |header|
+        %th= header.titleize
+      %th Total incoming
+
+  %tfoot
+    %tr
+      %td Total outgoing
+      - @business_case.headers.each do |total_cell|
+        %td.total
+      %td.subtotal
+
+  %tbody
+    - @business_case.rows.each do |row|
+      %tr
+        - row.each_pair do |column_header, row_values|
+          %td
+            %strong= column_header.titleize
+          - row_values.each do |row_value|
+            %td.row_value
+              - if row_value.is_a?(Hash)
+                %span{data: { value: row_value["tariff"] } }
+                  = number_to_currency(row_value["tariff"], unit: '€')
+
+          %td.incoming_total
