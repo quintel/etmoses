@@ -32,7 +32,7 @@ RSpec.describe Calculation::Context do
 
     before do
       tg.technology_profile = { 'lv1' => [{
-        'name' => 'Tech One', 'profile' => profile.key
+        'name' => 'Tech One', 'profile' => profile.id
       }]}
     end
 

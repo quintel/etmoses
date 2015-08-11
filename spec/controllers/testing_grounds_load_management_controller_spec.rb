@@ -21,22 +21,23 @@ RSpec.describe TestingGroundsController do
   # Testing of the buffering of local PV excess in heat pumps
   #
   describe "testing of buffering of local pv excess in heat pumps" do
+    let(:solar_load_profile){ FactoryGirl.create(:load_profile, key: 'solar_pv_test') }
+    let(:heat_pump_load_profile){
+      FactoryGirl.create(:load_profile, key: 'heat_pump_test')
+    }
+
     let!(:load_profiles){
       curves = [
         Network::Curve.new([-1.5, -1.5, -1.5, -1.5, 0,    0]),
         Network::Curve.new([   0,    0,    0,    0, 10.0, 0])
-        #Network::Curve.new([-0.1, -0.1, -1.0, -1.5, -1.5, -1.5, -1.0, -0.1, -0.1, -0.1]),
-        #Network::Curve.new([0, 0, 0, 10.0, 10.0, 10.0, 10.0, 10.0, 0, 0])
       ]
 
       allow_any_instance_of(Calculation::TechnologyLoad).to receive(:profile_for)
         .and_return(*curves)
 
-      solar_load_profile = FactoryGirl.create(:load_profile, key: 'solar_pv_test')
       FactoryGirl.create(:load_profile_component,
                          curve_type: 'default', load_profile: solar_load_profile)
 
-      heat_pump_load_profile = FactoryGirl.create(:load_profile, key: 'heat_pump_test')
       FactoryGirl.create(:load_profile_component,
                          curve_type: 'default', load_profile: heat_pump_load_profile)
 
@@ -48,7 +49,7 @@ RSpec.describe TestingGroundsController do
           "name"        => "Solar PV",
           "type"        => "households_solar_pv_solar_radiation",
           "behavior"    => nil,
-          "profile"     => "solar_pv_test",
+          "profile"     => solar_load_profile.id,
           "load"        => nil,
           "capacity"    => -1.5,
           "demand"      => nil,
@@ -60,7 +61,7 @@ RSpec.describe TestingGroundsController do
           "name"        => "Heat pump",
           "type"        => "households_space_heater_heatpump_air_water_electricity",
           "behavior"    => nil,
-          "profile"     => "heat_pump_test",
+          "profile"     => heat_pump_load_profile.id,
           "load"        => nil,
           "capacity"    => 3.0,
           "demand"      => nil,
@@ -95,8 +96,10 @@ RSpec.describe TestingGroundsController do
   # Testing of the postponing of base load
   #
   describe "applying postponing of base load" do
+    let(:load_profile){
+      FactoryGirl.create(:load_profile, key: 'edsn_inflex_and_flex_parts')
+    }
     let!(:load_profiles){
-      load_profile = FactoryGirl.create(:load_profile, key: 'edsn_inflex_and_flex_parts')
       FactoryGirl.create(:load_profile_component, curve_type: 'flex', load_profile: load_profile)
       FactoryGirl.create(:load_profile_component, curve_type: 'inflex', load_profile: load_profile)
 
@@ -113,7 +116,7 @@ RSpec.describe TestingGroundsController do
           "name"        => "Buildings",
           "type"        => "base_load",
           "behavior"    => nil,
-          "profile"     => "edsn_inflex_and_flex_parts",
+          "profile"     => load_profile.id,
           "load"        => nil,
           "capacity"    => nil,
           "demand"      => 2,
@@ -199,8 +202,10 @@ RSpec.describe TestingGroundsController do
   # - Using one congested node in the topology
   #
   describe "applying saving of base load strategy" do
+    let(:load_profile){
+      FactoryGirl.create(:load_profile, key: 'edsn_inflex_and_flex_parts')
+    }
     let!(:load_profiles){
-      load_profile = FactoryGirl.create(:load_profile, key: 'edsn_inflex_and_flex_parts')
       FactoryGirl.create(:load_profile_component, curve_type: 'flex', load_profile: load_profile)
       FactoryGirl.create(:load_profile_component, curve_type: 'inflex', load_profile: load_profile)
 
@@ -217,7 +222,7 @@ RSpec.describe TestingGroundsController do
           "name"        => "Buildings",
           "type"        => "base_load_buildings",
           "behavior"    => nil,
-          "profile"     => "edsn_inflex_and_flex_parts",
+          "profile"     => load_profile.id,
           "load"        => nil,
           "capacity"    => nil,
           "demand"      => 2,

@@ -6,7 +6,7 @@ module TechnologyProfiles
 
     def query
       Hash[permits.group_by(&:technology).map do |tech_key, techs|
-        [tech_key, techs.map { |tech| tech.load_profile.key }]
+        [tech_key, techs.map { |tech| tech.load_profile_id }]
       end]
     end
 
