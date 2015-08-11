@@ -22,7 +22,15 @@ module Market
   #   }
   class Builder
     FOUNDATIONS = {
-      kwh: ->(node, frame) { node.energy_at(frame) }
+      connections:    Foundations::NumberOfConnections,
+      flex_potential: Foundations::FlexibilityPotential,
+      flex_realised:  Foundations::FlexibilityRealised,
+      load:           Foundations::InstantaneousLoad,
+      kw_contracted:  ->(*) { 0.0 },
+      kw_max:         Foundations::KwMax.new,
+      kwh:            Foundations::Kwh.new,
+      kwh_consumed:   Foundations::KwhConsumed,
+      kwh_produced:   Foundations::KwhProduced
     }.freeze
 
     # Public: Creates a builder, which converts a "set-up hash" into a market
