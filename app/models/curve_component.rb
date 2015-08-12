@@ -1,4 +1,6 @@
 module CurveComponent
+  VALID_CSV_TYPES = ["text/csv", "text/plain", "application/octet-stream"]
+
   def as_json(*)
     super.merge('values' => network_curve.to_a)
   end
