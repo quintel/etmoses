@@ -17,18 +17,25 @@ module Finance
 
     private
 
-      def cells(column_header)
-        headers.map do |stakeholder|
-          row(column_header, stakeholder)
-        end
+    def cells(column_header)
+      headers.map do |stakeholder|
+        row(column_header, stakeholder)
+      end
+    end
+
+    def row(header, stakeholder)
+      rels = market.relations.select do |rel|
+        rel.from.key == stakeholder && rel.to.key == header
       end
 
-      def row(header, stakeholder)
-        return unless header == stakeholder
+      rels.any? ? rels.sum(&:price) : nil
+    end
 
-        @testing_ground.market_model.interactions.detect do |interaction|
-          interaction['stakeholder_from'] == stakeholder
-        end
-      end
+    def market
+      @market ||= Market.from_market_model(
+        @testing_ground.market_model,
+        @testing_ground.to_calculated_graph
+      )
+    end
   end
 end

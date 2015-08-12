@@ -21,25 +21,12 @@ RSpec.describe Finance::BusinessCaseCalculator do
     expect(business_case.headers).to eq(Stakeholder.all.sort);
   end
 
-  it "determines the row of the business case" do
-    expect(business_case.send(:row, "customer", "customer")).to eq({
-      "stakeholder_from"=>"customer",
-      "stakeholder_to"=>"customer",
-      "foundation"=>"kW_max",
-      "tariff"=>"0.5"
-    })
+  it "determines the value of the business case" do
+    expect(business_case.send(:row, "customer", "customer")).to eq(0.0)
   end
 
   it "determines the rows of the business case" do
     expect(business_case).to receive(:headers).twice.and_return(["customer"])
-
-    expect(business_case.rows).to eq([{
-      "customer"=>[{
-        "stakeholder_from"=>"customer",
-        "stakeholder_to"=>"customer",
-        "foundation"=>"kW_max",
-        "tariff"=>"0.5"}
-      ]}
-    ])
+    expect(business_case.rows).to eq([{ "customer" => [0.0] }])
   end
 end
