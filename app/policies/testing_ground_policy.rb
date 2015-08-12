@@ -11,8 +11,6 @@ class TestingGroundPolicy < ApplicationPolicy
 
   alias_method :data?, :show?
   alias_method :technology_profile?, :show?
-  alias_method :finance?, :show?
-  alias_method :compare?, :show?
   alias_method :import?, :new?
   alias_method :perform_import?, :import?
   alias_method :perform_export?, :export?

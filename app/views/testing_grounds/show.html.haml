@@ -1,10 +1,4 @@
 %h1
-  - if can_export?(@testing_ground)
-    = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
-
-  - if policy(@testing_ground).edit?
-    = link_to "Edit", edit_testing_ground_path(@testing_ground), style: "margin-right: 10px", class: "btn btn-default pull-right"
-
   = "Local Energy Solution (LES) ##{ @testing_ground.id }:"
   = @testing_ground.name
 
@@ -15,6 +9,10 @@
   Created by #{@testing_ground.user.name} on
   %span.date{title: "last updated on #{@testing_ground.updated_at.to_formatted_s(:long)}"}
     = @testing_ground.created_at.to_formatted_s(:long)
+
+  - if policy(@testing_ground).edit?
+    %span.sep
+      = link_to "Edit", edit_testing_ground_path(@testing_ground)
 
   - if @testing_ground.parent_scenario_id
     %span.sep
@@ -30,8 +28,12 @@
       = truncate(@testing_ground.topology.name, length: 25)
   .clearfix
 
-- if policy(@testing_ground).edit?
-  = link_to "Create business case", testing_ground_business_cases_path(@testing_ground), method: :post, style: "margin-right: 11px", class: "btn btn-primary"
+.btn-group.les{role: 'group'}
+  - if policy(@testing_ground).edit?
+    = link_to "Create business case", testing_ground_business_cases_path(@testing_ground), method: :post, class: "btn btn-primary"
+
+  - if can_export?(@testing_ground)
+    = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary'
 
 #testing-ground
   .strategies.hidden

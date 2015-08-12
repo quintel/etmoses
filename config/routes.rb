@@ -16,7 +16,11 @@ Rails.application.routes.draw do
       post 'save_as'
     end
 
-    resources :business_cases, only: [:create, :show, :update, :edit]
+    resources :business_cases, only: [:create, :show, :update, :edit] do
+      member do
+        post 'compare_with'
+      end
+    end
   end
 
   resources :price_curves, as: :price_curve

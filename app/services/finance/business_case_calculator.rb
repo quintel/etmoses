@@ -1,7 +1,7 @@
 module Finance
   class BusinessCaseCalculator
-    def initialize(business_case)
-      @business_case = business_case
+    def initialize(testing_ground)
+      @testing_ground = testing_ground
     end
 
     def rows
