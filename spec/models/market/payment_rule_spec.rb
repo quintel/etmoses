@@ -9,8 +9,8 @@ module Market
       retailer = market.add(Stakeholder.new(:retailer))
       producer = market.add(Stakeholder.new(:producer))
 
-      producer.connect_to(retailer)
-      retailer.connect_to(customer)
+      customer.connect_to(retailer)
+      retailer.connect_to(producer)
 
       market
     end
@@ -20,7 +20,7 @@ module Market
       let(:rule) { PaymentRule.new(->(m) { m }, Tariff.new(2.0)) }
 
       context 'applied to a node one edge from the measurable' do
-        let(:relation) { market.node(:retailer).out_edges.first }
+        let(:relation) { market.node(:retailer).in_edges.first }
 
         it 'has a price of 2.0' do
           expect(rule.call(relation)).to eq(2.0)
@@ -28,7 +28,7 @@ module Market
       end
 
       context 'applied to a node two edges from the measurable' do
-        let(:relation) { market.node(:producer).out_edges.first }
+        let(:relation) { market.node(:producer).in_edges.first }
 
         it 'has a price of 2.0' do
           expect(rule.call(relation)).to eq(2.0)
@@ -41,7 +41,7 @@ module Market
       let(:rule) { PaymentRule.new(->(m) { [m, m * 2] }, Tariff.new(2.0)) }
 
       context 'applied to a node one edge from the measurable' do
-        let(:relation) { market.node(:retailer).out_edges.first }
+        let(:relation) { market.node(:retailer).in_edges.first }
 
         it 'prices each value' do
           expect(rule.call(relation)).to eq(6.0)
@@ -49,7 +49,7 @@ module Market
       end
 
       context 'applied to a node two edges from the measurable' do
-        let(:relation) { market.node(:producer).out_edges.first }
+        let(:relation) { market.node(:producer).in_edges.first }
 
         it 'prices each value' do
           expect(rule.call(relation)).to eq(6.0)
@@ -61,7 +61,7 @@ module Market
       context 'and a measurable of [1.0, 2.0, 3.0] and tariff of 2.0' do
         let(:measure)  { PerUnitMeasure.new(->(m) { m }, ->(d) { 4 }) }
         let(:rule)     { PaymentRule.new(measure, Tariff.new(2.0)) }
-        let(:relation) { market.node(:retailer).out_edges.first }
+        let(:relation) { market.node(:retailer).in_edges.first }
 
         before { market.node(:customer).set(:measurables, [1.0, 2.0, 3.0]) }
 
@@ -77,7 +77,7 @@ module Market
     context 'with variants' do
       before { market.node(:customer).set(:measurables, [1.0]) }
       let(:rule) { PaymentRule.new(measure, Tariff.new(2.0)) }
-      let(:relation) { market.node(:retailer).out_edges.first }
+      let(:relation) { market.node(:retailer).in_edges.first }
       let(:variants) { { other: ->*{ ->{ 4.0 } } } }
 
       context 'and a measure with arity=1' do

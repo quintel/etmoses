@@ -55,7 +55,7 @@ RSpec.describe Network do
 
       before do
         data[:relations].first[:measure] = :kwh
-        data[:measurables] = { 'Stakeholder 2' => [measurable] }
+        data[:measurables] = { 'Stakeholder 1' => [measurable] }
       end
 
       it 'sets the measure' do

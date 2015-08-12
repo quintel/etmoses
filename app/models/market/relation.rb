@@ -13,8 +13,8 @@ module Market
     #
     # Returns an array of Network::Node instances.
     def measurables
-      @measurables ||= from.descendants
-        .select { |n| n.out_edges.none? }
+      @measurables ||= to.ancestors(label)
+        .select { |n| n.in_edges.none? }
         .get(:measurables).uniq.to_a
     end
 
