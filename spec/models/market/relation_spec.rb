@@ -12,7 +12,7 @@ RSpec.describe Market::Relation do
           {
             from: 'Stakeholder 1',
             to:   'Stakeholder 2',
-            foundation: -> v { v * 2 },
+            measure: -> v { v * 2 },
             tariff: 2.0
           }
         ]

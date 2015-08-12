@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-module Market::Foundations
+module Market::Measures
   RSpec.describe NumberOfConnections do
     let(:node) { Network::Node.new(:thing) }
 
@@ -60,4 +60,4 @@ module Market::Foundations
       end
     end # with one base_load_buildings technology
   end # NumberOfConnections
-end # Market::Foundations
+end # Market::Measures

@@ -1,14 +1,14 @@
 module Market
-  # A wrapper around a foundation which will divide the value computed by the
-  # foundation by a "number of units".
-  class PerUnitFoundation
-    # Public: Creates a new PerUnitFoundation.
+  # A wrapper around a measure which will divide the value computed by the
+  # measure by a "number of units".
+  class PerUnitMeasure
+    # Public: Creates a new PerUnitMeasure.
     #
-    # base     - The normal foundation which pays no respect to number of units.
+    # base     - The normal measure which pays no respect to number of units.
     # to_units - A proc which, given each measurable, determines how many units
     #            there are.
     #
-    # Returns a per-unit foundation.
+    # Returns a per-unit measure.
     def initialize(base, to_units)
       @base = base
       @to_units = to_units
@@ -29,5 +29,5 @@ module Market
     def units(measurable)
       @to_units.call(measurable)
     end
-  end # PerUnitFoundation
-end # Market
+  end
+end

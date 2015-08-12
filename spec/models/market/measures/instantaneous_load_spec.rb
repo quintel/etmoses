@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-module Market::Foundations
+module Market::Measures
   RSpec.describe InstantaneousLoad do
     let(:node) { Network::Node.new(:thing, load: [1, 2, 3, 9, 8, 7]) }
 

@@ -30,7 +30,7 @@ module Market
       end
     end
 
-    # Public: Given a number of units, returned by a foundation, determines the
+    # Public: Given a number of units, returned by a measure, determines the
     # approprite price.
     #
     # Returns a numeric.

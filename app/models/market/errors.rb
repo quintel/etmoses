@@ -28,8 +28,8 @@ module Market
     Class.new(superclass) { define_method(:make_message, &block) }
   end
 
-  NoSuchFoundationError = error_class do |name|
-    "No such foundation: #{ name.inspect }"
+  NoSuchMeasureError = error_class do |name|
+    "No such measure: #{ name.inspect }"
   end
 
   InvalidTariffError = error_class do |tariff|

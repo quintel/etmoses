@@ -1,4 +1,4 @@
-module Market::Foundations
+module Market::Measures
   # The average flexibility of the measurable throughout the year.
   FlexibilityPotential = lambda do |node, variants|
     flexes = Flexibility.new.call(node, variants)

@@ -1,4 +1,4 @@
-module Market::Foundations
+module Market::Measures
   # Given a node, determines the number of discrete connections present in the
   # node.
   module NumberOfConnections
@@ -13,5 +13,5 @@ module Market::Foundations
         end
       end
     end
-  end # NumberOfConnections
-end # Market::Foundations
+  end
+end

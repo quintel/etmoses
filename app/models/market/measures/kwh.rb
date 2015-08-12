@@ -1,4 +1,4 @@
-module Market::Foundations
+module Market::Measures
   # A sum of net consumption and production. Provide an optional "filter" block
   # which may alter each "energy" value as necessary.
   class Kwh
@@ -12,4 +12,4 @@ module Market::Foundations
       end
     end
   end
-end # Market::Foundations
+end

@@ -15,22 +15,22 @@ module Market
   #         name: :kwh, # Optional
   #         from: 'Stakeholder 1',
   #         to: 'Stakeholder 2',
-  #         foundation: :kwh,
+  #         measure: :kwh,
   #         tariff: 10.0
   #       }
   #     }
   #   }
   class Builder
-    FOUNDATIONS = {
-      connections:    Foundations::NumberOfConnections,
-      flex_potential: Foundations::FlexibilityPotential,
-      flex_realised:  Foundations::FlexibilityRealised,
-      load:           Foundations::InstantaneousLoad,
+    MEASURES = {
+      connections:    Measures::NumberOfConnections,
+      flex_potential: Measures::FlexibilityPotential,
+      flex_realised:  Measures::FlexibilityRealised,
+      load:           Measures::InstantaneousLoad,
       kw_contracted:  ->(*) { 0.0 },
-      kw_max:         Foundations::KwMax.new,
-      kwh:            Foundations::Kwh.new,
-      kwh_consumed:   Foundations::KwhConsumed,
-      kwh_produced:   Foundations::KwhProduced
+      kw_max:         Measures::KwMax.new,
+      kwh:            Measures::Kwh.new,
+      kwh_consumed:   Measures::KwhConsumed,
+      kwh_produced:   Measures::KwhProduced
     }.freeze
 
     # Public: Creates a builder, which converts a "set-up hash" into a market
@@ -70,9 +70,9 @@ module Market
       to   = stakeholder(relation[:to])
 
       from.connect_to(
-        to, relation[:name] || relation[:foundation],
+        to, relation[:name] || relation[:measure],
         rule: Market::PaymentRule.new(
-          foundation_from(relation), tariff_from(relation[:tariff])))
+          measure_from(relation), tariff_from(relation[:tariff])))
     end
 
     # Internal: Sets the market nodes which are measured by the relation.
@@ -84,19 +84,19 @@ module Market
       end
     end
 
-    # Internal: Given data about a relation, determines the foundation object
-    # to be used to compute the price.
-    def foundation_from(relation)
-      foundation =
-        if relation[:foundation].respond_to?(:call)
-          relation[:foundation]
+    # Internal: Given data about a relation, determines the measure object to be
+    # used to compute the price.
+    def measure_from(relation)
+      measure =
+        if relation[:measure].respond_to?(:call)
+          relation[:measure]
         else
-          FOUNDATIONS[relation[:foundation]]
+          MEASURES[relation[:measure]]
         end
 
-      fail NoSuchFoundationError, relation[:foundation] unless foundation
+      fail NoSuchMeasureError, relation[:measure] unless measure
 
-      foundation
+      measure
     end
 
     # Internal: Creates the Tariff object to be used in a payment rule.

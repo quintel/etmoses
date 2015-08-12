@@ -16,10 +16,10 @@ module Market
     def relations_from_model(model)
       model.interactions.map do |inter|
         {
-          from:       inter['stakeholder_from'],
-          to:         inter['stakeholder_to'],
-          foundation: inter['foundation'].downcase.to_sym,
-          tariff:     inter['tariff'].to_f
+          from:    inter['stakeholder_from'],
+          to:      inter['stakeholder_to'],
+          measure: inter['foundation'].downcase.to_sym,
+          tariff:  inter['tariff'].to_f
         }
       end
     end

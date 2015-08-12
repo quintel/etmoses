@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-module Market::Foundations
+module Market::Measures
   RSpec.describe KwhConsumed do
     let(:node) { Network::Node.new(:node, resolution: 1) }
 

@@ -1,6 +1,6 @@
-module Market::Foundations
-  # A foundation which descibes the difference between the focus network, and
-  # the "basic" network (minus all storage and load management features).
+module Market::Measures
+  # A measure which descibes the difference between the focus network, and the
+  # "basic" network (minus all storage and load management features).
   class Flexibility
     def initialize(&filter)
       @filter = filter || -> (amount, *) { amount }
@@ -24,4 +24,4 @@ module Market::Foundations
       difference > 0 ? difference : 0.0
     end
   end
-end # Market::Foundations
+end

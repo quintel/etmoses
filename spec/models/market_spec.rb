@@ -6,7 +6,7 @@ RSpec.describe Network do
       {
         relations: [
           { from: 'Stakeholder 1', to: 'Stakeholder 2',
-            foundation: ->{ 2 }, tariff: 2 }
+            measure: ->{ 2 }, tariff: 2 }
         ]
       }
     end
@@ -37,13 +37,13 @@ RSpec.describe Network do
           expect(relation.to.key).to eq('Stakeholder 2')
         end
 
-        it 'sets the foundation' do
+        it 'sets the measure' do
           expect(relation.price).to be_zero
         end
       end # the relation
     end # with a simple two-node market
 
-    context 'with a named foundation' do
+    context 'with a named measure' do
       let(:relation) { market.node('Stakeholder 1').out_edges.first }
 
       let(:measurable) do
@@ -54,14 +54,14 @@ RSpec.describe Network do
       end
 
       before do
-        data[:relations].first[:foundation] = :kwh
+        data[:relations].first[:measure] = :kwh
         data[:measurables] = { 'Stakeholder 2' => [measurable] }
       end
 
-      it 'sets the foundation' do
+      it 'sets the measure' do
         expect(relation.price).to eq(8.0)
       end
-    end # with a named foundation
+    end # with a named measure
 
     context 'with nil' do
       let(:data) { nil }

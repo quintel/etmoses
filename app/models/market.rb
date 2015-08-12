@@ -17,7 +17,7 @@ module Market
   #         name: :kwh, # Optional
   #         from: 'Stakeholder 1',
   #         to: 'Stakeholder 2',
-  #         foundation: :kwh,
+  #         measure: :kwh,
   #         tariff: 10.0
   #       }
   #     }
