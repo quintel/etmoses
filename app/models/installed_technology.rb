@@ -81,7 +81,9 @@ class InstalledTechnology
   #
   # Returns a Hash[{ <curve_type> => Network::Curve }]
   def profile_curve
-    if profile.is_a?(Array)
+    if profile.nil?
+      { default: nil }
+    elsif profile.is_a?(Array)
       curve = Network::Curve.new(profile)
       { default: curve * component_factor(curve) }
     elsif volume.blank? && (capacity || load)

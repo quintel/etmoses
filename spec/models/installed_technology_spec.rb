@@ -94,7 +94,7 @@ RSpec.describe InstalledTechnology do
 
         context 'and a LoadProfile-based curve' do
           before do
-            expect(LoadProfile).to receive(:find_by_id).and_return(load_profile)
+            tech.profile = load_profile.id
           end
 
           it 'scales without units' do
@@ -140,10 +140,7 @@ RSpec.describe InstalledTechnology do
       end
 
       context 'and a LoadProfile-based curve' do
-        before do
-          expect(LoadProfile).to receive(:find_by_id).and_return(load_profile)
-        end
-
+        before      { tech.profile = load_profile.id }
         let(:curve) { tech.profile_curve['flex'] }
 
         it 'scales without units' do
@@ -177,9 +174,7 @@ RSpec.describe InstalledTechnology do
       end
 
       context 'and a LoadProfile-based curve' do
-        before do
-          expect(LoadProfile).to receive(:find_by_id).and_return(load_profile)
-        end
+        before { tech.profile = load_profile.id }
 
         it 'scales without units' do
           expect(tech.profile_curve['flex'].at(0)).to eq(2.0)
@@ -194,10 +189,7 @@ RSpec.describe InstalledTechnology do
 
     context 'with volume' do
       let(:tech) { InstalledTechnology.new(volume: 100.0) }
-
-      before do
-        expect(LoadProfile).to receive(:find_by_id).and_return(load_profile)
-      end
+      before     { tech.profile = load_profile.id }
 
       it 'scales without units' do
         expect(tech.profile_curve['flex'].at(0)).to eq(200.0)
@@ -211,10 +203,7 @@ RSpec.describe InstalledTechnology do
 
     context 'with volume and capacity' do
       let(:tech) { InstalledTechnology.new(volume: 100.0, capacity: 0.2) }
-
-      before do
-        expect(LoadProfile).to receive(:find_by_id).and_return(load_profile)
-      end
+      before     { tech.profile = load_profile.id }
 
       it 'scales without units' do
         expect(tech.profile_curve['flex'].at(0)).to eq(200.0)
