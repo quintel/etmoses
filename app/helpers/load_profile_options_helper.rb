@@ -1,12 +1,4 @@
 module LoadProfileOptionsHelper
-  def profile_table_options_for_households(technologies, household)
-    load_profiles = profiles(technologies, household.load_profiles).map do |profile|
-      [profile.key, profile.id, data: { edsn: profile.is_edsn? }]
-    end
-
-    options_for_select(load_profiles)
-  end
-
   def options_for_load_profiles(technologies, technology = false)
     tech_profiles = technology ? technology.load_profiles : LoadProfile
 

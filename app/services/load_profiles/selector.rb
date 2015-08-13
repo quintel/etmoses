@@ -4,8 +4,6 @@ module LoadProfiles
   # technologies.
   #
 
-  EDSN_THRESHOLD = 30
-
   class Selector
     # Public: Creates a ProfileSelector which selects profiles for the given
     # +technologies+ keys.
@@ -45,20 +43,8 @@ module LoadProfiles
       @technology["concurrency"] == 'min'
     end
 
-    #
-    # Selection of profiles is different for households due to the fact that EDSN
-    # profiles are only picked when the units are above a certain threshold
-    #
     def selected_profiles(profiles)
-      profiles[(is_household? ? household_type : @technology['type'])]
-    end
-
-    def is_household?
-      @technology['type'] == 'base_load'
-    end
-
-    def household_type
-      (@technology['units'].to_i > EDSN_THRESHOLD ? 'base_load_edsn' : 'base_load')
+      profiles[@technology['type']]
     end
   end
 end

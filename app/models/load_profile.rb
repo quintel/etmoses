@@ -28,14 +28,9 @@ class LoadProfile < ActiveRecord::Base
     name.presence || key
   end
 
-  def is_edsn?
-    !!(key =~ /edsn/)
-  end
-
   def deprecated?
     !!(key =~ /deprecated/)
   end
-
 
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.
