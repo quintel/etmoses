@@ -1,6 +1,6 @@
 module Finance
   class BusinessCaseComparator
-    COMPARE_KEYS = %i(incoming outgoing freeform)
+    COMPARE_KEYS = %i(incoming outgoing freeform total)
 
     def initialize(business_case, other_business_case)
       raise ArgumentError unless (business_case && other_business_case)

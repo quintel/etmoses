@@ -7,8 +7,7 @@ $(document).on("page:change", function(){
   if(compareSelectBox.length > 0){
     compareSelectBox.on("change", compareBusinessCase);
     compareSelectBox.prop('disabled', false);
-    sumRows();
-  }
+  };
 
   function compareBusinessCase(){
     $(this).prop('disabled', true);
@@ -46,23 +45,11 @@ $(document).on("page:change", function(){
     var difference = $(this.cell).find("span.difference");
     var calc = $("<span>").addClass("calc").text(this.data);
 
-    if(cell.find("span.static").text() !== ""){
-      difference.html("");
-      difference.append(leftBracket.clone(), calc, rightBracket.clone());
+    if($(this.cell).find("span.static").text() !== ""){
+      difference.empty().append(leftBracket.clone(), calc, rightBracket.clone());
       difference.find(".calc").formatCurrency(Finance.currencyOptions);
     };
   };
 
-  function sumRows(){
-    compareTable.find("tr").each(function(i, row){
-      var total = 0;
-      $(row).find(".editable .static").each(function(j, value){
-        total += (parseFloat($(value).text()) || 0.0);
-      });
-
-      $(row).find(".total").text(total);
-    });
-  };
-
-  compareTable.find("td.editable .static, td.total").formatCurrency(Finance.currencyOptions);
+  compareTable.find("td.editable .static").formatCurrency(Finance.currencyOptions);
 });

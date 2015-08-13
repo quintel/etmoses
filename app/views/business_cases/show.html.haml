@@ -29,6 +29,8 @@
         %td.editable
           %span.static= financial_row[:freeform]
           %span.difference
-        %td.total= 0.0
+        %td.editable
+          %span.static= financial_row[:total]
+          %span.difference
 
 = link_to "Edit", edit_testing_ground_business_case_path(@testing_ground, @business_case), class: "btn btn-primary"
