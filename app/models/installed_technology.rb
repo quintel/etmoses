@@ -73,7 +73,8 @@ class InstalledTechnology
   def behavior_with_curve(curve_type = nil)
     behavior = self.behavior.presence || technology.behavior
 
-    return behavior if curve_type.nil? || curve_type == 'default'.freeze
+    return "default" if is_edsn_profile?
+    return behavior  if curve_type.nil? || curve_type == 'default'.freeze
 
     component_behavior = technology.component_behaviors.for_type(curve_type)
     component_behavior.try(:behavior) || behavior
@@ -118,6 +119,10 @@ class InstalledTechnology
     end
 
     multiplier * units
+  end
+
+  def is_edsn_profile?
+    profile =~ /edsn/
   end
 
   def ratio(component)
