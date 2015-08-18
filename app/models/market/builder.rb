@@ -102,9 +102,11 @@ module Market
     # Internal: Creates the Tariff object to be used in a payment rule.
     def tariff_from(tariff)
       case tariff
-        when Tariff  then tariff
-        when Numeric then Tariff.new(tariff)
-        else              fail(InvalidTariffError.new(tariff))
+        when Tariff         then tariff
+        when Numeric        then Tariff.new(tariff)
+        when Network::Curve then CurveTariff.new(tariff)
+        else
+          fail(InvalidTariffError.new(tariff))
       end
     end
   end # Builder

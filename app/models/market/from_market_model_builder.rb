@@ -21,7 +21,7 @@ module Market
           from:    inter['stakeholder_from'],
           to:      inter['stakeholder_to'],
           measure: inter['foundation'].downcase.to_sym,
-          tariff:  inter['tariff'].to_f
+          tariff:  convert_tariff(inter['tariff'])
         }
       end
 
@@ -38,6 +38,17 @@ module Market
       end
 
       measurables
+    end
+
+    def convert_tariff(tariff)
+      case tariff
+      when Numeric
+        tariff
+      when /\A[a-z0-9_]+\z/i
+        PriceCurve.find_by_key(tariff).network_curve
+      else
+        tariff.to_f
+      end
     end
   end # FromMarketModelBuidler
 end

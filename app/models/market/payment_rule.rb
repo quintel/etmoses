@@ -25,7 +25,7 @@ module Market
 
     # Public: Run the payment rule on a given relation.
     def call(relation, variants = {})
-      Array(value(relation, variants)).sum(&@tariff.method(:price_of))
+      @tariff.price_of(Array(value(relation, variants)))
     end
 
     #######
@@ -33,13 +33,22 @@ module Market
     #######
 
     def value(relation, variants)
+      values = []
+
       relation.measurables.sum do |measurable|
-        if @arity > 1
+        result = if @arity > 1
           @measure.call(measurable, variants_for(measurable, variants))
         else
           @measure.call(measurable)
         end
+
+        Array(result).each_with_index do |value, index|
+          values[index] ||= 0.0
+          values[index] += value
+        end
       end
+
+      values
     end
 
     def variants_for(measurable, variants)

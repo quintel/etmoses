@@ -40,4 +40,13 @@ module Market
     "Tried to fetch load on #{ node.key }, but none is set. Has the network " \
     "been calculated?"
   end
+
+  InvalidCurveError = error_class do |curve|
+    "#{ curve.inspect } is not a valid curve"
+  end
+
+  CurveLengthError = error_class do |curve, values|
+    "Tried to price a value collection containing #{ values } values " \
+    "with a curve containing #{ curve }"
+  end
 end

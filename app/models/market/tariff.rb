@@ -7,7 +7,7 @@ module Market
     end
 
     def price_of(units)
-      @price * units
+      @price * units.sum
     end
   end # Tariff
 end # Market

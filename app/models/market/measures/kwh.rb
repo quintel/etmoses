@@ -7,7 +7,7 @@ module Market::Measures
     end
 
     def call(node)
-      InstantaneousLoad.call(node).length.times.sum do |frame|
+      InstantaneousLoad.call(node).length.times.map do |frame|
         @filter.call(node.energy_at(frame))
       end
     end
