@@ -9,7 +9,7 @@ module Moses
         postponing_base_load: true,
         buffering_electric_car: true,
         saving_base_load: true,
-        buffering_heat_pumps: true,
+        buffering_space_heating: true,
         solar_power_to_gas: true
       }.freeze
 

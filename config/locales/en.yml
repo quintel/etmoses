@@ -47,7 +47,7 @@ en:
       conversion_local_solar_power_to_heat: 'Conversion of local PV excess using P2H'
       conversion_local_solar_power_to_gas: 'Conversion of local PV excess using P2G'
       buffering_local_solar_electric_car: 'Buffering of electricity in EV'
-      buffering_local_solar_heat_pumps: 'Buffering of heat in heat pumps'
+      buffering_local_solar_space_heating: 'Buffering of heat in heat pumps'
       postponing_base_load: 'Postponing of individual base-load'
       saving_aggregated_base_load: 'Saving of aggregated base-load'
       capping_solar_pv: 'Capping of solar PV'
