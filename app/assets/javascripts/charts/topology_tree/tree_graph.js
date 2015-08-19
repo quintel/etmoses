@@ -8,6 +8,8 @@ var TreeGraph = (function(){
       nodeIds         = 0,
       duration        = 250,
       ease            = 'cubic-out';
+      headers         = { full: "Daily maximum load througout the year",
+                          week: "Instantaneous load for week: " };
 
   TreeGraph.prototype = {
     showGraph: function(){
@@ -351,20 +353,28 @@ var TreeGraph = (function(){
   };
 
   function addNewLoadChartPlatform(uniqueId, d){
+    var self = this;
     var loadPlatform = $("<div>").addClass(uniqueId).addClass("chart");
-    loadPlatform.html('<svg></svg>');
     $(".load-graph").prepend(loadPlatform);
 
-    if (this.strategyLoads && this.strategyShown) {
-      new LoadChart([
-        { values: d.altLoad, name: d.name + ' (with strategies)', color: '#95BB95', area: true },
-        { values: d.load,    name: d.name, area: true, color: '#1F77B4' }
-      ], d.capacity).render('.' + uniqueId + ' svg')
-    } else {
-      new LoadChart([
-        { values: d.load, name: d.name, area: true, color: '#1F77B4' }
-      ], d.capacity).render('.' + uniqueId + ' svg')
-    }
+    $.each(Object.keys(headers), function(i, type){
+      var weekNumber = (type == 'week' ? (LoadChartHelper.currentWeek || 1) : 0)
+      var chart = $("<div>").addClass(type);
+      chart.append("<h2>" + headers[type] + "</h2>");
+      chart.append("<svg></svg>");
+      loadPlatform.append(chart);
+
+      if (self.strategyLoads && self.strategyShown) {
+        new LoadChart([
+          { values: d.altLoad, name: d.name + ' (with strategies)', color: '#95BB95', area: true },
+          { values: d.load,    name: d.name, area: true, color: '#1F77B4' }
+        ], d.capacity).render('.' + uniqueId + ' .' + type + ' svg', weekNumber)
+      } else {
+        new LoadChart([
+          { values: d.load, name: d.name, area: true, color: '#1F77B4' }
+        ], d.capacity).render('.' + uniqueId + ' .' + type + ' svg', weekNumber)
+      }
+    });
   };
 
   // Toggle children on click.

@@ -173,6 +173,10 @@ ul.testing-grounds {
   }
 }
 
+.line-chart .full svg{
+  margin-bottom: -100px;
+}
+
 .nvtooltip h3 {
   font-size: 1.5rem;
   letter-spacing: 0;
@@ -385,5 +389,17 @@ select#stakeholders{
   p.note{
     padding-top: 10px;
     font-style: italic;
+  }
+}
+
+.full {
+  svg .nv-lineWithFocusChart .nv-context{
+    display: none;
+  }
+}
+
+.week{
+  h2 select{
+    display: inline-block;
   }
 }
