@@ -358,7 +358,7 @@ var TreeGraph = (function(){
     if (this.strategyLoads && this.strategyShown) {
       new LoadChart([
         { values: d.altLoad, name: d.name + ' (with strategies)', color: '#95BB95', area: true },
-        { values: d.load,    name: d.name, area: true, color: '#1F77B4' }
+        { values: d.load,    name: d.name, area: false, color: '#1F77B4' }
       ], d.capacity).render('.' + uniqueId + ' svg')
     } else {
       new LoadChart([
