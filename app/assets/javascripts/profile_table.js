@@ -7,6 +7,7 @@ var ProfileTable = (function(){
       profileSelectBoxes.add();
       addChangeListenersToHouseholds();
       editableTable.append(parseTableToJSON, changeData);
+      parseTableToJSON();
     },
 
     updateProfiles: function(){
