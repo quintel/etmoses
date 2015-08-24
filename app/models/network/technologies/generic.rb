@@ -114,6 +114,9 @@ module Network
       def storage?
         false
       end
+
+      def store(_frame, _amount)
+      end
     end # Generic
   end
 end
