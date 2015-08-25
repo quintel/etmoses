@@ -18,7 +18,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
   let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
 
   it "determines the correct headers" do
-    expect(business_case.headers).to eq(Stakeholder.all.sort);
+    expect(business_case.stakeholders).to eq(Stakeholder.all.sort);
   end
 
   it "determines the value of the business case" do
@@ -26,7 +26,8 @@ RSpec.describe Finance::BusinessCaseCalculator do
   end
 
   it "determines the rows of the business case" do
-    expect(business_case).to receive(:headers).twice.and_return(["customer"])
+    expect(business_case).to receive(:stakeholders).twice.and_return(["customer"])
+
     expect(business_case.rows).to eq([{ "customer" => [0.0] }])
   end
 end

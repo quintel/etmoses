@@ -335,15 +335,4 @@ RSpec.describe TestingGroundsController do
       expect(TestingGround.count).to eq(2)
     end
   end
-
-  describe "#finance" do
-    let!(:sign_in_user){ sign_in(user) }
-    let(:testing_ground){ FactoryGirl.create(:testing_ground, user: user) }
-
-    it "visits finance path" do
-      get :finance, id: testing_ground.id
-
-      expect(response).to be_success
-    end
-  end
 end

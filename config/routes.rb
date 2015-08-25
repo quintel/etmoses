@@ -10,10 +10,16 @@ Rails.application.routes.draw do
     end
 
     member do
-      get  'export', 'technology_profile', 'finance'
+      get  'export', 'technology_profile'
       post 'data'
       post 'export', to: :perform_export
       post 'save_as'
+    end
+
+    resources :business_cases, only: [:create, :show, :update, :edit] do
+      member do
+        post 'compare_with'
+      end
     end
   end
 

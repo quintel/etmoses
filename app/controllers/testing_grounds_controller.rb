@@ -1,5 +1,5 @@
 class TestingGroundsController < ResourceController
-  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as finance)
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -119,10 +119,6 @@ class TestingGroundsController < ResourceController
     redirect_to(testing_ground)
   end
 
-  def finance
-    @business_case = Finance::BusinessCaseCalculator.new(@testing_ground)
-  end
-
   private
 
   # Internal: Returns the permitted parameters for creating a testing ground.
@@ -130,7 +126,7 @@ class TestingGroundsController < ResourceController
     tg_params = params
       .require(:testing_ground)
       .permit([:name, :technology_profile, :public,
-               :technology_profile_csv, :scenario_id, :topology_id])
+               :technology_profile_csv, :scenario_id, :topology_id, :market_model_id])
 
     if tg_params[:technology_profile_csv]
       tg_params.delete(:technology_profile)

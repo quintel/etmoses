@@ -17,7 +17,7 @@ module TestingGroundsHelper
   end
 
   def link_to_etm_scenario(title, scenario_id)
-    link_to(title, "http://#{ ET_MODEL_URL }/scenarios/#{ scenario_id }")
+    link_to(title, "http://#{ ET_MODEL_URL }/scenarios/#{ scenario_id }", target: "_blank")
   end
 
   # Public: Determines if the given testing ground has enough information to
@@ -80,6 +80,12 @@ module TestingGroundsHelper
       (options << n[:stakeholder] if n[:stakeholder])
     end
     options_for_select options.uniq
+  end
+
+  def options_for_testing_grounds
+    testing_grounds = policy_scope(TestingGround).joins(:business_case).order(:name)
+
+    options_for_select(testing_grounds.map{|tg| [tg.name, tg.id] })
   end
 
   def default_strategies

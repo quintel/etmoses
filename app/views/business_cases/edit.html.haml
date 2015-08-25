@@ -1,0 +1,42 @@
+%h2= "Business case for #{@testing_ground.name}"
+
+%table.table.table-bordered.finance-table
+  %thead
+    %tr
+      %th
+        - finance_table_rows(@business_case).each do |row|
+          - row.each_pair do |header, _values|
+            %th= header.titleize
+      %th Total incoming
+
+  %tfoot
+    %tr
+      %td Total outgoing
+      - Stakeholder.all.each do |total_cell|
+        %td.total
+      %td.subtotal
+
+  %tbody
+    - finance_table_rows(@business_case).each do |row|
+      %tr.stakeholder
+        - row.each_pair do |column_header, row_values|
+          %td
+            %strong= column_header.titleize
+          - row_values.each do |row_value|
+            %td.row_value
+              - if row_value
+                %span{data: { value: row_value } }
+                  = number_to_currency(row_value, unit: '€')
+
+          %td.incoming_total
+
+    %tr.freeform
+      %td Freeform
+      - finance_table_freeform_row(@business_case).each do |freeform|
+        %td.row_value
+          %input.free-form.form-control{value: freeform}
+
+= form_for [@testing_ground, @business_case] do |f|
+  .hidden
+    = f.text_area :financials, value: JSON.dump(@business_case.financials)
+  = f.submit "Update", class: "btn btn-primary"

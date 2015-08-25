@@ -1,0 +1,36 @@
+%h2
+  %span= "Compare business case from #{@testing_ground.name} with"
+  %span.compare
+    %select.form-control{ data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) } }
+      = options_for_testing_grounds
+
+.javascript.data.hidden
+  = JSON.dump(@testing_ground.business_case.financials)
+
+%table.table.table-bordered.compare
+  %thead
+    %tr
+      %th
+      %th In
+      %th Out
+      %th Cor
+      %th Total
+
+  %tbody
+    - @business_case_summary.each do |financial_row|
+      %tr
+        %td= financial_row[:stakeholder].titleize
+        %td.editable
+          %span.static= financial_row[:incoming]
+          %span.difference
+        %td.editable
+          %span.static= financial_row[:outgoing]
+          %span.difference
+        %td.editable
+          %span.static= financial_row[:freeform]
+          %span.difference
+        %td.editable
+          %span.static= financial_row[:total]
+          %span.difference
+
+= link_to "Edit", edit_testing_ground_business_case_path(@testing_ground, @business_case), class: "btn btn-primary"

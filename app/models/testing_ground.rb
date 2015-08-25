@@ -13,6 +13,8 @@ class TestingGround < ActiveRecord::Base
   belongs_to :market_model
   belongs_to :user
 
+  has_one :business_case
+
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }
 
