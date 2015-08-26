@@ -48,6 +48,20 @@ class MarketModelsController < ResourceController
   end
 
   def market_model_params
-    params.require(:market_model).permit(:name, :public, :interactions)
+    mm_params = params.require(:market_model)
+      .permit(:name, :public, :interactions)
+
+    if mm_params[:interactions].present?
+      mm_params[:interactions] =
+        JSON.parse(mm_params[:interactions]).map do |inter|
+          if inter['tariff_type'] == 'fixed'
+            inter['tariff'] = inter['tariff'].to_f
+          end
+
+          inter
+        end
+    end
+
+    mm_params
   end
 end

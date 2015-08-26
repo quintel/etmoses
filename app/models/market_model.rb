@@ -10,9 +10,5 @@ class MarketModel < ActiveRecord::Base
 
   belongs_to :user
 
-  serialize :interactions
-
-  def interactions
-    JSON.parse(super)
-  end
+  serialize :interactions, JSON
 end

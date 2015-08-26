@@ -10,12 +10,12 @@ RSpec.describe Market::FromMarketModelBuilder do
 
   describe 'given a market model with two stakeholders' do
     let(:mm) do
-      MarketModel.new(interactions: JSON.dump([{
+      MarketModel.new(interactions: [{
         'stakeholder_from' => 'system operator',
         'stakeholder_to'   => 'customer',
         'foundation'       => 'kWh',
         'tariff'           => 5.0
-      }]))
+      }])
     end
 
     it 'creates the "from" stakeholder' do

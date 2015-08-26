@@ -13,7 +13,7 @@
       = form.label :public, "Private", class: "radio-label"
 
   .hidden
-    = form.text_area :interactions
+    = form.text_area :interactions, value: JSON.dump(@market_model.interactions).html_safe
 
   = render table
 

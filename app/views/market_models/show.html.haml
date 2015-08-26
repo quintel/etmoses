@@ -2,11 +2,12 @@
   = @market_model.name
 %table.interactions.table
   %tr
-    %th Steakholder from
-    %th Steakholder To
-    %th Tariff
+    %th Stakeholder from
+    %th Stakeholder To
     %th Measure
-    %th Price
+    %th (not used)
+    %th Tariff Type
+    %th Tariff Price
   - @market_model.interactions.each do |interaction|
     %tr
       - interaction.each_value do |value|

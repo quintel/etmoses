@@ -4,6 +4,7 @@
     %th{data: {header: 'stakeholder_to' }} Stakeholder to
     %th{data: {header: 'foundation' }} Foundation
     %th{data: {header: 'measure' }} Measure
+    %th.tariff-type{data: {header: 'tariff_type' }} Tariff Type
     %th.col-sm-2{data: {header: 'tariff' }} Tariff
     %th
     %th
@@ -26,6 +27,9 @@
           %select.form-control
             = measure_options(selected: interaction["measure"])
 
+        %td.editable.tariff-type
+          %input{ name: "tariff_type", type: "hidden", value: interaction["tariff_type"].presence || 'fixed' }
+
         %td.editable.input-switch{data: {price: interaction["tariff"]}}
           .input-group
             .input-group-btn
@@ -34,17 +38,17 @@
                 %span.caret
               %ul.dropdown-menu
                 %li
-                  %a{:href => "#"}
+                  %a{:href => "#", 'data-type' => 'fixed'}
                     %span.glyphicon.glyphicon-euro
                     Fixed price
                 %li
-                  %a{:href => "#"}
+                  %a{:href => "#", 'data-type' => 'curve'}
                     %span.glyphicon.glyphicon-signal
                     Financial profile
 
-            .fixed-price
+            .fixed-tariff
               %input.form-control
-            .financial-profiles
+            .curve-tariff
               %select.form-control
                 = financial_profile_options
 
