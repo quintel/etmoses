@@ -88,6 +88,10 @@ class InstalledTechnology
     elsif profile.is_a?(Array)
       curve = Network::Curve.new(profile)
       { default: curve * component_factor(curve) }
+    elsif profile.is_a?(Hash)
+      Hash[profile.each_pair.map do |curve_type, curve|
+        [curve_type, Network::Curve.new(curve)]
+      end]
     elsif volume.blank? && (capacity || load)
       profile_curves(:capacity_scaled)
     elsif demand
@@ -97,16 +101,29 @@ class InstalledTechnology
     end
   end
 
+  def each_profile_curve
+    if has_heat_pump_profiles?
+      yield(profile_curve.keys.join('_'), *profile_curve.values)
+    else
+      profile_curve.each_pair.map do |curve_type, curve|
+        yield(curve_type, curve)
+      end
+    end
+  end
+
   private
+
+  def has_heat_pump_profiles?
+    profile_curve.keys.sort == %w(availability use)
+  end
 
   # Internal: Retrieves the Network::Curve used by the technology, with
   # scaling applied for demand or capacity and a ratio.
   #
   # Returns a Hash[{ <curve_type> => Network::Curve }].
   def profile_curves(scaling = nil)
-    Hash[profile_components.map do |component|
-      curve = component.scaled_network_curve(scaling)
-      [component.curve_type, curve * component_factor(curve) * ratio(component)]
+    Hash[profile_components.each_curve(scaling).map do |curve_type, curve, ratio|
+      [curve_type, curve * component_factor(curve) * ratio]
     end]
   end
 
@@ -120,15 +137,7 @@ class InstalledTechnology
     multiplier * units
   end
 
-  def ratio(component)
-    component.network_curve.reduce(:+) / combined_components.reduce(:+)
-  end
-
-  def combined_components
-    @combined_components ||= profile_components.map{|com| com.network_curve }.reduce(:+)
-  end
-
   def profile_components
-    @profile_components ||= LoadProfile.find_by_id(profile).load_profile_components
+    @profile_components ||= LoadProfile.find_by_id(profile).curves
   end
 end # end

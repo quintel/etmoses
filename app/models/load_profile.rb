@@ -36,6 +36,12 @@ class LoadProfile < ActiveRecord::Base
     Technology.where(key: technology_profiles.map(&:technology))
   end
 
+  # Public: Returns all the curve components belonging to this profile within
+  # a CurveCollection.
+  def curves
+    CurveCollection.new(load_profile_components)
+  end
+
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.
   def self.by_key(key)
