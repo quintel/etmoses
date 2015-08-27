@@ -58,8 +58,10 @@ module TestingGroundsHelper
     options_for_select(technologies, selected: selected_technology[:type])
   end
 
-  def node_options(profile, node)
-    options_for_select(profile.keys, selected: node)
+  def node_options(topology, node)
+    @edges ||= Topologies::EdgeNodesFinder.new(topology).find_edge_nodes
+
+    options_for_select(@edges.map(&:key), selected: node)
   end
 
   def technology_defaults(technology, profile)
