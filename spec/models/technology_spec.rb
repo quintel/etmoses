@@ -12,6 +12,10 @@ RSpec.describe Technology, type: :model do
 
   it { expect(subject).to validate_length_of(:export_to).is_at_most(100) }
 
+  it { expect(subject).to have_many(:importable_attributes).dependent(true) }
+  it { expect(subject).to have_many(:technology_profiles).dependent(true) }
+  it { expect(subject).to have_many(:component_behaviors).dependent(true) }
+
   describe '#name' do
     context 'when an name is assigned' do
       it 'uses the assigned name' do
