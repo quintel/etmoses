@@ -4,7 +4,11 @@ calculateConcurrency = ()->
     type: "POST"
     dataType: "script"
     data:
-      technology_distribution: technology_distribution()
+      technology_distribution: technology_distribution(),
+      topology_id: topology_id()
+
+topology_id = ->
+  $("#testing_ground_topology_id").val()
 
 technology_distribution = ->
   tech_distribution = JSON.parse($("textarea#technology_distribution").text())

@@ -26,7 +26,7 @@
         %tr{class: technology[:type]}
           %td.editable.select
             %select.nodes.form-control
-              = node_options(@testing_ground.topology.graph, node)
+              = node_options(topology.graph, node)
 
           - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
             - case key

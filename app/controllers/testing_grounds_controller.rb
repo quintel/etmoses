@@ -88,22 +88,23 @@ class TestingGroundsController < ResourceController
     end
   end
 
-  # GET /topologies/:id/edit
+  # GET /testing_grounds/:id/edit
   def edit
   end
 
-  # PATCH /topologies/:id
+  # PATCH /testing_grounds/:id
   def update
     @testing_ground.update_attributes(testing_ground_params)
     respond_with(@testing_ground)
   end
 
-  # POST /topologies/calculate_concurrency
+  # POST /testing_grounds/calculate_concurrency
   def calculate_concurrency
     concurrency = TestingGround::TechnologyProfileScheme.new(
                     JSON.parse(params[:technology_distribution])
                   ).build
 
+    @topology = Topology.find(params[:topology_id])
     @testing_ground_profile = TechnologyList.from_hash(concurrency)
   end
 
