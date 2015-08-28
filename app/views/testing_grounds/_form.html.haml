@@ -69,7 +69,7 @@
   .form-group
     = f.submit "#{submit_text} Local Energy Solution", class: 'btn btn-success'
     - unless testing_ground.new_record?
-      = link_to "Save As New Local Energy Solution", save_as_testing_ground_path(testing_ground), method: :post, class: "btn btn-primary"
+      = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(testing_ground) }, class: "btn btn-primary save_as"
 
     %span.or or
     - if testing_ground.new_record?

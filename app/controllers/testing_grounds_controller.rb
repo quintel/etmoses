@@ -115,6 +115,7 @@ class TestingGroundsController < ResourceController
 
   def save_as
     testing_ground = @testing_ground.dup
+    testing_ground.update_attributes(testing_ground_params)
     testing_ground.save
 
     redirect_to(testing_ground)

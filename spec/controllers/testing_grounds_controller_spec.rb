@@ -334,5 +334,11 @@ RSpec.describe TestingGroundsController do
 
       expect(TestingGround.count).to eq(2)
     end
+
+    it "saves as a new name" do
+      post :save_as, id: testing_ground.id, testing_ground: { name: "New name" }
+
+      expect(TestingGround.last.name).to eq("New name")
+    end
   end
 end

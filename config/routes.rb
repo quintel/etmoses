@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       get  'export', 'technology_profile'
       post 'data'
       post 'export', to: :perform_export
-      post 'save_as'
+      patch 'save_as'
     end
 
     resources :business_cases, only: [:create, :show, :update, :edit] do
