@@ -4,13 +4,15 @@
     %select.form-control{ data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) } }
       = options_for_testing_grounds
 
+%p= link_to "View load chart", testing_ground_path(@testing_ground), class: "btn btn-primary"
+
 .javascript.data.hidden
   = JSON.dump(@testing_ground.business_case.financials)
 
 %table.table.table-bordered.compare
   %thead
     %tr
-      %th
+      %th Stakeholder
       %th In
       %th Out
       %th Correction
@@ -32,7 +34,5 @@
         %td.editable
           %span.static= financial_row[:total]
           %span.difference
-
-= link_to "Back to load", testing_ground_path(@testing_ground), class: "btn btn-default"
 
 = link_to "Edit", edit_testing_ground_business_case_path(@testing_ground, @business_case), class: "btn btn-primary"
