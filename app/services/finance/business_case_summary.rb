@@ -15,7 +15,7 @@ module Finance
           incoming: incoming,
           outgoing: outgoing,
           freeform: freeform,
-          total: (incoming || 0) + (outgoing || 0) + freeform
+          total: (incoming || 0) - (outgoing || 0) + freeform
         }
       end
     end
