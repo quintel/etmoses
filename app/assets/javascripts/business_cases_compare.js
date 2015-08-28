@@ -11,12 +11,19 @@ $(document).on("page:change", function(){
 
   function compareBusinessCase(){
     $(this).prop('disabled', true);
-    $.ajax({
-      url: $(this).data('compareUrl'),
-      type: "POST",
-      data: { comparing_testing_ground_id: $(this).val() },
-      success: updateTable
-    });
+
+    if($(this).val() !== ""){
+      $.ajax({
+        url: $(this).data('compareUrl'),
+        type: "POST",
+        data: { comparing_testing_ground_id: $(this).val() },
+        success: updateTable
+      });
+    }
+    else{
+      $("span.difference").empty();
+      $(this).prop('disabled', false);
+    }
   };
 
   function updateTable(data){
