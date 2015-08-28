@@ -44,7 +44,7 @@
 
             - when :demand
               %td.editable.text{class: key, data: {edit_type: 'text'}}
-                %input.form-control{type: 'text', value: (value.to_i if value) }
+                %input.form-control{type: 'text', value: value.try(:round) }
 
             - else
               %td.editable.text{class: key, data: { edit_type: 'text' }}

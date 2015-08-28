@@ -38,8 +38,6 @@ var EdsnSwitch = (function(){
       var actual       = (units > EDSN_THRESHOLD ? "base_load_edsn" : "base_load");
       var select       = $(".hidden select." + actual).clone(true, true);
 
-      select.val($(this).data('profile'));
-
       $(this).parent().next().html(select);
       $(this).find("option[value='" + technology + "']").attr('value', actual);
 
