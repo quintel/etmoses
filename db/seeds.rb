@@ -78,6 +78,13 @@ Technology.create!(
   behavior:    'optional_buffer'
 )
 
+Technology.create!({
+  key:      "base_load_edsn",
+  name:     "Household aggregated",
+  behavior: "optional",
+  visible:  false
+})
+
 base_load = Technology.create!(
   key:         'base_load',
   name:        'Household',

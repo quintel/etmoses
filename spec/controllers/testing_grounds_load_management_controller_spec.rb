@@ -173,7 +173,7 @@ RSpec.describe TestingGroundsController do
       {
         "CONGESTED_END_POINT_1"=> [{
           "name"        => "Buildings",
-          "type"        => "base_load",
+          "type"        => "base_load_edsn",
           "behavior"    => nil,
           "profile"     => "edsn_inflex_and_flex_parts",
           "load"        => nil,
