@@ -84,8 +84,11 @@ module TestingGroundsHelper
     options_for_select options.uniq
   end
 
-  def options_for_testing_grounds
-    testing_grounds = policy_scope(TestingGround).joins(:business_case).order(:name)
+  def options_for_testing_grounds(testing_ground)
+    testing_grounds = policy_scope(TestingGround)
+                        .where("`testing_grounds`.`id` != ?", testing_ground.id)
+                        .joins(:business_case)
+                        .order(:name)
 
     options_for_select(testing_grounds.map{|tg| [tg.name, tg.id] })
   end

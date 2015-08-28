@@ -1,7 +1,7 @@
 %h2
   %span= "Compare business case from #{@testing_ground.name} with"
   %span.compare
-    = select_tag "compare", options_for_testing_grounds, include_blank: true, class: "form-control", data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) }
+    = select_tag "compare", options_for_testing_grounds(@testing_ground), include_blank: true, class: "form-control", data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) }
 
 .javascript.data.hidden
   = JSON.dump(@testing_ground.business_case.financials)
