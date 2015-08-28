@@ -31,7 +31,15 @@ module TestingGroundsHelper
       [technology.name, technology.key]
     end
 
-    options_for_select(technologies, selected: selected_technology[:type])
+    options_for_select(technologies, selected: selected_key(selected_technology))
+  end
+
+  def selected_key(selected_technology)
+    if selected_technology[:type] == 'base_load_edsn'
+      'base_load'
+    else
+      selected_technology[:type]
+    end
   end
 
   def node_options(topology, node)

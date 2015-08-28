@@ -1,6 +1,5 @@
 var ProfileSelectBoxes = (function(){
   var defaultCells = ["Capacity", "Volume", "Demand"];
-  var EDSN_THRESHOLD = 30;
 
   ProfileSelectBoxes.prototype = {
     add: function(){
@@ -26,19 +25,13 @@ var ProfileSelectBoxes = (function(){
   };
 
   function addChangeListenerToNameBox(){
-    $("select.name").off().on("change", function(){
+    $("select.name").off("change").on("change", function(){
       cloneAndAppendProfileSelect.call(this, true);
     });
   };
 
   function cloneAndAppendProfileSelect(isChanged){
     var technology = $(this).val();
-    var units = $(this).parents("tr").find(".units input").val();
-
-    if(technology == 'base_load' && units > EDSN_THRESHOLD){
-      technology = "base_load_edsn";
-    };
-
     var profileSelectbox = $(".hidden.profile select." + technology).clone();
 
     $(this).parent().next().html(profileSelectbox);
@@ -60,8 +53,7 @@ var ProfileSelectBoxes = (function(){
     };
   };
 
-  function ProfileSelectBoxes(){
-  };
+  function ProfileSelectBoxes(){};
 
   return ProfileSelectBoxes;
 })();

@@ -57,6 +57,14 @@ def basic_houses(units = '2.0')
      "concurrency" => 'min' }]
 end
 
+def basic_edsn_houses(units = '2.0')
+  [{ "name"=>"Household",
+     "type"=>"base_load_edsn",
+     "demand"=>"5",
+     "units"=>units,
+     "concurrency" => 'min' }]
+end
+
 def fake_technology_profile
   JSON.dump(fake_profile_data.group_by{|t| t['node']})
 end
@@ -80,6 +88,7 @@ def minimized_technology_distribution
     "type"=>"households_solar_pv_solar_radiation",
     "profile"=>"solar_pv_zwolle",
     "capacity"=>"-1.5",
+    "demand" => nil,
     "units"=>"1.0",
     "node"=>"lv1",
     "concurrency" => "max"
@@ -89,6 +98,7 @@ def minimized_technology_distribution
     "type"=>"households_solar_pv_solar_radiation",
     "profile"=>"solar_pv_ameland",
     "capacity"=>"-1.5",
+    "demand" => nil,
     "units"=>"1.0",
     "node"=>"lv1",
     "concurrency" => "max"
@@ -98,6 +108,7 @@ def minimized_technology_distribution
     "type"=>"households_solar_pv_solar_radiation",
     "profile"=>"solar_pv_zwolle",
     "capacity"=>"-1.5",
+    "demand" => nil,
     "units"=>"1.0",
     "node"=>"lv2",
     "concurrency" => "max"
@@ -107,6 +118,7 @@ def minimized_technology_distribution
     "type"=>"households_solar_pv_solar_radiation",
     "profile"=>"solar_pv_ameland",
     "capacity"=>"-1.5",
+    "demand" => nil,
     "units"=>"1.0",
     "node"=>"lv2",
     "concurrency" => "max"

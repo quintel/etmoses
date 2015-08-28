@@ -1,15 +1,18 @@
 var ProfileTable = (function(){
-  var widget, selector, profileSelectBoxes;
+  var widget, selector, profileSelectBoxes, edsnSwitch;
 
   ProfileTable.prototype = {
     append: function(){
       profileSelectBoxes.add();
+      edsnSwitch.enable();
+
       editableTable.append(parseTableToJSON, changeData);
       parseTableToJSON();
     },
 
     updateProfiles: function(){
       profileSelectBoxes.update();
+      parseTableToJSON();
     }
   };
 
@@ -39,9 +42,11 @@ var ProfileTable = (function(){
   };
 
   function ProfileTable(_selector){
-    selector = _selector;
+    selector           = _selector;
+    editing            = $("form.edit_testing_ground").length > 0;
     profileSelectBoxes = new ProfileSelectBoxes();
-    editableTable = new EditableTable(_selector);
+    editableTable      = new EditableTable(_selector);
+    edsnSwitch         = new EdsnSwitch(editing);
   };
 
   return ProfileTable;
