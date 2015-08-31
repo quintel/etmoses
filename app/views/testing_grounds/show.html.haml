@@ -95,9 +95,8 @@
             %tbody
               - techs.each do |tech|
                 %tr{ "data-tech" => tech.name }
-                  - InstalledTechnology::EDITABLES.each do |akey|
-                    - unless %i(concurrency in_cooperation).include?(akey)
-                      %td= tech.send(akey)
+                  - InstalledTechnology::PRESENTABLES.each do |akey|
+                    %td= tech.send(akey)
 
     - else
       No Technologies registered yet.

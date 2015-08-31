@@ -5,6 +5,7 @@ class InstalledTechnology
   attribute :type,     String, default: 'generic'
   attribute :behavior, String
   attribute :profile,  Integer
+  attribute :profile_key, String
   attribute :load,     Float
   attribute :capacity, Float
   attribute :demand,   Float
@@ -13,6 +14,7 @@ class InstalledTechnology
   attribute :concurrency, String, default: 'max'
 
   EDITABLES = %i(name profile capacity volume demand units concurrency)
+  PRESENTABLES = %i(name profile_key capacity volume demand units)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
