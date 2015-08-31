@@ -13,6 +13,8 @@ var TopologyPreviewer = (function(){
 
   TopologyPreviewer.prototype = {
     preview: function(){
+      clear();
+
       svgHeight = viewerHeight();
       svgWidth  = viewerWidth();
       svg       = buildBaseSvg();
@@ -27,6 +29,10 @@ var TopologyPreviewer = (function(){
       tree = d3.layout.tree().size([svgHeight, svgWidth])
       updateTree(root)
     }
+  };
+
+  function clear(){
+    $(topologyGraph).find("svg").remove();
   };
 
   function updateTree(source){

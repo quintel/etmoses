@@ -221,11 +221,6 @@ var TreeGraph = (function(){
     // be hidden until the user chooses to view them.
     establishMaxLabelLength.call(this);
     updateTreeData.call(this);
-
-    // First child of treedata
-    //toggleChildren(this.treeData);
-    // Children of treedata
-    //this.treeData.children.forEach(toggleChildren);
     recurseToggle(this.treeData);
 
     // Define the root
