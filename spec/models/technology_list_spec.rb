@@ -15,6 +15,10 @@ RSpec.describe TechnologyList do
       load: 0.1
   YML
 
+  let!(:mock_presentables){
+    stub_const("InstalledTechnology::PRESENTABLES", %i(name load))
+  }
+
   describe '#to_csv' do
     let(:csv)    { TechnologyList.load(JSON.dump(hash)).to_csv }
     let(:parsed) { CSV.parse(csv, headers: true) }

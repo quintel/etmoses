@@ -26,30 +26,6 @@ module TestingGroundsHelper
     testing_ground.scenario_id.present?
   end
 
-  def profile_table_options_for_profile(technology)
-    load_profiles = technology.load_profiles.map do |load_profile|
-      [load_profile.key, load_profile.id]
-    end
-
-    options_for_select(load_profiles)
-  end
-
-  def profile_table_options_for_households(household)
-    load_profiles = household.load_profiles.map do |profile|
-      [profile.key, profile.id, data: { edsn: profile.is_edsn? }]
-    end
-
-    options_for_select(load_profiles)
-  end
-
-  def options_for_load_profiles
-    load_profiles = LoadProfile.all.map do |load_profile|
-      [load_profile.key, load_profile.id]
-    end
-
-    options_for_select(load_profiles)
-  end
-
   def profile_table_options_for_name(selected_technology)
     technologies = @technologies.map do |technology|
       [technology.name, technology.key]

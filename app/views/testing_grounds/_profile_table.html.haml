@@ -15,11 +15,11 @@
         %select.form-control{class: technology.key, data: { defaults: technology_defaults(technology, testing_ground_profile) }}
           - case technology.key
           - when 'generic'
-            = options_for_load_profiles
+            = options_for_load_profiles(testing_ground_profile)
           - when 'base_load'
-            = profile_table_options_for_households(technology)
+            = profile_table_options_for_households(testing_ground_profile, technology)
           - else
-            = profile_table_options_for_profile(technology)
+            = options_for_load_profiles(testing_ground_profile, technology)
 
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|

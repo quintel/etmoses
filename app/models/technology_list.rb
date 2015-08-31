@@ -33,7 +33,7 @@ class TechnologyList
   def self.load_profiles(data)
     profile_ids = data.values.flatten.map{|t| t['profile']}.uniq
 
-    Hash[LoadProfile.find(profile_ids).map do |load_profile|
+    Hash[LoadProfile.where(id: profile_ids).map do |load_profile|
       [load_profile.id, load_profile.key]
     end]
   end

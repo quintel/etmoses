@@ -139,10 +139,10 @@ RSpec.describe BusinessCasesController do
                          id: business_case.id
 
       expect(JSON.parse(response.body)).to eq(
-        [ [0.0, 0.0, 0.0], [0.0, 0.0, 0.0],
-          [0.0, 0.0, 0.0], [0.0, 0.0, 0.0],
-          [0.0, 0.0, 0.0], [0.0, 0.0, 0.0],
-          [0.0, 0.0, 0.0]]
+        [ [0, 0, 0, 0], [0, 0, 0, 0],
+          [0, 0, 0, 0], [0, 0, 0, 0],
+          [0, 0, 0, 0], [0, 0, 0, 0],
+          [0, 0, 0, 0]]
       )
     end
   end

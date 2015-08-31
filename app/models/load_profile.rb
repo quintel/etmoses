@@ -19,6 +19,10 @@ class LoadProfile < ActiveRecord::Base
     order('COALESCE(`name`, `key`), `name`, `key`')
   end
 
+  def self.not_deprecated
+    where("`key` NOT LIKE '%deprecated%'")
+  end
+
   # Public: The human-readable name of the curve.
   def display_name
     name.presence || key
@@ -27,6 +31,11 @@ class LoadProfile < ActiveRecord::Base
   def is_edsn?
     !!(key =~ /edsn/)
   end
+
+  def deprecated?
+    !!(key =~ /deprecated/)
+  end
+
 
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.

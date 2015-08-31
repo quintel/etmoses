@@ -39,7 +39,7 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#calculate_concurrency" do
-    let(:topology){ FactoryGirl.create(:topology).graph.to_json }
+    let(:topology){ FactoryGirl.create(:topology) }
 
     describe "maximum profile differentiation" do
       it "combines a testing ground topology with a set of technologies" do
@@ -47,6 +47,7 @@ RSpec.describe TestingGroundsController do
 
         post :calculate_concurrency,
               technology_distribution: profile_json,
+              topology_id: topology.id,
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -62,6 +63,7 @@ RSpec.describe TestingGroundsController do
 
         post :calculate_concurrency,
               technology_distribution: profile_json,
+              topology_id: topology.id,
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -85,6 +87,7 @@ RSpec.describe TestingGroundsController do
 
         post :calculate_concurrency,
               technology_distribution: JSON.dump(tech_distribution),
+              topology_id: topology.id,
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -104,6 +107,7 @@ RSpec.describe TestingGroundsController do
 
         post :calculate_concurrency,
               technology_distribution: JSON.dump(tech_distribution),
+              topology_id: topology.id,
               format: :js
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
@@ -324,13 +328,13 @@ RSpec.describe TestingGroundsController do
     let(:testing_ground){ FactoryGirl.create(:testing_ground, user: user) }
 
     it "clones an existing testing ground" do
-      post :save_as, id: testing_ground.id
+      post :save_as, id: testing_ground.id, testing_ground: { name: "Test" }
 
       expect(response).to redirect_to(testing_ground_path(TestingGround.last))
     end
 
     it "counts 2 testing grounds" do
-      post :save_as, id: testing_ground.id
+      post :save_as, id: testing_ground.id, testing_ground: { name: "Test" }
 
       expect(TestingGround.count).to eq(2)
     end
