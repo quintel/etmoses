@@ -54,9 +54,11 @@ var TreeGraph = (function(){
       //
       _self = this;
 
-      var levelWidth = [1],
+      var newHeight, nodes, links, nodeEnter, nodeUpdate, nodeExit, link;
+      var levelWidth = [1];
 
-      childCount = function(level, n) {
+      // Fills the levelWidth area with all the nodes child counts
+      function childCount(level, n) {
         if (n.children && n.children.length > 0) {
           if (levelWidth.length <= level + 1) levelWidth.push(0);
 
@@ -65,18 +67,17 @@ var TreeGraph = (function(){
             childCount(level + 1, d);
           });
         }
-      },
-
-      newHeight, nodes, links, nodeEnter, nodeUpdate, nodeExit, link;
+      };
 
       childCount(0, this.root);
+
       newHeight = d3.max(levelWidth) * 35; // 25 pixels per line
 
       // Update the SVG height to fit the contents.
       var svgDivHeight = Math.min(newHeight, maxViewerHeight);
       var baseSvgSelector = $(baseSvg[0][0]);
-      baseSvgSelector.height(newHeight + 50);
-      baseSvgSelector.parent().height(svgDivHeight + 50);
+          baseSvgSelector.height(newHeight + 50);
+          baseSvgSelector.parent().height(svgDivHeight + 50);
 
       tree = tree.size([newHeight, viewerWidth]);
 
@@ -116,10 +117,7 @@ var TreeGraph = (function(){
         .on('dblclick', dblClick)
         .on('click', click);
 
-      node.classed('exceedance', function(d) {
-        var load = (d.altLoad || d.load);
-        return d.capacity && (d3.max(load) > d.capacity || d3.min(load) < -d.capacity);
-      });
+      node.classed('exceedance', overCapacity);
 
       nodeEnter.append('circle')
         .attr('class', 'nodeCircle')
@@ -207,6 +205,11 @@ var TreeGraph = (function(){
     strategyShown: false
   };
 
+  function overCapacity(d) {
+    var load = (d.altLoad || d.load);
+    return d.capacity && (d3.max(load) > d.capacity || d3.min(load) < -d.capacity);
+  };
+
   function setNodeClass(data){
     var nodeClass = ("node " + data.stakeholder);
     if(data.node_selected){ nodeClass += " selected" }
@@ -216,10 +219,14 @@ var TreeGraph = (function(){
   function transformData(){
     // Show nodes from the top-most two levels of the tree; nodes beneath will
     // be hidden until the user chooses to view them.
+    establishMaxLabelLength.call(this);
     updateTreeData.call(this);
-    toggleChildren(this.treeData);
 
-    this.treeData.children.forEach(toggleChildren);
+    // First child of treedata
+    //toggleChildren(this.treeData);
+    // Children of treedata
+    //this.treeData.children.forEach(toggleChildren);
+    recurseToggle(this.treeData);
 
     // Define the root
     this.root = this.treeData;
@@ -230,6 +237,13 @@ var TreeGraph = (function(){
       node.loads = {};
       node.loads[false] = node.load;
     });
+  };
+
+  function recurseToggle(n){
+    toggleChildren(n)
+    if(n.children && n.children.length > 0){
+      n.children.forEach(recurseToggle);
+    };
   };
 
   function createD3Tree(){
@@ -275,18 +289,23 @@ var TreeGraph = (function(){
       });
   };
 
-  function updateTreeData(){
+  function establishMaxLabelLength(){
     // Call visit function to establish maxLabelLength
-    visit(this.treeData, function(d) {
-      maxLabelLength = Math.max(d.name.length, maxLabelLength);
+    visit(this.treeData,
+      function(d) {
+        maxLabelLength = Math.max(d.name.length, maxLabelLength);
 
-      if (d.children && d.children.length === 0) {
-        d.children = null;
+        if (d.children && d.children.length === 0) {
+          d.children = null;
+        }
+      },
+      function(d) {
+        return d.children && d.children.length > 0 ? d.children : null;
       }
-    }, function(d) {
-      return d.children && d.children.length > 0 ? d.children : null;
-    });
+    );
+  };
 
+  function updateTreeData(){
     visit(this.treeData, toggleChildren, function(n) { return n._children });
   };
 
