@@ -71,6 +71,12 @@ module TestingGroundsHelper
     options_for_select(testing_grounds.map{|tg| [tg.name, tg.id] })
   end
 
+  def options_for_strategies
+    options_for_select(Strategies.all.map do |strategy|
+      [I18n.t("testing_grounds.strategies.#{strategy[:name]}"), strategy[:ajax_prop]]
+    end)
+  end
+
   def default_strategies
     Hash[Strategies.all.map{|s| [s[:ajax_prop], false] }].symbolize_keys
   end

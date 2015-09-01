@@ -141,12 +141,12 @@ class LoadChart
 
     chart.yAxis
          .axisLabel("kW")
-         .axisLabelDistance(35)
+         .axisLabelDistance(0)
          .tickFormat(d3.format(',.3r'))
 
     chart.y2Axis
          .axisLabel("kW")
-         .axisLabelDistance(35)
+         .axisLabelDistance(0)
          .tickFormat(d3.format(',.3r'))
 
     chart.brush.on('brushend', @setGlobalBrushFocus)

@@ -11,4 +11,10 @@ $(document).on("page:change", function(){
   if(financeTable.length > 0){
     new FinanceTable(financeTable).create();
   }
+
+  var businessCaseTable = $("#business_case_table");
+
+  if(businessCaseTable.length > 0){
+    $.ajax({ url: businessCaseTable.data('url'), type: "GET" });
+  };
 });

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :business_cases, only: [:create, :show, :update, :edit] do
       member do
         post 'compare_with'
+        get 'data'
       end
     end
   end
