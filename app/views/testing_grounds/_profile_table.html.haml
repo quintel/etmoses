@@ -16,8 +16,6 @@
           - case technology.key
           - when 'generic'
             = options_for_load_profiles(testing_ground_profile)
-          - when 'base_load'
-            = profile_table_options_for_households(testing_ground_profile, technology)
           - else
             = options_for_load_profiles(testing_ground_profile, technology)
 
