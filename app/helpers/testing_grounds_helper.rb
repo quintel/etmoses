@@ -27,11 +27,19 @@ module TestingGroundsHelper
   end
 
   def profile_table_options_for_name(selected_technology)
-    technologies = @technologies.map do |technology|
+    technologies = @technologies.visible.map do |technology|
       [technology.name, technology.key]
     end
 
-    options_for_select(technologies, selected: selected_technology[:type])
+    options_for_select(technologies, selected: selected_key(selected_technology))
+  end
+
+  def selected_key(selected_technology)
+    if selected_technology[:type] == 'base_load_edsn'
+      'base_load'
+    else
+      selected_technology[:type]
+    end
   end
 
   def node_options(topology, node)

@@ -36,6 +36,10 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
     it "expects no duplicate entries per node" do
       expect(new_profile.values.flatten.length).to eq(2)
     end
+
+    it "doesn't automatically fill in the demand" do
+      expect(new_profile.values.flatten.map{|t| t['demand'] }).to eq([nil, nil])
+    end
   end
 
   describe "minimizes concurrency with a subset of technologies" do
@@ -58,7 +62,7 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
           load_profile: FactoryGirl.create(:load_profile, key: "anonimous_#{i + 1}"))
 
         FactoryGirl.create(:technology_profile,
-          technology: 'base_load',
+          technology: 'base_load_edsn',
           load_profile: FactoryGirl.create(:load_profile, key: "edsn_#{i + 1}"))
       end
     }
@@ -66,14 +70,18 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
     describe "minimizes concurrency only with EDSN profiles" do
       let(:new_profile){
         TestingGround::TechnologyProfileScheme.new(
-          basic_houses(11.0)
+          basic_edsn_houses(31.0)
         ).build
       }
 
       it 'expects only EDSN profiles' do
         load_profile_id = new_profile.values.flatten.first["profile"]
 
-        expect(LoadProfile.find(load_profile_id).key).to eq("anonimous_1")
+        expect(LoadProfile.find(load_profile_id).key).to eq("edsn_1")
+      end
+
+      it "doesn't minimize" do
+        expect(new_profile.values.flatten.length).to eq(1)
       end
     end
 

@@ -8,10 +8,14 @@ var ProfileSelectBoxes = (function(){
     },
 
     update: function(){
-      $("select.name").each(function(){
-        $(this).parent().next().find("select").val($(this).data('profile'));
-      });
+      updateSelectBoxes();
     }
+  };
+
+  function updateSelectBoxes(){
+    $("select.name").each(function(){
+      $(this).parent().next().find("select").val($(this).data('profile'));
+    });
   };
 
   function addProfileSelectBoxes(){
@@ -21,7 +25,7 @@ var ProfileSelectBoxes = (function(){
   };
 
   function addChangeListenerToNameBox(){
-    $("select.name").off().on("change", function(){
+    $("select.name").off("change").on("change", function(){
       cloneAndAppendProfileSelect.call(this, true);
     });
   };
@@ -49,8 +53,7 @@ var ProfileSelectBoxes = (function(){
     };
   };
 
-  function ProfileSelectBoxes(){
-  };
+  function ProfileSelectBoxes(){};
 
   return ProfileSelectBoxes;
 })();

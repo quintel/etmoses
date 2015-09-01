@@ -22,6 +22,10 @@ class Technology < ActiveRecord::Base
   validates :export_to,
     length: { maximum: 100 }
 
+  def self.visible
+    where(visible: true)
+  end
+
   def self.with_load_profiles
     joins(:load_profiles).uniq + where(key: 'generic')
   end

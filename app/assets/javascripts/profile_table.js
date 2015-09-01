@@ -1,37 +1,19 @@
 var ProfileTable = (function(){
-  var widget, selector, profileSelectBoxes;
-  var EDSN_THRESHOLD = 30;
+  var widget, selector, profileSelectBoxes, edsnSwitch;
 
   ProfileTable.prototype = {
     append: function(){
       profileSelectBoxes.add();
-      addChangeListenersToHouseholds();
+      edsnSwitch.enable();
+
       editableTable.append(parseTableToJSON, changeData);
       parseTableToJSON();
     },
 
     updateProfiles: function(){
       profileSelectBoxes.update();
+      parseTableToJSON();
     }
-  };
-
-  function addChangeListenersToHouseholds(){
-    $("select.base_load:visible").each(function(){
-      var select = this;
-      var unitsInput = $(select).parents("tr").find(".units input");
-
-      toggleEDSNProfiles.call(this, unitsInput.val());
-
-      unitsInput.off("change").on("change", function(){
-        toggleEDSNProfiles.call(select, $(this).val());
-      });
-    });
-  };
-
-  function toggleEDSNProfiles(value){
-    $(this).val(function(){
-      return $(this).find("option[data-edsn=" + (value > EDSN_THRESHOLD) + "]").val();
-    });
   };
 
   function parseTableToJSON(){
@@ -60,9 +42,11 @@ var ProfileTable = (function(){
   };
 
   function ProfileTable(_selector){
-    selector = _selector;
+    selector           = _selector;
+    editing            = $("form.edit_testing_ground").length > 0;
     profileSelectBoxes = new ProfileSelectBoxes();
-    editableTable = new EditableTable(_selector);
+    editableTable      = new EditableTable(_selector);
+    edsnSwitch         = new EdsnSwitch(editing);
   };
 
   return ProfileTable;

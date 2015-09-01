@@ -12,6 +12,7 @@ topology_id = ->
 
 technology_distribution = ->
   tech_distribution = JSON.parse($("textarea#technology_distribution").text())
+
   for tech in tech_distribution
     concurrency = $(".check_box input[name='" + tech.type + "']")
     tech.concurrency = (if concurrency.prop('checked') then 'max' else 'min')

@@ -94,7 +94,7 @@ RSpec.describe TestingGroundsController do
   end
 
   # Testing of the postponing of base load
-  #
+  # with anonimous base load profile
   describe "applying postponing of base load" do
     let(:load_profile){
       FactoryGirl.create(:load_profile, key: 'edsn_inflex_and_flex_parts')
@@ -151,47 +151,52 @@ RSpec.describe TestingGroundsController do
         ])
       end
     end
+  end
 
-    describe "with a possibility to fix the problem" do
-      let(:flex_curve){   [0.2, [0.0] * 16].flatten }
-      let(:inflex_curve){ [1.0, 1.0, 1.0, 0.6, [1.0] * 13].flatten }
+  # Testing of the postponing of base load
+  # with edsn profiles it shouldn't change
+  #
+  describe "applying postponing of base load" do
+    let!(:load_profiles){
+      load_profile = FactoryGirl.create(:load_profile, key: 'edsn_inflex_and_flex_parts')
+      FactoryGirl.create(:load_profile_component, curve_type: 'flex', load_profile: load_profile)
+      FactoryGirl.create(:load_profile_component, curve_type: 'inflex', load_profile: load_profile)
 
-      it "applies postponing of base load" do
+      expect_any_instance_of(InstalledTechnology).to receive(:profile_curves)
+        .at_least(1).times.and_return({
+          flex:   Network::Curve.new(flex_curve),
+          inflex: Network::Curve.new(inflex_curve)
+        })
+    }
+
+    let(:technology_profile){
+      {
+        "CONGESTED_END_POINT_1"=> [{
+          "name"        => "Buildings",
+          "type"        => "base_load_edsn",
+          "behavior"    => nil,
+          "profile"     => "edsn_inflex_and_flex_parts",
+          "load"        => nil,
+          "capacity"    => nil,
+          "demand"      => 2,
+          "volume"      => nil,
+          "units"       => 1,
+          "concurrency" => "max"
+        }]
+      }
+    }
+
+    describe "with no possibility to fix the problem within 12 frames" do
+      let(:flex_curve){   [0.2, [0.0] * 14].flatten }
+      let(:inflex_curve){ [1.0] * 15 }
+
+      it "applies no postponing of base load" do
         get :data, format: :json, id: testing_ground.id,
                   strategies: FakeLoadManagement.strategies(postponing_base_load: true)
 
         expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          1.0, 1.0, 1.0, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0,
-          1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-        ])
-      end
-    end
-
-    describe "with a possibility to fix the across multiple frames" do
-      let(:flex_curve){   [0.2, [0.0] * 16].flatten }
-      let(:inflex_curve){ [1.0, 1.0, 1.0, 0.9, 0.9, [0.0] * 12].flatten }
-
-      it "applies postponing of base load" do
-        get :data, format: :json, id: testing_ground.id,
-                  strategies: FakeLoadManagement.strategies(postponing_base_load: true)
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0,
-          0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
-        ])
-      end
-    end
-
-    describe "with no possibility to fix the problem before the end" do
-      let(:flex_curve){   [0.2, [0.0] * 3].flatten }
-      let(:inflex_curve){ [1.0] * 4 }
-
-      it "applies postponing in the final frame" do
-        get :data, format: :json, id: testing_ground.id,
-          strategies: FakeLoadManagement.strategies(postponing_base_load: true)
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          1.0, 1.0, 1.0, 1.2
+          1.2, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
+          1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ])
       end
     end

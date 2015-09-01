@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150827100702) do
+ActiveRecord::Schema.define(version: 20150828134229) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -82,10 +82,11 @@ ActiveRecord::Schema.define(version: 20150827100702) do
   end
 
   create_table "technologies", force: true do |t|
-    t.string "key",       limit: 100, null: false
-    t.string "name",      limit: 100
-    t.string "export_to", limit: 100
-    t.string "behavior",  limit: 50
+    t.string  "key",       limit: 100,                null: false
+    t.string  "name",      limit: 100
+    t.string  "export_to", limit: 100
+    t.string  "behavior",  limit: 50
+    t.boolean "visible",               default: true
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
