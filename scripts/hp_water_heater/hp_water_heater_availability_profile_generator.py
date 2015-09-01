@@ -73,12 +73,10 @@ DHW_liters_to_energy = daily_energy_demand_DHW_per_household / daily_DHW_volume
 # From the ETM, see https://github.com/quintel/etdataset/issues/599#issuecomment-98747401
 specific_heat_H20 = 4.186 # Joule / gram / degrees
 P2H_boiler_volume = 100 # liters
-temp_diff = 95 - 15 # degrees
+temp_diff = 65 - 15 # degrees
 
 # HP capacity
-capacity = 10000 #W
-COP = 3.0
-effective_capacity = capacity * COP
+heat_output_capacity = 10000 #W
 
 # The factor 1000 is to convert from liters to grams
 P2H_storage_volume = specific_heat_H20 * P2H_boiler_volume * 1000 * temp_diff # Joule
@@ -174,7 +172,7 @@ def create_availability_profile(use_profile):
 
     # Calculate which fraction of the heat pumps capacity you can fill in 15 minute
     # 3600 is the conversion factor J / Wh  
-    maximum_added_energy = (effective_capacity / 4.0) * (3600 / P2H_storage_volume)
+    maximum_added_energy = (heat_output_capacity / 4.0) * (3600 / P2H_storage_volume)
 
     # start at the end of the year and works backwards
     backwards_use_profile = use_profile[::-1]

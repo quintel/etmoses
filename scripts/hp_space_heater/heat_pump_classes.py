@@ -29,7 +29,7 @@ class house:
         print "floor_area ", self.floor_area
         print "wall_area ", self.wall_area
         print "outside_area ", self.outside_area
-        print "volume ", self.volume
+        print "volume ", self.volume, "cubic meters"
         print "heat_demand ", self.heat_demand
         print "kWh_leaked_per_hour_per_Kelvin ", self.kWh_leaked_per_hour_per_Kelvin
         print "heat_loss_parameter ", self.heat_loss_parameter, " (1.1 is 'sustainable' pag. 295 SEWTHA)"

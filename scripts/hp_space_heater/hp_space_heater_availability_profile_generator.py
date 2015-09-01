@@ -41,9 +41,7 @@ house = heat_pump_classes.house(floor_area,
 house.print_info()
 
 # Specs of heat-pump
-capacity_in_kW = 10
-COP = 4.5
-effective_capacity_in_kW = capacity_in_kW * COP
+heat_output_capacity_in_kW = 10
 
 # Specs of storage tank
 liters = 100
@@ -93,7 +91,7 @@ demand_profile = demand_profile / max_content_in_kWh
 # If the tank should be more than 100% full, we expect the gas-boiler to kick in and save the day
 demand_profile = [x if x < 1 else 1 for x in demand_profile]
 
-def create_availability_profile(use_profile, effective_capacity_in_kW, max_content_in_kWh):
+def create_availability_profile(use_profile, heat_output_capacity_in_kW, max_content_in_kWh):
     # This profile creates an availability profile from a use profile. The use
     # of hot water determines when the heat pump needs to start heating. The
     # output profile of this function indicates which fraction of the total 
@@ -101,7 +99,7 @@ def create_availability_profile(use_profile, effective_capacity_in_kW, max_conte
 
     # Calculate which fraction of the boilers capacity you can fill in 15 minute
     # 3600 is the conversion factor J / Wh  
-    maximum_added_energy = (effective_capacity_in_kW / 4.0) / max_content_in_kWh
+    maximum_added_energy = (heat_output_capacity_in_kW / 4.0) / max_content_in_kWh
     print maximum_added_energy
 
     # start at the end of the year and works backwards
@@ -133,11 +131,11 @@ def create_availability_profile(use_profile, effective_capacity_in_kW, max_conte
     
     return availability_profile
     
-availability_profile = create_availability_profile(demand_profile, effective_capacity_in_kW, max_content_in_kWh)
+availability_profile = create_availability_profile(demand_profile, heat_output_capacity_in_kW, max_content_in_kWh)
 availability_profile = [x if x < 1 else 1 for x in availability_profile]
    
 mini = 8 * 4 * 24
-maxi = int(365 * 4 * 24)
+maxi = int(13 * 4 * 24)
 plt.plot(demand_profile[mini:maxi])
 plt.plot(availability_profile[mini:maxi])
 #plt.plot(availability_profile[mini:maxi]-demand_profile[mini:maxi])
@@ -145,6 +143,6 @@ plt.xlabel('time (15 minutes)')
 plt.ylabel('Fraction of buffer extracted')
 plt.show()
 
-print "../output_data/hp_space_heating_" + str(capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter"
-plt.savetxt("../output_data/hp_space_heating_" + str(capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter_use.csv", demand_profile, fmt='%.3f', delimiter=',') 
-plt.savetxt("../output_data/hp_space_heating_" + str(capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter_availability.csv", availability_profile, fmt='%.3f', delimiter=',') 
+print "../output_data/hp_space_heating_" + str(heat_output_capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter"
+plt.savetxt("../output_data/hp_space_heating_" + str(heat_output_capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter_use.csv", demand_profile, fmt='%.3f', delimiter=',') 
+plt.savetxt("../output_data/hp_space_heating_" + str(heat_output_capacity_in_kW) + "kW_" + str(floor_area) + "m2_" + str(liters) + "liter_availability.csv", availability_profile, fmt='%.3f', delimiter=',') 
