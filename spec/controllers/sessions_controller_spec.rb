@@ -21,7 +21,7 @@ RSpec.describe SessionsController do
   end
 
   it "logs in a an ativated user" do
-    user = FactoryGirl.create(:user, activated: true)
+    user = FactoryGirl.create(:user, activated: true, password: "test123")
 
     post :create, session: { email: user.email, password: "test123" }
 
