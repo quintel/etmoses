@@ -49,7 +49,9 @@ class LoadProfilesController < ResourceController
 
   def build_load_profile_components
     LoadProfileComponent::CURVE_TYPES.values.flatten.each do |curve_type|
-      @profile.load_profile_components.build(curve_type: curve_type)
+      unless @profile.load_profile_components.map(&:curve_type).include?(curve_type)
+        @profile.load_profile_components.build(curve_type: curve_type)
+      end
     end
   end
 
