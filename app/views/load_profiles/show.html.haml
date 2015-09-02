@@ -1,7 +1,5 @@
 %h1= @profile.key.titleize
-.curve
 .tech
-  %i Permitted Technologies:
   .profiles
     - @profile.technology_profiles.map(&:technology).each do |technology|
       %span.label.label-primary= technology
