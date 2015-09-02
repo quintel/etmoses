@@ -1,9 +1,13 @@
-%ul
-  %li== Key: #{ @profile.key }
-  %li== Curve file name: #{ @profile.load_profile_components.map(&:curve_file_name).join(", ") }
-  %li== Permitted Technologies: #{ @profile.technology_profiles.map(&:technology).join(", ") }
+%h1= @profile.key.titleize
+.curve
+.tech
+  %i Permitted Technologies:
+  .profiles
+    - @profile.technology_profiles.map(&:technology).each do |technology|
+      %span.label.label-primary= technology
 
 - @profile.load_profile_components.each do |load_profile_component|
+  %h2= load_profile_component.curve_type.titleize
   .profile-graph.line-chart{ class: "id-#{load_profile_component.id}", data: { url: load_profile_load_profile_component_path(@profile, load_profile_component, format: :json) } }
 
   .commit.pull-right
