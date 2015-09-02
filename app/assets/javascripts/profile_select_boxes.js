@@ -1,10 +1,12 @@
 var ProfileSelectBoxes = (function(){
+  var etmDefaults;
   var defaultCells = ["Capacity", "Volume", "Demand"];
 
   ProfileSelectBoxes.prototype = {
     add: function(){
       addProfileSelectBoxes();
       addChangeListenerToNameBox();
+      addChangeListenerToProfileBox();
     },
 
     update: function(){
@@ -30,30 +32,72 @@ var ProfileSelectBoxes = (function(){
     });
   };
 
+  function addChangeListenerToProfileBox(){
+    $("td.profile select").off().on("change", function(){
+      updateTextCells(this, $(this).parents("tr"));
+    });
+  };
+
   function cloneAndAppendProfileSelect(isChanged){
     var technology = $(this).val();
-    var profileSelectbox = $(".hidden.profile select." + technology).clone();
+    var profileSelectbox = $(".hidden.profile select." + technology).clone(true, true);
 
     $(this).parent().next().html(profileSelectbox);
 
-    if(isChanged){
-      updateTextCells(profileSelectbox, $(this).parents("tr"));
-    }
-    else{
-      profileSelectbox.val($(this).data('profile'));
-    }
-  };
+    updateTextCells(profileSelectbox, $(this).parents("tr"), isChanged);
 
-  function updateTextCells(profileSelectbox, currentRow){
-    for(var i = 0; i < defaultCells.length; i++){
-      var cell = defaultCells[i];
-      currentRow.find("." + cell.toLowerCase() + " input").val(
-        profileSelectbox.data("defaults" + cell)
-      );
+    if(!isChanged){
+      profileSelectbox.val($(this).data('profile'));
     };
   };
 
-  function ProfileSelectBoxes(){};
+  function updateTextCells(profileSelectbox, currentRow, clearValues){
+    var selected = $(profileSelectbox).val();
+    var selectedOption = $(profileSelectbox).find("option[value='" + selected + "']");
+    var defaults = selectedOption.data();
+
+    if(defaults){
+      for(var i = 0; i < defaultCells.length; i++){
+        setCellDefault.call({
+                cell: defaultCells[i],
+          currentRow: currentRow,
+               clear: clearValues,
+            defaults: defaults
+        });
+      };
+    };
+  };
+
+  function setCellDefault(){
+    var technology = this.currentRow.find("select.name").val();
+    var inputField = this.currentRow.find("." + this.cell.toLowerCase() + " input");
+    var dbDefault  = this.defaults["default" + this.cell];
+    var etmValue   = defaultsForTech(technology)[this.cell.toLowerCase()];
+    var userInput  = parseFloat(inputField.val());
+
+    if(etmValue == userInput || this.clear) userInput = undefined;
+
+    inputField.val(userInput || etmValue || dbDefault);
+  };
+
+  function defaultsForTech(tech){
+    return etmDefaults[tech] ? etmDefaults[tech][0] : {};
+  };
+
+  function setEtmDefaults(){
+    var profile = JSON.parse($("#testing_ground_technology_profile").text());
+    var technologies = []
+
+    Object.keys(profile).map(function(key){
+      technologies = technologies.concat(profile[key])
+    });
+
+    return ETHelper.groupBy(technologies, 'type');
+  };
+
+  function ProfileSelectBoxes(){
+    etmDefaults = setEtmDefaults();
+  };
 
   return ProfileSelectBoxes;
 })();

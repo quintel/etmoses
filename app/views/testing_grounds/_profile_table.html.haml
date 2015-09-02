@@ -12,7 +12,7 @@
   %tbody
     .hidden.profile
       - @technologies.each do |technology|
-        %select.form-control{class: technology.key, data: { defaults: technology_defaults(technology, testing_ground_profile) }}
+        %select.form-control{class: technology.key}
           - case technology.key
           - when 'generic'
             = options_for_load_profiles(testing_ground_profile)
@@ -34,14 +34,14 @@
                   = profile_table_options_for_name(technology)
 
             - when :profile
-              %td.editable.select
+              %td.profile.editable.select
 
             - when :concurrency
               %td.editable.hidden
                 %input{type: 'text', value: value}
 
             - when :demand
-              %td.editable.text{class: key, data: {edit_type: 'text'}}
+              %td.editable.text{class: key, data: { edit_type: 'text' }}
                 %input.form-control{type: 'text', value: value.try(:round) }
 
             - else
