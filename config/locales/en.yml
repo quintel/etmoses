@@ -20,6 +20,11 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  devise:
+    failure:
+      user:
+        not_activated: "User is not activated"
+
   not_authorized: "You don't have permission to view that."
 
   testing_grounds:
