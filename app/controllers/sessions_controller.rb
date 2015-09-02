@@ -7,7 +7,7 @@ class SessionsController < Devise::SessionsController
   def create
     user = User.find_by_email(params[:session][:email])
 
-    if user && user.activated? && sign_in(user)
+    if user && user.activated? && user.valid_password?(params[:session][:password]) && sign_in(user)
       redirect_to signed_in_redirect_path
     elsif user && !user.activated?
       flash.now[:alert] = "Account is not activated"
