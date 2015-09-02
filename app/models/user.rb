@@ -10,4 +10,16 @@ class User < ActiveRecord::Base
   def activate!
     update_column(:activated, true)
   end
+
+  def active_for_authentication?
+    super && activated?
+  end
+
+  def inactive_message
+    if !activated?
+      :not_activated
+    else
+      super # Use whatever other message
+    end
+  end
 end
