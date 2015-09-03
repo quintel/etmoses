@@ -12,8 +12,9 @@ module Network
                      solar_storage: false, **)
         super
 
-        @storage = solar_storage
-        @buffering = buffering_electric_car
+        @storage       = solar_storage
+        @buffering     = buffering_electric_car
+        @recent_excess = 0.0
       end
 
       def self.disabled?(options)
@@ -46,7 +47,7 @@ module Network
       end
 
       def production_at(frame)
-        disconnected?(frame) ? 0.0 : super
+        disconnected?(frame) ? disconnected_load_at(frame) : super
       end
 
       # Public: The minimum amount of energy required to fulfil the needs of the
@@ -55,9 +56,9 @@ module Network
       # Returns a numeric.
       def mandatory_consumption_at(frame)
         if disconnected?(frame)
-          0.0
+          disconnected_load_at(frame)
         else
-          required = profile.at(frame) * @profile.frames_per_hour
+          required = required_at(frame)
           stored   = production_at(frame)
 
           # When storage mode is turned off, the EV is not allowed to
@@ -91,6 +92,23 @@ module Network
 
       def disconnected?(frame)
         profile && profile.at(frame) < 0
+      end
+
+      def disconnected_load_at(frame)
+        if frame.zero?
+          @recent_excess = 0.0
+        elsif disconnected?(frame - 1)
+          @recent_excess
+        else
+          # The EV was connected to the network in the previous frame; we need
+          # to check if it had an excess of energy stored (beyond that required
+          # by the profile) and ensure this energy persists while disconnected.
+          @recent_excess = stored[frame - 1] - required_at(frame - 1)
+        end
+      end
+
+      def required_at(frame)
+        @profile.at(frame) * @profile.frames_per_hour
       end
     end # ElectricVehicle
   end
