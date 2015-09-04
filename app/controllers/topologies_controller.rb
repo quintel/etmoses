@@ -1,11 +1,12 @@
 class TopologiesController < ResourceController
-  RESOURCE_ACTIONS = %i(show edit update destroy)
+  RESOURCE_ACTIONS = %i(show edit update destroy clone)
 
   respond_to :html
   respond_to :json, only: :show
 
   before_filter :fetch_topology, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
+  before_filter :fetch_testing_ground, only: :clone
 
   def index
     @topologies = policy_scope(Topology.named).in_name_order
@@ -35,6 +36,13 @@ class TopologiesController < ResourceController
     respond_with(@topology)
   end
 
+  # POST /topologies/:id/clone
+  def clone
+    TestingGround::Cloner.new(@testing_ground, @topology, topology_params).clone
+
+    redirect_to testing_ground_path(@testing_ground)
+  end
+
   # DELETE /topologies/:id
   def destroy
     @topology.destroy
@@ -49,6 +57,6 @@ class TopologiesController < ResourceController
   end
 
   def topology_params
-    params.require(:topology).permit(:name, :graph, :public)
+    params.require(:topology).permit(:name, :user_id, :graph, :public)
   end
 end

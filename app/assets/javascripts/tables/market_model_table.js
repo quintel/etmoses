@@ -1,9 +1,8 @@
 var MarketModelTable = (function(){
-  var selector, editableTable;
+  var editableTable;
 
   function MarketModelTable(_selector){
-    selector = _selector;
-    editableTable = new EditableTable(selector);
+    editableTable = new EditableTable(_selector);
   };
 
   MarketModelTable.prototype = {

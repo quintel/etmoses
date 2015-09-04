@@ -19,6 +19,6 @@ createEditor = (textarea) ->
     textarea.text(editor.getSession().getValue())
 
 $(document).on "page:change", ->
-  textarea = $('textarea#topology_graph')
+  textarea = $('textarea.topology-graph')
   if textarea.length and ! textarea.data('editor')
     createEditor(textarea)

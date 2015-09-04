@@ -53,8 +53,8 @@ var ProfileTable = (function(){
 })();
 
 $(document).on("page:change", function(){
-  if($("#profiles-table table").length > 0){
-    window.currentProfileTable = new ProfileTable("#profiles-table table");
+  if($("#profiles-table > table").length > 0){
+    window.currentProfileTable = new ProfileTable("#profiles-table > table");
     window.currentProfileTable.append();
   }
 });

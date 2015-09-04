@@ -1,6 +1,6 @@
 module LoadProfileOptionsHelper
   def options_for_load_profiles(technologies, technology = false)
-    tech_profiles = technology ? technology.load_profiles : LoadProfile.all
+    tech_profiles = technology ? technology.load_profiles : LoadProfile.order(:key)
 
     load_profiles = profiles(technologies, tech_profiles).map do |load_profile|
       [load_profile.key, load_profile.id, data: default_values(load_profile, technology)]

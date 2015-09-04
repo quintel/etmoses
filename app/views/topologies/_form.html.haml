@@ -1,9 +1,9 @@
-- if @topology.errors.any?
+- if topology.errors.any?
   %ul.errors
-    - @topology.errors.full_messages.uniq.each do |message|
+    - topology.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for @topology, html: { multipart: true } do |form|
+= form_for topology, url: action, html: { multipart: true } do |form|
   .form-group
     = form.label :name
     = form.text_field :name, class: 'form-control'
@@ -23,12 +23,13 @@
   .form-group
     = form.label :graph
     = tooltip_tag(t(:'topologies.form.graph.tooltip'))
-    = form.text_area :graph, value: topology_field_value(@topology)
+    = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
 
   .form-group
-    = form.submit class: 'btn btn-primary'
-    %span.or or
-    - if @topology.new_record?
-      = link_to 'Cancel', topologies_path, class: 'btn btn-default'
-    - else
-      = link_to 'Cancel', topology_path(@topology), class: 'btn btn-default'
+    = form.submit 'Save', class: 'btn btn-primary'
+    - unless (defined?(hide_cancel) && hide_cancel)
+      %span.or or
+      - if topology.new_record?
+        = link_to 'Cancel', topologies_path, class: 'btn btn-default'
+      - else
+        = link_to 'Cancel', topology_path(topology), class: 'btn btn-default'

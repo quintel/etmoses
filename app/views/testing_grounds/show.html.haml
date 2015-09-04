@@ -64,7 +64,7 @@
     .tab-content
       .tab-pane.active#load{role: 'tabpanel'}
         .load-graph.line-chart
-          %p.info When clicking a node, load will appear
+          %p.info Click on a network component to view its load and attached technologies
 
         %p= link_to "Download curve", "#", class: "btn btn-primary download-curve"
 
@@ -107,14 +107,17 @@
 
 .dashboard
   %h2 Business case
-  #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
+  - if @testing_ground.business_case
+    #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
+  - else
+    %p No business case available yet
+    = link_to "Create business case", testing_ground_business_cases_path(@testing_ground), method: :post, class: "btn btn-primary"
 
   .clearfix
 
 .export
   - if can_export?(@testing_ground)
     = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
-
 
 -#
   #stakeholders

@@ -1,11 +1,12 @@
 class MarketModelsController < ResourceController
-  RESOURCE_ACTIONS = %i(show edit update destroy)
+  RESOURCE_ACTIONS = %i(show edit update destroy clone)
 
   before_filter :find_market_model, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
+  before_filter :fetch_testing_ground, only: :clone
 
   def index
-    @market_models = policy_scope(MarketModel)
+    @market_models = policy_scope(MarketModel).order(:name)
   end
 
   def new
@@ -33,6 +34,13 @@ class MarketModelsController < ResourceController
     else
       render :edit
     end
+  end
+
+  # POST /market_models/:id/clone
+  def clone
+    TestingGround::Cloner.new(@testing_ground, @market_model, market_model_params).clone
+
+    redirect_to testing_ground_path(@testing_ground)
   end
 
   def destroy

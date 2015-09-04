@@ -114,26 +114,6 @@ RSpec.describe BusinessCasesController do
     end
   end
 
-  describe "#data" do
-    let(:business_case){
-      FactoryGirl.create(:business_case)
-    }
-
-    it 'visits show page' do
-      get :data, testing_ground_id: testing_ground.id, id: business_case.id
-
-      expect(JSON.parse(response.body)).to eq([
-        {"aggregator"=>[nil, nil, nil, nil, nil, nil, nil]},
-        {"cooperation"=>[nil, nil, nil, nil, nil, nil, nil]},
-        {"customer"=>[nil, nil, nil, nil, nil, nil, nil]},
-        {"government"=>[nil, nil, nil, nil, nil, nil, nil]},
-        {"producer"=>[nil, nil, nil, nil, nil, nil, nil]},
-        {"supplier"=>[nil, nil, nil, nil, nil, nil, nil]},
-        {"system operator"=>[nil, nil, nil, nil, nil, nil, nil]}
-      ])
-    end
-  end
-
   describe "#compare_with" do
     let(:comparing_testing_ground){
       FactoryGirl.create(:testing_ground)

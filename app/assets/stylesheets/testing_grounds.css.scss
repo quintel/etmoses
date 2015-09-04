@@ -9,10 +9,20 @@ h3 .subtitle {
   margin-left: 5px;
 }
 
+h4.edit{
+  a{
+    color: black;
+  }
+}
+
+.collapse.edit{
+  margin-bottom: 30px;
+}
+
 ul.testing-grounds {
   .date {
     color: #777;
-    font-size: 1.2rem;
+    font-size: 1.2em;
     margin-left: 5px;
   }
 }
@@ -208,7 +218,7 @@ ul.testing-grounds {
   }
 }
 
-.new_testing_ground, .edit_testing_ground, .new_topology, .edit_topology {
+#topology-form, .new_testing_ground, .edit_testing_ground, .new_topology, .edit_topology {
   textarea {
     display: block;
     font: 13px/17px monospace;
@@ -422,4 +432,8 @@ select#stakeholders{
       margin-top: 20px;
     }
   }
+}
+
+.tab-pane.edit{
+  margin: 15px 20px;
 }

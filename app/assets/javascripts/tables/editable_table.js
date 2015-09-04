@@ -6,27 +6,29 @@ var EditableTable = (function(){
       changeListener = (_changeListener || function(){});
       changeData = (_changeData || function(){});
 
-      $(selector).on('change', changeListener.bind(this));
+      $(this.selector).on('change', changeListener.bind(this));
 
-      addClickListenersToAddRow();
-      addClickListenersToDeleteRow();
+      addClickListenersToAddRow.call(this);
+      addClickListenersToDeleteRow.call(this);
     },
 
     getData: function(){
-      return tableToProfile();
+      return tableToProfile.call(this);
     }
   };
 
   function tableToProfile(){
-    return tableRows().map(function(tableRow){
-      return rowToTechnologyObject(tableRow);
+    var self = this;
+    return tableRows.call(this).map(function(tableRow){
+      return rowToTechnologyObject.call(self, tableRow);
     });
   };
 
   function rowToTechnologyObject(tableRow){
     var tableData = {};
+    var self = this;
     $.each(tableRow, function(i, attribute){
-      var header = tableHeader(i);
+      var header = tableHeader.call(self, i);
       tableData[header] = attribute;
       changeData.call({ attribute: attribute, header: header, tableData: tableData });
     });
@@ -34,11 +36,11 @@ var EditableTable = (function(){
   };
 
   function tableHeader(index){
-    return $($(selector).find("thead th")[index]).data("header");
+    return $($(this.selector).find("thead th")[index]).data("header");
   };
 
   function tableRows(){
-    return $(selector).find("tbody tr").toArray().map(extractTextfromCells);
+    return $(this.selector).find("tbody tr").toArray().map(extractTextfromCells);
   };
 
   function extractTextfromCells(row){
@@ -53,7 +55,9 @@ var EditableTable = (function(){
   };
 
   function addClickListenersToAddRow(){
-    $(selector).find("a.add-row").on("click", function(){
+    $(this.selector).find("a.add-row").on("click", function(e){
+      e.preventDefault();
+
       var row = $(this).parents("tr");
       var clonedRow = row.clone(true, true);
       clonedRow.insertAfter(row);
@@ -62,14 +66,16 @@ var EditableTable = (function(){
   };
 
   function addClickListenersToDeleteRow(){
-    $(selector).find("a.remove-row").on("click", function(){
+    $(this.selector).find("a.remove-row").on("click", function(e){
+      e.preventDefault();
+
       $(this).parents("tr").remove();
       changeListener.call();
     });
   };
 
   function EditableTable(_selector){
-    selector = _selector;
+    this.selector = _selector;
   };
 
   return EditableTable;

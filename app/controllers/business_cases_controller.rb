@@ -12,7 +12,6 @@ class BusinessCasesController < ResourceController
   end
 
   def data
-    @business_case = Finance::BusinessCaseCreator.new(@testing_ground).create
     @business_case_summary = Finance::BusinessCaseSummary.new(@business_case).summarize
   end
 
@@ -28,7 +27,7 @@ class BusinessCasesController < ResourceController
   def update
     @business_case.update_attributes(business_case_params)
 
-    redirect_to testing_ground_business_case_path(@testing_ground, @business_case)
+    redirect_to testing_ground_path(@testing_ground)
   end
 
   def compare_with

@@ -1,4 +1,18 @@
 %h1 Market models
-- @market_models.each do |market_model|
-  .market-model
-    = link_to market_model.name, market_model
+
+.market-models
+  %table.table
+    %thead
+      %tr
+        %th Name
+        %th Created at
+    %tbody
+      - @market_models.each do |market_model|
+        %tr
+          %td
+            = link_to market_model do
+              - if market_model.private?
+                %span.glyphicon.glyphicon-lock
+              = (market_model.name || "No name specified")
+
+          %td= I18n.l(market_model.created_at, format: :short)

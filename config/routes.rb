@@ -27,8 +27,16 @@ Rails.application.routes.draw do
   resources :load_profiles do
     resources :load_profile_component, only: :show
   end
-  resources :topologies
-  resources :market_models
+  resources :topologies do
+    member do
+      patch :clone
+    end
+  end
+  resources :market_models do
+    member do
+      patch :clone
+    end
+  end
 
   root to: redirect('/welcome')
 

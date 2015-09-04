@@ -1,2 +1,2 @@
 %h3== Edit topology #{ @topology.name }
-= render partial: 'form'
+= render partial: 'form', locals: { topology: @topology, action: topology_path(@topology) }

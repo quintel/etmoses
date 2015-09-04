@@ -1,7 +1,9 @@
 Finance = {
   currencyOptions: {
     symbol: '€',
-    negativeFormat: "-%s%n"
+    negativeFormat: "-%s%n",
+    digitGroupSymbol: '.',
+    decimalSymbol: ','
   }
 };
 
@@ -15,6 +17,14 @@ $(document).on("page:change", function(){
   var businessCaseTable = $("#business_case_table");
 
   if(businessCaseTable.length > 0){
-    $.ajax({ url: businessCaseTable.data('url'), type: "GET" });
+
+    $.ajax({
+      url: businessCaseTable.data('url'),
+      type: "GET",
+      success: function(){
+        businessCaseTable.find("table tbody td.editable span.static").
+          formatCurrency(Finance.currencyOptions);
+      }
+    });
   };
 });
