@@ -1,17 +1,17 @@
 %h1
   = @market_model.name
-%table.interactions.table
+%table.interactions.table.table-bordered
   %tr
-    %th Stakeholder from
-    %th Stakeholder To
+    %th Payer
+    %th Payee
     %th Measure
-    %th (not used)
-    %th Tariff Type
-    %th Tariff Price
+    %th Applied to stakeholder
+    %th Tariff (EUR/unit)
   - @market_model.interactions.each do |interaction|
     %tr
-      - interaction.each_value do |value|
-        %td= value
+      - MarketModel::PRESENTABLES.each do |property|
+        %td= interaction[property]
 
-= link_to "Edit", edit_market_model_path(@market_model)
-= link_to "Destroy", market_model_path(@market_model), method: :delete, data: { confirm: "Are you sure?" }
+- if policy(@market_model).edit?
+  = link_to "Edit", edit_market_model_path(@market_model)
+  = link_to "Destroy", market_model_path(@market_model), method: :delete, data: { confirm: "Are you sure?" }

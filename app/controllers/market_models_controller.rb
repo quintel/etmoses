@@ -5,7 +5,7 @@ class MarketModelsController < ResourceController
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
 
   def index
-    @market_models = MarketModel.all
+    @market_models = policy_scope(MarketModel)
   end
 
   def new

@@ -1,9 +1,9 @@
 %table.table.interactions
   %thead
-    %th{data: {header: 'stakeholder_from' }} Stakeholder from
-    %th{data: {header: 'stakeholder_to' }} Stakeholder to
-    %th{data: {header: 'foundation' }} Foundation
-    %th{data: {header: 'measure' }} Measure
+    %th{data: {header: 'stakeholder_from' }} Payer
+    %th{data: {header: 'stakeholder_to' }} Payee
+    %th{data: {header: 'foundation' }} Measure
+    %th{data: {header: 'applied_stakeholder' }} Applied to stakeholder
     %th.tariff-type{data: {header: 'tariff_type' }} Tariff Type
     %th.col-sm-2{data: {header: 'tariff' }} Tariff
     %th
@@ -25,7 +25,7 @@
 
         %td.editable.select
           %select.form-control
-            = measure_options(selected: interaction["measure"])
+            = stakeholder_options(selected: interaction["applied_stakeholder"])
 
         %td.editable.tariff-type
           %input{ name: "tariff_type", type: "hidden", value: interaction["tariff_type"].presence || 'fixed' }
