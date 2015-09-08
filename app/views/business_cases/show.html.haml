@@ -8,31 +8,7 @@
 .javascript.data.hidden
   = JSON.dump(@testing_ground.business_case.financials)
 
-%table.table.table-bordered.compare
-  %thead
-    %tr
-      %th Stakeholder
-      %th In
-      %th Out
-      %th Correction
-      %th Total
-
-  %tbody
-    - @business_case_summary.each do |financial_row|
-      %tr
-        %td= financial_row[:stakeholder].titleize
-        %td.editable
-          %span.static= financial_row[:incoming]
-          %span.difference
-        %td.editable
-          %span.static= financial_row[:outgoing]
-          %span.difference
-        %td.editable
-          %span.static= financial_row[:freeform]
-          %span.difference
-        %td.editable
-          %span.static= financial_row[:total]
-          %span.difference
+= render 'table', business_case_rows: @business_case_summary
 
 = link_to "Edit", edit_testing_ground_business_case_path(@testing_ground, @business_case), class: "btn btn-primary"
 %span.or or

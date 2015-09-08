@@ -1,4 +1,5 @@
-= form_for @market_model do |form|
+- form_action = defined?(action) ? action : market_model
+= form_for market_model, url: form_action, html: { multipart: true } do |form|
   .form-group
     = form.label :name
     = form.text_field :name, class: "form-control"
@@ -13,9 +14,9 @@
       = form.label :public, "Private", class: "radio-label"
 
   .hidden
-    = form.text_area :interactions, value: JSON.dump(@market_model.interactions).html_safe
+    = form.text_area :interactions, value: JSON.dump(market_model.interactions).html_safe
 
-  = render table
+  = render partial: 'market_models/new_table', locals: { market_model: market_model }
 
   = form.submit 'Save', class: "btn btn-primary"
 

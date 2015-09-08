@@ -5,4 +5,5 @@ class BusinessCasePolicy < ApplicationPolicy
 
   alias :compare? :show?
   alias :compare_with? :show?
+  alias :data? :show?
 end

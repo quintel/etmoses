@@ -155,6 +155,7 @@ class TestingGroundsController < ResourceController
 
   def find_testing_ground
     @testing_ground = TestingGround.find(params[:id])
+    session[:testing_ground_id] = params[:id]
     authorize @testing_ground
   end
 

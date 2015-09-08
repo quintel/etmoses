@@ -22,15 +22,15 @@ var StrategyToggler = (function(){
 
   function updateStrategies(){
     var appliedStrategies = getStrategies();
-    $("input.strategy_option").each(function(){
-      appliedStrategies[$(this).data("ajaxProp")] = $(this).is(":checked");
+    $(".load-strategies input[type=checkbox]").each(function(){
+      appliedStrategies[$(this).val()] = $(this).is(":checked");
     })
     $(".strategies.hidden").text(JSON.stringify(appliedStrategies));
   };
 
   function setClearStrategies(){
     clearStrategies = true;
-    $("input.strategy_option").each(function(){
+    $(".load-strategies input[type=checkbox]").each(function(){
       if($(this).is(":checked")){
         clearStrategies = false;
         return false;

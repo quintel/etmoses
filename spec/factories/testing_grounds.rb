@@ -4,6 +4,8 @@ FactoryGirl.define do
 
     topology
 
+    market_model
+
     technology_profile { YAML.load(<<-YML.strip_heredoc) }
       ---
       lv1:

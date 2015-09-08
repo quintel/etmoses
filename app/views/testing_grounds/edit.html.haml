@@ -4,8 +4,39 @@
     %span.sr-only Warning:
     You are now editing #{@testing_ground.user.name}'s Local Energy Solution (LES)!
 
-%h3
+%h2
   Edit local energy solution:
   = @testing_ground.name
 
-= render partial: 'form', locals: { testing_ground: @testing_ground, submit_text: "Save" }
+<<<<<<< HEAD
+%ul.nav.nav-tabs{role: "tablist"}
+  %li{role: "presentation", class: "active"}
+    = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
+  %li{role: "presentation"}
+    = link_to "Technologies", "#technologies", "aria-controls" => "home", "role" => "tab", data: { toggle: "tab" }
+  %li{role: "presentation"}
+    = link_to "Topology", "#topology", "aria-controls" => "topology", "role" => "tab", data: { toggle: "tab" }
+  %li{role: "presentation"}
+    = link_to "Market model", "#market-model", "aria-controls" => "market-model", "role" => "tab", data: { toggle: "tab" }
+  %li{role: "presentation"}
+    = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
+
+.tab-content
+  .tab-pane.edit.active#general{role: "tabpanel"}
+    = render partial: 'general_form', locals: { testing_ground: @testing_ground, submit_text: "Save" }
+
+  .tab-pane.edit#technologies{role: "tabpanel"}
+    = render partial: 'form', locals: { testing_ground: @testing_ground, submit_text: "Save", hide_general: true }
+
+  .tab-pane.edit#topology{role: "tabpanel"}
+    = render partial: 'topologies/form', locals: { topology: @testing_ground.topology, action: clone_topology_path(@testing_ground.topology) , hide_cancel: true }
+
+  .tab-pane.edit#market-model{role: "tabpanel"}
+    = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model) }
+
+  .tab-pane.edit#business-case{role: "tabpanel"}
+    - if @testing_ground.business_case
+      = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
+    - else
+      = link_to "Create business case", "#!", data: { url: testing_ground_business_cases_path(@testing_ground) }, class: "btn btn-primary business_case_create"
+

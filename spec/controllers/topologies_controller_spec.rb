@@ -83,4 +83,62 @@ RSpec.describe TopologiesController do
       end
     end
   end
+
+  describe "#clone somebody else's topology" do
+    let!(:sign_in_user){ sign_in(:user, user) }
+    let(:topology){ FactoryGirl.create(:topology, graph: YAML::dump(graph)) }
+    let(:perform_clone){
+      patch :clone, id: topology.id, "topology"=>{
+        "name"=>"Hello",
+        "graph"=> YAML::dump(graph)
+      }
+    }
+
+    let(:graph){
+      {'name' => "HV Network", 'children' => [
+        { 'name' => 'MV Network', 'children' => [
+          {'name' => "lv1", 'stakeholder' => 'customer'},
+          {'name' => "lv2", 'stakeholder' => 'customer'}
+        ]}
+      ]}
+    }
+
+    let!(:testing_ground){
+      testing_ground = FactoryGirl.create(:testing_ground, topology: topology)
+
+      controller.session[:testing_ground_id] = testing_ground.id
+    }
+
+    describe "with other LES's" do
+      let!(:another_testing_ground){
+        FactoryGirl.create(:testing_ground, topology: topology)
+      }
+
+      it 'creates a 2nd topology' do
+        perform_clone
+
+        expect(Topology.count).to eq(2)
+      end
+
+      it 'makes a cloned topology private' do
+        perform_clone
+
+        expect(Topology.last.public).to eq(false)
+      end
+
+      it "belongs to the current user" do
+        perform_clone
+
+        expect(Topology.last.user).to eq(user)
+      end
+    end
+
+    describe "with no other LES's" do
+      it 'does not create a 2nd topology' do
+        perform_clone
+
+        expect(Topology.count).to eq(1)
+      end
+    end
+  end
 end

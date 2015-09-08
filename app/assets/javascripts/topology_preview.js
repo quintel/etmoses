@@ -119,7 +119,7 @@ var TopologyPreviewer = (function(){
 })();
 
 $(document).on("page:change", function(){
-  if($(".topology-graph").length > 0){
+  if($("div.topology-graph").length > 0){
     new TopologyPreviewer(".topology-graph").preview();
   }
 });

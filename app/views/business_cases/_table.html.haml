@@ -1,0 +1,26 @@
+%table.table.table-bordered.compare
+  %thead
+    %tr
+      %th Stakeholder
+      %th In
+      %th Out
+      %th Correction
+      %th Total
+
+  %tbody
+    - business_case_rows.each do |financial_row|
+      %tr
+        %td= financial_row[:stakeholder].titleize
+        %td.editable
+          %span.static= financial_row[:incoming]
+          %span.difference
+        %td.editable
+          %span.static= financial_row[:outgoing]
+          %span.difference
+        %td.editable
+          %span.static= financial_row[:freeform]
+          %span.difference
+        %td.editable
+          %span.static= financial_row[:total]
+          %span.difference
+

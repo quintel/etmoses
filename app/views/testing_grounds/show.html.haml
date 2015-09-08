@@ -1,40 +1,46 @@
-%h1
-  = "Local Energy Solution (LES) ##{ @testing_ground.id }:"
-  = @testing_ground.name
+.header
+  %h1
+    = @testing_ground.name
 
-%em.note
-  - if @testing_ground.private?
-    %span.glyphicon.glyphicon-lock
+    - if policy(@testing_ground).edit?
+      = link_to "Edit", edit_testing_ground_path(@testing_ground), class: "btn btn-primary"
 
-  Created by #{@testing_ground.user.name} on
-  %span.date{title: "last updated on #{@testing_ground.updated_at.to_formatted_s(:long)}"}
-    = @testing_ground.created_at.to_formatted_s(:long)
 
-  - if policy(@testing_ground).edit?
-    %span.sep
-      = link_to "Edit", edit_testing_ground_path(@testing_ground)
+  .load-strategies.pull-right
+    %select.strategies.multi-select.form-control{multiple: "multiple"}
+      = options_for_strategies
 
-  - if @testing_ground.parent_scenario_id
-    %span.sep
-      = link_to_etm_scenario('National scenario', @testing_ground.parent_scenario_id)
+    .slider-wrapper.hidden
+      %input#solar_pv_capping{type: 'text', data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => 100}}
+      .clearfix
+      %p.note Specify which percentage of solar production can be capped
 
-  - if @testing_ground.scenario_id
-    %span.sep
-      = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
-
-  %span.sep
-    = link_to topology_path(@testing_ground.topology), target: "_blank" do
-      View
-      = truncate(@testing_ground.topology.name, length: 25)
-  .clearfix
-
-  - if policy(@testing_ground).edit?
-    = link_to "Create business case", testing_ground_business_cases_path(@testing_ground), method: :post, class: "btn btn-primary"
-
-  - if can_export?(@testing_ground)
-    = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
+    %button.btn.btn-primary.apply_strategies Apply
 
   .clearfix
+
+  %em.note
+    - if @testing_ground.private?
+      %span.glyphicon.glyphicon-lock
+
+    Created by #{@testing_ground.user.name} on
+    %span.date{title: "last updated on #{@testing_ground.updated_at.to_formatted_s(:long)}"}
+      = @testing_ground.created_at.to_formatted_s(:long)
+
+    - if @testing_ground.parent_scenario_id
+      %span.sep
+        = link_to_etm_scenario('National scenario', @testing_ground.parent_scenario_id)
+
+    - if @testing_ground.scenario_id
+      %span.sep
+        = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
+
+    %span.sep
+      = link_to topology_path(@testing_ground.topology), target: "_blank" do
+        View
+        = truncate(@testing_ground.topology.name, length: 25)
+    .clearfix
+
 
 #testing-ground
   .strategies.hidden
@@ -48,67 +54,75 @@
         Large local energy solutions may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
 
-.clearfix
+  .load-graph-wrapper
+    %ul.nav.nav-tabs{role: 'tablist'}
+      %li{role: 'presentation', class: 'active'}
+        = link_to "Load", "#load", "aria-controls" => "load", role: "tab", data: {toggle: "tab"}
+      %li{role: 'presentation'}
+        = link_to "Technologies", "#technologies", "aria-controls" => "technologies", role: "tab", data: {toggle: "tab"}
 
-.node-info
-  %h5
-  .load-graph.line-chart
+    .tab-content
+      .tab-pane.active#load{role: 'tabpanel'}
+        .load-graph.line-chart
+          %p.info Click on a network component to view its load and attached technologies
+
+        %p= link_to "Download curve", "#", class: "btn btn-primary download-curve"
+
+      .tab-pane#technologies{role: 'tabpanel'}
+        #technologies
+          %p.info When clicking an end-node technologies will appear
+          - if @testing_ground.technology_profile.any?
+            - @testing_ground.technology_profile.each do |key, techs|
+              .row-fluid{ "data-node" => key }
+                %table.table
+                  %thead
+                    %tr
+                      %th Name (Profile)
+                      %th Capacity [kW]
+                      %th Storage volume [kWh]
+                      %th Yearly demand [kWh]
+                      %th Units
+                  %tbody
+                    - techs.each do |tech|
+                      %tr{ "data-tech" => tech.name }
+                        %td
+                          .name= tech.name
+                          %i.profile= tech.profile_key
+                        %td= tech.capacity
+                        %td= tech.volume
+                        %td= tech.demand
+                        %td= tech.units
+
+          - else
+            %p No Technologies registered yet.
+
+          %p
+            = link_to 'Download Tech. CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'
+
     %span.loading-spinner
       = image_tag 'wait.gif'
 
-  = link_to "Download curve", "#", class: "btn btn-primary download-curve"
 
 .clearfix
 
-.load-strategies
-  %h2
-    = link_to "Flexibility strategies", "#collapse-strategies", data: {toggle: 'collapse'}
+.dashboard
+  %h2 Business case
+  - if @testing_ground.business_case
+    #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
+  - else
+    %p No business case available yet
 
-  #collapse-strategies.collapse
-    - Strategies.all.each do |strategy|
-      %div
-        = check_box_tag strategy[:name], nil, false, class: "strategy_option", data: { ajax_prop: strategy[:ajax_prop]}, disabled: !strategy[:enabled]
-        = label_tag :storage, I18n.t("testing_grounds.strategies.#{strategy[:name]}"), class: ("disabled" unless strategy[:enabled])
+  .clearfix
 
-    .slider-wrapper.hidden
-      %input#solar_pv_capping{type: 'text', data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => 100}}
-      .clearfix
-      %p.note Specify which percentage of solar production can be capped
+.export
+  - if can_export?(@testing_ground)
+    = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
 
-    %button.btn.btn-primary.apply_strategies Apply
+-#
+  #stakeholders
+    %h2
+      = link_to "Stakeholders", "#collapse-stakeholders", data: {toggle: 'collapse'}
 
-#technologies
-  %h2
-    = link_to "Technologies", "#collapse-technologies", data: {toggle: 'collapse'}
-
-  #collapse-technologies.collapse
-    - if @testing_ground.technology_profile.any?
-      - @testing_ground.technology_profile.each do |key, techs|
-        .row-fluid{ "data-node" => key }
-          %table.table
-            %thead
-              %tr
-                %th Name
-                %th Profile
-                %th Capacity [kW]
-                %th Storage volume [kWh]
-                %th Yearly demand [kWh]
-                %th Units
-            %tbody
-              - techs.each do |tech|
-                %tr{ "data-tech" => tech.name }
-                  - InstalledTechnology::PRESENTABLES.each do |akey|
-                    %td= tech.send(akey)
-
-    - else
-      No Technologies registered yet.
-
-    = link_to 'Download Tech. CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'
-
-#stakeholders
-  %h2
-    = link_to "Stakeholders", "#collapse-stakeholders", data: {toggle: 'collapse'}
-
-  #collapse-stakeholders.collapse
-    = select_tag("stakeholders", options_for_stakeholders, {include_blank: '-----', class: "form-control"})
+    #collapse-stakeholders.collapse
+      = select_tag("stakeholders", options_for_stakeholders, {include_blank: '-----', class: "form-control"})
 

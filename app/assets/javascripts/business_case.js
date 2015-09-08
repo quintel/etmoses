@@ -1,0 +1,9 @@
+$(document).on("page:change", function(){
+  var businessCaseCreateButton = $("a.btn.business_case_create");
+
+  if(businessCaseCreateButton.length > 0){
+    businessCaseCreateButton.on('click', function(){
+      $.ajax({ type: "POST", url: businessCaseCreateButton.data('url') });
+    });
+  };
+});

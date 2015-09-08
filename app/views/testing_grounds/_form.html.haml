@@ -13,20 +13,21 @@
   .hidden
     = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json
 
-  .form-group
-    = f.label :name, 'Local energy solution name'
-    = f.text_field :name, class: 'form-control'
+  - unless defined?(hide_general) && hide_general
+    .form-group
+      = f.label :name, 'Local energy solution name'
+      = f.text_field :name, class: 'form-control'
 
-  .form-group
-    = f.label :public, "Permissions"
+    .form-group
+      = f.label :public, "Permissions"
 
-    .radio-buttons
-      = f.radio_button :public, true
-      = f.label :public, "Public", class: "radio-label"
-      = f.radio_button :public, false
-      = f.label :public, "Private", class: "radio-label"
+      .radio-buttons
+        = f.radio_button :public, true
+        = f.label :public, "Public", class: "radio-label"
+        = f.radio_button :public, false
+        = f.label :public, "Private", class: "radio-label"
 
-    = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
+      = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
 
   = f.label :technology_profile, "Technology profile"
   .help-block
