@@ -1,7 +1,14 @@
 $(document).on("page:change", function(){
   $("select.multi-select").multiselect({
     buttonWidth: '200px',
-    nonSelectedText: "Pick a strategy"
+    buttonText: function(options) {
+      if (options.length) {
+        return "Pick a strategy (" + options.length + " selected)";
+      } else {
+        return "Pick a strategy";
+      }
+    },
+    dropRight: true
   });
 
   var cappingInput = $("input[type=checkbox][value=capping_solar_pv]")
