@@ -8,7 +8,6 @@
   Edit local energy solution:
   = @testing_ground.name
 
-<<<<<<< HEAD
 %ul.nav.nav-tabs{role: "tablist"}
   %li{role: "presentation", class: "active"}
     = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
@@ -39,4 +38,5 @@
       = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
     - else
       = link_to "Create business case", "#!", data: { url: testing_ground_business_cases_path(@testing_ground) }, class: "btn btn-primary business_case_create"
+      %span.wait.hidden= image_tag 'wait.gif'
 

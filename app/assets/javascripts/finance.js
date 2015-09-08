@@ -1,9 +1,7 @@
 Finance = {
   currencyOptions: {
     symbol: '€',
-    negativeFormat: "-%s%n",
-    digitGroupSymbol: '.',
-    decimalSymbol: ','
+    negativeFormat: "-%s%n"
   }
 };
 

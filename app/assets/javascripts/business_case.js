@@ -3,7 +3,14 @@ $(document).on("page:change", function(){
 
   if(businessCaseCreateButton.length > 0){
     businessCaseCreateButton.on('click', function(){
-      $.ajax({ type: "POST", url: businessCaseCreateButton.data('url') });
+      $("span.wait").removeClass("hidden");
+      $.ajax({
+        type: "POST",
+        url: businessCaseCreateButton.data('url'),
+        success: function(){
+          $("span.wait").addClass("hidden");
+        }
+      });
     });
   };
 });
