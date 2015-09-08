@@ -178,7 +178,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     end # with a high-resolution curve
 
     context 'with a value of -1' do
-      let(:profile) { [0.0, -1.0] * 4380 }
+      let(:profile) { [0.5, -1.0] * 4380 }
 
       it 'has production of zero' do
         expect(tech.production_at(1)).to be_zero
@@ -192,6 +192,106 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         expect(tech.conditional_consumption_at(1)).to be_zero
       end
     end # with stored energy of 0.5, and with a profile 1.0
+
+    context 'when disconnected, and an excess of storage' do
+      let(:profile) { [0.2, -1.0, -1.0, 0.0] * 2190 }
+
+      # The car is disconnected in a frame where the availability profile
+      # specified that the car needed 0.2. There is therefore 0.3 kWf stored in
+      # the car not needed for the next journey.
+
+      context 'immediately after disconnection' do
+        it 'has production of 0.3' do
+          expect(tech.production_at(1)).to eq(0.3)
+        end
+
+        it 'has mandatory consumption of 0.3' do
+          # 0.3 production and m.consumption cancel each other out; the car has
+          # no load on the network, but preserves the amount stored.
+          expect(tech.mandatory_consumption_at(1)).to eq(0.3)
+        end
+
+        it 'has no conditional consumption' do
+          expect(tech.conditional_consumption_at(1)).to be_zero
+        end
+
+        it 'stores 0.3' do
+          expect(tech.stored[1]).to eq(0.3)
+        end
+      end
+
+      context 'part-way through disconnection' do
+        before do
+          # Compute the loads of the previous disconnection frames first.
+          tech.production_at(1)
+        end
+
+        it 'has production of 0.3' do
+          expect(tech.production_at(2)).to eq(0.3)
+        end
+
+        it 'has mandatory consumption of 0.3' do
+          # 0.3 production and m.consumption cancel each other out; the car has
+          # no load on the network, but preserves the amount stored.
+          expect(tech.mandatory_consumption_at(2)).to eq(0.3)
+        end
+
+        it 'has no conditional consumption' do
+          expect(tech.conditional_consumption_at(2)).to be_zero
+        end
+
+        it 'stores 0.3' do
+          expect(tech.stored[2]).to eq(0.3)
+        end
+      end # part-way through disconnection
+
+      context 'when reconnected' do
+        before do
+          # Compute the loads of the previous disconnection frames first.
+          tech.production_at(1)
+          tech.production_at(2)
+        end
+
+        it 'has production of 0.3' do
+          expect(tech.production_at(3)).to eq(0.3)
+        end
+
+        it 'has no mandatory consumption' do
+          # Profile has no required stored amount, therefore there is no
+          # m.consumption.
+          expect(tech.mandatory_consumption_at(3)).to be_zero
+        end
+
+        it 'has conditional consumption of 3.0' do
+          # The EV may charge again.
+          expect(tech.conditional_consumption_at(3)).to eq(3.0)
+        end
+
+        it 'stores nothing' do
+          expect(tech.stored[3]).to be_zero
+        end
+      end # when reconnected
+
+      context 'immediately after disconnection with storage off' do
+        let(:opts) { super().merge(solar_storage: false) }
+
+        it 'has production of 0.3' do
+          expect(tech.production_at(1)).to eq(0.3)
+        end
+
+        it 'has mandatory consumption of 0.3' do
+          expect(tech.mandatory_consumption_at(1)).to eq(0.3)
+        end
+
+        it 'has no conditional consumption' do
+          expect(tech.conditional_consumption_at(1)).to be_zero
+        end
+
+        it 'stores 0.3' do
+          expect(tech.stored[1]).to eq(0.3)
+        end
+      end
+    end # when disconnected, and an excess of storage
 
     context 'with capacity of 0.2' do
       let(:capacity) { 0.2 }
@@ -303,22 +403,6 @@ RSpec.describe Network::Technologies::ElectricVehicle do
           expect(tech.conditional_consumption_at(1)).to eq(2.2)
         end
       end # and a profile value of 8
-
-      context 'and a profile value of -1' do
-        let(:profile) { [0.0, -1.0] * 4380 }
-
-        it 'has no production' do
-          expect(tech.production_at(1)).to be_zero
-        end
-
-        it 'has no mandatory consumption' do
-          expect(tech.mandatory_consumption_at(1)).to be_zero
-        end
-
-        it 'has no conditional consumption' do
-          expect(tech.conditional_consumption_at(1)).to be_zero
-        end
-      end # and a profile value of -1
     end # with capacity of 5.0
   end # with a profile
 
