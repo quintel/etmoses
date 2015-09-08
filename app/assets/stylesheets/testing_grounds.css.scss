@@ -400,7 +400,7 @@ select#stakeholders{
 }
 
 .slider-wrapper{
-  padding: 5px 0 5px 20px;
+  padding: 5px 0 5px 15px;
 
   .slider{
     .slider-handle{
@@ -413,8 +413,11 @@ select#stakeholders{
   }
 
   p.note{
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 0;
     padding-top: 10px;
-    font-style: italic;
+    padding-right: 20px;
   }
 }
 
