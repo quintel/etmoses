@@ -13,7 +13,7 @@ RSpec.describe BusinessCasesController do
 
   describe "#create" do
     let(:create_business_case){
-      post :create, testing_ground_id: testing_ground.id
+      post :create, testing_ground_id: testing_ground.id, format: :js
     }
 
     it 'creates a business case' do
@@ -30,12 +30,6 @@ RSpec.describe BusinessCasesController do
       expect(BusinessCase.count).to eq(1)
     end
 
-    it "doesn't let you create a business case without a market model" do
-      post :create, testing_ground_id: testing_ground_without_mm.id
-
-      expect(BusinessCase.count).to eq(0)
-    end
-
     it "sets financials to table" do
       create_business_case
 
@@ -48,13 +42,6 @@ RSpec.describe BusinessCasesController do
           {"supplier"=>[nil, nil, nil, nil, nil, nil, nil]},
           {"system operator"=>[nil, nil, nil, nil, nil, nil, nil]}
         ])
-    end
-
-    it "redirects to show page" do
-      create_business_case
-
-      expect(response).to redirect_to(
-        testing_ground_business_case_path(testing_ground, BusinessCase.last))
     end
   end
 
