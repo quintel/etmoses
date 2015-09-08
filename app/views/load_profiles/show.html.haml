@@ -1,8 +1,9 @@
 %h1= @profile.key.titleize
 .tech
+  %span Associated technologies:
   .profiles
-    - @profile.technology_profiles.map(&:technology).each do |technology|
-      %span.label.label-primary= technology
+    - @profile.technologies.each do |technology|
+      %span.label.label-primary= technology.name
 
 - @profile.load_profile_components.each do |load_profile_component|
   %h2= load_profile_component.curve_type.titleize

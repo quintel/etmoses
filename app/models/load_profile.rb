@@ -32,6 +32,10 @@ class LoadProfile < ActiveRecord::Base
     !!(key =~ /deprecated/)
   end
 
+  def technologies
+    Technology.where(key: technology_profiles.map(&:technology))
+  end
+
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.
   def self.by_key(key)
