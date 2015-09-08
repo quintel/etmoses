@@ -27,11 +27,13 @@ module Finance
     end
 
     def financials
-      (Finance::BusinessCaseCalculator.new(@testing_ground).rows + [freeform]).compact
+      (Finance::BusinessCaseCalculator.new(@testing_ground).rows + [existing_freeform]).compact
     end
 
-    def freeform
-      @business_case.financials.last
+    def existing_freeform
+      if financials = @business_case.financials
+        financials.last
+      end
     end
   end
 end

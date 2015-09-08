@@ -1,0 +1,33 @@
+- if testing_ground.errors.any?
+  %ul.errors
+    - testing_ground.errors.full_messages.uniq.each do |message|
+      %li= message
+
+= form_for(testing_ground) do |f|
+  - if @testing_ground.scenario_id
+    = f.hidden_field :scenario_id
+
+  = f.hidden_field :topology_id, value: testing_ground.topology_id
+  = f.hidden_field :market_model_id, value: testing_ground.market_model_id
+
+  .hidden
+    = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json
+
+  .form-group
+    = f.label :name, 'Local energy solution name'
+    = f.text_field :name, class: 'form-control'
+
+  .form-group
+    = f.label :public, "Permissions"
+
+    .radio-buttons
+      = f.radio_button :public, true
+      = f.label :public, "Public", class: "radio-label"
+      = f.radio_button :public, false
+      = f.label :public, "Private", class: "radio-label"
+
+    = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
+
+  .form-group
+    = f.submit submit_text, class: 'btn btn-primary'
+
