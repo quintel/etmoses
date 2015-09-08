@@ -24,6 +24,31 @@ module Market::Measures
       end
     end # with one base_load technology
 
+    context 'with one base_load technology split into two net techs' do
+      before do
+        installed = build(:installed_base_load)
+
+        node.set(:techs, [
+          network_technology(installed),
+          network_technology(installed)
+        ])
+      end
+
+      context 'and one unit' do
+        it 'has one connection' do
+          expect(NumberOfConnections.call(node)).to eq(1)
+        end
+      end
+
+      context 'and three units' do
+        before { node.get(:techs).first.installed.units = 3 }
+
+        it 'has three connections' do
+          expect(NumberOfConnections.call(node)).to eq(3)
+        end
+      end
+    end # with one base_load technology
+
     context 'with three base_load technologies' do
       before do
         node.set(:techs, [
