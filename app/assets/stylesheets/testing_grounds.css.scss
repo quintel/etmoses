@@ -431,8 +431,20 @@ select#stakeholders{
       float: left;
     }
 
-    .load-strategies{
+    .les-controls {
       margin-top: 20px;
+
+      .main-buttons {
+        border-left: 1px solid #ccc;
+        float: right;
+        margin: 0 0 0 10px;
+        padding: 0 0 0 10px;
+
+        .glyphicon-pencil {
+          margin: 0px 2px 0 0;
+          vertical-align: text-top;
+        }
+      }
     }
   }
 }
