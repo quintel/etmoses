@@ -26,7 +26,7 @@ module Market
       flex_potential: Measures::FlexibilityPotential,
       flex_realised:  Measures::FlexibilityRealised,
       load:           Measures::InstantaneousLoad,
-      kw_contracted:  ->(*) { 0.0 },
+      kw_contracted:  Measures::KwMax.new(1),
       kw_max:         Measures::KwMax.new,
       kwh:            Measures::Kwh.new,
       kwh_consumed:   Measures::KwhConsumed,
