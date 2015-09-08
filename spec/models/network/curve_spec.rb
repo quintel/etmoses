@@ -1,6 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Network::Curve do
+  describe '.from' do
+    context 'with an array' do
+      let(:enum)  { [1, 2, 3, 4, 5] }
+      let(:curve) { Network::Curve.from(enum) }
+
+      it 'returns a Network::Curve' do
+        expect(curve).to be_a(Network::Curve)
+      end
+
+      it 'contains the original values' do
+        expect(curve.to_a).to eq(enum)
+      end
+    end
+
+    context 'with a Network::Curve' do
+      let(:enum)  { Network::Curve.new([1, 2, 3, 4, 5]) }
+      let(:curve) { Network::Curve.from(enum) }
+
+      it 'returns a Network::Curve' do
+        expect(curve).to be_a(Network::Curve)
+      end
+
+      it 'returns the original object' do
+        expect(curve.object_id).to eq(enum.object_id)
+      end
+
+      it 'contains the original values' do
+        expect(curve.to_a).to eq([1, 2, 3, 4, 5])
+      end
+    end
+  end
+
   context 'with an array of 8,760 values' do
     let(:curve) { Network::Curve.new([1] * 8760) }
 
