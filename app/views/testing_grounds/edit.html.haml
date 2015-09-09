@@ -9,9 +9,9 @@
   = @testing_ground.name
 
 %ul.nav.nav-tabs{role: "tablist"}
-  %li{role: "presentation", class: "active"}
-    = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
   %li{role: "presentation"}
+    = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
+  %li{role: "presentation", class: "active"}
     = link_to "Technologies", "#technologies", "aria-controls" => "home", "role" => "tab", data: { toggle: "tab" }
   %li{role: "presentation"}
     = link_to "Topology", "#topology", "aria-controls" => "topology", "role" => "tab", data: { toggle: "tab" }
@@ -21,10 +21,10 @@
     = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
 
 .tab-content
-  .tab-pane.edit.active#general{role: "tabpanel"}
+  .tab-pane.edit#general{role: "tabpanel"}
     = render partial: 'general_form', locals: { testing_ground: @testing_ground, submit_text: "Save" }
 
-  .tab-pane.edit#technologies{role: "tabpanel"}
+  .tab-pane.edit.active#technologies{role: "tabpanel"}
     = render partial: 'form', locals: { testing_ground: @testing_ground, submit_text: "Save", hide_general: true }
 
   .tab-pane.edit#topology{role: "tabpanel"}
