@@ -8,6 +8,11 @@
   Edit local energy solution:
   = @testing_ground.name
 
+- if @testing_ground.errors.any?
+  %ul.errors
+    - @testing_ground.errors.full_messages.uniq.each do |message|
+      %li= message
+
 %ul.nav.nav-tabs{role: "tablist"}
   %li{role: "presentation"}
     = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
@@ -21,22 +26,40 @@
     = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
 
 .tab-content
-  .tab-pane.edit#general{role: "tabpanel"}
-    = render partial: 'general_form', locals: { testing_ground: @testing_ground, submit_text: "Save" }
+  .tab-pane.remote.edit#general{role: "tabpanel"}
+    = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), html: { remote: true } do |form|
+      = render partial: 'general_form', locals: { form: form, testing_ground: @testing_ground }
+      .hidden
+        = form.text_field "form_type", value: "general"
+      .form-group
+        = form.submit "Save", class: 'btn btn-primary'
+        %span.wait.hidden= image_tag 'wait.gif'
 
-  .tab-pane.edit.active#technologies{role: "tabpanel"}
-    = render partial: 'form', locals: { testing_ground: @testing_ground, submit_text: "Save", hide_general: true }
+  .tab-pane.remote.edit.active#technologies{role: "tabpanel"}
+    = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), html: { remote: true } do |form|
+      = render partial: 'technologies_form', locals: { form: form, testing_ground: @testing_ground, submit_text: "Save" }
+      .hidden
+        = form.text_field "form_type", value: "technologies"
+      .form-group
+        = form.submit "Save", class: 'btn btn-primary'
+        %span.wait.hidden= image_tag 'wait.gif'
 
-  .tab-pane.edit#topology{role: "tabpanel"}
-    = render partial: 'topologies/form', locals: { topology: @testing_ground.topology, action: clone_topology_path(@testing_ground.topology) , hide_cancel: true }
+  .tab-pane.remote.edit#topology{role: "tabpanel"}
+    = render partial: 'topologies/form', locals: { topology: @testing_ground.topology, action: clone_topology_path(@testing_ground.topology, format: :js), hide_cancel: true, remote: true }
 
-  .tab-pane.edit#market-model{role: "tabpanel"}
-    = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model) }
+  .tab-pane.remote.edit#market-model{role: "tabpanel"}
+    = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model, format: :js), remote: true }
 
-  .tab-pane.edit#business-case{role: "tabpanel"}
+  .tab-pane.remote.edit#business-case{role: "tabpanel"}
     - if @testing_ground.business_case
       = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
     - else
       = link_to "Create business case", "#!", data: { url: testing_ground_business_cases_path(@testing_ground) }, class: "btn btn-primary business_case_create"
       %span.wait.hidden= image_tag 'wait.gif'
 
+.btn-group.pull-right
+  %span.wait.hidden= image_tag 'wait.gif'
+  = link_to "Save all", "#", class: "btn btn-primary save-all"
+  = link_to "View LES", testing_ground_path(@testing_ground), class: "btn btn-primary"
+
+.clearfix

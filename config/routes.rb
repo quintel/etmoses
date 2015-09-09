@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       patch 'save_as'
     end
 
-    resources :business_cases, only: [:create, :show, :update, :edit] do
+    resources :business_cases, only: [:create, :show, :update] do
       member do
         post 'compare_with'
         get 'data'

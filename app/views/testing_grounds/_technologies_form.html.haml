@@ -1,0 +1,49 @@
+- if @testing_ground.scenario_id
+  = form.hidden_field :scenario_id
+
+= form.hidden_field :topology_id, value: testing_ground.topology_id
+= form.hidden_field :market_model_id, value: testing_ground.market_model_id
+
+.hidden
+  = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json
+
+= form.label :technology_profile, "Technology profile"
+.help-block
+  %p
+    Use the interactive table below to:
+    %ul
+      %li Connect the technologies from your scaled scenario to the endpoints of your chosen network topology
+      %li Edit the properties of the technologies
+      %li Attach profiles to technologies
+
+#profiles-table
+  = render partial: "testing_grounds/profile_table", locals: {topology: @testing_ground.topology, testing_ground_profile: @testing_ground.technology_profile.as_json}
+
+- unless testing_ground.new_record?
+  .form-group.pull-right
+    = link_to "Export to CSV", technology_profile_testing_ground_path(@testing_ground, format: :csv), class: "btn btn-primary"
+
+  .clearfix
+
+.concurrency
+  %strong Select the technologies to switch concurrency
+  .checkboxes
+    - @technologies.visible.with_load_profiles.each do |technology|
+      %span.check_box
+        - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
+        = check_box_tag technology.key, "max", max, {data: {toggle: "toggle", on: "Max", off: "Min"}}
+        %span= technology.name
+
+    .buttons
+      = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"
+      - edit_class = (testing_ground.new_record? ? "" : "edit")
+      = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary #{edit_class}"
+
+.form-group
+  = form.label :technology_profile_csv, "Technology profile CSV"
+  = tooltip_tag(t(:'testing_grounds.form.technology_profile_csv.tooltip'))
+  = form.file_field :technology_profile_csv, accept: 'text/csv'
+
+.hidden
+  = form.text_area :technology_profile, value: @testing_ground.technology_profile.to_json
+

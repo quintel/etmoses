@@ -34,8 +34,9 @@
         %td.row_value
           %input.free-form.form-control{value: freeform}
 
-= form_for [testing_ground, business_case] do |f|
+= form_for [testing_ground, business_case], html: { remote: true } do |f|
   .hidden
     = f.text_area :financials, value: JSON.dump(business_case.financials)
   = f.submit "Update", class: "btn btn-primary"
+  %span.wait.hidden= image_tag "wait.gif"
 

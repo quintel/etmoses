@@ -1,6 +1,8 @@
 class MarketModelsController < ResourceController
   RESOURCE_ACTIONS = %i(show edit update destroy clone)
 
+  respond_to :js, only: :clone
+
   before_filter :find_market_model, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :fetch_testing_ground, only: :clone
@@ -39,8 +41,6 @@ class MarketModelsController < ResourceController
   # POST /market_models/:id/clone
   def clone
     TestingGround::Cloner.new(@testing_ground, @market_model, market_model_params).clone
-
-    redirect_to testing_ground_path(@testing_ground)
   end
 
   def destroy

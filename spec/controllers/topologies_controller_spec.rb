@@ -88,7 +88,7 @@ RSpec.describe TopologiesController do
     let!(:sign_in_user){ sign_in(:user, user) }
     let(:topology){ FactoryGirl.create(:topology, graph: YAML::dump(graph)) }
     let(:perform_clone){
-      patch :clone, id: topology.id, "topology"=>{
+      patch :clone, format: :js, id: topology.id, "topology"=>{
         "name"=>"Hello",
         "graph"=> YAML::dump(graph)
       }
