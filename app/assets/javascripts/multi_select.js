@@ -1,12 +1,13 @@
 $(document).on("page:change", function(){
   $("select.multi-select").multiselect({
-    buttonWidth: '200px',
     buttonText: function(options) {
+      var text = 'Customise technology behaviour';
+
       if (options.length) {
-        return "Pick a strategy (" + options.length + " selected)";
-      } else {
-        return "Pick a strategy";
+        text = text + ' (' + options.length + ' selected)';
       }
+
+      return text;
     },
     dropRight: true
   });
