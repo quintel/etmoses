@@ -3,14 +3,19 @@ $(document).on("page:change", function(){
 
   if(businessCaseCreateButton.length > 0){
     businessCaseCreateButton.on('click', function(){
-      $("span.wait").removeClass("hidden");
-      $.ajax({
-        type: "POST",
-        url: businessCaseCreateButton.data('url'),
-        success: function(){
-          $("span.wait").addClass("hidden");
-        }
-      });
+      if(!businessCaseCreateButton.hasClass("disabled")){
+        businessCaseCreateButton.addClass("disabled");
+        $("span.wait").removeClass("hidden");
+
+        $.ajax({
+          type: "POST",
+          url: businessCaseCreateButton.data('url'),
+          success: function(){
+            businessCaseCreateButton.removeClass("disabled");
+            $("span.wait").addClass("hidden");
+          }
+        });
+      };
     });
   };
 });
