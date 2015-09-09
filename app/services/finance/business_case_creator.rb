@@ -32,7 +32,7 @@ module Finance
 
     def existing_freeform
       if financials = @business_case.financials
-        financials.last
+        financials.detect{|row| row['freeform'] }
       end
     end
   end

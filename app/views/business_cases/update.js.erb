@@ -1,0 +1,5 @@
+$("#business-case").html("<%= escape_javascript(render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }) %>");
+new FinanceTable($("table.finance-table")).create();
+$("#business-case span.wait").addClass("hidden");
+$("#business-case input[type=submit]").removeClass("disabled");
+
