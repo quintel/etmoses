@@ -9,10 +9,14 @@ var EdsnSwitch = (function(){
       if(editing){
         swapEdsnBaseLoadSelectBoxes();
       }
-      else{
-        addChangeListenerToNameBoxes();
-        checkAllCurrentBaseLoads();
-      }
+    },
+
+    isEdsn: function(){
+      return validBaseLoads.test($(this).val());
+    },
+
+    cloneAndAppendProfileSelect: function(){
+      swapSelectBox.call(this);
     }
   };
 
@@ -20,29 +24,18 @@ var EdsnSwitch = (function(){
     $("tr.base_load_edsn select.name").each(swapSelectBox);
   };
 
-  function addChangeListenerToNameBoxes(){
-    $("select.name").on("change", swapSelectBox);
-  };
-
-  function checkAllCurrentBaseLoads(){
-    $("select.name").each(swapSelectBox);
-  };
-
   function swapSelectBox(){
     var technology = $(this).val();
+    var self         = this;
+    var unitSelector = $(this).parents("tr").find(".units input");
+    var units        = parseInt(unitSelector.val());
+    var actual       = (units > EDSN_THRESHOLD ? "base_load_edsn" : "base_load");
+    var select       = $(".hidden select." + actual).clone(true, true);
 
-    if(validBaseLoads.test(technology)){
-      var self         = this;
-      var unitSelector = $(this).parents("tr").find(".units input");
-      var units        = parseInt(unitSelector.val());
-      var actual       = (units > EDSN_THRESHOLD ? "base_load_edsn" : "base_load");
-      var select       = $(".hidden select." + actual).clone(true, true);
+    $(this).parent().next().html(select);
+    $(this).find("option[value='" + technology + "']").attr('value', actual);
 
-      $(this).parent().next().html(select);
-      $(this).find("option[value='" + technology + "']").attr('value', actual);
-
-      unitSelector.off('change').on('change', swapSelectBox.bind(self));
-    };
+    unitSelector.off('change').on('change', swapSelectBox.bind(self));
   };
 
   function EdsnSwitch(_editing){
