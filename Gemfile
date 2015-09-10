@@ -30,6 +30,9 @@ gem 'spring',        group: :development
 # Use unicorn as the app server
 gem 'unicorn'
 
+# Background processor
+gem 'delayed_job_active_record'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'

@@ -12,6 +12,19 @@ $(document).on("page:change", function(){
     dropRight: true
   });
 
+  if($(".save_strategies").length > 0){
+    var saveStrategies = JSON.parse($(".save_strategies").text());
+    var selected = [];
+
+    for(var strategy in saveStrategies){
+      if(saveStrategies[strategy]){
+        selected.push(strategy);
+      }
+    };
+
+    $("select.multi-select").multiselect('select', selected);
+  };
+
   var cappingInput = $("input[type=checkbox][value=capping_solar_pv]")
   cappingInput.parents('a').append($(".slider-wrapper.hidden"));
 

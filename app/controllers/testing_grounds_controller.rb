@@ -54,8 +54,11 @@ class TestingGroundsController < ResourceController
 
   # POST /topologies
   def create
-    respond_with(@testing_ground = current_user.testing_grounds
-                                     .create(testing_ground_params))
+    @testing_ground = current_user.testing_grounds.create(testing_ground_params)
+
+    Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
+
+    respond_with(@testing_ground)
   end
 
   # GET /topologies/:id
@@ -65,6 +68,10 @@ class TestingGroundsController < ResourceController
   # POST /testing_grounds/:id/data
   def data
     begin
+      if params[:strategies]
+        @testing_ground.update_attribute(:strategies, params[:strategies])
+      end
+
       render json: @testing_ground.to_json(params[:strategies])
     rescue StandardError => ex
       notify_airbrake(ex) if defined?(Airbrake)
@@ -96,6 +103,10 @@ class TestingGroundsController < ResourceController
   def update
     @form_type = params[:testing_ground][:form_type]
     @testing_ground.update_attributes(testing_ground_params)
+
+    if @testing_ground.business_case
+      @testing_ground.business_case.clear_job!
+    end
 
     respond_with(@testing_ground)
   end

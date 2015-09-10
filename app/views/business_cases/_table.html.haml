@@ -1,26 +1,42 @@
-%table.table.table-bordered.compare
-  %thead
-    %tr
-      %th Stakeholder
-      %th In
-      %th Out
-      %th Correction
-      %th Total
+%h2
+  - if business_case_rows
+    %span= "Compare business case from #{@testing_ground.name} with"
+    %span.compare
+      = select_tag "compare", options_for_testing_grounds(@testing_ground), include_blank: true, class: "form-control", data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) }
 
-  %tbody
-    - business_case_rows.each do |financial_row|
-      %tr
-        %td= financial_row[:stakeholder].titleize
-        %td.editable
-          %span.static= financial_row[:incoming]
-          %span.difference
-        %td.editable
-          %span.static= financial_row[:outgoing]
-          %span.difference
-        %td.editable
-          %span.static= financial_row[:freeform]
-          %span.difference
-        %td.editable
-          %span.static= financial_row[:total]
-          %span.difference
+  - else
+    Business case
 
+#business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @business_case), finish_url: render_summary_testing_ground_business_case_path(@testing_ground, @business_case) } }
+  - if business_case_rows
+    %table.table.table-bordered.compare
+      %thead
+        %tr
+          %th Stakeholder
+          %th In
+          %th Out
+          %th Correction
+          %th Total
+
+      %tbody
+        - business_case_rows.each do |financial_row|
+          %tr
+            %td= financial_row[:stakeholder].titleize
+            %td.editable
+              %span.static= financial_row[:incoming]
+              %span.difference
+            %td.editable
+              %span.static= financial_row[:outgoing]
+              %span.difference
+            %td.editable
+              %span.static= financial_row[:freeform]
+              %span.difference
+            %td.editable
+              %span.static= financial_row[:total]
+              %span.difference
+
+    %span.loading-spinner
+      = image_tag 'wait.gif'
+
+  - else
+    Loading ..

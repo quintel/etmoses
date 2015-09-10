@@ -104,14 +104,14 @@ RSpec.describe TopologiesController do
     }
 
     let!(:testing_ground){
-      testing_ground = FactoryGirl.create(:testing_ground, topology: topology)
+      testing_ground = FactoryGirl.create(:testing_ground, user: user, topology: topology)
 
       controller.session[:testing_ground_id] = testing_ground.id
     }
 
     describe "with other LES's" do
       let!(:another_testing_ground){
-        FactoryGirl.create(:testing_ground, topology: topology)
+        FactoryGirl.create(:testing_ground, user: user, topology: topology)
       }
 
       it 'creates a 2nd topology' do

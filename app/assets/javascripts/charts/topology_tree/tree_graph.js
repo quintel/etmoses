@@ -17,7 +17,9 @@ var TreeGraph = (function(){
       buildBase();
       transformData.call(this);
 
-      new StrategyToggler(this).addOnChangeListener();
+      var strategyToggler = new StrategyToggler(this)
+      strategyToggler.addOnChangeListener();
+      strategyToggler.setDefaultStrategies();
 
       // Layout the tree initially and center on the root node.
       this.update(this.root);
@@ -29,6 +31,10 @@ var TreeGraph = (function(){
 
     showChart: function(d) {
       reloadCharts();
+
+      if(d === undefined){
+        return false;
+      };
 
       var uniqueId = ("chart-id-" + d.id);
       var existingLoadPlatform = $(".load-graph ." + uniqueId);

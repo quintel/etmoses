@@ -1,7 +1,8 @@
 module Finance
   class BusinessCaseCalculator
-    def initialize(testing_ground)
+    def initialize(testing_ground, strategies = {})
       @testing_ground = testing_ground
+      @strategies = strategies
     end
 
     def rows
@@ -33,7 +34,7 @@ module Finance
     def market
       @market ||= Market.from_market_model(
         @testing_ground.market_model,
-        @testing_ground.to_calculated_graph
+        @testing_ground.to_calculated_graph(@strategies)
       )
     end
   end

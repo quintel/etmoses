@@ -15,14 +15,20 @@ $(document).on("page:change", function(){
   var businessCaseTable = $("#business_case_table");
 
   if(businessCaseTable.length > 0){
-
-    $.ajax({
+    new Poller({
       url: businessCaseTable.data('url'),
-      type: "GET",
-      success: function(){
-        businessCaseTable.find("table tbody td.editable span.static").
-          formatCurrency(Finance.currencyOptions);
+      data: TopologyTreeHelper.strategies(),
+      hooks: {
+        final_success: renderSummary
       }
+    }).poll();
+  };
+
+  function renderSummary(){
+    $.ajax({
+      type: "POST",
+      url:  businessCaseTable.data('finishUrl'),
     });
   };
 });
+

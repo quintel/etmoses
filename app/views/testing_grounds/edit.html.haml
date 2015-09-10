@@ -22,8 +22,10 @@
     = link_to "Topology", "#topology", "aria-controls" => "topology", "role" => "tab", data: { toggle: "tab" }
   %li{role: "presentation"}
     = link_to "Market model", "#market-model", "aria-controls" => "market-model", "role" => "tab", data: { toggle: "tab" }
-  %li{role: "presentation"}
-    = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
+
+  - if @testing_ground.business_case
+    %li{role: "presentation"}
+      = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
 
 .tab-content
   .tab-pane.remote.edit#general{role: "tabpanel"}
@@ -50,12 +52,9 @@
   .tab-pane.remote.edit#market-model{role: "tabpanel"}
     = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model, format: :js), remote: true }
 
-  .tab-pane.remote.edit#business-case{role: "tabpanel"}
-    - if @testing_ground.business_case
+  - if @testing_ground.business_case
+    .tab-pane.remote.edit#business-case{role: "tabpanel"}
       = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
-    - else
-      = link_to "Create business case", "#!", data: { url: testing_ground_business_cases_path(@testing_ground) }, class: "btn btn-primary business_case_create"
-      %span.wait.hidden= image_tag 'wait.gif'
 
 .btn-group.pull-right
   %span.wait.hidden= image_tag 'wait.gif'

@@ -1,11 +1,11 @@
-$(document).on("page:change", function(){
-  var compareSelectBox = $(".container .compare select");
+function enableCompareSelectbox(){
+  var compareSelectBox = $(".compare select");
   var compareTable     = $("table.compare");
   var leftBracket      = $("<span>").text("(");
   var rightBracket     = $("<span>").text(")");
 
   if(compareSelectBox.length > 0){
-    compareSelectBox.on("change", compareBusinessCase);
+    compareSelectBox.off("change").on("change", compareBusinessCase);
     compareSelectBox.prop('disabled', false);
   };
 
@@ -59,4 +59,4 @@ $(document).on("page:change", function(){
   };
 
   compareTable.find("td.editable .static").formatCurrency(Finance.currencyOptions);
-});
+};
