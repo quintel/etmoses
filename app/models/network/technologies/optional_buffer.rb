@@ -10,26 +10,28 @@ module Network
     # consumption, and is not released back to the network.
     class OptionalBuffer < Buffer
       def self.disabled?(options)
-        !options[:solar_power_to_heat]
+        ! options[:solar_power_to_heat]
       end
 
       def self.disabled_class
         Null
       end
 
+      def self.build(installed, profile, **options)
+        super(installed, profile, **options.merge(additional_profile: profile))
+      end
+
       # Public: Buffers may not return their stored energy back to the network.
       # Therefore, their consumption equals their output in order that the two
-      # balance out to zero
+      # balance out to zero.
+      #
+      # As the buffer is "optional", it only receives "conditional" loads when
+      # there is available excess within the network. The availability profile
+      # required by the Buffer superclass is therefore ignored.
+      #
+      # Returns a numeric.
       def mandatory_consumption_at(frame)
         production_at(frame)
-      end
-
-      def capacity_constrained?
-        false
-      end
-
-      def volume
-        installed.volume
       end
     end # OptionalBuffer
   end

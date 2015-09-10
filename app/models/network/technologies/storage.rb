@@ -29,8 +29,7 @@ module Network
       #
       # Returns an array.
       def stored
-        @stored ||= Network::DefaultArray.new(
-          &method(:mandatory_consumption_at))
+        @stored ||= DefaultArray.new(&method(:mandatory_consumption_at))
       end
 
       def production_at(frame)

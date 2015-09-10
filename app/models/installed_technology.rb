@@ -103,7 +103,7 @@ class InstalledTechnology
 
   def each_profile_curve
     if has_heat_pump_profiles?
-      yield(profile_curve.keys.join('_'), *profile_curve.values)
+      yield(profile_curve.keys.sort.join('_'), *profile_curve.values)
     else
       profile_curve.each_pair.map do |curve_type, curve|
         yield(curve_type, curve)
