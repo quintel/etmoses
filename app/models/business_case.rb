@@ -6,8 +6,6 @@ class BusinessCase < ActiveRecord::Base
 
   serialize :financials, JSON
 
-  attr_accessor :strategy_financials
-
   def financials=(financials)
     if(financials.is_a?(Array))
       super(financials)
