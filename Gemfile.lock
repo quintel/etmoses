@@ -68,6 +68,8 @@ GEM
     capistrano-rbenv (2.0.2)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
+    capistrano3-delayed-job (1.4.0)
+      capistrano (>= 3.0.0)
     capistrano3-unicorn (0.2.1)
       capistrano (~> 3.1, >= 3.1.0)
     celluloid (0.15.2)
@@ -338,6 +340,7 @@ DEPENDENCIES
   capistrano-bundler (~> 1.1)
   capistrano-rails (~> 1.1)
   capistrano-rbenv (~> 2.0)
+  capistrano3-delayed-job (~> 1.0)
   capistrano3-unicorn (~> 0.2)
   coffee-rails (~> 4.0.0)
   database_cleaner

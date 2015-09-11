@@ -48,6 +48,7 @@ group :development do
   gem 'capistrano-rails',    '~> 1.1',   require: false
   gem 'capistrano-bundler',  '~> 1.1',   require: false
   gem 'capistrano3-unicorn', '~> 0.2',   require: false
+  gem 'capistrano3-delayed-job', '~> 1.0'
 
   gem 'better_errors'
   gem 'binding_of_caller'
