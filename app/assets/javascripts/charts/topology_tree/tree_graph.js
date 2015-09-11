@@ -181,7 +181,6 @@ var TreeGraph = (function(){
     $('.loading').remove();
 
     baseSvg = createBaseSvg();
-    baseSvg.on('click', resetStyle);
     svgGroup = baseSvg.append('g');
   };
 
