@@ -27,7 +27,7 @@ module TestingGroundsHelper
   end
 
   def profile_table_options_for_name(selected_technology)
-    technologies = @technologies.visible.map do |technology|
+    technologies = @technologies.visible.order(:name).map do |technology|
       [technology.name, technology.key]
     end
 
