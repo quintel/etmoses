@@ -76,7 +76,7 @@ class TechnologyList
 
   # Public: Iterates through all technologies in the testing ground.
   def each_tech(&block)
-    @list.values.flatten.each(&block)
+    block_given? ? @list.values.flatten.each(&block) : enum_for(:each_tech)
   end
 
   # Public: Given a node key, returns the attached technologies in an array.
