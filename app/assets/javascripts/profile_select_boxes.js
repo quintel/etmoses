@@ -1,5 +1,5 @@
 var ProfileSelectBoxes = (function(){
-  var etmDefaults;
+  var etmDefaults, edsnSwitch;
   var defaultCells = ["Capacity", "Volume", "Demand"];
 
   ProfileSelectBoxes.prototype = {
@@ -39,6 +39,15 @@ var ProfileSelectBoxes = (function(){
   };
 
   function cloneAndAppendProfileSelect(isChanged){
+    if(edsnSwitch.isEdsn.call(this)){
+      edsnSwitch.cloneAndAppendProfileSelect.call(this, isChanged);
+    }
+    else{
+      defaultCloneAndAppend.call(this, isChanged);
+    }
+  };
+
+  function defaultCloneAndAppend(isChanged){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone(true, true);
 
@@ -95,8 +104,9 @@ var ProfileSelectBoxes = (function(){
     return ETHelper.groupBy(technologies, 'type');
   };
 
-  function ProfileSelectBoxes(){
+  function ProfileSelectBoxes(_edsnSwitch){
     etmDefaults = setEtmDefaults();
+    edsnSwitch = _edsnSwitch;
   };
 
   return ProfileSelectBoxes;

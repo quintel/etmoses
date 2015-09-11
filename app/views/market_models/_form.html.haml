@@ -1,5 +1,5 @@
 - form_action = defined?(action) ? action : market_model
-= form_for market_model, url: form_action, html: { multipart: true } do |form|
+= form_for market_model, url: form_action, html: { remote: remote, multipart: true } do |form|
   .form-group
     = form.label :name
     = form.text_field :name, class: "form-control"
@@ -19,4 +19,8 @@
   = render partial: 'market_models/new_table', locals: { market_model: market_model }
 
   = form.submit 'Save', class: "btn btn-primary"
+
+  - if remote
+    %span.wait.hidden= image_tag 'wait.gif'
+
 

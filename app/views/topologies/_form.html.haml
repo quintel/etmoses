@@ -3,7 +3,7 @@
     - topology.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for topology, url: action, html: { multipart: true } do |form|
+= form_for topology, url: action, html: { remote: remote, multipart: true } do |form|
   .form-group
     = form.label :name
     = form.text_field :name, class: 'form-control'
@@ -27,6 +27,10 @@
 
   .form-group
     = form.submit 'Save', class: 'btn btn-primary'
+
+    - if remote
+      %span.wait.hidden= image_tag 'wait.gif'
+
     - unless (defined?(hide_cancel) && hide_cancel)
       %span.or or
       - if topology.new_record?

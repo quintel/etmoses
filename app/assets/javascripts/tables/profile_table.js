@@ -36,6 +36,9 @@ var ProfileTable = (function(){
 
   function getNameForType(type){
     var selectedOption = $("select.name").first().find("option").filter(function(){
+      if(type == "base_load_edsn"){
+        type = "base_load";
+      };
       return $(this).val() == type;
     });
     return selectedOption.text();
@@ -44,9 +47,9 @@ var ProfileTable = (function(){
   function ProfileTable(_selector){
     selector           = _selector;
     editing            = $("form.edit_testing_ground").length > 0;
-    profileSelectBoxes = new ProfileSelectBoxes();
-    editableTable      = new EditableTable(_selector);
     edsnSwitch         = new EdsnSwitch(editing);
+    profileSelectBoxes = new ProfileSelectBoxes(edsnSwitch);
+    editableTable      = new EditableTable(_selector);
   };
 
   return ProfileTable;

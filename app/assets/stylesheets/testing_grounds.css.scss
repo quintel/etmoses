@@ -454,3 +454,8 @@ select#stakeholders{
 .tab-pane.edit{
   margin: 15px 20px;
 }
+
+ul.nav-tabs > li.active > a.editing,
+ul.nav-tabs > li > a.editing{
+  border-bottom: 2px solid gold;
+}

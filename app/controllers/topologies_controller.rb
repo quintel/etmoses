@@ -2,6 +2,7 @@ class TopologiesController < ResourceController
   RESOURCE_ACTIONS = %i(show edit update destroy clone)
 
   respond_to :html
+  respond_to :js, only: :clone
   respond_to :json, only: :show
 
   before_filter :fetch_topology, only: RESOURCE_ACTIONS
@@ -39,8 +40,6 @@ class TopologiesController < ResourceController
   # POST /topologies/:id/clone
   def clone
     TestingGround::Cloner.new(@testing_ground, @topology, topology_params).clone
-
-    redirect_to testing_ground_path(@testing_ground)
   end
 
   # DELETE /topologies/:id
