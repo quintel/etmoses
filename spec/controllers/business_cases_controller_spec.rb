@@ -54,23 +54,12 @@ RSpec.describe BusinessCasesController do
       put :update, testing_ground_id: testing_ground.id, id: business_case.id,
                    business_case: {
                      financials: JSON.dump([{row: 'customer', tariff: 123 }])
-                   }
+                   },
+                   format: :js
 
       expect(business_case.reload.financials).to eq([{
         "row" => 'customer', "tariff" => 123
       }])
-    end
-  end
-
-  describe "#edit" do
-    let(:business_case){
-      FactoryGirl.create(:business_case, testing_ground: testing_ground)
-    }
-
-    it "visits the edit path of the business case" do
-      get :edit, testing_ground_id: testing_ground.id, id: business_case.id
-
-      expect(response).to be_success
     end
   end
 

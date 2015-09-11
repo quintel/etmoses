@@ -133,12 +133,16 @@ def create_availability_profile(use_profile, heat_output_capacity_in_kW, max_con
     
 availability_profile = create_availability_profile(demand_profile, heat_output_capacity_in_kW, max_content_in_kWh)
 availability_profile = [x if x < 1 else 1 for x in availability_profile]
+
+# Shifting the availability profile back in time by one entry to match the convention used for EV.
+# The availability will describe how full the buffer should be to match the use event in the next time-step
+# Last entry is a zero because there are no events in the next time-step
+availability_profile = np.append( availability_profile[1::], [0.0])
    
-mini = 8 * 4 * 24
-maxi = int(13 * 4 * 24)
+mini = 0 * 4 * 24
+maxi = int(7 * 4 * 24)
 plt.plot(demand_profile[mini:maxi])
 plt.plot(availability_profile[mini:maxi])
-#plt.plot(availability_profile[mini:maxi]-demand_profile[mini:maxi])
 plt.xlabel('time (15 minutes)')
 plt.ylabel('Fraction of buffer extracted')
 plt.show()

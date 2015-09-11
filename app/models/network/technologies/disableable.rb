@@ -3,7 +3,7 @@ module Network
     module Disableable
       # Internal: Enables implementors to customise the profile prior to
       # initializing the class which represents the disabled technology.
-      def disabled_profile(profile)
+      def disabled_profile(profile, _options)
         profile
       end
 
@@ -17,7 +17,11 @@ module Network
       # storage technology.
       def build(installed, profile, options)
         if disabled?(options)
-          disabled_class.new(installed, disabled_profile(profile), **options)
+          disabled_class.new(
+            installed,
+            Network::Curve.from(disabled_profile(profile, options)),
+            **options
+          )
         else
           new(installed, profile, **options)
         end

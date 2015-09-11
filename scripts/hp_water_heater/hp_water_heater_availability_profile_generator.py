@@ -230,12 +230,21 @@ for j in range(0,10):
     
     # calculate the pattern in relative terms by dividing by the maximum storage volume of the P2H boiler
     pattern = pattern / P2H_storage_volume
+
+    # If the tank should be more than 100% full, we expect the gas-boiler to kick in and save the day
+    pattern = [x if x < 1 else 1 for x in pattern]
     
     use_filename = '../output_data/dhw_use_profile_' + str(j+1) + '.csv'
     plt.savetxt(use_filename, pattern, fmt='%.3f', delimiter=',')    
 
     # calculate the availability profile from the use profile
-    availability_profile = create_availability_profile(pattern)    
+    availability_profile = create_availability_profile(pattern)
+    availability_profile = [x if x < 1 else 1 for x in availability_profile]
+
+    # Shifting the availability profile back in time by one entry to match the convention used for EV.
+    # The availability will describe how full the buffer should be to match the use event in the next time-step
+    # Last entry is a zero because there are no events in the next time-step
+    availability_profile = np.append( availability_profile[1::], [0.0]) 
     
     availability_filename = '../output_data/dhw_availability_profile_' + str(j+1) + '.csv'
     plt.savetxt(availability_filename, availability_profile, fmt='%.3f', delimiter=',')  

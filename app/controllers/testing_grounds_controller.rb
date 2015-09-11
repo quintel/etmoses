@@ -3,7 +3,7 @@ class TestingGroundsController < ResourceController
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: :calculate_concurrency
+  respond_to :js, only: [:calculate_concurrency, :update]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -94,7 +94,9 @@ class TestingGroundsController < ResourceController
 
   # PATCH /testing_grounds/:id
   def update
+    @form_type = params[:testing_ground][:form_type]
     @testing_ground.update_attributes(testing_ground_params)
+
     respond_with(@testing_ground)
   end
 

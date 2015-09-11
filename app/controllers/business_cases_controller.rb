@@ -1,7 +1,7 @@
 class BusinessCasesController < ResourceController
-  RESOURCE_ACTIONS = %i(show edit update compare compare_with data)
+  RESOURCE_ACTIONS = %i(show update compare compare_with data)
 
-  respond_to :js, only: [:compare_with, :data, :create]
+  respond_to :js, only: [:compare_with, :data, :create, :update]
 
   before_filter :find_testing_ground
   before_filter :find_business_case, only: RESOURCE_ACTIONS
@@ -19,13 +19,8 @@ class BusinessCasesController < ResourceController
     @business_case = Finance::BusinessCaseCreator.new(@testing_ground).create
   end
 
-  def edit
-  end
-
   def update
     @business_case.update_attributes(business_case_params)
-
-    redirect_to testing_ground_path(@testing_ground)
   end
 
   def compare_with
