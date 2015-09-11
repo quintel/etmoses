@@ -1,8 +1,6 @@
 module Network
   module Technologies
     class Buffer < Storage
-      extend Availability
-
       def self.build(installed, profile, options)
         unless options[:additional_profile]
           fail "Missing use profile for #{ installed.name }"
