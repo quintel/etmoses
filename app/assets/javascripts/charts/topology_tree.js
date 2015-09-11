@@ -3,6 +3,8 @@ var TopologyTree = (function(){
 
   TopologyTree.prototype = {
     showTree: function() {
+      $("#collapse-stakeholders select").prop('disabled', true);
+
       d3.json(url)
         .header("Content-Type", "application/json")
         .header("Accept", "application/json")
@@ -15,7 +17,7 @@ var TopologyTree = (function(){
       new ErrorDisplayer(error, container).displayError();
     }
     else{
-      $("#collapse-stakeholders select").removeAttr("disabled");
+      $("#collapse-stakeholders select").prop('disabled', false);
 
       new TreeGraph(url, treeData.graph, container).showGraph();
     };
