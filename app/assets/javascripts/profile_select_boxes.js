@@ -86,7 +86,7 @@ var ProfileSelectBoxes = (function(){
 
     if(etmValue == userInput || this.clear) userInput = undefined;
 
-    inputField.val(userInput || etmValue || dbDefault);
+    inputField.val(userInput || etmValue || dbDefault || '');
   };
 
   function defaultsForTech(tech){

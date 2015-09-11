@@ -11,14 +11,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150911114950) do
+ActiveRecord::Schema.define(version: 20150911125818) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
     t.text     "financials"
+    t.integer  "job_id"
+    t.datetime "job_finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "delayed_jobs", force: true do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
@@ -89,10 +107,10 @@ ActiveRecord::Schema.define(version: 20150911114950) do
     t.string  "name",             limit: 100
     t.string  "export_to",        limit: 100
     t.string  "behavior",         limit: 50
+    t.boolean "visible",                      default: true
     t.float   "default_capacity", limit: 24
     t.float   "default_volume",   limit: 24
     t.float   "default_demand",   limit: 24
-    t.boolean "visible",                      default: true
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
@@ -120,6 +138,7 @@ ActiveRecord::Schema.define(version: 20150911114950) do
     t.integer  "market_model_id"
     t.boolean  "public",                              default: true, null: false
     t.integer  "parent_scenario_id"
+    t.text     "strategies"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",               limit: 100,      default: "",   null: false
