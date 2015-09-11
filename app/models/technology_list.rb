@@ -31,7 +31,10 @@ class TechnologyList
   end
 
   def self.load_profiles(data)
-    profile_ids = data.values.flatten.map{|t| t['profile']}.uniq
+    profile_ids =
+      data.values.flatten.map{ |t| t['profile'] }.uniq.reject do |key|
+        ! key.is_a?(String) || ! key.is_a?(Integer)
+      end
 
     Hash[LoadProfile.where(id: profile_ids).map do |load_profile|
       [load_profile.id, load_profile.key]
