@@ -15,6 +15,8 @@ var TopologyTree = (function(){
       new ErrorDisplayer(error, container).displayError();
     }
     else{
+      $("#collapse-stakeholders select").removeAttr("disabled");
+
       new TreeGraph(url, treeData.graph, container).showGraph();
     };
   };

@@ -2,7 +2,6 @@
   %h1
     = @testing_ground.name
 
-
   .pull-right.les-controls
     .load-strategies.btn-group(role="group")
       %select.strategies.multi-select.form-control{multiple: "multiple"}
@@ -106,6 +105,10 @@
     %span.loading-spinner
       = image_tag 'wait.gif'
 
+.clearfix
+
+#collapse-stakeholders
+  = select_tag("stakeholders", options_for_stakeholders, {include_blank: 'Select stakeholder', class: "form-control", disabled: 'disabled'})
 
 .clearfix
 
@@ -121,12 +124,4 @@
 .export
   - if can_export?(@testing_ground)
     = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
-
--#
-  #stakeholders
-    %h2
-      = link_to "Stakeholders", "#collapse-stakeholders", data: {toggle: 'collapse'}
-
-    #collapse-stakeholders.collapse
-      = select_tag("stakeholders", options_for_stakeholders, {include_blank: '-----', class: "form-control"})
 
