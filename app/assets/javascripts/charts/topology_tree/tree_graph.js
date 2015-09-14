@@ -337,18 +337,20 @@ var TreeGraph = (function(){
     if (d3.event && d3.event.defaultPrevented) return; // click suppressed
 
     toggleSelectedNode.call(this);
+
     _self.lastClicked = d;
-
-    // Load chart.
-    var values = d.load;
-
     _self.showChart(d);
 
-    $("p.info").hide();
     $(".nav-tabs li a[href='#load']").tab('show');
-    $('#technologies .row-fluid').hide();
+    LoadChartHelper.reloadChart(d.id);
+
+    $('#technologies .row-fluid, p.info').hide();
     $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
 
+    enableCsvDownloadCurveButton(d);
+  };
+
+  function enableCsvDownloadCurveButton(d){
     $('#load .download-curve').show().off('click').on('click', function(event) {
       event.preventDefault();
       CSV.download(d.load.join("\n"),

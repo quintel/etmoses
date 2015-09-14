@@ -18,11 +18,15 @@ LoadChartHelper = {
   updateBrush: function(currentChartId){
     if(this.globalBrushExtent){
       this.setBrushExtent();
-      currentChart = this.charts[currentChartId - 1];
-      if(currentChart && currentChart.update){
-        currentChart.update();
-      }
+      this.reloadChart(currentChartId);
     }
+  },
+
+  reloadChart: function(currentChartId){
+    var currentChart = this.charts[currentChartId - 1];
+    if(currentChart && currentChart.update){
+      currentChart.update();
+    };
   },
 
   setBrushExtent: function(){
