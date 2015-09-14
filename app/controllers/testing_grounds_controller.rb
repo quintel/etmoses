@@ -10,7 +10,7 @@ class TestingGroundsController < ResourceController
 
   before_filter :prepare_export, only: %i(export perform_export)
 
-  before_filter :load_technologies, only: [:perform_import, :update, :create,
+  before_filter :load_technologies_and_profiles, only: [:perform_import, :update, :create,
                                            :edit, :new, :calculate_concurrency]
 
   skip_before_filter :verify_authenticity_token, only: [:data]
@@ -168,7 +168,10 @@ class TestingGroundsController < ResourceController
     @export         = Export.new(@testing_ground)
   end
 
-  def load_technologies
+  def load_technologies_and_profiles
     @technologies = Technology.all
+    @load_profiles = LoadProfile.joins("LEFT JOIN `technology_profiles` ON `load_profiles`.`id` = `technology_profiles`.`load_profile_id`")
+                                .select("`technology_profiles`.`technology`, `load_profiles`.*")
+                                .group_by{|t| t.technology }
   end
 end # TestingGroundsController
