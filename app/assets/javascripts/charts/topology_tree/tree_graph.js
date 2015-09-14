@@ -346,6 +346,7 @@ var TreeGraph = (function(){
 
     $('#technologies .row-fluid, p.info').hide();
     $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
+    $('a.download-curve').parent().removeClass("hidden");
 
     enableCsvDownloadCurveButton(d);
   };

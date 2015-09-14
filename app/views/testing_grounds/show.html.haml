@@ -40,7 +40,6 @@
 
     .clearfix
 
-
 #testing-ground
   .strategies.hidden
     = default_strategies.to_json
@@ -65,7 +64,7 @@
         .load-graph.line-chart
           %p.info Click on a network component to view its load and attached technologies
 
-        %p= link_to "Download curve", "#", class: "btn btn-primary download-curve"
+        %p.hidden= link_to "Download curve", "#", class: "btn btn-primary download-curve"
 
       .tab-pane#technologies{role: 'tabpanel'}
         #technologies
