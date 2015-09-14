@@ -15,13 +15,10 @@ $(document).on("page:change", function(){
   var businessCaseTable = $("#business_case_table");
 
   if(businessCaseTable.length > 0){
-    new Poller({
+    var poller = new Poller({
       url: businessCaseTable.data('url'),
-      data: TopologyTreeHelper.strategies(),
-      hooks: {
-        final_success: renderSummary
-      }
-    }).poll();
+      data: TopologyTreeHelper.strategies()
+    }).poll().done(renderSummary);
   };
 
   function renderSummary(){

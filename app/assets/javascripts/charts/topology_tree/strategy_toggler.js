@@ -69,23 +69,16 @@ var StrategyToggler = (function(){
   function pollTree(){
     new Poller({
       url: loadChart.url,
-      data: TopologyTreeHelper.strategies(),
-      hooks: {
-        final_success: updateLoadChart
-      }
-    }).poll();
+      data: TopologyTreeHelper.strategies()
+    }).poll().done(updateLoadChart);
   };
 
   function pollBusinessCase(){
     new Poller({
       url: businessCaseTable.data('url'),
       data: TopologyTreeHelper.strategies(),
-      first_data: { clear: true },
-      hooks: {
-        final_success: renderSummary,
-        pending: showLoadingSpinner
-      }
-    }).poll();
+      first_data: { clear: true }
+    }).poll().done(renderSummary).progress(showLoadingSpinner);
   };
 
   function renderSummary(){

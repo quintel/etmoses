@@ -5,12 +5,7 @@ var TopologyTree = (function(){
     showTree: function() {
       $("#collapse-stakeholders select").prop('disabled', true);
 
-      new Poller({
-        url: url,
-        hooks: {
-          final_success: d3Callback
-        }
-      }).poll();
+      new Poller({ url: url }).poll().done(d3Callback);
     }
   };
 
