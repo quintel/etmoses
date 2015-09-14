@@ -38,12 +38,6 @@
       %span.sep
         = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
 
-    - if policy(@testing_ground.topology).show?
-      %span.sep
-        = link_to topology_path(@testing_ground.topology), target: "_blank" do
-          View
-          = truncate(@testing_ground.topology.name, length: 25)
-
     .clearfix
 
 
