@@ -47,7 +47,7 @@
     = default_strategies.to_json
 
   .save_strategies.hidden
-    = @testing_ground.strategies.to_json
+    = @testing_ground.selected_strategy.to_json
 
   .testing-ground-view{ "data-url" => data_testing_ground_url(@testing_ground, format: :json) }
     %span.loading

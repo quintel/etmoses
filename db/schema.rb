@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150911125818) do
+ActiveRecord::Schema.define(version: 20150914132535) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -102,6 +102,20 @@ ActiveRecord::Schema.define(version: 20150911125818) do
     t.datetime "updated_at"
   end
 
+  create_table "selected_strategies", force: true do |t|
+    t.integer "testing_ground_id"
+    t.boolean "solar_storage",           default: false
+    t.boolean "battery_storage",         default: false
+    t.boolean "solar_power_to_heat",     default: false
+    t.boolean "solar_power_to_gas",      default: false
+    t.boolean "buffering_electric_car",  default: false
+    t.boolean "buffering_space_heating", default: false
+    t.boolean "postponing_base_load",    default: false
+    t.boolean "saving_base_load",        default: false
+    t.boolean "capping_solar_pv",        default: false
+    t.integer "capping_fraction",        default: 100
+  end
+
   create_table "technologies", force: true do |t|
     t.string  "key",              limit: 100,                null: false
     t.string  "name",             limit: 100
@@ -138,7 +152,6 @@ ActiveRecord::Schema.define(version: 20150911125818) do
     t.integer  "market_model_id"
     t.boolean  "public",                              default: true, null: false
     t.integer  "parent_scenario_id"
-    t.text     "strategies"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",               limit: 100,      default: "",   null: false

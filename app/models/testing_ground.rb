@@ -8,12 +8,12 @@ class TestingGround < ActiveRecord::Base
   IMPORT_PROVIDERS = %w(beta.et-engine.com).freeze
 
   serialize :technology_profile, TechnologyList
-  serialize :strategies, JSON
 
   belongs_to :topology
   belongs_to :market_model
   belongs_to :user
 
+  has_one :selected_strategy
   has_one :business_case
 
   validates :topology, presence: true
