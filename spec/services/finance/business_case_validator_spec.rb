@@ -9,6 +9,13 @@ RSpec.describe Finance::BusinessCaseValidator do
   end
 
   it "validates a business case" do
+    topology = FactoryGirl.create(:topology)
+    market_model = FactoryGirl.create(:market_model)
+
+    expect(Finance::BusinessCaseValidator.new(topology, market_model).valid?).to eq(false)
+  end
+
+  it "validates a business case" do
     topology = FactoryGirl.create(:topology_with_stakeholders)
     market_model = FactoryGirl.create(:market_model, interactions: [{
       "stakeholder_from"    => "customer",
