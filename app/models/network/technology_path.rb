@@ -44,7 +44,7 @@ module Network
     end
 
     def production_exceedance_at(frame)
-      @path.map{|node| node.production_exceedance_at(frame) }.max
+      @path.map { |node| node.production_exceedance_at(frame) }.max
     end
 
     # Public: Sends a given amount of energy down the path, increasing the
