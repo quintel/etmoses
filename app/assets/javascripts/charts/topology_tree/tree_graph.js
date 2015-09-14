@@ -346,13 +346,15 @@ var TreeGraph = (function(){
 
     $('#technologies .row-fluid, p.info').hide();
     $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
-    $('a.download-curve').parent().removeClass("hidden");
 
     enableCsvDownloadCurveButton(d);
   };
 
   function enableCsvDownloadCurveButton(d){
-    $('#load .download-curve').show().off('click').on('click', function(event) {
+    var downloadBtn = $('#load a.download-curve')
+        downloadBtn.parent().removeClass("hidden");
+
+    downloadBtn.off('click').on('click', function(event) {
       event.preventDefault();
       CSV.download(d.load.join("\n"),
         (d.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
