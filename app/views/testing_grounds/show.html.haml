@@ -1,6 +1,8 @@
 .header
   %h1
-    = @testing_ground.name
+    %span.name= @testing_ground.name
+    %span.arrow.hidden &rarr;
+    %span.current-chart.hidden
 
   .pull-right.les-controls
     .load-strategies.btn-group(role="group")

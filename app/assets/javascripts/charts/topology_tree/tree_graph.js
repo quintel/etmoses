@@ -347,7 +347,13 @@ var TreeGraph = (function(){
     $('#technologies .row-fluid, p.info').hide();
     $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
 
+    setHeader(d);
     enableCsvDownloadCurveButton(d);
+  };
+
+  function setHeader(d){
+    $("h1 span").removeClass("hidden");
+    $("h1 span.current-chart").text(d.name);
   };
 
   function enableCsvDownloadCurveButton(d){
