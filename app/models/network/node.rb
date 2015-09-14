@@ -132,8 +132,8 @@ module Network
     end
 
     def production_exceedance_at(frame)
-      if congested_at?(frame)
-        production_at(frame) - (get(:capacity) || 0)
+      if congested_at?(frame) && (current_load = load_at(frame)) < 0
+        current_load.abs - (get(:capacity) || 0)
       else
         0
       end
