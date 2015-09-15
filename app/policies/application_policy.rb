@@ -23,7 +23,7 @@ class ApplicationPolicy
   end
 
   def update?
-    false
+    user.admin?
   end
 
   def edit?
@@ -31,7 +31,7 @@ class ApplicationPolicy
   end
 
   def destroy?
-    false
+    user.admin?
   end
 
   def scope
@@ -47,7 +47,11 @@ class ApplicationPolicy
     end
 
     def resolve
-      scope
+      if user && user.admin?
+        scope.all
+      else
+        scope
+      end
     end
   end
 end
