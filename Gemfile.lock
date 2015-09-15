@@ -343,6 +343,7 @@ DEPENDENCIES
   capistrano3-delayed-job (~> 1.0)
   capistrano3-unicorn (~> 0.2)
   coffee-rails (~> 4.0.0)
+  daemons
   database_cleaner
   delayed_job_active_record
   devise

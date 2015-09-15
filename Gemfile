@@ -31,6 +31,7 @@ gem 'spring',        group: :development
 gem 'unicorn'
 
 # Background processor
+gem 'daemons'
 gem 'delayed_job_active_record'
 
 group :development, :test do
