@@ -3,9 +3,9 @@ module LoadProfiles
     #
     # Class to generate options for load profiles
     #
-    def initialize(load_profiles, testing_ground, technology)
+    def initialize(load_profiles, technology_profile, technology)
       @load_profiles  = selected_load_profiles(load_profiles, technology)
-      @testing_ground = testing_ground
+      @technology_profile = technology_profile
     end
 
     def generate_options
@@ -27,8 +27,8 @@ module LoadProfiles
     end
 
     def profile_ids
-      @profile_ids ||= @testing_ground.technology_profile.list.values.flatten
-        .map(&:profile).uniq
+      @profile_ids ||= @technology_profile.values.flatten
+        .map{|t| t['profile'] }.uniq
     end
 
     def selected_profiles

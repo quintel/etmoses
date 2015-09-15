@@ -15,9 +15,9 @@
         %select.form-control{class: technology.key}
           - case technology.key
           - when 'generic'
-            = options_for_load_profiles
+            = options_for_load_profiles(testing_ground_profile)
           - else
-            = options_for_load_profiles(technology)
+            = options_for_load_profiles(testing_ground_profile, technology)
 
     - testing_ground_profile.each_pair do |node, technologies|
       - technologies.each do |technology|
