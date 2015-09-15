@@ -189,7 +189,19 @@ RSpec.describe TestingGroundsController do
       expect(response).to redirect_to(root_path)
     end
 
-    it "shows a testing ground when it's private" do
+    it "shows a testing ground when it's private and you're an admin" do
+      user.update_attribute(:admin, true)
+
+      sign_in(user)
+
+      testing_ground = FactoryGirl.create(:testing_ground, public: false)
+
+      get :show, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+
+    it "shows a testing ground when it's private and yours" do
       sign_in(user)
 
       testing_ground = FactoryGirl.create(:testing_ground,
