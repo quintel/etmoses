@@ -5,18 +5,15 @@ var TopologyTree = (function(){
     showTree: function() {
       $("#collapse-stakeholders select").prop('disabled', true);
 
-      d3.json(url)
-        .header("Content-Type", "application/json")
-        .header("Accept", "application/json")
-        .post(TopologyTreeHelper.strategies(), d3Callback);
+      new Poller({ url: url }).poll().done(d3Callback);
     }
   };
 
-  function d3Callback(error, treeData){
-    if (error) {
-      new ErrorDisplayer(error, container).displayError();
+  function d3Callback(treeData){
+    if (treeData.error) {
+      new ErrorDisplayer(treeData.error, container).displayError();
     }
-    else{
+    else if(treeData.graph){
       $("#collapse-stakeholders select").prop('disabled', false);
 
       new TreeGraph(url, treeData.graph, container).showGraph();
@@ -36,6 +33,6 @@ var TopologyTreeHelper = {
     var strategies = JSON.parse($(".strategies.hidden").text());
         strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
 
-    return JSON.stringify({ strategies: strategies });
+    return { strategies: strategies };
   }
 };

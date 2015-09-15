@@ -30,6 +30,9 @@ gem 'spring',        group: :development
 # Use unicorn as the app server
 gem 'unicorn'
 
+# Background processor
+gem 'delayed_job_active_record'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'
@@ -45,6 +48,7 @@ group :development do
   gem 'capistrano-rails',    '~> 1.1',   require: false
   gem 'capistrano-bundler',  '~> 1.1',   require: false
   gem 'capistrano3-unicorn', '~> 0.2',   require: false
+  gem 'capistrano3-delayed-job', '~> 1.0'
 
   gem 'better_errors'
   gem 'binding_of_caller'

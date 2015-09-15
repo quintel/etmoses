@@ -11,40 +11,6 @@ RSpec.describe BusinessCasesController do
     FactoryGirl.create(:testing_ground, user: user)
   }
 
-  describe "#create" do
-    let(:create_business_case){
-      post :create, testing_ground_id: testing_ground.id, format: :js
-    }
-
-    it 'creates a business case' do
-      create_business_case
-
-      expect(BusinessCase.count).to eq(1)
-    end
-
-    it "does not create an extra business case" do
-      BusinessCase.create!(testing_ground: testing_ground)
-
-      create_business_case
-
-      expect(BusinessCase.count).to eq(1)
-    end
-
-    it "sets financials to table" do
-      create_business_case
-
-      expect(BusinessCase.last.financials).to eq(
-        [ {"aggregator"=>[nil, nil, nil, nil, nil, nil, nil]},
-          {"cooperation"=>[nil, nil, nil, nil, nil, nil, nil]},
-          {"customer"=>[nil, nil, nil, nil, nil, nil, nil]},
-          {"government"=>[nil, nil, nil, nil, nil, nil, nil]},
-          {"producer"=>[nil, nil, nil, nil, nil, nil, nil]},
-          {"supplier"=>[nil, nil, nil, nil, nil, nil, nil]},
-          {"system operator"=>[nil, nil, nil, nil, nil, nil, nil]}
-        ])
-    end
-  end
-
   describe "#update" do
     let(:business_case){
       FactoryGirl.create(:business_case, testing_ground: testing_ground)
@@ -75,18 +41,6 @@ RSpec.describe BusinessCasesController do
                    }
 
       expect(response).to redirect_to(root_path)
-    end
-  end
-
-  describe "#show" do
-    let(:business_case){
-      FactoryGirl.create(:business_case)
-    }
-
-    it 'visits show page' do
-      get :show, testing_ground_id: testing_ground.id, id: business_case.id
-
-      expect(response).to be_success
     end
   end
 
