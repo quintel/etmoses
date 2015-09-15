@@ -14,13 +14,19 @@ module Market
     end
 
     def relations_from_model(model)
-      model.interactions.map do |inter|
+      ignore = [:kw_flex, :kw_connection]
+
+      relations = model.interactions.map do |inter|
         {
           from:    inter['stakeholder_from'],
           to:      inter['stakeholder_to'],
           measure: inter['foundation'].downcase.to_sym,
           tariff:  inter['tariff'].to_f
         }
+      end
+
+      relations.reject do |relation|
+        ignore.include?(relation[:measure])
       end
     end
 
