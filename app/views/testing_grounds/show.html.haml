@@ -14,7 +14,7 @@
         .clearfix
         %p.note Specify which percentage of solar production can be capped
 
-      %button.btn.btn-primary.apply_strategies Apply
+      %button.btn.btn-primary.apply_strategies{data: {url: store_strategies_testing_ground_path(@testing_ground) }} Apply
 
     - if policy(@testing_ground).edit?
       .main-buttons
@@ -49,7 +49,7 @@
   .save_strategies.hidden
     = @testing_ground.selected_strategy.to_json
 
-  .testing-ground-view{ "data-url" => data_testing_ground_url(@testing_ground, format: :json) }
+  .testing-ground-view{ data: { url: process_data_testing_ground_path(@testing_ground, format: :json), finish_url: data_testing_ground_url(@testing_ground, format: :json),  } }
     %span.loading
       %h5
         %span.main Calculating your local energy solution&hellip;

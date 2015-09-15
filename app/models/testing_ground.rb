@@ -12,6 +12,7 @@ class TestingGround < ActiveRecord::Base
   belongs_to :topology
   belongs_to :market_model
   belongs_to :user
+  belongs_to :job, class: Delayed::Job
 
   has_one :selected_strategy
   has_one :business_case
@@ -34,9 +35,17 @@ class TestingGround < ActiveRecord::Base
   # important attributes from the techologies hash into the topology.
   #
   # This should be moved to a presenter after the prototype stage.
-  def as_json(opts = {})
-    { graph: GraphToTree.convert(to_calculated_graph(opts)),
+  def as_json(*)
+    { graph: Rails.cache.fetch("#{id}.load_calculation"),
       technologies: technology_profile.as_json }
+  end
+
+  def perform_calculation(opts)
+    Rails.cache.write("#{id}.load_calculation", GraphToTree.convert(to_calculated_graph(opts)))
+  end
+
+  def empty_cache?
+    Rails.cache.fetch("#{id}.load_calculation").nil?
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies
@@ -104,6 +113,10 @@ class TestingGround < ActiveRecord::Base
   def technology_profile_csv=(csv)
     csv = csv.read if csv.respond_to?(:read)
     self.technology_profile = TechnologyList.from_csv(csv)
+  end
+
+  def clear_job!
+    update_attributes(job_finished_at: nil, job_id: nil)
   end
 
   private

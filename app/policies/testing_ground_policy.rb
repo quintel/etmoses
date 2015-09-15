@@ -10,6 +10,8 @@ class TestingGroundPolicy < ApplicationPolicy
   end
 
   alias_method :data?, :show?
+  alias_method :process_data?, :show?
+  alias_method :store_strategies?, :show?
   alias_method :technology_profile?, :show?
   alias_method :import?, :new?
   alias_method :perform_import?, :import?
