@@ -188,7 +188,7 @@ window.downsampleCurve = downsampleCurve
 $(document).on "page:change", ->
   $('.testing-ground-view').each (idx, viewEl) ->
     if $('.loading', viewEl).length
-      new TopologyTree($(viewEl).data('url'), viewEl).showTree()
+      new TopologyTree($(viewEl).data(), viewEl).showTree()
 
   $("#testing_ground_technologies_csv").filestyle(buttonBefore: true)
 

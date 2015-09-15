@@ -439,15 +439,16 @@ var TreeGraph = (function(){
     });
   };
 
-  function TreeGraph(_url, _treeData, _container){
-    this.url      = _url;
-    this.treeData = _treeData;
-    container     = _container;
+  function TreeGraph(_url, _finishUrl, _treeData, _container){
+    this.url       = _url;
+    this.finishUrl = _finishUrl;
+    this.treeData  = _treeData;
+    container      = _container;
 
-    tree          = createD3Tree();
-    diagonal      = createD3Diagonal();
-    zoomListener  = createZoomListener();
-    dragListener  = createDragListener();
+    tree           = createD3Tree();
+    diagonal       = createD3Diagonal();
+    zoomListener   = createZoomListener();
+    dragListener   = createDragListener();
   };
 
   return TreeGraph;

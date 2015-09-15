@@ -1,12 +1,22 @@
 var TopologyTree = (function(){
-  var url, container;
+  var urls, finishUrl, container;
 
   TopologyTree.prototype = {
     showTree: function() {
       $("#collapse-stakeholders select").prop('disabled', true);
 
-      new Poller({ url: url }).poll().done(d3Callback);
+      new Poller({ url: url }).poll().done(displayData);
     }
+  };
+
+  function displayData(){
+    $.ajax({
+      type:         "POST",
+      contentType:  "application/json",
+      dataType:     "json",
+      url:          finishUrl,
+      success:      d3Callback
+    });
   };
 
   function d3Callback(treeData){
@@ -16,12 +26,13 @@ var TopologyTree = (function(){
     else if(treeData.graph){
       $("#collapse-stakeholders select").prop('disabled', false);
 
-      new TreeGraph(url, treeData.graph, container).showGraph();
+      new TreeGraph(url, finishUrl, treeData.graph, container).showGraph();
     };
   };
 
-  function TopologyTree(_url, _container){
-    url = _url;
+  function TopologyTree(_urls, _container){
+    url = _urls.url;
+    finishUrl = _urls.finishUrl;
     container = _container;
   };
 

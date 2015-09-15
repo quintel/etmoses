@@ -14,6 +14,7 @@ var StrategyToggler = (function(){
       shouldPollBusinessCase = true;
 
       updateStrategies();
+      storeStrategies();
       setClearStrategies();
       toggleStrategies();
     },
@@ -25,6 +26,16 @@ var StrategyToggler = (function(){
       setClearStrategies();
       toggleStrategies();
     }
+  };
+
+  function storeStrategies(){
+    $.ajax({
+      type: "POST",
+      url:  applyStrategyButton.data('url'),
+      data: {
+        strategies: getStrategies()
+      }
+    });
   };
 
   function getStrategies(){
@@ -69,8 +80,19 @@ var StrategyToggler = (function(){
   function pollTree(){
     new Poller({
       url: loadChart.url,
-      data: TopologyTreeHelper.strategies()
-    }).poll().done(updateLoadChart);
+      data: TopologyTreeHelper.strategies(),
+      first_data: { clear: true }
+    }).poll().done(displayData);
+  };
+
+  function displayData(){
+    $.ajax({
+      type:         "POST",
+      contentType:  "application/json",
+      dataType:     "json",
+      url:          loadChart.finishUrl,
+      success:      updateLoadChart
+    });
   };
 
   function pollBusinessCase(){
@@ -83,6 +105,7 @@ var StrategyToggler = (function(){
 
   function renderSummary(){
     $.ajax({ type: "POST", url: businessCaseTable.data('finishUrl') });
+
     $("#business_case_table .loading-spinner").removeClass("on");
     $("select#compare").prop('disabled', false);
   };
@@ -123,8 +146,13 @@ var StrategyToggler = (function(){
     applyStrategyButton.prop("disabled", loadingSpinner.hasClass("on"));
   };
 
+  /*
+   * Prototype to toggle the strategies
+   * Takes a loadChart
+   *
+   */
   function StrategyToggler(_loadChart){
-    loadChart = _loadChart;
+    loadChart         = _loadChart;
     businessCaseTable = $("#business_case_table");
   };
 
