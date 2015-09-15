@@ -347,4 +347,28 @@ RSpec.describe TestingGroundsController do
       expect(TestingGround.last.name).to eq("New name")
     end
   end
+
+  describe "#store strategies" do
+    let(:strategies){ {
+      "solar_storage"=>false,
+      "battery_storage"=>false,
+      "solar_power_to_heat"=>false,
+      "solar_power_to_gas"=>false,
+      "buffering_electric_car"=>false,
+      "buffering_space_heating"=>false,
+      "postponing_base_load"=>false,
+      "saving_base_load"=>false,
+      "capping_solar_pv"=>false,
+      "capping_fraction"=>1.0
+    } }
+
+    let!(:sign_in_user){ sign_in(user) }
+    let(:testing_ground){ FactoryGirl.create(:testing_ground, user: user) }
+
+    it "saves strategies" do
+      post :store_strategies, id: testing_ground.id, format: :js, strategies: strategies
+
+      expect(JSON.parse(testing_ground.selected_strategy.to_json)).to eq(strategies)
+    end
+  end
 end

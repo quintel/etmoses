@@ -14,6 +14,7 @@ var StrategyToggler = (function(){
       shouldPollBusinessCase = true;
 
       updateStrategies();
+      storeStrategies();
       setClearStrategies();
       toggleStrategies();
     },
@@ -27,8 +28,18 @@ var StrategyToggler = (function(){
     }
   };
 
+  function storeStrategies(){
+    $.ajax({
+      type: "POST",
+      url:  applyStrategyButton.data('url'),
+      data: {
+        strategies: getStrategies()
+      }
+    });
+  };
+
   function getStrategies(){
-    return JSON.parse($(".strategies.hidden").text());
+    return JSON.parse($(".save_strategies.hidden").text());
   };
 
   function updateStrategies(){
@@ -36,7 +47,7 @@ var StrategyToggler = (function(){
     $(".load-strategies input[type=checkbox]").each(function(){
       appliedStrategies[$(this).val()] = $(this).is(":checked");
     })
-    $(".strategies.hidden").text(JSON.stringify(appliedStrategies));
+    $(".save_strategies.hidden").text(JSON.stringify(appliedStrategies));
   };
 
   function setClearStrategies(){

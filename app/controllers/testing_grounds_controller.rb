@@ -1,9 +1,9 @@
 class TestingGroundsController < ResourceController
-  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as)
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as store_strategies)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:calculate_concurrency, :update]
+  respond_to :js, only: [:calculate_concurrency, :update, :store_strategies]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -12,8 +12,6 @@ class TestingGroundsController < ResourceController
 
   before_filter :load_technologies_and_profiles, only: [:perform_import, :update, :create,
                                            :edit, :new, :calculate_concurrency]
-
-  before_filter :update_strategies, only: :data
 
   skip_before_filter :verify_authenticity_token, only: [:data]
 
@@ -93,6 +91,12 @@ class TestingGroundsController < ResourceController
     end
   end
 
+  # POST /testing_grounds/:id/store_strategies
+  def store_strategies
+    selected_strategy = SelectedStrategy.find_or_create_by(testing_ground: @testing_ground)
+    selected_strategy.update_attributes(strategy_params)
+  end
+
   # GET /testing_grounds/:id/edit
   def edit
   end
@@ -163,13 +167,6 @@ class TestingGroundsController < ResourceController
       :solar_power_to_heat, :solar_power_to_gas, :buffering_electric_car,
       :buffering_space_heating, :postponing_base_load, :saving_base_load,
       :capping_solar_pv, :capping_fraction)
-  end
-
-  def update_strategies
-    return unless params[:strategies]
-
-    selected_strategy = SelectedStrategy.find_or_create_by(testing_ground: @testing_ground)
-    selected_strategy.update_attributes(strategy_params)
   end
 
   # Internal: Given a hash and an attribute key, assumes the value is a YAML
