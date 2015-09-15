@@ -61,6 +61,10 @@ module Network
         0.0
       end
 
+      def flexible_conditional?
+        true
+      end
+
       def conservable_production_at(frame)
         0.0
       end

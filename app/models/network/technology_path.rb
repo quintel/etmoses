@@ -74,7 +74,14 @@ module Network
       return amount unless @technology.capacity_constrained?
 
       headroom = @path.available_capacity_at(frame)
-      headroom < amount ? headroom : amount
+
+      if headroom < amount
+        # Some techs work on the principle that if all of their conditional
+        # consumption cannot be satisfied, none of it should.
+        @technology.flexible_conditional? ? headroom : 0.0
+      else
+        amount
+      end
     end
   end # TechnologyPath
 end # Network

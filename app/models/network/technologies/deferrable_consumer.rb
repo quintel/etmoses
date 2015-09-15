@@ -82,6 +82,13 @@ module Network
         )
       end
 
+      # Public: Deferrable consumers must have their entire conditional load
+      # satisfied. If network conditions do not allow, the conditional load is
+      # deferred.
+      def flexible_conditional?
+        false
+      end
+
       # Public: Informs the Deferrable that some or all of its conditional
       # consumption has been satisfied.
       #
