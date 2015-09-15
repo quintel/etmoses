@@ -1,22 +1,26 @@
 class BusinessCasesController < ResourceController
-  RESOURCE_ACTIONS = %i(show update compare compare_with data)
+  RESOURCE_ACTIONS = %i(update compare compare_with data render_summary)
 
-  respond_to :js, only: [:compare_with, :data, :create, :update]
+  respond_to :js, only: [:compare_with, :data, :create, :update, :render_summary]
 
   before_filter :find_testing_ground
   before_filter :find_business_case, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
-
-  def show
-    @business_case_summary = Finance::BusinessCaseSummary.new(@business_case).summarize
-  end
+  before_filter :clear_job, only: :data
 
   def data
-    @business_case_summary = Finance::BusinessCaseSummary.new(@business_case).summarize
+    unless @business_case.job_id.present?
+      task = BusinessCaseCalculatorJob.new(@testing_ground, params[:strategies])
+
+      @business_case.update_attributes(job: Delayed::Job.enqueue(task),
+                                       job_finished_at: nil)
+    end
+
+    render json: { pending: @business_case.job_finished_at.blank? }
   end
 
-  def create
-    @business_case = Finance::BusinessCaseCreator.new(@testing_ground).create
+  def render_summary
+    @business_case_summary = Finance::BusinessCaseSummary.new(@business_case).summarize
   end
 
   def update
@@ -35,6 +39,12 @@ class BusinessCasesController < ResourceController
   end
 
   private
+
+  def clear_job
+    if params[:clear]
+      @business_case.clear_job!
+    end
+  end
 
   def business_case_params
     params.require(:business_case).permit(:financials)

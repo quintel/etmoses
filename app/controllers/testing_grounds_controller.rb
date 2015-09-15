@@ -13,6 +13,8 @@ class TestingGroundsController < ResourceController
   before_filter :load_technologies_and_profiles, only: [:perform_import, :update, :create,
                                            :edit, :new, :calculate_concurrency]
 
+  before_filter :update_strategies, only: :data
+
   skip_before_filter :verify_authenticity_token, only: [:data]
 
   # GET /topologies
@@ -54,8 +56,11 @@ class TestingGroundsController < ResourceController
 
   # POST /topologies
   def create
-    respond_with(@testing_ground = current_user.testing_grounds
-                                     .create(testing_ground_params))
+    @testing_ground = current_user.testing_grounds.create(testing_ground_params)
+
+    Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
+
+    respond_with(@testing_ground)
   end
 
   # GET /topologies/:id
@@ -96,6 +101,10 @@ class TestingGroundsController < ResourceController
   def update
     @form_type = params[:testing_ground][:form_type]
     @testing_ground.update_attributes(testing_ground_params)
+
+    if @testing_ground.business_case
+      @testing_ground.business_case.clear_job!
+    end
 
     respond_with(@testing_ground)
   end
@@ -147,6 +156,20 @@ class TestingGroundsController < ResourceController
     end
 
     tg_params
+  end
+
+  def strategy_params
+    params.require(:strategies).permit(:solar_storage, :battery_storage,
+      :solar_power_to_heat, :solar_power_to_gas, :buffering_electric_car,
+      :buffering_space_heating, :postponing_base_load, :saving_base_load,
+      :capping_solar_pv, :capping_fraction)
+  end
+
+  def update_strategies
+    return unless params[:strategies]
+
+    selected_strategy = SelectedStrategy.find_or_create_by(testing_ground: @testing_ground)
+    selected_strategy.update_attributes(strategy_params)
   end
 
   # Internal: Given a hash and an attribute key, assumes the value is a YAML

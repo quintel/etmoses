@@ -5,7 +5,7 @@
         %li= message
 
 = form_for(testing_ground) do |f|
-  = render 'general_form', form: f
+  = render 'general_form', form: f, testing_ground: testing_ground
   = render 'technologies_form', form: f, testing_ground: testing_ground, submit_text: submit_text
 
   .form-group

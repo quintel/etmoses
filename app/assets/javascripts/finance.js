@@ -15,14 +15,17 @@ $(document).on("page:change", function(){
   var businessCaseTable = $("#business_case_table");
 
   if(businessCaseTable.length > 0){
-
-    $.ajax({
+    var poller = new Poller({
       url: businessCaseTable.data('url'),
-      type: "GET",
-      success: function(){
-        businessCaseTable.find("table tbody td.editable span.static").
-          formatCurrency(Finance.currencyOptions);
-      }
+      data: TopologyTreeHelper.strategies()
+    }).poll().done(renderSummary);
+  };
+
+  function renderSummary(){
+    $.ajax({
+      type: "POST",
+      url:  businessCaseTable.data('finishUrl'),
     });
   };
 });
+

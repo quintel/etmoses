@@ -46,6 +46,9 @@
   .strategies.hidden
     = default_strategies.to_json
 
+  .save_strategies.hidden
+    = @testing_ground.selected_strategy.to_json
+
   .testing-ground-view{ "data-url" => data_testing_ground_url(@testing_ground, format: :json) }
     %span.loading
       %h5
@@ -109,10 +112,15 @@
 
 .clearfix
 
-.dashboard
-  %h2 Business case
+.dashboard#business_case_target_area
+  %h2
+    Business case
+    %span.loading
+      = image_tag 'wait.gif'
+
   - if @testing_ground.business_case
-    #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
+    #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case), finish_url: render_summary_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
+    Loading ...
   - else
     %p No business case available yet
 

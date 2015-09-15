@@ -11,7 +11,10 @@ class TestingGround::Cloner
     else
       @object.update_attributes(@params)
     end
-    Finance::BusinessCaseCreator.new(@testing_ground).calculate
+
+    if @testing_ground.business_case
+      @testing_ground.business_case.clear_job!
+    end
   end
 
   private
@@ -23,7 +26,7 @@ class TestingGround::Cloner
   end
 
   def clone_params
-    @params.merge(user_id: @testing_ground.user, public: false)
+    @params.merge(user_id: @testing_ground.user_id, public: false)
   end
 
   def in_use?

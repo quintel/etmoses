@@ -119,11 +119,13 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#create" do
+    let(:topology){ FactoryGirl.create(:topology) }
+    let(:market_model) { FactoryGirl.create(:market_model) }
     it "creates a testing ground" do
       sign_in(user)
 
       expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
-      post :create, TestingGroundsControllerTest.create_hash
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.count).to eq(1)
     end
@@ -132,7 +134,7 @@ RSpec.describe TestingGroundsController do
       sign_in(user)
 
       expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
-      post :create, TestingGroundsControllerTest.create_hash
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(response).to redirect_to(testing_ground_path(TestingGround.last))
     end
@@ -141,7 +143,7 @@ RSpec.describe TestingGroundsController do
       sign_in(user)
 
       expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
-      post :create, TestingGroundsControllerTest.create_hash
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.last.user).to eq(controller.current_user)
     end

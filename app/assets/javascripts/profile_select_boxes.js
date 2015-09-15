@@ -51,6 +51,7 @@ var ProfileSelectBoxes = (function(){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone(true, true);
 
+    $(this).parents("tr").find(".units input").off("change");
     $(this).parent().next().html(profileSelectbox);
 
     updateTextCells(profileSelectbox, $(this).parents("tr"), isChanged);

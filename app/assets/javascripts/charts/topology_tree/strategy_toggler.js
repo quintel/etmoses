@@ -1,6 +1,7 @@
 var StrategyToggler = (function(){
-  var loadChart, applyStrategyButton;
+  var loadChart, applyStrategyButton, businessCaseTable;
   var clearStrategies = false;
+  var shouldPollBusinessCase = true;
 
   StrategyToggler.prototype = {
     addOnChangeListener: function(){
@@ -10,6 +11,16 @@ var StrategyToggler = (function(){
     },
 
     applyStrategies: function(){
+      shouldPollBusinessCase = true;
+
+      updateStrategies();
+      setClearStrategies();
+      toggleStrategies();
+    },
+
+    setDefaultStrategies: function(){
+      shouldPollBusinessCase = false;
+
       updateStrategies();
       setClearStrategies();
       toggleStrategies();
@@ -48,14 +59,40 @@ var StrategyToggler = (function(){
     else {
       loadChart.strategyLoads = true;
 
-      d3.json(loadChart.url)
-        .header("Content-Type", "application/json")
-        .header("Accept", "application/json")
-        .post(TopologyTreeHelper.strategies(), updateLoadChart);
+      pollTree();
+      if(shouldPollBusinessCase){
+        pollBusinessCase();
+      };
     }
   };
 
-  function updateLoadChart(error, strategyData){
+  function pollTree(){
+    new Poller({
+      url: loadChart.url,
+      data: TopologyTreeHelper.strategies()
+    }).poll().done(updateLoadChart);
+  };
+
+  function pollBusinessCase(){
+    new Poller({
+      url: businessCaseTable.data('url'),
+      data: TopologyTreeHelper.strategies(),
+      first_data: { clear: true }
+    }).poll().done(renderSummary).progress(showLoadingSpinner);
+  };
+
+  function renderSummary(){
+    $.ajax({ type: "POST", url: businessCaseTable.data('finishUrl') });
+    $("#business_case_table .loading-spinner").removeClass("on");
+    $("select#compare").prop('disabled', false);
+  };
+
+  function showLoadingSpinner(){
+    $("#business_case_table .loading-spinner").addClass("on");
+    $("select#compare").prop('disabled', true);
+  };
+
+  function updateLoadChart(strategyData){
     toggleLoading();
 
     loadChart.strategyLoads = {};
@@ -81,13 +118,14 @@ var StrategyToggler = (function(){
   };
 
   function toggleLoading(){
-    var loadingSpinner = $(".loading-spinner");
+    var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
     loadingSpinner.toggleClass("on");
     applyStrategyButton.prop("disabled", loadingSpinner.hasClass("on"));
   };
 
   function StrategyToggler(_loadChart){
     loadChart = _loadChart;
+    businessCaseTable = $("#business_case_table");
   };
 
   return StrategyToggler;

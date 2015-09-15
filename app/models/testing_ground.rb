@@ -13,6 +13,7 @@ class TestingGround < ActiveRecord::Base
   belongs_to :market_model
   belongs_to :user
 
+  has_one :selected_strategy
   has_one :business_case
 
   validates :topology, presence: true
