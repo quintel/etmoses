@@ -76,4 +76,15 @@ RSpec.describe BusinessCasesController do
       )
     end
   end
+
+  describe "validate business case" do
+    it "validates a business case" do
+      topology = FactoryGirl.create(:topology_with_stakeholders)
+      market_model = FactoryGirl.create(:market_model)
+
+      post :validate, business_case: { topology_id: topology, market_model_id: market_model }
+
+      expect(JSON.parse(response.body)).to eq({ "valid" => true })
+    end
+  end
 end
