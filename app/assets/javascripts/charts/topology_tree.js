@@ -30,7 +30,7 @@ var TopologyTree = (function(){
 
 var TopologyTreeHelper = {
   strategies: function(){
-    var strategies = JSON.parse($(".strategies.hidden").text());
+    var strategies = JSON.parse($(".save_strategies.hidden").text());
         strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
 
     return { strategies: strategies };
