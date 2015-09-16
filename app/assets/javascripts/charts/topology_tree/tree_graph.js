@@ -46,6 +46,7 @@ var TreeGraph = (function(){
         ETHelper.eachNode([this.root], setAltLoad.bind(this));
         this.showChart(this.lastClicked);
         this.update(this.root);
+        setLastClickedNode.call(this);
       };
     },
 
@@ -69,6 +70,12 @@ var TreeGraph = (function(){
       else{
         addNewLoadChartPlatform.call(this, uniqueId, d);
       };
+
+      LoadChartHelper.reloadChart(d.id);
+
+      localSettings.set('current_chart_id', d.id);
+
+      toggleDomParts(d);
     },
 
     update: function(source) {
@@ -385,19 +392,16 @@ var TreeGraph = (function(){
   function click(d) {
     if (d3.event && d3.event.defaultPrevented) return; // click suppressed
 
-    toggleSelectedNode.call(this);
-
     _self.lastClicked = d;
     _self.showChart(d);
 
-    $(".nav-tabs li a[href='#load']").tab('show');
-    LoadChartHelper.reloadChart(d.id);
+    toggleSelectedNode.call(this);
+  };
 
+  function toggleDomParts(d){
     $('#technologies .row-fluid, p.info').hide();
     showTechnologies(d);
-
     setHeader(d);
-    enableCsvDownloadCurveButton(d);
   };
 
   function showTechnologies(d){
@@ -416,6 +420,8 @@ var TreeGraph = (function(){
   function setHeader(d){
     $("h1 span").removeClass("hidden");
     $("h1 span.current-chart").text(d.name);
+
+    enableCsvDownloadCurveButton(d);
   };
 
   function enableCsvDownloadCurveButton(d){
@@ -507,11 +513,26 @@ var TreeGraph = (function(){
     });
   };
 
-  function TreeGraph(_url, _container){
+  function setLastClickedNode(){
+    var settings = window.localSettings.getAll();
+    if(settings && settings.current_chart_id){
+      var currentNode;
+      ETHelper.eachNode([this.root], function(node) {
+        if(node.id == settings.current_chart_id){
+          currentNode = node;
+          return false;
+        }
+      });
+      this.lastClicked = currentNode;
+    };
+  };
+
+  function TreeGraph(_url, _treeData, _container){
     this.strategyToggler  = new StrategyToggler(this)
 
-    this.url              = _url;
-    container             = _container;
+    this.url      = _url;
+    this.treeData = _treeData;
+    container     = _container;
 
     tree          = createD3Tree();
     diagonal      = createD3Diagonal();

@@ -29,6 +29,7 @@ var TopologyTree = (function(){
 
     treeGraph.initialCallDone = true;
     treeGraph.showGraph(treeData.graph);
+    window.localSettings = new LocalSettings($(".testing_ground_id").text());
   };
 
   function failCallback(treeData){
