@@ -5,19 +5,18 @@ var TopologyTree = (function(){
     showTree: function() {
       $("#collapse-stakeholders select").prop('disabled', true);
 
-      new Poller({ url: url }).poll().done(d3Callback);
+      new Poller({ url: url }).poll().done(d3Callback).fail(failCallback);
     }
   };
 
   function d3Callback(treeData){
-    if (treeData.error) {
-      new ErrorDisplayer(treeData.error, container).displayError();
-    }
-    else if(treeData.graph){
-      $("#collapse-stakeholders select").prop('disabled', false);
+    $("#collapse-stakeholders select").prop('disabled', false);
 
-      new TreeGraph(url, treeData.graph, container).showGraph();
-    };
+    new TreeGraph(url, treeData.graph, container).showGraph();
+  };
+
+  function failCallback(treeData){
+    new ErrorDisplayer(treeData.responseJSON, container).displayError();
   };
 
   function TopologyTree(_url, _container){

@@ -56,9 +56,13 @@ module TestingGroundsHelper
 
   def options_for_stakeholders
     options = []
-    @testing_ground.topology.each_node do |n|
-      (options << n[:stakeholder] if n[:stakeholder])
+
+    if @testing_ground.topology
+      @testing_ground.topology.each_node do |n|
+        (options << n[:stakeholder] if n[:stakeholder])
+      end
     end
+
     options_for_select options.uniq
   end
 
