@@ -33,7 +33,8 @@ class PriceCurvesController < ResourceController
 
   def destroy
     @price_curve.destroy
-    redirect_to(price_curves_index_path)
+
+    redirect_to(load_profiles_path)
   end
 
   private

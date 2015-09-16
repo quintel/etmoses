@@ -1,0 +1,15 @@
+%h2
+  %span= "Compare business case from #{@testing_ground.name} with"
+  %span.compare
+    = select_tag "compare", options_for_testing_grounds(@testing_ground), include_blank: true, class: "form-control", data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) }
+
+%p= link_to "View load chart", testing_ground_path(@testing_ground), class: "btn btn-primary"
+
+.javascript.data.hidden
+  = JSON.dump(@testing_ground.business_case.financials)
+
+= render 'table', business_case_rows: @business_case_summary
+
+= link_to "Edit", edit_testing_ground_business_case_path(@testing_ground, @business_case), class: "btn btn-primary"
+%span.or or
+= link_to "Back to load", testing_ground_path(@testing_ground), class: "btn btn-default"
