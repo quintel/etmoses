@@ -13,7 +13,8 @@ class PriceCurvesController < ResourceController
 
   def create
     @price_curve = current_user.price_curves.create(profile_params)
-    redirect_to price_curve_path(@price_curve)
+
+    respond_with(@price_curve)
   end
 
   def show

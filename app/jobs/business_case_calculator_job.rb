@@ -5,7 +5,7 @@ class BusinessCaseCalculatorJob
   end
 
   def perform
-    Finance::BusinessCaseCreator.new(@testing_ground, @strategies).calculate
+    Finance::BusinessCaseCreator.new(@testing_ground, business_case, @strategies).calculate
   end
 
   def success(job)

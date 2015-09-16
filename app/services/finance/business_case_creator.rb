@@ -1,8 +1,8 @@
 module Finance
   class BusinessCaseCreator
-    def initialize(testing_ground, strategies = {})
+    def initialize(testing_ground, business_case, strategies = {})
       @testing_ground = testing_ground
-      @business_case = @testing_ground.business_case
+      @business_case = business_case
       @strategies = strategies
     end
 
@@ -18,8 +18,8 @@ module Finance
     end
 
     def existing_freeform
-      if financials = @business_case.financials
-        financials.detect{|row| row['freeform'] }
+      if @business_case && @business_case.financials
+        @business_case.financials.detect{|row| row['freeform'] }
       end
     end
   end
