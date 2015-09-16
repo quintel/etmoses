@@ -14,3 +14,8 @@
 # ActiveSupport::Inflector.inflections(:en) do |inflect|
 #   inflect.acronym 'RESTful'
 # end
+
+ActiveSupport::Inflector.inflections(:en) do |inflect|
+  # Otherwise Inflector.singularize('price_curves') # => 'price_curf'
+  inflect.irregular 'curve', 'curves'
+end
