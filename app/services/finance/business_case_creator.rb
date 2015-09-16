@@ -7,16 +7,10 @@ module Finance
     end
 
     def calculate
-      return unless existing_business_case?
-
       @business_case.update_attribute(:financials, financials)
     end
 
     private
-
-    def existing_business_case?
-      @business_case.present?
-    end
 
     def financials
       ( Finance::BusinessCaseCalculator.new(@testing_ground, @strategies).rows +
