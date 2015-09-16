@@ -18,7 +18,9 @@ module Network
       end
 
       def self.build(installed, profile, **options)
-        super(installed, profile, **options.merge(additional_profile: profile))
+        super(installed, profile, **options.merge(
+          additional_profile: profile, buffering_space_heating: true
+        ))
       end
 
       # Public: Buffers may not return their stored energy back to the network.
@@ -32,6 +34,10 @@ module Network
       # Returns a numeric.
       def mandatory_consumption_at(frame)
         production_at(frame)
+      end
+
+      def excess_constrained?
+        true
       end
     end # OptionalBuffer
   end
