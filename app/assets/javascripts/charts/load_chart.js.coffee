@@ -34,7 +34,6 @@ class LoadChart
   renderChart: (intoSelector, week) ->
     self = this
 
-    console.log(@data)
     data = for datum, index in @data
       { key: datum.name, values: @sampledData(datum.values), area: datum.area, color: datum.color}
 

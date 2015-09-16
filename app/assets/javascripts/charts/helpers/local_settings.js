@@ -1,7 +1,7 @@
 var LocalSettings = (function(){
   LocalSettings.prototype = {
     set: function(key, value){
-      var settings = read();
+      var settings = read.call(this);
       settings[key] = value;
       write.call(this, settings);
     },
@@ -16,7 +16,7 @@ var LocalSettings = (function(){
   };
 
   function write(value){
-    if(isSupportingLocalStorage()){
+    if(isSupportingLocalStorage() && value !== null){
       window.localStorage.setItem(this.testingGroundId, JSON.stringify(value));
     }
   };
