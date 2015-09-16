@@ -12,9 +12,13 @@ class PriceCurvesController < ResourceController
   end
 
   def create
-    @price_curve = current_user.price_curves.create(profile_params)
+    @price_curve = current_user.price_curves.new(profile_params)
 
-    respond_with(@price_curve)
+    if @price_curve.save
+      redirect_to price_curve_path(@price_curve)
+    else
+      render :new
+    end
   end
 
   def show
