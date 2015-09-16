@@ -5,9 +5,9 @@
 .profile-graph.line-chart{ 'data-url' => price_curve_path(@price_curve, format: :json) }
 
 .commit
-  = link_to('Download', @price_curve.curve.url, class: 'button')
+  = link_to('Download', @price_curve.curve.url, class: 'btn')
   %span.or or
-  = link_to_if(policy(@price_curve).edit?, 'Edit', edit_price_curve_path(@price_curve), class: 'button')
-  = link_to_if(policy(@price_curve).destroy?, 'Delete', price_curve_path(@price_curve), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this profile?' })
+  = link_to_if(policy(@price_curve).edit?, 'Edit', edit_price_curve_path(@price_curve))
+  = link_to_if(policy(@price_curve).destroy?, 'Delete', price_curve_path(@price_curve), method: 'delete', data: { confirm: 'Are you sure you want to delete this profile?' })
 
-= link_to '◄ All load profiles', load_profiles_path, class: 'button button-primary'
+= link_to '◄ All load profiles', load_profiles_path
