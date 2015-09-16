@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     end
   end
 
+  post :validate_business_case, to: "business_cases#validate"
+
   resources :price_curves, as: :price_curve
   resources :load_profiles do
     resources :load_profile_component, only: :show

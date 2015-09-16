@@ -7,4 +7,5 @@ class BusinessCasePolicy < ApplicationPolicy
   alias :compare_with? :show?
   alias :data? :show?
   alias :render_summary? :show?
+  alias :validate? :create?
 end

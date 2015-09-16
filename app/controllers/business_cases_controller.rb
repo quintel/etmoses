@@ -1,9 +1,10 @@
 class BusinessCasesController < ResourceController
   RESOURCE_ACTIONS = %i(update compare compare_with data render_summary)
 
-  respond_to :js, only: [:compare_with, :data, :create, :update, :render_summary]
+  respond_to :js, only: [:compare_with, :data, :create, :update, :render_summary,
+                         :validate]
 
-  before_filter :find_testing_ground
+  before_filter :find_testing_ground, except: :validate
   before_filter :find_business_case, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :clear_job, only: :data
@@ -36,6 +37,15 @@ class BusinessCasesController < ResourceController
     rescue ActiveRecord::RecordNotFound
       render json: { error: 'Testing ground not found' }, status: :unprocessable_entity
     end
+  end
+
+  def validate
+    @topology = Topology.find(params[:business_case][:topology_id])
+    @market_model = MarketModel.find(params[:business_case][:market_model_id])
+
+    render json: {
+      valid: Finance::BusinessCaseValidator.new(@topology, @market_model).valid?
+    }
   end
 
   private
