@@ -5,7 +5,7 @@
 .form-group
   = form.label :public, "Permissions"
 
-  - if testing_ground.topology.public? && testing_ground.market_model.public?
+  - if (!testing_ground.topology || !testing_ground.market_model) || (testing_ground.topology.public? && testing_ground.market_model.public?)
     .radio-buttons
       = form.radio_button :public, true
       = form.label :public, "Public", class: "radio-label"

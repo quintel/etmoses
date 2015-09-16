@@ -18,10 +18,14 @@
     = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
   %li{role: "presentation", class: "active"}
     = link_to "Technologies", "#technologies", "aria-controls" => "home", "role" => "tab", data: { toggle: "tab" }
-  %li{role: "presentation"}
-    = link_to "Topology", "#topology", "aria-controls" => "topology", "role" => "tab", data: { toggle: "tab" }
-  %li{role: "presentation"}
-    = link_to "Market model", "#market-model", "aria-controls" => "market-model", "role" => "tab", data: { toggle: "tab" }
+
+  - if @testing_ground.topology
+    %li{role: "presentation"}
+      = link_to "Topology", "#topology", "aria-controls" => "topology", "role" => "tab", data: { toggle: "tab" }
+
+  - if @testing_ground.market_model
+    %li{role: "presentation"}
+      = link_to "Market model", "#market-model", "aria-controls" => "market-model", "role" => "tab", data: { toggle: "tab" }
 
   - if @testing_ground.business_case
     %li{role: "presentation"}
@@ -46,11 +50,13 @@
         = form.submit "Save", class: 'btn btn-primary'
         %span.wait.hidden= image_tag 'wait.gif'
 
-  .tab-pane.remote.edit#topology{role: "tabpanel"}
-    = render partial: 'topologies/form', locals: { topology: @testing_ground.topology, action: clone_topology_path(@testing_ground.topology, format: :js), hide_cancel: true, remote: true }
+  - if @testing_ground.topology
+    .tab-pane.remote.edit#topology{role: "tabpanel"}
+      = render partial: 'topologies/form', locals: { topology: @testing_ground.topology, action: clone_topology_path(@testing_ground.topology, format: :js), hide_cancel: true, remote: true }
 
-  .tab-pane.remote.edit#market-model{role: "tabpanel"}
-    = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model, format: :js), remote: true }
+  - if @testing_ground.market_model
+    .tab-pane.remote.edit#market-model{role: "tabpanel"}
+      = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model, format: :js), remote: true }
 
   - if @testing_ground.business_case
     .tab-pane.remote.edit#business-case{role: "tabpanel"}
