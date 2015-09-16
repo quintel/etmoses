@@ -5,6 +5,10 @@ module BusinessCaseHelper
   end
 
   def finance_table_rows(business_case)
-    business_case.financials.reject{|t| t['freeform']}
+    if business_case.financials
+      business_case.financials.reject{|t| t['freeform']}
+    else
+      []
+    end
   end
 end
