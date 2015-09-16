@@ -4,7 +4,6 @@
 
 .form-group
   = form.label :public, "Permissions"
-  = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
 
   - if testing_ground.topology.public? && testing_ground.market_model.public?
     .radio-buttons
@@ -12,6 +11,8 @@
       = form.label :public, "Public", class: "radio-label"
       = form.radio_button :public, false
       = form.label :public, "Private", class: "radio-label"
+
+      = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
 
   - else
     = form.hidden_field :public, value: false
