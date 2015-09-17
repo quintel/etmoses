@@ -41,5 +41,5 @@ Rails.application.routes.draw do
 
   root to: redirect('/welcome')
 
-  get ':id', to: 'pages#show', as: :page
+  get ':id', to: 'pages#show', as: :page, constraints: { id: /welcome|how_to/ }
 end
