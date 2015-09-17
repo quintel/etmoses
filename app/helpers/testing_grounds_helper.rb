@@ -17,7 +17,11 @@ module TestingGroundsHelper
   end
 
   def link_to_etm_scenario(title, scenario_id)
-    link_to(title, "http://#{ ET_MODEL_URL }/scenarios/#{ scenario_id }", target: "_blank")
+    link_to_etm(title, "scenarios/#{ scenario_id }")
+  end
+
+  def link_to_etm(title, link, options = {})
+    link_to(title, "http://#{ ET_MODEL_URL }/#{link}", target: "_blank")
   end
 
   # Public: Determines if the given testing ground has enough information to

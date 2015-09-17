@@ -8,34 +8,52 @@
   %a{href:'http://alliander.com'} Alliander
   = "."
 
-%p A Local Energy Solution (LES) consists of three components:
+%p A Local Energy Solution (LES) consists of four components:
 
 .row
-  .col-md-4
-    %h3 1. ETM Scenarios
+  .col-md-3
+    %h3 1. Scaled ETM Scenario
     %p
       Every local energy solution starts with a national scenario from the ETM, and
       a scaled down version of it.
-  .col-md-4
-    %h3 2. Network Topology
-    %p
-      A specific network structure needs to be defined. If none is defined,
-      a default one is chosen.
-  .col-md-4
-    %h3 3. Technologies
+  .col-md-3
+    %h3 2. Technologies
     %p
       The technologies used in a Local Energy Solution (LES) are taken from the ETM as
       much as possible, and can be adapted to the specific situation by the
       user.
+  .col-md-3
+    %h3 3. Topology
+    %p
+      A specific network structure needs to be defined. If none is defined,
+      a default one is chosen.
+  .col-md-3
+    %h3 4. Market model
+    %p
+      A specific market model needs to be defined. If non is defined,
+      a default one is chosen.
 
 .jumbotron(style="margin-top: 30px")
   %h2 Getting started&hellip;
 
   %p
-    You may start by creating a local energy solution completely from scratch,
-    importing an existing, scaled down scenario from the Energy Transition
-    Model, or view ready-made local energy solutions for inspiration.
+    You may start by
+    %a{href: testing_grounds_path} opening an existing local energy solution
+    or create your own by scaling down a scenario from the Energy Transition
+    Model by going through the following steps:
+
+    .etm-explanation
+      .scene
+        %p 1. Start a new or existing scenario
+        = image_tag 'etm-1.png'
+      .scene
+        %p 2. Scale the scenario
+        = image_tag 'etm-2.png'
+      .scene
+        %p 3. Open in ETMoses
+        = image_tag 'etm-3.png'
+
+      .clearfix
 
   %p
-    %a.btn.btn-lg.btn-success{href: import_testing_grounds_path} Import from the ETM
-    %a.btn.btn-lg.btn-default{href: testing_grounds_path} Explore&hellip;
+    %a.btn.btn-lg.btn-success{href: "http://#{ET_MODEL_URL}", target: "_blank"} Go to the Energy Transition Model
