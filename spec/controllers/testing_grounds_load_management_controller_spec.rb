@@ -249,7 +249,7 @@ RSpec.describe TestingGroundsController do
                   strategies: FakeLoadManagement.strategies(postponing_base_load: true)
 
         expect(JSON.parse(response.body)["graph"]["load"]).to eq([
-          1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+          1.0, 1.0, 1.0, 0.9, 0.9, 0.2, 0.0, 0.0, 0.0,
           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         ])
       end
