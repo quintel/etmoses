@@ -44,7 +44,7 @@ module Market
       case tariff
       when Numeric
         tariff
-      when /\A[a-z0-9_]+\z/i
+      when /\A[a-z0-9_\s]+\z/i
         PriceCurve.find_by_key(tariff).network_curve
       else
         tariff.to_f
