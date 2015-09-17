@@ -39,6 +39,8 @@
         = form.text_field "form_type", value: "general"
       .form-group
         = form.submit "Save", class: 'btn btn-primary'
+        %span.or or
+        = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
         %span.wait.hidden= image_tag 'wait.gif'
 
   .tab-pane.remote.edit.active#technologies{role: "tabpanel"}

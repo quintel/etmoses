@@ -4,6 +4,7 @@ $(document).on('page:change', function(){
 
     var form = $(this).parents("form")
     form.attr("action", $(this).data('url'))
+    form.removeAttr("data-remote");
     form.submit();
   });
 });
