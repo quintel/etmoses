@@ -1,6 +1,8 @@
 var ProfileSelectBoxes = (function(){
   var etmDefaults, edsnSwitch;
   var defaultCells = ["Capacity", "Volume", "Demand"];
+  var defaultValues = { defaultCapacity: null, defaultDemand: null, defaultVolume: null };
+
 
   ProfileSelectBoxes.prototype = {
     add: function(){
@@ -64,17 +66,15 @@ var ProfileSelectBoxes = (function(){
   function updateTextCells(profileSelectbox, currentRow, clearValues){
     var selected = $(profileSelectbox).val();
     var selectedOption = $(profileSelectbox).find("option[value='" + selected + "']");
-    var defaults = selectedOption.data();
+    var defaults = selectedOption.data() || defaultValues;
 
-    if(defaults){
-      for(var i = 0; i < defaultCells.length; i++){
-        setCellDefault.call({
-                cell: defaultCells[i],
-          currentRow: currentRow,
-               clear: clearValues,
-            defaults: defaults
-        });
-      };
+    for(var i = 0; i < defaultCells.length; i++){
+      setCellDefault.call({
+              cell: defaultCells[i],
+        currentRow: currentRow,
+              clear: clearValues,
+          defaults: defaults
+      });
     };
   };
 
