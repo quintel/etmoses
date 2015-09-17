@@ -25,6 +25,28 @@ RSpec.describe TopologiesController do
     end
   end
 
+  describe "creating a topology and failing" do
+    let!(:sign_in_user){ sign_in(:user, user) }
+    let(:perform_post){
+      post :create, "topology"=>{
+       "name"=>"Hello",
+       "graph"=>"---\r\nname: HV Network\r\nchildren:\r\n- name: MV Network\r\n  children:\r\n  - name: \"LV #1\"\r\n  - name: \"LV #2\"\r\n  \r\n  \r\nFAILURE\r\n  - name: \"LV #3\"\r\n"
+      }
+    }
+
+    it 'does not create a topology' do
+      perform_post
+
+      expect(Topology.count).to eq(0)
+    end
+
+    it "topology belongs to the user" do
+      perform_post
+
+      expect(response).to render_template(:new)
+    end
+  end
+
   describe "creating a topology with hard tabs" do
     let!(:sign_in_user){ sign_in(:user, user) }
     let(:perform_post){

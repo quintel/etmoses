@@ -9,6 +9,7 @@ class Topology < ActiveRecord::Base
 
   validates_presence_of :name
 
+  validate :validate_graph_yaml
   validate :validate_node_names
   validate :validate_units
   validate :validate_stakeholders
@@ -29,21 +30,27 @@ class Topology < ActiveRecord::Base
   #
   # Returns nothing.
   def each_node(nodes = [graph], &block)
-    nodes.map(&:symbolize_keys).each do |node|
+    return if self.errors[:graph].any?
+
+    nodes.compact.map(&:symbolize_keys).each do |node|
       block.call(node)
       each_node(node[:children], &block) if node[:children]
     end
   end
 
-  def graph=(graph)
-    if graph.is_a?(String)
-      super YAML.load(graph.gsub(/\t/, '    '))
-    else
-      super graph
+  private
+
+  def validate_graph_yaml
+    begin
+      self.graph = if graph.is_a?(String)
+        YAML.load(graph.gsub(/\t/, ' ' * 4))
+      else
+        graph
+      end
+    rescue Psych::SyntaxError => e
+      errors.add(:graph, e.message)
     end
   end
-
-  private
 
   def validate_node_names
     seen = Set.new
