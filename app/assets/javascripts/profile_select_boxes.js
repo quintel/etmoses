@@ -3,7 +3,6 @@ var ProfileSelectBoxes = (function(){
   var defaultCells = ["Capacity", "Volume", "Demand"];
   var defaultValues = { defaultCapacity: null, defaultDemand: null, defaultVolume: null };
 
-
   ProfileSelectBoxes.prototype = {
     add: function(){
       addProfileSelectBoxes();
