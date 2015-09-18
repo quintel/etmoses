@@ -41,6 +41,7 @@ class MarketModelsController < ResourceController
   # POST /market_models/:id/clone
   def clone
     TestingGround::Cloner.new(@testing_ground, @market_model, market_model_params).clone
+    @errors = @market_model.errors.messages
   end
 
   def destroy
