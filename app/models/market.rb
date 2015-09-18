@@ -53,7 +53,7 @@ module Market
   #   relation.price     # The price to be paid.
   #
   # Returns a Market::Graph
-  def self.from_market_model(model, les)
-    Market::FromMarketModelBuilder.new(model, les).to_market
+  def self.from_market_model(model, les, variants)
+    Market::FromMarketModelBuilder.new(model, les, variants).to_market
   end
 end # Market

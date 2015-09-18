@@ -34,8 +34,15 @@ module Finance
     def market
       @market ||= Market.from_market_model(
         @testing_ground.market_model,
-        @testing_ground.to_calculated_graph(@strategies)
+        @testing_ground.to_calculated_graph(@strategies),
+        basic: featureless_network
       )
+    end
+
+    # A variant of the network with all storage, flexibility, and other special
+    # features turned off. Used in the flexibility measures.
+    def featureless_network
+      Market::Variant.new(&@testing_ground.method(:to_calculated_graph))
     end
   end
 end

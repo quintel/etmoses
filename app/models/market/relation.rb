@@ -22,7 +22,7 @@ module Market
     #
     # Returns a numeric.
     def price
-      get(:rule).call(self)
+      get(:rule).call(self, get(:variants))
     end
   end
 end

@@ -71,6 +71,7 @@ module Market
 
       from.connect_to(
         to, relation[:name] || relation[:measure],
+        variants: @data[:variants],
         rule: Market::PaymentRule.new(
           measure_from(relation), tariff_from(relation[:tariff])))
     end

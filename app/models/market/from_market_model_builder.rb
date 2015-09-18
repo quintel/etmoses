@@ -1,15 +1,16 @@
 module Market
   class FromMarketModelBuilder < Builder
-    def initialize(model, les)
-      super(data_from_model(model, les))
+    def initialize(model, les, variants = {})
+      super(data_from_model(model, les, variants))
     end
 
     private
 
-    def data_from_model(model, les)
+    def data_from_model(model, les, variants)
       {
-        relations: relations_from_model(model),
-        measurables: measurables_from_les(les)
+        relations:   relations_from_model(model),
+        measurables: measurables_from_les(les),
+        variants:    variants
       }
     end
 
