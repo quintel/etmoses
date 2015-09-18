@@ -1,6 +1,6 @@
 var ProfileSelectBoxes = (function(){
   var etmDefaults, edsnSwitch;
-  var defaultCells = ["Capacity", "Volume", "Demand"];
+  var isChanged = false;
   var defaultValues = { defaultCapacity: null, defaultDemand: null, defaultVolume: null };
 
   ProfileSelectBoxes.prototype = {
@@ -23,13 +23,15 @@ var ProfileSelectBoxes = (function(){
 
   function addProfileSelectBoxes(){
     $("select.name").each(function(){
-      cloneAndAppendProfileSelect.call(this, false);
+      cloneAndAppendProfileSelect.call(this);
     });
   };
 
   function addChangeListenerToNameBox(){
     $("select.name").off("change").on("change", function(){
-      cloneAndAppendProfileSelect.call(this, true);
+      isChanged = true;
+
+      cloneAndAppendProfileSelect.call(this);
     });
   };
 
@@ -39,57 +41,62 @@ var ProfileSelectBoxes = (function(){
     });
   };
 
-  function cloneAndAppendProfileSelect(isChanged){
+  function cloneAndAppendProfileSelect(){
     if(edsnSwitch.isEdsn.call(this)){
-      edsnSwitch.cloneAndAppendProfileSelect.call(this, isChanged);
+      edsnSwitch.cloneAndAppendProfileSelect.call(this);
     }
     else{
-      defaultCloneAndAppend.call(this, isChanged);
+      defaultCloneAndAppend.call(this);
     }
   };
 
-  function defaultCloneAndAppend(isChanged){
+  function defaultCloneAndAppend(){
     var technology = $(this).val();
     var profileSelectbox = $(".hidden.profile select." + technology).clone(true, true);
 
     $(this).parents("tr").find(".units input").off("change");
     $(this).parent().next().html(profileSelectbox);
 
-    updateTextCells(profileSelectbox, $(this).parents("tr"), isChanged);
+    updateTextCells.call(this, profileSelectbox);
 
     if(!isChanged){
       profileSelectbox.val($(this).data('profile'));
     };
   };
 
-  function updateTextCells(profileSelectbox, currentRow, clearValues){
-    var selected = $(profileSelectbox).val();
-    var selectedOption = $(profileSelectbox).find("option[value='" + selected + "']");
-    var defaults = selectedOption.data() || defaultValues;
+  function updateTextCells(profileSelectbox){
+    var technologyDefaults = getDefaults.call(this);
+    var profileDefaults = getDefaults.call(profileSelectbox);
 
-    for(var i = 0; i < defaultCells.length; i++){
+    for(var defaultValue in defaultValues){
       setCellDefault.call({
-              cell: defaultCells[i],
-        currentRow: currentRow,
-              clear: clearValues,
-          defaults: defaults
+        techBox:        this,
+        key:            defaultValue.replace(/default/, '').toLowerCase(),
+        techDefault:    technologyDefaults[defaultValue],
+        profileDefault: profileDefaults[defaultValue]
       });
     };
   };
 
-  function setCellDefault(){
-    var technology = this.currentRow.find("select.name").val();
-    var inputField = this.currentRow.find("." + this.cell.toLowerCase() + " input");
-    var dbDefault  = this.defaults["default" + this.cell];
-    var etmValue   = defaultsForTech(technology)[this.cell.toLowerCase()];
-    var userInput  = parseFloat(inputField.val());
+  function getDefaults(){
+    var selectedOption = $(this).find("option[value='" + $(this).val() + "']");
 
-    if(etmValue == userInput || this.clear) userInput = undefined;
-
-    inputField.val(userInput || etmValue || dbDefault || '');
+    return selectedOption.data() || defaultValues;
   };
 
-  function defaultsForTech(tech){
+  function setCellDefault(){
+    var inputField = $(this.techBox).parents("tr").find('.' + this.key + " input");
+    var technology = $(this.techBox).val();
+    var etmValue   = defaultsFromEtm(technology)[this.key];
+    var userInput  = parseFloat(inputField.val());
+
+    if(etmValue == userInput || isChanged) userInput = undefined;
+
+    inputField.val(userInput || etmValue ||
+      this.profileDefault || this.techDefault || '');
+  };
+
+  function defaultsFromEtm(tech){
     return etmDefaults[tech] ? etmDefaults[tech][0] : {};
   };
 
