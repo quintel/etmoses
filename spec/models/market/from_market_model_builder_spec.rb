@@ -11,8 +11,8 @@ RSpec.describe Market::FromMarketModelBuilder do
   describe 'given a market model with two stakeholders' do
     let(:mm) do
       MarketModel.new(interactions: [{
-        'stakeholder_from' => 'system operator',
-        'stakeholder_to'   => 'customer',
+        'stakeholder_from' => 'customer',
+        'stakeholder_to'   => 'system operator',
         'foundation'       => 'kWh',
         'tariff'           => 5.0
       }])
@@ -27,12 +27,32 @@ RSpec.describe Market::FromMarketModelBuilder do
     end
 
     it 'assigns nodes from the LES to the Customer group' do
-      expect(market.node('customer').get(:measurables))
+      expect(market.node('customer').out_edges.first.get(:measurables))
         .to eq([les.node('lv1'), les.node('lv2')])
     end
+  end # given a market model with two stakeholders
 
-    it 'assigns nodes from the LES to the Supplier group' do
-      expect(market.node('system operator').get(:measurables))
+  describe 'given a market model with an applied_stakeholder' do
+    let(:mm) do
+      MarketModel.new(interactions: [{
+        'stakeholder_from'    => 'customer',
+        'stakeholder_to'      => 'system operator',
+        'applied_stakeholder' => 'system operator',
+        'foundation'          => 'kWh',
+        'tariff'              => 5.0
+      }])
+    end
+
+    it 'creates the "from" stakeholder' do
+      expect(market.node('system operator')).to be
+    end
+
+    it 'creates the "to" stakeholder' do
+      expect(market.node('customer')).to be
+    end
+
+    it 'assigns nodes from the LES to the Customer group' do
+      expect(market.node('customer').out_edges.first.get(:measurables))
         .to eq([les.node('hv')])
     end
   end # given a market model with two stakeholders

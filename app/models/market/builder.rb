@@ -40,6 +40,8 @@ module Market
 
       @market = Graph.new
       @data   = data
+
+      @data[:measurables] ||= {}
     end
 
     # Public: Creates and returns the Market::Graph based on the data with which
@@ -48,8 +50,6 @@ module Market
       @data[:relations].each do |relation_data|
         build_relation!(relation_data)
       end
-
-      set_measurables!
 
       @market
     end
@@ -71,18 +71,16 @@ module Market
 
       from.connect_to(
         to, relation[:name] || relation[:measure],
+        measurables: measurables_for(relation),
         variants: @data[:variants],
         rule: Market::PaymentRule.new(
           measure_from(relation), tariff_from(relation[:tariff])))
     end
 
-    # Internal: Sets the market nodes which are measured by the relation.
-    def set_measurables!
-      return unless @data[:measurables]
-
-      @data[:measurables].each do |key, measurables|
-        @market.node(key) && @market.node(key).set(:measurables, measurables)
-      end
+    # Internal: Returns the Network nodes whose information is read in order to
+    # determine the price of a relation.
+    def measurables_for(relation)
+      @data[:measurables][relation[:applied_to] || relation[:from]] || []
     end
 
     # Internal: Given data about a relation, determines the measure object to be

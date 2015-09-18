@@ -22,7 +22,7 @@ RSpec.describe Market::Relation do
     let(:market) { Market.build(data) }
 
     before do
-      market.node('Stakeholder 1').set(:measurables, [1.0, 2.0, 3.0])
+      market.relations.first.set(:measurables, [1.0, 2.0, 3.0])
     end
 
     # --------------------------------------------------------------------------

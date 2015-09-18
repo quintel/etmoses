@@ -13,16 +13,14 @@ module Market
     #
     # Returns an array of Network::Node instances.
     def measurables
-      @measurables ||= to.ancestors(label)
-        .select { |n| n.in_edges.none? }
-        .get(:measurables).uniq.to_a
+      get(:measurables) || []
     end
 
     # Public: Determines the price of the relation.
     #
     # Returns a numeric.
     def price
-      get(:rule).call(self, get(:variants))
+      rule.call(self, get(:variants))
     end
   end
 end

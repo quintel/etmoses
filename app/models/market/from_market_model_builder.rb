@@ -19,10 +19,11 @@ module Market
 
       relations = model.interactions.map do |inter|
         {
-          from:    inter['stakeholder_from'],
-          to:      inter['stakeholder_to'],
-          measure: inter['foundation'].downcase.to_sym,
-          tariff:  convert_tariff(inter['tariff'])
+          from:       inter['stakeholder_from'],
+          to:         inter['stakeholder_to'],
+          measure:    inter['foundation'].downcase.to_sym,
+          applied_to: inter['applied_stakeholder'],
+          tariff:     convert_tariff(inter['tariff'])
         }
       end
 
