@@ -40,6 +40,7 @@ class TopologiesController < ResourceController
   # POST /topologies/:id/clone
   def clone
     TestingGround::Cloner.new(@testing_ground, @topology, topology_params).clone
+    @errors = @topology.errors.messages
   end
 
   # DELETE /topologies/:id
