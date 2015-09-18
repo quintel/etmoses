@@ -69,7 +69,7 @@ RSpec.describe TopologiesController do
     let(:perform_post){
       post :create, "topology"=>{
         "name"=>"Hello",
-        "graph"=> YAML::dump(graph)
+        "graph"=> YAML.dump(graph)
       }
     }
 
@@ -108,21 +108,12 @@ RSpec.describe TopologiesController do
 
   describe "#clone somebody else's topology" do
     let!(:sign_in_user){ sign_in(:user, user) }
-    let(:topology){ FactoryGirl.create(:topology, graph: YAML::dump(graph)) }
+    let(:topology){ FactoryGirl.create(:topology) }
     let(:perform_clone){
       patch :clone, format: :js, id: topology.id, "topology"=>{
-        "name"=>"Hello",
-        "graph"=> YAML::dump(graph)
+        "name"=>"Topology for cloning",
+        "graph"=> graph
       }
-    }
-
-    let(:graph){
-      {'name' => "HV Network", 'children' => [
-        { 'name' => 'MV Network', 'children' => [
-          {'name' => "lv1", 'stakeholder' => 'customer'},
-          {'name' => "lv2", 'stakeholder' => 'customer'}
-        ]}
-      ]}
     }
 
     let!(:testing_ground){
@@ -132,6 +123,15 @@ RSpec.describe TopologiesController do
     }
 
     describe "with other LES's" do
+      let(:graph){
+        {'name' => "HV Network", 'children' => [
+          { 'name' => 'MV Network', 'children' => [
+            {'name' => "lv1", 'stakeholder' => 'customer'},
+            {'name' => "lv2", 'stakeholder' => 'customer'}
+          ]}
+        ]}
+      }
+
       let!(:another_testing_ground){
         FactoryGirl.create(:testing_ground, user: user, topology: topology)
       }
@@ -155,8 +155,32 @@ RSpec.describe TopologiesController do
       end
     end
 
+    describe "With a fail in the graph" do
+    end
+
     describe "with no other LES's" do
+      let(:graph){
+        {'name' => "HV Network", 'children' => [
+          { 'name' => 'MV Network', 'children' => [
+            {'name' => "lv1", 'stakeholder' => 'customer'},
+            {'name' => "lv2", 'stakeholder' => 'customer'}
+          ]}
+        ]}
+      }
+
       it 'does not create a 2nd topology' do
+        perform_clone
+
+        expect(Topology.count).to eq(1)
+      end
+    end
+
+    describe "with a wrong topology" do
+      let(:graph){
+        "---\r\nname: HV Network\r\nchildren:\r\n- name: MV Network\r\n  children:\r\n  - name: \"LV #1\"\r\n  - name: \"LV #2\"\r\n  \r\n  \r\nFAILURE\r\n  - name: \"LV #3\"\r\n"
+      }
+
+      it 'does not create a 2nd topology due to errors' do
         perform_clone
 
         expect(Topology.count).to eq(1)

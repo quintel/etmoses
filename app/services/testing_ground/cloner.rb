@@ -21,8 +21,11 @@ class TestingGround::Cloner
 
   def cloned_object
     clone = @object.dup
-    clone.update_attributes(clone_params)
-    clone
+    if clone.update_attributes(clone_params)
+      clone
+    else
+      @object
+    end
   end
 
   def clone_params
