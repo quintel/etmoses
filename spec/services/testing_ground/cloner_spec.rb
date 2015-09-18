@@ -4,24 +4,25 @@ RSpec.describe TestingGround::Cloner do
   let(:topology){ FactoryGirl.create(:topology) }
   let(:testing_ground){ FactoryGirl.create(:testing_ground, topology: topology) }
 
-  let(:perform_clone){
-    TestingGround::Cloner.new(testing_ground, topology, params).clone
+  let(:cloner){
+    TestingGround::Cloner.new(testing_ground, topology, params)
   }
 
   describe "cloning when valid and only topology used" do
     let(:params){ { name: "Topology clone" } }
 
     it "keeps one topology" do
-      perform_clone
+      cloner.clone
 
       expect(Topology.count).to eq(1)
     end
 
     it "ensure the topology is still attached to the testing ground" do
-      perform_clone
+      cloner.clone
 
       expect(TestingGround.last.topology).to eq(topology)
     end
+
   end
 
   describe "clones a topology only if it's valid" do
@@ -31,7 +32,7 @@ RSpec.describe TestingGround::Cloner do
     } }
 
     it "doesn't change the current graph due to errors" do
-      perform_clone
+      cloner.clone
 
       expect(Topology.last.graph).to eq({
         "name"=>"hv", "children"=>[{
@@ -43,7 +44,7 @@ RSpec.describe TestingGround::Cloner do
     end
 
     it "ensure the topology is still attached to the testing ground" do
-      perform_clone
+      cloner.clone
 
       expect(TestingGround.last.topology).to eq(topology)
     end
@@ -58,7 +59,7 @@ RSpec.describe TestingGround::Cloner do
     } }
 
     it "doesn't change the current graph due to errors" do
-      perform_clone
+      cloner.clone
 
       expect(Topology.last.graph).to eq({
         "name"=>"hv", "children"=>[{
@@ -70,9 +71,15 @@ RSpec.describe TestingGround::Cloner do
     end
 
     it "ensure the topology is still attached to the testing ground" do
-      perform_clone
+      cloner.clone
 
       expect(TestingGround.last.topology).to eq(topology)
+    end
+
+    it "cloner errors" do
+      cloner.clone
+
+      expect(cloner.errors).to eq(["Graph (<unknown>): could not find expected ':' while scanning a simple key at line 10 column 1"])
     end
   end
 end
