@@ -20,8 +20,11 @@ module Market::Measures
     private
 
     def flexibility(feature, basic)
-      difference = basic - feature
-      difference > 0 ? difference : 0.0
+      # abs because a swing from -2 to 2 isn't flexibility; the load is the same
+      # but in the opposite direction. A swing from -3 to 2 is a "flexibility"
+      # increase of 1.
+      diff = basic.abs - feature.abs
+      diff < 0 ? 0.0 : diff
     end
   end
 end
