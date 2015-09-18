@@ -4,6 +4,7 @@
       %li= message
 
 = form_for topology, url: action, html: { remote: remote, multipart: true } do |form|
+  .errors
   .form-group
     = form.label :name
     = form.text_field :name, class: 'form-control'
