@@ -43,7 +43,7 @@ class Topology < ActiveRecord::Base
   def validate_graph_yaml
     begin
       self.graph = if graph.is_a?(String)
-        YAML.load(graph.gsub(/\t/, ' ' * 4))
+        YAML.load(graph.gsub(/\t/, ' ' * 4)) || {}
       else
         graph
       end

@@ -186,5 +186,15 @@ RSpec.describe TopologiesController do
         expect(Topology.count).to eq(1)
       end
     end
+
+    describe "with no topology" do
+      let(:graph){ "" }
+
+      it 'does not create a 2nd topology due to errors' do
+        perform_clone
+
+        expect(Topology.count).to eq(1)
+      end
+    end
   end
 end
