@@ -1,6 +1,6 @@
 module CurveComponent
   VALID_CSV_TYPES = ["data:text/csv", "text/csv", "text/plain",
-                     "application/octet-stream"]
+                     "application/octet-stream", "application/vnd.ms-excel"]
 
   def as_json(*)
     super.merge('values' => network_curve.to_a)
