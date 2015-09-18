@@ -32,7 +32,7 @@ module TestingGroundsHelper
 
   def profile_table_options_for_name(selected_technology)
     technologies = @technologies.visible.order(:name).map do |technology|
-      [technology.name, technology.key]
+      [technology.name, technology.key, data: default_values(technology) ]
     end
 
     options_for_select(technologies, selected: selected_key(selected_technology))
