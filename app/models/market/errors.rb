@@ -49,4 +49,12 @@ module Market
     "Tried to price a value collection containing #{ values } values " \
     "with a curve containing #{ curve }"
   end
+
+  InvalidInterpolationError = error_class do |length, vlength|
+    "Cannot interpolate a curve with #{ vlength } values to #{ length }"
+  end
+
+  ImmutableCurveError = error_class do
+    'Cannot modify an immutable curve'
+  end
 end
