@@ -38,9 +38,10 @@
       .hidden
         = form.text_field "form_type", value: "general"
       .form-group
-        = form.submit "Save", class: 'btn btn-primary'
-        %span.or or
-        = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
+        .btn-group
+          = form.submit "Save", class: 'btn btn-primary'
+          = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
+          = save_all_button(@testing_ground)
         %span.wait.hidden= image_tag 'wait.gif'
 
   .tab-pane.remote.edit.active#technologies{role: "tabpanel"}
@@ -49,7 +50,9 @@
       .hidden
         = form.text_field "form_type", value: "technologies"
       .form-group
-        = form.submit "Save", class: 'btn btn-primary'
+        .btn-group
+          = form.submit "Save", class: 'btn btn-primary'
+          = save_all_button(@testing_ground)
         %span.wait.hidden= image_tag 'wait.gif'
 
   - if @testing_ground.topology
@@ -64,9 +67,7 @@
     .tab-pane.remote.edit#business-case{role: "tabpanel"}
       = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
 
-.btn-group.pull-right
-  %span.wait.hidden= image_tag 'wait.gif'
-  = link_to "Save all", "#", class: "btn btn-primary save-all"
-  = link_to "View LES", testing_ground_path(@testing_ground), class: "btn btn-primary"
+.last-btns
+  %span.save-all.wait.hidden= image_tag 'wait.gif'
 
 .clearfix

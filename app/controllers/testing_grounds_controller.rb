@@ -133,6 +133,12 @@ class TestingGroundsController < ResourceController
     testing_ground.update_attributes(testing_ground_params)
     testing_ground.save
 
+    if @testing_ground.business_case
+      business_case = @testing_ground.business_case.dup
+      business_case.update_attribute(:testing_ground, testing_ground)
+      business_case.save
+    end
+
     redirect_to(testing_ground)
   end
 

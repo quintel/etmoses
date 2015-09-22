@@ -19,9 +19,10 @@
 
   = render partial: 'market_models/new_table', locals: { market_model: market_model }
 
-  = form.submit 'Save', class: "btn btn-primary"
+  .btn-group
+    = form.submit 'Save', class: "btn btn-primary"
 
-  - if remote
-    %span.wait.hidden= image_tag 'wait.gif'
-
+    - if remote
+      = save_all_button(@testing_ground)
+      %span.wait.hidden= image_tag 'wait.gif'
 

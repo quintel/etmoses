@@ -88,4 +88,10 @@ module TestingGroundsHelper
   def default_strategies
     Hash[Strategies.all.map{|s| [s[:ajax_prop], false] }].symbolize_keys
   end
+
+  def save_all_button(testing_ground)
+    link_to("Save all", "#",
+      data: { url: testing_ground_path(testing_ground) },
+      class: "btn btn-success save-all")
+  end
 end

@@ -2,5 +2,5 @@ $("#topology form .errors").html("<%= escape_javascript(render partial: "shared/
 
 $("#topology span.wait").addClass("hidden");
 $("#topology input[type=submit]").removeClass("disabled");
-$("a[href='#topology']").removeClass("editing");
+$("a[href='#topology']").removeClass("editing").toggleClass("error", <%= @errors.any? %>);
 

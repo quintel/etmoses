@@ -10,21 +10,36 @@ $(document).on("page:change", function(){
     tabHeader.addClass("editing");
   });
 
-  $(".save-all").on("click", function(e){
+  var saveAll = $("a.btn.save-all");
+  var completeCount = 0;
+  var current;
+
+  saveAll.off("click").on("click", function(e){
     e.preventDefault();
 
-    var completeCount = 1;
+    current = $(e.target);
 
-    $(".save-all").addClass("disabled");
-    $(".btn-group span.wait").removeClass("hidden");
-    $(".remote form").submit();
+    saveAll.addClass("disabled");
+    $("span.save-all.wait").removeClass("hidden");
 
-    $("body").on("ajax:complete", function(){
-      completeCount += 1;
-      if(completeCount == $(".remote form").length){
-        $(".btn-group span.wait").addClass("hidden");
-        $(".save-all").removeClass("disabled");
-      };
-    });
+    submitForms();
   });
+
+  function submitForms(){
+    $(".remote form").each(function(){
+      $(this).submit();
+      $(this).on("ajax:success", finishAndRedirect);
+    });
+  };
+
+  function finishAndRedirect(e){
+    completeCount += 1;
+
+    if(completeCount == $(".remote form").length){
+      $("span.save-all.wait").addClass("hidden");
+      saveAll.removeClass("disabled");
+
+      window.location.replace(current.data('url'));
+    };
+  };
 });

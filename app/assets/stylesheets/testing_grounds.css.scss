@@ -334,7 +334,6 @@ table.table.scenarios{
 
 .container .tab-content{
   padding-bottom: 20px;
-  margin-bottom: 20px;
   border-bottom: 1px solid #DDD;
 }
 
@@ -460,6 +459,11 @@ ul.nav-tabs > li > a.editing {
   margin-bottom: -1px;
 }
 
+ul.nav-tabs > li > a.error {
+  border-bottom: 2px solid #D00;
+  margin-bottom: -1px;
+}
+
 ul.nav-tabs > li.active > a.editing {
   border-top: 2px solid gold;
   border-bottom: 1px solid rgba(0, 0, 0, 0);
@@ -467,6 +471,17 @@ ul.nav-tabs > li.active > a.editing {
   margin-bottom: 0;
 }
 
+ul.nav-tabs > li.active > a.error {
+  border-top: 2px solid #D00;
+  border-bottom: 1px solid rgba(0, 0, 0, 0);
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+
 #business_case_table{
   position: relative;
+}
+
+.last-btns{
+  margin: 15px 20px;
 }

@@ -27,10 +27,12 @@
     = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
 
   .form-group
-    = form.submit 'Save', class: 'btn btn-primary'
+    .btn-group
+      = form.submit 'Save', class: 'btn btn-primary'
 
-    - if remote
-      %span.wait.hidden= image_tag 'wait.gif'
+      - if remote
+        = save_all_button(@testing_ground)
+        %span.wait.hidden= image_tag 'wait.gif'
 
     - unless (defined?(hide_cancel) && hide_cancel)
       %span.or or
