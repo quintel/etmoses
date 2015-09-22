@@ -25,7 +25,8 @@ module Market
 
     # Public: Run the payment rule on a given relation.
     def call(relation, variants = {})
-      @tariff.price_of(Array(value(relation, variants)))
+      amount = @tariff.price_of(Array(value(relation, variants)))
+      amount < 0 ? 0.0 : amount
     end
 
     #######

@@ -26,6 +26,17 @@ module Market
       end
     end # with a measurable of [1.0] and tariff of 2.0
 
+    context 'with a measurable of [-1.0] and tariff of 2.0' do
+      let(:rule) { PaymentRule.new(->(m) { m }, Tariff.new(2.0)) }
+      let(:relation) { market.node(:retailer).in_edges.first }
+
+      before { relation.set(:measurables, [-1.0]) }
+
+      it 'has a price of 0.0' do
+        expect(rule.call(relation)).to eq(0.0)
+      end
+    end # with a measurable of [-1.0] and tariff of 2.0
+
     context 'with a measure which returns an array' do
       let(:rule) { PaymentRule.new(->(m) { [m, m * 2] }, Tariff.new(2.0)) }
       let(:relation) { market.node(:retailer).in_edges.first }
