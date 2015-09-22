@@ -59,10 +59,6 @@ class EtEngineConnector
   private
 
     def et_api_request(method, *args)
-      begin
-        JSON.parse(RestClient.public_send(method, *args))
-      rescue RestClient::ResourceNotFound, JSON::ParserError
-        nil
-      end
+      JSON.parse(RestClient.public_send(method, *args))
     end
 end
