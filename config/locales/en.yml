@@ -25,6 +25,12 @@ en:
       user:
         not_activated: "User is not activated"
 
+  tariff:
+    type:
+      fixed: 'Fixed-rate'
+      curve: 'Price curve'
+      merit: 'Merit price'
+
   not_authorized: "You don't have permission to view that."
 
   testing_grounds:

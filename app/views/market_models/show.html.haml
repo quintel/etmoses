@@ -10,7 +10,11 @@
   - @market_model.interactions.each do |interaction|
     %tr
       - MarketModel::PRESENTABLES.each do |property|
-        %td= interaction[property]
+        %td
+          - if respond_to?(:"format_interaction_#{ property }")
+            = public_send(:"format_interaction_#{ property }", interaction)
+          - else
+            = interaction[property]
 
 - if policy(@market_model).edit?
   = link_to "Edit", edit_market_model_path(@market_model)
