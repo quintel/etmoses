@@ -1,10 +1,7 @@
 class MarketModel < ActiveRecord::Base
   include Privacy
 
-  FOUNDATIONS = %w(
-    connections kWh kWh_produced kWh_consumed kW_max kW_contracted
-    flex_realised flex_potential
-  )
+  FOUNDATIONS = Market::Builder::MEASURES.keys
 
   PRESENTABLES = %w(stakeholder_from stakeholder_to foundation applied_stakeholder tariff)
   DEFAULT_INTERACTIONS = [{ "stakeholder_from"    => "",
