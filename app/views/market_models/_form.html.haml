@@ -1,6 +1,10 @@
 - form_action = defined?(action) ? action : market_model
 = form_for market_model, url: form_action, html: { remote: remote, multipart: true } do |form|
-  .errors
+  - if market_model.errors.any?
+    %ul.errors
+      - market_model.errors.full_messages.uniq.each do |message|
+        %li= message
+
   .form-group
     = form.label :name
     = form.text_field :name, class: "form-control"
