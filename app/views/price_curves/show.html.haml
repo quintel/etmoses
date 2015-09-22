@@ -2,7 +2,7 @@
   %li== Key: #{ @price_curve.key }
   %li== Curve file name: #{ @price_curve.curve_file_name }
 
-.profile-graph.line-chart{ 'data-url' => price_curve_path(@price_curve, format: :json) }
+.profile-graph.line-chart{ data: { url: price_curve_path(@price_curve, format: :json), curve_type: 'price' } }
 
 .commit
   = link_to('Download', @price_curve.curve.url, class: 'btn')

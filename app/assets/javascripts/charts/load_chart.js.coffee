@@ -1,10 +1,17 @@
-# Creates a line chart to represent the load of a network component over time.
 # Uses nvd3 in order to create a "focus" area so the user may zoom on and view
 # the curve in greater detail.
 class LoadChart
   intoSelector: null
 
-  constructor: (@data, @capacity) ->
+  axisLabels:
+    default: 'kW'
+    flex: 'kW'
+    inflex: 'kW'
+    use: ''
+    availability: ''
+    price: '€'
+
+  constructor: (@data, @capacity, @curve_type) ->
     # pass
 
   sampledData: (loads) ->
@@ -140,12 +147,12 @@ class LoadChart
          .tickFormat(@formatDateFromFrame)
 
     chart.yAxis
-         .axisLabel("kW")
+         .axisLabel(@axisLabels[@curve_type])
          .axisLabelDistance(0)
          .tickFormat(d3.format(',.3r'))
 
     chart.y2Axis
-         .axisLabel("kW")
+         .axisLabel(@axisLabels[@curve_type])
          .axisLabelDistance(0)
          .tickFormat(d3.format(',.3r'))
 
