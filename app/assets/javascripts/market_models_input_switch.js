@@ -10,7 +10,7 @@ $(document).on("page:change", function(){
 
     buttonGlyph.removeClass().addClass(spanClass);
 
-    cell.find(".curve-tariff, .fixed-tariff").hide();
+    cell.find(".curve-tariff, .fixed-tariff, .merit-tariff").hide();
     cell.find("." + $(this).data('type') + "-tariff").show();
 
     tariffTypeField($(this)).val($(this).data('type'));
@@ -24,15 +24,26 @@ $(document).on("page:change", function(){
     var inputPrice = $(this).data('price'),
         tariffType = tariffTypeField($(this)).val();
 
-    if(tariffType === "curve"){
-      $(this).find("button.dropdown-toggle span.glyphicon")
-        .removeClass("glyphicon-euro")
-        .addClass("glyphicon-signal");
+    switch(tariffType) {
+      case 'curve':
+        $(this).find("button.dropdown-toggle span.glyphicon")
+          .removeClass("glyphicon-euro")
+          .addClass("glyphicon-signal");
 
-      $(this).find(".curve-tariff, .fixed-tariff").toggle();
-      $(this).find(".curve-tariff select").val(inputPrice);
-    } else {
-      $(this).find("input").val(inputPrice);
+        $(this).find(".curve-tariff, .fixed-tariff").toggle();
+        $(this).find(".curve-tariff select").val(inputPrice);
+        break;
+
+      case 'merit':
+        $(this).find("button.dropdown-toggle span.glyphicon")
+          .removeClass("glyphicon-euro")
+          .addClass("glyphicon-sort-by-attributes");
+
+        $(this).find(".merit-tariff, .fixed-tariff").toggle();
+        break;
+
+      default:
+        $(this).find("input").val(inputPrice);
     }
   });
 });

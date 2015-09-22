@@ -10,6 +10,7 @@ class MarketModel < ActiveRecord::Base
   DEFAULT_INTERACTIONS = [{ "stakeholder_from"    => "",
                             "stakeholder_to"      => "",
                             "tariff"              => "",
+                            "tariff_type"         => "fixed",
                             "applied_stakeholder" => "",
                             "price"               => "" }]
 

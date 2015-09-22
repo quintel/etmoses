@@ -45,12 +45,18 @@
                   %a{:href => "#", 'data-type' => 'curve'}
                     %span.glyphicon.glyphicon-signal
                     Financial profile
+                %li
+                  %a{:href => "#", 'data-type' => 'merit'}
+                    %span.glyphicon.glyphicon-sort-by-attributes
+                    Merit price curve
 
             .fixed-tariff
               %input.form-control
             .curve-tariff
               %select.form-control
                 = financial_profile_options
+            .merit-tariff.btn.btn-default.disabled
+              Merit price
 
         %td
           = link_to "#", class: "add-row text-success" do

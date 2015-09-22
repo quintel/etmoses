@@ -1,12 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe Market::FromMarketModelBuilder do
-  let(:les) do
-    create(:testing_ground,
-      topology: build(:topology_with_stakeholders)).to_calculated_graph
+  let(:testing_ground) do
+    tg = create(:testing_ground, topology: build(:topology_with_stakeholders))
+    allow(tg).to receive(:market_model) { mm } #.and_return(mm)
+    tg
   end
 
-  let(:market) { Market::FromMarketModelBuilder.new(mm, les).to_market }
+  let(:les) do
+    testing_ground.to_calculated_graph
+  end
+
+  let(:market) do
+    Market::FromMarketModelBuilder.new(testing_ground, les).to_market
+  end
 
   describe 'given a market model with two stakeholders' do
     let(:mm) do
@@ -14,7 +21,8 @@ RSpec.describe Market::FromMarketModelBuilder do
         'stakeholder_from' => 'customer',
         'stakeholder_to'   => 'system operator',
         'foundation'       => 'kWh',
-        'tariff'           => 5.0
+        'tariff'           => 5.0,
+        'tariff_type'      => 'fixed'
       }])
     end
 
@@ -39,7 +47,8 @@ RSpec.describe Market::FromMarketModelBuilder do
         'stakeholder_to'      => 'system operator',
         'applied_stakeholder' => 'system operator',
         'foundation'          => 'kWh',
-        'tariff'              => 5.0
+        'tariff'              => 5.0,
+        'tariff_type'         => 'fixed'
       }])
     end
 
@@ -63,7 +72,8 @@ RSpec.describe Market::FromMarketModelBuilder do
         'stakeholder_from' => 'system operator',
         'stakeholder_to'   => 'customer',
         'foundation'       => 'kWh',
-        'tariff'           => curve.key.to_s
+        'tariff'           => curve.key.to_s,
+        'tariff_type'      => 'curve'
       }])
     end
 

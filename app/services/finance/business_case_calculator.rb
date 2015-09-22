@@ -33,7 +33,7 @@ module Finance
 
     def market
       @market ||= Market.from_market_model(
-        @testing_ground.market_model,
+        @testing_ground,
         @testing_ground.to_calculated_graph(@strategies),
         basic: featureless_network
       )
