@@ -30,6 +30,16 @@ en:
       fixed: 'Fixed-rate'
       curve: 'Price curve'
       merit: 'Merit price'
+    measure:
+      connections: Number of connections
+      flex_realised: Flexibility realised
+      flex_potential: Flexibility potential
+      load: Instantaneous load
+      kwh: kWh
+      kwh_consumed: kWh consumed
+      kwh_produced: kWh produced
+      kw_max: Monthly maximum kW load
+      kw_contracted: Annual maximum kW load ("contracted")
 
   not_authorized: "You don't have permission to view that."
 

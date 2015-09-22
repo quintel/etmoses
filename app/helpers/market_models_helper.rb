@@ -4,7 +4,11 @@ module MarketModelsHelper
   end
 
   def foundation_options(options = {})
-    options_for_select(MarketModel::FOUNDATIONS, options)
+    values = MarketModel::FOUNDATIONS.map do |key|
+      [t("tariff.measure.#{ key.downcase }"), key]
+    end.sort_by(&:first)
+
+    options_for_select(values, options)
   end
 
   def measure_options(options = {})
@@ -13,6 +17,10 @@ module MarketModelsHelper
 
   def financial_profile_options(options = {})
     options_for_select(PriceCurve.all.map(&:key), options)
+  end
+
+  def format_interaction_foundation(interaction)
+    t("tariff.measure.#{ interaction['foundation'].downcase }")
   end
 
   def format_interaction_tariff(interaction)
