@@ -18,8 +18,15 @@ module MarketModelsHelper
   def format_interaction_tariff(interaction)
     type = t("tariff.type.#{ interaction['tariff_type'] }")
 
-    [ content_tag(:span, type, class: 'tariff_type label label-default'),
-      content_tag(:span, interaction['tariff'], class: 'tariff')
+    tariff =
+      if interaction['tariff_type'] == 'merit'
+        '&ndash;'.html_safe
+      else
+        interaction['tariff']
+      end
+
+    [ content_tag(:span, type, class: 'tariff_type label'),
+      content_tag(:span, tariff, class: 'tariff')
     ].join(' ').html_safe
   end
 end

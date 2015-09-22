@@ -40,15 +40,15 @@
                 %li
                   %a{:href => "#", 'data-type' => 'fixed'}
                     %span.glyphicon.glyphicon-euro
-                    Fixed price
+                    = t('tariff.type.fixed')
                 %li
                   %a{:href => "#", 'data-type' => 'curve'}
                     %span.glyphicon.glyphicon-signal
-                    Financial profile
+                    = t('tariff.type.curve')
                 %li
                   %a{:href => "#", 'data-type' => 'merit'}
                     %span.glyphicon.glyphicon-sort-by-attributes
-                    Merit price curve
+                    = t('tariff.type.merit')
 
             .fixed-tariff
               %input.form-control
