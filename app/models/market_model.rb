@@ -2,7 +2,7 @@ class MarketModel < ActiveRecord::Base
   include Privacy
 
   FOUNDATIONS = %w(
-    connections kWh kW_connection kW_max kW_contracted
+    connections kWh kWh_produced kWh_consumed kW_max kW_contracted
     flex_realised flex_potential
   )
 
