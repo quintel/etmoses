@@ -23,6 +23,10 @@ module MarketModelsHelper
     t("tariff.measure.#{ interaction['foundation'].downcase }")
   end
 
+  def format_interaction_applied_stakeholder(interaction)
+    interaction['applied_stakeholder'] || interaction['stakeholder_from']
+  end
+
   def format_interaction_tariff(interaction)
     type = t("tariff.type.#{ interaction['tariff_type'] }")
 
