@@ -2,15 +2,19 @@
   = @market_model.name
 %table.interactions.table.table-bordered
   %tr
-    %th Payer
-    %th Payee
-    %th Measure
-    %th Applied to stakeholder
+    %th.stakeholder_from Payer
+    %th.arrow &#8594;
+    %th.stakeholder_to Payee
+    %th.applied_stakeholder Applied to stakeholder
+    %th.foundation Measure
     %th Tariff (EUR/unit)
   - @market_model.interactions.each do |interaction|
     %tr
       - MarketModel::PRESENTABLES.each do |property|
-        %td
+        - if property == 'stakeholder_to'
+          %td.arrow &#8594;
+
+        %td{ class: property }
           - if respond_to?(:"format_interaction_#{ property }")
             = public_send(:"format_interaction_#{ property }", interaction)
           - else

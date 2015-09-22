@@ -3,7 +3,7 @@ class MarketModel < ActiveRecord::Base
 
   FOUNDATIONS = Market::Builder::MEASURES.keys
 
-  PRESENTABLES = %w(stakeholder_from stakeholder_to foundation applied_stakeholder tariff)
+  PRESENTABLES = %w(stakeholder_from stakeholder_to applied_stakeholder foundation tariff)
   DEFAULT_INTERACTIONS = [{ "stakeholder_from"    => "",
                             "stakeholder_to"      => "",
                             "tariff"              => "",
