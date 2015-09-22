@@ -2,12 +2,16 @@ class Import
   module TechnologyBuilder
     # Extracts number_of_units from the raw data.
     NumberOfUnitsAttribute = Attribute.new('number_of_units')
+    InitialInvestmentAttribute = Attribute.new('initial_investment')
+    TechnicalLifetimeAttribute = Attribute.new('technical_lifetime')
 
     # Internal: A hash of attributes which may be imported from ETEngine.
     ATTRIBUTES = Hash[[ DemandAttribute,
                         ElectricityOutputCapacityAttribute,
                         InputCapacityAttribute,
-                        StorageVolumeAttribute ].map do |attribute|
+                        StorageVolumeAttribute,
+                        InitialInvestmentAttribute,
+                        TechnicalLifetimeAttribute ].map do |attribute|
       [attribute.remote_name, attribute]
     end].with_indifferent_access.freeze
 

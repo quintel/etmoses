@@ -1,19 +1,23 @@
 class InstalledTechnology
   include Virtus.model
 
-  attribute :name,     String
-  attribute :type,     String, default: 'generic'
-  attribute :behavior, String
-  attribute :profile,  Integer
-  attribute :profile_key, String
-  attribute :load,     Float
-  attribute :capacity, Float
-  attribute :demand,   Float
-  attribute :volume,   Float
-  attribute :units,    Integer, default: 1
-  attribute :concurrency, String, default: 'max'
+  attribute :name,               String
+  attribute :type,               String, default: 'generic'
+  attribute :behavior,           String
+  attribute :profile,            Integer
+  attribute :profile_key,        String
+  attribute :load,               Float
+  attribute :capacity,           Float
+  attribute :demand,             Float
+  attribute :volume,             Float
+  attribute :units,              Integer, default: 1
+  attribute :initial_investment, Float
+  attribute :technical_lifetime, Integer
+  attribute :concurrency,        String, default: 'max'
 
-  EDITABLES = %i(name profile capacity volume demand units concurrency)
+  EDITABLES = %i(name profile capacity volume demand units initial_investment
+                 technical_lifetime concurrency)
+
   PRESENTABLES = %i(name profile_key capacity volume demand units)
 
   # Public: Returns a template for a technology. For evaluation purposes

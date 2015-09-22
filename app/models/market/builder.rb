@@ -69,11 +69,13 @@ module Market
       to   = stakeholder(relation[:to])
 
       from.connect_to(
-        to, relation[:name] || relation[:measure],
+        to,
+        (relation[:name] || relation[:measure]),
         measurables: measurables_for(relation),
-        variants: @data[:variants],
-        rule: Market::PaymentRule.new(
-          measure_from(relation), tariff_from(relation[:tariff])))
+        variants:    @data[:variants],
+        rule:        Market::PaymentRule.new(measure_from(relation),
+                                             tariff_from(relation[:tariff]))
+      )
     end
 
     # Internal: Returns the Network nodes whose information is read in order to

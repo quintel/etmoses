@@ -18,6 +18,7 @@ module Market
         relations: relations,
         measurables: measurables,
         variants: @variants
+        initial_costs: initial_costs_from_les(les)
       }
     end
 
@@ -37,6 +38,10 @@ module Market
       relations.reject do |relation|
         ignore.include?(relation[:measure])
       end
+    end
+
+    def initial_costs_from_les(les)
+      InitialCosts.new(les).calculate
     end
 
     def measurables
