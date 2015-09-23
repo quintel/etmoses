@@ -182,7 +182,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.1)
-    nio4r (1.1.0)
+    nio4r (1.1.1)
     orm_adapter (0.5.0)
     paperclip (4.2.1)
       activemodel (>= 3.0.0)
@@ -375,3 +375,6 @@ DEPENDENCIES
   validates_email_format_of
   virtus
   webmock
+
+BUNDLED WITH
+   1.10.6
