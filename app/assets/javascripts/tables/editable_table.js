@@ -1,12 +1,10 @@
 var EditableTable = (function(){
-  var selector, changeData, changeListener;
-
   EditableTable.prototype = {
     append: function(_changeListener, _changeData){
-      changeListener = (_changeListener || function(){});
-      changeData = (_changeData || function(){});
+      this.changeListener = (_changeListener || function(){});
+      this.changeData = (_changeData || function(){});
 
-      $(this.selector).on('change', changeListener.bind(this));
+      $(this.selector).on('change', this.changeListener.bind(this));
 
       addClickListenersToAddRow.call(this);
       addClickListenersToDeleteRow.call(this);
@@ -30,8 +28,13 @@ var EditableTable = (function(){
     $.each(tableRow, function(i, attribute){
       var header = tableHeader.call(self, i);
       tableData[header] = attribute;
-      changeData.call({ attribute: attribute, header: header, tableData: tableData });
-    });
+
+      this.changeData.call({
+        attribute: attribute,
+        header: header,
+        tableData: tableData
+      });
+    }.bind(this));
     return tableData;
   };
 
@@ -58,24 +61,27 @@ var EditableTable = (function(){
     $(this.selector).find("a.add-row").on("click", function(e){
       e.preventDefault();
 
-      var row = $(this).parents("tr");
+      var row = $(e.currentTarget).parents("tr");
       var clonedRow = row.clone(true, true);
       clonedRow.insertAfter(row);
-      changeListener.call();
-    });
+      this.changeListener();
+    }.bind(this));
   };
 
   function addClickListenersToDeleteRow(){
     $(this.selector).find("a.remove-row").on("click", function(e){
       e.preventDefault();
 
-      $(this).parents("tr").remove();
-      changeListener.call();
-    });
+      $(e.currentTarget).parents("tr").remove();
+      this.changeListener();
+    }.bind(this));
   };
 
   function EditableTable(_selector){
     this.selector = _selector;
+
+    this.changeListener = function() {};
+    this.changeData = function() {};
   };
 
   return EditableTable;
