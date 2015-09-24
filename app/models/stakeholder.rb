@@ -1,6 +1,6 @@
 class Stakeholder
   def self.all
-    [ "customer", "cooperation", "aggregator", "government", "supplier", "producer",
-      "system operator"]
+    [ "aggregator", "cooperation", "customer", "government", "producer", "supplier",
+      "system operator" ]
   end
 end

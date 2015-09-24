@@ -32,7 +32,7 @@
             - case key
             - when :name
               %td.editable.select
-                %select.name.form-control{data: {profile: technology[:profile]}}
+                %select.name.form-control{data: {profile: technology[:profile], type: technology[:type] }}
                   = profile_table_options_for_name(technology)
 
             - when :profile

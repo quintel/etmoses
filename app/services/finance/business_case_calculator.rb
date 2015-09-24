@@ -19,7 +19,12 @@ module Finance
 
     def cells(column_header)
       stakeholders.map do |stakeholder|
-        row(column_header, stakeholder)
+        if stakeholder == column_header
+          (row(column_header, stakeholder) || 0) +
+          (initial_business_case_costs[stakeholder] || 0)
+        else
+          row(column_header, stakeholder)
+        end
       end
     end
 
@@ -33,10 +38,16 @@ module Finance
 
     def market
       @market ||= Market.from_market_model(
-        @testing_ground,
-        @testing_ground.to_calculated_graph(@strategies),
-        basic: featureless_network
+        @testing_ground, network, basic: featureless_network
       )
+    end
+
+    def network
+      @network ||= @testing_ground.to_calculated_graph(@strategies)
+    end
+
+    def initial_business_case_costs
+      @initial_costs ||= Market::InitialCosts.new(network).calculate
     end
 
     # A variant of the network with all storage, flexibility, and other special

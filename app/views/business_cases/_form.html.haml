@@ -20,8 +20,8 @@
         - row.each_pair do |column_header, row_values|
           %td
             %strong= column_header.titleize
-          - row_values.each do |row_value|
-            %td.row_value
+          - row_values.each_with_index do |row_value, index|
+            %td.row_value{class: ("center" if Stakeholder.all.index(column_header) == index ) }
               - if row_value
                 %span{data: { value: row_value } }
                   = number_to_currency(row_value, unit: '€')

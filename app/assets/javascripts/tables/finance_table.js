@@ -30,7 +30,7 @@ var FinanceTable = (function(){
 
   function calculateIncomingTotal(){
     var incoming = 0;
-    $(this).find("td span").each(function(){
+    $(this).find("td:not(.center) span").each(function(){
       incoming += parseFloat($(this).data('value'));
     });
     return incoming;

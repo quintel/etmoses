@@ -1,22 +1,14 @@
 module Finance
   class BusinessCaseSummary
+    include Summarizer
+
     def initialize(business_case)
       @business_case = business_case
     end
 
     def summarize
       financials_without_freeform.each_with_index.map do |financial_rule, index|
-        incoming = financial_rule.values.flatten.compact.reduce(:+)
-        outgoing = transposed_financials[index].compact.reduce(:+)
-        freeform = (freeform_row[index] || 0)
-
-        {
-          stakeholder: financial_rule.keys.first,
-          incoming: incoming,
-          outgoing: outgoing,
-          freeform: freeform,
-          total: (incoming || 0) - (outgoing || 0) + freeform
-        }
+        summarize_rule(financial_rule, index)
       end
     end
 
@@ -24,6 +16,10 @@ module Finance
 
     def financials
       @financials ||= @business_case.financials
+    end
+
+    def transposed_financials
+      financials_without_freeform.map{ |f| f.values.flatten }.transpose
     end
 
     def freeform_row
@@ -35,11 +31,9 @@ module Finance
     end
 
     def freeform_proc
-      Proc.new{|t| t.keys.first == "freeform" }
-    end
-
-    def transposed_financials
-      financials_without_freeform.map{ |f| f.values.flatten }.transpose
+      Proc.new do |financial_rule|
+        financial_rule.keys.first == "freeform"
+      end
     end
   end
 end
