@@ -15,15 +15,23 @@ module Market
 
       order.add(Merit::User.create(
         key: :consumption,
-        load_curve: Merit::Curve.new(@demand)
+        # Moses demands are in kWh, Merit expects MWh.
+        load_curve: Merit::Curve.new(
+          # Sums each 15-minute consumption into total hourly consumption, then
+          # convert to MJ (since Merit profiles expect MJ).
+          @demand
+            .each_slice(4).map { |hour| hour.reduce(:+) }
+            .map { |v| v / 1000 * 3600 }
+        )
       ))
 
-      order
+      order.calculate
     end
 
     def price_curve
       InterpolatedCurve.new(
-        to_merit_order.calculate.price_curve.to_a,
+        # The merit price is per-MWh; Moses wants per-kWh.
+        to_merit_order.price_curve.to_a.map { |v| v / 1000 },
         @demand.length
       )
     end
@@ -37,14 +45,12 @@ module Market
         when 'must_run'     then Merit::MustRunProducer
       end
 
-      participant[:curve_length] = @demand.length
-
       if participant[:profile]
-        participant[:load_profile] = Market::InterpolatedCurve.new(
-          @curves[participant[:profile]], @demand.length)
+        participant[:load_profile] =
+          Merit::Curve.new(@curves[participant[:profile]])
       end
 
       klass.new(participant)
     end
-  end
+  end # MeritBuilder
 end
