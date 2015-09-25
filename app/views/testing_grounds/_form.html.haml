@@ -1,8 +1,7 @@
-- if defined?(hide_general) && hide_general
-  - if testing_ground.errors.any?
-    %ul.errors
-      - testing_ground.errors.full_messages.uniq.each do |message|
-        %li= message
+- if testing_ground.errors.any?
+  %ul.errors
+    - testing_ground.errors.full_messages.uniq.each do |message|
+      %li= message
 
 = form_for(testing_ground) do |f|
   = render 'general_form', form: f, testing_ground: testing_ground
