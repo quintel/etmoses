@@ -23,7 +23,11 @@ module Market
     def technology_costs
       group_sum(technology_nodes) do |node|
         node.techs.map(&:installed).sum do |tech|
-          tech.initial_investment / tech.technical_lifetime
+          if tech.initial_investment && tech.technical_lifetime
+            tech.initial_investment / tech.technical_lifetime
+          else
+            0.0
+          end
         end
       end
     end
