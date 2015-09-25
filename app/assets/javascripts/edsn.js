@@ -12,7 +12,7 @@ var EdsnSwitch = (function(){
     },
 
     isEdsn: function(){
-      return validBaseLoads.test($(this).val());
+      return validBaseLoads.test($(this).data('type'));
     },
 
     cloneAndAppendProfileSelect: function(){
