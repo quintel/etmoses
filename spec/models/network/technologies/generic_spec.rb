@@ -68,21 +68,12 @@ RSpec.describe Network::Technologies::Generic do
     end
   end # with a negative load
 
-  context 'given a "load" instead of capacity' do
-    let(:installed) { InstalledTechnology.new(load: profile.first) }
-    let(:profile)   { [2.0] }
-
-    it 'uses the load in place of capacity' do
-      expect(tech.capacity).to eq(2.0)
-    end
-  end # given a "load" instead of capacity
-
-  context 'given no "load" or capacity' do
+  context 'given no capacity' do
     let(:installed) { InstalledTechnology.new }
     let(:profile)   { [2.0] }
 
     it 'has a capacity of zero' do
       expect(tech.capacity).to be_zero
     end
-  end # given no "load" or capacity
+  end # given no capacity
 end

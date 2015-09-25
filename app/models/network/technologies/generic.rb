@@ -78,7 +78,7 @@ module Network
       end
 
       def capacity
-        (@installed.capacity || @installed.load || 0.0) *
+        (@installed.capacity || 0.0) *
           @installed.units / @installed.performance_coefficient
       end
 

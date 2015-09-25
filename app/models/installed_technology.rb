@@ -6,7 +6,6 @@ class InstalledTechnology
   attribute :behavior,                String
   attribute :profile,                 Integer
   attribute :profile_key,             String
-  attribute :load,                    Float
   attribute :capacity,                Float
   attribute :demand,                  Float
   attribute :volume,                  Float
@@ -158,7 +157,7 @@ class InstalledTechnology
       Hash[profile.each_pair.map do |curve_type, curve|
         [curve_type, Network::Curve.new(curve)]
       end]
-    elsif volume.blank? && (capacity || load)
+    elsif volume.blank? && capacity
       profile_curves(:capacity_scaled)
     elsif demand
       profile_curves(:demand_scaled)
@@ -198,7 +197,7 @@ class InstalledTechnology
   end
 
   def component_factor(curve)
-    multiplier = volume || capacity || load
+    multiplier = volume || capacity
 
     if multiplier.nil?
       multiplier = (demand && demand * curve.frames_per_hour) || 1.0

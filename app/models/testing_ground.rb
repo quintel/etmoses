@@ -127,13 +127,6 @@ class TestingGround < ActiveRecord::Base
       if ! tech.exists?
         errors.add(
           :technology_profile, "has an unknown technology type: #{ tech.type }")
-      elsif tech.profile
-        if tech.profile && tech.load
-          errors.add(
-            :technology_profile,
-            "may not have an explicitly set load, and also a load profile"
-          )
-        end
       end
     end
   end

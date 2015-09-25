@@ -5,18 +5,18 @@ RSpec.describe TechnologyList do
     ---
     lv1:
     - name: One
-      load: 1.2
+      capacity: 1.2
     - name: Two
-      load: -0.3
+      capacity: -0.3
     lv2:
     - name: Three
-      load: 3.2
+      capacity: 3.2
     - name: Four
-      load: 0.1
+      capacity: 0.1
   YML
 
   let!(:mock_presentables){
-    stub_const("InstalledTechnology::PRESENTABLES", %i(name load))
+    stub_const("InstalledTechnology::PRESENTABLES", %i(name capacity))
   }
 
   describe '#to_csv' do
@@ -38,7 +38,7 @@ RSpec.describe TechnologyList do
       tech = parsed.detect { |row| row['name'] == 'Two' }
 
       expect(tech['connection']).to eq('lv1')
-      expect(tech['load']).to eq('-0.3')
+      expect(tech['capacity']).to eq('-0.3')
     end
   end # to_csv
 
@@ -58,20 +58,20 @@ RSpec.describe TechnologyList do
       expect(list['lv1'].length).to eq(2)
 
       expect(list['lv1'][0].name).to eq('One')
-      expect(list['lv1'][0].load).to eq(1.2)
+      expect(list['lv1'][0].capacity).to eq(1.2)
 
       expect(list['lv1'][1].name).to eq('Two')
-      expect(list['lv1'][1].load).to eq(-0.3)
+      expect(list['lv1'][1].capacity).to eq(-0.3)
     end
 
     it 'adds technologies to the second connection' do
       expect(list['lv2'].length).to eq(2)
 
       expect(list['lv2'][0].name).to eq('Three')
-      expect(list['lv2'][0].load).to eq(3.2)
+      expect(list['lv2'][0].capacity).to eq(3.2)
 
       expect(list['lv2'][1].name).to eq('Four')
-      expect(list['lv2'][1].load).to eq(0.1)
+      expect(list['lv2'][1].capacity).to eq(0.1)
     end
   end # .from_csv
 

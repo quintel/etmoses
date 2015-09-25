@@ -98,8 +98,8 @@ RSpec.describe TestingGround do
         expect(tg).to be_valid
       end
 
-      it 'may have a :load' do
-        tg.technology_profile['lv1'].first.load = 5.0
+      it 'may have a :capacity' do
+        tg.technology_profile['lv1'].first.capacity = 5.0
         expect(tg).to be_valid
       end
     end # with no load profile set
@@ -119,12 +119,9 @@ RSpec.describe TestingGround do
         expect(tg).to be_valid
       end
 
-      it 'may not have a :load' do
-        tg.technology_profile['lv1'].first.load = 5.0
-
-        expect(tg.errors_on(:technology_profile)).to include(
-          "may not have an explicitly set load, and also a load profile"
-        )
+      it 'may have a :capacity' do
+        tg.technology_profile['lv1'].first.capacity = 5.0
+        expect(tg).to be_valid
       end
     end # with a permitted load profile set
 

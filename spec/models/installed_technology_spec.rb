@@ -75,39 +75,37 @@ RSpec.describe InstalledTechnology do
   describe '#profile_curve' do
     let(:load_profile) { create(:load_profile_with_curve) }
 
-    %w(capacity load).each do |attribute|
-      context "with #{ attribute }" do
-        let(:tech) { InstalledTechnology.new(attribute => 2.0) }
+    context "with capacity" do
+      let(:tech) { InstalledTechnology.new(capacity: 2.0) }
 
-        context 'and an inline curve' do
-          before { tech.profile = [2.0] }
+      context 'and an inline curve' do
+        before { tech.profile = [2.0] }
 
-          it 'scales without units' do
-            expect(tech.profile_curve[:default].at(0)).to eq(4.0)
-          end
-
-          it 'scales with units' do
-            tech.units = 2.0
-            expect(tech.profile_curve[:default].at(0)).to eq(8.0)
-          end
-        end # and an inline curve
-
-        context 'and a LoadProfile-based curve' do
-          before do
-            tech.profile = load_profile.id
-          end
-
-          it 'scales without units' do
-            expect(tech.profile_curve['flex'].at(0)).to eq(1.0)
-          end
-
-          it 'scales with units' do
-            tech.units = 2.0
-            expect(tech.profile_curve['flex'].at(0)).to eq(2.0)
-          end
+        it 'scales without units' do
+          expect(tech.profile_curve[:default].at(0)).to eq(4.0)
         end
-      end # with {attribute}
-    end # [capacity load] each
+
+        it 'scales with units' do
+          tech.units = 2.0
+          expect(tech.profile_curve[:default].at(0)).to eq(8.0)
+        end
+      end # and an inline curve
+
+      context 'and a LoadProfile-based curve' do
+        before do
+          tech.profile = load_profile.id
+        end
+
+        it 'scales without units' do
+          expect(tech.profile_curve['flex'].at(0)).to eq(1.0)
+        end
+
+        it 'scales with units' do
+          tech.units = 2.0
+          expect(tech.profile_curve['flex'].at(0)).to eq(2.0)
+        end
+      end
+    end # with capacity
 
     context 'with demand' do
       let(:tech) { InstalledTechnology.new(demand: 8760.0) }
