@@ -22,6 +22,6 @@ RSpec.describe Finance::BusinessCaseComparator do
   it "compares two business cases" do
     compare = Finance::BusinessCaseComparator.new(business_case, other_business_case).compare
 
-    expect(compare).to eq([[-4, -1, 0, -3], [0, -3, 0, 3]]);
+    expect(compare).to eq([[-3, -1, 0, -2], [0, -3, 0, 3]]);
   end
 end
