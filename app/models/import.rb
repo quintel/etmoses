@@ -5,7 +5,7 @@ class Import
 
   validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
   validates :scenario_id, numericality: { only_integer: true }
-  validate :is_scaled_scenario
+  validate :is_scaled_scenario, if: -> { scenario_id.present? }
 
   # Public: Returns a hash of technologies which we can import from ETEngine.
   #
