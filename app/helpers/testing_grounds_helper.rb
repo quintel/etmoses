@@ -39,10 +39,10 @@ module TestingGroundsHelper
   end
 
   def selected_key(selected_technology)
-    if selected_technology[:type] == 'base_load_edsn'
+    if selected_technology.type == 'base_load_edsn'
       'base_load'
     else
-      selected_technology[:type]
+      selected_technology.type
     end
   end
 

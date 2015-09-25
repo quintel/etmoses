@@ -17,7 +17,7 @@
       %li Attach profiles to technologies
 
 #profiles-table
-  = render partial: "testing_grounds/profile_table", locals: {topology: @testing_ground.topology, testing_ground_profile: @testing_ground.technology_profile.as_json}
+  = render partial: "testing_grounds/profile_table", locals: {topology: @testing_ground.topology, testing_ground_profile: @testing_ground.technology_profile}
 
 - unless testing_ground.new_record?
   .form-group.pull-right

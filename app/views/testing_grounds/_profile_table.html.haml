@@ -21,18 +21,20 @@
           - else
             = options_for_load_profiles(testing_ground_profile, technology)
 
-    - testing_ground_profile.each_pair do |node, technologies|
+    - testing_ground_profile.each do |node, technologies|
       - technologies.each do |technology|
-        %tr{class: technology[:type]}
+        %tr{class: technology.type}
           %td.editable.select
             %select.nodes.form-control
               = node_options(topology.graph, node)
 
-          - technology.slice(*InstalledTechnology::EDITABLES).each_pair do |key, value|
+          - InstalledTechnology::EDITABLES.each do |key|
+            - value = technology.public_send(key)
+
             - case key
             - when :name
               %td.editable.select
-                %select.name.form-control{data: {profile: technology[:profile], type: technology[:type] }}
+                %select.name.form-control{data: {profile: technology.profile, type: technology.type }}
                   = profile_table_options_for_name(technology)
 
             - when :profile

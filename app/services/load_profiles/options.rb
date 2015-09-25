@@ -27,8 +27,7 @@ module LoadProfiles
     end
 
     def profile_ids
-      @profile_ids ||= @technology_profile.values.flatten
-        .map{|t| t['profile'] }.uniq
+      @profile_ids ||= @technology_profile.each_tech.map(&:profile).uniq
     end
 
     def selected_profiles
