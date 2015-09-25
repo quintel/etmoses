@@ -65,12 +65,12 @@ RSpec.describe Finance::BusinessCaseCalculator do
 
     it "determines the initial investments for the stakeholders" do
       expect(business_case.rows).to eq([
-        {"aggregator"      =>[0,   nil, nil,     nil, nil, nil, nil]},
-        {"cooperation"     =>[nil, 0,   nil,     nil, nil, nil, nil]},
-        {"customer"        =>[nil, nil, 0,       nil, nil, nil, nil]},
-        {"government"      =>[nil, nil, nil,     0,   nil, nil, nil]},
-        {"producer"        =>[nil, nil, nil,     nil, 0,   nil, nil]},
-        {"supplier"        =>[nil, nil, nil,     nil, nil, 0,   nil]},
+        {"aggregator"      =>[0.0, nil, nil,     nil, nil, nil, nil]},
+        {"cooperation"     =>[nil, 0.0, nil,     nil, nil, nil, nil]},
+        {"customer"        =>[nil, nil, 0.0,     nil, nil, nil, nil]},
+        {"government"      =>[nil, nil, nil,     0.0, nil, nil, nil]},
+        {"producer"        =>[nil, nil, nil,     nil, 0.0, nil, nil]},
+        {"supplier"        =>[nil, nil, nil,     nil, nil, 0.0, nil]},
         {"system operator" =>[nil, nil, 44150.4, nil, nil, nil, 10000.0]}
       ])
     end
