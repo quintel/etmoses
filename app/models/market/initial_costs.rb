@@ -1,6 +1,14 @@
 module Market
+  # Calculates the costs to stakeholders of the technologies and infrastructure
+  # for which they are responsible.
+  #
+  # Topology nodes belonging to a stakeholder with an investment_cost and
+  # technical_lifetime will incur a cost to the stakeholder. Similarly,
+  # technologies on endpoints with an initial_investment and technical_lifetime
+  # will be billable to the stakeholder who owns the endpoint.
   class InitialCosts
-    REQUIRED = %i(investment_cost technical_lifetime stakeholder)
+    TOPOLOGY_REQUIRED   = %i(investment_cost technical_lifetime stakeholder)
+    TECHNOLOGY_REQUIRED = %i(initial_investment technical_lifetime)
 
     def initialize(network)
       @network = network
@@ -23,7 +31,7 @@ module Market
     def technology_costs
       group_sum(technology_nodes) do |node|
         node.techs.map(&:installed).sum do |tech|
-          if tech.initial_investment && tech.technical_lifetime
+          if calculable_tech?(tech)
             tech.initial_investment / tech.technical_lifetime
           else
             0.0
@@ -33,25 +41,25 @@ module Market
     end
 
     def group_sum(nodes)
-      Hash[nodes.group_by{|node| node.get(:stakeholder) }.map do |_, nodes|
-        [_, nodes.sum do |node|
-          yield(node)
-        end]
-      end]
+      nodes.each_with_object(Hash.new(0.0)) do |node, data|
+        data[node.get(:stakeholder)] += yield(node)
+      end
     end
 
     def technology_nodes
       @network.nodes.select do |node|
-        node.techs.map(&:installed).any? do |tech|
-          tech.initial_investment && tech.technical_lifetime
-        end
+        node.techs.map(&:installed).any? { |tech| calculable_tech?(tech) }
       end
     end
 
     def topology_nodes
       @network.nodes.select do |node|
-        REQUIRED.all?{|attr| node.get(attr) }
+        TOPOLOGY_REQUIRED.all? { |attr| node.get(attr) }
       end
+    end
+
+    def calculable_tech?(tech)
+      TECHNOLOGY_REQUIRED.all? { |attr| tech.public_send(attr) }
     end
   end
 end

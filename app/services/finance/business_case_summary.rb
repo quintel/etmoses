@@ -19,7 +19,7 @@ module Finance
     end
 
     def transposed_financials
-      financials_without_freeform.map{ |f| f.values.flatten }.transpose
+      financials_without_freeform.map { |f| f.values.flatten }.transpose
     end
 
     def freeform_row
