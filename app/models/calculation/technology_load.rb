@@ -66,7 +66,7 @@ module Calculation
     # An array with the given length will be returned.
     def self.constant_profile(technology, length)
       Network::Curve.new(
-        [], length, technology.capacity || technology.load || 0.0)
+        [], length, (technology.electrical_capacity || 0.0) * technology.units)
     end
   end # TechnologyLoad
 end # Calculation

@@ -10,14 +10,14 @@ FactoryGirl.define do
       ---
       lv1:
       - name: One
-        load: 1.2
+        capacity: 1.2
       - name: Two
-        load: -0.3
+        capacity: -0.3
       lv2:
       - name: Three
-        load: 3.2
+        capacity: 3.2
       - name: Four
-        load: 0.1
+        capacity: 0.1
     YML
   end
 end
