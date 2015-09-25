@@ -90,7 +90,7 @@ module TestingGroundsHelper
   end
 
   def save_all_button(testing_ground)
-    link_to("Save all", "#",
+    link_to("Save all and view LES", "#",
       data: { url: testing_ground_path(testing_ground) },
       class: "btn btn-success save-all")
   end
