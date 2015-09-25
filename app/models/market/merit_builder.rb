@@ -18,10 +18,10 @@ module Market
         # Moses demands are in kWh, Merit expects MWh.
         load_curve: Merit::Curve.new(
           # Sums each 15-minute consumption into total hourly consumption, then
-          # convert to MJ (since Merit profiles expect MJ).
+          # convert to MWh for use in Merit.
           @demand
             .each_slice(4).map { |hour| hour.reduce(:+) }
-            .map { |v| v / 1000 * 3600 }
+            .map { |v| v / 1000 }
         )
       ))
 
