@@ -13,8 +13,7 @@ class BusinessCasesController < ResourceController
     unless @business_case.job_id.present?
       task = BusinessCaseCalculatorJob.new(@testing_ground, params[:strategies])
 
-      @business_case.update_attributes(job: Delayed::Job.enqueue(task),
-                                       job_finished_at: nil)
+      Delayed::Job.enqueue(task)
     end
 
     render json: { pending: @business_case.job_finished_at.blank? }
