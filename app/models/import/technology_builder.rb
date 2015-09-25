@@ -11,7 +11,8 @@ class Import
                         InputCapacityAttribute,
                         StorageVolumeAttribute,
                         InitialInvestmentAttribute,
-                        TechnicalLifetimeAttribute ].map do |attribute|
+                        TechnicalLifetimeAttribute,
+                        CoefficientOfPerformanceAttribute ].map do |attribute|
       [attribute.remote_name, attribute]
     end].with_indifferent_access.freeze
 

@@ -3,12 +3,13 @@
     %th.col-sm-2{data: {header: 'node'}} End-point
     %th.col-sm-2{data: {header: 'name'}} Name
     %th.col-sm-3{data: {header: 'profile'}} Profile
-    %th{data: {header: 'capacity'}} Capacity [kW]
+    %th{data: {header: 'electrical_capacity'}} Capacity [kW]
     %th{data: {header: 'volume'}} Storage volume [kWh]
     %th{data: {header: 'demand'}} Yearly demand [kWh]
     %th{data: {header: 'units'}} Units
     %th.hidden{data: {header: 'initial_investment'}} Initial investment
     %th.hidden{data: {header: 'technical_lifetime'}} Technical lifetime
+    %th.hidden{data: {header: 'performance_coefficient'}} Coefficient of performance
     %th.hidden{data: {header: 'concurrency'}} Concurrency
 
   %tbody
@@ -40,13 +41,17 @@
             - when :profile
               %td.profile.editable.select
 
-            - when :concurrency, :initial_investment, :technical_lifetime
+            - when :concurrency, :performance_coefficient, :initial_investment, :technical_lifetime
               %td.editable.hidden
                 %input{type: 'text', value: value}
 
             - when :demand
               %td.editable.text{class: key, data: { edit_type: 'text' }}
                 %input.form-control{type: 'text', value: value.try(:round) }
+
+            - when :electrical_capacity
+              %td.editable.text{class: key, data: { edit_type: 'text' }}
+                %input.form-control{type: 'text', value: value.try(:round, 4) }
 
             - else
               %td.editable.text{class: key, data: { edit_type: 'text' }}

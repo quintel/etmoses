@@ -78,7 +78,8 @@ module Network
       end
 
       def capacity
-        (@installed.capacity || @installed.load || 0.0) * @installed.units
+        (@installed.capacity || @installed.load || 0.0) *
+          @installed.units / @installed.performance_coefficient
       end
 
       # Public: If this technology may store/buffer energy for later use, how
@@ -99,7 +100,8 @@ module Network
       #
       # Returns a numeric.
       def volume
-        (@installed.volume || Float::INFINITY) *
+        ((@installed.volume || Float::INFINITY) /
+          (@installed.performance_coefficient || 1.0)) *
           @installed.units * @profile.frames_per_hour
       end
 

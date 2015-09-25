@@ -1,24 +1,28 @@
 class InstalledTechnology
   include Virtus.model
 
-  attribute :name,               String
-  attribute :type,               String, default: 'generic'
-  attribute :behavior,           String
-  attribute :profile,            Integer
-  attribute :profile_key,        String
-  attribute :load,               Float
-  attribute :capacity,           Float
-  attribute :demand,             Float
-  attribute :volume,             Float
-  attribute :units,              Integer, default: 1
-  attribute :initial_investment, Float
-  attribute :technical_lifetime, Integer
-  attribute :concurrency,        String, default: 'max'
+  attribute :name,                    String
+  attribute :type,                    String, default: 'generic'
+  attribute :behavior,                String
+  attribute :profile,                 Integer
+  attribute :profile_key,             String
+  attribute :load,                    Float
+  attribute :capacity,                Float
+  attribute :demand,                  Float
+  attribute :volume,                  Float
+  attribute :units,                   Integer, default: 1
+  attribute :initial_investment,      Float
+  attribute :technical_lifetime,      Integer
+  attribute :performance_coefficient, Float
+  attribute :concurrency,             String, default: 'max'
 
-  EDITABLES = %i(name profile capacity volume demand units initial_investment
-                 technical_lifetime concurrency)
+  EDITABLES = %i(
+    name profile electrical_capacity volume demand units
+    initial_investment technical_lifetime
+    performance_coefficient concurrency
+  )
 
-  PRESENTABLES = %i(name profile_key capacity volume demand units)
+  PRESENTABLES = %i(name profile_key electrical_capacity volume demand units)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
@@ -69,6 +73,64 @@ class InstalledTechnology
     type.present? ? Technology.by_key(type) : Technology.generic
   end
 
+  # Public: Describes the electrical capacity of the technology.
+  #
+  # The "full" capacity of some technologies includes energy which comes from
+  # non-electrical sources. For example, heat pumps derive a large portion of
+  # their energy from ambient heat.
+  #
+  # Returns a numeric.
+  def electrical_capacity
+    capacity && capacity / performance_coefficient
+  end
+
+  # Public: Sets a new electrical capacity. Also sets the main capacity
+  # attribute.
+  #
+  # If the technology has a performance coefficient, the main capacity will be
+  # adjusted appropriately.
+  #
+  # Returns the given value.
+  def electrical_capacity=(value)
+    if value.present?
+      @recent_electrical_capacity = value.to_f
+      self.capacity = value.to_f * performance_coefficient
+    else
+      self.capacity = @recent_electrical_capacity = nil
+    end
+  end
+
+  # Public: Describes the real capcity of the technology in relation to its
+  # electrical capacity.
+  #
+  # Performance coefficient is the amount by which the electrical capacity
+  # should be multiplied in order to arrive at the technologys real capacity.
+  #
+  # For example, a heat pump may have an electrical capacity of 2.5 and a
+  # coefficient of 4.0. This means that the technology will receive 7.5 kW from
+  # other sources for every 2.5 it receives in electrical energy.
+  #
+  # Returns a numeric.
+  def performance_coefficient
+    super || 1.0
+  end
+
+  # Public: Sets the performance coefficient of this technology.
+  #
+  # If an electrical capacity has recently been set, changing the coefficient
+  # will adjust the main capacity attribute as appropriate.
+  #
+  # Returns given coefficient.
+  def performance_coefficient=(value)
+    super
+
+    if @recent_electrical_capacity
+      # If the user set the electrical capacity prior to the COP, we need to
+      # re-set the capacity so that it correctly accounts for performance.
+      self.electrical_capacity = @recent_electrical_capacity
+    end
+  end
+
   # Public: Determines the network behavior of this technology with a particular
   # curve type. Base load technologies will behave differently depending on the
   # use of a flexible or inflexible curve.
@@ -115,6 +177,10 @@ class InstalledTechnology
     end
   end
 
+  def as_json(*)
+    super.merge('electrical_capacity' => electrical_capacity)
+  end
+
   private
 
   def has_heat_pump_profiles?
@@ -138,7 +204,7 @@ class InstalledTechnology
       multiplier = (demand && demand * curve.frames_per_hour) || 1.0
     end
 
-    multiplier * units
+    multiplier / performance_coefficient * units
   end
 
   def profile_components

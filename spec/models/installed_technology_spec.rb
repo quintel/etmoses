@@ -215,4 +215,56 @@ RSpec.describe InstalledTechnology do
       end
     end # with volume and capacity
   end # profile_curve
+
+  describe 'performance_coefficient' do
+    context 'when no value is set' do
+      let(:tech) { InstalledTechnology.new }
+
+      it 'defaults to 1.0' do
+        expect(tech.performance_coefficient).to eq(1.0)
+      end
+    end # when no value is set
+
+    context 'when set to nil' do
+      let(:tech) { InstalledTechnology.new(performance_coefficient: nil) }
+
+      it 'returns 1.0' do
+        expect(tech.performance_coefficient).to eq(1.0)
+      end
+    end # when set to nil
+
+    context 'when set to 4.0' do
+      let(:tech) { InstalledTechnology.new(performance_coefficient: 4.0) }
+
+      it 'returns 4.0' do
+        expect(tech.performance_coefficient).to eq(4.0)
+      end
+
+      context 'when setting the electrical capacity to 1.0' do
+        before { tech.electrical_capacity = 1.0 }
+
+        it 'sets the capacity to 4.0' do
+          expect(tech.capacity).to eq(4.0)
+        end
+
+        it 'sets capacity to 8.0 when changing the coefficient to 8.0' do
+          tech.performance_coefficient = 8.0
+          expect(tech.capacity).to eq(8.0)
+        end
+      end # when setting the electrical capacity
+
+      context 'when setting the electrical capacity to nil' do
+        before { tech.electrical_capacity = nil }
+
+        it 'sets the capacity to nil' do
+          expect(tech.capacity).to be_nil
+        end
+
+        it 'sets capacity to nil when changing the coefficient to 8.0' do
+          tech.performance_coefficient = 8.0
+          expect(tech.capacity).to be_nil
+        end
+      end # when setting the electrical capacity
+    end # when set to 4.0
+  end
 end # InstalledTechnology

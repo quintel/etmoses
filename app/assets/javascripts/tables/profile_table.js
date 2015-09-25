@@ -29,7 +29,7 @@ var ProfileTable = (function(){
       this.tableData["name"] = getNameForType(this.attribute);
       this.tableData["type"] = this.attribute;
     }
-    else if(!(/demand|capacity/.test(this.header) && this.attribute == "")){
+    else if(!(/demand|electrical_capacity/.test(this.header) && this.attribute == "")){
       this.tableData[this.header] = this.attribute
     };
   };

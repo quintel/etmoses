@@ -5,7 +5,7 @@
 = form.hidden_field :market_model_id, value: testing_ground.market_model_id
 
 .hidden
-  = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json
+  = text_area_tag :technology_distribution, @testing_ground.technology_distribution
 
 = form.label :technology_profile, "Technology profile"
 .help-block
