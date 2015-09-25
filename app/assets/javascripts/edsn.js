@@ -25,17 +25,15 @@ var EdsnSwitch = (function(){
   };
 
   function swapSelectBox(){
-    var technology   = 'base_load'
+    var technology   = $(this).val();
     var self         = this;
     var unitSelector = $(this).parents("tr").find(".units input");
     var units        = parseInt(unitSelector.val());
     var actual       = (units > EDSN_THRESHOLD ? "base_load_edsn" : "base_load");
     var select       = $(".hidden select." + actual).clone(true, true);
 
-    $(this).val(technology);
     $(this).parent().next().html(select);
     $(this).find("option[value='" + technology + "']").attr('value', actual);
-    $(this).val(actual);
 
     unitSelector.off('change').on('change', swapSelectBox.bind(self));
   };
@@ -46,3 +44,4 @@ var EdsnSwitch = (function(){
 
   return EdsnSwitch;
 })();
+
