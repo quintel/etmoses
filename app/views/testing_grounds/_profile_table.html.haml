@@ -7,6 +7,8 @@
     %th{data: {header: 'volume'}} Storage volume [kWh]
     %th{data: {header: 'demand'}} Yearly demand [kWh]
     %th{data: {header: 'units'}} Units
+    %th.hidden{data: {header: 'initial_investment'}} Initial investment
+    %th.hidden{data: {header: 'technology_lifetime'}} Technology lifetime
     %th.hidden{data: {header: 'concurrency'}} Concurrency
 
   %tbody
@@ -30,13 +32,13 @@
             - case key
             - when :name
               %td.editable.select
-                %select.name.form-control{data: {profile: technology[:profile]}}
+                %select.name.form-control{data: {profile: technology[:profile], type: technology[:type] }}
                   = profile_table_options_for_name(technology)
 
             - when :profile
               %td.profile.editable.select
 
-            - when :concurrency
+            - when :concurrency, :initial_investment, :technical_lifetime
               %td.editable.hidden
                 %input{type: 'text', value: value}
 
