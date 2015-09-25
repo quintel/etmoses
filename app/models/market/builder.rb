@@ -28,7 +28,6 @@ module Market
       load:           Measures::InstantaneousLoad,
       kw_contracted:  Measures::KwMax.new(1),
       kw_max:         Measures::KwMax.new,
-      kwh:            Measures::Kwh.new,
       kwh_consumed:   Measures::KwhConsumed,
       kwh_produced:   Measures::KwhProduced
     }.freeze
