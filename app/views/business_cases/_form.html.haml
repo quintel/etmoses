@@ -39,7 +39,7 @@
     = f.text_area :financials, value: JSON.dump(business_case.financials)
 
   .btn-group
-    = f.submit "Update", class: "btn btn-primary"
+    = f.submit "Update freeform", class: "btn btn-primary"
     = save_all_button(testing_ground)
     %span.wait.hidden= image_tag "wait.gif"
 
