@@ -24,7 +24,7 @@ module Market
 
     def topology_costs
       group_sum(topology_nodes) do |node|
-        node.get(:investment_cost) / node.get(:technical_lifetime)
+        node.get(:investment_cost).to_f / node.get(:technical_lifetime)
       end
     end
 
@@ -32,7 +32,7 @@ module Market
       group_sum(technology_nodes) do |node|
         node.techs.map(&:installed).sum do |tech|
           if calculable_tech?(tech)
-            (tech.initial_investment / tech.technical_lifetime) * tech.units
+            tech.initial_investment.to_f / tech.technical_lifetime * tech.units
           else
             0.0
           end

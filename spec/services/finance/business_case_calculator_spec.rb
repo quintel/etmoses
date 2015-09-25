@@ -71,7 +71,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
         {"government"      =>[nil, nil, nil,     0,   nil, nil, nil]},
         {"producer"        =>[nil, nil, nil,     nil, 0,   nil, nil]},
         {"supplier"        =>[nil, nil, nil,     nil, nil, 0,   nil]},
-        {"system operator" =>[nil, nil, 44150.4, nil, nil, nil, 9998]}
+        {"system operator" =>[nil, nil, 44150.4, nil, nil, nil, 10000.0]}
       ])
     end
   end
