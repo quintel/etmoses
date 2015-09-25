@@ -44,7 +44,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
     let(:market_model_interactions){
       [{ 'stakeholder_from'    => 'customer',
          'stakeholder_to'      => 'system operator',
-         'foundation'          => 'kwh',
+         'foundation'          => 'kwh_consumed',
          'tariff'              => '0.6',
          'applied_stakeholder' => 'system operator' }]
     }

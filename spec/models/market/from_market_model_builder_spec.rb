@@ -20,7 +20,7 @@ RSpec.describe Market::FromMarketModelBuilder do
       MarketModel.new(interactions: [{
         'stakeholder_from' => 'customer',
         'stakeholder_to'   => 'system operator',
-        'foundation'       => 'kWh',
+        'foundation'       => 'kwh_consumed',
         'tariff'           => 5.0,
         'tariff_type'      => 'fixed'
       }])
@@ -46,7 +46,7 @@ RSpec.describe Market::FromMarketModelBuilder do
         'stakeholder_from'    => 'customer',
         'stakeholder_to'      => 'system operator',
         'applied_stakeholder' => 'system operator',
-        'foundation'          => 'kWh',
+        'foundation'          => 'kwh_consumed',
         'tariff'              => 5.0,
         'tariff_type'         => 'fixed'
       }])
@@ -71,7 +71,7 @@ RSpec.describe Market::FromMarketModelBuilder do
       MarketModel.new(interactions: [{
         'stakeholder_from' => 'system operator',
         'stakeholder_to'   => 'customer',
-        'foundation'       => 'kWh',
+        'foundation'       => 'kwh_consumed',
         'tariff'           => curve.key.to_s,
         'tariff_type'      => 'curve'
       }])
