@@ -4,11 +4,15 @@ class BusinessCaseCalculatorJob
     @strategies = strategies || {}
   end
 
+  def before(job)
+    business_case.update_attribute(:job_id, job.id)
+  end
+
   def perform
     Finance::BusinessCaseCreator.new(@testing_ground, business_case, @strategies).calculate
   end
 
-  def success(job)
+  def after(job)
     business_case.update_attribute(:job_finished_at, DateTime.now)
   end
 

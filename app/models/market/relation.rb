@@ -7,6 +7,10 @@ module Market
       get(:rule)
     end
 
+    def inspect
+      "#<Market::Relation #{rule}>"
+    end
+
     # Public: The nodes whose values should be measured in order to determine
     # the price of the relation. These are the network nodes belonging to the
     # leaf nodes in the market graph.

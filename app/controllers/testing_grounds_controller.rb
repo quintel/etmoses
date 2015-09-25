@@ -56,6 +56,8 @@ class TestingGroundsController < ResourceController
   def create
     @testing_ground = current_user.testing_grounds.create(testing_ground_params)
 
+    BusinessCase.create!(testing_ground: @testing_ground)
+
     Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
 
     respond_with(@testing_ground)
