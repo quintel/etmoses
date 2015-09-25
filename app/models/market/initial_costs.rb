@@ -32,7 +32,7 @@ module Market
       group_sum(technology_nodes) do |node|
         node.techs.map(&:installed).sum do |tech|
           if calculable_tech?(tech)
-            tech.initial_investment / tech.technical_lifetime
+            (tech.initial_investment / tech.technical_lifetime) * tech.units
           else
             0.0
           end
