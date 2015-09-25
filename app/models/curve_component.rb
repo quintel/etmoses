@@ -1,4 +1,10 @@
 module CurveComponent
+  extend ActiveSupport::Concern
+
+  included do
+    validate :validate_curve_length
+  end
+
   VALID_CSV_TYPES = ["data:text/csv", "text/csv", "text/plain",
                      "application/octet-stream", "application/vnd.ms-excel"]
 
@@ -24,5 +30,24 @@ module CurveComponent
         else network_curve
       end.to_a
     )
+  end
+
+  private
+
+  def validate_curve_length
+    return unless curve && curve.queued_for_write[:original]
+
+    length = Network::Curve.load_file(
+      curve.queued_for_write[:original].path
+    ).length
+
+    # 8760 is permitted in tests, but not *currently* officially supported in
+    # the front-end.
+    unless length == 8760 || length == 35040
+      errors.add(
+        :curve,
+        "must have 35,040 values, but the uploaded file has #{ length }"
+      )
+    end
   end
 end
