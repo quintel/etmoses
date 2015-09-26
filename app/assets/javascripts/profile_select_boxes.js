@@ -68,10 +68,18 @@ var ProfileSelectBoxes = (function(){
     var technologyDefaults = getDefaults.call(this);
     var profileDefaults = getDefaults.call(profileSelectbox);
 
+    var key;
+
     for(var defaultValue in defaultValues){
+      key = defaultValue.replace(/default/, '').toLowerCase();
+
+      if (key === 'capacity') {
+        key = 'electrical_capacity';
+      }
+
       setCellDefault.call({
         techBox:        this,
-        key:            defaultValue.replace(/default/, '').toLowerCase(),
+        key:            key,
         techDefault:    technologyDefaults[defaultValue],
         profileDefault: profileDefaults[defaultValue]
       });
