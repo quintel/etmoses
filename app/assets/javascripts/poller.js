@@ -10,6 +10,10 @@ var Poller = (function(){
       return this.deferred.promise();
     },
     create: function(data){
+      if (! this.firstRequestAt) {
+        this.firstRequestAt = new Date();
+      }
+
       $.ajax({
         type:         "POST",
         contentType:  "application/json",
@@ -29,8 +33,15 @@ var Poller = (function(){
   };
 
   function success(data){
+    var nextPollTime = pollTime;
+
     if(data.pending){
-      this.timeout = setTimeout(onTimeout.bind(this), pollTime);
+      if ((new Date()) - this.firstRequestAt > this.slower) {
+        // After "this.slower" ms have elapsed, start polling at a slower rate.
+        nextPollTime = pollTime * 2;
+      }
+
+      this.timeout = setTimeout(onTimeout.bind(this), nextPollTime);
     }
     else{
       this.deferred.resolve(data);
@@ -59,6 +70,7 @@ var Poller = (function(){
     this.url           = _options.url;
     this.data          = _options.data || {};
     this.first_data    = _options.first_data || {};
+    this.slower        = _options.slower || 10000;
 
     this.timeout       = null;
   };
