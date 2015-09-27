@@ -230,8 +230,12 @@ var TreeGraph = (function(){
   };
 
   function overCapacity(d) {
-    var load = (d.altLoad || d.load);
-    return d.capacity && (d3.max(load) > d.capacity || d3.min(load) < -d.capacity);
+    var load = (d.altLoad || d.load),
+        // add 1e-5 so that we don't wrongly highlight nodes whose load has tiny
+        // variations due to floating-point arithmetic.
+        capacity = d.capacity + 1e-5;
+
+    return d.capacity && (d3.max(load) > capacity || d3.min(load) < -capacity);
   };
 
   function setNodeClass(data){
