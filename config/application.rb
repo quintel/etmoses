@@ -39,7 +39,10 @@ module Moses
       url:  "/#{ paperclip_path }"
     }
 
-    config.action_mailer.smtp_settings = YAML.load_file(File.open(File.join("config", "email.yml")))[Rails.env].symbolize_keys
+    if (email_conf = Rails.root.join('config/email.yml')).file?
+      config.action_mailer.smtp_settings =
+        YAML.load_file(email_conf)[Rails.env].symbolize_keys
+    end
   end
 
   # Public: Path to the directory in which static data files files typically
