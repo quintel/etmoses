@@ -43,8 +43,7 @@ module Calculation
     # Returns an array of InstalledTechnology instances.
     def suitable_technologies(node)
       node.get(:installed_techs).select do |technology|
-        technology.profile || technology.capacity ||
-          technology.load || technology.volume
+        technology.profile || technology.capacity || technology.volume
       end
     end
 
