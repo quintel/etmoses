@@ -372,7 +372,18 @@ var TreeGraph = (function(){
 
     downloadBtn.off('click').on('click', function(event) {
       event.preventDefault();
-      CSV.download(d.load.join("\n"),
+
+      var loads = d.load.map(function(value, index) {
+        return "" + value + "," + (d.altLoad ? d.altLoad[index] : '');
+      });
+
+      if (d.altLoad) {
+        loads.unshift('Strategies On,Strategies Off');
+      } else {
+        loads.unshift('Strategies Off,');
+      }
+
+      CSV.download(loads.join("\n"),
         (d.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
     });
   };
