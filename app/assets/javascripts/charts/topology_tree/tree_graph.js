@@ -151,7 +151,7 @@ var TreeGraph = (function(){
       link.enter().insert('path', 'g')
         .attr('class', 'link')
         .attr('d', function(d) {
-          var o = { x: source.y0, y: source.x0 };
+          var o = { x: source.x0, y: source.y0 };
           return diagonal({ source: o, target: o });
         });
 
@@ -164,7 +164,7 @@ var TreeGraph = (function(){
       link.exit().transition()
         .duration(duration).ease(ease)
         .attr('d', function(d) {
-          var o = { x: source.y, y: source.x };
+          var o = { x: source.x, y: source.y };
           return diagonal({ source: o, target: o });
         })
         .remove();
