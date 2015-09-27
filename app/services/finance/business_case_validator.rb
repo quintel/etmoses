@@ -13,11 +13,7 @@ module Finance
     private
 
     def topology_stakeholders
-      stakeholders = []
-      @topology.each_node do |node|
-        stakeholders << node[:stakeholder]
-      end
-      stakeholders.compact.uniq
+      @topology.each_node.map { |node| node[:stakeholder] }
     end
 
     def applied_to_stakeholders

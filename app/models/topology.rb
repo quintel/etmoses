@@ -31,6 +31,7 @@ class Topology < ActiveRecord::Base
   # Returns nothing.
   def each_node(nodes = [graph], &block)
     return if self.errors[:graph].any?
+    return enum_for(:each_node, nodes) unless block_given?
 
     nodes.compact.map(&:symbolize_keys).each do |node|
       block.call(node)
