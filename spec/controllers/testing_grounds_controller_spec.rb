@@ -124,7 +124,9 @@ RSpec.describe TestingGroundsController do
     it "creates a testing ground" do
       sign_in(user)
 
-      expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
+      expect_any_instance_of(TestingGround).to receive(:valid?)
+        .at_least(:once).and_return(true)
+
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.count).to eq(1)
@@ -133,7 +135,9 @@ RSpec.describe TestingGroundsController do
     it "redirects to show page" do
       sign_in(user)
 
-      expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
+      expect_any_instance_of(TestingGround).to receive(:valid?).
+        at_least(:once).and_return(true)
+
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(response).to redirect_to(testing_ground_path(TestingGround.last))
@@ -142,7 +146,9 @@ RSpec.describe TestingGroundsController do
     it "assings the testing ground to the current user" do
       sign_in(user)
 
-      expect_any_instance_of(TestingGround).to receive(:valid?).and_return(true)
+      expect_any_instance_of(TestingGround).to receive(:valid?)
+        .at_least(:once).and_return(true)
+
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.last.user).to eq(controller.current_user)
