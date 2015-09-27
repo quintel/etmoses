@@ -10,17 +10,11 @@ module Finance
     end
 
     def compare
-      zipped.map do |pair|
+      @business_case.zip(@other_business_case).map do |pair|
         COMPARE_KEYS.map do |key|
           pair.last && pair.last[key] || 0
         end
       end
-    end
-
-    private
-
-    def zipped
-      @business_case.zip(@other_business_case)
     end
   end
 end
