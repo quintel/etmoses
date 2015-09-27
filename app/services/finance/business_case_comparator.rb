@@ -12,7 +12,7 @@ module Finance
     def compare
       zipped.map do |pair|
         COMPARE_KEYS.map do |key|
-          (pair.first[key] || 0) - (pair.last[key] || 0)
+          pair.last && pair.last[key] || 0
         end
       end
     end

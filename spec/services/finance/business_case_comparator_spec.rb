@@ -22,6 +22,20 @@ RSpec.describe Finance::BusinessCaseComparator do
   it "compares two business cases" do
     compare = Finance::BusinessCaseComparator.new(business_case, other_business_case).compare
 
-    expect(compare).to eq([[-3, -1, 0, -2], [0, -3, 0, 3]]);
+    expect(compare).to eq([[3, 2, 0, 1], [1, 3, 0, -2]]);
+  end
+
+  context 'when a business case is missing a stakeholder' do
+    let(:other_financials){
+      [ {"aggregator" =>[1, 3]} ]
+    }
+
+    it "compares two business cases" do
+      compare = Finance::BusinessCaseComparator.new(
+        business_case, other_business_case
+      ).compare
+
+      expect(compare).to eq([[3, 1, 0, 2], [0, 0, 0, 0]]);
+    end
   end
 end
