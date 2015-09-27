@@ -6,5 +6,6 @@ namespace :ci do
   task :setup do
     cp 'config/email.sample.yml',   'config/email.yml'
     cp 'config/secrets.sample.yml', 'config/secrets.yml'
+    mkdir_p 'tmp/cache'
   end
 end
