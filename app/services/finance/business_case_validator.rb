@@ -6,7 +6,8 @@ module Finance
     end
 
     def valid?
-      (topology_stakeholders & applied_to_stakeholders) == applied_to_stakeholders
+      (topology_stakeholders & applied_to_stakeholders).sort ==
+        applied_to_stakeholders.sort
     end
 
     private
@@ -20,7 +21,7 @@ module Finance
     end
 
     def applied_to_stakeholders
-      @market_model.interactions.map{|i| i['applied_stakeholder'] }.uniq
+      @market_model.interactions.map{ |i| i['applied_stakeholder'] }.uniq
     end
   end
 end
