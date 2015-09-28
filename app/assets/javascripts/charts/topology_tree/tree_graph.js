@@ -13,20 +13,39 @@ var TreeGraph = (function(){
       levelWidth      = [1];
 
   TreeGraph.prototype = {
-    showGraph: function(){
-      buildBase();
-      transformData.call(this);
+    showGraph: function(treeData){
+      if(!!treeData) this.treeData = treeData;
 
-      var strategyToggler = new StrategyToggler(this)
-      strategyToggler.addOnChangeListener();
-      strategyToggler.setDefaultStrategies();
+      if(this.initialCallDone && this.initialStrategyCallDone){
+        buildBase();
+        transformData.call(this);
 
-      // Layout the tree initially and center on the root node.
-      this.update(this.root);
+        ETHelper.eachNode([this.root], setAltLoad.bind(this));
 
-      // Center the diagram with an offset such that *children* of the root will
-      // appear to be in the center.
-      centerNode(this.root);
+        this.strategyToggler.addOnChangeListener();
+
+        // Layout the tree initially and center on the root node.
+        this.update(this.root);
+
+        // Center the diagram with an offset such that *children* of the root will
+        // appear to be in the center.
+        centerNode(this.root);
+      };
+    },
+
+    applyStrategies: function(data){
+      this.strategyLoads = {};
+
+      console.log(data.graph);
+      ETHelper.eachNode([data.graph], setStrategyLoad.bind(this));
+
+      LoadChartHelper.forceReload = true
+
+      if(this.root){
+        ETHelper.eachNode([this.root], setAltLoad.bind(this));
+        this.showChart(this.lastClicked);
+        this.update(this.root);
+      };
     },
 
     showChart: function(d) {
@@ -176,7 +195,26 @@ var TreeGraph = (function(){
     root: undefined,
     lastClicked: undefined,
     strategyLoads: false,
-    strategyShown: false
+    strategyShown: false,
+    initialCallDone: false,
+    initialStrategyCallDone: false
+  };
+
+  function setStrategyLoad(node){
+    this.strategyLoads[node.name] = node.load;
+  };
+
+  function setAltLoad(node){
+    this.strategyShown = true;
+    if(this.strategyLoads){
+      if(this.strategyToggler.clear()){
+        this.strategyShown = false;
+        delete node.altLoad;
+      }
+      else{
+        node.altLoad = this.strategyLoads[node.name];
+      }
+    };
   };
 
   function setNodeLabelY(d){
@@ -467,10 +505,11 @@ var TreeGraph = (function(){
     });
   };
 
-  function TreeGraph(_url, _treeData, _container){
-    this.url      = _url;
-    this.treeData = _treeData;
-    container     = _container;
+  function TreeGraph(_url, _container){
+    this.strategyToggler  = new StrategyToggler(this)
+
+    this.url              = _url;
+    container             = _container;
 
     tree          = createD3Tree();
     diagonal      = createD3Diagonal();

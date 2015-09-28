@@ -1,18 +1,36 @@
 var TopologyTree = (function(){
-  var url, container;
+  var url, container, treeGraph;
 
   TopologyTree.prototype = {
     showTree: function() {
       $("#collapse-stakeholders select").prop('disabled', true);
 
-      new Poller({ url: url }).poll().done(d3Callback).fail(failCallback);
+      treeGraph.strategyToggler.toggleLoading();
+
+      getTree({}, d3Callback);
+      getTree({ strategies: StrategyHelper.getStrategies() }, updateLoadChart);
     }
   };
 
+  function getTree(data, callback){
+    new Poller({ url: url, data: data }).poll().done(callback).fail(failCallback);
+  };
+
+  function updateLoadChart(treeDataWithStrategies){
+    console.log("2: ---- green line");
+    console.log(treeDataWithStrategies.graph.children[0].children[0].children[0].load.slice(15025, 15045))
+    treeGraph.strategyToggler.updateLoadChartWithStrategies(treeDataWithStrategies);
+    treeGraph.initialStrategyCallDone = true;
+    treeGraph.showGraph();
+  };
+
   function d3Callback(treeData){
+    console.log("1: ---- blue line");
+    console.log(treeData.graph.children[0].children[0].children[0].load.slice(15025, 15045))
     $("#collapse-stakeholders select").prop('disabled', false);
 
-    new TreeGraph(url, treeData.graph, container).showGraph();
+    treeGraph.initialCallDone = true;
+    treeGraph.showGraph(treeData.graph);
   };
 
   function failCallback(treeData){
@@ -20,18 +38,11 @@ var TopologyTree = (function(){
   };
 
   function TopologyTree(_url, _container){
-    url = _url;
+    url       = _url;
     container = _container;
+    treeGraph = new TreeGraph(url, container);
   };
 
   return TopologyTree;
 })();
 
-var TopologyTreeHelper = {
-  strategies: function(){
-    var strategies = JSON.parse($(".save_strategies.hidden").text());
-        strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
-
-    return { strategies: strategies };
-  }
-};

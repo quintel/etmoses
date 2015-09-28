@@ -1,4 +1,6 @@
 $(document).on("page:change", function(){
+  var saveStrategies;
+
   $("select.multi-select").multiselect({
     buttonText: function(options) {
       var text = 'Customise technology behaviour';
@@ -13,8 +15,8 @@ $(document).on("page:change", function(){
   });
 
   if($(".save_strategies").length > 0){
-    var saveStrategies = JSON.parse($(".save_strategies").text());
     var selected = [];
+    saveStrategies = JSON.parse($(".save_strategies").text());
 
     for(var strategy in saveStrategies){
       if(saveStrategies[strategy]){
@@ -23,12 +25,17 @@ $(document).on("page:change", function(){
     };
 
     $("select.multi-select").multiselect('select', selected);
+    $("#solar_pv_capping").slider({
+      focus: true,
+      formatter: function(value){
+        return value + "%";
+      }
+    }).slider('setValue', saveStrategies.capping_fraction * 100);
   };
 
   var cappingInput = $("input[type=checkbox][value=capping_solar_pv]")
-  cappingInput.parents('a').append($(".slider-wrapper.hidden"));
-
-  cappingInput.on("change", showSlider);
+      cappingInput.parents('a').append($(".slider-wrapper.hidden"));
+      cappingInput.on("change", showSlider);
 
   showSlider.call(cappingInput);
 
@@ -41,11 +48,4 @@ $(document).on("page:change", function(){
       sliderWrapper.addClass("hidden");
     }
   };
-
-  $("#solar_pv_capping").slider({
-    focus: true,
-    formatter: function(value){
-      return value + "%";
-    }
-  });
 });

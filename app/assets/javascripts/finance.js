@@ -17,7 +17,7 @@ $(document).on("page:change", function(){
   if(businessCaseTable.length > 0){
     var poller = new Poller({
       url: businessCaseTable.data('url'),
-      data: TopologyTreeHelper.strategies()
+      data: StrategyHelper.getStrategies()
     }).poll().done(renderSummary);
   };
 
