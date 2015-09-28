@@ -1,0 +1,42 @@
+---
+households_solar_pv_solar_radiation_market_penetration:
+  min: 0
+  max: 100
+  default: 8.587975150297294e-05
+transport_car_using_electricity_share:
+  min: 0
+  max: 100
+  default: 0.06551202512604795
+  share_group: transport_car_tech
+households_space_heater_heatpump_air_water_electricity_share:
+  min: 0
+  max: 100
+  default: 0
+  share_group: heating_households
+households_space_heater_heatpump_ground_water_electricity_share:
+  min: 0
+  max: 100
+  default: 0.07895121669076477
+  share_group: heating_households
+households_water_heater_heatpump_air_water_electricity_share:
+  min: 0
+  max: 100
+  default: 0
+  share_group: hot_water_households
+households_water_heater_heatpump_ground_water_electricity_share:
+  min: 0
+  max: 100
+  default: 0
+  share_group: hot_water_households
+households_flexibility_p2p_electricity_market_penetration:
+  min: 0
+  max: 100
+  default: 0
+number_of_energy_flexibility_p2g_electricity:
+  min: 0
+  max: 0.01353777173692319
+  default: 0
+households_flexibility_p2h_electricity_market_penetration:
+  min: 0
+  max: 100
+  default: 0

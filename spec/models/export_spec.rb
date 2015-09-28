@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Export do
   let(:topology){ FactoryGirl.create(:topology) }
+
   let(:testing_ground){
     FactoryGirl.create(:testing_ground,
+      scenario_id: 2,
       topology: topology,
       technology_profile: fake_technology_profile)
   }
@@ -11,6 +13,7 @@ RSpec.describe Export do
   it "exports an export" do
     export = Export.new(testing_ground)
 
+    stub_et_engine_scenario_inputs_request
     stub_et_engine_scenario_create_request
     stub_et_engine_scenario_update_request
 

@@ -12,8 +12,10 @@ class Export
   # Returns a Hash.
   def inputs
     Hash[technology_units.map do |tech_key, units|
-      [ Technology.by_key(tech_key).export_to,
-        (units / factor_for_tech(tech_key) / number_of_households) * 100 ]
+      value = (units / factor_for_tech(tech_key) / number_of_households) * 100
+      export_to = Technology.by_key(tech_key).export_to
+
+      [export_to, limit_value(value, export_to)]
     end]
   end
 
@@ -72,5 +74,21 @@ class Export
     @households ||= EtEngineConnector.new(gqueries: [
       'households_number_of_residences'
     ]).gquery(@testing_ground.scenario_id)['future']
+  end
+
+  # Private: Limits the value of an input so that it may be submitted to
+  # ETEngine without validation errors.
+  #
+  # Returns the value.
+  def limit_value(value, input)
+    [[value, ete_inputs[input]['max']].min, ete_inputs[input]['min']].max
+  end
+
+  # Private: The ETENgine input data, including the minimum and maximum
+  # permitted values.
+  #
+  # Returns a Hash.
+  def ete_inputs
+    @ete_inputs ||= EtEngineConnector.new.inputs(@testing_ground.scenario_id)
   end
 end

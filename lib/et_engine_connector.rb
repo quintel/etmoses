@@ -7,7 +7,8 @@ class EtEngineConnector
     stats:     'http://%s/api/v3/scenarios/%d/converters/stats',
     scenario:  'http://%s/api/v3/scenarios/%d',
     scenarios: 'http://%s/api/v3/scenarios',
-    merit:     'http://%s/api/v3/scenarios/%d/merit'
+    merit:     'http://%s/api/v3/scenarios/%d/merit',
+    inputs:    'http://%s/api/v3/scenarios/%d/inputs'
   }.freeze
 
   HEADERS = { content_type: :json, accept: :json }
@@ -39,6 +40,10 @@ class EtEngineConnector
     url = ETM_URLS[:merit] % [@provider, scenario_id]
 
     et_api_request(:get, url, HEADERS)
+  end
+
+  def inputs(scenario_id)
+    et_api_request(:get, ETM_URLS[:inputs] % [@provider, scenario_id], HEADERS)
   end
 
   def gquery(scenario_id)

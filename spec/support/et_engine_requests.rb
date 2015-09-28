@@ -1,13 +1,14 @@
-def stub_et_engine_scenario_create_request
+def stub_et_engine_scenario_create_request(preset_id = 2)
   stub_request(:post, "http://beta.et-engine.com/api/v3/scenarios").with(
     :body => {
-      "scenario"=>{"scenario_id"=>"",
+      "scenario"=>{"scenario_id"=>preset_id.to_s,
       "descale"=>"true"}
     },
     :headers => {
       'Accept'=>'application/json',
       'Accept-Encoding'=>'gzip, deflate',
-      'Content-Type'=>'application/x-www-form-urlencoded'
+      'Content-Type'=>'application/x-www-form-urlencoded',
+      'User-Agent'=>'Ruby'
     }
   ).to_return(:status => 200, :body => JSON.dump({id: 2}), :headers => {})
 end
@@ -20,8 +21,8 @@ def stub_et_engine_scenario_update_request(id = 2)
       "scenario"=>{
         "title"=>"My Testing Ground",
         "user_values"=>{
-          "households_solar_pv_solar_radiation_market_penetration"=>"300",
-          "transport_car_using_electricity_share"=>"3200"
+          "households_solar_pv_solar_radiation_market_penetration"=>"100",
+          "transport_car_using_electricity_share"=>"100"
         }
       }
     },
@@ -31,6 +32,18 @@ def stub_et_engine_scenario_update_request(id = 2)
       'Content-Type'=>'application/x-www-form-urlencoded'
     }
   ).to_return(:status => 200, :body => JSON.dump({}), :headers => {})
+end
+
+def stub_et_engine_scenario_inputs_request(id = 2)
+  url  = "http://beta.et-engine.com/api/v3/scenarios/#{id}/inputs"
+  json = YAML.load_file(Rails.root.join('spec/fixtures/responses/inputs.yml'))
+
+  stub_request(:get, url).with(:headers => {
+    'Accept'          => 'application/json',
+    'Accept-Encoding' => 'gzip, deflate',
+    'Content-Type'    => 'application/json',
+    'User-Agent'      => 'Ruby'
+  }).to_return(:status => 200, :body => JSON.dump(json), :headers => {})
 end
 
 def stub_et_engine_request
