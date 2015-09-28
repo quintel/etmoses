@@ -355,10 +355,23 @@ var TreeGraph = (function(){
     LoadChartHelper.reloadChart(d.id);
 
     $('#technologies .row-fluid, p.info').hide();
-    $('#technologies .row-fluid[data-node="' + d.name + '"]').show();
+    showTechnologies(d);
 
     setHeader(d);
     enableCsvDownloadCurveButton(d);
+  };
+
+  function showTechnologies(d){
+    var techTab = $('#technologies .row-fluid[data-node="' + d.name + '"]');
+    if(techTab.length > 0){
+      techTab.show();
+      $(".technologies-button").removeClass("hidden");
+      $(".nav-tabs li a[href='#technologies']").removeClass("disabled-tab");
+    }
+    else{
+      $(".technologies-button").addClass("hidden");
+      $(".nav-tabs li a[href='#technologies']").addClass("disabled-tab");
+    };
   };
 
   function setHeader(d){

@@ -489,3 +489,8 @@ ul.nav-tabs > li.active > a.error {
 .finance-table tr.stakeholder td.center{
   background-color: #F3F5F2;
 }
+
+.disabled-tab{
+  pointer-events: none;
+  color: #aaa;
+}
