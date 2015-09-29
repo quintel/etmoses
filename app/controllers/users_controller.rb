@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   def create
     @registration_form = RegistrationForm.new(params[:registration_form])
     if @registration_form.submit
-      flash[:notice] = "Your account needs activation before you can sign in."
+      sign_in(:user, @registration_form.user)
       redirect_to root_path
     else
       flash[:alert] = @registration_form.errors.full_messages.join(", ")

@@ -20,11 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  devise:
-    failure:
-      user:
-        not_activated: "User is not activated"
-
   tariff:
     type:
       fixed: 'Fixed-rate'

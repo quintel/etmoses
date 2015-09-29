@@ -1,7 +1,7 @@
 class RegistrationForm
   include ActiveModel::Model
 
-  attr_accessor :email, :password
+  attr_accessor :email, :password, :user
 
   validates_presence_of :email, :password
 
@@ -13,7 +13,7 @@ class RegistrationForm
 
   def submit
     if self.valid?
-      user = User.create!(attributes)
+      @user = User.create!(attributes)
       true
     else
       false
