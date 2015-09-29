@@ -1,31 +1,96 @@
 var StrategyToggler = (function(){
-  var loadChart, applyStrategyButton, businessCaseTable;
-  var clearStrategies = false;
-  var shouldPollBusinessCase = true;
+  var loadChart, applyStrategyButton, businessCaseTable, savedStrategies;
+  var sliderSettings = {
+    focus: true,
+    formatter: function(value){
+      return value + "%";
+    }
+  };
+
+  var multiSelectSettings = {
+    buttonText: function(options) {
+      var text = 'Customise technology behaviour';
+
+      if (options.length) {
+        text = text + ' (' + options.length + ' selected)';
+      }
+
+      return text;
+    },
+    dropRight: true
+  };
 
   StrategyToggler.prototype = {
     addOnChangeListener: function(){
-      applyStrategyButton = $("button.apply_strategies");
       applyStrategyButton.prop('disabled', false);
       applyStrategyButton.on("click", this.applyStrategies.bind(this));
     },
 
     applyStrategies: function(){
-      shouldPollBusinessCase = true;
-
-      updateStrategies();
-      storeStrategies();
-      setClearStrategies();
-      toggleStrategies();
+      updateStrategies.call(this);
+      storeStrategies.call(this);
+      toggleStrategies.call(this);
     },
 
-    setDefaultStrategies: function(){
-      shouldPollBusinessCase = false;
+    toggleLoading: function(){
+      var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
+          loadingSpinner.toggleClass("on");
 
-      updateStrategies();
-      setClearStrategies();
-      toggleStrategies();
+      applyStrategyButton.prop("disabled", loadingSpinner.hasClass("on"));
+    },
+
+    updateLoadChartWithStrategies: function(data){
+      updateLoadChart.call(this, data);
+    },
+
+    setStrategies: function(){
+      savedStrategies = JSON.parse($(".save_strategies").text());
+
+      var multiSelect = buildMultiSelect();
+          multiSelect.multiselect('select', getSelectedItems());
+
+      var cappingInput = $("input[type=checkbox][value=capping_solar_pv]")
+          cappingInput.parents('a').append($(".slider-wrapper.hidden"));
+          cappingInput.on("change", showSlider);
+
+      showSlider.call(cappingInput);
+
+      $("#solar_pv_capping").slider(sliderSettings)
+                            .slider('setValue', savedStrategies.capping_fraction * 100);
+    },
+
+    clear: function(){
+      var clearStrategies = true;
+      $(".load-strategies input[type=checkbox]").each(function(){
+        if($(this).is(":checked")){
+          clearStrategies = false;
+        };
+      });
+      return clearStrategies;
     }
+  };
+
+  function showSlider(){
+    var sliderWrapper = $(this).parents('a').find(".slider-wrapper");
+
+    sliderWrapper.toggleClass("hidden", $(this).is(":checked"));
+  };
+
+  function buildMultiSelect(){
+    var multiSelect = $("select.multi-select")
+        multiSelect.multiselect(multiSelectSettings);
+
+    return multiSelect;
+  };
+
+  function getSelectedItems(){
+    var selected = [];
+    for(var strategy in savedStrategies){
+      if(savedStrategies[strategy]){
+        selected.push(strategy);
+      }
+    };
+    return selected;
   };
 
   function storeStrategies(){
@@ -33,35 +98,21 @@ var StrategyToggler = (function(){
       type: "POST",
       url:  applyStrategyButton.data('url'),
       data: {
-        strategies: getStrategies()
+        strategies: StrategyHelper.getStrategies()
       }
     });
   };
 
-  function getStrategies(){
-    return JSON.parse($(".save_strategies.hidden").text());
-  };
-
   function updateStrategies(){
-    var appliedStrategies = getStrategies();
+    var appliedStrategies = StrategyHelper.getStrategies();
     $(".load-strategies input[type=checkbox]").each(function(){
       appliedStrategies[$(this).val()] = $(this).is(":checked");
     })
     $(".save_strategies.hidden").text(JSON.stringify(appliedStrategies));
   };
 
-  function setClearStrategies(){
-    clearStrategies = true;
-    $(".load-strategies input[type=checkbox]").each(function(){
-      if($(this).is(":checked")){
-        clearStrategies = false;
-        return false;
-      }
-    });
-  };
-
   function toggleStrategies(){
-    toggleLoading();
+    this.toggleLoading();
     loadChart.strategyShown = true;
 
     if (loadChart.strategyLoads === true) {
@@ -70,24 +121,22 @@ var StrategyToggler = (function(){
     else {
       loadChart.strategyLoads = true;
 
-      pollTree();
-      if(shouldPollBusinessCase){
-        pollBusinessCase();
-      };
+      pollTree.call(this);
+      pollBusinessCase.call(this);
     }
   };
 
   function pollTree(){
     new Poller({
       url: loadChart.url,
-      data: TopologyTreeHelper.strategies()
-    }).poll().done(updateLoadChart);
+      data: { strategies: StrategyHelper.getStrategies() }
+    }).poll().done(updateLoadChart.bind(this));
   };
 
   function pollBusinessCase(){
     new Poller({
       url: businessCaseTable.data('url'),
-      data: TopologyTreeHelper.strategies(),
+      data: { strategies: StrategyHelper.getStrategies() },
       first_data: { clear: true }
     }).poll().done(renderSummary).progress(showLoadingSpinner);
   };
@@ -104,40 +153,25 @@ var StrategyToggler = (function(){
   };
 
   function updateLoadChart(strategyData){
-    toggleLoading();
+    this.toggleLoading();
 
-    loadChart.strategyLoads = {};
-
-    ETHelper.eachNode([strategyData.graph], function(node) {
-      loadChart.strategyLoads[node.name] = node.load;
-    });
-
-    ETHelper.eachNode([loadChart.root], function(node) {
-      if(clearStrategies){
-        loadChart.strategyShown = false;
-        delete node.altLoad;
-      }
-      else{
-        node.altLoad = loadChart.strategyLoads[node.name];
-      }
-    });
-
-    LoadChartHelper.forceReload = true
-
-    loadChart.showChart(loadChart.lastClicked);
-    loadChart.update(loadChart.root);
-  };
-
-  function toggleLoading(){
-    var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
-    loadingSpinner.toggleClass("on");
-    applyStrategyButton.prop("disabled", loadingSpinner.hasClass("on"));
+    loadChart.applyStrategies(strategyData);
   };
 
   function StrategyToggler(_loadChart){
-    loadChart = _loadChart;
-    businessCaseTable = $("#business_case_table");
+    loadChart           = _loadChart;
+    businessCaseTable   = $("#business_case_table");
+    applyStrategyButton = $("button.apply_strategies");
   };
 
   return StrategyToggler;
 })();
+
+var StrategyHelper = {
+  getStrategies: function(){
+    var strategies = JSON.parse($(".save_strategies.hidden").text());
+        strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
+
+    return strategies;
+  }
+};
