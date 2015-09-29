@@ -486,8 +486,11 @@ ul.nav-tabs > li.active > a.error {
   margin: 15px 20px;
 }
 
-.finance-table tr.stakeholder td.center{
+.finance-table tr.stakeholder td.center,
+.finance-table th.center{
   background-color: #F3F5F2;
+  font-style: italic;
+  font-weight: normal;
 }
 
 .disabled-tab{

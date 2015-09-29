@@ -1,10 +1,10 @@
 %table.table.table-bordered.finance-table
   %thead
     %tr
-      %th
-        - finance_table_rows(business_case).each do |row|
-          - row.each_pair do |header, _values|
-            %th= header.titleize
+      %th.center Depreciation cost
+      - finance_table_rows(business_case).each do |row|
+        - row.each_pair do |header, _values|
+          %th= header.titleize
       %th Total incoming
 
   %tfoot
