@@ -1,5 +1,24 @@
 var StrategyToggler = (function(){
-  var loadChart, applyStrategyButton, businessCaseTable;
+  var loadChart, applyStrategyButton, businessCaseTable, savedStrategies;
+  var sliderSettings = {
+    focus: true,
+    formatter: function(value){
+      return value + "%";
+    }
+  };
+
+  var multiSelectSettings = {
+    buttonText: function(options) {
+      var text = 'Customise technology behaviour';
+
+      if (options.length) {
+        text = text + ' (' + options.length + ' selected)';
+      }
+
+      return text;
+    },
+    dropRight: true
+  };
 
   StrategyToggler.prototype = {
     addOnChangeListener: function(){
@@ -24,6 +43,22 @@ var StrategyToggler = (function(){
       updateLoadChart.call(this, data);
     },
 
+    setStrategies: function(){
+      savedStrategies = JSON.parse($(".save_strategies").text());
+
+      var multiSelect = buildMultiSelect();
+          multiSelect.multiselect('select', getSelectedItems());
+
+      var cappingInput = $("input[type=checkbox][value=capping_solar_pv]")
+          cappingInput.parents('a').append($(".slider-wrapper.hidden"));
+          cappingInput.on("change", showSlider);
+
+      showSlider.call(cappingInput);
+
+      $("#solar_pv_capping").slider(sliderSettings)
+                            .slider('setValue', savedStrategies.capping_fraction * 100);
+    },
+
     clear: function(){
       var clearStrategies = true;
       $(".load-strategies input[type=checkbox]").each(function(){
@@ -33,6 +68,29 @@ var StrategyToggler = (function(){
       });
       return clearStrategies;
     }
+  };
+
+  function showSlider(){
+    var sliderWrapper = $(this).parents('a').find(".slider-wrapper");
+
+    sliderWrapper.toggleClass("hidden", $(this).is(":checked"));
+  };
+
+  function buildMultiSelect(){
+    var multiSelect = $("select.multi-select")
+        multiSelect.multiselect(multiSelectSettings);
+
+    return multiSelect;
+  };
+
+  function getSelectedItems(){
+    var selected = [];
+    for(var strategy in savedStrategies){
+      if(savedStrategies[strategy]){
+        selected.push(strategy);
+      }
+    };
+    return selected;
   };
 
   function storeStrategies(){

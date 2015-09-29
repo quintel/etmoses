@@ -6,6 +6,7 @@ var TopologyTree = (function(){
       $("#collapse-stakeholders select").prop('disabled', true);
 
       treeGraph.strategyToggler.toggleLoading();
+      treeGraph.strategyToggler.setStrategies();
 
       getTree({}, d3Callback);
       getTree({ strategies: StrategyHelper.getStrategies() }, updateLoadChart);
@@ -17,16 +18,12 @@ var TopologyTree = (function(){
   };
 
   function updateLoadChart(treeDataWithStrategies){
-    console.log("2: ---- green line");
-    console.log(treeDataWithStrategies.graph.children[0].children[0].children[0].load.slice(15025, 15045))
     treeGraph.strategyToggler.updateLoadChartWithStrategies(treeDataWithStrategies);
     treeGraph.initialStrategyCallDone = true;
     treeGraph.showGraph();
   };
 
   function d3Callback(treeData){
-    console.log("1: ---- blue line");
-    console.log(treeData.graph.children[0].children[0].children[0].load.slice(15025, 15045))
     $("#collapse-stakeholders select").prop('disabled', false);
 
     treeGraph.initialCallDone = true;
