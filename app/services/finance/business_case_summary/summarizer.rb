@@ -21,7 +21,7 @@ module Finance
       def incoming
         values = @financial_rule.values.flatten
         values.delete_at(skip)
-        values.compact.reduce(:+) || 0
+        values.compact.sum
       end
 
       def skip
@@ -29,7 +29,7 @@ module Finance
       end
 
       def outgoing
-        transposed_financials[@index].compact.reduce(:+)
+        transposed_financials[@index].compact.sum
       end
 
       def freeform
