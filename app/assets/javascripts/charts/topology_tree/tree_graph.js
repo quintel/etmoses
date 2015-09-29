@@ -36,7 +36,6 @@ var TreeGraph = (function(){
     applyStrategies: function(data){
       this.strategyLoads = {};
 
-      console.log(data.graph);
       ETHelper.eachNode([data.graph], setStrategyLoad.bind(this));
 
       LoadChartHelper.forceReload = true
