@@ -3,7 +3,7 @@ class TestingGroundsController < ResourceController
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:calculate_concurrency, :update, :store_strategies]
+  respond_to :js, only: [:calculate_concurrency, :update, :store_strategies, :save_as]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -143,7 +143,7 @@ class TestingGroundsController < ResourceController
       business_case.save
     end
 
-    redirect_to(testing_ground)
+    @testing_ground = testing_ground
   end
 
   private
