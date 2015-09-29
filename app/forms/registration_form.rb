@@ -14,7 +14,6 @@ class RegistrationForm
   def submit
     if self.valid?
       user = User.create!(attributes)
-      RegistrationMailer.new_registration(user).deliver!
       true
     else
       false

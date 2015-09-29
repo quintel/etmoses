@@ -128,6 +128,5 @@ Technology.create!(
 
 User.create!(
   email: 'guest@quintel.com',
-  password: 'guest',
-  activated: true
+  password: 'guest'
 )
