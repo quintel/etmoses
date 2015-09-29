@@ -397,7 +397,13 @@ label.disabled{
 
 select#stakeholders{
   width: 300px;
-  margin-top: 10px;
+  margin-top: -45px;
+  margin-left: 12px;
+  position: absolute;
+}
+
+#business_case_target_area{
+  margin-top: 30px;
 }
 
 .slider-wrapper{
