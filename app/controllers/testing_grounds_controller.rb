@@ -130,10 +130,11 @@ class TestingGroundsController < ResourceController
 
   # POST /testing_grounds/fetch_etm_values
   def fetch_etm_values
-    @response ||= EtEngineConnector.new(keys: [params[:key]])
-      .stats(params[:scenario_id])['nodes']
+    key = params[:key]
 
-    render json: @response.fetch(params[:key])
+    @response ||= EtEngineConnector.new(keys: [key]).stats(params[:scenario_id])['nodes']
+
+    render json: Import::TechnologyBuilder.build(key, @response.fetch(key))
   end
 
   # GET /testing_grounds/:id/technology_profile.csv
