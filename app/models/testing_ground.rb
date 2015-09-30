@@ -5,8 +5,6 @@ class TestingGround < ActiveRecord::Base
 
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
 
-  IMPORT_PROVIDERS = %w(beta.et-engine.com).freeze
-
   serialize :technology_profile, TechnologyList
 
   belongs_to :topology

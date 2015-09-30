@@ -15,7 +15,7 @@ class EtEngineConnector
 
   def initialize(params = {})
     @params = params
-    @provider = TestingGround::IMPORT_PROVIDERS.first
+    @provider = Settings.etengine_host
   end
 
   def stats(scenario_id)

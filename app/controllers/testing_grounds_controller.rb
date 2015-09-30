@@ -43,7 +43,7 @@ class TestingGroundsController < ResourceController
 
   # POST /testing_grounds/:id/export
   def perform_export
-    redirect_to("http://beta.pro.et-model.com/scenarios/" +
+    redirect_to("http://#{ Settings.etmodel_host }/scenarios/" +
                 "#{ @export.export['id'] }")
   end
 

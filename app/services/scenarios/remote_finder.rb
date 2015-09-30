@@ -1,6 +1,7 @@
 module Scenarios
   class RemoteFinder
-    SCENARIO_PATH = "http://et-engine.com/api/v3/scenarios/templates"
+    SCENARIO_PATH = "http://#{Settings.etengine_host}/" \
+                    "api/v3/scenarios/templates"
 
     # Public: find all scenarios sort them by title
     def find_remote_scenarios

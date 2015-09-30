@@ -13,5 +13,13 @@ Rails.application.configure do
   config.log_formatter                             = ::Logger::Formatter.new
   config.active_record.dump_schema_after_migration = false
 
-  ET_MODEL_URL = "beta.pro.et-model.com"
+  # Temporarily use in-memory caching.
+  config.cache_store = :memory_store, { size: 64.megabytes }
+
+  # Mail settings.
+
+  config.action_mailer.delivery_method       = :smtp
+  config.action_mailer.perform_deliveries    = true
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default charset: 'utf-8'
 end

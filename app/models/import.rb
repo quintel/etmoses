@@ -3,7 +3,7 @@ class Import
 
   attr_reader :provider, :scenario_id, :topology_id, :market_model_id
 
-  validates :provider,    inclusion: { in: TestingGround::IMPORT_PROVIDERS }
+  validates :provider,    inclusion: { in: [Settings.etengine_host] }
   validates :scenario_id, numericality: { only_integer: true }
   validate :is_scaled_scenario, if: -> { scenario_id.present? }
 
@@ -23,8 +23,7 @@ class Import
   #
   # Returns an Import.
   def initialize(attributes = {})
-    @provider =
-      attributes[:provider] || TestingGround::IMPORT_PROVIDERS.first
+    @provider = Settings.etengine_host
 
     @scenario_id = attributes[:scenario_id]
     @topology_id = attributes[:topology_id]

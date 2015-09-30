@@ -39,6 +39,12 @@ module Moses
       url:  "/#{ paperclip_path }"
     }
 
+    # Mail
+    # ----
+
+    config.action_mailer.default_url_options =
+      { host: "http://#{ Settings.host }" }
+
     if (email_conf = Rails.root.join('config/email.yml')).file?
       config.action_mailer.smtp_settings =
         YAML.load_file(email_conf)[Rails.env].symbolize_keys
