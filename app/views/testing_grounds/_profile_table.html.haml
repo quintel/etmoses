@@ -42,7 +42,7 @@
               %td.profile.editable.select
 
             - when :concurrency, :performance_coefficient, :initial_investment, :technical_lifetime
-              %td.editable.hidden
+              %td.editable.hidden{class: key}
                 %input{type: 'text', value: value}
 
             - when :demand
