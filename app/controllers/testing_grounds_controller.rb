@@ -4,6 +4,7 @@ class TestingGroundsController < ResourceController
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
   respond_to :js, only: [:calculate_concurrency, :update, :store_strategies, :save_as]
+  respond_to :json, only: :fetch_etm_values
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -125,6 +126,14 @@ class TestingGroundsController < ResourceController
 
     @topology = Topology.find(params[:topology_id])
     @testing_ground_profile = TechnologyList.from_hash(concurrency)
+  end
+
+  # POST /testing_grounds/fetch_etm_values
+  def fetch_etm_values
+    @response ||= EtEngineConnector.new(keys: [params[:key]])
+      .stats(params[:scenario_id])['nodes']
+
+    render json: @response.fetch(params[:key])
   end
 
   # GET /testing_grounds/:id/technology_profile.csv

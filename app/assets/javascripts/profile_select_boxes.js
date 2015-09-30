@@ -2,6 +2,7 @@ var ProfileSelectBoxes = (function(){
   var etmDefaults, edsnSwitch;
   var isChanged = false;
   var defaultValues = { defaultCapacity: null, defaultDemand: null, defaultVolume: null };
+  var attributes = { technical_lifetime: {}, initial_investment: {} };
 
   ProfileSelectBoxes.prototype = {
     add: function(){
@@ -31,8 +32,31 @@ var ProfileSelectBoxes = (function(){
     $("select.name").off("change").on("change", function(){
       isChanged = true;
 
+      fetchEtmAttributes.call(this);
       cloneAndAppendProfileSelect.call(this);
     });
+  };
+
+  function fetchEtmAttributes(){
+    if(/base_load/.test($(this).val())){
+      setEtmAttributes.call(this, attributes);
+      return false;
+    };
+
+    $.ajax({
+      type: "POST",
+      url: $("#profiles-table").data("fetchUrl"),
+      data: { key: $(this).val() },
+      success: setEtmAttributes.bind(this)
+    });
+  };
+
+  function setEtmAttributes(data){
+    for(var key in attributes){
+      var value = data[key]['present'];
+
+      $(this).parents("tr").find("." + key + " input").val(value);
+    };
   };
 
   function addChangeListenerToProfileBox(){
