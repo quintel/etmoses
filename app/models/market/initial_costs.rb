@@ -7,8 +7,7 @@ module Market
   # technologies on endpoints with an initial_investment and technical_lifetime
   # will be billable to the stakeholder who owns the endpoint.
   class InitialCosts
-    TOPOLOGY_REQUIRED   = %i(investment_cost technical_lifetime stakeholder)
-    TECHNOLOGY_REQUIRED = %i(initial_investment technical_lifetime)
+    TOPOLOGY_REQUIRED = %i(investment_cost technical_lifetime stakeholder)
 
     def initialize(network)
       @network = network
@@ -31,11 +30,7 @@ module Market
     def technology_costs
       group_sum(technology_nodes) do |node|
         node.techs.map(&:installed).sum do |tech|
-          if calculable_tech?(tech)
-            tech.initial_investment.to_f / tech.technical_lifetime * tech.units
-          else
-            0.0
-          end
+          tech.yearly_investment * tech.units
         end
       end
     end
@@ -48,7 +43,7 @@ module Market
 
     def technology_nodes
       @network.nodes.select do |node|
-        node.techs.map(&:installed).any? { |tech| calculable_tech?(tech) }
+        node.techs.map(&:installed).any?
       end
     end
 
@@ -56,10 +51,6 @@ module Market
       @network.nodes.select do |node|
         TOPOLOGY_REQUIRED.all? { |attr| node.get(attr) }
       end
-    end
-
-    def calculable_tech?(tech)
-      TECHNOLOGY_REQUIRED.all? { |attr| tech.public_send(attr) }
     end
   end
 end

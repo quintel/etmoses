@@ -2,7 +2,14 @@ var ProfileSelectBoxes = (function(){
   var etmDefaults, edsnSwitch;
   var isChanged = false;
   var defaultValues = { defaultCapacity: null, defaultDemand: null, defaultVolume: null };
-  var attributes = { technical_lifetime: {}, initial_investment: {} };
+  var attributes = {
+    technical_lifetime:                  null,
+    initial_investment:                  null,
+    full_load_hours:                     null,
+    om_costs_per_year:                   null,
+    om_costs_per_full_load_hour:         null,
+    om_costs_for_ccs_per_full_load_hour: null
+  };
 
   ProfileSelectBoxes.prototype = {
     add: function(){
@@ -38,7 +45,7 @@ var ProfileSelectBoxes = (function(){
   };
 
   function fetchEtmAttributes(){
-    if(/base_load/.test($(this).val())){
+    if(/^(base_load|generic)/.test($(this).val())){
       setEtmAttributes.call(this, attributes);
       return false;
     };
@@ -53,9 +60,7 @@ var ProfileSelectBoxes = (function(){
 
   function setEtmAttributes(data){
     for(var key in attributes){
-      var value = data[key]['present'];
-
-      $(this).parents("tr").find("." + key + " input").val(value);
+      $(this).parents("tr").find("." + key + " input").val(data[key]);
     };
   };
 
