@@ -19,14 +19,6 @@ RSpec.describe UsersController do
     it "creates a user" do
       expect(response).to redirect_to(root_path)
     end
-
-    it "sends a mail to chael" do
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-    end
-
-    it "is not activated" do
-      expect(User.last.activated).to eq(false)
-    end
   end
 
   describe "creating a faulty user" do

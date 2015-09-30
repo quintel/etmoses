@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150927123723) do
+ActiveRecord::Schema.define(version: 20150929142437) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -171,7 +171,6 @@ ActiveRecord::Schema.define(version: 20150927123723) do
     t.string   "email",                              null: false
     t.string   "encrypted_password", default: "",    null: false
     t.string   "name"
-    t.boolean  "activated",          default: false
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.boolean  "admin",              default: false
