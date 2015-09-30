@@ -80,10 +80,13 @@ en:
           Select a network topology for your local energy solution. To inspect
           existing topologies you can visit the topology page in the main menu.
           You can also create a new topology using the "create new" submenu of
-          the topology menu item.
+          the topology menu item. For more information you can view the user documentation.
       market_model_id:
         tooltip: >
-          Lorum ipsum
+          Select an existing market model for your local energy solution. To inspect
+          existing market models you can visit the market model page in the main menu.
+          You can also create a new market model using the "create new" submenu of
+          the market model menu item. For more information you can view the user documentation.
       scenario_id:
         tooltip: >
           This unique identifier is linked to your scaled ETM scenario. The
