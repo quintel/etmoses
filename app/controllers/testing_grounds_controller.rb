@@ -15,6 +15,7 @@ class TestingGroundsController < ResourceController
                                            :edit, :new, :calculate_concurrency]
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
+  skip_before_filter :authenticate_user!, only: [:show, :data, :index, :import]
 
   # GET /topologies
   def index

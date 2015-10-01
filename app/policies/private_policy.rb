@@ -1,6 +1,6 @@
 module PrivatePolicy
   def update?
-    record.user == user || user.admin?
+    record.user == user || user && user.admin?
   end
 
   alias_method :destroy?, :update?

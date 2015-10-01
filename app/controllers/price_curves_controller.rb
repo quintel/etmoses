@@ -4,6 +4,8 @@ class PriceCurvesController < ResourceController
   before_filter :fetch_profile, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
 
+  skip_before_filter :authenticate_user!, only: :show
+
   respond_to :html
   respond_to :json, only: :show
 
