@@ -503,3 +503,7 @@ ul.nav-tabs > li.active > a.error {
   pointer-events: none;
   color: #aaa;
 }
+
+.navbar-default .navbar-nav > li > a.dropdown-toggle.disabled{
+  color: #AAAAAA;
+}

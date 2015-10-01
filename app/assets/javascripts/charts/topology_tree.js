@@ -3,6 +3,7 @@ var TopologyTree = (function(){
 
   TopologyTree.prototype = {
     showTree: function() {
+      $("a.dropdown-toggle").first().addClass("disabled");
       $("#collapse-stakeholders select").prop('disabled', true);
 
       treeGraph.strategyToggler.toggleLoading();

@@ -56,7 +56,7 @@ var StrategyToggler = (function(){
       showSlider.call(cappingInput);
 
       $("#solar_pv_capping").slider(sliderSettings)
-                            .slider('setValue', savedStrategies.capping_fraction * 100);
+        .slider('setValue', (savedStrategies.capping_fraction || 1) * 100);
     },
 
     clear: function(){

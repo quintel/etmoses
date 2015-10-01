@@ -17,6 +17,8 @@ var TreeGraph = (function(){
       if(!!treeData) this.treeData = treeData;
 
       if(this.initialCallDone && this.initialStrategyCallDone){
+        $("a.dropdown-toggle").first().removeClass("disabled");
+
         buildBase();
         transformData.call(this);
 
