@@ -246,6 +246,24 @@ RSpec.describe TestingGroundsController do
 
       expect(response.status).to eq(200)
     end
+
+    it "doesn't show a LES with a private market model" do
+      market_model = FactoryGirl.create(:market_model, public: false)
+      testing_ground = FactoryGirl.create(:testing_ground, public: true, market_model: market_model)
+
+      get :show, id: testing_ground.id
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "doesn't show a LES with a private topology" do
+      topology = FactoryGirl.create(:topology, public: false)
+      testing_ground = FactoryGirl.create(:testing_ground, public: true, topology: topology)
+
+      get :show, id: testing_ground.id
+
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe "#export" do

@@ -3,6 +3,7 @@ include ActionDispatch::TestProcess
 FactoryGirl.define do
   factory :market_model do
     name "Market model"
+    public "true"
     interactions [{
       "stakeholder_from"=>"customer",
       "stakeholder_to"=>"customer",
