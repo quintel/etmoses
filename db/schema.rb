@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150929142437) do
+ActiveRecord::Schema.define(version: 20151001090016) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20150929142437) do
 
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
-    t.string  "name",          limit: 50
+    t.string  "name",          limit: 100
   end
 
   add_index "importable_attributes", ["technology_id", "name"], name: "index_importable_attributes_on_technology_id_and_name", unique: true, using: :btree

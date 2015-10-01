@@ -57,21 +57,66 @@ RSpec.describe Finance::BusinessCaseCalculator do
       FactoryGirl.create(:topology_with_financial_information)
     }
 
+    let(:technology_profile){
+      { "hh1" => [{ "name"                                => "Residential PV panel",
+                    "type"                                => "households_solar_pv_solar_radiation",
+                    "profile"                             => nil,
+                    "profile_key"                         => nil,
+                    "capacity"                            => -1.5,
+                    "units"                               => 1,
+                    "initial_investment"                  => 10,
+                    "technical_lifetime"                  => 1,
+                    "performance_coefficient"             => 1.0,
+                    "concurrency"                         => "max" },
+                  { "name"                                => "Electric vehicle",
+                    "type"                                => "households_solar_pv_solar_radiation",
+                    "profile"                             => nil,
+                    "profile_key"                         => nil,
+                    "capacity"                            => -1.5,
+                    "units"                               => 1,
+                    "initial_investment"                  => nil,
+                    "technical_lifetime"                  => nil,
+                    "full_load_hours"                     => nil,
+                    "om_costs_per_year"                   => 5.5,
+                    "om_costs_per_full_load_hour"         => nil,
+                    "om_costs_for_ccs_per_full_load_hour" => nil,
+                    "performance_coefficient"             => 1.0,
+                    "concurrency"                         => "max" },
+                  { "name"                                => "Electric vehicle",
+                    "type"                                => "households_solar_pv_solar_radiation",
+                    "profile"                             => nil,
+                    "profile_key"                         => nil,
+                    "capacity"                            => -1.5,
+                    "units"                               => 2,
+                    "initial_investment"                  => nil,
+                    "technical_lifetime"                  => nil,
+                    "full_load_hours"                     => 2,
+                    "om_costs_per_year"                   => 5.5,
+                    "om_costs_per_full_load_hour"         => 25.0,
+                    "om_costs_for_ccs_per_full_load_hour" => nil,
+                    "performance_coefficient"             => 1.0,
+                    "concurrency"                         => "max" }
+        ]
+      }
+    }
+
     let(:testing_ground){
-      FactoryGirl.create(:testing_ground, market_model: market_model, topology: topology)
+      FactoryGirl.create(:testing_ground,
+        technology_profile: technology_profile,
+        market_model: market_model, topology: topology)
     }
 
     let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
 
     it "determines the initial investments for the stakeholders" do
       expect(business_case.rows).to eq([
-        {"aggregator"      =>[0.0, nil, nil,     nil, nil, nil, nil]},
-        {"cooperation"     =>[nil, 0.0, nil,     nil, nil, nil, nil]},
-        {"customer"        =>[nil, nil, 0.0,     nil, nil, nil, nil]},
-        {"government"      =>[nil, nil, nil,     0.0, nil, nil, nil]},
-        {"producer"        =>[nil, nil, nil,     nil, 0.0, nil, nil]},
-        {"supplier"        =>[nil, nil, nil,     nil, nil, 0.0, nil]},
-        {"system operator" =>[nil, nil, 44150.4, nil, nil, nil, 10000.0]}
+        {"aggregator"      =>[0.0, nil, nil, nil, nil, nil, nil]},
+        {"cooperation"     =>[nil, 0.0, nil, nil, nil, nil, nil]},
+        {"customer"        =>[nil, nil, 51.5, nil, nil, nil, nil]},
+        {"government"      =>[nil, nil, nil, 0.0, nil, nil, nil]},
+        {"producer"        =>[nil, nil, nil, nil, 0.0, nil, nil]},
+        {"supplier"        =>[nil, nil, nil, nil, nil, 0.0, nil]},
+        {"system operator" =>[nil, nil, 0.0, nil, nil, nil, 10000.0]}
       ])
     end
   end

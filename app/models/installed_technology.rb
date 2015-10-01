@@ -1,23 +1,32 @@
 class InstalledTechnology
   include Virtus.model
 
-  attribute :name,                    String
-  attribute :type,                    String, default: 'generic'
-  attribute :behavior,                String
-  attribute :profile,                 Integer
-  attribute :profile_key,             String
-  attribute :capacity,                Float
-  attribute :demand,                  Float
-  attribute :volume,                  Float
-  attribute :units,                   Integer, default: 1
-  attribute :initial_investment,      Float
-  attribute :technical_lifetime,      Integer
-  attribute :performance_coefficient, Float
-  attribute :concurrency,             String, default: 'max'
+  attribute :name,                                String
+  attribute :type,                                String, default: 'generic'
+  attribute :behavior,                            String
+  attribute :profile,                             Integer
+  attribute :profile_key,                         String
+  attribute :capacity,                            Float
+  attribute :demand,                              Float
+  attribute :volume,                              Float
+  attribute :units,                               Integer, default: 1
+  attribute :initial_investment,                  Float
+  attribute :technical_lifetime,                  Integer
+  attribute :performance_coefficient,             Float
+  attribute :concurrency,                         String,  default: 'max'
+  attribute :full_load_hours,                     Integer
+  attribute :om_costs_per_year,                   Float
+  attribute :om_costs_per_full_load_hour,         Float
+  attribute :om_costs_for_ccs_per_full_load_hour, Float
 
-  EDITABLES = %i(
-    name profile electrical_capacity volume demand units
-    initial_investment technical_lifetime
+  EDITABLES = %i(name profile electrical_capacity volume demand units initial_investment
+    technical_lifetime full_load_hours om_costs_per_year
+    om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
+    performance_coefficient concurrency
+  )
+
+  HIDDEN = %i(initial_investment technical_lifetime full_load_hours om_costs_per_year
+    om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
     performance_coefficient concurrency
   )
 
@@ -178,6 +187,13 @@ class InstalledTechnology
 
   def as_json(*)
     super.merge('electrical_capacity' => electrical_capacity)
+  end
+
+  def yearly_investment
+    om_costs_per_year.to_f                   +
+    initial_investment.to_f                  / (technical_lifetime || 1) +
+    om_costs_per_full_load_hour.to_f         / (full_load_hours || 1) +
+    om_costs_for_ccs_per_full_load_hour.to_f / (full_load_hours || 1)
   end
 
   private

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     collection do
       get  'import'
       post 'import', to: :perform_import
-      post 'calculate_concurrency'
+      post 'calculate_concurrency', 'fetch_etm_values'
     end
 
     member do

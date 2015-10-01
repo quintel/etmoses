@@ -4,6 +4,7 @@ class Import
     NumberOfUnitsAttribute = Attribute.new('number_of_units')
     InitialInvestmentAttribute = Attribute.new('initial_investment')
     TechnicalLifetimeAttribute = Attribute.new('technical_lifetime')
+    FullLoadHoursAttribute = Attribute.new('full_load_hours')
 
     # Internal: A hash of attributes which may be imported from ETEngine.
     ATTRIBUTES = Hash[[ DemandAttribute,
@@ -12,7 +13,11 @@ class Import
                         StorageVolumeAttribute,
                         InitialInvestmentAttribute,
                         TechnicalLifetimeAttribute,
-                        CoefficientOfPerformanceAttribute ].map do |attribute|
+                        CoefficientOfPerformanceAttribute,
+                        FullLoadHoursAttribute,
+                        FixedOmCostsPerYearAttribute,
+                        VariableOmCostsCcsPerFullLoadHourAttribute,
+                        VariableOmCostsPerFullLoadHourAttribute ].map do |attribute|
       [attribute.remote_name, attribute]
     end].with_indifferent_access.freeze
 
