@@ -404,11 +404,11 @@ var TreeGraph = (function(){
     var techTab = $('#technologies .row-fluid[data-node="' + d.name + '"]');
     if(techTab.length > 0){
       techTab.show();
-      $(".technologies-button").removeClass("hidden");
+      $(".technologies-button").parent().removeClass("disabled");
       $(".nav-tabs li a[href='#technologies']").removeClass("disabled-tab");
     }
     else{
-      $(".technologies-button").addClass("hidden");
+      $(".technologies-button").parent().addClass("disabled");
       $(".nav-tabs li a[href='#technologies']").addClass("disabled-tab");
     };
   };
@@ -419,8 +419,9 @@ var TreeGraph = (function(){
   };
 
   function enableCsvDownloadCurveButton(d){
-    var downloadBtn = $('#load a.download-curve')
-        downloadBtn.parent().removeClass("hidden");
+    var downloadBtn = $('li a.download-curve')
+        downloadBtn.parent().removeClass("disabled");
+        downloadBtn.text("Download curve for '" + d.name + "'");
 
     downloadBtn.off('click').on('click', function(event) {
       event.preventDefault();

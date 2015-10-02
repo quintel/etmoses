@@ -5,6 +5,19 @@
     %span.current-chart.hidden
 
   .pull-right.les-controls
+    .btn-group
+      %button{type: "button", class: "btn btn-default dropdown-toggle", data: { toggle: "dropdown" } }
+        Options
+        %span.caret
+      %ul.dropdown-menu
+        %li.disabled= link_to "Download curve", "#", class: "download-curve"
+        %li.disabled= link_to 'Download technologies CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: "technologies-button"
+
+        - if can_export?(@testing_ground)
+          %li.divider{role: "separator"}
+          %li= link_to 'Create national scenario', export_testing_ground_path(@testing_ground)
+
+
     .load-strategies.btn-group(role="group")
       %select.strategies.multi-select.form-control{multiple: "multiple"}
         = options_for_strategies
@@ -73,8 +86,6 @@
         .load-graph.line-chart
           %p.info Click on a network component to view its load and attached technologies
 
-        %p.hidden= link_to "Download curve", "#", class: "btn btn-primary download-curve"
-
       .tab-pane#technologies{role: 'tabpanel'}
         #technologies
           %p.info When clicking an end-node technologies will appear
@@ -103,9 +114,6 @@
           - else
             %p No Technologies registered yet.
 
-          %p.technologies-button.hidden
-            = link_to 'Download Tech. CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: 'btn btn-primary'
-
     %span.loading-spinner
       = image_tag 'wait.gif'
 
@@ -129,8 +137,4 @@
     %p No business case available yet
 
   .clearfix
-
-.export
-  - if can_export?(@testing_ground)
-    = link_to 'Create national scenario ►', export_testing_ground_path(@testing_ground), class: 'btn btn-primary pull-right'
 
