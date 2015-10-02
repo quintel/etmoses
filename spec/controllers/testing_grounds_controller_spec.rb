@@ -156,24 +156,43 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#data.json" do
-    let!(:sign_in_user){ sign_in(user) }
+    describe "while signing in" do
+      let!(:sign_in_user){ sign_in(user) }
 
-    it "shows the data of a testing ground" do
-      testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
+      it "shows the data of a testing ground" do
+        testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 
-      get :data, format: :json, id: testing_ground.id
+        get :data, format: :json, id: testing_ground.id
 
-      expect(response.status).to eq(200)
+        expect(response.status).to eq(200)
+      end
+
+      it "denies permission for the data of a private testing grounds" do
+        testing_ground = FactoryGirl.create(:testing_ground, public: false)
+
+        get :data, format: :json, id: testing_ground.id
+
+        expect(response.status).to eq(403)
+      end
     end
 
-    it "denies permission for the data of a private testing grounds" do
-      testing_ground = FactoryGirl.create(:testing_ground, public: false)
+    describe "while not signing in" do
+      it "shows the data of a testing ground" do
+        testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 
-      get :data, format: :json, id: testing_ground.id
+        get :data, format: :json, id: testing_ground.id
 
-      expect(response.status).to eq(403)
+        expect(response.status).to eq(200)
+      end
+
+      it "shows the data of a testing ground" do
+        testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {}, public: false)
+
+        get :data, format: :json, id: testing_ground.id
+
+        expect(response.status).to eq(403)
+      end
     end
-
   end
 
   describe "#show" do
@@ -218,6 +237,32 @@ RSpec.describe TestingGroundsController do
       get :show, id: testing_ground.id
 
       expect(response.status).to eq(200)
+    end
+
+    it 'shows a public testing ground' do
+      testing_ground = FactoryGirl.create(:testing_ground, public: true)
+
+      get :show, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+
+    it "doesn't show a LES with a private market model" do
+      market_model = FactoryGirl.create(:market_model, public: false)
+      testing_ground = FactoryGirl.create(:testing_ground, public: true, market_model: market_model)
+
+      get :show, id: testing_ground.id
+
+      expect(response).to redirect_to(root_path)
+    end
+
+    it "doesn't show a LES with a private topology" do
+      topology = FactoryGirl.create(:topology, public: false)
+      testing_ground = FactoryGirl.create(:testing_ground, public: true, topology: topology)
+
+      get :show, id: testing_ground.id
+
+      expect(response).to redirect_to(root_path)
     end
   end
 

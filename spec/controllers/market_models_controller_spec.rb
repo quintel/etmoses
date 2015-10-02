@@ -1,18 +1,37 @@
 require 'rails_helper'
 
 RSpec.describe MarketModelsController do
-  let(:user){ FactoryGirl.create(:user) }
-  let!(:sign_in_user){ sign_in(user) }
+  describe "#index" do
+    it 'visits index path' do
+      get :index
 
-  it 'visits index path' do
-    get :index
+      expect(response.status).to eq(200)
+    end
 
-    expect(response.status).to eq(200)
+    it 'visits new market model view' do
+      sign_in(:user, FactoryGirl.create(:user))
+
+      get :new
+
+      expect(response.status).to eq(200)
+    end
   end
 
-  it 'visits new market model view' do
-    get :new
+  describe "#show" do
+    it 'visits show path' do
+      market_model = FactoryGirl.create(:market_model, public: true)
 
-    expect(response.status).to eq(200)
+      get :show, id: market_model.id
+
+      expect(response.code).to eq("200")
+    end
+
+    it 'doesnt visit private show path' do
+      market_model = FactoryGirl.create(:market_model, public: false)
+
+      get :show, id: market_model.id
+
+      expect(response).to redirect_to(root_path)
+    end
   end
 end

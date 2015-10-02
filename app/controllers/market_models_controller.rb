@@ -7,6 +7,8 @@ class MarketModelsController < ResourceController
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :fetch_testing_ground, only: :clone
 
+  skip_before_filter :authenticate_user!, only: [:show, :index]
+
   def index
     @market_models = policy_scope(MarketModel).order(:name)
   end

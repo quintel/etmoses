@@ -9,6 +9,8 @@ class BusinessCasesController < ResourceController
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :clear_job, only: :data
 
+  skip_before_filter :authenticate_user!, only: [:data, :render_summary, :validate]
+
   def data
     unless @business_case.job_id.present?
       task = BusinessCaseCalculatorJob.new(@testing_ground, params[:strategies])

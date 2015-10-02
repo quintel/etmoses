@@ -9,6 +9,8 @@ class TopologiesController < ResourceController
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
   before_filter :fetch_testing_ground, only: :clone
 
+  skip_before_filter :authenticate_user!, only: [:show, :index]
+
   def index
     @topologies = policy_scope(Topology.named).in_name_order
   end

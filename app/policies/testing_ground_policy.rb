@@ -9,6 +9,18 @@ class TestingGroundPolicy < ApplicationPolicy
     new? || edit?
   end
 
+  def show?
+    super && show_topology? && show_market_model?
+  end
+
+  def show_market_model?
+    record.market_model ? record.market_model.public? : true
+  end
+
+  def show_topology?
+    record.topology ? record.topology.public? : true
+  end
+
   alias_method :data?, :show?
   alias_method :store_strategies?, :show?
   alias_method :technology_profile?, :show?

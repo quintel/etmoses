@@ -8,6 +8,8 @@ class LoadProfilesController < ResourceController
   respond_to :html
   respond_to :json, only: :show
 
+  skip_before_filter :authenticate_user!, only: [:index, :show]
+
   def index
     skip_policy_scope
     @load_profile_categories = LoadProfileCategory.where(parent_id: nil)
