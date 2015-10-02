@@ -130,3 +130,11 @@ User.create!(
   email: 'guest@quintel.com',
   password: 'guest'
 )
+
+password = SecureRandom.hex[0..16]
+
+User.create!(
+  email: "orphan@quintel.com",
+  name: "ETMoses",
+  password: password
+)

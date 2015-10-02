@@ -47,7 +47,12 @@ class TopologiesController < ResourceController
 
   # DELETE /topologies/:id
   def destroy
-    @topology.destroy
+    if TestingGround.where(topology: @topology).count > 0
+      @topology.update_attribute(:user, User.orphan)
+    else
+      @topology.destroy
+    end
+
     redirect_to(topologies_url)
   end
 
