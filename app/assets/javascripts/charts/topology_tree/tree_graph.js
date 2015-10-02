@@ -4,7 +4,7 @@ var TreeGraph = (function(){
 
   var maxLabelLength  = 0,
       maxViewerHeight = 500,
-      viewerHeight    = 615,
+      viewerHeight    = 570,
       viewerWidth     = 500,
       nodeIds         = 0,
       duration        = 250,

@@ -28,7 +28,7 @@ ul.testing-grounds {
 }
 
 #testing-ground{
-  margin: 20px 0;
+  margin: 5px 0 20px 0;
 }
 
 .testing-ground-view {
@@ -506,4 +506,17 @@ ul.nav-tabs > li.active > a.error {
 
 .navbar-default .navbar-nav > li > a.dropdown-toggle.disabled{
   color: #AAAAAA;
+}
+
+.container {
+  .header {
+    h1{
+      margin: 20px 0;
+    }
+  }
+  .bottom{
+    margin: 10px 0 0 0;
+    padding: 6px 0 22px 0;
+    border-top: 1px solid #ddd;
+  }
 }

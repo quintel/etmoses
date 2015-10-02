@@ -37,28 +37,6 @@
 
   .clearfix
 
-  %em.note
-    - if @testing_ground.private?
-      %span.glyphicon.glyphicon-lock
-
-    Created by #{@testing_ground.user.name} on
-    %span.date{title: "last updated on #{@testing_ground.updated_at.to_formatted_s(:long)}"}
-      = @testing_ground.created_at.to_formatted_s(:long)
-
-    - if @testing_ground.parent_scenario_id
-      %span.sep
-        = link_to_etm_scenario('National scenario', @testing_ground.parent_scenario_id)
-
-    - if @testing_ground.scenario_id
-      %span.sep
-        = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
-
-    - if @testing_ground.market_model
-      %span.sep
-        = link_to @testing_ground.market_model.name, market_model_path(@testing_ground.market_model)
-
-    .clearfix
-
 #testing-ground
   .save_strategies.hidden
     - if @testing_ground.selected_strategy
@@ -138,3 +116,25 @@
 
   .clearfix
 
+.bottom
+  %em.note
+    - if @testing_ground.private?
+      %span.glyphicon.glyphicon-lock
+
+    Created by #{@testing_ground.user.name} on
+    %span.date{title: "last updated on #{@testing_ground.updated_at.to_formatted_s(:long)}"}
+      = @testing_ground.created_at.to_formatted_s(:long)
+
+    - if @testing_ground.parent_scenario_id
+      %span.sep
+        = link_to_etm_scenario('National scenario', @testing_ground.parent_scenario_id)
+
+    - if @testing_ground.scenario_id
+      %span.sep
+        = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
+
+    - if @testing_ground.market_model
+      %span.sep
+        = link_to @testing_ground.market_model.name, market_model_path(@testing_ground.market_model)
+
+    .clearfix
