@@ -11,7 +11,7 @@ class TestingGroundPolicy < ApplicationPolicy
 
   def show?
     super && ((show_topology? && show_market_model?) ||
-               record.user == user || user.admin?)
+               record.user == user || (user && user.admin?))
   end
 
   def show_market_model?
