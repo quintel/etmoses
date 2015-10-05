@@ -44,7 +44,18 @@ class TestingGround::Cloner
   end
 
   def clone_params
-    @params.merge(user_id: @testing_ground.user_id, public: false)
+    @params.merge(user_id: @testing_ground.user_id,
+                  name: name,
+                  public: false,
+                  original_id: @object.id)
+  end
+
+  def name
+    "#{@object.name} - Clone ##{clone_count}"
+  end
+
+  def clone_count
+    @object.class.where(original_id: @object.id).count + 1
   end
 
   def in_use?
