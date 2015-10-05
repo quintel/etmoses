@@ -148,6 +148,18 @@ RSpec.describe TopologiesController do
         expect(Topology.last.public).to eq(false)
       end
 
+      it "adds the clone number to the topology name" do
+        perform_clone
+
+        expect(Topology.last.name).to eq("Topology - Clone #1")
+      end
+
+      it 'remembers the original topology' do
+        perform_clone
+
+        expect(Topology.last.original).to eq(topology)
+      end
+
       it "belongs to the current user" do
         perform_clone
 

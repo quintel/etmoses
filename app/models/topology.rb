@@ -6,6 +6,7 @@ class Topology < ActiveRecord::Base
   DEFAULT_GRAPH = Rails.root.join('db/default_topology.yml').read
 
   belongs_to :user
+  belongs_to :original, class: Topology
 
   validates_presence_of :name
 
