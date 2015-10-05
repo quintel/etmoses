@@ -31,7 +31,7 @@ RSpec.describe MarketModelsController do
 
       get :show, id: market_model.id
 
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(new_user_session_path)
     end
   end
 end

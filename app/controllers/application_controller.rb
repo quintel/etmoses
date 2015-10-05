@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
     if request.format.json?
       render json: { message: t(:not_authorized) }, status: 403
     else
-      redirect_to(root_path, alert: t(:not_authorized))
+      redirect_to(new_user_session_path, alert: t(:not_authorized))
     end
   end
 
