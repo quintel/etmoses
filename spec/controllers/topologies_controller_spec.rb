@@ -197,4 +197,36 @@ RSpec.describe TopologiesController do
       end
     end
   end
+
+  describe "#destroy" do
+    let(:user){ FactoryGirl.create(:user) }
+    let!(:sign_in_user){ sign_in(:user, user) }
+
+    describe "lonely topology" do
+      let(:topology){ FactoryGirl.create(:topology, user: user) }
+
+      it "destroys the topology" do
+        delete :destroy, id: topology.id
+
+        expect(Topology.count).to eq(0)
+      end
+    end
+
+    describe "not so lonely topology" do
+      let(:topology){ FactoryGirl.create(:topology, user: user) }
+      let!(:les){ FactoryGirl.create(:testing_ground, topology: topology) }
+
+      it "doesn't destroy the topology" do
+        delete :destroy, id: topology.id
+
+        expect(Topology.count).to eq(1)
+      end
+
+      it "assigns the topology to the orphan user" do
+        delete :destroy, id: topology.id
+
+        expect(Topology.last.user).to eq(User.orphan)
+      end
+    end
+  end
 end
