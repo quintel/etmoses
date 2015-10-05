@@ -332,11 +332,6 @@ table.table.scenarios{
   width: 100px;
 }
 
-.container .tab-content{
-  padding-bottom: 20px;
-  border-bottom: 1px solid #DDD;
-}
-
 #profiles-table{
   margin-bottom: 30px;
 
@@ -440,12 +435,11 @@ select#stakeholders{
 
     .les-controls {
       margin-top: 20px;
+      margin-right: 65px;
 
       .main-buttons {
-        border-left: 1px solid #ccc;
         float: right;
-        margin: 0 0 0 10px;
-        padding: 0 0 0 10px;
+        padding: 0 0 0 8px;
 
         .glyphicon-pencil {
           margin: 0px 2px 0 0;
@@ -518,5 +512,9 @@ ul.nav-tabs > li.active > a.error {
     margin: 10px 0 0 0;
     padding: 6px 0 22px 0;
     border-top: 1px solid #ddd;
+  }
+
+  .load-strategies.btn-group{
+    padding: 0 0 0 5px;
   }
 }
