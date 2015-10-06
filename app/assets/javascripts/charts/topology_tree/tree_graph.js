@@ -6,7 +6,6 @@ var TreeGraph = (function(){
       maxViewerHeight = 500,
       viewerHeight    = 570,
       viewerWidth     = 500,
-      nodeIds         = 0,
       duration        = 250,
       nodeSize        = 50,
       ease            = 'cubic-out',
@@ -22,6 +21,8 @@ var TreeGraph = (function(){
         buildBase();
         transformData.call(this);
 
+        window.localSettings = new LocalSettings($(".testing_ground_id").text());
+
         ETHelper.eachNode([this.root], setAltLoad.bind(this));
 
         this.strategyToggler.addOnChangeListener();
@@ -32,6 +33,12 @@ var TreeGraph = (function(){
         // Center the diagram with an offset such that *children* of the root will
         // appear to be in the center.
         centerNode(this.root);
+
+        setLastClickedNode.call(this);
+
+        if(this.lastClicked){
+          this.showChart(this.lastClicked);
+        };
       };
     },
 
@@ -44,7 +51,6 @@ var TreeGraph = (function(){
 
       if(this.root){
         ETHelper.eachNode([this.root], setAltLoad.bind(this));
-        this.showChart(this.lastClicked);
         this.update(this.root);
       };
     },
@@ -68,7 +74,14 @@ var TreeGraph = (function(){
       }
       else{
         addNewLoadChartPlatform.call(this, uniqueId, d);
+        LoadChartHelper.updateBrush(d.id);
       };
+
+      LoadChartHelper.reloadChart(d.id);
+
+      toggleDomParts(d);
+
+      toggleSelectedNode(d.id);
     },
 
     update: function(source) {
@@ -79,6 +92,7 @@ var TreeGraph = (function(){
       //
       _self = this;
 
+      var nodeIds = 0;
       var newHeight, nodes, links, nodeEnter, nodeUpdate, nodeExit, link;
 
       // Fills the levelWidth area with all the nodes child counts
@@ -97,8 +111,9 @@ var TreeGraph = (function(){
       });
 
       // Update the nodes…
-      node = svgGroup.selectAll('g.node')
-        .data(nodes, function(d) { return d.id || (d.id = ++nodeIds); });
+      node = svgGroup.selectAll('g.node').data(nodes, function(d) {
+        return d.id || (d.id = ++nodeIds);
+      });
 
       node.classed('collapsed', function(d) { return d._children; });
 
@@ -278,7 +293,7 @@ var TreeGraph = (function(){
   };
 
   function setNodeClass(data){
-    var nodeClass = ("node " + data.stakeholder);
+    var nodeClass = ("node " + data.stakeholder + " n" + data.id);
     if(data.node_selected){ nodeClass += " selected" }
     return nodeClass;
   };
@@ -385,19 +400,16 @@ var TreeGraph = (function(){
   function click(d) {
     if (d3.event && d3.event.defaultPrevented) return; // click suppressed
 
-    toggleSelectedNode.call(this);
+    localSettings.set('current_chart_id', d.id);
 
     _self.lastClicked = d;
     _self.showChart(d);
+  };
 
-    $(".nav-tabs li a[href='#load']").tab('show');
-    LoadChartHelper.reloadChart(d.id);
-
+  function toggleDomParts(d){
     $('#technologies .row-fluid, p.info').hide();
     showTechnologies(d);
-
     setHeader(d);
-    enableCsvDownloadCurveButton(d);
   };
 
   function showTechnologies(d){
@@ -416,6 +428,8 @@ var TreeGraph = (function(){
   function setHeader(d){
     $("h1 span").removeClass("hidden");
     $("h1 span.current-chart").text(d.name);
+
+    enableCsvDownloadCurveButton(d);
   };
 
   function enableCsvDownloadCurveButton(d){
@@ -441,15 +455,15 @@ var TreeGraph = (function(){
     });
   };
 
-  function toggleSelectedNode(){
+  function toggleSelectedNode(id){
     d3.selectAll(".overlay circle, .overlay text").style("opacity", 0.3);
     d3.selectAll(".overlay text").style({
       "font-weight":     "normal",
       "text-decoration": "none"
     });
 
-    d3.select(this).select("circle").style("opacity", 1.0);
-    d3.select(this).select("text").style({
+    d3.select(".overlay g.node.n" + id).select("circle").style("opacity", 1.0);
+    d3.select(".overlay g.node.n" + id).select("text").style({
       "opacity":         1.0,
       "font-weight":     "bold"
     });
@@ -507,11 +521,25 @@ var TreeGraph = (function(){
     });
   };
 
+  function setLastClickedNode(){
+    var settings = window.localSettings.getAll();
+    if(settings && settings.current_chart_id){
+      var currentNode;
+      ETHelper.eachNode([this.root], function(node) {
+        if(node.id == settings.current_chart_id){
+          currentNode = node;
+          return false;
+        }
+      });
+      this.lastClicked = currentNode;
+    };
+  };
+
   function TreeGraph(_url, _container){
     this.strategyToggler  = new StrategyToggler(this)
 
-    this.url              = _url;
-    container             = _container;
+    this.url      = _url;
+    container     = _container;
 
     tree          = createD3Tree();
     diagonal      = createD3Diagonal();
