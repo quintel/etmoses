@@ -16,6 +16,7 @@ LoadChartHelper = {
   },
 
   updateBrush: function(currentChartId){
+    this.globalBrushExtent = localSettings.get('global_brush_extent')
     if(this.globalBrushExtent){
       this.setBrushExtent();
       this.reloadChart(currentChartId);

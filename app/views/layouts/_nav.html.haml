@@ -60,6 +60,9 @@
             %li
               = link_to 'Show all', market_models_path
 
-    - if current_user
-      .pull-right
+    .pull-right
+      - if current_user
         = link_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-primary", title: "Signed in as: #{current_user.email}"
+      - else
+        = link_to "Sign in", new_user_session_path, class: "btn btn-primary"
+

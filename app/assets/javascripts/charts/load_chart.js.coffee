@@ -167,6 +167,7 @@ class LoadChart
 
   setGlobalBrushFocus: ()->
     LoadChartHelper.globalBrushExtent = d3.event.target.extent()
+    localSettings.set('global_brush_extent', d3.event.target.extent());
 
   loadChartLocation: ->
     parseInt(@intoSelector.replace(/\D/g, ''))
