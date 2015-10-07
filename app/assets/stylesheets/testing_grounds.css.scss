@@ -29,6 +29,7 @@ ul.testing-grounds {
 
 #testing-ground{
   margin: 5px 0 20px 0;
+  position: relative;
 }
 
 .testing-ground-view {
@@ -392,9 +393,13 @@ label.disabled{
 
 select#stakeholders{
   width: 300px;
-  margin-top: -45px;
   margin-left: 12px;
+  top: 575px;
   position: absolute;
+}
+
+select#stakeholders[disabled]{
+  display: none;
 }
 
 #business_case_target_area{

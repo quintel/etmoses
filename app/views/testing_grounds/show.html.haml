@@ -95,10 +95,8 @@
     %span.loading-spinner
       = image_tag 'wait.gif'
 
-.clearfix
-
-#collapse-stakeholders
-  = select_tag("stakeholders", options_for_stakeholders, {include_blank: 'Select stakeholder', class: "form-control", disabled: 'disabled'})
+  #collapse-stakeholders
+    = select_tag("stakeholders", options_for_stakeholders, {include_blank: 'Select stakeholder', class: "form-control", disabled: 'disabled'})
 
 .clearfix
 

@@ -8,6 +8,15 @@ module FakeLoadManagement
     }
   end
 
+  def self.caching_graph(size = 1)
+    { "name"=>"HV",
+      "children"=>(size.times.map { |i|
+        { "name"=>"CONGESTED_END_POINT_#{i}",
+          "capacity"=>100.0 }
+      })
+    }
+  end
+
   def self.strategies(options = {})
     {
       "storage"                 => (options[:storage] || false),

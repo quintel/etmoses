@@ -1,5 +1,5 @@
 var StrategyToggler = (function(){
-  var loadChart, applyStrategyButton, businessCaseTable, savedStrategies;
+  var loadChart, applyStrategyButton, businessCaseTable, savedStrategies, changedStrategy;
   var sliderSettings = {
     focus: true,
     formatter: function(value){
@@ -64,6 +64,7 @@ var StrategyToggler = (function(){
       $(".load-strategies input[type=checkbox]").each(function(){
         if($(this).is(":checked")){
           clearStrategies = false;
+          return false;
         };
       });
       return clearStrategies;
@@ -73,7 +74,7 @@ var StrategyToggler = (function(){
   function showSlider(){
     var sliderWrapper = $(this).parents('a').find(".slider-wrapper");
 
-    sliderWrapper.toggleClass("hidden", ! $(this).is(":checked"));
+    sliderWrapper.toggleClass("hidden", !$(this).is(":checked"));
   };
 
   function buildMultiSelect(){
@@ -94,7 +95,7 @@ var StrategyToggler = (function(){
   };
 
   function storeStrategies(){
-    if(applyStrategyButton.data('isAllowedToStoreStrategies')){
+    if(applyStrategyButton.data('isAllowedToStoreStrategies') && changedStrategy){
       $.ajax({
         type: "POST",
         url:  applyStrategyButton.data('url'),
@@ -107,9 +108,19 @@ var StrategyToggler = (function(){
 
   function updateStrategies(){
     var appliedStrategies = StrategyHelper.getStrategies();
+        changedStrategy = false;
+
+    $(".load-strategies input[type=checkbox]").each(function(){
+      if(appliedStrategies[$(this).val()] != $(this).is(":checked")){
+        changedStrategy = true;
+        return false;
+      };
+    });
+
     $(".load-strategies input[type=checkbox]").each(function(){
       appliedStrategies[$(this).val()] = $(this).is(":checked");
     })
+
     $(".save_strategies.hidden").text(JSON.stringify(appliedStrategies));
   };
 
@@ -119,6 +130,17 @@ var StrategyToggler = (function(){
 
     if (loadChart.strategyLoads === true) {
       return false;
+    }
+    else if(!StrategyHelper.anyStrategies()){
+      this.toggleLoading();
+
+      if(changedStrategy){
+        LoadChartHelper.forceReload = true
+        loadChart.strategyShown = false;
+        loadChart.reloadLast();
+
+        pollBusinessCase.call(this);
+      };
     }
     else {
       loadChart.strategyLoads = true;
@@ -131,7 +153,7 @@ var StrategyToggler = (function(){
   function pollTree(){
     new Poller({
       url: loadChart.url,
-      data: { strategies: StrategyHelper.getStrategies() }
+      data: { strategies: StrategyHelper.getStrategies(), clear_cache: changedStrategy }
     }).poll().done(updateLoadChart.bind(this));
   };
 
@@ -169,11 +191,3 @@ var StrategyToggler = (function(){
   return StrategyToggler;
 })();
 
-var StrategyHelper = {
-  getStrategies: function(){
-    var strategies = JSON.parse($(".save_strategies.hidden").text());
-        strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
-
-    return strategies;
-  }
-};

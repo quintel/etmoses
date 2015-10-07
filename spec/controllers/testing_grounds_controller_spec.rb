@@ -156,7 +156,7 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#data.json" do
-    describe "while signing in" do
+    describe "while signed in" do
       let!(:sign_in_user){ sign_in(user) }
 
       it "shows the data of a testing ground" do
@@ -176,7 +176,7 @@ RSpec.describe TestingGroundsController do
       end
     end
 
-    describe "while not signing in" do
+    describe "while not signed in" do
       it "shows the data of a testing ground" do
         testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 

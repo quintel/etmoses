@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Calculation::Context do
-  let(:context) { Calculation::Context.new(graph) }
+  let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+  let(:context) { Calculation::Context.new(graph, testing_ground) }
   let(:graph)   { Turbine::Graph.new }
 
   context 'with a graph containing no profiles' do

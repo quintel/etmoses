@@ -11,6 +11,7 @@ class TestingGround::Cloner
     in_use? ? clone_object : update_attributes
 
     clear_job
+    clear_cache
   end
 
   def errors
@@ -23,6 +24,11 @@ class TestingGround::Cloner
     if @errors.nil? && @testing_ground.business_case
       @testing_ground.business_case.clear_job!
     end
+  end
+
+  # Private: Clears all cache
+  def clear_cache
+    NetworkCache::Destroyer.from(@testing_ground).destroy_all
   end
 
   def clone_object

@@ -74,7 +74,7 @@ class TestingGroundsController < ResourceController
   # POST /testing_grounds/:id/data
   def data
     begin
-      render json: @testing_ground.to_json(params[:strategies])
+      render json: @testing_ground.to_json(params.slice(:strategies, :clear_cache))
     rescue StandardError => ex
       notify_airbrake(ex) if defined?(Airbrake)
 
@@ -115,6 +115,8 @@ class TestingGroundsController < ResourceController
     if @testing_ground.business_case
       @testing_ground.business_case.clear_job!
     end
+
+    NetworkCache::Destroyer.from(@testing_ground).destroy_all
 
     respond_with(@testing_ground)
   end

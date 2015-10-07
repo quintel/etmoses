@@ -22,7 +22,6 @@ RSpec.describe TestingGround::Cloner do
 
       expect(TestingGround.last.topology).to eq(topology)
     end
-
   end
 
   describe "clones a topology only if it's valid" do
@@ -80,6 +79,17 @@ RSpec.describe TestingGround::Cloner do
       cloner.clone
 
       expect(cloner.errors).to eq(["Graph (<unknown>): could not find expected ':' while scanning a simple key at line 10 column 1"])
+    end
+  end
+
+  describe "cloning clears the testing grounds cache" do
+    let(:params){ { name: "Topology clone" } }
+    let!(:cache){ NetworkCache::Writer.from(testing_ground).write('lv1', [0.0] * 35040) }
+
+    it "destroys the cache that's written" do
+      cloner.clone
+
+      expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)
     end
   end
 end

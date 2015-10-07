@@ -37,19 +37,14 @@ class TestingGround < ActiveRecord::Base
       technologies: technology_profile.as_json }
   end
 
-  # Public: Creates a Turbine graph representing the graph and technologies
-  # defined in the topology.
-  #
-  # Returns a Turbine::Graph.
-  def to_graph(frame = 0)
-    TreeToGraph.convert(topology.graph, technology_profile, frame)
-  end
-
   # Public: Converts the testing ground to a Network::Graph and calculated the
   # loads for the entire year.
   #
   # Returns the Network::Graph.
   def to_calculated_graph(opts = {})
+    strategies  = opts[:strategies] || {}
+    clear_cache = opts[:clear_cache]
+
     calculators = [
       Calculation::TechnologyLoad,
       Calculation::PullConsumption,
@@ -57,8 +52,12 @@ class TestingGround < ActiveRecord::Base
     ]
 
     context = calculators
-      .reduce(to_calculation_context(opts.symbolize_keys)) do |cxt, calculator|
-        calculator.call(cxt)
+      .reduce(to_calculation_context(strategies.symbolize_keys)) do |cxt, calculator|
+        if NetworkCache::Validator.from(self, strategies).valid?(clear_cache)
+          NetworkCache::Fetcher.call(cxt)
+        else
+          calculator.call(cxt)
+        end
       end
 
     context.graph
@@ -69,7 +68,15 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
-    Calculation::Context.new(to_graph, options)
+    Calculation::Context.new(to_graph, self, options)
+  end
+
+  # Public: Creates a Turbine graph representing the graph and technologies
+  # defined in the topology.
+  #
+  # Returns a Turbine::Graph.
+  def to_graph(frame = 0)
+    TreeToGraph.convert(topology.graph, technology_profile, frame)
   end
 
   # Public: Given a calculated graph, returns the technologies JSON, injecting

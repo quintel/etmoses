@@ -8,12 +8,21 @@ var SaveAll = (function () {
         window.location.replace(this.saveAllButton.data('url'));
     }
 
+    function editedLes() {
+        return $("ul.nav-tabs li a.editing").length > 0;
+    }
+
     function click(e) {
         e.preventDefault();
 
         this.completeCount = 0;
         this.saveAllButton.addClass("disabled");
-        this.submitForms(finishAndRedirect);
+
+        if (editedLes()) {
+            this.submitForms(finishAndRedirect.bind(this));
+        } else {
+            finishAndRedirect.call(this);
+        }
     }
 
     function done(doneCallback) {
@@ -30,10 +39,11 @@ var SaveAll = (function () {
         },
 
         submitForms: function (success) {
-            $(".remote form").each(function (i, form) {
-                $(form).submit();
-                $(form).on("ajax:success", done.bind(this, success));
-            }.bind(this));
+            var self = this;
+            $(".remote form").each(function (form) {
+                $(this).submit();
+                $(this).on("ajax:success", done.bind(self, success));
+            });
         }
     };
 
@@ -58,6 +68,7 @@ $(document).on("page:change", function () {
             tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
 
         tabHeader.addClass("editing");
+        $(this).addClass("editing");
     });
 
     window.saveAll = new SaveAll();
