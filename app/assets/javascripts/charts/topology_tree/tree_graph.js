@@ -36,9 +36,7 @@ var TreeGraph = (function(){
 
         setLastClickedNode.call(this);
 
-        if(this.lastClicked){
-          this.showChart(this.lastClicked);
-        };
+        this.reloadLast();
       };
     },
 
@@ -52,6 +50,13 @@ var TreeGraph = (function(){
       if(this.root){
         ETHelper.eachNode([this.root], setAltLoad.bind(this));
         this.update(this.root);
+        this.reloadLast();
+      };
+    },
+
+    reloadLast: function(){
+      if(this.lastClicked){
+        this.showChart(this.lastClicked);
       };
     },
 
