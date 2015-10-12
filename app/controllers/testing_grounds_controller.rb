@@ -17,8 +17,6 @@ class TestingGroundsController < ResourceController
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
   skip_before_filter :authenticate_user!, only: [:show, :data, :index]
 
-  after_filter :update_strategies, only: :data
-
   # GET /topologies
   def index
     @testing_grounds = policy_scope(TestingGround).latest_first
@@ -198,12 +196,6 @@ class TestingGroundsController < ResourceController
     @testing_ground = TestingGround.find(params[:id])
     session[:testing_ground_id] = params[:id]
     authorize @testing_ground
-  end
-
-  def update_strategies
-    if params[:strategies]
-      @testing_ground.selected_strategy.update_attributes(strategy_params)
-    end
   end
 
   # Internal: Before filter which loads models required for export-to-ETEngine

@@ -1,55 +1,48 @@
-var TopologyTree = (function(){
-  var url, container, treeGraph, strategies;
+/*globals StrategyHelper,ErrorDisplayer,TreeFetcher,TreeGraph*/
+var TopologyTree = (function () {
+    'use strict';
 
-  TopologyTree.prototype = {
-    showTree: function() {
-      var id = $(".testing_ground_id").text();
-
-      $("a.dropdown-toggle").first().addClass("disabled");
-      $("#collapse-stakeholders select").prop('disabled', true);
-
-      treeGraph.strategyToggler.toggleLoading();
-      treeGraph.strategyToggler.setStrategies();
-
-      getTree({}, d3Callback);
-
-      if(StrategyHelper.anyStrategies()){
-        getTree({ strategies: StrategyHelper.getStrategies() }, updateLoadChart);
-      }
-      else{
-        treeGraph.initialStrategyCallDone = true;
-        treeGraph.strategyToggler.toggleLoading();
-      };
+    function updateLoadChart(treeDataWithStrategies) {
+        this.treeGraph.strategyToggler.updateLoadChartWithStrategies(treeDataWithStrategies);
+        this.treeGraph.initialStrategyCallDone = true;
+        this.treeGraph.showGraph();
     }
-  };
 
-  function getTree(data, callback){
-    new Poller({ url: url, data: data }).poll().done(callback).fail(failCallback);
-  };
+    function setInitialLoadChart(treeData) {
+        $("#collapse-stakeholders select").prop('disabled', false);
 
-  function updateLoadChart(treeDataWithStrategies){
-    treeGraph.strategyToggler.updateLoadChartWithStrategies(treeDataWithStrategies);
-    treeGraph.initialStrategyCallDone = true;
-    treeGraph.showGraph();
-  };
+        if (!StrategyHelper.anyStrategies()) {
+            this.treeGraph.initialStrategyCallDone = true;
+            this.treeGraph.strategyToggler.toggleLoading();
+        }
 
-  function d3Callback(treeData){
-    $("#collapse-stakeholders select").prop('disabled', false);
+        this.treeGraph.initialCallDone = true;
+        this.treeGraph.showGraph(treeData.graph);
+    }
 
-    treeGraph.initialCallDone = true;
-    treeGraph.showGraph(treeData.graph);
-  };
+    TopologyTree.prototype = {
+        showTree: function () {
+            $("a.dropdown-toggle").first().addClass("disabled");
+            $("#collapse-stakeholders select").prop('disabled', true);
 
-  function failCallback(treeData){
-    new ErrorDisplayer(treeData.responseJSON, container).displayError();
-  };
+            this.treeGraph.strategyToggler.toggleLoading();
+            this.treeGraph.strategyToggler.setStrategies();
 
-  function TopologyTree(_url, _container){
-    url       = _url;
-    container = _container;
-    treeGraph = new TreeGraph(url, container);
-  };
+            new TreeFetcher(this.url).fetch({}, setInitialLoadChart.bind(this));
 
-  return TopologyTree;
-})();
+            if (StrategyHelper.anyStrategies()) {
+                new TreeFetcher(this.url).fetch({
+                    strategies: StrategyHelper.getStrategies()
+                }, updateLoadChart.bind(this));
+            }
+        }
+    };
 
+    function TopologyTree(url, container) {
+        this.url = url;
+        this.container = container;
+        this.treeGraph = new TreeGraph(url, container);
+    }
+
+    return TopologyTree;
+}());

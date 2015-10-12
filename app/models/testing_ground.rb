@@ -10,6 +10,7 @@ class TestingGround < ActiveRecord::Base
   belongs_to :topology
   belongs_to :market_model
   belongs_to :user
+  belongs_to :job, class: Delayed::Job
 
   has_one :selected_strategy
   has_one :business_case

@@ -4,11 +4,7 @@ require 'rails_helper'
 # Separate tests for load management issues
 #
 
-RSpec.describe TestingGroundsController do
-  let(:user){ FactoryGirl.create(:user) }
-
-  let!(:sign_in_user) { sign_in(:user, user) }
-
+RSpec.describe TestingGround do
   let(:topology_graph){ FakeLoadManagement.topology_graph }
 
   let(:topology){ FactoryGirl.create(:topology, graph: topology_graph) }
@@ -17,6 +13,11 @@ RSpec.describe TestingGroundsController do
     FactoryGirl.create(:testing_ground, technology_profile: technology_profile,
                                         topology: topology)
   }
+
+  def calculate(strategies = {})
+    fake_strategies = FakeLoadManagement.strategies(strategies)
+    GraphToTree.convert(testing_ground.to_calculated_graph(fake_strategies)).fetch(:load)
+  end
 
   # Testing of the buffering of local PV excess in heat pumps
   #
@@ -66,10 +67,7 @@ RSpec.describe TestingGroundsController do
 
       describe "#buffering_heat_pumps" do
         it "no strategy applied" do
-          get :data, format: :json, id: testing_ground.id,
-                    strategies: FakeLoadManagement.strategies
-
-          results = JSON.parse(response.body)['graph']['load']
+          results = calculate
 
           expected = [
             0.0, 0.0,
@@ -88,11 +86,7 @@ RSpec.describe TestingGroundsController do
         end
 
         it "buffering heat pumps strategy applied" do
-          get :data, format: :json, id: testing_ground.id,
-                    strategies: FakeLoadManagement.strategies(buffering_space_heating: true)
-
-          # expect(JSON.parse(response.body)["graph"]["load"]).to eq([1.0] * 16)
-          results = JSON.parse(response.body)['graph']['load']
+          results = calculate(buffering_space_heating: true)
 
           expected = [
             # Buffering limited by capacity. 2x 1.0 kW = 0.5 kWh stored.
@@ -119,10 +113,7 @@ RSpec.describe TestingGroundsController do
 
       describe "#buffering_heat_pumps" do
         it "no strategy applied" do
-          get :data, format: :json, id: testing_ground.id,
-                    strategies: FakeLoadManagement.strategies
-
-          results = JSON.parse(response.body)['graph']['load']
+          results = calculate
 
           expected = [
             0.0, 0.0,
@@ -141,10 +132,7 @@ RSpec.describe TestingGroundsController do
         end
 
         it "buffering heat pumps strategy applied" do
-          get :data, format: :json, id: testing_ground.id,
-                    strategies: FakeLoadManagement.strategies(buffering_space_heating: true)
-
-          results = JSON.parse(response.body)['graph']['load']
+          results = calculate(buffering_space_heating: true)
 
           expected = [
             # Buffer 0.5 kW in the first hour. This fills the buffers 0.5 kWh
@@ -205,20 +193,14 @@ RSpec.describe TestingGroundsController do
       let(:inflex_curve){ [1.0] * 15 }
 
       it "applies no postponing of base load - just returns the load profile" do
-        get :data, format: :json, id: testing_ground.id,
-                  strategies: FakeLoadManagement.strategies
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
+        expect(calculate).to eq([
           1.2, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
           1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ])
       end
 
       it "applies postponing of base load" do
-        get :data, format: :json, id: testing_ground.id,
-                  strategies: FakeLoadManagement.strategies(postponing_base_load: true)
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
+        expect(calculate(postponing_base_load: true)).to eq([
           1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0,
           1.0, 1.0, 1.0, 1.0, 1.2, 1.0, 1.0
         ])
@@ -230,10 +212,7 @@ RSpec.describe TestingGroundsController do
       let(:inflex_curve){ [1.0, 1.0, 1.0, 0.6, [1.0] * 13].flatten }
 
       it "applies postponing of base load" do
-        get :data, format: :json, id: testing_ground.id,
-                  strategies: FakeLoadManagement.strategies(postponing_base_load: true)
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
+        expect(calculate(postponing_base_load: true)).to eq([
           1.0, 1.0, 1.0, 0.8, 1.0, 1.0, 1.0, 1.0, 1.0,
           1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
         ])
@@ -245,10 +224,7 @@ RSpec.describe TestingGroundsController do
       let(:inflex_curve){ [1.0, 1.0, 1.0, 0.9, 0.9, [0.0] * 12].flatten }
 
       it "applies postponing of base load" do
-        get :data, format: :json, id: testing_ground.id,
-                  strategies: FakeLoadManagement.strategies(postponing_base_load: true)
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
+        expect(calculate(postponing_base_load: true)).to eq([
           1.0, 1.0, 1.0, 0.9, 0.9, 0.2, 0.0, 0.0, 0.0,
           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
         ])
@@ -260,10 +236,7 @@ RSpec.describe TestingGroundsController do
       let(:inflex_curve){ [1.0] * 4 }
 
       it "applies postponing in the final frame" do
-        get :data, format: :json, id: testing_ground.id,
-          strategies: FakeLoadManagement.strategies(postponing_base_load: true)
-
-        expect(JSON.parse(response.body)["graph"]["load"]).to eq([
+        expect(calculate(postponing_base_load: true)).to eq([
           1.0, 1.0, 1.0, 1.2
         ])
       end
@@ -307,10 +280,7 @@ RSpec.describe TestingGroundsController do
     }
 
     it "applies no saving of base load - just returns the load profile" do
-      get :data, format: :json, id: testing_ground.id,
-                 strategies: FakeLoadManagement.strategies
-
-      expect(JSON.parse(response.body)["graph"]["load"]).to eq([1.0, 2.0, 3.0])
+      expect(calculate).to eq([1.0, 2.0, 3.0])
     end
 
     it "applies saving of base load (i.e. shaving of the flex profile)" do
@@ -318,17 +288,11 @@ RSpec.describe TestingGroundsController do
       testing_ground.selected_strategy.update_attributes(old_strategies)
       NetworkCache::Writer.from(testing_ground, old_strategies).write
 
-      get :data, format: :json, id: testing_ground.id,
-                 strategies: FakeLoadManagement.strategies(saving_base_load: true)
-
-      expect(JSON.parse(response.body)["graph"]["load"]).to eq([1.0, 1.8, 2.7])
+      expect(calculate(saving_base_load: true)).to eq([1.0, 1.8, 2.7])
     end
 
     it "updates the saved strategies" do
-      get :data, format: :json, id: testing_ground.id,
-                 strategies: FakeLoadManagement.strategies(saving_base_load: true)
-
-      expect(testing_ground.selected_strategy.reload.saving_base_load).to eq(true)
+      expect(calculate(saving_base_load: true)).to eq([1.0, 1.8, 2.7])
     end
   end
 end
