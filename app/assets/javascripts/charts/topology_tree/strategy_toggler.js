@@ -88,19 +88,21 @@ var StrategyToggler = (function(){
     for(var strategy in savedStrategies){
       if(savedStrategies[strategy]){
         selected.push(strategy);
-      }
+      };
     };
     return selected;
   };
 
   function storeStrategies(){
-    $.ajax({
-      type: "POST",
-      url:  applyStrategyButton.data('url'),
-      data: {
-        strategies: StrategyHelper.getStrategies()
-      }
-    });
+    if(applyStrategyButton.data('isAllowedToStoreStrategies')){
+      $.ajax({
+        type: "POST",
+        url:  applyStrategyButton.data('url'),
+        data: {
+          strategies: StrategyHelper.getStrategies()
+        }
+      });
+    };
   };
 
   function updateStrategies(){
