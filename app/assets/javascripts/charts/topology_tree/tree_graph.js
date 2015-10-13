@@ -61,32 +61,7 @@ var TreeGraph = (function(){
     },
 
     showChart: function(d) {
-      reloadCharts();
-
-      if(d === undefined){
-        return false;
-      };
-
-      var uniqueId = ("chart-id-" + d.id);
-      var existingLoadPlatform = $(".load-graph ." + uniqueId);
-
-      $(".load-graph .chart").hide();
-
-      if(existingLoadPlatform.length > 0){
-        existingLoadPlatform.show();
-        LoadChartHelper.updateBrush(d.id);
-        LoadChartHelper.toggleCapacity(d.id);
-      }
-      else{
-        addNewLoadChartPlatform.call(this, uniqueId, d);
-        LoadChartHelper.updateBrush(d.id);
-      };
-
-      LoadChartHelper.reloadChart(d.id);
-
-      toggleDomParts(d);
-
-      toggleSelectedNode(d.id);
+      new ChartShower(this, d).reload().show();
     },
 
     update: function(source) {
@@ -377,30 +352,6 @@ var TreeGraph = (function(){
     zoomListener.translate([x, y]);
   };
 
-  function reloadCharts(){
-    if(LoadChartHelper.forceReload){
-      $(".load-graph .chart").remove();
-      LoadChartHelper.forceReload = false;
-    };
-  };
-
-  function addNewLoadChartPlatform(uniqueId, d){
-    var loadPlatform = $("<div>").addClass(uniqueId).addClass("chart");
-    loadPlatform.html('<svg></svg>');
-    $(".load-graph").prepend(loadPlatform);
-
-    if (this.strategyLoads && this.strategyShown) {
-      new LoadChart([
-        { values: d.altLoad, name: d.name + ' (with strategies)', color: '#95BB95', area: true },
-        { values: d.load,    name: d.name, area: false, color: '#1F77B4' }
-      ], d.capacity, 'default').render('.' + uniqueId + ' svg')
-    } else {
-      new LoadChart([
-        { values: d.load, name: d.name, area: true, color: '#1F77B4' }
-      ], d.capacity, 'default').render('.' + uniqueId + ' svg')
-    }
-  };
-
   // Toggle children on click.
   function click(d) {
     if (d3.event && d3.event.defaultPrevented) return; // click suppressed
@@ -409,12 +360,6 @@ var TreeGraph = (function(){
 
     _self.lastClicked = d;
     _self.showChart(d);
-  };
-
-  function toggleDomParts(d){
-    $('#technologies .row-fluid, p.info').hide();
-    showTechnologies(d);
-    setHeader(d);
   };
 
   function showTechnologies(d){
@@ -457,20 +402,6 @@ var TreeGraph = (function(){
 
       CSV.download(loads.join("\n"),
         (d.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
-    });
-  };
-
-  function toggleSelectedNode(id){
-    d3.selectAll(".overlay circle, .overlay text").style("opacity", 0.3);
-    d3.selectAll(".overlay text").style({
-      "font-weight":     "normal",
-      "text-decoration": "none"
-    });
-
-    d3.select(".overlay g.node.n" + id).select("circle").style("opacity", 1.0);
-    d3.select(".overlay g.node.n" + id).select("text").style({
-      "opacity":         1.0,
-      "font-weight":     "bold"
     });
   };
 
