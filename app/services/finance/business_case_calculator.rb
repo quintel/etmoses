@@ -12,10 +12,21 @@ module Finance
     end
 
     def stakeholders
-      Stakeholder.all.sort
+      @stakeholders ||= (topology_stakeholders.compact +
+                         market_model_stakeholders.flatten).uniq.sort
     end
 
     private
+
+    def topology_stakeholders
+      network.nodes.map{|n| n.get(:stakeholder) }
+    end
+
+    def market_model_stakeholders
+      @testing_ground.market_model.interactions.map do |interaction|
+        [interaction["stakeholder_from"], interaction["stakeholder_to"]]
+      end
+    end
 
     def cells(column_header)
       stakeholders.map do |stakeholder|

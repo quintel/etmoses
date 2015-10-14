@@ -22,7 +22,33 @@ RSpec.describe Finance::BusinessCaseComparator do
   it "compares two business cases" do
     compare = Finance::BusinessCaseComparator.new(business_case, other_business_case).compare
 
-    expect(compare).to eq([[3, 2, 0, 1], [1, 3, 0, -2]]);
+    expect(compare).to eq([
+      { :stakeholder=>"aggregator",
+        :incoming=>0,
+        :outgoing=>1,
+        :freeform=>nil,
+        :total=>-1,
+        :compare=>{
+          :stakeholder=>"aggregator",
+          :incoming=>3,
+          :outgoing=>2,
+          :freeform=>nil,
+          :total=>1
+        }
+      },
+      { :stakeholder=>"cooperation",
+        :incoming=>1,
+        :outgoing=>0,
+        :freeform=>nil,
+        :total=>1,
+        :compare=>{
+          :stakeholder=>"cooperation",
+          :incoming=>1,
+          :outgoing=>3,
+          :freeform=>nil,
+          :total=>-2
+        }
+      }])
   end
 
   context 'when a business case is missing a stakeholder' do
@@ -35,7 +61,30 @@ RSpec.describe Finance::BusinessCaseComparator do
         business_case, other_business_case
       ).compare
 
-      expect(compare).to eq([[3, 1, 0, 2], [0, 0, 0, 0]]);
+      expect(compare).to eq([
+        { :stakeholder=>"aggregator", :incoming=>0, :outgoing=>1, :freeform=>nil, :total=>-1,
+         :compare=>{:stakeholder=>"aggregator", :incoming=>3, :outgoing=>1, :freeform=>nil, :total=>2}},
+        { :stakeholder=>"cooperation", :incoming=>1, :outgoing=>0, :freeform=>nil, :total=>1, :compare=>nil}
+      ]);
+    end
+  end
+
+  context 'when a business case is missing a stakeholder' do
+    let(:other_financials){
+      [ {"no_stakeholder" =>[1, 3]}, {"aggregator" =>[1, 3]}]
+    }
+
+    it "compares two business cases" do
+      compare = Finance::BusinessCaseComparator.new(
+        business_case, other_business_case
+      ).compare
+
+      expect(compare).to eq([
+        { :stakeholder=>"aggregator", :incoming=>0, :outgoing=>1, :freeform=>nil, :total=>-1,
+          :compare=>{:stakeholder=>"aggregator", :incoming=>1, :outgoing=>6, :freeform=>nil, :total=>-5}},
+        { :stakeholder=>"cooperation", :incoming=>1, :outgoing=>0, :freeform=>nil, :total=>1, :compare=>nil},
+        { :stakeholder => "no_stakeholder", :compare=>{:stakeholder=>"no_stakeholder", :incoming=>3, :outgoing=>2, :freeform=>nil, :total=>1}}
+      ]);
     end
   end
 end

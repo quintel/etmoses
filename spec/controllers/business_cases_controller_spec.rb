@@ -64,16 +64,12 @@ RSpec.describe BusinessCasesController do
     end
 
     it "visits compare path (to compare business cases)" do
-      get :compare_with, testing_ground_id: testing_ground.id,
+      xhr :get, :compare_with, testing_ground_id: testing_ground.id,
                          comparing_testing_ground_id: comparing_testing_ground.id,
-                         id: business_case.id
+                         id: business_case.id,
+                         format: :js
 
-      expect(JSON.parse(response.body)).to eq(
-        [ [0, 7, 0, -7], [1, 0, 0, 1],
-          [1, 0, 0, 1], [1, 0, 0, 1],
-          [1, 0, 0, 1], [1, 0, 0, 1],
-          [1, 0, 0, 1]]
-      )
+      expect(controller.instance_variable_get("@business_case_rows")).to_not be_blank
     end
   end
 

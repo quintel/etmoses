@@ -1,11 +1,6 @@
 class LoadProfileCategory < ActiveRecord::Base
+  include Hierarchy
+  extend HierarchySort
+
   has_many :load_profiles
-
-  def parent
-    self.class.find_by_id(self.parent_id)
-  end
-
-  def children
-    self.class.where(parent_id: self.id)
-  end
 end

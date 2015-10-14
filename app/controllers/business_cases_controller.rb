@@ -34,10 +34,9 @@ class BusinessCasesController < ResourceController
 
   def compare_with
     begin
-      testing_ground = TestingGround.find(params[:comparing_testing_ground_id])
-
-      render json: Finance::BusinessCaseComparator.new(
-        @business_case, testing_ground.business_case).compare
+      @comparing_testing_ground = TestingGround.find(params[:comparing_testing_ground_id])
+      @business_case_rows = Finance::BusinessCaseComparator.new(
+        @business_case, @comparing_testing_ground.business_case).compare
     rescue ActiveRecord::RecordNotFound
       render json: { error: 'Testing ground not found' }, status: :unprocessable_entity
     end

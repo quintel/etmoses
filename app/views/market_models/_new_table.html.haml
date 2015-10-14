@@ -12,19 +12,19 @@
     - market_model.interactions.each do |interaction|
       %tr
         %td.editable.select
-          %select.form-control
+          %select.form-control.from
             = stakeholder_options(selected: interaction["stakeholder_from"])
 
         %td.editable.select
-          %select.form-control
+          %select.form-control.to
             = stakeholder_options(selected: interaction["stakeholder_to"])
 
         %td.editable.select
-          %select.form-control
+          %select.form-control.foundation
             = foundation_options(selected: interaction["foundation"])
 
         %td.editable.select
-          %select.form-control
+          %select.form-control.applied
             = stakeholder_options(selected: interaction["applied_stakeholder"])
 
         %td.editable.tariff-type

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151008084212) do
+ActiveRecord::Schema.define(version: 20151014121349) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -117,6 +117,11 @@ ActiveRecord::Schema.define(version: 20151008084212) do
     t.float   "capping_fraction",        limit: 24, default: 1.0
   end
 
+  create_table "stakeholders", force: true do |t|
+    t.string  "name"
+    t.integer "parent_id"
+  end
+
   create_table "technologies", force: true do |t|
     t.string  "key",              limit: 100,                null: false
     t.string  "name",             limit: 100
@@ -153,6 +158,8 @@ ActiveRecord::Schema.define(version: 20151008084212) do
     t.integer  "market_model_id"
     t.boolean  "public",                              default: true, null: false
     t.integer  "parent_scenario_id"
+    t.integer  "job_id"
+    t.datetime "job_finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",               limit: 100,      default: "",   null: false

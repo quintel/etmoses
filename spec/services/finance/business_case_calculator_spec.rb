@@ -2,8 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Finance::BusinessCaseCalculator do
   describe "basic business case" do
-    let(:market_model_interactions){ MarketModels::Default.interactions }
-
     let(:market_model){
       FactoryGirl.create(:market_model, interactions: market_model_interactions)
     }
@@ -18,25 +16,47 @@ RSpec.describe Finance::BusinessCaseCalculator do
 
     let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
 
-    it "determines the correct headers" do
-      expect(business_case.stakeholders).to eq(Stakeholder.all.sort)
+    describe "calculation" do
+      let(:market_model_interactions){ MarketModels::Default.interactions }
+
+      it "determines the correct headers" do
+        expect(business_case.stakeholders).to eq(["customer", "system operator"])
+      end
+
+      it "determines the value of the business case" do
+        price = business_case.send(:row, "customer", "customer")
+
+        # 1 frame per hour (8760)
+        # year-round loads of 0.9 and 3.3
+        # 0.5 eur per unit
+        expect(price).to eq(8760.0 * 0.5 * (0.9 + 3.3))
+      end
+
+      it "determines the rows of the business case" do
+        expect(business_case).to receive(:stakeholders).twice.and_return(["customer"])
+
+        expect(business_case.rows).to eq([{
+          "customer" => [8760.0 * 0.5 * (0.9 + 3.3)]
+        }])
+      end
     end
 
-    it "determines the value of the business case" do
-      price = business_case.send(:row, "customer", "customer")
+    describe "calculation advanced" do
+      let(:market_model_interactions){ MarketModels::Default.advanced }
 
-      # 1 frame per hour (8760)
-      # year-round loads of 0.9 and 3.3
-      # 0.5 eur per unit
-      expect(price).to eq(8760.0 * 0.5 * (0.9 + 3.3))
-    end
+      it "determines the correct headers" do
+        expect(business_case.stakeholders).to eq(["customer", "government",
+                                                  "supplier", "system operator"])
+      end
 
-    it "determines the rows of the business case" do
-      expect(business_case).to receive(:stakeholders).twice.and_return(["customer"])
-
-      expect(business_case.rows).to eq([{
-        "customer" => [8760.0 * 0.5 * (0.9 + 3.3)]
-      }])
+      it "financials" do
+        expect(business_case.rows).to eq([
+          {"customer"       =>[0.0, nil, nil, nil]},
+          {"government"     =>[nil, 0.0, nil, 18396.0]},
+          {"supplier"       =>[18396.0, nil, 0.0, nil]},
+          {"system operator"=>[nil, nil, nil, 0.0]}
+        ])
+      end
     end
   end
 
@@ -109,15 +129,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
     let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
 
     it "determines the initial investments for the stakeholders" do
-      expect(business_case.rows).to eq([
-        {"aggregator"      =>[0.0, nil, nil, nil, nil, nil, nil]},
-        {"cooperation"     =>[nil, 0.0, nil, nil, nil, nil, nil]},
-        {"customer"        =>[nil, nil, 51.5, nil, nil, nil, nil]},
-        {"government"      =>[nil, nil, nil, 0.0, nil, nil, nil]},
-        {"producer"        =>[nil, nil, nil, nil, 0.0, nil, nil]},
-        {"supplier"        =>[nil, nil, nil, nil, nil, 0.0, nil]},
-        {"system operator" =>[nil, nil, 0.0, nil, nil, nil, 10000.0]}
-      ])
+      expect(business_case.rows.last['system operator'].last).to eq(10000.0)
     end
   end
 end

@@ -21,23 +21,27 @@ module Finance
       def incoming
         values = @financial_rule.values.flatten
         values.delete_at(skip)
-        values.compact.sum
+        values.compact.inject(:+)
       end
 
       def skip
-        Stakeholder.all.index(stakeholder)
+        stakeholders.index(stakeholder)
+      end
+
+      def stakeholders
+        @stakeholders ||= @business_case.financials.map(&:keys).flatten
       end
 
       def outgoing
-        transposed_financials[@index].compact.sum
+        transposed_financials[@index].compact.inject(:+)
       end
 
       def freeform
-        freeform_row[@index] || 0
+        freeform_row[@index]
       end
 
       def total
-        incoming - outgoing + freeform
+        (incoming || 0) - (outgoing || 0) + (freeform || 0)
       end
     end
   end

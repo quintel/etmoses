@@ -6,5 +6,17 @@ module MarketModels
          'foundation'       => 'kwh_consumed',
          'tariff'           => '0.5' }]
     end
+
+    def self.advanced
+      [{ 'stakeholder_from' => 'customer',
+         'stakeholder_to'   => 'supplier',
+         'foundation'       => 'kwh_consumed',
+         'tariff'           => '0.5' },
+       { 'stakeholder_from' => 'system operator',
+         'stakeholder_to'   => 'government',
+         'foundation'       => 'kwh_consumed',
+         'tariff'           => '0.5' }
+      ]
+    end
   end
 end
