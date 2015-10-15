@@ -66,7 +66,7 @@ var ChartShower = (function(){
 
   function toggleDomParts(){
     $('#technologies .row-fluid, p.info').hide();
-    showTechnologies(this);
+    showTechnologies.call(this);
     setHeader.call(this);
     toggleSelectedNode.call(this);
   };
