@@ -1,4 +1,4 @@
-worker_processes 2
+worker_processes 12
 working_directory '/var/www/etmoses/current'
 
 # This loads the application in the master process before forking worker
