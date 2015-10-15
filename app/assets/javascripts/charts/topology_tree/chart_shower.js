@@ -60,7 +60,7 @@ var ChartShower = (function(){
     } else {
       new LoadChart([
         { values: d.load, name: d.name, area: true, color: blue }
-      ], d.capacity, 'default').render(loadCharClass);
+      ], d.capacity, 'default').render(loadChartClass);
     }
   };
 
