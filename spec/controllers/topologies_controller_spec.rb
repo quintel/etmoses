@@ -122,6 +122,38 @@ RSpec.describe TopologiesController do
       controller.session[:testing_ground_id] = testing_ground.id
     }
 
+    describe "removing a child should spawn an error" do
+      let(:graph){
+        {'name' => "HV Network", 'children' => [
+          { 'name' => 'MV Network', 'children' => [
+            {'name' => "lv1", 'stakeholder' => 'customer'},
+            {'name' => "lv2", 'stakeholder' => 'customer'}
+          ]}
+        ]}
+      }
+
+      let(:clone_graph){
+        {'name' => "HV Network", 'children' => [
+          { 'name' => 'MV Network', 'children' => [
+            {'name' => "lv1", 'stakeholder' => 'customer'}
+          ]}
+        ]}
+      }
+
+      let!(:another_testing_ground){
+        FactoryGirl.create(:testing_ground, user: user, topology: topology)
+      }
+
+      it "doesn't clone the graph due to removal of a child" do
+        patch :clone, format: :js, id: topology.id, topology: {
+          name: "Topology for cloning",
+          graph: JSON.dump(clone_graph)
+        }
+
+        expect(Topology.count).to eq(1)
+      end
+    end
+
     describe "with other LES's" do
       let(:graph){
         {'name' => "HV Network", 'children' => [
