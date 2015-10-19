@@ -1,6 +1,6 @@
 # ETMoses
 
-![](http://f.cl.ly/items/291h3S0g3E2U3L1T0Z2H/Screen%20Shot%202013-12-10%20at%2013.38.35.png)
+![Screenshot](http://f.cl.ly/items/291h3S0g3E2U3L1T0Z2H/Screen%20Shot%202013-12-10%20at%2013.38.35.png)
 
 This is the source code of [ETMoses](http://moses.et-model.com):
 an online decision support tool to create local energy situations for
