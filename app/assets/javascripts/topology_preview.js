@@ -1,160 +1,139 @@
-var TopologyPreviewer = (function(){
-  var topologyGraph, presetData, style, svgGroup, data, root, tree, svgHeight, svgWidth,
-      currentStylesheet;
+var TopologyPreviewer = (function() {
+    'use strict';
 
-  var nodeIds         = 0,
-      maxLabelLength  = 20,
-      duration        = 250,
-      depthCounter    = 0,
-      endPointCounter = 0,
-      stepSize        = 20,
-      ease            = 'cubic-out';
+    var nodeIds = 0,
+        maxLabelLength = 20,
+        ease = 'cubic-out';
 
-  var stylesheet = {
-    full: {
-      renderLabels: true,
-      lineSpace: 280,
-      margin: { left: 100, top: 15 }
-    },
-    simple: {
-      renderLabels: false,
-      lineSpace: 60,
-      margin: { left: 20, top: 15 }
-    }
-  };
+    var diagonal = d3.svg.diagonal()
+        .projection(function(d) {
+            return [d.x, d.y];
+        });
 
-  var diagonal = d3.svg.diagonal()
-      .projection(function(d) { return [d.x, d.y]; });
+    TopologyPreviewer.prototype = {
+        preview: function() {
+            clear.call(this);
 
-  TopologyPreviewer.prototype = {
-    preview: function(){
-      clear();
+            this.currentStylesheet = TopologyStylesheet[this.style];
+            this.svgHeight = 0;
+            this.svgWidth = viewerWidth.call(this);
+            this.svg = buildBaseSvg.call(this);
+            this.data = [this.presetData];
+            this.root = this.data[0];
+            this.lineSpace = Math.min(calculateLineHeight.call(this), 100);
 
-      currentStylesheet = stylesheet[style];
-      svgHeight         = viewerHeight() + 100;
-      svgWidth          = viewerWidth();
-      svg               = buildBaseSvg();
-      data              = [presetData];
-      root              = data[0];
+            this.svgGroup = this.svg.append('g');
+            this.svgGroup.attr('transform', function(d) {
+                return "translate(" + this.currentStylesheet.margin.left + "," + this.currentStylesheet.margin.top + ")";
+            }.bind(this));
 
-      svgGroup = svg.append('g');
-      svgGroup.attr('transform', function(d){
-        return "translate(" + currentStylesheet.margin.left + "," + currentStylesheet.margin.top + ")";
-      });
-
-      tree = d3.layout.tree().size([
-        svgHeight - currentStylesheet.margin.top + 5, svgWidth + 50
-      ]);
-      updateTree(root)
-    }
-  };
-
-  function clear(){
-    $(topologyGraph).find("svg").remove();
-  };
-
-  function updateTree(source){
-    var nodes = tree.nodes(root).reverse(),
-        links = tree.links(nodes);
-
-    tree.separation(function(a,b){
-      return (a.parent == b.parent ? 1 : 2) / a.depth;
-    });
-
-    nodes.forEach(function(d) { d.y = d.depth * currentStylesheet.lineSpace; });
-
-    var node = svgGroup.selectAll("g.node")
-      .data(nodes, function(d) { return d.id || (d.id = ++nodeIds); });
-
-    var nodeEnter = node.enter().append("g")
-      .attr("class", "node")
-      .attr("transform", function(d) {
-        return "translate(" + d.x + "," + d.y + ")";
-      })
-      .classed('collapsed', function(d) {
-        return d._children;
-      });
-
-   nodeEnter.append("circle")
-     .attr("r", 8)
-     .style("fill", "#fff");
-
-   if(currentStylesheet.renderLabels){
-     nodeEnter.append("text")
-       .attr("x", function(d) {
-         return d.children || d._children ? -13 : 13; })
-       .attr("dy", ".35em")
-       .attr("text-anchor", function(d) {
-         return d.children || d._children ? "end" : "start"; })
-       .text(function(d) { return d.name; })
-       .style("fill-opacity", 1);
-   };
-
-   var link = svgGroup.selectAll("path.link")
-       .data(links, function(d) { return d.target.id; });
-
-   link.enter().insert("path", "g")
-     .attr("class", "link")
-     .attr("d", diagonal);
-  };
-
-  function buildBaseSvg(){
-    return d3.select(topologyGraph).append('svg')
-      .attr('width', svgWidth)
-      .attr('height', svgHeight)
-      .attr('class', 'overlay')
-      .call(zoomListener)
-        .on('wheel.zoom', null)
-        .on('dblclick.zoom', null);
-  };
-
-  function dragListener(){};
-
-  function zoomListener(){};
-
-  function viewerWidth(){
-    endPointCounter = 1;
-    var totalWidth = (endPointCount(presetData) * stepSize);
-    return totalWidth;
-  };
-
-  function viewerHeight(){
-    depthCounter = 1;
-    var totalHeight = (depthCount(presetData) * currentStylesheet.lineSpace);
-    return totalHeight + currentStylesheet.margin.top;
-  };
-
-  function depthCount(d){
-    if(d.children){
-      for(var i = 0; i < d.children.length; i++){
-        depthCount(d.children[i]);
-        if(d.children[i].children){
-          depthCounter++;
-          break;
+            this.tree = d3.layout.tree().size([this.svgWidth, this.svgHeight]);
+            updateTree.call(this, this.root);
         }
-      };
     };
-    return depthCounter;
-  };
 
-  function endPointCount(d){
-    for(var i = 0; i < d.children.length; i++){
-      d.children[i].children ? endPointCount(d.children[i]) : endPointCounter++;
+    function clear() {
+        $(this.topologyGraph).find("svg").remove();
     };
-    return endPointCounter;
-  };
 
-  function TopologyPreviewer(_topologyGraph, _presetData, _style){
-    topologyGraph = _topologyGraph;
-    presetData    = _presetData ? _presetData.graph : JSON.parse($(topologyGraph).find(".data").text());
-    style         = _style || "full";
-  };
+    function updateTree(source) {
+        var nodes = this.tree.nodes(this.root).reverse(),
+            links = this.tree.links(nodes);
 
-  return TopologyPreviewer;
-})();
+        nodes.forEach(function(d) {
+            d.y = d.depth * this.lineSpace;
+        }.bind(this));
 
-$(document).on("page:change", function(){
-  if($("div.topology-graph").length > 0){
-    new TopologyPreviewer(".topology-graph").preview();
-  }
+        var node = this.svgGroup.selectAll("g.node")
+            .data(nodes, function(d) {
+                return d.id || (d.id = ++nodeIds);
+            });
+
+        var nodeEnter = node.enter().append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            })
+            .classed('collapsed', function(d) {
+                return d._children;
+            });
+
+        nodeEnter.append("circle")
+            .attr("r", this.currentStylesheet.radius)
+            .style("fill", this.currentStylesheet.nodeColor);
+
+        if (this.currentStylesheet.renderLabels) {
+            nodeEnter.append("text")
+                .attr("x", function(d) {
+                    return d.children || d._children ? -13 : 13;
+                })
+                .attr("dy", ".35em")
+                .attr("text-anchor", function(d) {
+                    return d.children || d._children ? "end" : "start";
+                })
+                .text(function(d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 1);
+        };
+
+        var link = this.svgGroup.selectAll("path.link")
+            .data(links, function(d) {
+                return d.target.id;
+            });
+
+        link.enter().insert("path", "g")
+            .attr("class", "link")
+            .attr("d", diagonal);
+    };
+
+    function buildBaseSvg() {
+        return d3.select(this.topologyGraph).append('svg')
+            .attr('width', '100%')
+            .attr('height', this.currentStylesheet.svgHeight)
+            .attr('class', 'overlay')
+            .call(zoomListener)
+            .on('wheel.zoom', null)
+            .on('dblclick.zoom', null);
+    };
+
+    function dragListener() {};
+
+    function zoomListener() {};
+
+    function calculateLineHeight() {
+        var depths = depthCount.call(this, this.presetData, 0);
+        return (this.currentStylesheet.height / depths)
+    };
+
+    function viewerWidth() {
+        return this.currentStylesheet.width - this.currentStylesheet.margin.left * 2;
+    };
+
+    function depthCount(d, level) {
+        level = level || 1;
+
+        if (d.children && d.children.length) {
+            return d3.max(d.children.map(function(child) {
+                return depthCount(child, level + 1);
+            }));
+        } else {
+            return level;
+        }
+    };
+
+    function TopologyPreviewer(_topologyGraph, _presetData, _style) {
+        this.topologyGraph = _topologyGraph;
+        this.presetData = _presetData ? _presetData.graph : JSON.parse($(topologyGraph).find(".data").text());
+        this.style = _style || "full";
+        this.lineSpace = 0;
+    };
+
+    return TopologyPreviewer;
+}());
+
+$(document).on("page:change", function() {
+    if ($("div.topology-graph").length > 0) {
+        new TopologyPreviewer(".topology-graph").preview();
+    }
 });
