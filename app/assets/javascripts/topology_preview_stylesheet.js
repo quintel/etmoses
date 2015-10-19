@@ -15,7 +15,7 @@ var TopologyStylesheet = {
     svgHeight: '250px',
     renderLabels: false,
     margin: { left: 20, top: 15 },
-    radius: 5,
+    radius: 3.5,
     nodeColor: "#999"
   }
 };

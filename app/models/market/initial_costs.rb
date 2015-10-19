@@ -7,7 +7,7 @@ module Market
   # technologies on endpoints with an initial_investment and technical_lifetime
   # will be billable to the stakeholder who owns the endpoint.
   class InitialCosts
-    TOPOLOGY_REQUIRED = %i(investment_cost technical_lifetime stakeholder)
+    TOPOLOGY_REQUIRED = %i(investment_cost stakeholder)
 
     def initialize(network)
       @network = network
@@ -23,7 +23,7 @@ module Market
 
     def topology_costs
       group_sum(topology_nodes) do |node|
-        node.get(:investment_cost).to_f / node.get(:technical_lifetime)
+        node.get(:investment_cost).to_f / node.lifetime
       end
     end
 
@@ -49,7 +49,7 @@ module Market
 
     def topology_nodes
       @network.nodes.select do |node|
-        TOPOLOGY_REQUIRED.all? { |attr| node.get(attr) }
+        TOPOLOGY_REQUIRED.all? { |attr| node.get(attr) } && node.lifetime
       end
     end
   end
