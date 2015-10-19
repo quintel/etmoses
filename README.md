@@ -1,11 +1,62 @@
 # ETMoses
 
-Calculation module to compute loads in a multi-level (LV, MV, HV, et cetera)
-electricity network.
+![](http://f.cl.ly/items/291h3S0g3E2U3L1T0Z2H/Screen%20Shot%202013-12-10%20at%2013.38.35.png)
 
-Project currently available on a [beta server](http://beta.moses.et-model.com).
+This is the source code of [ETMoses](http://moses.et-model.com):
+an online decision support tool to create local energy situations for
+neighbourhoods, cities and regions with a time resolution of 15 minutes.
+This software is [Open Source](LICENSE.txt), so you can
+fork it and alter at your will.
 
-Documentation can be found on the Documentation repository:
-* [General use](https://github.com/quintel/documentation/blob/master/general/testing_grounds_overview.md)
-* [On topologies](https://github.com/quintel/documentation/blob/master/general/topology.md)
-* [On topologies](https://github.com/quintel/documentation/blob/master/general/topology_syntax.md)
+If you have any questions, please [contact us](http://quintel.com/contact).
+
+## Build Status
+
+### Master
+![Master branch](https://semaphoreci.com/api/v1/projects/e51cd924-a6d4-4c0e-a36c-af7f9e6789ba/550483/badge.svg)
+
+### Production
+![Production branch](https://semaphoreci.com/api/v1/projects/e51cd924-a6d4-4c0e-a36c-af7f9e6789ba/555979/badge.svg)
+
+## License
+
+ETMoses is released under the [MIT License](LICENSE.txt).
+
+## Branches
+
+* **master**: Working branch. Please always merge pull requests with this
+  branch, just like any other Git project This branch is automatically deployed
+  to [the ETMoses staging server](http://beta.moses.et-model.com).
+* **production**: Tracks [the ETMoses production server](http://moses.et-model.com)
+
+## Dependencies
+
+* [Git](https://git-scm.com/)
+* [Ruby 2.0+](https://www.ruby-lang.org)
+* [Bundler](http://bundler.io)
+* [MySQL database server](https://www.mysql.com)
+
+## Installing
+
+* Pull this repository with `git clone git@github.com:quintel/etmoses.git`
+* Create your personal configuration files from the samples with
+  ```
+  cp -vn config/database.sample.yml config/database.yml
+  cp -vn config/secrets.sample.yml config/secrets.yml
+  cp -vn config/email.sample.yml config/email.yml
+  ```
+
+* Provide your MySQL username/password to `config/database.yml` if it is
+  different from root/*blank*
+* Run `bundle install` to install all the dependencies
+* Create local database with `bundle exec rake db:create`
+* Fill database structure and seeds with `bundle exec rake db:reset`
+* Fire up your local server with `bundle exec rails server -p3000`
+* Got to [localhost:3000](http://localhost:3000) and you should see ETMoses
+
+## Bugs and feature requests
+
+If you encounter a bug or if you have a feature request, you can either let us
+know by creating an [Issue](http://github.com/quintel/etmoses/issues) *or* you
+can try to fix it yourself and create a
+[pull request](http://github.com/quintel/etmoses/pulls).
