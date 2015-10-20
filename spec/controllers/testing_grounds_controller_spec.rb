@@ -389,8 +389,9 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#save_as" do
-    let!(:sign_in_user){ sign_in(user) }
-    let(:testing_ground){ FactoryGirl.create(:testing_ground, user: user) }
+    let!(:admin) { FactoryGirl.create(:user, admin: true) }
+    let!(:sign_in_user){ sign_in(admin) }
+    let(:testing_ground){ FactoryGirl.create(:testing_ground) }
 
     it "counts 2 testing grounds" do
       post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "Test" }
@@ -402,6 +403,12 @@ RSpec.describe TestingGroundsController do
       post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "New name" }
 
       expect(TestingGround.last.name).to eq("New name")
+    end
+
+    it "saves as a new name" do
+      post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "New name" }
+
+      expect(TestingGround.last.user).to eq(admin)
     end
   end
 
