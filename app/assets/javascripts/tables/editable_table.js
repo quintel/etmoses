@@ -1,88 +1,93 @@
-var EditableTable = (function(){
-  EditableTable.prototype = {
-    append: function(_changeListener, _changeData){
-      this.changeListener = (_changeListener || function(){});
-      this.changeData = (_changeData || function(){});
+var EditableTable = (function () {
+    'use strict';
 
-      $(this.selector).on('change', this.changeListener.bind(this));
-
-      addClickListenersToAddRow.call(this);
-      addClickListenersToDeleteRow.call(this);
-    },
-
-    getData: function(){
-      return tableToProfile.call(this);
+    function extractTextfromCells(row) {
+        return $(row).find("td.editable").toArray().map(function (cell) {
+            var value;
+            if ($(cell).find("select:visible").length > 0) {
+                value = $.trim($(cell).find("select").val());
+            } else {
+                value = $.trim($(cell).find("input").val());
+            }
+            return value;
+        });
     }
-  };
 
-  function tableToProfile(){
-    var self = this;
-    return tableRows.call(this).map(function(tableRow){
-      return rowToTechnologyObject.call(self, tableRow);
-    });
-  };
+    function tableRows() {
+        return $(this.selector).find("tbody tr").toArray().map(extractTextfromCells);
+    }
 
-  function rowToTechnologyObject(tableRow){
-    var tableData = {};
-    var self = this;
-    $.each(tableRow, function(i, attribute){
-      var header = tableHeader.call(self, i);
-      tableData[header] = attribute;
+    function tableHeader(index) {
+        return $($(this.selector).find("thead th")[index]).data("header");
+    }
 
-      this.changeData.call({
-        attribute: attribute,
-        header: header,
-        tableData: tableData
-      });
-    }.bind(this));
-    return tableData;
-  };
+    function rowToTechnologyObject(tableRow) {
+        var tableData = {},
+            self = this;
 
-  function tableHeader(index){
-    return $($(this.selector).find("thead th")[index]).data("header");
-  };
+        $.each(tableRow, function (i, attribute) {
+            var header = tableHeader.call(self, i);
+            tableData[header] = attribute;
 
-  function tableRows(){
-    return $(this.selector).find("tbody tr").toArray().map(extractTextfromCells);
-  };
+            this.changeData.call({
+                attribute: attribute,
+                header: header,
+                tableData: tableData
+            });
+        }.bind(this));
 
-  function extractTextfromCells(row){
-    return $(row).find("td.editable").toArray().map(function(cell){
-      if($(cell).find("select:visible").length > 0){
-        return $.trim($(cell).find("select").val());
-      }
-      else{
-        return $.trim($(cell).find("input").val());
-      }
-    });
-  };
+        return tableData;
+    }
 
-  function addClickListenersToAddRow(){
-    $(this.selector).find("a.add-row").on("click", function(e){
-      e.preventDefault();
+    function tableToProfile() {
+        var self = this;
+        return tableRows.call(this).map(function (tableRow) {
+            return rowToTechnologyObject.call(self, tableRow);
+        });
+    }
 
-      var row = $(e.currentTarget).parents("tr");
-      var clonedRow = row.clone(true, true);
-      clonedRow.insertAfter(row);
-      this.changeListener();
-    }.bind(this));
-  };
+    function addClickListenersToAddRow() {
+        $(this.selector).find("a.add-row").on("click", function (e) {
+            e.preventDefault();
 
-  function addClickListenersToDeleteRow(){
-    $(this.selector).find("a.remove-row").on("click", function(e){
-      e.preventDefault();
+            var row       = $(e.currentTarget).parents("tr"),
+                clonedRow = row.clone(true, true);
 
-      $(e.currentTarget).parents("tr").remove();
-      this.changeListener();
-    }.bind(this));
-  };
+            clonedRow.insertAfter(row);
+            this.changeListener();
+        }.bind(this));
+    }
 
-  function EditableTable(_selector){
-    this.selector = _selector;
+    function addClickListenersToDeleteRow() {
+        $(this.selector).find("a.remove-row").on("click", function (e) {
+            e.preventDefault();
 
-    this.changeListener = function() {};
-    this.changeData = function() {};
-  };
+            $(e.currentTarget).parents("tr").remove();
+            this.changeListener();
+        }.bind(this));
+    }
 
-  return EditableTable;
-})();
+    EditableTable.prototype = {
+        append: function (changeListener, changeData) {
+            this.changeListener = (changeListener || function () { return; });
+            this.changeData = (changeData || function () { return; });
+
+            $(this.selector).on('change', this.changeListener.bind(this));
+
+            addClickListenersToAddRow.call(this);
+            addClickListenersToDeleteRow.call(this);
+        },
+
+        getData: function () {
+            return tableToProfile.call(this);
+        }
+    };
+
+    function EditableTable(selector) {
+        this.selector       = selector;
+        this.changeListener = function () { return; };
+        this.changeData     = function () { return; };
+    }
+
+    return EditableTable;
+}());
