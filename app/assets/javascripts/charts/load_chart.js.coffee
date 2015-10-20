@@ -63,6 +63,8 @@ class LoadChart
       d3.select(intoSelector).datum(data).call(chart)
       chart.update()
 
+      LoadChartHelper.toggleCapacity(@loadChartLocation())
+
   generateCapacity: (data) =>
     top_line = data[0].values.map((sample) => { x: sample.x, y: @capacity })
     bottom_line = data[0].values.map((sample) => { x: sample.x, y: (@capacity * -1) })
