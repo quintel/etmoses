@@ -25,8 +25,16 @@ module Market
 
     # Public: Run the payment rule on a given relation.
     def call(relation, variants = {})
-      amount = @tariff.price_of(Array(value(relation, variants)))
-      amount < 0 ? 0.0 : amount
+      values = Array(value(relation, variants))
+
+      if values.empty?
+        # If the measure returns nothing, the "applied to" stakeholder does not
+        # exist in the network.
+        0.0
+      else
+        amount = @tariff.price_of(values)
+        amount < 0 ? 0.0 : amount
+      end
     end
 
     #######
