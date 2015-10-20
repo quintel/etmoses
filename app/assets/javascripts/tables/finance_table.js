@@ -6,7 +6,7 @@ var FinanceTable = (function() {
         create: function() {
             financeArea = $("form #business_case_financials");
             rowHeight = financeTable.find("tbody tr.stakeholder").length;
-            currentFinances = JSON.parse(financeArea.text());
+            currentFinances = JSON.parse(financeArea.text()) || {};
             freeformRow = (currentFinances[rowHeight] || {
                 freeform: []
             });

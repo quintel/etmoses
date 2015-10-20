@@ -1,14 +1,17 @@
-$(document).on('page:change', function(){
-  $(".save_as").on("click", function(e){
-    e.preventDefault();
+/*globals document*/
+$(document).on('page:change', function () {
+    'use strict';
 
-    window.saveAll.submitForms(submitSaveAsForm.bind(this));
-  });
+    function submitSaveAsForm() {
+        var form = $(this).parents("form");
+        form.attr("action", $(this).data('url'));
+        form.removeAttr("data-remote");
+        form.submit();
+    }
 
-  function submitSaveAsForm(){
-    var form = $(this).parents("form")
-    form.attr("action", $(this).data('url'))
-    form.removeAttr("data-remote");
-    form.submit();
-  };
+    $(".save_as").on("click", function (e) {
+        e.preventDefault();
+
+        window.saveAll.submitForms(submitSaveAsForm.bind(this));
+    });
 });

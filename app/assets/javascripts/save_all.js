@@ -1,63 +1,65 @@
-var SaveAll = (function(){
-  var saveAllButton;
-  var completeCount = 0;
+/*globals document*/
+var SaveAll = (function () {
+    'use strict';
 
-  SaveAll.prototype = {
-    append: function(){
-      saveAllButton.off("click").on("click", click.bind(this));
-    },
+    function finishAndRedirect() {
+        this.saveAllButton.removeClass("disabled");
 
-    submitForms: function(success){
-      $(".remote form").each(function(){
-        $(this).submit();
-        $(this).on("ajax:success", done.bind(this, success));
-      });
+        window.location.replace(this.saveAllButton.data('url'));
     }
-  };
 
-  function click(e){
-    e.preventDefault();
+    function click(e) {
+        e.preventDefault();
 
-    completeCount = 0;
+        this.completeCount = 0;
+        this.saveAllButton.addClass("disabled");
+        this.submitForms(finishAndRedirect);
+    }
 
-    saveAllButton.addClass("disabled");
+    function done(doneCallback) {
+        this.completeCount += 1;
 
-    this.submitForms(finishAndRedirect);
-  };
+        if (this.completeCount === $(".remote form").length) {
+            doneCallback.call(this);
+        }
+    }
 
-  function done(doneCallback){
-    completeCount += 1;
+    SaveAll.prototype = {
+        append: function () {
+            this.saveAllButton.off("click").on("click", click.bind(this));
+        },
 
-    if(completeCount == $(".remote form").length){
-      doneCallback.call();
+        submitForms: function (success) {
+            $(".remote form").each(function (i, form) {
+                $(form).submit();
+                $(form).on("ajax:success", done.bind(this, success));
+            }.bind(this));
+        }
     };
-  };
 
-  function finishAndRedirect(){
-    saveAllButton.removeClass("disabled");
+    function SaveAll() {
+        this.saveAllButton = $("a.btn.save-all");
+        this.completeCount = 0;
+    }
 
-    window.location.replace(saveAllButton.data('url'));
-  };
+    return SaveAll;
+}());
 
-  function SaveAll(){
-    saveAllButton = $("a.btn.save-all");
-  };
+$(document).on("page:change", function () {
+    'use strict';
 
-  return SaveAll;
-})();
+    $(".tab-content .remote form").on("submit", function () {
+        $(this).find("input[type=submit]").addClass("disabled");
+        $(this).find("span.wait").removeClass("hidden");
+    });
 
-$(document).on("page:change", function(){
-  $(".tab-content .remote form").on("submit", function(){
-    $(this).find("input[type=submit]").addClass("disabled");
-    $(this).find("span.wait").removeClass("hidden");
-  });
+    $(".remote form").on("change", function () {
+        var tabTarget = $(this).parent().attr("id"),
+            tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
 
-  $(".remote form").on("change", function(){
-    var tabTarget = $(this).parent().attr("id");
-    var tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
-    tabHeader.addClass("editing");
-  });
+        tabHeader.addClass("editing");
+    });
 
-  window.saveAll = new SaveAll();
-  window.saveAll.append();
+    window.saveAll = new SaveAll();
+    window.saveAll.append();
 });

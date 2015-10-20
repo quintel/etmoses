@@ -15,6 +15,29 @@ module Market
       market
     end
 
+    context 'with no measurables' do
+      let(:rule) { PaymentRule.new(->(m) { m }, tariff) }
+      let(:relation) { market.node(:retailer).in_edges.first }
+
+      before { relation.set(:measurables, []) }
+
+      context 'and a fixed tariff' do
+        let(:tariff) { Tariff.new(2.0) }
+
+        it 'returns a value of 0' do
+          expect(rule.call(relation)).to be_zero
+        end
+      end # and a fixed tariff
+
+      context 'and a curve tariff' do
+        let(:tariff) { CurveTariff.new(Network::Curve.new([2.0, 2.0])) }
+
+        it 'returns a value of 0' do
+          expect(rule.call(relation)).to be_zero
+        end
+      end # and a curve tariff
+    end
+
     context 'with a measurable of [1.0] and tariff of 2.0' do
       let(:rule) { PaymentRule.new(->(m) { m }, Tariff.new(2.0)) }
       let(:relation) { market.node(:retailer).in_edges.first }
