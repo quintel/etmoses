@@ -40,7 +40,7 @@ var SaveAll = (function () {
 
         submitForms: function (success) {
             var self = this;
-            $(".remote form").each(function (form) {
+            $(".remote form").each(function () {
                 $(this).submit();
                 $(this).on("ajax:success", done.bind(self, success));
             });
