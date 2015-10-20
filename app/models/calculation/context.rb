@@ -46,6 +46,38 @@ module Calculation
         path_order)
     end
 
+    # Public: An array containing all paths, and their subpaths, from each
+    # technology to the head node. Subpaths describe each "step" from the
+    # technology (and the node to which it belongs) and each parent node.
+    #
+    # Subpaths are sorted in a round-robin fashion so that loads can be assigned
+    # more fairly (instead of the first node being given preference over the
+    # others).
+    #
+    # Returns an array of TechnologyPath instances.
+    def subpaths
+      @subpaths ||= begin
+        by_level = Hash.new { |hash, key| hash[key] = [] }
+        data     = {}
+
+        paths.map { |path| Network::SubPath.from(path) }.each do |subpaths|
+          subpaths.each { |path| by_level[path.distance].push(path) }
+        end
+
+        # "Round-robin" paths of the same length, so as not to give preference
+        # to technologies form the first node returned by "paths".
+        by_level.each do |level, level_paths|
+          by_parent = level_paths.group_by(&:head).values
+
+          data[level] = Array.new(by_parent.map(&:length).max)
+            .zip(*by_parent).flatten.compact
+        end
+
+        # Shortest subpaths first.
+        data.keys.sort.reverse.flat_map { |key| data[key] }
+      end
+    end
+
     # Public: Determines how many time-steps are being calculated with this
     # testing ground.
     #

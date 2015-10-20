@@ -4,7 +4,7 @@ module Network
     extend Forwardable
     include Enumerable
 
-    def_delegator :@path, :each
+    def_delegators :@path, :each, :length
 
     attr_reader :head, :leaf
 
@@ -36,6 +36,11 @@ module Network
 
     def to_s
       "{#{ @path.map(&:key).join(', ') }}"
+    end
+
+    # Public: The top-most node in the path.
+    def head
+      @path.last
     end
 
     # Public: The conditional consumption being created by the consumption node.
