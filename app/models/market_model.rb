@@ -17,4 +17,5 @@ class MarketModel < ActiveRecord::Base
   serialize :interactions, JSON
 
   validates :name, presence: true
+  validates_with IrregularCurveMeasuresValidator
 end

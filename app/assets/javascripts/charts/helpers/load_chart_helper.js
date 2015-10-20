@@ -5,7 +5,7 @@ var LoadChartHelper = (function () {
         globalBrushExtent: undefined,
         currentWeek: undefined,
         forceReload: false,
-        disableCapacity: true,
+        disabledCharts: {"#95BB95": true, "#1F77B4": true, "darkred": false},
         charts: [],
 
         toggleCapacity: function (currentChartId) {
@@ -14,7 +14,9 @@ var LoadChartHelper = (function () {
                 d3ChartData  = d3Chart.data();
 
             if (d3ChartData[0]) {
-                d3ChartData[0][d3ChartData[0].length - 1].disabled = this.disableCapacity;
+                d3ChartData[0].forEach(function (chart) {
+                    chart.disabled = !this.disabledCharts[chart.color];
+                }.bind(this));
             }
 
             currentChart.update();

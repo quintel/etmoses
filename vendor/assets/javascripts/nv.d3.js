@@ -4318,31 +4318,20 @@ nv.models.ohlcBarChart = function() {
                         }
                         else {
                             /* Custom */
-                            if(d.key == "Capacity"){
-                                LoadChartHelper.disableCapacity = !d.disabled;
-                            }
+                            LoadChartHelper.disabledCharts[d.color] = d.disabled;
                             /* END Custom */
                             d.disabled = !d.disabled;
                             if (data.every(function(series) { return series.disabled})) {
                                 //the default behavior of NVD3 legends is, if every single series
                                 // is disabled, turn all series' back on.
-                                data.forEach(function(series) { series.disabled = false});
+                                data.forEach(function(series) {
+                                  series.disabled = false
+                                  /* Custom */
+                                  LoadChartHelper.disabledCharts[series.color] = true;
+                                  /* END Custom */
+                                });
                             }
                         }
-                        dispatch.stateChange({
-                            disabled: data.map(function(d) { return !!d.disabled })
-                        });
-                    }
-                })
-                .on('dblclick', function(d,i) {
-                    dispatch.legendDblclick(d,i);
-                    if (updateState) {
-                        //the default behavior of NVD3 legends, when double clicking one,
-                        // is to set all other series' to false, and make the double clicked series enabled.
-                        data.forEach(function(series) {
-                            series.disabled = true;
-                        });
-                        d.disabled = false;
                         dispatch.stateChange({
                             disabled: data.map(function(d) { return !!d.disabled })
                         });
