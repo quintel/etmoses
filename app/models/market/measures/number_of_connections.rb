@@ -13,5 +13,9 @@ module Market::Measures
         end
       end
     end
+
+    def self.irregular?
+      true
+    end
   end
 end

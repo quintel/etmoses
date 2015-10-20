@@ -11,5 +11,9 @@ module Market::Measures
       loads = InstantaneousLoad.call(node)
       loads.each_slice(loads.length / @partitions).map(&:max)
     end
+
+    def irregular?
+      true
+    end
   end
 end
