@@ -408,7 +408,7 @@ RSpec.describe TestingGroundsController do
     it "saves as a new name" do
       post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "New name" }
 
-      expect(TestingGround.last.user).to eq(user)
+      expect(TestingGround.last.user).to eq(admin)
     end
   end
 

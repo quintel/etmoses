@@ -146,7 +146,7 @@ class TestingGroundsController < ResourceController
   def save_as
     testing_ground = @testing_ground.dup
     testing_ground.update_attributes(testing_ground_params)
-    testing_ground.user = current_user
+    testing_ground.update_attribute(:user_id, current_user.id)
     testing_ground.save
 
     if @testing_ground.business_case
