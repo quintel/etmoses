@@ -146,6 +146,13 @@ module Network
       get(:techs) || set(:techs, [])
     end
 
+    # Public: An integer that returns the lifetime of yhis node
+    #
+    # Returns an integer
+    def lifetime
+      get(:technical_lifetime) || get(:economic_lifetime)
+    end
+
     private
 
     # Internal: A memoized list of child nodes. Since the graph never changes

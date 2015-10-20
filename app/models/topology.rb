@@ -14,6 +14,7 @@ class Topology < ActiveRecord::Base
   validate :validate_node_names
   validate :validate_units
   validate :validate_stakeholders
+  validate :validate_clone
 
   def self.default
     find_by_name("Default topology")
@@ -90,6 +91,15 @@ class Topology < ActiveRecord::Base
       unless Stakeholder.all.include?(node[:stakeholder])
         errors.add(:graph, "contains a non existing stakeholder")
       end
+    end
+  end
+
+  def validate_clone
+    return if original.blank? || errors[:graph].any?
+
+    if each_node.count != original.each_node.count
+      errors.add(:graph, "doesn't allow to remove a child from a topology. Please make"\
+                "a new topology through the topologies menu and create a new LES.")
     end
   end
 end
