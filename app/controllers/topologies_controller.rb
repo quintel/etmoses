@@ -17,6 +17,7 @@ class TopologiesController < ResourceController
 
   # GET /topologies
   def show
+    respond_with(@topology)
   end
 
   # GET /topologies/new

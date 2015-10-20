@@ -108,7 +108,7 @@
     %span.loading
       = image_tag 'wait.gif'
 
-  - if @testing_ground.business_case
+  - if @testing_ground.business_case && @testing_ground.business_case.financials
     #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case), finish_url: render_summary_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
     Loading ...
   - else

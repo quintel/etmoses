@@ -73,7 +73,7 @@ var StrategyToggler = (function(){
   function showSlider(){
     var sliderWrapper = $(this).parents('a').find(".slider-wrapper");
 
-    sliderWrapper.toggleClass("hidden", $(this).is(":checked"));
+    sliderWrapper.toggleClass("hidden", ! $(this).is(":checked"));
   };
 
   function buildMultiSelect(){

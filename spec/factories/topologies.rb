@@ -62,7 +62,7 @@ FactoryGirl.define do
           stakeholder: system operator
         - name: 'lv2'
           capacity: 700
-          technical_lifetime: 30
+          economic_lifetime: 30
           investment_cost: 50000
           stakeholder: system operator
           children:

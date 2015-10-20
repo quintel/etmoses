@@ -1,5 +1,10 @@
 .topology-graph{
   margin: 30px 0;
+
+  svg{
+    height: auto;
+  }
+
   .node circle {
      fill: #fff;
      stroke: steelblue;
@@ -16,5 +21,27 @@
      fill: none;
      stroke: #ccc;
      stroke-width: 2px;
+   }
+}
+
+.topology-preview{
+  svg{
+    height: auto;
+  }
+
+  .node circle {
+     fill: #fff;
+     stroke: #999;
+     stroke-width: 1px;
+   }
+
+   .node circle:hover{
+     cursor: pointer;
+   }
+
+   .link {
+     fill: none;
+     stroke: #ccc;
+     stroke-width: 1px;
    }
 }
