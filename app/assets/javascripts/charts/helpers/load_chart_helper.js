@@ -45,7 +45,7 @@ var LoadChartHelper = (function () {
                 if (chart) {
                     chart.brushExtent(this.globalBrushExtent);
                 }
-            });
+            }.bind(this));
         },
 
         clearBrush: function () {
