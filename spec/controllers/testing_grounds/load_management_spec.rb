@@ -314,10 +314,21 @@ RSpec.describe TestingGroundsController do
     end
 
     it "applies saving of base load (i.e. shaving of the flex profile)" do
+      old_strategies = FakeLoadManagement.strategies(solar_storage: true)
+      testing_ground.selected_strategy.update_attributes(old_strategies)
+      NetworkCache::Writer.from(testing_ground, old_strategies).write
+
       get :data, format: :json, id: testing_ground.id,
                  strategies: FakeLoadManagement.strategies(saving_base_load: true)
 
       expect(JSON.parse(response.body)["graph"]["load"]).to eq([1.0, 1.8, 2.7])
+    end
+
+    it "updates the saved strategies" do
+      get :data, format: :json, id: testing_ground.id,
+                 strategies: FakeLoadManagement.strategies(saving_base_load: true)
+
+      expect(testing_ground.selected_strategy.reload.saving_base_load).to eq(true)
     end
   end
 end

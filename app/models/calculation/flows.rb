@@ -19,12 +19,6 @@ module Calculation
         context.graph.nodes.each { |n| n.cache_load_at!(frame) }
       end
 
-      # write to cache
-      context.graph.nodes.each do |node|
-        NetworkCache::Writer.from(context.testing_ground, context.options)
-                            .write(node.key, node.get(:load))
-      end
-
       context
     end
   end # Flows

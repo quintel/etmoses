@@ -42,9 +42,6 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns the Network::Graph.
   def to_calculated_graph(opts = {})
-    strategies  = opts[:strategies] || {}
-    clear_cache = opts[:clear_cache]
-
     calculators = [
       Calculation::TechnologyLoad,
       Calculation::PullConsumption,
@@ -52,12 +49,8 @@ class TestingGround < ActiveRecord::Base
     ]
 
     context = calculators
-      .reduce(to_calculation_context(strategies.symbolize_keys)) do |cxt, calculator|
-        if NetworkCache::Validator.from(self, strategies).valid?(clear_cache)
-          NetworkCache::Fetcher.call(cxt)
-        else
-          calculator.call(cxt)
-        end
+      .reduce(to_calculation_context(opts.symbolize_keys)) do |cxt, calculator|
+        calculator.call(cxt)
       end
 
     context.graph
@@ -68,7 +61,7 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
-    Calculation::Context.new(to_graph, self, options)
+    Calculation::Context.new(to_graph, options)
   end
 
   # Public: Creates a Turbine graph representing the graph and technologies
