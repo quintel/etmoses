@@ -50,5 +50,6 @@ namespace :deploy do
   end
 
   after 'deploy:compile_assets', 'paperclip:build_missing_styles'
+  after 'deploy:finished', 'airbrake:deploy'
   after :publishing, :restart
 end
