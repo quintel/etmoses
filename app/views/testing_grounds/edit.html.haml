@@ -63,7 +63,7 @@
     .tab-pane.remote.edit#market-model{role: "tabpanel"}
       = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model, format: :js), remote: true }
 
-  - if @testing_ground.business_case
+  - if @testing_ground.business_case && @testing_ground.business_case.financials
     .tab-pane.remote.edit#business-case{role: "tabpanel"}
       = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
 
