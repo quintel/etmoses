@@ -3,8 +3,16 @@ module Network
   # technology which owns the profile. Used by technologies which share a single
   # profile, where the demand may be met by one or more of the techs.
   class DepletingCurve < SimpleDelegator
+    def self.from(enumerable)
+      if enumerable.is_a?(self)
+        enumerable
+      else
+        new(Network::Curve.from(enumerable.to_a))
+      end
+    end
+
     def initialize(curve)
-      super
+      super(Network::Curve.from(curve))
       @receipts = Network::DefaultArray.new { 0.0 }
     end
 
@@ -24,5 +32,7 @@ module Network
       amount = super - @receipts[frame]
       amount > 0 ? amount : 0.0
     end
+
+    alias_method :at, :get
   end # DepletingCurve
 end
