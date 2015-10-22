@@ -1,11 +1,6 @@
 module BusinessCaseHelper
   def finance_table_freeform_row(business_case)
-    if business_case.financials
-      (business_case.financials.detect{|t| t['freeform'] } ||
-       BusinessCase::FREEFORM_ROW).values.flatten
-    else
-      BusinessCase::FREEFORM_ROW.values.flatten
-    end
+    business_case.freeform.values.flatten
   end
 
   def finance_table_rows(business_case)
@@ -14,5 +9,17 @@ module BusinessCaseHelper
     else
       []
     end
+  end
+
+  def valid_financial_row?(financial_row)
+    if financial_row[:compare]
+      valid_financial_statement?(financial_row[:compare])
+    else
+      valid_financial_statement?(financial_row)
+    end
+  end
+
+  def valid_financial_statement?(setting)
+    setting[:incoming] || setting[:outgoing]
   end
 end

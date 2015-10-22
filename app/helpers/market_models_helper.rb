@@ -1,6 +1,12 @@
 module MarketModelsHelper
   def stakeholder_options(options = {})
-    options_for_select(Stakeholder.all, options)
+    stakeholders = Stakeholder.tree_sort.map do |stakeholder|
+      name = "#{ "- " * (stakeholder.path.length - 1) }#{ stakeholder.name }"
+
+      [ name, stakeholder.name, { data: { parent_id: stakeholder.parent_id }} ]
+    end
+
+    options_for_select(stakeholders, options)
   end
 
   def foundation_options(options = {})

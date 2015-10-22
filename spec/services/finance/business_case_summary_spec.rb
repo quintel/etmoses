@@ -15,13 +15,13 @@ RSpec.describe Finance::BusinessCaseSummary do
 
   it "gives the business case summary" do
     expect(Finance::BusinessCaseSummary.new(business_case).summarize).to eq([
-      {:stakeholder=>"aggregator",      :incoming=>0,       :outgoing=>0,       :freeform=>0, :total=>0},
-      {:stakeholder=>"cooperation",     :incoming=>0,       :outgoing=>0,       :freeform=>0, :total=>0},
-      {:stakeholder=>"customer",        :incoming=>0,       :outgoing=>44150.4, :freeform=>0, :total=>-44150.4},
-      {:stakeholder=>"government",      :incoming=>0,       :outgoing=>0,       :freeform=>0, :total=>0},
-      {:stakeholder=>"producer",        :incoming=>0,       :outgoing=>0,       :freeform=>0, :total=>0},
-      {:stakeholder=>"supplier",        :incoming=>0,       :outgoing=>0,       :freeform=>0, :total=>0},
-      {:stakeholder=>"system operator", :incoming=>44150.4, :outgoing=>9998,    :freeform=>0, :total=>34152.4}
+      {:stakeholder=>"aggregator",      :incoming=>nil,       :outgoing=>0,       :freeform=>nil, :total=>0},
+      {:stakeholder=>"cooperation",     :incoming=>nil,       :outgoing=>0,       :freeform=>nil, :total=>0},
+      {:stakeholder=>"customer",        :incoming=>nil,       :outgoing=>44150.4, :freeform=>nil, :total=>-44150.4},
+      {:stakeholder=>"government",      :incoming=>nil,       :outgoing=>0,       :freeform=>nil, :total=>0},
+      {:stakeholder=>"producer",        :incoming=>nil,       :outgoing=>0,       :freeform=>nil, :total=>0},
+      {:stakeholder=>"supplier",        :incoming=>nil,       :outgoing=>0,       :freeform=>nil, :total=>0},
+      {:stakeholder=>"system operator", :incoming=>44150.4, :outgoing=>9998,    :freeform=>nil, :total=>34152.4}
     ])
   end
 end

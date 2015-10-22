@@ -486,11 +486,18 @@ ul.nav-tabs > li.active > a.error {
   margin: 15px 20px;
 }
 
-.finance-table tr.stakeholder td.center,
-.finance-table th.center{
-  background-color: #F3F5F2;
-  font-style: italic;
-  font-weight: normal;
+.finance-table{
+  table-layout: fixed;
+
+  tr th{
+    width: 135px;
+  }
+  tr.stakeholder td.center,
+  th.center{
+    background-color: #F3F5F2;
+    font-style: italic;
+    font-weight: normal;
+  }
 }
 
 .disabled-tab{
@@ -527,4 +534,15 @@ ul.nav-tabs > li.active > a.error {
 
 .business-case-warning{
   width: 500px;
+}
+
+.container .tab-content #business-case .table-wrapper{
+  box-shadow: -6px -2px 10px 0 #ccc inset;
+  overflow-x: scroll;
+  margin-bottom: 5px;
+}
+
+table span.static{
+  display: inline-block;
+  width: 120px;
 }

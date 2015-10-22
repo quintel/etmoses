@@ -20,20 +20,40 @@
 
       %tbody
         - business_case_rows.each do |financial_row|
-          %tr
-            %td= financial_row[:stakeholder].titleize
-            %td.editable
-              %span.static= financial_row[:incoming]
-              %span.difference
-            %td.editable
-              %span.static= financial_row[:outgoing]
-              %span.difference
-            %td.editable
-              %span.static= financial_row[:freeform]
-              %span.difference
-            %td.editable
-              %span.static= financial_row[:total]
-              %span.difference
+          - if valid_financial_row?(financial_row)
+            %tr
+              %td= financial_row[:stakeholder].titleize
+              %td.editable
+                %span.static= financial_row[:incoming]
+                %span.difference
+                  - if financial_row[:compare]
+                    %span>(
+                    %span.calc= financial_row[:compare][:incoming]
+                    %span>)
+
+              %td.editable
+                %span.static= financial_row[:outgoing]
+                %span.difference
+                  - if financial_row[:compare]
+                    %span>(
+                    %span.calc= financial_row[:compare][:outgoing]
+                    %span>)
+
+              %td.editable
+                %span.static= financial_row[:freeform]
+                %span.difference
+                  - if financial_row[:compare]
+                    %span>(
+                    %span.calc= financial_row[:compare][:freeform]
+                    %span>)
+
+              %td.editable
+                %span.static= financial_row[:total]
+                %span.difference
+                  - if financial_row[:compare]
+                    %span>(
+                    %span.calc= financial_row[:compare][:total]
+                    %span>)
 
     %span.loading-spinner
       = image_tag 'wait.gif'

@@ -1,10 +1,16 @@
 class BusinessCase < ActiveRecord::Base
-  FREEFORM_ROW = { 'freeform' => [nil] * Stakeholder.all.size }
-
   belongs_to :testing_ground
   belongs_to :job, class: Delayed::Job
 
   serialize :financials, JSON
+
+  def freeform
+    if financials && freeform_row = financials.detect{|t| t['freeform'] }
+      freeform_row
+    else
+      {'freeform' => [nil] * financials.size }
+    end
+  end
 
   def financials=(financials)
     if(financials.is_a?(Array))

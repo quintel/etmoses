@@ -88,7 +88,7 @@ class Topology < ActiveRecord::Base
     each_node do |node|
       next unless node[:stakeholder]
 
-      unless Stakeholder.all.include?(node[:stakeholder])
+      unless Stakeholder.pluck(:name).include?(node[:stakeholder])
         errors.add(:graph, "contains a non existing stakeholder")
       end
     end
