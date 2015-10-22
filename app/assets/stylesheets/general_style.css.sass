@@ -1,4 +1,4 @@
-$tooltip-color: #eee
+$tooltip-color: #E8E8E8
 
 em.note span.sep
   border-left: 1px solid #999
@@ -18,15 +18,18 @@ em.note span.sep
   color: #bbb
   display: inline-block
   + .tooltip
+    &.in
+      opacity: 1
     &.right .tooltip-arrow
       border-right-color: $tooltip-color
     > .tooltip-inner
       color: black
       background-color: $tooltip-color
       opacity: 1
-      width: 400px
+      max-width: 300px
       text-align: left
-      padding: 10px 10px 10px 15px
+      padding: 10px 10px 10px 12px
+      text-align: justify
 
 .field_with_errors
   display: inline

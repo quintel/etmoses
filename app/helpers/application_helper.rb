@@ -1,6 +1,6 @@
 module ApplicationHelper
   def tooltip_tag(tooltip_text)
-    link_to "#", data: {toggle: 'tooltip', placement: 'right'}, title: tooltip_text, class: "tooltip-link" do
+    link_to "#", data: {toggle: 'tooltip', placement: 'right', trigger: 'click'}, title: tooltip_text, class: "tooltip-link" do
       content_tag(:span, nil, class: "glyphicon glyphicon-info-sign")
     end
   end
