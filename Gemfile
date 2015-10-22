@@ -65,11 +65,8 @@ group :test do
   gem 'webmock'
 end
 
-group :production, :staging do
-  gem 'airbrake'
-end
-
 # Application Gems.
+gem 'airbrake'
 gem 'rest-client'
 gem 'virtus'
 gem 'devise'
