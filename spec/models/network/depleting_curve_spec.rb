@@ -18,7 +18,11 @@ RSpec.describe Network::DepletingCurve do
     end
 
     context 'after assigning use of 0.5 to frame 0' do
-      before { curve.deplete(0, 0.5) }
+      let!(:depleted) { curve.deplete(0, 0.5) }
+
+      it 'returns the depleted amount' do
+        expect(depleted).to eq(0.5)
+      end
 
       it 'reduces the amount required in frame 0 to 0.5' do
         expect(curve.get(0)).to eq(0.5)
@@ -31,7 +35,11 @@ RSpec.describe Network::DepletingCurve do
 
 
     context 'after assigning use of 1.5 to frame 0' do
-      before { curve.deplete(0, 1.0) }
+      let!(:depleted) { curve.deplete(0, 1.0) }
+
+      it 'returns the depleted amount' do
+        expect(depleted).to eq(1.0)
+      end
 
       it 'reduces the amount required in frame 0 to zero' do
         expect(curve.get(0)).to be_zero
