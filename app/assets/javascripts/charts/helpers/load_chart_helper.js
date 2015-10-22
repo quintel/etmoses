@@ -49,8 +49,11 @@ var LoadChartHelper = (function () {
         },
 
         clearBrush: function () {
+            if (window.localSettings !== undefined) {
+                window.localSettings.remove('global_brush_extent');
+            }
+
             this.globalBrushExtent = undefined;
-            window.localSettings.remove('global_brush_extent');
             this.charts.forEach(function (chart) {
                 if (chart) {
                     d3.select(".brush").call(chart.brush.clear());
