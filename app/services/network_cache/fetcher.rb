@@ -16,8 +16,6 @@ module NetworkCache
       tree_scope
     end
 
-    private
-
     def read(key)
       MessagePack.unpack(File.read(file_name(key)))
     end

@@ -20,6 +20,12 @@ Rails.application.routes.draw do
         post 'compare_with', 'data', 'render_summary'
       end
     end
+
+    resources :merit, only: [] do
+      collection do
+        get :price_curve, :load_curves
+      end
+    end
   end
 
   post :validate_business_case, to: "business_cases#validate"

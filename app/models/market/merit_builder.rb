@@ -36,6 +36,10 @@ module Market
       )
     end
 
+    def load_curves
+      to_merit_order.load_curves
+    end
+
     private
 
     def participant_from(participant)

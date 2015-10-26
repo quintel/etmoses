@@ -16,7 +16,9 @@ var TreeGraph = (function(){
       if(!!treeData) this.treeData = treeData;
 
       if(this.initialCallDone && this.initialStrategyCallDone){
+        /*Enable the first menu item*/
         $("a.dropdown-toggle").first().removeClass("disabled");
+        $("a.merit-button").parents("li.disabled").removeClass("disabled");
 
         buildBase();
         transformData.call(this);

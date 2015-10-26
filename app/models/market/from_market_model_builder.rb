@@ -51,7 +51,7 @@ module Market
 
     def convert_tariff(type, tariff)
       case type
-        when 'merit' then merit_curve
+        when 'merit' then merit_curve.price_curve
         when 'curve' then PriceCurve.find_by_key(tariff).network_curve
         else              tariff.to_f
       end
@@ -60,18 +60,7 @@ module Market
     def merit_curve
       return @merit_curve if @merit_curve
 
-      merit_data = EtEngineConnector.new.merit(@les.scenario_id)
-      root       = @network.nodes.detect { |node| node.in_edges.none? }
-
-      load_curve = Network::Curve.from(root.load)
-
-      consumption = load_curve.map do |kw|
-        kw < 0 ? 0.0 : kw * load_curve.resolution
-      end
-
-      @merit_curve ||= MeritBuilder.new(
-        *merit_data.values_at('participants', 'profiles'), consumption.to_a
-      ).price_curve
+      @merit_curve ||= MeritCurveBuilder.new(@les, @network).build
     end
   end # FromMarketModelBuidler
 end

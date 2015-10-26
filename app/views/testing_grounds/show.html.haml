@@ -12,6 +12,8 @@
       %ul.dropdown-menu
         %li.disabled= link_to "Download curve", "#", class: "download-curve"
         %li.disabled= link_to 'Download technologies CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: "technologies-button"
+        %li.disabled= link_to 'Download merit order price curve', price_curve_testing_ground_merit_index_path(@testing_ground, format: :csv), class: "merit-button"
+        %li.disabled= link_to 'Download merit order load curves', load_curves_testing_ground_merit_index_path(@testing_ground, format: :csv), class: "merit-button"
 
         - if can_export?(@testing_ground)
           %li.divider{role: "separator"}
