@@ -1,0 +1,46 @@
+.technology{class: technology.type, data: technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node) }
+  %div.pull-right
+    = link_to "Show advanced", "#!", class: "btn btn-primary show-advanced"
+
+    = link_to "Remove", "#!", class: "remove-row btn btn-danger"
+
+  %strong= technology.name
+  .editable.profile.select
+    %span Profile
+    %select.profile.form-control{autocomplete: 'off', data: { type: 'profile' }}
+
+  .editable.buffer.select.hidden
+    %span Buffer
+    %select.buffer.form-control{autocomplete: 'off', data: { type: 'buffer' }}
+
+  .editable.text{class: 'demand'}
+    %span Demand
+    %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: {type: 'demand'} }
+    .clearfix
+
+  .editable.text{class: 'electrical_capacity'}
+    %span Electrical capacity
+    %input.form-control{type: 'text', value: technology.electrical_capacity.try(:round, 4), data: {type: 'electrical_capacity' } }
+    .clearfix
+
+  .editable.text{class: 'volume'}
+    %span Volume
+    %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
+    .clearfix
+
+  .editable.text{class: 'units'}
+    %span Units
+    %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
+    .clearfix
+
+  - InstalledTechnology::HIDDEN.each do |key|
+    - if key == :concurrency
+      .editable.hidden{class: key}
+        %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key} }
+    - else
+      .editable.advanced.hidden{class: key}
+        %span= key.to_s.humanize
+        %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key } }
+        .clearfix
+
+  .clearfix
