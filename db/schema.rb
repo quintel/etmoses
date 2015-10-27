@@ -128,11 +128,12 @@ ActiveRecord::Schema.define(version: 20151117105143) do
   end
 
   create_table "technologies", force: true do |t|
-    t.string  "key",              limit: 100,                null: false
+    t.string  "key",              limit: 100,                 null: false
     t.string  "name",             limit: 100
     t.string  "export_to",        limit: 100
     t.string  "behavior",         limit: 50
     t.boolean "visible",                      default: true
+    t.boolean "composite",                    default: false
     t.float   "default_capacity", limit: 24
     t.float   "default_volume",   limit: 24
     t.float   "default_demand",   limit: 24
