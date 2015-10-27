@@ -268,21 +268,6 @@ ul.testing-grounds {
   }
 }
 
-#technologies .technology {
-  background: #eee;
-  border-radius: 5px;
-  font-size: 13px;
-  margin-bottom: 20px;
-
-  .inner {
-    padding: 5px 10px;
-  }
-
-  .quiet {
-    color: #777;
-  }
-}
-
 .or {
   font-size: 11px;
   font-weight: 600;
@@ -344,15 +329,37 @@ table.table.scenarios{
     padding-left: 0px;
   }
 
-  select{
-    border: none;
-    box-shadow: none;
-    padding-left: 6px;
-  }
+  .technologies .technology{
+    margin: 18px 0;
+    clear: both;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
 
-  input{
-    border: none;
-    width: 100%;
+    .editable{
+      padding: 7px 0;
+
+      &.text, &.advanced{
+        width: 400px;
+        float: left;
+      }
+
+      &.buffer select,
+      &.profile select{
+        width: 380px;
+      }
+
+      span, input{
+        float: left;
+      }
+
+      span{
+        width: 230px;
+      }
+
+      input{
+        width: 150px;
+      }
+    }
   }
 }
 
@@ -554,4 +561,15 @@ table span.static{
   vertical-align: middle;
   white-space: nowrap;
   width: 130px;
+}
+
+.add-technology {
+  .input-group{
+    display: block;
+
+    select{
+      float: left;
+      width: 250px;
+    }
+  }
 }

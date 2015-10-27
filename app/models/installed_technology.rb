@@ -2,6 +2,7 @@ class InstalledTechnology
   include Virtus.model
 
   attribute :name,                                String
+  attribute :buffer,                             String
   attribute :type,                                String, default: 'generic'
   attribute :behavior,                            String
   attribute :profile,                             Integer
@@ -19,8 +20,8 @@ class InstalledTechnology
   attribute :om_costs_per_full_load_hour,         Float
   attribute :om_costs_for_ccs_per_full_load_hour, Float
 
-  EDITABLES = %i(name profile electrical_capacity volume demand units initial_investment
-    technical_lifetime full_load_hours om_costs_per_year
+  EDITABLES = %i(name buffer type profile electrical_capacity volume demand units
+    initial_investment technical_lifetime full_load_hours om_costs_per_year
     om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
     performance_coefficient concurrency
   )

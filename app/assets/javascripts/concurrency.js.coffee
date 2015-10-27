@@ -10,6 +10,7 @@ calculateConcurrency = ()->
 topology_id = ->
   $("#testing_ground_topology_id").val()
 
+# Also apply the concurrency settings
 technology_distribution = ->
   tech_distribution = JSON.parse($("textarea#technology_distribution").text())
 
