@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151027151808) do
+ActiveRecord::Schema.define(version: 20151104094407) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 20151027151808) do
     t.datetime "job_finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "composites", force: true do |t|
+    t.integer "technology_id"
+    t.integer "composite_id"
   end
 
   create_table "delayed_jobs", force: true do |t|
@@ -123,11 +128,12 @@ ActiveRecord::Schema.define(version: 20151027151808) do
   end
 
   create_table "technologies", force: true do |t|
-    t.string  "key",              limit: 100,                null: false
+    t.string  "key",              limit: 100,                 null: false
     t.string  "name",             limit: 100
     t.string  "export_to",        limit: 100
     t.string  "behavior",         limit: 50
     t.boolean "visible",                      default: true
+    t.boolean "composite",                    default: false
     t.float   "default_capacity", limit: 24
     t.float   "default_volume",   limit: 24
     t.float   "default_demand",   limit: 24
