@@ -7,10 +7,6 @@ module Market
       get(:rule)
     end
 
-    def inspect
-      "#<Market::Relation #{rule}>"
-    end
-
     # Public: The nodes whose values should be measured in order to determine
     # the price of the relation. These are the network nodes belonging to the
     # leaf nodes in the market graph.
@@ -25,6 +21,9 @@ module Market
     # Returns a numeric.
     def price
       rule.call(self, get(:variants))
+    rescue Market::Error => ex
+      ex.message.gsub!(/$/, " (in #{ inspect })")
+      raise ex
     end
   end
 end
