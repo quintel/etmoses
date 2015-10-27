@@ -27,7 +27,7 @@
         .clearfix
         %p.note Specify which percentage of solar production can be capped
 
-      %button.btn.btn-primary.apply_strategies{data: {url: store_strategies_testing_ground_path(@testing_ground), is_allowed_to_store_strategies: (!!policy(@testing_ground).store_strategies?).to_s }} Apply
+      %button.btn.btn-primary.apply_strategies Apply
 
     - if policy(@testing_ground).edit?
       .main-buttons
@@ -95,10 +95,8 @@
     %span.loading-spinner
       = image_tag 'wait.gif'
 
-.clearfix
-
-#collapse-stakeholders
-  = select_tag("stakeholders", options_for_stakeholders, {include_blank: 'Select stakeholder', class: "form-control", disabled: 'disabled'})
+  #collapse-stakeholders
+    = select_tag("stakeholders", options_for_stakeholders, {include_blank: 'Select stakeholder', class: "form-control", disabled: 'disabled'})
 
 .clearfix
 

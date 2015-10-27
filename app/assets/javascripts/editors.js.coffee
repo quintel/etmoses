@@ -18,6 +18,7 @@ createEditor = (textarea) ->
   editor.on 'change', ->
     textarea.text(editor.getSession().getValue())
     $("a[href='#topology']").addClass("editing");
+    textarea.parents("form").addClass("editing");
 
 $(document).on "page:change", ->
   textarea = $('textarea.topology-graph')

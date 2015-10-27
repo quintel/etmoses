@@ -121,34 +121,37 @@ RSpec.describe TestingGroundsController do
   describe "#create" do
     let(:topology){ FactoryGirl.create(:topology) }
     let(:market_model) { FactoryGirl.create(:market_model) }
-    it "creates a testing ground" do
-      sign_in(user)
-
+    let!(:sign_in_user){ sign_in(user) }
+    let!(:valid_testing_ground){
       expect_any_instance_of(TestingGround).to receive(:valid?)
         .at_least(:once).and_return(true)
+    }
 
+    it "creates a testing ground" do
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.count).to eq(1)
     end
 
+    it "creates a selected strategy" do
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+
+      expect(SelectedStrategy.last.testing_ground).to eq(TestingGround.last)
+    end
+
+    it "creates a business case" do
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+
+      expect(BusinessCase.last.testing_ground).to eq(TestingGround.last)
+    end
+
     it "redirects to show page" do
-      sign_in(user)
-
-      expect_any_instance_of(TestingGround).to receive(:valid?).
-        at_least(:once).and_return(true)
-
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(response).to redirect_to(testing_ground_path(TestingGround.last))
     end
 
     it "assings the testing ground to the current user" do
-      sign_in(user)
-
-      expect_any_instance_of(TestingGround).to receive(:valid?)
-        .at_least(:once).and_return(true)
-
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.last.user).to eq(controller.current_user)
@@ -156,7 +159,7 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#data.json" do
-    describe "while signing in" do
+    describe "while signed in" do
       let!(:sign_in_user){ sign_in(user) }
 
       it "shows the data of a testing ground" do
@@ -176,7 +179,7 @@ RSpec.describe TestingGroundsController do
       end
     end
 
-    describe "while not signing in" do
+    describe "while not signed in" do
       it "shows the data of a testing ground" do
         testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 
@@ -409,30 +412,6 @@ RSpec.describe TestingGroundsController do
       post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "New name" }
 
       expect(TestingGround.last.user).to eq(admin)
-    end
-  end
-
-  describe "#store strategies" do
-    let(:strategies){ {
-      "solar_storage"=>false,
-      "battery_storage"=>false,
-      "solar_power_to_heat"=>false,
-      "solar_power_to_gas"=>false,
-      "buffering_electric_car"=>false,
-      "buffering_space_heating"=>false,
-      "postponing_base_load"=>false,
-      "saving_base_load"=>false,
-      "capping_solar_pv"=>false,
-      "capping_fraction"=>1.0
-    } }
-
-    let!(:sign_in_user){ sign_in(user) }
-    let(:testing_ground){ FactoryGirl.create(:testing_ground, user: user) }
-
-    it "saves strategies" do
-      post :store_strategies, id: testing_ground.id, format: :js, strategies: strategies
-
-      expect(JSON.parse(testing_ground.selected_strategy.to_json)).to eq(strategies)
     end
   end
 end

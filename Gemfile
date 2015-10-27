@@ -34,6 +34,9 @@ gem 'unicorn'
 gem 'daemons'
 gem 'delayed_job_active_record'
 
+# Caching
+gem 'msgpack'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'

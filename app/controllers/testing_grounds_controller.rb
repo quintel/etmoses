@@ -1,9 +1,9 @@
 class TestingGroundsController < ResourceController
-  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as store_strategies)
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:calculate_concurrency, :update, :store_strategies, :save_as]
+  respond_to :js, only: [:calculate_concurrency, :update, :save_as]
   respond_to :json, only: :fetch_etm_values
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
@@ -16,6 +16,8 @@ class TestingGroundsController < ResourceController
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
   skip_before_filter :authenticate_user!, only: [:show, :data, :index]
+
+  after_filter :update_strategies, only: :data
 
   # GET /topologies
   def index
@@ -60,6 +62,7 @@ class TestingGroundsController < ResourceController
 
     if @testing_ground.valid?
       BusinessCase.create!(testing_ground: @testing_ground)
+      SelectedStrategy.create!(testing_ground: @testing_ground)
 
       Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
     end
@@ -74,7 +77,7 @@ class TestingGroundsController < ResourceController
   # POST /testing_grounds/:id/data
   def data
     begin
-      render json: @testing_ground.to_json(params[:strategies])
+      render json: TestingGround::Calculator.new(@testing_ground, params[:strategies]).calculate
     rescue StandardError => ex
       notify_airbrake(ex) if defined?(Airbrake)
 
@@ -95,12 +98,6 @@ class TestingGroundsController < ResourceController
 
       render json: result, status: 500
     end
-  end
-
-  # POST /testing_grounds/:id/store_strategies
-  def store_strategies
-    selected_strategy = SelectedStrategy.find_or_create_by(testing_ground: @testing_ground)
-    selected_strategy.update_attributes(strategy_params)
   end
 
   # GET /testing_grounds/:id/edit
@@ -201,6 +198,12 @@ class TestingGroundsController < ResourceController
     @testing_ground = TestingGround.find(params[:id])
     session[:testing_ground_id] = params[:id]
     authorize @testing_ground
+  end
+
+  def update_strategies
+    if params[:strategies]
+      @testing_ground.selected_strategy.update_attributes(strategy_params)
+    end
   end
 
   # Internal: Before filter which loads models required for export-to-ETEngine

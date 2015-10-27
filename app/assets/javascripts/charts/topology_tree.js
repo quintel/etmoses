@@ -1,5 +1,5 @@
 var TopologyTree = (function(){
-  var url, container, treeGraph;
+  var url, container, treeGraph, strategies;
 
   TopologyTree.prototype = {
     showTree: function() {
@@ -10,7 +10,14 @@ var TopologyTree = (function(){
       treeGraph.strategyToggler.setStrategies();
 
       getTree({}, d3Callback);
-      getTree({ strategies: StrategyHelper.getStrategies() }, updateLoadChart);
+
+      if(StrategyHelper.anyStrategies()){
+        getTree({ strategies: StrategyHelper.getStrategies() }, updateLoadChart);
+      }
+      else{
+        treeGraph.initialStrategyCallDone = true;
+        treeGraph.strategyToggler.toggleLoading();
+      };
     }
   };
 

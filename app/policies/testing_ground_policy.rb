@@ -23,7 +23,6 @@ class TestingGroundPolicy < ApplicationPolicy
   end
 
   alias_method :data?, :show?
-  alias_method :store_strategies?, :edit?
   alias_method :technology_profile?, :show?
   alias_method :import?, :new?
   alias_method :perform_import?, :import?

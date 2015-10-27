@@ -6,6 +6,8 @@ FactoryGirl.define do
 
     market_model
 
+    selected_strategy
+
     user
 
     technology_profile { YAML.load(<<-YML.strip_heredoc) }

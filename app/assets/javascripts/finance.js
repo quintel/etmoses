@@ -10,6 +10,9 @@ $(document).on("page:change", function(){
 
   if(financeTable.length > 0){
     new FinanceTable(financeTable).create();
+    $(financeTable).find(".row_value input").on('change', function(){
+      $(".edit_business_case, a[href='#business-case']").addClass("editing");
+    });
   }
 
   var businessCaseTable = $("#business_case_table");

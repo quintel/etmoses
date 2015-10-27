@@ -36,7 +36,10 @@ RSpec.configure do |config|
     FileUtils.rm_rf(Dir["#{ Rails.root }/public/test_files/"])
   end
 
+  # Clear all mails from memory
+  # Clear all cache
   config.after :each do
     ActionMailer::Base.deliveries.clear
+    FileUtils.rm_rf(Dir["#{ Rails.root }/tmp/networks/#{Rails.env}/*"])
   end
 end

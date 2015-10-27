@@ -12,6 +12,27 @@ FactoryGirl.define do
     YML
   end
 
+  factory :topology_caching, class: Topology do
+    name "Topology"
+    graph { YAML.load(<<-YML.strip_heredoc) }
+      ---
+      name: :hv
+      load:
+        - 3
+      children:
+      - name: :mv
+        load:
+          - 2
+        children:
+        - name: :lv1
+          load:
+            - 1
+        - name: :lv2
+          load:
+            - 4
+    YML
+  end
+
   factory :large_topology, class: Topology do
     name "Large Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }

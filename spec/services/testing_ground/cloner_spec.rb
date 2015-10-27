@@ -22,7 +22,6 @@ RSpec.describe TestingGround::Cloner do
 
       expect(TestingGround.last.topology).to eq(topology)
     end
-
   end
 
   describe "clones a topology only if it's valid" do

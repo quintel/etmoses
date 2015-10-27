@@ -181,6 +181,7 @@ GEM
     method_source (0.8.2)
     mime-types (2.4.3)
     minitest (5.5.1)
+    msgpack (0.6.2)
     multi_json (1.11.2)
     mysql2 (0.3.18)
     net-scp (1.2.1)
@@ -361,6 +362,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   mailcatcher
+  msgpack
   mysql2 (~> 0.3.18)
   paperclip (~> 4.2)
   pry-rails

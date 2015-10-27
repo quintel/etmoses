@@ -10,6 +10,7 @@ capybara-*.html
 /public/system
 /coverage/
 /spec/tmp
+/spec/fixtures/*.tmp.csv
 /scripts/output_data/*.csv
 **.orig
 rerun.txt
