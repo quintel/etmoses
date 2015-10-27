@@ -33,6 +33,10 @@ RSpec.describe Network::Technologies::Battery do
     it 'has conditional consumption equal to the volume' do
       expect(tech.conditional_consumption_at(0)).to eq(2.0)
     end
+
+    it 'stores nothing' do
+      expect(tech.stored[0]).to be_zero
+    end
   end # in frame 0
 
   context 'in frame 1' do
@@ -43,6 +47,10 @@ RSpec.describe Network::Technologies::Battery do
 
       it 'has conditional consumption equal to the volume' do
         expect(tech.conditional_consumption_at(1)).to eq(2.0)
+      end
+
+      it 'stores nothing' do
+        expect(tech.stored[1]).to be_zero
       end
     end # with no storage carried from frame 0
 
@@ -57,6 +65,11 @@ RSpec.describe Network::Technologies::Battery do
         expect(tech.conditional_consumption_at(1)).to eq(2.0)
       end
 
+      it 'stores nothing' do
+        # Infinite capacity means all stored can be emitted.
+        expect(tech.stored[1]).to be_zero
+      end
+
       context 'with capacity of 0.2' do
         let(:capacity) { 0.2 }
 
@@ -66,6 +79,10 @@ RSpec.describe Network::Technologies::Battery do
 
         it 'has conditional consumption equal to the 2x capacity' do
           expect(tech.conditional_consumption_at(1)).to be_within(1e-9).of(0.4)
+        end
+
+        it 'stores 1.3' do
+          expect(tech.stored[1]).to eq(1.3)
         end
       end # with capacity of 0.2
 
@@ -78,6 +95,10 @@ RSpec.describe Network::Technologies::Battery do
 
         it 'has conditional consumption equal to the volume' do
           expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        end
+
+        it 'stores nothing' do
+          expect(tech.stored[1]).to be_zero
         end
       end # with capacity of 3.0
     end # with 1.5 storage carried from frame 0
