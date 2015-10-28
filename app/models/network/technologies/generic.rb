@@ -106,11 +106,13 @@ module Network
       end
 
       def consumer?
-        capacity.present? && capacity >= 0 ||
-          @installed.demand ||
+        if @installed.demand
+          @installed.demand >= 0
+        else
           # When storage is disabled, it may turn into a normal technology in
           # order to draw load -- but NOT store -- from the network.
-          @installed.volume
+          @installed.volume || capacity >= 0
+        end
       end
 
       def producer?
