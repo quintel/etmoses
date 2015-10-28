@@ -3,6 +3,8 @@ var TopologyTree = (function(){
 
   TopologyTree.prototype = {
     showTree: function() {
+      var id = $(".testing_ground_id").text();
+
       $("a.dropdown-toggle").first().addClass("disabled");
       $("#collapse-stakeholders select").prop('disabled', true);
 

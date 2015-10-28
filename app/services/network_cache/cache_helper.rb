@@ -18,7 +18,7 @@ module NetworkCache
     end
 
     def strategy_prefix
-      @opts.except(:capping_fraction).values.any? ? 'features' : 'basic'
+      @opts.symbolize_keys.except(:capping_fraction).values.any? ? 'features' : 'basic'
     end
   end
 end

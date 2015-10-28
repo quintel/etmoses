@@ -1,0 +1,3 @@
+<% @merit_curve.each do |row| %>
+  <%= CSV.generate_line(row) %>
+<% end %>

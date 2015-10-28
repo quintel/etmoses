@@ -8,6 +8,8 @@ FactoryGirl.define do
 
     selected_strategy
 
+    scenario_id 1
+
     user
 
     technology_profile { YAML.load(<<-YML.strip_heredoc) }
