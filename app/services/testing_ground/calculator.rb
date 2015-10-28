@@ -6,7 +6,7 @@ class TestingGround::Calculator
 
   def calculate
     if cache.present?
-      @testing_ground.update_attribute(:job_id, nil)
+      @testing_ground.update_column(:job_id, nil)
 
       base.merge(graph: GraphToTree.convert(cache.fetch))
     else
@@ -20,7 +20,8 @@ class TestingGround::Calculator
 
   def calculate_load_in_background
     unless @testing_ground.job_id.present?
-      @testing_ground.update_attributes(job: Delayed::Job.enqueue(task), job_finished_at: nil)
+      job = Delayed::Job.enqueue(task)
+      @testing_ground.update_columns(job_id: job.id, job_finished_at: nil)
     end
   end
 

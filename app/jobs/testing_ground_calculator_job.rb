@@ -8,13 +8,9 @@ class TestingGroundCalculatorJob
     cache.write(@testing_ground.to_calculated_graph(@strategies))
   end
 
-  def before(job)
-    @testing_ground.update_attribute(:job_id, job.id)
-  end
-
   def success(job)
     store_strategies
-    @testing_ground.update_attributes(job_finished_at: DateTime.now)
+    @testing_ground.update_column(:job_finished_at, DateTime.now)
   end
 
   def error(job, exception)

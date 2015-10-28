@@ -58,21 +58,4 @@ RSpec.describe TestingGroundsController do
               .fetch.node('CONGESTED_END_POINT_0').get(:load).length).to eq(8760)
     end
   end
-
-  describe "#fetch_cache" do
-    it "doesn't fetch cache" do
-      post :data, id: testing_ground,
-            strategies: FakeLoadManagement.strategies(saving_base_load: true)
-
-      expect(JSON.parse(response.body)["pending"]).to eq(true)
-    end
-
-    it "fetches cache" do
-      NetworkCache::Writer.from(testing_ground).write
-
-      post :data, id: testing_ground
-
-      expect(JSON.parse(response.body)).to have_key('graph')
-    end
-  end
 end
