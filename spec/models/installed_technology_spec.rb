@@ -231,6 +231,14 @@ RSpec.describe InstalledTechnology do
       end
     end # when set to nil
 
+    context 'when set to ""' do
+      let(:tech) { InstalledTechnology.new(performance_coefficient: "") }
+
+      it 'returns 1.0' do
+        expect(tech.performance_coefficient).to eq(1.0)
+      end
+    end # when set to nil
+
     context 'when set to 4.0' do
       let(:tech) { InstalledTechnology.new(performance_coefficient: 4.0) }
 

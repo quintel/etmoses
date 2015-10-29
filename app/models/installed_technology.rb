@@ -120,7 +120,7 @@ class InstalledTechnology
   #
   # Returns a numeric.
   def performance_coefficient
-    super || 1.0
+    super.presence || 1.0
   end
 
   # Public: Sets the performance coefficient of this technology.
