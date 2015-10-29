@@ -5,13 +5,6 @@ var LoadChartHelper = (function () {
         globalBrushExtent: undefined,
         currentWeek: undefined,
         forceReload: false,
-        disabledCharts: {
-            load_strategies: true,
-            load: true,
-            capacity: false,
-            gas_strategies: true,
-            gas: true
-        },
         charts: [],
 
         toggleCapacity: function (currentChartId) {
@@ -21,7 +14,7 @@ var LoadChartHelper = (function () {
 
             if (d3ChartData[0]) {
                 d3ChartData[0].forEach(function (chart) {
-                    chart.disabled = !this.disabledCharts[chart.type];
+                    chart.disabled = !LoadChartsSettings[chart.type].enabled;
                 }.bind(this));
             }
 

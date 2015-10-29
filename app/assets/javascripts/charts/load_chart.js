@@ -3,15 +3,9 @@ var LoadChart = (function () {
     'use strict';
 
     var chartLengths = {
-            long: 35040,
-            short: 8760
-        },
-        colors = {
-            load: '#1F77B4',
-            load_strategies: '#95BB95',
-            gas: '#9B5191',
-            gas_strategies: '#C8C758'
-        };
+        long: 35040,
+        short: 8760
+    };
 
     function formatDateFromFrame(frame) {
         var multiplier = -1,
@@ -93,9 +87,9 @@ var LoadChart = (function () {
         return {
             key: "Capacity",
             type: "capacity",
-            color: "darkred",
+            color: LoadChartsSettings['capacity'].color,
             values: total,
-            disabled: LoadChartHelper.disableCapacity
+            disabled: !LoadChartsSettings['capacity'].enabled
         };
     }
 
@@ -125,7 +119,7 @@ var LoadChart = (function () {
                 type:   datum.type,
                 values: sampledData.call(this, datum.values),
                 area:   datum.area,
-                color:  colors[datum.type]
+                color:  LoadChartsSettings[datum.type].color
             });
         }.bind(this));
 

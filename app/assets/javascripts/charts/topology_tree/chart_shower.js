@@ -85,8 +85,8 @@ var ChartShower = (function () {
                     { values: d.altLoad, name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
                     { values: d.load,    name: 'Gas', area: false, type: 'gas' }];
         } else {
-            load = [{ values: d.load, name: 'Load', area: true },
-                    { values: d.load, name: 'Gas',  area: true }];
+            load = [{ values: d.load, name: 'Load', area: true, type: 'load' },
+                    { values: d.load, name: 'Gas',  area: true, type: 'gas' }];
         }
 
         new LoadChart(load, d.capacity, 'default').render(loadChartClass);
