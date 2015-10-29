@@ -1,29 +1,16 @@
 module Network
   module Technologies
     class Buffer < Storage
-      def self.build(installed, profile, options)
-        unless options[:additional_profile]
-          fail "Missing use profile for #{ installed.name }"
-        end
-
-        super
-      end
-
-      def self.disabled_profile(profile, options)
-        Network::Curve.from(super) + options[:additional_profile]
-      end
-
       def self.disabled?(options)
-        false
+        ! options[:buffering_space_heating]
       end
 
-      def initialize(installed, profile,
-                     buffering_space_heating: false,
-                     additional_profile:, **)
-        super
+      def self.disabled_class
+        Generic
+      end
 
-        @use_profile = additional_profile
-        @buffering   = buffering_space_heating
+      def stored
+        @stored ||= DefaultArray.new(&method(:production_at))
       end
 
       # Keep the original production_at which tells us how much energy is stored
@@ -36,7 +23,7 @@ module Network
       #
       # Returns a numeric.
       def production_at(frame)
-        prod = super - (@use_profile.at(frame) * @use_profile.frames_per_hour)
+        prod = super - @profile.at(frame)
         prod < 0 ? 0.0 : prod
       end
 
@@ -47,23 +34,17 @@ module Network
       #
       # Returns a numeric.
       def mandatory_consumption_at(frame)
-        required = @profile.at(frame) * @profile.frames_per_hour
-        stored   = production_at(frame)
+        production = production_at(frame)
+        required   = @profile.at(frame)
 
-        # When storage mode is turned off, the EV is not allowed to
-        # discharge energy for use in other technologies; it is exclusively
-        # for its own use.
-        required = stored if stored > required
+        if production.zero? && required > 0
+          stored   = available_storage_at(frame)
+          unfilled = required - stored
 
-        @capacity.limit_mandatory(frame, required)
-      end
-
-      # Public: Describes the unfilled storage capacity which may be assigned
-      # from excess production in the network.
-      #
-      # Returns a numeric.
-      def conditional_consumption_at(frame)
-        @buffering && super || 0.0
+          unfilled > 0 ? unfilled : 0.0
+        else
+          production
+        end
       end
 
       # Public: EVs should not overload the network.

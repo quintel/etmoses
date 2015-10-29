@@ -19,7 +19,7 @@ module Network
 
       def self.build(installed, profile, **options)
         super(installed, profile, **options.merge(
-          additional_profile: profile, buffering_space_heating: true
+          buffering_space_heating: true
         ))
       end
 

@@ -27,8 +27,7 @@ RSpec.describe TestingGround do
     }
 
     let(:heat_pump_load_profile){
-      { 'availability' => [0, 0, 0.25, 0.5, 0.2, 0],
-        'use'          => [0, 0, 0,    0,   0.5, 0] }
+      { 'default' => [0, 0, 0, 0, 0.5, 0] }
     }
 
     let(:technology_profile){
@@ -70,12 +69,9 @@ RSpec.describe TestingGround do
           results = calculate
 
           expected = [
-            0.0, 0.0,
-            # 2x 1kW = 0.5 kWh stored
-            1.0, 1.0,
-            # 0.5 kWh used by the use profile, 0.8 kW = 0.2 kWh needed by the
-            # availability profile
-            0.8,
+            0.0, 0.0, 0.0, 0.0,
+            # 0.5 kWh used by the profile
+            0.5,
             0.0
           ]
 
@@ -93,9 +89,9 @@ RSpec.describe TestingGround do
             1.0, 1.0,
             # Buffer is full.
             0.0, 0.0,
-            # 0.5 kWh is now subtracted from the buffer, and we can start
+            # 0.5 kW is now subtracted from the buffer, and we can start
             # buffering again...
-            1.0, 1.0
+            0.5, 0.0
           ]
 
           expect(results).to eq(expected.map do |val|
@@ -116,12 +112,9 @@ RSpec.describe TestingGround do
           results = calculate
 
           expected = [
-            0.0, 0.0,
-            # 2x 0.25 kW = 0.5 kWh stored
-            0.25, 0.25,
-            # 0.5 kWh used by the use profile, Availability profile wants to
-            # refill to 0.2 kWh.
-            0.2,
+            0.0, 0.0, 0.0, 0.0,
+            # 0.5 kWh used by the use profile.
+            0.5,
             0.0
           ]
 
