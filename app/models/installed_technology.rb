@@ -89,7 +89,7 @@ class InstalledTechnology
   #
   # Returns a numeric.
   def electrical_capacity
-    capacity && capacity / performance_coefficient
+    capacity.presence && capacity / performance_coefficient
   end
 
   # Public: Sets a new electrical capacity. Also sets the main capacity
