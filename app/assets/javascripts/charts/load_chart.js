@@ -3,9 +3,15 @@ var LoadChart = (function () {
     'use strict';
 
     var chartLengths = {
-        long: 35040,
-        short: 8760
-    };
+            long: 35040,
+            short: 8760
+        },
+        colors = {
+            load: '#1F77B4',
+            load_strategies: '#95BB95',
+            gas: '#9B5191',
+            gas_strategies: '#C8C758'
+        };
 
     function formatDateFromFrame(frame) {
         var multiplier = -1,
@@ -86,6 +92,7 @@ var LoadChart = (function () {
 
         return {
             key: "Capacity",
+            type: "capacity",
             color: "darkred",
             values: total,
             disabled: LoadChartHelper.disableCapacity
@@ -115,9 +122,10 @@ var LoadChart = (function () {
         this.data.forEach(function (datum) {
             results.push({
                 key:    datum.name,
+                type:   datum.type,
                 values: sampledData.call(this, datum.values),
                 area:   datum.area,
-                color:  datum.color
+                color:  colors[datum.type]
             });
         }.bind(this));
 

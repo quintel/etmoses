@@ -2,9 +2,6 @@
 var ChartShower = (function () {
     'use strict';
 
-    var blue = '#1F77B4',
-        green = '#95BB95';
-
     function toggleSelectedNode() {
         d3.selectAll(".overlay circle, .overlay text").style("opacity", 0.3);
         d3.selectAll(".overlay text").style({
@@ -83,11 +80,13 @@ var ChartShower = (function () {
         $(".load-graph").prepend(loadPlatform);
 
         if (this.treeChart.strategyLoads && this.treeChart.strategyShown) {
-            load = [{ values: d.altLoad, name: d.name + ' (with strategies)',
-                      color: green, area: true },
-                    { values: d.load, name: d.name, area: false, color: blue }];
+            load = [{ values: d.altLoad, name: 'Load (with strategies)', area: true, type: 'load_strategies' },
+                    { values: d.load,    name: 'Load', area: false, type: 'load' },
+                    { values: d.altLoad, name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
+                    { values: d.load,    name: 'Gas', area: false, type: 'gas' }];
         } else {
-            load = [{ values: d.load, name: d.name, area: true, color: blue }];
+            load = [{ values: d.load, name: 'Load', area: true },
+                    { values: d.load, name: 'Gas',  area: true }];
         }
 
         new LoadChart(load, d.capacity, 'default').render(loadChartClass);
