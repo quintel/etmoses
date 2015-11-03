@@ -33,7 +33,7 @@ module Network
       #
       # Returns a numeric.
       def mandatory_consumption_at(frame)
-        production_at(frame)
+        0.0
       end
 
       def excess_constrained?

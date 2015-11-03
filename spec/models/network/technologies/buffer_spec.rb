@@ -40,20 +40,22 @@ RSpec.describe Network::Technologies::Buffer do
       describe 'and use of 2.5' do
         let(:profile) { [0.0, 2.5] * 4380 }
 
-        it 'has no production' do
-          expect(tech.production_at(1)).to be_zero
-        end
+        context 'assigned nothing' do
+          it 'has no production' do
+            expect(tech.production_at(1)).to be_zero
+          end
 
-        it 'has mandatory consumption of 2.5' do
-          expect(tech.mandatory_consumption_at(1)).to eq(2.5)
-        end
+          it 'has mandatory consumption of 2.5' do
+            expect(tech.mandatory_consumption_at(1)).to eq(2.5)
+          end
 
-        it 'has conditional consumption of 2.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(2.5)
-        end
+          it 'has conditional consumption of 2.5' do
+            expect(tech.conditional_consumption_at(1)).to eq(2.5)
+          end
 
-        it 'stores nothing' do
-          expect(tech.stored[1]).to be_zero
+          it 'stores nothing' do
+            expect(tech.stored[1]).to be_zero
+          end
         end
 
         # with nothing stored and use of 2.5
@@ -82,12 +84,12 @@ RSpec.describe Network::Technologies::Buffer do
       context 'and no use' do
         let(:profile) { [0.0] * 8760 }
 
-        it 'has production of 2.5' do
-          expect(tech.production_at(1)).to eq(2.5)
+        it 'has no production' do
+          expect(tech.production_at(1)).to be_zero
         end
 
-        it 'has mandatory consumption of 2.5' do
-          expect(tech.mandatory_consumption_at(1)).to eq(2.5)
+        it 'has no mandatory consumption' do
+          expect(tech.mandatory_consumption_at(1)).to be_zero
         end
 
         it 'has conditional consumption of 5.0' do
@@ -103,36 +105,42 @@ RSpec.describe Network::Technologies::Buffer do
       context 'and a use of 1.5' do
         let(:profile) { [0.0, 1.5] * 4380 }
 
-        it 'has production of 1.0' do
-          expect(tech.production_at(1)).to eq(1)
-        end
+        context 'assigned nothing' do
+          it 'has no production' do
+            expect(tech.production_at(1)).to be_zero
+          end
 
-        it 'has mandatory consumption of 1.0' do
-          expect(tech.mandatory_consumption_at(1)).to eq(1)
-        end
+          it 'has no mandatory consumption' do
+            expect(tech.mandatory_consumption_at(1)).to be_zero
+          end
 
-        it 'has conditional consumption of 5.0' do
-          expect(tech.conditional_consumption_at(1)).to eq(5)
-        end
+          it 'has conditional consumption of 5.0' do
+            expect(tech.conditional_consumption_at(1)).to eq(5)
+          end
 
-        it 'has 1.0 remaining storage' do
-          expect(tech.stored[1]).to eq(1)
+          it 'has 1.0 remaining storage' do
+            expect(tech.stored[1]).to eq(1)
+          end
         end
 
         # with 2.5 stored and use of 1.5
         context 'and a capacity of 0.5' do
           let(:capacity) { 0.5 }
 
-          it 'has production of 1.0' do
-            expect(tech.production_at(1)).to eq(1)
+          it 'has no production' do
+            expect(tech.production_at(1)).to be_zero
           end
 
-          it 'has mandatory consumption of 1.0' do
-            expect(tech.mandatory_consumption_at(1)).to eq(1)
+          it 'has no mandatory consumption' do
+            expect(tech.mandatory_consumption_at(1)).to be_zero
           end
 
           it 'has conditional consumption of 0.5' do
             expect(tech.conditional_consumption_at(1)).to eq(0.5)
+          end
+
+          it 'has 1.0 remaining storage' do
+            expect(tech.stored[1]).to eq(1)
           end
         end # and a capacity of 0.5
 
@@ -140,16 +148,20 @@ RSpec.describe Network::Technologies::Buffer do
         context 'and a capacity of 2.0' do
           let(:capacity) { 2.0 }
 
-          it 'has production of 1.0' do
-            expect(tech.production_at(1)).to eq(1)
+          it 'has no production' do
+            expect(tech.production_at(1)).to be_zero
           end
 
-          it 'has mandatory consumption of 1.0' do
-            expect(tech.mandatory_consumption_at(1)).to eq(1)
+          it 'has no mandatory consumption' do
+            expect(tech.mandatory_consumption_at(1)).to be_zero
           end
 
           it 'has conditional consumption of 2.0' do
             expect(tech.conditional_consumption_at(1)).to eq(2)
+          end
+
+          it 'has 1.0 remaining storage' do
+            expect(tech.stored[1]).to eq(1)
           end
         end # and a capacity of 2.0
       end # and a required load of 1.5
