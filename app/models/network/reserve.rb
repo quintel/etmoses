@@ -2,8 +2,9 @@ module Network
   # Stores energy for later use. Has an optional volume which may not be
   # exceeded.
   class Reserve
-    def initialize(volume = Float::INFINITY)
+    def initialize(volume = Float::INFINITY, &decay)
       @volume = volume
+      @decay  = decay
       @store  = []
     end
 
@@ -13,7 +14,7 @@ module Network
     #
     # Returns a numeric.
     def at(frame)
-      @store[frame] ||= frame.zero? ? 0.0 : at(frame - 1)
+      @store[frame] ||= frame.zero? ? 0.0 : at(frame - 1) - decay_at(frame)
     end
 
     alias_method :[], :at
@@ -63,6 +64,19 @@ module Network
         set(frame, 0.0)
         stored
       end
+    end
+
+    # Public: Returns how much energy decayed in the reserve at the beginning of
+    # the given frame.
+    #
+    # Returns a numeric.
+    def decay_at(frame)
+      return 0.0 if frame.zero? || ! @decay
+
+      start = at(frame - 1)
+      decay = @decay.call(frame, start)
+
+      decay < start ? decay : start
     end
 
     # Public: A human readable version of the reserve for debugging.
