@@ -10,12 +10,8 @@ module Network
       end
 
       def stored
-        @stored ||= DefaultArray.new(&method(:production_at))
+        @stored ||= Reserve.new { |frame, _| @profile.at(frame) }
       end
-
-      # Keep the original production_at which tells us how much energy is stored
-      # and available for use.
-      alias_method :available_storage_at, :production_at
 
       # Public: Production describes the amount stored in the buffer at the
       # start of the frame, minus that consumed by the use profile. If use
@@ -23,8 +19,7 @@ module Network
       #
       # Returns a numeric.
       def production_at(frame)
-        prod = super - @profile.at(frame)
-        prod < 0 ? 0.0 : prod
+        0.0
       end
 
       # Public: The minimum amount of energy required to fulfil the needs of the
@@ -34,16 +29,17 @@ module Network
       #
       # Returns a numeric.
       def mandatory_consumption_at(frame)
-        production = production_at(frame)
-        required   = @profile.at(frame)
+        wanted = @profile.at(frame)
 
-        if production.zero? && required > 0
-          stored   = available_storage_at(frame)
-          unfilled = required - stored
-
-          unfilled > 0 ? unfilled : 0.0
+        if frame.zero?
+          wanted
+        elsif stored.at(frame).zero? && wanted > 0
+          # Nothing is left in the buffer and we have consumption, perhaps the
+          # buffer did not have enough to satisfy demand...
+          wanted - stored.decay_at(frame)
         else
-          production
+          # Demand was satisfied.
+          0.0
         end
       end
 
