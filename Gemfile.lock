@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/quintel/merit.git
-  revision: 10749241c9afd6c83cff27b8af950c1198b4aa6d
+  revision: b72c37a28d1d7eb079331fe5ae63b0ca953bce1b
   branch: arbitrary-length
   specs:
     quintel_merit (0.1.0)
