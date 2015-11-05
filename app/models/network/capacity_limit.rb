@@ -9,7 +9,7 @@ module Network
   class CapacityLimit
     attr_reader :capacity, :volume
 
-    def initialize(technology = technology)
+    def initialize(technology)
       @technology = technology
       @volume     = technology.volume
       @capacity   = technology.capacity || Float::INFINITY
