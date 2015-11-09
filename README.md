@@ -10,6 +10,12 @@ fork it and alter at your will.
 
 If you have any questions, please [contact us](http://quintel.com/contact).
 
+## Documentation
+
+* [User documentation for ETMoses](https://github.com/quintel/documentation/tree/master/etmoses) can be found on the [ETM documentation repository](https://github.com/quintel/documentation/tree/master/)
+* Technical documentation is located on the [ETMoses Wiki page](https://github.com/quintel/etmoses/wiki).
+* A PDF document describing the ideas and choices behind the modeling of ETMoses can be downloaded [here](https://github.com/quintel/documentation/blob/master/etmoses/ETMoses_v01.pdf).
+
 ## Build Status
 
 ### Master
