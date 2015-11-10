@@ -23,7 +23,8 @@ module Market
 
     def topology_costs
       group_sum(topology_nodes) do |node|
-        node.get(:investment_cost).to_f / node.lifetime
+        node.get(:investment_cost).to_f / node.lifetime +
+        node.get(:yearly_o_and_m_costs).to_f
       end
     end
 

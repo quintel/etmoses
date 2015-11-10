@@ -129,7 +129,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
     let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
 
     it "determines the initial investments for the stakeholders" do
-      expect(business_case.rows.last['system operator'].last).to eq(10000.0)
+      expect(business_case.rows.last['system operator'].last).to eq(11000.0)
     end
   end
 end
