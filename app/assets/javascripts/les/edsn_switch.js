@@ -1,13 +1,12 @@
-var EDSN_THRESHOLD = 30;
-
 var EdsnSwitch = (function () {
     'use strict';
 
-    var editing = false,
+    var EDSN_THRESHOLD = 30,
+        editing = false,
         validBaseLoads = /^(base_load|base_load_edsn)$/;
 
     function swapSelectBox() {
-        var technology   = $(this.target).data('technology'),
+        var technology   = $(this.target).data('type'),
             self         = this,
             unitSelector = $(this.target).find(".units input"),
             units        = parseInt(unitSelector.val(), 10),
@@ -17,7 +16,7 @@ var EdsnSwitch = (function () {
         $(this.target).find('.editable.profile select').replaceWith(select);
         $(this.target).find("option[value='" + technology + "']").attr('value', actual);
 
-        unitSelector.off('change').on('change', swapSelectBox.bind(self));
+        unitSelector.off('change.units').on('change.units', swapSelectBox.bind(self));
 
         return select;
     }
@@ -34,14 +33,13 @@ var EdsnSwitch = (function () {
         },
 
         isEdsn: function () {
-            return validBaseLoads.test($(this).data('technology'));
+            return validBaseLoads.test($(this).data('type'));
         },
 
         cloneAndAppendProfileSelect: function () {
             swapSelectBox.call(this);
         }
     };
-
 
     function EdsnSwitch() {
         return;
