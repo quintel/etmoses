@@ -2,7 +2,7 @@
 var ProfileSelectBox = (function () {
     'use strict';
 
-    var etmDefaults, edsnSwitch,
+    var edsnSwitch,
         defaultValues = {
             defaultCapacity: null,
             defaultDemand: null,
@@ -22,25 +22,13 @@ var ProfileSelectBox = (function () {
     }
 
     function getDefaults(value) {
-        var selectedOption = $(this).find("option[value='" + value + "']");
-
-        return selectedOption.data() || defaultValues;
-    }
-
-    function defaultsFromEtm(tech) {
-        return etmDefaults[tech] ? etmDefaults[tech][0] : {};
+        return $(this).selectedOption(value).data() || defaultValues;
     }
 
     function setCellDefault() {
         var inputField = $(this.techBox).find('.' + this.key + " input"),
-            technology = $(this.techBox).data('type'),
-            etmValue   = defaultsFromEtm(technology)[this.key],
             userInput  = parseFloat(inputField.val()),
-            def        = (etmValue || this.profileDefault || this.techDefault || '');
-
-        if (etmValue === userInput) {
-            userInput = undefined;
-        }
+            def        = (this.profileDefault || this.techDefault || '');
 
         $(this.techBox).attr('data-' + this.key, userInput || def);
         inputField.val(userInput || def);
@@ -49,7 +37,7 @@ var ProfileSelectBox = (function () {
     function updateTextCells(profileSelectBox) {
         var key,
             defaultValue,
-            technologyDefaults = getDefaults.call($(".row.add-technology select"), $(this).data('type')),
+            technologyDefaults = getDefaults.call($(".add-technology select"), $(this).data('type')),
             profileDefaults    = getDefaults.call(profileSelectBox, $(profileSelectBox).val());
 
         for (defaultValue in defaultValues) {
@@ -128,17 +116,6 @@ var ProfileSelectBox = (function () {
         }
     }
 
-    function setEtmDefaults() {
-        var profile = JSON.parse($("#testing_ground_technology_profile").text()),
-            technologies = [];
-
-        Object.keys(profile).map(function (key) {
-            technologies = technologies.concat(profile[key]);
-        });
-
-        return ETHelper.groupBy(technologies, 'type');
-    }
-
     ProfileSelectBox.prototype = {
         add: function () {
             cloneAndAppendProfileSelect.call(this);
@@ -157,7 +134,6 @@ var ProfileSelectBox = (function () {
 
     function ProfileSelectBox(target) {
         this.target = target;
-        etmDefaults = setEtmDefaults();
         edsnSwitch  = new EdsnSwitch();
     }
 

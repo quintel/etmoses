@@ -13,6 +13,10 @@ $.fn.extend({
 
     selectedOption: function(value){
         return $(this).find("option[value='" + (value || $(this).val()) + "']");
+    },
+
+    set: function(option, value){
+        $(this).data(option, value).attr("data-" + option, value);
     }
 });
 

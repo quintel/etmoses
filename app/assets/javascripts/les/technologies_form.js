@@ -2,6 +2,11 @@
 var TechnologiesForm = (function () {
     'use strict';
 
+    /*
+     * Loops over all the technology <div> tags in the html and extract all the data
+     * attributes.
+     * It than writes the data several hidden <div> tags
+     */
     function parseHarmonicaToJSON() {
         var tableProfile = $(".technologies .technology").toArray().map(function (target) {
                 return $(target).underscorizedData();
@@ -17,7 +22,7 @@ var TechnologiesForm = (function () {
             target = $(this).parents(".technology"),
             value  = $(this).val();
 
-        target.attr('data-' + type, value).data(type, value);
+        target.set(type, value);
 
         parseHarmonicaToJSON();
     }
@@ -26,20 +31,17 @@ var TechnologiesForm = (function () {
         new ProfileSelectBox(this).add();
     }
 
-    function removeBufferOption() {
-        if (this.composite) {
-            $(this.target).find(".buffer_template select").selectedOption(this.value).remove();
-        }
-    }
-
     function addTechnologyTemplate() {
         new TechnologyTemplate(this).addTo(function () {
             parseHarmonicaToJSON();
-            $(this).find("input, select").on('change', updateJSON);
+            $(this).find("input, select").off('change.json_update')
+                .on('change.json_update', updateJSON);
         });
     }
 
-    function addNewTechnologyRow() {
+    function addNewTechnologyRow(e) {
+        e.preventDefault();
+
         var technologySelect = $(this).parents(".input-group").find("select.name"),
             technologyVal    = technologySelect.val(),
             technologyOption = technologySelect.selectedOption(),
@@ -52,17 +54,24 @@ var TechnologiesForm = (function () {
                                      includes:  technologyOption.data('includes') });
     }
 
-    function toggleAdvancedFeatures() {
+    function toggleAdvancedFeatures(e) {
+        e.preventDefault();
+
         $(this).parents(".technology").find(".editable.advanced").toggleClass("hidden");
     }
 
+    /*
+     * Checks if a technology can be removed from the table.
+     * For instance if you want to remove a buffer from the table and it still has
+     * technologies attached to it, it should alert the user that that is not possible.
+     */
     function removeable() {
         var canBeRemoved = true,
             technology = $(this).parents(".technology"),
             target = $(this).parents(".technologies");
 
         target.find(".technology .buffer select:visible").each(function () {
-            if ($(this).val() === technology.data('value')) {
+            if ($(this).val() === technology.data('compositeValue')) {
                 canBeRemoved = false;
                 return false;
             }
@@ -71,12 +80,20 @@ var TechnologiesForm = (function () {
         return canBeRemoved;
     }
 
-    function removeTechnologyRow() {
+    function removeBufferOption() {
+        if (this.composite) {
+            $(".buffer_template select, .technology .buffer select")
+                .selectedOption(this.compositeValue).remove();
+        }
+    }
+
+    function removeTechnologyRow(e) {
+        e.preventDefault();
+
         var technology = $(this).parents(".technology");
 
         if (removeable.call(this)) {
-            removeBufferOption.call({ value:     technology.data().type,
-                                      composite: technology.data().composite });
+            removeBufferOption.call(technology.data());
 
             technology.remove();
         } else {
@@ -98,11 +115,29 @@ var TechnologiesForm = (function () {
         append: function () {
             addListenersToNewTechnology.call(this);
             parseHarmonicaToJSON.call(this);
+
+            if (this.editing) {
+                this.updateProfiles();
+            }
+        },
+
+        updateProfiles: function () {
+            $(".technologies .technology").each(function () {
+                var techObject    = $(this).underscorizedData();
+
+                techObject.target = $(this).parent();
+                new TechnologyTemplate(techObject).update(this);
+            });
+
+            $(".technology").each(function () {
+                $(this).find(".buffer select").val($(this).data('buffer'));
+            });
         }
     };
 
     function TechnologiesForm(selector) {
         this.selector    = selector;
+        this.editing     = $(selector).parents("form").hasClass("edit_testing_ground");
         this.bufferCount = 0;
     }
 

@@ -36,7 +36,7 @@ module LoadProfiles
     end
 
     def is_edsn?
-      @technology['type'] == "base_load_edsn"
+      @technology.type == "base_load_edsn"
     end
 
     def first
@@ -44,11 +44,11 @@ module LoadProfiles
     end
 
     def minimize_concurrency?
-      @technology["concurrency"] == 'min' && !is_edsn?
+      @technology.concurrency == 'min' && !is_edsn?
     end
 
     def selected_profiles(profiles)
-      profiles[@technology['type']]
+      profiles[@technology.type]
     end
   end
 end

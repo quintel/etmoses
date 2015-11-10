@@ -1,6 +1,6 @@
-.technology{class: technology.type, data: technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node) }
+.technology{class: technology.type, data: stringify_values(technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node)) }
   %div.pull-right
-    = link_to "Show advanced", "#!", class: "btn btn-primary show-advanced"
+    = link_to "Toggle advanced", "#!", class: "btn btn-primary show-advanced"
 
     = link_to "Remove", "#!", class: "remove-row btn btn-danger"
 
@@ -14,17 +14,17 @@
     %select.buffer.form-control{autocomplete: 'off', data: { type: 'buffer' }}
 
   .editable.text{class: 'demand'}
-    %span Demand
+    %span Demand [kWh]
     %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: {type: 'demand'} }
     .clearfix
 
   .editable.text{class: 'electrical_capacity'}
-    %span Electrical capacity
+    %span Electrical capacity [kW]
     %input.form-control{type: 'text', value: technology.electrical_capacity.try(:round, 4), data: {type: 'electrical_capacity' } }
     .clearfix
 
   .editable.text{class: 'volume'}
-    %span Volume
+    %span Volume [kWh]
     %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
     .clearfix
 
