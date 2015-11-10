@@ -28,6 +28,10 @@ class Technology < ActiveRecord::Base
     where(visible: true)
   end
 
+  def self.expandable
+    where(expandable: true)
+  end
+
   def self.with_load_profiles
     joins(:load_profiles).uniq + where(key: 'generic')
   end

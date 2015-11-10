@@ -38,4 +38,5 @@
   .hidden.technology_template
     = render partial: "technology_template", locals: { technology: InstalledTechnology.new, node: nil }
 
-
+  .hidden.includes
+    = composites_data.to_json

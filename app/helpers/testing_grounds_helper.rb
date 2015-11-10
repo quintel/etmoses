@@ -33,8 +33,7 @@ module TestingGroundsHelper
   def profile_table_options_for_name
     technologies = @technologies.visible.order(:name).map do |technology|
       [technology.name, technology.key, data: default_values(technology).merge(
-        composite: technology.composite,
-        includes:  technology.technologies.map(&:key).join(","))
+        composite: technology.composite)
       ]
     end
 
@@ -80,14 +79,31 @@ module TestingGroundsHelper
       class: "btn btn-success save-all")
   end
 
-  def end_point_filter_options(profile)
-    options_for_select(profile.keys, profile.keys)
+  def concurrency_options
+    @technologies.visible.expandable.with_load_profiles
   end
 
-  def column_filter_options(profile)
-    editables = (%w(node) + InstalledTechnology::EDITABLES[0...-1])
-    selected  = %w(node name profile electrical_capacity volume demand units)
+  def composites_data
+    composites = @technologies.map do |technology|
+      if technology.technologies.any?
+        [ technology.key, technology.technologies.map(&:key) ]
+      end
+    end
 
-    options_for_select(editables.map(&:to_s).map{|e| [e.humanize, e] }, selected)
+    Hash[composites.compact]
+  end
+
+  def concurrency_options
+    @technologies.visible.expandable.with_load_profiles
+  end
+
+  def composites_data
+    composites = @technologies.map do |technology|
+      if technology.technologies.any?
+        [ technology.key, technology.technologies.map(&:key) ]
+      end
+    end
+
+    Hash[composites.compact]
   end
 end
