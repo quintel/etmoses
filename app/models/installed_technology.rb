@@ -130,7 +130,7 @@ class InstalledTechnology
   #
   # Returns given coefficient.
   def performance_coefficient=(value)
-    super
+    super(value == 0 ? 1.0 : value)
 
     if @recent_electrical_capacity
       # If the user set the electrical capacity prior to the COP, we need to
