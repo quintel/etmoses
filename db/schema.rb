@@ -137,6 +137,7 @@ ActiveRecord::Schema.define(version: 20151117105143) do
     t.float   "default_capacity", limit: 24
     t.float   "default_volume",   limit: 24
     t.float   "default_demand",   limit: 24
+    t.boolean "expandable",                   default: true
   end
 
   add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree

@@ -78,7 +78,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
         }
 
         it "distributes houses and buildings as though they are one technology" do
-          expect(new_profile.map{|t| t["node"] }.uniq).to eq([:lv1, :lv2, :lv3])
+          expect(new_profile.map{|t| t["node"] }.uniq).to eq(['lv1', 'lv2', 'lv3'])
         end
       end
 
@@ -91,7 +91,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
         }
 
         it "distributes houses and buildings as though they are one technology" do
-          expect(new_profile.map{|t| t["node"] }.uniq).to eq([:lv1, :lv2, :lv3])
+          expect(new_profile.map{|t| t["node"] }.uniq).to eq(['lv1', 'lv2', 'lv3'])
         end
       end
     end

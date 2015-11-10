@@ -1,8 +1,11 @@
 class InstalledTechnology
   include Virtus.model
 
+  attribute :node,                                String
   attribute :name,                                String
-  attribute :buffer,                             String
+  attribute :buffer,                              String
+  attribute :composite,                           Boolean, default: false
+  attribute :composite_value,                     String
   attribute :type,                                String, default: 'generic'
   attribute :behavior,                            String
   attribute :profile,                             Integer
@@ -19,11 +22,12 @@ class InstalledTechnology
   attribute :om_costs_per_year,                   Float
   attribute :om_costs_per_full_load_hour,         Float
   attribute :om_costs_for_ccs_per_full_load_hour, Float
+  attribute :associates,                          Array[InstalledTechnology]
 
   EDITABLES = %i(name buffer type profile electrical_capacity volume demand units
     initial_investment technical_lifetime full_load_hours om_costs_per_year
     om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
-    performance_coefficient concurrency
+    performance_coefficient concurrency composite composite_value
   )
 
   HIDDEN = %i(initial_investment technical_lifetime full_load_hours om_costs_per_year
@@ -45,7 +49,7 @@ class InstalledTechnology
   end
 
   def to_s
-    "#{ name } (#{ type })"
+    "#{ name } ( #{ [type, buffer, composite_value].compact.join(", ") })"
   end
 
   # Public: Set the profile to be used to describe the technology load over
@@ -202,6 +206,10 @@ class InstalledTechnology
     initial_investment.to_f                  / (technical_lifetime || 1) +
     om_costs_per_full_load_hour.to_f         / (full_load_hours || 1) +
     om_costs_for_ccs_per_full_load_hour.to_f / (full_load_hours || 1)
+  end
+
+  def parent_key
+    buffer && !composite ? buffer : ''
   end
 
   private

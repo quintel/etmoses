@@ -53,7 +53,7 @@ RSpec.describe Import do
     end
 
     it 'adds three coal heaters' do
-      expect(testing_ground.technology_profile.list["lv2"][0]["units"]).to eq(3.0)
+      expect(testing_ground.technology_profile.list["lv1"][0].units).to eq(3.0)
     end
 
     context 'when the ETE scenario has no parent' do

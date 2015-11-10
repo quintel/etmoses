@@ -10,4 +10,10 @@ module ApplicationHelper
       [default, object.send(default)]
     end]
   end
+
+  def stringify_values(hash)
+    Hash[hash.map do |k, v|
+      [k, v.to_s]
+    end]
+  end
 end
