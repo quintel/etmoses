@@ -6,7 +6,8 @@ module NetworkCache
     end
 
     def tree_scope
-      @tree_scope ||= TreeToGraph.convert(@testing_ground.topology.graph)
+      @tree_scope ||=
+        Network::Builders::Electricity.build(@testing_ground.topology.graph)
     end
 
     def file_name(key)

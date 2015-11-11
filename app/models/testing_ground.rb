@@ -56,7 +56,7 @@ class TestingGround < ActiveRecord::Base
         calculator.call(cxt)
       end
 
-    context.graph
+    context.graph(:electricity)
   end
 
   # Public: Creates a Calculation::Context which contains all the information
@@ -64,15 +64,17 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
-    Calculation::Context.new(to_graph, options)
+    Calculation::Context.new([network(:electricity), network(:gas)], options)
   end
 
-  # Public: Creates a Turbine graph representing the graph and technologies
-  # defined in the topology.
+  # Public: Creates a Network::Graph representing the topology and technologies
+  # defined.
   #
-  # Returns a Turbine::Graph.
-  def to_graph(frame = 0)
-    TreeToGraph.convert(topology.graph, technology_profile, frame)
+  # carrier - A symbol naming which carrier's network is to be built.
+  #
+  # Returns a Network::Graph.
+  def network(carrier)
+    Network::Builders.for(carrier).build(topology.graph, technology_profile)
   end
 
   # Public: Given a calculated graph, returns the technologies JSON, injecting

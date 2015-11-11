@@ -15,7 +15,7 @@ RSpec.describe Import do
   before do
     %w(tech_one tech_two).each do |key|
       ImportableAttribute.create!(
-        technology: Technology.create!(key: key),
+        technology: Technology.create!(key: key, carrier: 'electricity'),
         name: 'electricity_output_capacity'
       )
     end

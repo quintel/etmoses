@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe Calculation::Context do
   let(:testing_ground) { FactoryGirl.create(:testing_ground) }
-  let(:context) { Calculation::Context.new(graph) }
-  let(:graph)   { Turbine::Graph.new }
+  let(:context) { Calculation::Context.new([graph]) }
+  let(:graph)   { Network::Graph.new(:electricity) }
 
   context 'with a graph containing no profiles' do
     it 'contains the graph' do
-      expect(context.graph).to eq(graph)
+      expect(context.graph(:electricity)).to eq(graph)
     end
 
     it 'has a length of 1' do
@@ -29,7 +29,7 @@ RSpec.describe Calculation::Context do
   context 'with a graph containing a load profile' do
     let(:profile) { create(:load_profile_with_curve) }
     let(:tg)      { create(:testing_ground) }
-    let(:graph)   { tg.to_graph }
+    let(:graph)   { tg.network(:electricity) }
 
     before do
       tg.technology_profile = { 'lv1' => [{

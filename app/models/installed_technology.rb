@@ -161,6 +161,13 @@ class InstalledTechnology
     end
   end
 
+  # Public: The carrier (energy type) used by this technology.
+  #
+  # Returns a Symbol.
+  def carrier
+    technology.carrier.to_sym
+  end
+
   # Public: Determines the network behavior of this technology with a particular
   # curve type. Base load technologies will behave differently depending on the
   # use of a flexible or inflexible curve.

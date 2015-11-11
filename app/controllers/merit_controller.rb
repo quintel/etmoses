@@ -20,7 +20,7 @@ class MeritController < ApplicationController
     graph = TestingGround::Calculator.new(@testing_ground,
               @testing_ground.selected_strategy.attributes).calculate
 
-    network = TreeToGraph.convert(graph[:graph])
+    network = Network::Builders::Electricity.build(graph[:graph])
 
     Market::MeritCurveBuilder.new(@testing_ground, network).merit
   end

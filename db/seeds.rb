@@ -13,6 +13,7 @@ Technology.create!(
   key:         'households_solar_pv_solar_radiation',
   name:        'Residential PV panel',
   export_to:   'households_solar_pv_solar_radiation_market_penetration',
+  carrier:     'electricity',
   behavior:    'conserving'
 )
 
@@ -20,12 +21,14 @@ Technology.create!(
   key:         'transport_car_using_electricity',
   name:        'Electric car',
   export_to:   'transport_car_using_electricity_share',
+  carrier:     'electricity',
   behavior:    'electric_vehicle'
 )
 
 Technology.create!(
   key:         'battery',
   name:        'Generic Battery',
+  carrier:     'electricity',
   behavior:    'storage'
 )
 
@@ -33,6 +36,7 @@ Technology.create!(
   key:         'households_flexibility_p2p_electricity',
   name:        'Battery',
   export_to:   'households_flexibility_p2p_electricity_market_penetration',
+  carrier:     'electricity',
   behavior:    'storage'
 )
 
@@ -40,6 +44,7 @@ Technology.create!(
   key:         'energy_flexibility_p2g_electricity',
   name:        'Power-To-Gas',
   export_to:   'number_of_energy_flexibility_p2g_electricity',
+  carrier:     'electricity',
   behavior:    'siphon'
 )
 
@@ -47,12 +52,14 @@ Technology.create!(
   key:         'households_flexibility_p2h_electricity',
   name:        'Power-To-Heat',
   export_to:   'households_flexibility_p2h_electricity_market_penetration',
+  carrier:     'electricity',
   behavior:    'optional_buffer'
 )
 
 Technology.create!({
   key:      "base_load_edsn",
   name:     "Household aggregated",
+  carrier:     'electricity',
   behavior: "optional",
   visible:  false
 })
@@ -60,6 +67,7 @@ Technology.create!({
 base_load = Technology.create!(
   key:         'base_load',
   name:        'Household',
+  carrier:     'electricity',
   behavior:    'base_load'
 )
 
@@ -78,6 +86,7 @@ TechnologyComponentBehavior.create!(
 base_load_buildings = Technology.create!(
   key:         'base_load_buildings',
   name:        'Buildings',
+  carrier:     'electricity',
   behavior:    'base_load_buildings'
 )
 
@@ -95,52 +104,60 @@ TechnologyComponentBehavior.create!(
 
 Technology.create!(
   key:         'generic',
-  name:        'Other'
+  name:        'Other',
+  carrier:     'electricity',
 )
 
 hp_sh_aw = Technology.create!(
   key:         'households_space_heater_heatpump_air_water_electricity',
   name:        'Heat pump for space heating (air)',
   export_to:   'households_space_heater_heatpump_air_water_electricity_share',
-  behavior:    'buffer'
+  behavior:    'buffer',
+  carrier:     'electricity'
 )
 
 hp_sh_gw = Technology.create!(
   key:         'households_space_heater_heatpump_ground_water_electricity',
   name:        'Heat pump for space heating (ground)',
   export_to:   'households_space_heater_heatpump_ground_water_electricity_share',
-  behavior:    'buffer'
+  behavior:    'buffer',
+  carrier:     'electricity'
 )
 
 hp_sh_ng = Technology.create!(
   key:         'households_space_heater_network_gas',
-  name:        'Households space heater network gas'
+  name:        'Households space heater network gas',
+  carrier:     'gas'
 )
 
 hp_sh_cng = Technology.create!(
   key:         'households_space_heater_combined_network_gas',
-  name:        'Households space heater combined network gas'
+  name:        'Households space heater combined network gas',
+  carrier:     'gas'
 )
 
 hp_wh_aw = Technology.create!(
   key:         'households_water_heater_heatpump_air_water_electricity',
   name:        'Heat pump for hot water (air)',
   export_to:   'households_water_heater_heatpump_air_water_electricity_share',
-  behavior:    'buffer'
+  behavior:    'buffer',
+  carrier:     'electricity'
 )
 
 hp_wh_gw = Technology.create!(
   key:         'households_water_heater_heatpump_ground_water_electricity',
   name:        'Heat pump for hot water (ground)',
   export_to:   'households_water_heater_heatpump_ground_water_electricity_share',
-  behavior:    'buffer'
+  behavior:    'buffer',
+  carrier:     'electricity'
 )
 
 buffer_space_heating = Technology.create!({
   key:       "buffer_space_heating",
   name:      "Buffer space heating",
   behavior:  "optional",
-  composite: true
+  carrier:   "electricity",
+  composite: true,
 })
 
 [hp_sh_aw, hp_sh_gw, hp_sh_ng, hp_sh_cng].each do |tech|
@@ -151,6 +168,7 @@ buffer_water_heating = Technology.create!({
   key:       "buffer_water_heating",
   name:      "Buffer water heating",
   behavior:  "optional",
+  carrier:   "electricity",
   composite: true
 })
 

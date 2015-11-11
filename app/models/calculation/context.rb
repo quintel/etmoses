@@ -1,29 +1,42 @@
 module Calculation
   # Holds information about a graph, which is to be calcualted.
   class Context
-    # Public: Returns the Turbine::Graph instance.
-    attr_reader :graph
-
     # Public: Options which change the behavior of the calculation.
     attr_reader :options
 
-    def initialize(graph, options = {})
-      @graph   = graph
+    def initialize(graphs, options = {})
+      @graphs  = Hash[graphs.map { |g| [g.carrier, g] }]
       @options = options
+    end
+
+    # Public: Given the name of a carrier, returns the energy network used to
+    # calculate the flows of that carrier.
+    #
+    # Returns a Network::Graph.
+    # Raises a KeyError if no such network exists.
+    def graph(carrier)
+      @graphs.fetch(carrier)
+    end
+
+    # Public: All the networks being calculated, in an array.
+    def graphs
+      @graphs.values
     end
 
     # Public: Determines which nodes in the graph have attached technologies.
     #
     # Returns an array of Network::Node instances.
     def technology_nodes
-      @technology_nodes ||= graph.nodes.select do |node|
-        node.get(:installed_techs).any?
+      @technology_nodes ||= graphs.flat_map do |graph|
+        graph.nodes.select do |node|
+          node.get(:installed_techs).any?
+        end
       end
     end
 
-    # Public: The top-most node in the network.
+    # Public: The top-most node in the electricity network.
     def head
-      @head ||= @graph.nodes.detect { |node| node.edges(:in).none? }
+      graph(:electricity).head
     end
 
     def paths

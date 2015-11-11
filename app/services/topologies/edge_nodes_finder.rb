@@ -17,7 +17,7 @@ module Topologies
     private
 
     def all_topology_nodes
-      TreeToGraph.convert(@topology).nodes
+      Network::Builders::Electricity.build(@topology).nodes
     end
   end
 end
