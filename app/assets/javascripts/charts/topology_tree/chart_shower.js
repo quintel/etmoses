@@ -31,25 +31,31 @@ var ChartShower = (function () {
         }
     }
 
+    function downloadLoad() {
+        var loads = this.load.map(function (value, index) {
+                return value + "," + (this.altLoad ? this.altLoad[index] : '');
+            }.bind(this));
+
+        if (this.altLoad) {
+            loads.unshift('Strategies On,Strategies Off');
+        } else {
+            loads.unshift('Strategies Off,');
+        }
+
+        CSV.download(loads.join("\n"), (this.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
+    }
+
     function enableCsvDownloadCurveButton() {
-        var downloadBtn = $('li a.download-curve');
+        var self = this,
+            downloadBtn = $('li a.download-curve');
+
         downloadBtn.parent().removeClass("disabled");
         downloadBtn.text("Download curve for '" + this.name + "'");
 
         downloadBtn.off('click').on('click', function (event) {
             event.preventDefault();
 
-            var loads = this.load.map(function (value, index) {
-                return value + "," + (this.altLoad ? this.altLoad[index] : '');
-            });
-
-            if (this.altLoad) {
-                loads.unshift('Strategies On,Strategies Off');
-            } else {
-                loads.unshift('Strategies Off,');
-            }
-
-            CSV.download(loads.join("\n"), (this.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
+            downloadLoad.call(self);
         });
     }
 
