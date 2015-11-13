@@ -7,7 +7,8 @@ module Network
         new(installed, profile, **options)
       end
 
-      attr_reader :installed, :profile
+      attr_reader   :installed
+      attr_accessor :profile
 
       def initialize(installed, profile, **)
         @installed = installed
@@ -124,6 +125,9 @@ module Network
       end
 
       def store(_frame, _amount)
+      end
+
+      def receive_mandatory(_frame, _amount)
       end
     end # Generic
   end
