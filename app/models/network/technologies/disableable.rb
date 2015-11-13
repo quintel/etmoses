@@ -17,9 +17,11 @@ module Network
       # storage technology.
       def build(installed, profile, options)
         if disabled?(options)
+          profile = disabled_profile(profile, options)
+
           disabled_class.new(
             installed,
-            Network::Curve.from(disabled_profile(profile, options)),
+            profile ? Network::Curve.from(profile) : profile,
             **options
           )
         else

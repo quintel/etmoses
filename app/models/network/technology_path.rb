@@ -60,7 +60,13 @@ module Network
       return if amount.zero? && ! @technology.respond_to?(:store)
 
       # TODO: "store" should be renamed to "consume_conditional"
-      @technology.store(frame, amount) if conditional
+      if conditional
+        @technology.store(frame, amount)
+      else
+        # Hack hack hack. Required to tell components in a "composite"
+        # technology what they have received.
+        @technology.receive_mandatory(frame, amount)
+      end
 
       currently = @technology.consumption[frame] || 0.0
       @technology.consumption[frame] = currently + amount
