@@ -1,19 +1,19 @@
 connection,name,profile_key,electrical_capacity,volume,demand,units
 HSR grid losses,Buildings,edsn_e3d,,,328802000,1
-AC7,Other,Productie edsn_3d,,,-1814424000,1
+AC7,Other,edsn_e3d,,,-1814424000,1
 AC7,Buildings,edsn_e3a,,,3797874,5
 AC7,Buildings,edsn_e3b,,,31534853,1
 AC7,Buildings,edsn_e3c,,,62533931,2
 AC7,Buildings,edsn_e3d,,,72095289,3
 AC6 imex,Buildings,edsn_e3d,,,231019000,1
-AC6 imex,Other,Productie edsn_3d,,,-114960000,1
+AC6 imex,Other,edsn_e3d,,,-114960000,1
 AC6-mw,Buildings,edsn_e3a,,,612433,12
 AC5,Buildings,edsn_e3a,,,388332,864
 AC5,Buildings,edsn_e3b,,,1734221,374
 AC5,Buildings,edsn_e3c,,,3315041,590
 AC5,Buildings,edsn_e3d,,,6291932,127
-AC5,Other,Productie edsn_3d,,,-297812000,1
-AC6,Other,Productie edsn_3d,,,-3375861000,1
+AC5,Other,edsn_e3d,,,-297812000,1
+AC6,Other,edsn_e3d,,,-3375861000,1
 AC6A,Buildings,edsn_e3a,,,1504129,109
 AC6A,Buildings,edsn_e3b,,,7296439,67
 AC6A,Buildings,edsn_e3c,,,12816456,94
@@ -32,7 +32,7 @@ AC5B,Buildings,edsn_e3c,,,1829446,167
 AC5B,Buildings,edsn_e3d,,,3638586,25
 MS grid losses,Buildings,edsn_e3a,,,250677000,1
 MSR grid losses,Buildings,edsn_e3a,,,210006000,1
-AC4,Other,Productie edsn_3d,,,-20816000,1
+AC4,Other,edsn_e3d,,,-20816000,1
 AC4a,Buildings,edsn_e3a,,,65644,4957
 AC4a,Buildings,edsn_e3b,,,145134,2015
 AC4a,Buildings,edsn_e3c,,,229232,1067

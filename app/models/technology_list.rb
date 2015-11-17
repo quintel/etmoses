@@ -25,8 +25,7 @@ class TechnologyList
       [node_key, technologies.map do |technology|
         InstalledTechnology.new(
           technology.update(
-            'profile_key' => ( technology['profile_key'] ||
-                               profiles[technology['profile']] )
+            'profile' => profiles[technology['profile_key']]
           )
         )
       end]
@@ -34,13 +33,10 @@ class TechnologyList
   end
 
   def self.load_profiles(data)
-    profile_ids =
-      data.values.flatten.map{ |t| t['profile'] }.uniq.reject do |key|
-        ! key.is_a?(Integer)
-      end
+    profile_keys = data.values.flatten.map{ |t| t['profile_key'] }.uniq
 
-    Hash[LoadProfile.where(id: profile_ids).map do |load_profile|
-      [load_profile.id, load_profile.key]
+    Hash[LoadProfile.where(key: profile_keys).map do |load_profile|
+      [load_profile.key, load_profile.id]
     end]
   end
 

@@ -6,17 +6,21 @@ RSpec.describe TechnologyList do
     lv1:
     - name: One
       capacity: 1.2
+      profile_key: 'profile_1'
     - name: Two
       capacity: -0.3
+      profile_key: 'profile_1'
     lv2:
     - name: Three
       capacity: 3.2
+      profile_key: 'profile_1'
     - name: Four
       capacity: 0.1
+      profile_key: 'profile_1'
   YML
 
   let!(:mock_presentables){
-    stub_const("InstalledTechnology::PRESENTABLES", %i(name capacity))
+    stub_const("InstalledTechnology::PRESENTABLES", %i(name capacity profile_key))
   }
 
   describe '#to_csv' do
@@ -45,6 +49,7 @@ RSpec.describe TechnologyList do
   describe '.from_csv with 2x2 connections' do
     let(:csv)  { TechnologyList.load(JSON.dump(hash)).to_csv }
     let(:list) { TechnologyList.from_csv(csv) }
+    let!(:load_profile) { FactoryGirl.create(:load_profile, key: 'profile_1') }
 
     it 'returns a TechnologyList' do
       expect(list).to be_a(TechnologyList)
@@ -62,6 +67,8 @@ RSpec.describe TechnologyList do
 
       expect(list['lv1'][1].name).to eq('Two')
       expect(list['lv1'][1].capacity).to eq(-0.3)
+      expect(list['lv1'][1].profile_key).to eq('profile_1')
+      expect(list['lv1'][1].profile).to eq(load_profile.id)
     end
 
     it 'adds technologies to the second connection' do
