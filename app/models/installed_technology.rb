@@ -171,10 +171,10 @@ class InstalledTechnology
       Hash[profile.each_pair.map do |curve_type, curve|
         [curve_type, Network::Curve.new(curve)]
       end]
-    elsif volume.blank? && capacity
-      profile_curves(:capacity_scaled)
     elsif demand
       profile_curves(:demand_scaled)
+    elsif volume.blank? && capacity
+      profile_curves(:capacity_scaled)
     else
       profile_curves
     end
@@ -222,13 +222,8 @@ class InstalledTechnology
   end
 
   def component_factor(curve)
-    multiplier = volume || capacity
-
-    if multiplier.nil?
-      multiplier = (demand && demand * curve.frames_per_hour) || 1.0
-    end
-
-    multiplier / performance_coefficient * units
+    (capacity || (demand && demand * curve.frames_per_hour) || volume || 1.0) /
+      performance_coefficient * units
   end
 
   def profile_components
