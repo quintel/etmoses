@@ -6,13 +6,18 @@ RSpec.describe Network::Technologies::Buffer do
     let(:volume)   { 50.0 }
 
     let(:tech) do
-      network_technology(
+      tech = network_technology(
         build(
           :installed_heat_pump, profile: profile,
           capacity: capacity, volume: volume
         ), 8760,
         buffering_space_heating: true
       )
+
+      dprofile  = Network::DepletingCurve.new(profile)
+      composite = Network::Technologies::Composite.new(volume, dprofile)
+
+      composite.add(tech)
     end
 
     context 'with nothing stored' do
