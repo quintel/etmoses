@@ -1,6 +1,6 @@
 class TechnologyList
   include Enumerable
-  extend  Forwardable
+  extend Forwardable
 
   def_delegators :@list, :each, :keys, :to_h, :[]=, :delete, :empty?, :blank?
 
@@ -13,31 +13,42 @@ class TechnologyList
     data.blank? ? new({}) : from_hash(JSON.parse(data))
   end
 
+  def self.initiate_technology(technology, profiles)
+    attributes = if technology['profile_key']
+                   { 'profile' => profiles.key(technology['profile_key']) }
+                 else
+                   { 'profile_key' => profiles[technology['profile']] }
+                 end
+
+    InstalledTechnology.new(technology.update(attributes))
+  end
+
   # Public: Given a hash containing node keys, and a list of technologies
   # attached to the node, converts this into a TechnologyList where each tech
   # becomes an InstalledTechnology instance.
   #
   # Returns a TechnologyList.
   def self.from_hash(data)
-    profiles = self.load_profiles(data)
+    profiles = load_profiles(data)
 
     new(Hash[data.map do |node_key, technologies|
       [node_key, technologies.map do |technology|
-        InstalledTechnology.new(
-          technology.update(
-            'profile' => profiles[technology['profile_key']]
-          )
-        )
+        initiate_technology(technology, profiles)
       end]
     end])
   end
 
-  def self.load_profiles(data)
-    profile_keys = data.values.flatten.map{ |t| t['profile_key'] }.uniq
+  def self.fetch_key(technology)
+    technology['profile'] || technology['profile_key']
+  end
 
-    Hash[LoadProfile.where(key: profile_keys).map do |load_profile|
-      [load_profile.key, load_profile.id]
-    end]
+  def self.load_profiles(data)
+    profile_ids = data.values.flatten.map(&method(:fetch_key)).compact.uniq
+
+    Hash[
+      LoadProfile.where('`id` IN (:profile_ids) OR `key` IN (:profile_ids)',
+                        profile_ids: profile_ids).pluck(:id, :key)
+    ]
   end
 
   # Public: Given a TechnologyList, converts it back to the raw hash form for
@@ -98,7 +109,9 @@ class TechnologyList
     CSV.generate(options) do |csv|
       each do |connection, technologies|
         technologies.each do |technology|
-          csv << [connection, *attributes.map{|attribute| technology.send(attribute) }]
+          csv << [connection, *attributes.map do |attribute|
+            technology.send(attribute)
+          end]
         end
       end
     end
