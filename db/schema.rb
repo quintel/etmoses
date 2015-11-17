@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102091535) do
+ActiveRecord::Schema.define(version: 20151117105143) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 20151102091535) do
     t.datetime "job_finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "composites", force: true do |t|
+    t.integer "technology_id"
+    t.integer "composite_id"
   end
 
   create_table "delayed_jobs", force: true do |t|
@@ -151,6 +156,13 @@ ActiveRecord::Schema.define(version: 20151102091535) do
   add_index "technology_profiles", ["load_profile_id", "technology"], name: "index_technology_profiles_on_load_profile_id_and_technology", unique: true, using: :btree
   add_index "technology_profiles", ["load_profile_id"], name: "index_technology_profiles_on_load_profile_id", using: :btree
 
+  create_table "testing_ground_delayed_jobs", force: true do |t|
+    t.integer  "testing_ground_id"
+    t.integer  "job_id"
+    t.string   "job_type"
+    t.datetime "finished_at"
+  end
+
   create_table "testing_grounds", force: true do |t|
     t.text     "technology_profile", limit: 16777215
     t.integer  "user_id"
@@ -158,8 +170,6 @@ ActiveRecord::Schema.define(version: 20151102091535) do
     t.integer  "market_model_id"
     t.boolean  "public",                              default: true, null: false
     t.integer  "parent_scenario_id"
-    t.integer  "job_id"
-    t.datetime "job_finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "name",               limit: 100,      default: "",   null: false

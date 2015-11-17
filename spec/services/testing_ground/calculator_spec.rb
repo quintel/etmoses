@@ -3,8 +3,10 @@ require 'rails_helper'
 RSpec.describe TestingGround::Calculator do
   let(:testing_ground){ FactoryGirl.create(:testing_ground) }
 
-  it 'puts testing ground calculcation in background' do
-    expect(TestingGround::Calculator.new(testing_ground, {}).calculate).to eq(pending: true)
+  it 'sets a testing ground delayed job' do
+    TestingGround::Calculator.new(testing_ground, {}).calculate
+
+    expect(TestingGroundDelayedJob.count).to eq(1)
   end
 
   it 'fetches the cache if it has one' do

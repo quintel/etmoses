@@ -1,0 +1,8 @@
+class TestingGroundDelayedJob < ActiveRecord::Base
+  belongs_to :testing_ground
+  belongs_to :job, class: Delayed::Job
+
+  def self.for(job_type)
+    find_by(job_type: job_type)
+  end
+end

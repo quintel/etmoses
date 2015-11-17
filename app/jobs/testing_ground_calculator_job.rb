@@ -10,7 +10,9 @@ class TestingGroundCalculatorJob
 
   def success(job)
     store_strategies
-    @testing_ground.update_column(:job_finished_at, DateTime.now)
+
+    @testing_ground.testing_ground_delayed_jobs.for(job_type)
+      .update_column(:finished_at, DateTime.now)
   end
 
   def error(job, exception)
@@ -27,6 +29,10 @@ class TestingGroundCalculatorJob
     if @strategies.any?
       @testing_ground.selected_strategy.update_attributes(@strategies.permit(@strategies.keys))
     end
+  end
+
+  def job_type
+    SelectedStrategy.strategy_type(@strategies)
   end
 
   def cache

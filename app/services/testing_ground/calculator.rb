@@ -1,36 +1,44 @@
 class TestingGround::Calculator
-  def initialize(testing_ground, options)
+  def initialize(testing_ground, strategies)
     @testing_ground = testing_ground
-    @options        = options || {}
+    @strategies     = strategies || {}
   end
 
   def calculate
     if cache.present?
-      @testing_ground.update_column(:job_id, nil)
+      existing_job.destroy if existing_job
 
       base.merge(graph: GraphToTree.convert(cache.fetch))
     else
       calculate_load_in_background
 
-      @options.merge(pending: @testing_ground.job_finished_at.blank?)
+      @strategies.merge(pending: existing_job.finished_at.blank?)
     end
   end
 
   private
 
   def calculate_load_in_background
-    unless @testing_ground.job_id.present?
-      job = Delayed::Job.enqueue(task)
-      @testing_ground.update_columns(job_id: job.id, job_finished_at: nil)
-    end
+    return if existing_job
+
+    job = @testing_ground.testing_ground_delayed_jobs.create!(job_type: job_type)
+    job.update_column(:job_id, Delayed::Job.enqueue(task))
+  end
+
+  def existing_job
+    @testing_ground.testing_ground_delayed_jobs.for(job_type)
   end
 
   def task
-    TestingGroundCalculatorJob.new(@testing_ground, @options)
+    TestingGroundCalculatorJob.new(@testing_ground, @strategies)
   end
 
   def cache
-    @cache ||= NetworkCache::Cache.new(@testing_ground, @options)
+    @cache ||= NetworkCache::Cache.new(@testing_ground, @strategies)
+  end
+
+  def job_type
+    SelectedStrategy.strategy_type(@strategies)
   end
 
   def base
