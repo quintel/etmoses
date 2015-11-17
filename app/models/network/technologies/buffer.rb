@@ -12,7 +12,7 @@ module Network
       end
 
       def stored
-        @stored ||= Reserve.new# { |frame, _| @profile.at(frame) }
+        @stored ||= Reserve.new
       end
 
       # Public: Production describes the amount stored in the buffer at the
@@ -43,6 +43,17 @@ module Network
           # Demand was satisfied.
           0.0
         end
+      end
+
+      # Public: Determines how much extra the buffer may consume in order to
+      # fill the attached Reserve futher.
+      #
+      # Returns a numeric.
+      def conditional_consumption_at(frame)
+        remaining_cap = super
+        available     = @stored.unfilled_at(frame)
+
+        remaining_cap > available ? available : remaining_cap
       end
 
       # Public: EVs should not overload the network.
