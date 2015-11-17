@@ -1,0 +1,54 @@
+connection,name,profile_key,electrical_capacity,volume,demand,units
+HSR grid losses,Buildings,edsn_e3d,,,328802000,1
+AC7,Other,Productie edsn_3d,,,-1814424000,1
+AC7,Buildings,edsn_e3a,,,3797874,5
+AC7,Buildings,edsn_e3b,,,31534853,1
+AC7,Buildings,edsn_e3c,,,62533931,2
+AC7,Buildings,edsn_e3d,,,72095289,3
+AC6 imex,Buildings,edsn_e3d,,,231019000,1
+AC6 imex,Other,Productie edsn_3d,,,-114960000,1
+AC6-mw,Buildings,edsn_e3a,,,612433,12
+AC5,Buildings,edsn_e3a,,,388332,864
+AC5,Buildings,edsn_e3b,,,1734221,374
+AC5,Buildings,edsn_e3c,,,3315041,590
+AC5,Buildings,edsn_e3d,,,6291932,127
+AC5,Other,Productie edsn_3d,,,-297812000,1
+AC6,Other,Productie edsn_3d,,,-3375861000,1
+AC6A,Buildings,edsn_e3a,,,1504129,109
+AC6A,Buildings,edsn_e3b,,,7296439,67
+AC6A,Buildings,edsn_e3c,,,12816456,94
+AC6A,Buildings,edsn_e3d,,,22407312,51
+AC6B,Buildings,edsn_e3a,,,1122823,49
+AC6B,Buildings,edsn_e3b,,,7858832,16
+AC6B,Buildings,edsn_e3c,,,21170234,20
+AC6B,Buildings,edsn_e3d,,,42986520,20
+AC5A,Buildings,edsn_e3a,,,177944,4587
+AC5A,Buildings,edsn_e3b,,,471913,2722
+AC5A,Buildings,edsn_e3c,,,839255,2313
+AC5A,Buildings,edsn_e3d,,,1487525,271
+AC5B,Buildings,edsn_e3a,,,362716,216
+AC5B,Buildings,edsn_e3b,,,1167113,137
+AC5B,Buildings,edsn_e3c,,,1829446,167
+AC5B,Buildings,edsn_e3d,,,3638586,25
+MS grid losses,Buildings,edsn_e3a,,,250677000,1
+MSR grid losses,Buildings,edsn_e3a,,,210006000,1
+AC4,Other,Productie edsn_3d,,,-20816000,1
+AC4a,Buildings,edsn_e3a,,,65644,4957
+AC4a,Buildings,edsn_e3b,,,145134,2015
+AC4a,Buildings,edsn_e3c,,,229232,1067
+AC4a,Buildings,edsn_e3d,,,443483,91
+AC4b,Buildings,edsn_e3a,,,101820,3545
+AC4b,Buildings,edsn_e3b,,,223848,1954
+AC4b,Buildings,edsn_e3c,,,360141,1415
+AC4b,Buildings,edsn_e3d,,,785634,142
+LS grid losses,Buildings,edsn_e3a,,,600083000,1
+AC3,Buildings,edsn_e3a,,,52696,666
+AC3,Buildings,edsn_e3b,,,118107,324
+AC3,Buildings,edsn_e3c,,,173477,221
+AC3,Buildings,edsn_e3d,,,189670,22
+AC2b,Other,edsn_e2b,,,30124,72697
+AC2a,Other,edsn_e2a,,,21357,40921
+AC1,Other,edsn_e1a,,,2933,1663507
+AC1,Other,edsn_e1b,,,4273,883549
+AC1,Other,edsn_e1c,,,3901,229759
+AC1-ov,Other,edsn_e4a,,,13276,13009

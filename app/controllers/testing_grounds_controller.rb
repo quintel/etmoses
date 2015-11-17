@@ -51,12 +51,12 @@ class TestingGroundsController < ResourceController
                 "#{ @export.export['id'] }")
   end
 
-  # GET /topologies/new
+  # GET /testing_grounds/new
   def new
     respond_with(@testing_ground = TestingGround.new)
   end
 
-  # POST /topologies
+  # POST /testing_grounds
   def create
     @testing_ground = current_user.testing_grounds.create(testing_ground_params)
 
@@ -70,7 +70,7 @@ class TestingGroundsController < ResourceController
     respond_with(@testing_ground)
   end
 
-  # GET /topologies/:id
+  # GET /testing_grounds/:id
   def show
   end
 

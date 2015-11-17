@@ -21,6 +21,7 @@ class TestingGround < ActiveRecord::Base
   validate  :validate_technology_profile_types
   validate  :validate_technology_profile_units
   validate  :validate_inline_technology_profiles
+  validate  :validate_load_profiles
 
   attr_accessor :technology_distribution
 
@@ -115,6 +116,17 @@ class TestingGround < ActiveRecord::Base
     technology_profile.keys.reject { |key| node_keys.include?(key) }.each do |key|
       errors.add(:technology_profile,
                  "includes a connection to missing node #{ key.inspect }")
+    end
+  end
+
+  def validate_load_profiles
+    technology_profile.each_tech do |tech|
+      next if tech.profile_key.nil?
+
+      if ! LoadProfile.find_by_key(tech.profile_key).present?
+        errors.add(
+          :technology_profile, "has an unknown load profile: #{ tech.profile_key }")
+      end
     end
   end
 

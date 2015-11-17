@@ -23,9 +23,12 @@ class TechnologyList
 
     new(Hash[data.map do |node_key, technologies|
       [node_key, technologies.map do |technology|
-        InstalledTechnology.new(technology.update(
-          'profile_key' => profiles[technology['profile']]
-        ))
+        InstalledTechnology.new(
+          technology.update(
+            'profile_key' => ( technology['profile_key'] ||
+                               profiles[technology['profile']] )
+          )
+        )
       end]
     end])
   end
