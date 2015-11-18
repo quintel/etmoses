@@ -4,7 +4,6 @@ RSpec.describe TestingGroundsController do
   let(:user){ FactoryGirl.create(:user) }
 
   it "visits the import path" do
-    user = FactoryGirl.create(:user)
     sign_in(user)
 
     get :import
@@ -13,7 +12,6 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#perform_import" do
-    let(:user){ FactoryGirl.create(:user) }
     let!(:topology){ FactoryGirl.create(:topology, name: "Default topology")}
     let!(:technology){ FactoryGirl.create(:importable_technology,
                         key: "magical_technology") }
@@ -356,13 +354,17 @@ RSpec.describe TestingGroundsController do
       testing_ground
     }
 
-    let(:update_hash){
-      TestingGroundsControllerTest.update_hash
+    let(:profile){
+      FactoryGirl.create(:load_profile, key: 'profile_1')
     }
 
-    it "updates testing ground" do
-      sign_in(user)
+    let(:update_hash){
+      TestingGroundsControllerTest.update_hash(profile)
+    }
 
+    let!(:sign_in_user){ sign_in(user) }
+
+    it "updates testing ground" do
       patch :update, id: testing_ground.id,
                    testing_ground: update_hash
 
@@ -370,17 +372,42 @@ RSpec.describe TestingGroundsController do
     end
 
     it "doesn't update a private testing ground" do
-      sign_in(user)
-
       patch :update, id: private_testing_ground.id,
-                   testing_ground: update_hash
+                     testing_ground: update_hash
 
       expect(response).to redirect_to(new_user_session_path)
     end
 
-    it "updates testing ground with a csv" do
-      sign_in(user)
+    it "sets the correct technology profile" do
+      patch :update, id: testing_ground.id,
+                     testing_ground: update_hash
 
+      expect(testing_ground.reload.technology_profile.as_json).to eq({
+        "lv1"=>[{
+          :name=>"Residential PV panel",
+          :type=>"households_solar_pv_solar_radiation",
+          :behavior=>nil,
+          :profile=>profile.id,
+          :profile_key=>"profile_1",
+          :capacity=>-1.5,
+          :demand=>nil,
+          :volume=>nil,
+          :units=>38,
+          :initial_investment=>nil,
+          :technical_lifetime=>nil,
+          :performance_coefficient=>1.0,
+          :concurrency=>"max",
+          :full_load_hours=>nil,
+          :om_costs_per_year=>nil,
+          :om_costs_per_full_load_hour=>nil,
+          :om_costs_for_ccs_per_full_load_hour=>nil
+        }],
+        "lv2"=>[],
+        "lv3"=>[]
+      })
+    end
+
+    it "updates testing ground with a csv" do
       patch :update, id: testing_ground.id,
         testing_ground: update_hash.merge({
           technology_profile_csv: fixture_file_upload("technology_profile.csv",

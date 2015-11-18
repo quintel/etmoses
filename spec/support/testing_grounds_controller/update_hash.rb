@@ -1,7 +1,22 @@
 module TestingGroundsControllerTest
-  def self.update_hash
+  def self.update_hash(profile)
     { "scenario_id"=>"405671",
       "name"=>"2015-08-02 - Test123",
-      "technology_profile"=>"{\"lv1\":[{\"node\":\"lv1\",\"name\":\"Residential PV panel\",\"type\":\"households_solar_pv_solar_radiation\",\"profile\":\"solar_pv_zwolle\",\"capacity\":\"-1.5\",\"storage\":\"\",\"units\":\"38.0\"},{\"node\":\"lv1\",\"name\":\"Electric car\",\"type\":\"transport_car_using_electricity\",\"profile\":\"ev_profile_11_3.7_kw\",\"capacity\":\"3.7\",\"storage\":\"\",\"units\":\"7.0\"},{\"node\":\"lv1\",\"name\":\"Household\",\"type\":\"base_load\",\"profile\":\"edsn_e1a\",\"storage\":\"\",\"demand\":\"3950.53\",\"units\":\"34.0\"}],\"lv2\":[{\"node\":\"lv2\",\"name\":\"Residential PV panel\",\"type\":\"households_solar_pv_solar_radiation\",\"profile\":\"solar_pv_zwolle\",\"capacity\":\"-1.5\",\"storage\":\"\",\"units\":\"38.0\"},{\"node\":\"lv2\",\"name\":\"Electric car\",\"type\":\"transport_car_using_electricity\",\"profile\":\"ev_profile_11_3.7_kw\",\"capacity\":\"3.7\",\"storage\":\"\",\"units\":\"7.0\"},{\"node\":\"lv2\",\"name\":\"Household\",\"type\":\"base_load\",\"profile\":\"edsn_e1a\",\"storage\":\"\",\"demand\":\"3950.53\",\"units\":\"33.0\"}],\"lv3\":[{\"node\":\"lv3\",\"name\":\"Residential PV panel\",\"type\":\"households_solar_pv_solar_radiation\",\"profile\":\"solar_pv_zwolle\",\"capacity\":\"-1.5\",\"storage\":\"\",\"units\":\"37.0\"},{\"node\":\"lv3\",\"name\":\"Electric car\",\"type\":\"transport_car_using_electricity\",\"profile\":\"ev_profile_11_3.7_kw\",\"capacity\":\"3.7\",\"storage\":\"\",\"units\":\"7.0\"},{\"node\":\"lv3\",\"name\":\"Household\",\"type\":\"base_load\",\"profile\":\"edsn_e1a\",\"storage\":\"\",\"demand\":\"3950.53\",\"units\":\"33.0\"}]}"}
+      "technology_profile"=> JSON.dump({
+        "lv1"=>[
+          {
+            "node"=>"lv1",
+            "name"=>"Residential PV panel",
+            "type"=>"households_solar_pv_solar_radiation",
+            "profile"=>profile.id,
+            "capacity"=>"-1.5",
+            "storage"=>"",
+            "units"=>"38.0"
+          }
+        ],
+        "lv2"=>[],
+        "lv3"=>[]
+      })
+    }
   end
 end

@@ -13,14 +13,17 @@ class TechnologyList
     data.blank? ? new({}) : from_hash(JSON.parse(data))
   end
 
-  def self.initiate_technology(technology, profiles)
-    attributes = if technology['profile_key']
-                   { 'profile' => profiles.key(technology['profile_key']) }
-                 else
-                   { 'profile_key' => profiles[technology['profile']] }
-                 end
+  def self.initiate_technology(tech, profiles)
+    profile_id = tech['profile']
+    profile_key = tech['profile_key']
 
-    InstalledTechnology.new(technology.update(attributes))
+    attributes = if profile_key && profile_id.blank?
+      { 'profile' => profiles.key(profile_key) }
+    elsif profile_key.blank? && profile_id.try(:to_i)
+      { 'profile_key' => profiles[profile_id.to_i] }
+    end
+
+    InstalledTechnology.new(tech.update(attributes || {}))
   end
 
   # Public: Given a hash containing node keys, and a list of technologies
