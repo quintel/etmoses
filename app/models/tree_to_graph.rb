@@ -42,7 +42,10 @@ class TreeToGraph
     children = attrs.delete(:children) || []
     node     = graph.add(Network::Node.new(attrs.delete(:name), attrs))
 
-    node.set(:installed_techs, @techs[node.key])
+    composites, techs = @techs[node.key].partition(&:composite)
+
+    node.set(:installed_comps, composites)
+    node.set(:installed_techs, techs)
 
     if node.get(:capacity) && node.get(:units)
       node.set(:capacity, node.get(:capacity) * node.get(:units))

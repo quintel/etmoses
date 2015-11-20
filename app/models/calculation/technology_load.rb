@@ -16,7 +16,8 @@ module Calculation
       end
 
       @context.technology_nodes.each do |node|
-        node.set(:techs, techs_for(node).flatten)
+        node.set(:comps, comps_for(node))
+        node.set(:techs, techs_for(node))
       end
 
       @context
@@ -25,14 +26,34 @@ module Calculation
     private
 
     def techs_for(node)
-      suitable_technologies(node).map do |tech|
+      suitable_technologies(node).flat_map do |tech|
         tech.each_profile_curve do |curve_type, curve|
-          Network::Technologies.from_installed(
+          net_tech = Network::Technologies.from_installed(
             tech, profile_for(tech, curve),
             @context.options.merge(curve_type: curve_type)
           )
+
+          if tech.buffer.present?
+            # Returns the technology wrapped in a Composite::Wrapper.
+            composite(node, tech.buffer).add(net_tech)
+          else
+            net_tech
+          end
         end
       end
+    end
+
+    def comps_for(node)
+      node.get(:installed_comps).each_with_object({}) do |comp, hash|
+        hash[comp.composite_value] = Network::Technologies::Composite.new(
+          comp.volume, Network::DepletingCurve.new(
+            comp.profile_curve.fetch('default'.freeze))
+        )
+      end
+    end
+
+    def composite(node, name)
+      node.get(:comps).fetch(name)
     end
 
     # Internal: Given a node, returns an array of technologies which may be used

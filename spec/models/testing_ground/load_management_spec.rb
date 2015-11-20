@@ -45,10 +45,24 @@ RSpec.describe TestingGround do
           "concurrency" => "max"
         },
         {
+          "name"            => "Buffer space heating #1",
+          "type"            => "buffer_space_heating",
+          "composite"       => true,
+          "composite_value" => "buffer_space_heating_1",
+          "behavior"        => nil,
+          "profile"         => heat_pump_load_profile,
+          # "capacity" => null,
+          # "demand" => 70080.0,
+          "volume"          => 0.5,
+          "units"           => 1,
+          "concurrency"     => "max"
+        },
+        {
           "name"        => "Heat pump",
           "type"        => "households_space_heater_heatpump_air_water_electricity",
+          "buffer"      => "buffer_space_heating_1",
           "behavior"    => nil,
-          "profile"     => heat_pump_load_profile,
+          "profile"     => nil,
           "load"        => nil,
           "capacity"    => 1.0,
           "demand"      => nil,
@@ -75,10 +89,10 @@ RSpec.describe TestingGround do
             0.0
           ]
 
-          expect(results).to eq(expected.map do |val|
-            # Reduce "expected" by solar production.
-            val + solar_load_profile['default'].first
-          end)
+          expect(results.map do |val|
+            # Adjust loads by solar production.
+            val - solar_load_profile['default'].first
+          end).to eq(expected)
         end
 
         it "buffering heat pumps strategy applied" do
@@ -94,10 +108,10 @@ RSpec.describe TestingGround do
             0.5, 0.0
           ]
 
-          expect(results).to eq(expected.map do |val|
-            # Reduce "expected" by solar production.
-            val + solar_load_profile['default'].first
-          end)
+          expect(results.map do |val|
+            # Adjust loads by solar production.
+            val - solar_load_profile['default'].first
+          end).to eq(expected)
         end
       end
     end

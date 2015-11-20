@@ -37,10 +37,15 @@ module Calculation
     #
     # Returns an integer.
     def length
-      @length ||= technology_nodes.map { |n| n.get(:installed_techs) }.flatten
-        .map do |tech|
+      @length ||= begin
+        techs = technology_nodes.flat_map do |node|
+          node.get(:installed_techs) + node.get(:installed_comps)
+        end
+
+        techs.map do |tech|
           tech.profile.present? ? tech.profile_curve.first.last.length : 1
         end.max || 1
+      end
     end
 
     # Public: Iterates through each frame in the testing ground graph. If no
