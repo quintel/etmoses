@@ -126,6 +126,32 @@ Technology.create!(
   name:        'Other'
 )
 
+# Buffers
+# -------
+
+buffer_space_heating = Technology.create!(
+  key: 'buffer_space_heating',
+  name: "Buffer space heating",
+  composite: true
+)
+
+Technology.where("`key` LIKE 'households_space_heater_heatpump%'").each do |tech|
+  Composite.create!(technology: tech, composite: buffer_space_heating)
+end
+
+buffer_water_heating = Technology.create!(
+  key: 'buffer_water_heating',
+  name: "Buffer water heating",
+  composite: true
+)
+
+Technology.where("`key` LIKE 'households_water_heater_heatpump%'").each do |tech|
+  Composite.create!(technology: tech, composite: buffer_water_heating)
+end
+
+# Users
+# -----
+
 User.create!(
   email: 'guest@quintel.com',
   password: 'guest'
