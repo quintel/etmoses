@@ -4,4 +4,6 @@ class TopologyPolicy < ApplicationPolicy
   def clone?
     true
   end
+
+  alias_method :download_as_png?, :show?
 end

@@ -37,6 +37,7 @@ Rails.application.routes.draw do
   resources :topologies do
     member do
       patch :clone
+      post :download_as_png
     end
   end
   resources :market_models do

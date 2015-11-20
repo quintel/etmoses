@@ -1,5 +1,5 @@
 class TopologiesController < ResourceController
-  RESOURCE_ACTIONS = %i(show edit update destroy clone)
+  RESOURCE_ACTIONS = %i(show edit update destroy clone download_as_png)
 
   respond_to :html
   respond_to :js, only: :clone
@@ -10,6 +10,7 @@ class TopologiesController < ResourceController
   before_filter :fetch_testing_ground, only: :clone
 
   skip_before_filter :authenticate_user!, only: [:show, :index]
+  skip_before_filter :verify_authenticity_token, only: [:download_as_png]
 
   def index
     @topologies = policy_scope(Topology.named).in_name_order
@@ -57,6 +58,19 @@ class TopologiesController < ResourceController
     end
 
     redirect_to(topologies_url)
+  end
+
+  # POST /topologies/:id/download_as_png
+  def download_as_png
+    filename = "#{ Rails.root }/tmp/#{ @topology.id }.png"
+    img = Magick::Image.from_blob(params[:svg]) do
+      self.format = 'SVG'
+      self.background_color = 'transparent'
+    end
+    img[0].resize!(2)
+    img[0].write(filename)
+
+    send_file(filename, disposition: 'inline')
   end
 
   private

@@ -12,7 +12,7 @@ var TopologyPreviewer = (function () {
     }
 
     function viewerWidth() {
-        return this.currentStylesheet.width - this.currentStylesheet.margin.left * 2;
+        return $(this.topologyGraph).width() - this.currentStylesheet.margin.left * 2;
     }
 
     function updateTree() {
@@ -38,7 +38,9 @@ var TopologyPreviewer = (function () {
 
         nodeEnter.append("circle")
             .attr("r", this.currentStylesheet.radius)
-            .style("fill", this.currentStylesheet.nodeColor);
+            .style("fill", this.currentStylesheet.nodeColor)
+            .style("stroke", "steelblue")
+            .style("stroke-width", "2px");
 
         if (this.currentStylesheet.renderLabels) {
             nodeEnter.append("text")
@@ -62,6 +64,9 @@ var TopologyPreviewer = (function () {
 
         link.enter().insert("path", "g")
             .attr("class", "link")
+            .attr("fill", "none")
+            .attr("stroke", "#ccc")
+            .attr("stroke-width", "2px")
             .attr("d", diagonal);
     }
 
@@ -85,10 +90,14 @@ var TopologyPreviewer = (function () {
     }
 
     function buildBaseSvg() {
+        var width = $(this.topologyGraph).width(),
+            height = this.depths * this.lineSpace;
+
         return d3.select(this.topologyGraph).append('svg')
-            .attr('width', '100%')
-            .attr('height', this.depths * this.lineSpace)
+            .attr('id', this.currentStylesheet.id)
             .attr('class', 'overlay')
+            .attr('width', width).attr('height', height)
+            .attr('viewBox', '0 0 ' + width + ' ' + height)
             .call(zoomListener)
             .on('wheel.zoom', null)
             .on('dblclick.zoom', null);

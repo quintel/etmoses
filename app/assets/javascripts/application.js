@@ -22,4 +22,5 @@
 //= require bootstrap-filestyle
 //= require bootstrap-toggle.min
 //= require bootstrap-slider
+//= require save_as_png
 //= require_tree .
