@@ -23,6 +23,10 @@ module Network
         ))
       end
 
+      def stored
+        @stored ||= Reserve.new { |frame, _| profile.at(frame) }
+      end
+
       # Public: Buffers may not return their stored energy back to the network.
       # Therefore, their consumption equals their output in order that the two
       # balance out to zero.

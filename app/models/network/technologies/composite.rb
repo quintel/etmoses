@@ -9,6 +9,8 @@ module Network
         @techs   = []
         @profile = profile
 
+        volume = volume * profile.frames_per_hour
+
         @reserve = Reserve.new(volume) do |frame, amount|
           wanted = @profile.at(frame)
           decay  = wanted < amount ? wanted : amount

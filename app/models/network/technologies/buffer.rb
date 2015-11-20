@@ -1,14 +1,22 @@
 module Network
   module Technologies
     class Buffer < Storage
-      def self.disabled?(options)
-        ! options[:buffering_space_heating]
-      end
-
       attr_accessor :stored
 
+      def self.disabled?(options)
+        false
+      end
+
       def self.disabled_class
-        Generic
+        self
+      end
+
+      def initialize(installed, profile, buffering_space_heating: false, **)
+        super
+
+        @buffering  = buffering_space_heating
+        @mand_loads = []
+        @cond_loads = []
       end
 
       def stored
@@ -31,17 +39,17 @@ module Network
       #
       # Returns a numeric.
       def mandatory_consumption_at(frame)
-        wanted = @profile.at(frame)
+        @mand_loads[frame] ||= begin
+          # Force evaluation of energy taken from buffer.
+          stored.at(frame)
 
-        if frame.zero?
-          wanted
-        elsif stored.at(frame).zero? && wanted > 0
-          # Nothing is left in the buffer and we have consumption, perhaps the
-          # buffer did not have enough to satisfy demand...
-          wanted - stored.decay_at(frame)
-        else
-          # Demand was satisfied.
-          0.0
+          wanted = @profile.at(frame)
+
+          if stored.at(frame).zero? && wanted > 0
+            @capacity.limit_mandatory(frame, wanted)
+          else
+            0.0
+          end
         end
       end
 
@@ -50,10 +58,14 @@ module Network
       #
       # Returns a numeric.
       def conditional_consumption_at(frame)
-        remaining_cap = super
-        available     = @stored.unfilled_at(frame)
+        return 0.0 unless @buffering
 
-        remaining_cap > available ? available : remaining_cap
+        @cond_loads[frame] ||= begin
+          remaining_cap = super
+          available     = stored.unfilled_at(frame)
+
+          remaining_cap > available ? available : remaining_cap
+        end
       end
 
       # Public: EVs should not overload the network.
@@ -67,7 +79,11 @@ module Network
       end
 
       def receive_mandatory(frame, amount)
-        @stored.add(frame, amount)
+        stored.add(frame, amount)
+      end
+
+      def store(frame, amount)
+        stored.add(frame, amount)
       end
     end # Buffer
   end
