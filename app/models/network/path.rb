@@ -55,7 +55,7 @@ module Network
     #
     # Returns a numeric.
     def available_capacity_at(frame)
-      @path.map { |node| node.available_capacity_at(frame) }.min
+      @path.map { |node| node.available_capacity_at(frame) }.reject(&:nan?).min
     end
 
     # Public: Determines if the load of the any node in the path node exceeds
