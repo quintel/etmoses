@@ -5,20 +5,17 @@ var DownloadTopologyAs = (function () {
         convert: function (e) {
             e.preventDefault();
 
-            var topology = document.querySelector("svg");
+            var topology = document.querySelector("svg"),
+                form = $("<form>").attr({
+                    "action": $(e.target).data('png'),
+                    "method": "post",
+                    "style" : "display:none;"
+                }),
+                textarea = $("<textarea>").attr("name", "svg").text(topology.outerHTML);
 
-            window.svgAsDataUri(topology, {}, function (svg) {
-                var form = $("<form>").attr({
-                        "action": $(e.target).data('png'),
-                        "method": "post",
-                        "style" : "display:none;"
-                    }),
-                    textarea = $("<textarea>").attr("name", "svg").text(svg);
-
-                form.append(textarea);
-                $("body").append(form);
-                form.submit();
-            });
+            form.append(textarea);
+            $("body").append(form);
+            form.submit();
         }
     };
 

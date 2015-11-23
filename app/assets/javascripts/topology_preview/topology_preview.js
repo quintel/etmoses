@@ -54,7 +54,8 @@ var TopologyPreviewer = (function () {
                 .text(function (d) {
                     return d.name;
                 })
-                .style("fill-opacity", 1);
+                .style("fill-opacity", 1)
+                .style("font", "12px sans-serif");
         }
 
         var link = this.svgGroup.selectAll("path.link")

@@ -3,13 +3,12 @@
 }
 
 svg#topology-graph-full{
-  height: auto;
+  min-height: 500px;
+  width: 100%;
 
   .node circle:hover{
     cursor: pointer;
   }
-
-  .node text { font: 12px sans-serif; }
 }
 
 .topology-footer.commit{
