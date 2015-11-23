@@ -43,7 +43,7 @@ module Network
           # Force evaluation of energy taken from buffer.
           stored.at(frame)
 
-          wanted = @profile.at(frame)
+          wanted = @profile.at(frame) / @installed.performance_coefficient
 
           if stored.at(frame).zero? && wanted > 0
             @capacity.limit_mandatory(frame, wanted)
@@ -78,13 +78,11 @@ module Network
         false
       end
 
-      def receive_mandatory(frame, amount)
-        stored.add(frame, amount)
+      def store(frame, amount)
+        stored.add(frame, amount * @installed.performance_coefficient)
       end
 
-      def store(frame, amount)
-        stored.add(frame, amount)
-      end
+      alias_method :receive_mandatory, :store
     end # Buffer
   end
 end

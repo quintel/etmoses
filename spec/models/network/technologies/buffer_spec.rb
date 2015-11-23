@@ -2,14 +2,16 @@ require 'rails_helper'
 
 RSpec.describe Network::Technologies::Buffer do
   context 'with a storage volume of 10 and capacity of 5' do
-    let(:capacity) { 5.0 }
-    let(:volume)   { 50.0 }
+    let(:capacity)    { 5.0 }
+    let(:volume)      { 50.0 }
+    let(:performance) { 1.0 }
 
     let(:tech) do
       tech = network_technology(
         build(
           :installed_heat_pump, profile: profile,
-          capacity: capacity, volume: volume
+          capacity: capacity, volume: volume,
+          performance_coefficient: performance
         ), 8760,
         buffering_space_heating: true
       )
@@ -61,6 +63,19 @@ RSpec.describe Network::Technologies::Buffer do
           it 'stores nothing' do
             expect(tech.stored[1]).to be_zero
           end
+
+          # with nothing stored and use of 2.5
+          context 'with a performance coefficient of 4.0' do
+            let(:performance) { 4.0 }
+
+            it 'has mandatory consumption of 0.625' do
+              expect(tech.mandatory_consumption_at(1)).to eq(0.625)
+            end
+
+            it 'has conditional consumption of 0.625' do
+              expect(tech.conditional_consumption_at(1)).to eq(0.625)
+            end
+          end
         end
 
         # with nothing stored and use of 2.5
@@ -69,6 +84,15 @@ RSpec.describe Network::Technologies::Buffer do
 
           it 'stores 5.0' do
             expect(tech.stored[1]).to eq(5.0)
+          end
+
+          # with nothing stored and use of 2.5, assigned 5.0 conditional
+          context 'and a performance coefficient of 4.0' do
+            let(:performance) { 4.0 }
+
+            it 'stores 20.0' do
+              expect(tech.stored[1]).to eq(20.0)
+            end
           end
         end
 
@@ -213,6 +237,25 @@ RSpec.describe Network::Technologies::Buffer do
         end
       end # and a use of 5.0
     end # with 2.5 stored
+
+    context 'with a storage volume of 3.0 and use of 2.5' do
+      let(:volume)  { 3.0 }
+      let(:profile) { [0.0, 2.5] * 4380 }
+
+      # with a storage volume of 3.0 and use of 2.5
+      context 'with a performance coefficient of 4.0' do
+        let(:performance) { 4.0 }
+
+        it 'has mandatory consumption of 0.625' do
+          expect(tech.mandatory_consumption_at(1)).to eq(0.625)
+        end
+
+        pending 'has conditional consumption of 0.625' do
+          # Buffer should be able to satisfy demand, *and* refill the buffer.
+          expect(tech.conditional_consumption_at(1)).to eq(0.625)
+        end
+      end
+    end
   end # with a storage volume of 50
 
   context 'when disabled' do
