@@ -108,6 +108,13 @@ class InstalledTechnology
     end
   end
 
+  # Public: How many units of this technology are installed?
+  #
+  # Returns a numeric.
+  def units
+    super.presence || 1
+  end
+
   # Public: Describes the real capcity of the technology in relation to its
   # electrical capacity.
   #
