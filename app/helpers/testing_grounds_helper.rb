@@ -33,7 +33,9 @@ module TestingGroundsHelper
   def profile_table_options_for_name
     technologies = @technologies.visible.order(:name).map do |technology|
       [technology.name, technology.key, data: default_values(technology).merge(
-        composite: technology.composite)
+        position_relative_to_buffer: technology.default_position_relative_to_buffer,
+                          composite: technology.composite,
+                           includes: technology.technologies.map(&:key))
       ]
     end
 
@@ -105,5 +107,11 @@ module TestingGroundsHelper
     end
 
     Hash[composites.compact]
+  end
+
+  def technology_class(technology)
+    technology_class = technology.type
+    technology_class += " buffer-child" if technology.buffer.present?
+    technology_class
   end
 end

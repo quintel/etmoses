@@ -67,7 +67,7 @@ class Import
   end
 
   def technology_distribution
-    TestingGround::TechnologyDistributor.new(technologies, topology.graph).build
+    @technology_distribution ||= TestingGround::TechnologyDistributor.new(technologies, topology.graph).build
   end
 
   private
@@ -97,7 +97,7 @@ class Import
   #
   # Returns an array.
   def technologies
-    technologies_from + households + buildings
+    households + buildings + composites + technologies_from
   end
 
   # Internal: Given a response, splits out the nodes into discrete technologies.
@@ -118,6 +118,13 @@ class Import
   # Returns an array.
   def households
     HouseBuilder.new(@scenario_id, etm_scenario["scaling"]).build
+  end
+
+  # Internal: Given and etm scenario, creates a set of composites
+  #
+  # Returns an array.
+  def composites
+    CompositeBuilder.new(etm_scenario["scaling"]).build
   end
 
   # Internal: Retrieves the scenario from ETModel

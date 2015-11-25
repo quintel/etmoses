@@ -5,10 +5,10 @@ class Import
     # Could be a house or building
     #
 
-    def initialize(scenario_id, number_of_units, gquery_key)
+    def initialize(scenario_id, number_of_units, gquery_keys)
       @scenario_id     = scenario_id
       @number_of_units = number_of_units.to_i
-      @gquery_key      = gquery_key
+      @gquery_keys     = gquery_keys
     end
 
     def calculate
@@ -29,7 +29,9 @@ class Import
 
     def demand_for_scenario
       if demand_gquery
-        demand_gquery["future"]
+        @gquery_keys.sum do |key|
+          demand_gquery[key]['future'].to_f
+        end
       else
         0
       end
@@ -40,7 +42,7 @@ class Import
     end
 
     def gquery
-      { gqueries: [@gquery_key] }
+      { gqueries: @gquery_keys }
     end
   end
 end

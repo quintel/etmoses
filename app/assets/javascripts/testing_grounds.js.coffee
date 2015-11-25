@@ -201,5 +201,3 @@ $(document).on "page:change", ->
     else
       $('#testing_ground_technologies_csv').show()
       editor.hide()
-
-  $('[data-toggle="tooltip"]').tooltip();

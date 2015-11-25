@@ -1,6 +1,8 @@
-/*global ETHelper,ProfileSelectBox,TechnologyTemplate*/
+/*global ETHelper,ProfileSelectBox,TemplateUpdater,Technology*/
 var TechnologiesForm = (function () {
     'use strict';
+
+    var template = null;
 
     /*
      * Loops over all the technology <div> tags in the html and extract all the data
@@ -8,7 +10,7 @@ var TechnologiesForm = (function () {
      * It than writes the data several hidden <div> tags
      */
     function parseHarmonicaToJSON() {
-        var tableProfile = $(".technologies .technology").toArray().map(function (target) {
+        var tableProfile = $(".technologies .technology:not(.hidden)").toArray().map(function (target) {
                 return $(target).underscorizedData();
             }),
             groupedByNode = ETHelper.groupBy(tableProfile, 'node');
@@ -27,31 +29,29 @@ var TechnologiesForm = (function () {
         parseHarmonicaToJSON();
     }
 
-    function addProfileSelectBox() {
-        new ProfileSelectBox(this).add();
+    function updateTemplate() {
+        new TemplateUpdater(template, this).update();
     }
 
-    function addTechnologyTemplate() {
-        new TechnologyTemplate(this).addTo(function () {
-            parseHarmonicaToJSON();
-            $(this).find("input, select").off('change.json_update')
-                .on('change.json_update', updateJSON);
-        });
+    function addOnChangeListener() {
+        parseHarmonicaToJSON();
+
+        $(this).find("input, select")
+            .off('change.json_update')
+            .on('change.json_update', updateJSON);
     }
 
     function addNewTechnologyRow(e) {
         e.preventDefault();
 
-        var technologySelect = $(this).parents(".input-group").find("select.name"),
-            technologyVal    = technologySelect.val(),
-            technologyOption = technologySelect.selectedOption(),
-            target           = $(this).parents(".panel-body").find(".technologies");
+        var newTemplate = template.clone(true, true);
 
-        addTechnologyTemplate.call({ target:    target,
-                                     value:     technologyVal,
-                                     title:     technologyOption.text(),
-                                     composite: technologyOption.data('composite'),
-                                     includes:  technologyOption.data('includes') });
+        new TemplateUpdater(newTemplate, $(this).parents(".input-group").find("select")).increaseCompositeValue();
+        new Technology(newTemplate).add(this);
+
+        AddedTechnologiesValidator.validate();
+
+        addOnChangeListener.call(newTemplate);
     }
 
     function toggleAdvancedFeatures(e) {
@@ -96,6 +96,8 @@ var TechnologiesForm = (function () {
             removeBufferOption.call(technology.data());
 
             technology.remove();
+
+            AddedTechnologiesValidator.validate();
         } else {
             alert("There are technologies that use this buffer, remove these first before removing this buffer");
         }
@@ -104,41 +106,33 @@ var TechnologiesForm = (function () {
     }
 
     function addListenersToNewTechnology() {
-        $(".technologies .technology").each(addProfileSelectBox);
-        $(".technologies .technology input, .technologies .technology select").on('change', updateJSON);
+        $(".technologies .technology").find("input, select").on('change', updateJSON);
+
+        $(".add-technology select").off().on("change", updateTemplate);
         $(".add-technology button").on("click", addNewTechnologyRow);
         $(".technology .remove-row").on("click", removeTechnologyRow);
         $(".technology .show-advanced").on("click", toggleAdvancedFeatures);
+
+        $(".add-technology select").first().trigger('change');
     }
 
     TechnologiesForm.prototype = {
         append: function () {
+            $(".technologies .technology:not(.hidden)").each(function () {
+                new Technology(this).update();
+
+                addOnChangeListener.call(this);
+            });
+
             addListenersToNewTechnology.call(this);
             parseHarmonicaToJSON.call(this);
 
-            if (this.editing) {
-                this.updateProfiles();
-            }
-        },
-
-        updateProfiles: function () {
-            $(".technologies .technology").each(function () {
-                var techObject    = $(this).underscorizedData();
-
-                techObject.target = $(this).parent();
-                new TechnologyTemplate(techObject).update(this);
-            });
-
-            $(".technology").each(function () {
-                $(this).find(".buffer select").val($(this).data('buffer'));
-            });
+            AddedTechnologiesValidator.validate();
         }
     };
 
-    function TechnologiesForm(selector) {
-        this.selector    = selector;
-        this.editing     = $(selector).parents("form").hasClass("edit_testing_ground");
-        this.bufferCount = 0;
+    function TechnologiesForm() {
+        template = $(".technology_template .technology");
     }
 
     return TechnologiesForm;
@@ -148,7 +142,7 @@ $(document).on("page:change", function () {
     'use strict';
 
     if ($("#profiles-table").length > 0) {
-        window.currentTechnologiesForm = new TechnologiesForm("#profiles-table");
+        window.currentTechnologiesForm = new TechnologiesForm();
         window.currentTechnologiesForm.append();
     }
 });

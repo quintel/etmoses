@@ -120,9 +120,13 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
       let(:profile_scheme){ ProfileSchemeTestHelper.technology_distribution_buffers }
 
       it 'minimizes concurrency with buffers' do
-        expect(new_profile.values.flatten.map{|t| t['buffer'] }.compact).to eq(
-          %w(buffer_1 buffer_1 buffer_2 buffer_2 buffer_3 buffer_3 buffer_4 buffer_4
-             buffer_5 buffer_5))
+        expect(new_profile.values.flatten.map{|t| t['buffer'] }.compact).to eq([
+          "buffer_space_heating_1", "buffer_space_heating_1",
+          "buffer_space_heating_2", "buffer_space_heating_2",
+          "buffer_space_heating_3", "buffer_space_heating_3",
+          "buffer_space_heating_4", "buffer_space_heating_4",
+          "buffer_space_heating_5", "buffer_space_heating_5"
+        ])
       end
     end
 

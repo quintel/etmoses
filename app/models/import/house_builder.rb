@@ -1,5 +1,7 @@
 class Import
   class HouseBuilder
+    include Scaling
+
     #
     # Builds houses from an ETM scaling attribute
     #
@@ -16,21 +18,15 @@ class Import
          "profile"  => nil,
          "capacity" => nil,
          "demand"   => average_demand,
-         "units"    => @scaling['value'].to_i }]
+         "units"    => scaling_value }]
     end
 
     def average_demand
       @average_demand ||= Import::DemandCalculator.new(
         @scenario_id,
-        @scaling["value"].to_i,
-        "final_demand_of_electricity_in_households"
+        scaling_value,
+        ["final_demand_of_electricity_in_households"]
       ).calculate
-    end
-
-    private
-
-    def valid_scaling?
-      @scaling && @scaling['area_attribute'] == 'number_of_residences'
     end
   end
 end

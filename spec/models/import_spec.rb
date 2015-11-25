@@ -139,4 +139,5 @@ RSpec.describe Import do
       end
     end # importing the demand attribute
   end # with five coal heaters and three gas heaters
+
 end # describe Import

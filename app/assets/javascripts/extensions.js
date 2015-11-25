@@ -24,7 +24,8 @@ $.fn.extend({
     },
 
     set: function(option, value){
-        $(this).data(option, value).attr("data-" + option, value);
+        $(this).data(option, value)
+               .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
     }
 });
 

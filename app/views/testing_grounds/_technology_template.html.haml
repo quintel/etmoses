@@ -1,45 +1,64 @@
-.technology{class: technology.type, data: stringify_values(technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node)) }
+.technology{class: technology_class(technology), data: stringify_values(technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node)) }
   %div.pull-right
-    = link_to "Toggle advanced", "#!", class: "btn btn-primary show-advanced"
-    = link_to "Remove", "#!", class: "remove-row btn btn-danger"
+    .btn-group
+      = link_to "Toggle advanced", "#!", class: "btn btn-primary show-advanced"
 
-  %strong= technology.name
-  .editable.profile.select
-    %span Profile
-    %select.profile.form-control{autocomplete: 'off', data: { type: 'profile' }}
+      = link_to "#!", class: "remove-row btn btn-danger" do
+        %span.glyphicon.glyphicon-trash
 
-  .editable.buffer.select.hidden
-    %span Buffer
-    %select.buffer.form-control{autocomplete: 'off', data: { type: 'buffer' }}
+  .indent.arrow{class: ('hidden' unless technology.buffer.present?) }
 
-  .editable.text{class: 'demand'}
-    %span Demand [kWh]
-    %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: {type: 'demand'} }
+  .wrapper-tech
+    %strong= technology.name
+    .editable.profile.select{class: ('hidden' if technology.buffer.present?) }
+      %span Profile
+      %select.profile.form-control{autocomplete: 'off', data: { type: 'profile' }}
+
+    .editable.buffer.select{class: ('hidden' unless technology.buffer.present?) }
+      %span Buffer
+      %select.buffer.form-control{autocomplete: 'off', data: { type: 'buffer' }}
+
+    .editable.position_relative_to_buffer{class: ('hidden' unless technology.position_relative_to_buffer.present?)}
+      %span Position technology
+      - %w(boosting buffering).each do |position|
+        %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
+          %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
+          = position.humanize
+
+      = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))
+
+      .clearfix
+
+    .editable.text{class: 'demand'}
+      %span Demand [kWh]
+      %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: {type: 'demand'} }
+      .clearfix
+
+    .editable.text{class: 'electrical_capacity'}
+      %span Electrical capacity [kW]
+      %input.form-control{type: 'text', value: technology.electrical_capacity.try(:round, 4), data: {type: 'electrical_capacity' } }
+      .clearfix
+
+    .editable.text{class: 'volume'}
+      %span Volume [kWh]
+      %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
+      .clearfix
+
+    .editable.text{class: 'units'}
+      %span Units
+      %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
+      .clearfix
+
+    - InstalledTechnology::HIDDEN.each do |key|
+      - if %i(concurrency includes composite_index).include?(key)
+        .editable.hidden{class: key}
+          %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key} }
+      - else
+        .editable.advanced.hidden{class: key}
+          %span= key.to_s.humanize
+          %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key } }
+          .clearfix
+
     .clearfix
-
-  .editable.text{class: 'electrical_capacity'}
-    %span Electrical capacity [kW]
-    %input.form-control{type: 'text', value: technology.electrical_capacity.try(:round, 4), data: {type: 'electrical_capacity' } }
-    .clearfix
-
-  .editable.text{class: 'volume'}
-    %span Volume [kWh]
-    %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
-    .clearfix
-
-  .editable.text{class: 'units'}
-    %span Units
-    %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
-    .clearfix
-
-  - InstalledTechnology::HIDDEN.each do |key|
-    - if key == :concurrency
-      .editable.hidden{class: key}
-        %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key} }
-    - else
-      .editable.advanced.hidden{class: key}
-        %span= key.to_s.humanize
-        %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key } }
-        .clearfix
 
   .clearfix
