@@ -6,8 +6,8 @@ class TestingGround::TechnologyPartitioner
   end
 
   def partition
-    duplicate_technologies.map
-      .each_with_index(&method(:couple_composite))
+    duplicate_technologies
+      .each_with_index.map(&method(:couple_composite))
       .reject(&method(:remove_zeros))
   end
 
@@ -26,15 +26,20 @@ class TestingGround::TechnologyPartitioner
   end
 
   def couple_composite(technology, index)
-    return technology unless technology.composite
+    technology.composite_index = ((technology.composite_index || 1) - 1) * @size + (index + 1)
 
-    technology.composite_value = "buffer_#{ index + 1 }"
+    if technology.composite
+      technology.name = technology.get_composite_name
+      technology.composite_value = technology.get_composite_value
 
-    technology.associates = technology.associates.map do |associate|
-      associate        = associate.dup
-      associate.buffer = technology.composite_value
-      associate.units  = get_associate_units(associate.type, index)
-      associate
+      technology.associates = technology.associates.map do |associate|
+        associate        = associate.dup
+        associate.buffer = technology.composite_value
+        associate.units  = get_associate_units(associate.type, index)
+        associate
+      end
+    elsif technology.buffer.present?
+      technology.buffer = technology.get_buffer(technology.buffer)
     end
 
     technology

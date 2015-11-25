@@ -22,7 +22,8 @@ RSpec.describe TestingGroundsController do
       stub_et_engine_request
       stub_scenario_request
 
-      expect_any_instance_of(Import).to receive(:buildings).twice.and_return([])
+      expect_any_instance_of(Import).to receive(:buildings)
+        .at_least(1).times.and_return([])
 
       post :perform_import, import: { scenario_id: 1, market_model_id: 5 }
     end

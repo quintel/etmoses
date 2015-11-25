@@ -81,11 +81,12 @@ end
 
 def stub_et_gquery(gqueries)
   stub_request(:put, "http://beta.et-engine.com/api/v3/scenarios/1").
-    with(body: { "gqueries"=>gqueries.keys.map(&:to_s) },
+    with(body: { "gqueries"=> gqueries.keys.map(&:to_s) },
          headers: {
           'Accept'=>'application/json',
           'Accept-Encoding'=>'gzip, deflate',
-          'Content-Type'=>'application/x-www-form-urlencoded'
+          'Content-Type'=>'application/x-www-form-urlencoded',
+          'User-Agent'=>'Ruby'
          }).
     to_return(
       status: 200,

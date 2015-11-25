@@ -17,34 +17,6 @@ Technology.create!(
 )
 
 Technology.create!(
-  key:         'households_space_heater_heatpump_air_water_electricity',
-  name:        'Heat pump for space heating (air)',
-  export_to:   'households_space_heater_heatpump_air_water_electricity_share',
-  behavior:    'buffer'
-)
-
-Technology.create!(
-  key:         'households_space_heater_heatpump_ground_water_electricity',
-  name:        'Heat pump for space heating (ground)',
-  export_to:   'households_space_heater_heatpump_ground_water_electricity_share',
-  behavior:    'buffer'
-)
-
-Technology.create!(
-  key:         'households_water_heater_heatpump_air_water_electricity',
-  name:        'Heat pump for hot water (air)',
-  export_to:   'households_water_heater_heatpump_air_water_electricity_share',
-  behavior:    'buffer'
-)
-
-Technology.create!(
-  key:         'households_water_heater_heatpump_ground_water_electricity',
-  name:        'Heat pump for hot water (ground)',
-  export_to:   'households_water_heater_heatpump_ground_water_electricity_share',
-  behavior:    'buffer'
-)
-
-Technology.create!(
   key:         'transport_car_using_electricity',
   name:        'Electric car',
   export_to:   'transport_car_using_electricity_share',
@@ -126,6 +98,66 @@ Technology.create!(
   name:        'Other'
 )
 
+hp_sh_aw = Technology.create!(
+  key:         'households_space_heater_heatpump_air_water_electricity',
+  name:        'Heat pump for space heating (air)',
+  export_to:   'households_space_heater_heatpump_air_water_electricity_share',
+  behavior:    'buffer'
+)
+
+hp_sh_gw = Technology.create!(
+  key:         'households_space_heater_heatpump_ground_water_electricity',
+  name:        'Heat pump for space heating (ground)',
+  export_to:   'households_space_heater_heatpump_ground_water_electricity_share',
+  behavior:    'buffer'
+)
+
+hp_sh_ng = Technology.create!(
+  key:         'households_space_heater_network_gas',
+  name:        'Households space heater network gas'
+)
+
+hp_sh_cng = Technology.create!(
+  key:         'households_space_heater_combined_network_gas',
+  name:        'Households space heater combined network gas'
+)
+
+hp_wh_aw = Technology.create!(
+  key:         'households_water_heater_heatpump_air_water_electricity',
+  name:        'Heat pump for hot water (air)',
+  export_to:   'households_water_heater_heatpump_air_water_electricity_share',
+  behavior:    'buffer'
+)
+
+hp_wh_gw = Technology.create!(
+  key:         'households_water_heater_heatpump_ground_water_electricity',
+  name:        'Heat pump for hot water (ground)',
+  export_to:   'households_water_heater_heatpump_ground_water_electricity_share',
+  behavior:    'buffer'
+)
+
+buffer_space_heating = Technology.create!({
+  key:       "buffer_space_heating",
+  name:      "Buffer space heating",
+  behavior:  "optional",
+  composite: true
+})
+
+[hp_sh_aw, hp_sh_gw, hp_sh_ng, hp_sh_cng].each do |tech|
+  Composite.create!(composite: buffer_space_heating, technology: tech)
+end
+
+buffer_water_heating = Technology.create!({
+  key:       "buffer_water_heating",
+  name:      "Buffer water heating",
+  behavior:  "optional",
+  composite: true
+})
+
+[hp_wh_aw, hp_wh_gw].each do |tech|
+  Composite.create!(composite: buffer_water_heating, technology: tech)
+end
+
 User.create!(
   email: 'guest@quintel.com',
   password: 'guest'
@@ -151,4 +183,3 @@ customer = Stakeholder.find_by_name("Customer")
     Stakeholder.create!(name: "customer AC#{i + 1}#{suffix}", parent_id: customer.id)
   end
 end
-

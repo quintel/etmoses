@@ -61,9 +61,7 @@ class Export
   #
   # Returns a Float
   def solar_panel_units_factor
-    @solar_panel_units_factor ||= EtEngineConnector.new(gqueries: [
-      'number_of_solar_pv'
-    ]).gquery(@testing_ground.scenario_id)['future'] / number_of_households
+    et_engine_gqueries['number_of_solar_pv']['future'] / number_of_households
   end
 
   # Private: Queries ETEngine to determine how many households exist in the
@@ -71,9 +69,13 @@ class Export
   #
   # Returns an Integer.
   def number_of_households
-    @households ||= EtEngineConnector.new(gqueries: [
-      'households_number_of_residences'
-    ]).gquery(@testing_ground.scenario_id)['future']
+    et_engine_gqueries['households_number_of_residences']['future']
+  end
+
+  def et_engine_gqueries
+    @et_engine_gqueries ||= EtEngineConnector.new(gqueries:
+      %w(households_number_of_residences number_of_solar_pv)
+    ).gquery(@testing_ground.scenario_id)
   end
 
   # Private: Limits the value of an input so that it may be submitted to

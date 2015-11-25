@@ -5,7 +5,9 @@ class InstalledTechnology
   attribute :name,                                String
   attribute :buffer,                              String
   attribute :composite,                           Boolean, default: false
+  attribute :composite_index,                     Integer
   attribute :composite_value,                     String
+  attribute :position_relative_to_buffer,         String
   attribute :type,                                String, default: 'generic'
   attribute :behavior,                            String
   attribute :profile,                             Integer
@@ -23,19 +25,27 @@ class InstalledTechnology
   attribute :om_costs_per_full_load_hour,         Float
   attribute :om_costs_for_ccs_per_full_load_hour, Float
   attribute :associates,                          Array[InstalledTechnology]
+  attribute :includes,                            Array[String]
 
   EDITABLES = %i(name buffer type profile electrical_capacity volume demand units
     initial_investment technical_lifetime full_load_hours om_costs_per_year
     om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
     performance_coefficient concurrency composite composite_value
+    position_relative_to_buffer includes composite_index
   )
 
   HIDDEN = %i(initial_investment technical_lifetime full_load_hours om_costs_per_year
     om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
-    performance_coefficient concurrency
+    performance_coefficient concurrency includes composite_index
   )
 
   PRESENTABLES = (EDITABLES - %i(electrical_capacity concurrency) + %i(capacity))
+
+  def initialize(args = nil)
+    @id = SecureRandom.hex
+
+    super
+  end
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
@@ -210,6 +220,26 @@ class InstalledTechnology
 
   def parent_key
     buffer && !composite ? buffer : ''
+  end
+
+  def get_composite_value
+    "#{type}_#{composite_index}"
+  end
+
+  def get_composite_name
+    if name =~ /\#[0-9]+/
+      name.sub(/[0-9]+/, composite_index.to_s)
+    else
+      "#{name} ##{composite_index}"
+    end
+  end
+
+  def get_buffer(buffer)
+    "#{buffer}_#{composite_index}"
+  end
+
+  def position_relative_to_buffer_name
+    "position_relative_to_buffer_#{@id}_#{type}"
   end
 
   private
