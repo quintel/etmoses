@@ -227,11 +227,13 @@ class InstalledTechnology
         # TODO Refactor scaling of curves to be explicitly defined on a
         # per-technology basis.
         demand && demand * curve.frames_per_hour
+      elsif composite
+        demand && demand * curve.frames_per_hour
       else
-        capacity || (demand && demand * curve.frames_per_hour) || volume || 1.0
+        volume || capacity || (demand && demand * curve.frames_per_hour) || 1.0
       end
 
-    factor * performance_coefficient * units
+    (factor / performance_coefficient) * units
   end
 
   def profile_components
