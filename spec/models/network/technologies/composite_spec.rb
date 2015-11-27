@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Network::Technologies::Composite do
   let(:profile)   { Network::DepletingCurve.from([1.0, 1.0, 1.0, 1.0]) }
-  let(:installed) { FactoryGirl.build(:installed_heat_pump, capacity: 0.8) }
+
+  let(:installed) do
+    FactoryGirl.build(:installed_heat_pump, buffer: 'a', capacity: 0.8)
+  end
 
   let(:tech) do
     Network::Technologies::Composite.new(Float::INFINITY, profile).tap do |c|

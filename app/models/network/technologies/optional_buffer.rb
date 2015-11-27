@@ -19,7 +19,8 @@ module Network
 
       def self.build(installed, profile, **options)
         super(installed, profile, **options.merge(
-          buffering_space_heating: true
+          buffering_space_heating: true,
+          no_legacy_fallback: true
         ))
       end
 

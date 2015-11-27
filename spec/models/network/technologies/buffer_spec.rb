@@ -11,7 +11,8 @@ RSpec.describe Network::Technologies::Buffer do
         build(
           :installed_heat_pump, profile: profile,
           capacity: capacity, volume: volume,
-          performance_coefficient: performance
+          performance_coefficient: performance,
+          buffer: 'one'
         ), 8760,
         buffering_space_heating: true
       )
@@ -265,7 +266,7 @@ RSpec.describe Network::Technologies::Buffer do
       network_technology(
         build(
           :installed_heat_pump, profile: profile,
-          capacity: 5.0, volume: 50.0
+          capacity: 5.0, volume: 50.0, buffer: 'one'
         ), 8760,
         buffering_space_heating: false
       )

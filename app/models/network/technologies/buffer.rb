@@ -11,6 +11,14 @@ module Network
         self
       end
 
+      def self.build(installed, profile, options)
+        if installed.buffer.blank? && ! options[:no_legacy_fallback]
+          LegacyBuffer.build(installed, profile, options)
+        else
+          super
+        end
+      end
+
       def initialize(installed, profile, buffering_space_heating: false, **)
         super
 
