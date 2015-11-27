@@ -3,7 +3,7 @@ module Network
     # Stores and wraps technologies whose profile and storage reserve is shared
     # between them.
     class Composite
-      attr_reader :techs
+      attr_reader :volume, :techs
 
       def initialize(volume, profile)
         @techs   = []

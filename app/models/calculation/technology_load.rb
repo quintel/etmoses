@@ -28,22 +28,36 @@ module Calculation
     def techs_for(node)
       suitable_technologies(node).flat_map do |tech|
         tech.each_profile_curve do |curve_type, curve, additional_curve|
-          net_tech = Network::Technologies.from_installed(
-            tech, profile_for(tech, curve),
-            @context.options.merge(
-              curve_type: curve_type,
-              additional_profile: additional_curve
-            )
-          )
-
           if tech.buffer.present?
             # Returns the technology wrapped in a Composite::Wrapper.
-            composite(node, tech.buffer).add(net_tech)
+            # composite(node, tech.buffer).add(net_tech)
+            create_tech_for_composite(
+              composite(node, tech.buffer),
+              tech, curve_type, curve, additional_curve
+            )
           else
-            net_tech
+            create_tech(tech, curve_type, curve, additional_curve)
           end
         end
       end
+    end
+
+    def create_tech_for_composite(composite, tech, curve_type, curve, additional_curve)
+      # Storage technologies belonging to a composite must have the same volume
+      # as the composite.
+      tech.volume = composite.volume
+
+      composite.add(create_tech(tech, curve_type, curve, additional_curve))
+    end
+
+    def create_tech(tech, curve_type, curve, additional_curve)
+      Network::Technologies.from_installed(
+        tech, profile_for(tech, curve),
+        @context.options.merge(
+          curve_type: curve_type,
+          additional_profile: additional_curve
+        )
+      )
     end
 
     def comps_for(node)
