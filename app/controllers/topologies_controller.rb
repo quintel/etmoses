@@ -66,11 +66,16 @@ class TopologiesController < ResourceController
     img = Magick::Image.from_blob(params[:svg]) do
       self.format = 'SVG'
       self.background_color = 'transparent'
+      self.quality = 100
     end
 
-    img[0].resize!(2)
-
-    send_data(img[0].to_blob { self.format = 'PNG' }, content_type: 'image/png')
+    send_data(
+      img[0].to_blob do
+        self.format = 'PNG'
+        self.quality = 100
+      end,
+      filename: "#{ @topology.filename }.png",
+      content_type: 'image/png')
   end
 
   private

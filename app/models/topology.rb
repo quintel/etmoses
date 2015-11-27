@@ -41,6 +41,10 @@ class Topology < ActiveRecord::Base
     end
   end
 
+  def filename
+    name.gsub(/[^A-Za-z0-9\-\.]/, '-').gsub(/\-+/, '-')
+  end
+
   private
 
   def validate_graph_yaml
