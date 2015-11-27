@@ -7,7 +7,8 @@ module NetworkCache
     end
 
     def valid?
-      cache_intact? && identical_strategies? && fresh?
+      Settings.cache.networks && cache_intact? &&
+        identical_strategies? && fresh?
     end
 
     private

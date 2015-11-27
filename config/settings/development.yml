@@ -1,2 +1,5 @@
 ---
 host: 'etmoses.dev'
+
+cache:
+  networks: false

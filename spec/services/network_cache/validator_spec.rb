@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe NetworkCache::Validator do
   let(:testing_ground){ FactoryGirl.create(:testing_ground, topology: FactoryGirl.create(:topology_caching)) }
 
+  before do
+    expect(Settings.cache).to receive(:networks).and_return(true)
+  end
+
   it "marks the network cache as invalid" do
     expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)
   end

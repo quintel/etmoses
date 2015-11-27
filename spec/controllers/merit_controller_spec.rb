@@ -8,6 +8,10 @@ RSpec.describe MeritController do
 
     let!(:sign_in_user){ sign_in(user) }
 
+    before do
+      expect(Settings.cache).to receive(:networks).and_return(true)
+    end
+
     it 'creates a merit order' do
       stub_request(:get, "http://beta.et-engine.com/api/v3/scenarios/1/merit").
         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
