@@ -1,5 +1,6 @@
 var TopologyStylesheet = {
   full: {
+    id: 'topology-graph-full',
     width: 1140,
     height: 600,
     svgHeight: '520px',
@@ -10,6 +11,7 @@ var TopologyStylesheet = {
   },
 
   simple: {
+    id: 'topology-graph-simple',
     width: 230,
     height: 250,
     svgHeight: '250px',
