@@ -4,6 +4,7 @@ class TopologiesController < ResourceController
   respond_to :html
   respond_to :js, only: :clone
   respond_to :json, only: :show
+  respond_to :png, only: :download_as_png
 
   before_filter :fetch_topology, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -60,17 +61,16 @@ class TopologiesController < ResourceController
     redirect_to(topologies_url)
   end
 
-  # POST /topologies/:id/download_as_png
+  # POST /topologies/:id/download_as_png.png
   def download_as_png
-    filename = "#{ Rails.root }/tmp/#{ @topology.id }.png"
     img = Magick::Image.from_blob(params[:svg]) do
       self.format = 'SVG'
       self.background_color = 'transparent'
     end
-    img[0].resize!(2)
-    img[0].write(filename)
 
-    send_file(filename, disposition: 'inline')
+    img[0].resize!(2)
+
+    send_data(img[0].to_blob { self.format = 'PNG' }, content_type: 'image/png')
   end
 
   private
