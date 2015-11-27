@@ -2,3 +2,7 @@
 host:          'beta.moses.et-model.com'
 etengine_host: 'beta.et-engine.com'
 etmodel_host:  'beta.pro.et-model.com'
+
+cache:
+  # Cache the results of network calculations.
+  networks: true
