@@ -263,9 +263,9 @@ class InstalledTechnology
       if type == 'transport_car_using_electricity'.freeze
         # TODO Refactor scaling of curves to be explicitly defined on a
         # per-technology basis.
-        demand && demand * curve.frames_per_hour
+        (demand && demand * curve.frames_per_hour) || 1.0
       elsif composite
-        demand && demand * curve.frames_per_hour
+        (demand && demand * curve.frames_per_hour) || 1.0
       else
         volume || capacity || (demand && demand * curve.frames_per_hour) || 1.0
       end
