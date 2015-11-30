@@ -63,7 +63,11 @@ class EtEngineConnector
 
   private
 
-    def et_api_request(method, *args)
+  def et_api_request(method, *args)
+    begin
       JSON.parse(RestClient.public_send(method, *args))
+    rescue RestClient::ResourceNotFound
+      { error: "from ETModel not found" }
     end
+  end
 end

@@ -5,6 +5,7 @@ class Import
 
   validates :provider,    inclusion: { in: [Settings.etengine_host] }
   validates :scenario_id, numericality: { only_integer: true }
+  validate :etm_scenario_present
   validate :is_scaled_scenario, if: -> { scenario_id.present? }
 
   # Public: Returns a hash of technologies which we can import from ETEngine.
@@ -124,5 +125,11 @@ class Import
   # Returns a JSON object or nil if the scenario doesn't exist on ETModel
   def etm_scenario
     @etm_scenario ||= EtEngineConnector.new.scenario(@scenario_id)
+  end
+
+  def etm_scenario_present
+    if etm_scenario[:error]
+      errors.add(:scenario, etm_scenario[:error])
+    end
   end
 end # Import
