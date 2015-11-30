@@ -62,6 +62,12 @@ class TechnologyList
     JSON.dump(Hash[list.to_h.map { |key, techs| [key, techs.map(&:to_h)] }])
   end
 
+  def self.technologies_in_csv(parsed)
+    names = parsed.map{|row| row['name'] }.uniq
+
+    Hash[Technology.where(name: names).pluck(:name, :key)]
+  end
+
   # Public: Given a CSV file as a string, creates a TechnologyList.
   #
   # Parses the contents of the CSV into a new TechnologyList. The file is
@@ -70,9 +76,16 @@ class TechnologyList
   #
   # Returns a TechnologyList.
   def self.from_csv(csv)
-    data = CSV.parse(csv, headers: true).each_with_object({}) do |row, data|
+    parsed = CSV.parse(csv, headers: true)
+    techs  = technologies_in_csv(parsed)
+
+    data = parsed.each_with_object({}) do |row, data|
       data[row['connection']] ||= []
-      data[row['connection']].push(row.to_h.except('connection'))
+      data[row['connection']].push(
+        row.to_h.except('connection').merge(
+          type: techs[row['name']]
+        )
+      )
     end
 
     TechnologyList.from_hash(data)
