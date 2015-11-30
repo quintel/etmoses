@@ -1,5 +1,5 @@
 $("#business_case_target_area").html("<%= escape_javascript(render partial: 'business_cases/table', locals: { business_case_rows: @business_case_rows, business_case: @business_case } ) %>");
-$("#business_case_target_area").find("table tbody td.editable span.static, table tbody td.editable span.difference .calc").formatCurrency(Finance.currencyOptions);
+$("#business_case_target_area").find("table tbody td.editable span.static, table tbody td.editable span.difference .calc").formatCurrency();
 $("#business_case_target_area").find("table tbody td.editable span.difference .calc").text(function(){
   if($(this).text() == ''){ $(this).parent().text("-"); };
 });

@@ -78,7 +78,7 @@ var FinanceTable = (function() {
 
     function setTotalAndFormat(total) {
         $(this).text(total);
-        $(this).formatCurrency(Finance.currencyOptions);
+        $(this).formatCurrency();
     };
 
     function updateCurrentFinances() {
