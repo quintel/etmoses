@@ -46,24 +46,20 @@ def stub_et_engine_scenario_inputs_request(id = 2)
   }).to_return(:status => 200, :body => JSON.dump(json), :headers => {})
 end
 
-def stub_et_engine_request
+def stub_et_engine_request(keys = ['magical_technology'])
+  nodes = Hash[keys.map do |key|
+    [key, { load: 1.0, technical_lifetime: { present: 2, future: 2 } }]
+  end]
+
   stub_request(:post,
     "http://beta.et-engine.com/api/v3/scenarios/1/converters/stats").
-    with(body: {"keys"=>["magical_technology"]},
+    with(body: {"keys"=>keys},
          headers: {
           'Accept'=>'application/json',
           'Accept-Encoding'=>'gzip, deflate',
-          'Content-Length'=>'25',
           'Content-Type'=>'application/x-www-form-urlencoded'
          }).
-    to_return(status: 200,
-              body: JSON.dump({
-                nodes: {
-                  magical_technology: {
-                    load: 1.0
-                  }
-                }
-              }) )
+    to_return(status: 200, body: JSON.dump(nodes: nodes))
 end
 
 def stub_scenario_request(id = 1)

@@ -30,7 +30,7 @@ class InstalledTechnology
     performance_coefficient concurrency
   )
 
-  PRESENTABLES = %i(name profile_key electrical_capacity volume demand units)
+  PRESENTABLES = (EDITABLES - %i(electrical_capacity concurrency) + %i(capacity))
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
