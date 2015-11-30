@@ -46,15 +46,7 @@ var Poller = (function () {
                 this.firstRequestAt = new Date();
             }
 
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                dataType: "json",
-                url: this.url,
-                data: JSON.stringify(data),
-                success: success.bind(this),
-                error: fail.bind(this)
-            });
+            Ajax.json(this.url, data, success.bind(this), fail.bind(this));
         }
     };
 

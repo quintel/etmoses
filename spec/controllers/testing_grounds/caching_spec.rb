@@ -38,8 +38,11 @@ RSpec.describe TestingGroundsController do
     end
 
     it 'caches the data request for strategies separately' do
-      get :data, id: testing_ground,
-                 strategies: FakeLoadManagement.strategies(saving_base_load: true)
+      strategies = FakeLoadManagement.strategies(saving_base_load: true)
+
+      NetworkCache::Writer.from(testing_ground, strategies).write
+
+      get :data, id: testing_ground, strategies: strategies
 
       expect(NetworkCache::Fetcher.from(testing_ground, { saving_base_load: true })
               .fetch.node('CONGESTED_END_POINT_0').get(:load).length
@@ -50,15 +53,6 @@ RSpec.describe TestingGroundsController do
       NetworkCache::Writer.from(testing_ground).write
 
       get :data, id: testing_ground
-
-      expect(NetworkCache::Fetcher.from(testing_ground)
-              .fetch.node('CONGESTED_END_POINT_0').get(:load).length).to eq(8760)
-    end
-
-    it 'clears the data cache' do
-      NetworkCache::Writer.from(testing_ground).write
-
-      get :data, id: testing_ground, clear_cache: true
 
       expect(NetworkCache::Fetcher.from(testing_ground)
               .fetch.node('CONGESTED_END_POINT_0').get(:load).length).to eq(8760)

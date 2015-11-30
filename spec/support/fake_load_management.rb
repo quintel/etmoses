@@ -19,17 +19,7 @@ module FakeLoadManagement
   end
 
   def self.strategies(options = {})
-    {
-      "solar_storage"           => (options[:solar_storage] || false),
-      "battery_storage"         => (options[:battery_storage] || false),
-      "solar_power_to_heat"     => (options[:solar_power_to_heat] || false),
-      "solar_power_to_gas"      => (options[:solar_power_to_gas] || false),
-      "buffering_electric_car"  => (options[:buffering_electric_car] || false),
-      "buffering_space_heating" => (options[:buffering_space_heating] || false),
-      "postponing_base_load"    => (options[:postponing_base_load] || false),
-      "saving_base_load"        => (options[:saving_base_load] || false),
-      "capping_solar_pv"        => (options[:capping_solar_pv] || false),
-      'capping_fraction'        => 0.5
-    }
+    FactoryGirl.create(:selected_strategy).attributes.except("id", "testing_ground_id")
+                                          .merge(options.stringify_keys)
   end
 end

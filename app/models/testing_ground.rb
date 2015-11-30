@@ -14,6 +14,8 @@ class TestingGround < ActiveRecord::Base
   has_one :selected_strategy
   has_one :business_case
 
+  has_many :testing_ground_delayed_jobs
+
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }
 

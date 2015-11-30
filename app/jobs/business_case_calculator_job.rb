@@ -18,7 +18,7 @@ class BusinessCaseCalculatorJob
 
   def error(job, exception)
     if %w(development test).include?(Rails.env)
-      puts exception
+      raise exception
     else
       Airbrake.notify(exception)
     end

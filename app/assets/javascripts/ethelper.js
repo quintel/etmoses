@@ -1,38 +1,33 @@
-/*
- * Collection of helper methods
- */
-var ETHelper = {
-  groupBy: function(elements, key) {
-    var grouped = {},
-        length  = elements.length,
-        i, element;
+var ETHelper = (function () {
+    'use strict';
 
-    for (i = 0; i < length; i++) {
-      element = elements[i];
+    return {
+        groupBy: function (elements, key) {
+            var grouped = {};
 
-      if (! grouped.hasOwnProperty(element[key])) {
-        grouped[element[key]] = [];
-      }
+            elements.forEach(function (element) {
+                if (!grouped.hasOwnProperty(element[key])) {
+                    grouped[element[key]] = [];
+                }
 
-      grouped[element[key]].push(element);
-    }
+                grouped[element[key]].push(element);
+            });
 
-    return grouped;
-  },
+            return grouped;
+        },
 
-  eachNode: function(nodes, iterator) {
-    var length = nodes.length, i;
+        eachNode: function (nodes, iterator) {
+            nodes.forEach(function (node) {
+                iterator.call(this, node);
 
-    for (i = 0; i < length; i++) {
-      iterator.call(this, nodes[i]);
+                if (node.children && node.children.length) {
+                    ETHelper.eachNode(node.children, iterator);
+                }
 
-      if (nodes[i]['children'] && nodes[i]['children'].length) {
-        ETHelper.eachNode(nodes[i]['children'], iterator);
-      }
-
-      if (nodes[i]['_children'] && nodes[i]['_children'].length) {
-        ETHelper.eachNode(nodes[i]['_children'], iterator);
-      }
-    }
-  }
-};
+                if (node._children && node._children.length) {
+                    ETHelper.eachNode(node._children, iterator);
+                }
+            });
+        }
+    };
+}());

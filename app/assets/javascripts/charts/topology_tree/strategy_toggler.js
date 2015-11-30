@@ -1,4 +1,4 @@
-/*global StrategyHelper,LoadChartHelper,Poller*/
+/*global StrategyHelper,LoadChartHelper,Poller,TreeFetcher*/
 var StrategyToggler = (function () {
     'use strict';
 
@@ -54,12 +54,9 @@ var StrategyToggler = (function () {
     }
 
     function pollTree() {
-        new Poller({
-            url: loadChart.url,
-            data: {
-                strategies: StrategyHelper.getStrategies()
-            }
-        }).poll().done(updateLoadChart.bind(this));
+        new TreeFetcher(this.urls).fetch({
+            strategies: StrategyHelper.getStrategies(),
+        }, updateLoadChart.bind(this));
     }
 
     function renderSummary() {
@@ -153,12 +150,13 @@ var StrategyToggler = (function () {
         },
 
         setStrategies: function () {
+            var multiSelect = buildMultiSelect(),
+                cappingInput = $("input[type=checkbox][value=capping_solar_pv]");
+
             savedStrategies = JSON.parse($(".save_strategies").text());
 
-            var multiSelect = buildMultiSelect();
             multiSelect.multiselect('select', getSelectedItems());
 
-            var cappingInput = $("input[type=checkbox][value=capping_solar_pv]");
             cappingInput.parents('a').append($(".slider-wrapper.hidden"));
             cappingInput.on("change", showSlider);
 
@@ -180,8 +178,9 @@ var StrategyToggler = (function () {
         }
     };
 
-    function StrategyToggler(thisLoadChart) {
+    function StrategyToggler(thisLoadChart, urls) {
         loadChart = thisLoadChart;
+        this.urls = urls;
         businessCaseTable = $("#business_case_table");
         applyStrategyButton = $("button.apply_strategies");
     }
