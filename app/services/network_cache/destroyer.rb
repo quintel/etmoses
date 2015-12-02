@@ -9,17 +9,13 @@ module NetworkCache
     #
     # Destroys all network cache with and without strategies
     def destroy_all
-      FileUtils.rm_rf(file_path.sub(/[^\/]*$/, ''))
+      FileUtils.rm_rf(file_path.parent)
     end
 
     #
     # Destroys the network cache (with or without strategies)
     def destroy
-      tree_scope.nodes do |node|
-        if File.exists?(file_name(node.key))
-          File.delete(file_name(node.key))
-        end
-      end
+      FileUtils.rm_rf(file_path)
     end
   end
 end

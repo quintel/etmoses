@@ -8,12 +8,19 @@ class TestingGround::Calculator
     if cache.present?
       existing_job.destroy if existing_job
 
-      base.merge(graph: GraphToTree.convert(cache.fetch))
+      base.merge(
+        graph: GraphToTree.convert(network(:electricity)),
+        gas:   GraphToTree.convert(network(:gas))
+      )
     else
       calculate_load_in_background
 
       @strategies.merge(pending: existing_job.finished_at.blank?)
     end
+  end
+
+  def network(carrier)
+    fetch_networks.detect { |net| net.carrier == carrier }
   end
 
   private
@@ -31,6 +38,10 @@ class TestingGround::Calculator
 
   def task
     TestingGroundCalculatorJob.new(@testing_ground, @strategies)
+  end
+
+  def fetch_networks
+    @networks ||= cache.fetch
   end
 
   def cache

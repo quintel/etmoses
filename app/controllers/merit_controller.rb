@@ -17,12 +17,14 @@ class MeritController < ApplicationController
   private
 
   def merit_order
-    graph = TestingGround::Calculator.new(@testing_ground,
-              @testing_ground.selected_strategy.attributes).calculate
+    calculator = TestingGround::Calculator.new(
+      @testing_ground,
+      @testing_ground.selected_strategy.attributes
+    )
 
-    network = Network::Builders::Electricity.build(graph[:graph])
-
-    Market::MeritCurveBuilder.new(@testing_ground, network).merit
+    Market::MeritCurveBuilder.new(
+      @testing_ground, calculator.network(:electricity)
+    ).merit
   end
 
   def set_csv_headers

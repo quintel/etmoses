@@ -13,7 +13,7 @@ RSpec.describe MeritController do
         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => JSON.dump({participants: [], profiles: []}))
 
-      NetworkCache::Writer.from(testing_ground).write(
+      NetworkCache::Writer.from(testing_ground).write([
         Network::Builders::Electricity.build({
           name: "hv",
           load: [0.0] * 8760,
@@ -25,8 +25,9 @@ RSpec.describe MeritController do
               { name: 'lv2', load: [0.0] * 8760 }
             ]
           }]
-        })
-      )
+        }),
+        Network::Builders::Gas.build({}, {})
+      ])
 
       get :price_curve, testing_ground_id: testing_ground.id, format: :csv
 

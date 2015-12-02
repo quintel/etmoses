@@ -8,16 +8,28 @@ module NetworkCache
 
     #
     # Writes a load calculation to cache
-    def write(network = tree_scope)
-      network.nodes.each do |node|
-        unless File.directory?(file_path)
-          FileUtils.mkdir_p(file_path)
-        end
-
-        File.write(file_name(node.key), node.get(:load).to_msgpack, mode: 'wb')
+    def write(networks = tree_scope)
+      networks.each do |network|
+        write_network(file_path, network)
       end
 
-      network
+      networks
+    end
+
+    private
+
+    def write_network(path, network)
+      directory = path.join(network.carrier.to_s)
+
+      FileUtils.mkdir_p(directory) unless directory.directory?
+
+      network.nodes.each do |node|
+        File.write(
+          file_name(network.carrier, node.key),
+          node.get(:load).to_msgpack,
+          mode: 'wb'
+        )
+      end
     end
   end
 end

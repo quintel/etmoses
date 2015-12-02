@@ -43,8 +43,19 @@ class TestingGround < ActiveRecord::Base
   # Public: Converts the testing ground to a Network::Graph and calculated the
   # loads for the entire year.
   #
+  # This is a temporary method for backward compatibility. It will be removed
+  # soon.
+  #
   # Returns the Network::Graph.
   def to_calculated_graph(opts = {})
+    to_calculated_graphs(opts).detect { |g| g.carrier == :electricity }
+  end
+
+  # Public: Converts the testing ground into separate Network::Graph instances
+  # for each carrier, and loads are calculated for the entire year.
+  #
+  # Returns an array of Network::Graphs.
+  def to_calculated_graphs(opts = {})
     calculators = [
       Calculation::TechnologyLoad,
       Calculation::PullConsumption,
@@ -56,7 +67,7 @@ class TestingGround < ActiveRecord::Base
         calculator.call(cxt)
       end
 
-    context.graph(:electricity)
+    context.graphs
   end
 
   # Public: Creates a Calculation::Context which contains all the information

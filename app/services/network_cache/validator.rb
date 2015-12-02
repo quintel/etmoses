@@ -14,8 +14,10 @@ module NetworkCache
     private
 
     def cache_intact?
-      tree_scope.nodes.all? do |node|
-        File.exists?(file_name(node.key))
+      tree_scope.all? do |network|
+        network.nodes.all? do |node|
+          File.exists?(file_name(network.carrier, node.key))
+        end
       end
     end
 
@@ -32,7 +34,11 @@ module NetworkCache
     end
 
     def cache_time
-      tree_scope.nodes.map{|n| File.mtime(file_name(n.key)) }.min
+      tree_scope.map do |network|
+        network.nodes.map do |node|
+          File.mtime(file_name(network.carrier, node.key))
+        end.min
+      end.min
     end
 
     def strategy_attributes

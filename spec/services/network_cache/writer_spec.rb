@@ -1,19 +1,34 @@
 require 'rails_helper'
 
 RSpec.describe NetworkCache::Writer do
-  let(:testing_ground){ FactoryGirl.create(:testing_ground, topology: FactoryGirl.create(:topology_caching)) }
-
-  it 'writes to cache' do
-    NetworkCache::Writer.from(testing_ground).write
-
-    expect(NetworkCache::Fetcher.from(testing_ground).fetch.node('lv1').get(:load)).to eq([1])
+  let(:testing_ground) do
+    FactoryGirl.create(
+      :testing_ground,
+      topology: FactoryGirl.create(:topology_caching)
+    )
   end
 
-  it 'writes strategies to a separate cache' do
-    NetworkCache::Writer.from(testing_ground, { saving_base_load: true })
-           .write
+  let(:network) do
+    NetworkCache::Fetcher.from(testing_ground, opts).fetch.detect do |net|
+      net.carrier == :electricity
+    end
+  end
 
-    expect(NetworkCache::Fetcher.from(testing_ground, { saving_base_load: true  })
-           .fetch.node('lv1').get(:load)).to eq([1])
+  context 'with no calculation options' do
+    let(:opts) { {} }
+
+    it 'writes to cache' do
+      NetworkCache::Writer.from(testing_ground, opts).write
+      expect(network.node('lv1').get(:load)).to eq([1])
+    end
+  end
+
+  context 'with calculation options' do
+    let(:opts) { { saving_base_load: true } }
+
+    it 'writes strategies to a separate cache' do
+      NetworkCache::Writer.from(testing_ground, opts).write
+      expect(network.node('lv1').get(:load)).to eq([1])
+    end
   end
 end

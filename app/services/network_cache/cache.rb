@@ -6,8 +6,8 @@ module NetworkCache
       new(testing_ground, opts)
     end
 
-    def write(network)
-      Writer.from(@testing_ground, @opts).write(network)
+    def write(networks)
+      Writer.from(@testing_ground, @opts).write(networks)
     end
 
     def fetch

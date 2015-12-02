@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe TestingGround::Calculator do
-  let(:testing_ground){ FactoryGirl.create(:testing_ground) }
+  let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+
+  before do
+    allow(Settings.cache).to receive(:networks).and_return(true)
+  end
 
   it 'sets a testing ground delayed job' do
     TestingGround::Calculator.new(testing_ground, {}).calculate
@@ -9,20 +13,39 @@ RSpec.describe TestingGround::Calculator do
     expect(TestingGroundDelayedJob.count).to eq(1)
   end
 
-  it 'fetches the cache if it has one' do
-    NetworkCache::Writer.from(testing_ground).write(TreeToGraph.convert({
-      name: 'hv',
-      load: [0.0] * 8760,
-      children: [{
-        name: 'mv',
-        load: [0.0] * 8760,
-        children: [
-          { name: 'lv1', load: [0.0] * 8760 },
-          { name: 'lv2', load: [0.0] * 8760 }
-        ]
-      }]
-    }))
+  context 'with a fresh cache' do
+    before do
+      NetworkCache::Writer.from(testing_ground).write([
+        Network::Builders.for(:electricity).build({
+          name: 'hv',
+          load: [0.0] * 8760,
+          children: [{
+            name: 'mv',
+            load: [0.0] * 8760,
+            children: [
+              { name: 'lv1', load: [0.0] * 8760 },
+              { name: 'lv2', load: [0.0] * 8760 }
+            ]
+          }]
+        }),
+        Network::Builders.for(:gas).build({})
+      ])
+    end
 
-    expect(TestingGround::Calculator.new(testing_ground, {}).calculate).to have_key(:graph)
+    let(:cache) do
+      TestingGround::Calculator.new(testing_ground, {}).calculate
+    end
+
+    it 'is not pending calculation' do
+      expect(cache).to_not have_key(:pending)
+    end
+
+    it 'fetches the electricity network' do
+      expect(cache).to have_key(:graph)
+    end
+
+    it 'fetches the gas network' do
+      expect(cache).to have_key(:gas)
+    end
   end
 end

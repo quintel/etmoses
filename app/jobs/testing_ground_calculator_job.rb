@@ -5,7 +5,7 @@ class TestingGroundCalculatorJob
   end
 
   def perform
-    cache.write(@testing_ground.to_calculated_graph(@strategies))
+    cache.write(@testing_ground.to_calculated_graphs(@strategies))
   end
 
   def success(job)

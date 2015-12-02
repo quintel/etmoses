@@ -29,33 +29,50 @@ RSpec.describe TestingGroundsController do
     }
   }
 
+  let(:network) do
+    NetworkCache::Fetcher.from(testing_ground, opts).fetch.detect do |net|
+      net.carrier == :electricity
+    end
+  end
+
   describe 'caching' do
+    let(:opts) { {} }
+
     it 'caches the data request' do
       get :data, id: testing_ground
 
-      expect(NetworkCache::Fetcher.from(testing_ground)
-              .fetch.node('CONGESTED_END_POINT_0').get(:load).length).to eq(8760)
+      loads = network.node('CONGESTED_END_POINT_0').get(:load)
+      expect(loads.length).to eq(8760)
     end
 
-    it 'caches the data request for strategies separately' do
-      strategies = FakeLoadManagement.strategies(saving_base_load: true)
+    context 'with custom calculation options' do
+      let(:opts) { { saving_base_load: true } }
 
-      NetworkCache::Writer.from(testing_ground, strategies).write
+      it 'caches the data request for strategies separately' do
+        get :data, id: testing_ground,
+                   strategies: FakeLoadManagement.strategies(opts)
 
-      get :data, id: testing_ground, strategies: strategies
-
-      expect(NetworkCache::Fetcher.from(testing_ground, { saving_base_load: true })
-              .fetch.node('CONGESTED_END_POINT_0').get(:load).length
-            ).to eq(8760)
+        loads = network.node('CONGESTED_END_POINT_0').get(:load)
+        expect(loads.length).to eq(8760)
+      end
     end
 
     it 'fetches the data instead of calculating' do
-      NetworkCache::Writer.from(testing_ground).write
+      NetworkCache::Writer.from(testing_ground, opts).write
 
       get :data, id: testing_ground
 
-      expect(NetworkCache::Fetcher.from(testing_ground)
-              .fetch.node('CONGESTED_END_POINT_0').get(:load).length).to eq(8760)
+      loads = network.node('CONGESTED_END_POINT_0').get(:load)
+      expect(loads.length).to eq(8760)
+    end
+
+    it 'clears the data cache' do
+      NetworkCache::Writer.from(testing_ground, opts).write
+
+      get :data, id: testing_ground, clear_cache: true
+
+      loads = network.node('CONGESTED_END_POINT_0').get(:load)
+      expect(loads.length).to eq(8760)
     end
   end
 end
