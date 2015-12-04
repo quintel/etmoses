@@ -70,7 +70,7 @@ module Calculation
     end
 
     def composite(node, name)
-      node.get(:comps).fetch(name)
+      @context.graph(:electricity).node(node.key).get(:comps).fetch(name)
     end
 
     # Internal: Given a node, returns an array of technologies which may be used

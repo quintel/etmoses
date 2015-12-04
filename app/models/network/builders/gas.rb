@@ -45,7 +45,10 @@ module Network
           return if techs.empty?
 
           @head.connect_to(@graph.add(
-            Node.new(name, attrs.merge(installed_techs: techs))
+            Node.new(name, attrs.merge(
+              installed_techs: techs,
+              installed_comps: []
+            ))
           ))
         end
       end
