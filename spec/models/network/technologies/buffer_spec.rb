@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Network::Technologies::Buffer do
   context 'with a storage volume of 10 and capacity of 5' do
-    let(:capacity)    { 5.0 }
-    let(:volume)      { 50.0 }
-    let(:performance) { 1.0 }
+    let(:capacity)      { 5.0 }
+    let(:volume)        { 50.0 }
+    let(:performance)   { 1.0 }
 
     let(:tech) do
       tech = network_technology(
@@ -18,7 +18,8 @@ RSpec.describe Network::Technologies::Buffer do
       )
 
       dprofile  = Network::DepletingCurve.new(profile)
-      composite = Network::Technologies::Composite.new(volume, dprofile)
+      composite = Network::Technologies::Composite.new(
+        Float::INFINITY, volume, dprofile)
 
       composite.add(tech)
     end
