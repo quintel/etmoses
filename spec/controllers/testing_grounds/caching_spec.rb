@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe TestingGroundsController do
+  before do
+    expect(Settings.cache).
+      to receive(:networks).at_least(:once).and_return(true)
+  end
+
   let(:user){ FactoryGirl.create(:user) }
 
   let!(:sign_in_user) { sign_in(:user, user) }

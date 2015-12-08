@@ -5,7 +5,7 @@ class TestingGround::Calculator
   end
 
   def calculate
-    if cache.present?
+    if ! Settings.cache.networks || cache.present?
       existing_job.destroy if existing_job
 
       base.merge(
@@ -41,7 +41,12 @@ class TestingGround::Calculator
   end
 
   def fetch_networks
-    @networks ||= cache.fetch
+    @networks ||=
+      if Settings.cache.networks
+        cache.fetch
+      else
+        @testing_ground.to_calculated_graphs(@strategies)
+      end
   end
 
   def cache

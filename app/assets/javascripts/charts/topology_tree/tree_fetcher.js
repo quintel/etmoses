@@ -3,7 +3,10 @@ var TreeFetcher = (function () {
     'use strict';
 
     function failCallback(treeData) {
-        new ErrorDisplayer(treeData.responseJSON, this.container).displayError();
+        new ErrorDisplayer(
+            treeData.responseJSON,
+            $('.testing-ground-view')
+        ).displayError();
     }
 
     function finalCall() {
@@ -40,7 +43,12 @@ var TreeFetcher = (function () {
             this.data = data;
             this.cachedCallback = cachedCallback;
 
-            Ajax.json(this.url, data, initialCachingCallback.bind(this));
+            Ajax.json(
+                this.url,
+                data,
+                initialCachingCallback.bind(this),
+                failCallback.bind(this)
+            );
         }
     };
 
