@@ -17,7 +17,7 @@ var TopologyTree = (function () {
         }
 
         this.treeGraph.initialCallDone = true;
-        this.treeGraph.showGraph(treeData.graph);
+        this.treeGraph.showGraph(treeData.networks.electricity);
     }
 
     TopologyTree.prototype = {

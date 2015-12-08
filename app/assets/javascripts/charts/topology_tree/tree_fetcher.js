@@ -31,7 +31,7 @@ var TreeFetcher = (function () {
      * callback after requesting caching
      */
     function initialCachingCallback(cachedData) {
-        if (cachedData.graph) {
+        if (cachedData.networks) {
             this.cachedCallback(cachedData);
         } else {
             pendingCalculate.call(this);

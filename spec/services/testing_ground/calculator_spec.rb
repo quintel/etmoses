@@ -41,11 +41,13 @@ RSpec.describe TestingGround::Calculator do
     end
 
     it 'fetches the electricity network' do
-      expect(cache).to have_key(:graph)
+      expect(cache).to have_key(:networks)
+      expect(cache[:networks]).to have_key(:electricity)
     end
 
     it 'fetches the gas network' do
-      expect(cache).to have_key(:gas)
+      expect(cache).to have_key(:networks)
+      expect(cache[:networks]).to have_key(:gas)
     end
   end
 end

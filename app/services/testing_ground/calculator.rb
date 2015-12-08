@@ -8,10 +8,10 @@ class TestingGround::Calculator
     if ! Settings.cache.networks || cache.present?
       existing_job.destroy if existing_job
 
-      base.merge(
-        graph: GraphToTree.convert(network(:electricity)),
-        gas:   GraphToTree.convert(network(:gas))
-      )
+      base.merge(networks: {
+        electricity: GraphToTree.convert(network(:electricity)),
+        gas:         GraphToTree.convert(network(:gas))
+      })
     else
       calculate_load_in_background
 
