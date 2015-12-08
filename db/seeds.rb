@@ -155,7 +155,6 @@ hp_wh_gw = Technology.create!(
 buffer_space_heating = Technology.create!({
   key:       "buffer_space_heating",
   name:      "Buffer space heating",
-  behavior:  "optional",
   carrier:   "electricity",
   composite: true,
 })
@@ -167,7 +166,6 @@ end
 buffer_water_heating = Technology.create!({
   key:       "buffer_water_heating",
   name:      "Buffer water heating",
-  behavior:  "optional",
   carrier:   "electricity",
   composite: true
 })
