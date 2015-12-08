@@ -2,6 +2,10 @@
 var TreeFetcher = (function () {
     'use strict';
 
+    function showProgress() {
+        new StatusUpdater("...", 1).append();
+    }
+
     function failCallback(treeData) {
         new ErrorDisplayer(
             treeData.responseJSON,
@@ -22,6 +26,7 @@ var TreeFetcher = (function () {
             url: this.url,
             data: this.data
         }).poll()
+            .progress(showProgress.bind(this))
             .done(finalCall.bind(this))
             .fail(failCallback.bind(this));
     }
