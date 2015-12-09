@@ -11,7 +11,10 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError do |ex|
     if request.format.json?
       render json: { message: t(:not_authorized) }, status: 403
+    elsif current_user
+      redirect_to(root_path)
     else
+      session[:previous_url] = request.fullpath
       redirect_to(new_user_session_path, alert: t(:not_authorized))
     end
   end

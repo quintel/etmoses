@@ -214,7 +214,7 @@ RSpec.describe TestingGroundsController do
 
       get :show, id: testing_ground.id
 
-      expect(response).to redirect_to(new_user_session_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it "shows a testing ground when it's private and you're an admin" do
@@ -313,7 +313,7 @@ RSpec.describe TestingGroundsController do
 
       get :edit, id: testing_ground.id
 
-      expect(response).to redirect_to(new_user_session_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it "doesn't show the edit page of a testing ground when it's private" do
@@ -323,7 +323,7 @@ RSpec.describe TestingGroundsController do
 
       get :edit, id: testing_ground.id
 
-      expect(response).to redirect_to(new_user_session_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it "shows the edit page of a testing ground when it's private" do
@@ -375,7 +375,7 @@ RSpec.describe TestingGroundsController do
       patch :update, id: private_testing_ground.id,
                      testing_ground: update_hash
 
-      expect(response).to redirect_to(new_user_session_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it "sets the correct technology profile" do
