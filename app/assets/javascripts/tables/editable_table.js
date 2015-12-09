@@ -18,15 +18,17 @@ var EditableTable = (function () {
     }
 
     function tableHeader(index) {
-        return $($(this.selector).find("thead th")[index]).data("header");
+        return $(this.selector).find("thead th").get(index).getAttribute("data-header");
     }
 
     function rowToTechnologyObject(tableRow) {
         var tableData = {},
             self = this;
 
-        $.each(tableRow, function (i, attribute) {
-            var header = tableHeader.call(self, i);
+        for (var i = 0; i < tableRow.length; i++) {
+            var attribute = tableRow[i],
+                header = tableHeader.call(self, i);
+
             tableData[header] = attribute;
 
             this.changeData.call({
@@ -34,7 +36,7 @@ var EditableTable = (function () {
                 header: header,
                 tableData: tableData
             });
-        }.bind(this));
+        }
 
         return tableData;
     }
