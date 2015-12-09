@@ -9,7 +9,11 @@ module LoadProfilesHelper
     options_for_select(load_profiles, { selected: profile.load_profile_category_id })
   end
 
-  def technologies_select_options(selected = nil)
-    options_for_select(@technologies.map{|t| [t.name, t.key]}, {selected: selected})
+  def technologies_select_options
+    bufferables = @technologies.map(&:technologies).flatten
+
+    options_for_select((@technologies.visible - bufferables).map do |technology|
+      [technology.name, technology.key]
+    end)
   end
 end
