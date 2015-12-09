@@ -29,7 +29,8 @@ module Calculation
     def technology_nodes
       @technology_nodes ||= graphs.flat_map do |graph|
         graph.nodes.select do |node|
-          node.get(:installed_techs).any?
+          node.get(:installed_techs).any? ||
+            node.get(:installed_comps) && node.get(:installed_comps).any?
         end
       end
     end
