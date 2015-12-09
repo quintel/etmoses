@@ -12,7 +12,7 @@ module Network
         @demand   = profile
         @profile  = DepletingCurve.new(profile)
 
-        volume = volume * profile.frames_per_hour
+        volume = (volume || 0.0) * profile.frames_per_hour
 
         @reserve = Reserve.new(volume) do |frame, amount|
           wanted = @profile.at(frame)
