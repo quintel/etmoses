@@ -19,7 +19,7 @@ module Finance
     private
 
     def topology_stakeholders
-      network.nodes.map{|n| n.get(:stakeholder) }
+      networks[:electricity].nodes.map{ |n| n.get(:stakeholder) }
     end
 
     def market_model_stakeholders
@@ -48,23 +48,49 @@ module Finance
     end
 
     def market
-      @market ||= Market.from_market_model(
-        @testing_ground, network, basic: featureless_network
-      )
+      @market ||= begin
+        Market.from_market_model(
+          @testing_ground,
+          networks[:electricity],
+          gas:       Market::Variant.new { networks[:gas] },
+          basic:     featureless_networks[:electricity],
+          basic_gas: featureless_networks[:gas],
+        )
+      end
     end
 
-    def network
-      @network ||= @testing_ground.to_calculated_graph(@strategies)
+    def networks
+      @networks ||= Hash[
+        @testing_ground.to_calculated_graphs(@strategies).map do |network|
+          [network.carrier, network]
+        end
+      ]
     end
 
     def initial_business_case_costs
-      @initial_costs ||= Market::InitialCosts.new(network).calculate
+      @initial_costs ||=
+        Market::InitialCosts.new(networks[:electricity]).calculate
     end
 
     # A variant of the network with all storage, flexibility, and other special
     # features turned off. Used in the flexibility measures.
-    def featureless_network
-      Market::Variant.new(&@testing_ground.method(:to_calculated_graph))
+    def featureless_networks
+      @featureless_networks ||= begin
+        # Lazily computes the featureless networks only when required.
+        featureless = Market::Variant.new do
+          @testing_ground.to_calculated_graphs
+        end
+
+        electricity = Market::Variant.new do
+          featureless.detect { |net| net.carrier == :electricity }
+        end
+
+        gas = Market::Variant.new do
+          featureless.detect { |net| net.carrier == :gas }
+        end
+
+        { electricity: electricity, gas: gas }
+      end
     end
   end
 end

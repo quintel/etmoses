@@ -26,9 +26,10 @@ en:
       curve: 'Price curve'
       merit: 'Merit price'
     measure:
-      connections: Number of connections
+      connections: Number of electricity connections
       flex_realised: Flexibility realised
       flex_potential: Flexibility potential
+      gas_connections: Number of gas connections
       load: Instantaneous load
       kwh: kWh
       kwh_consumed: kWh consumed

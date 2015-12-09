@@ -1,4 +1,4 @@
-require_relative 'market/errors'
+require_relative 'market/error'
 
 module Market
   # Public: Creates a new market graph.
