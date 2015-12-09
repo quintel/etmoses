@@ -50,7 +50,7 @@ RSpec.describe TestingGroundsController do
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
 
-        expect(result.values.flatten.count).to eq(2)
+        expect(result.values.flatten.count).to eq(4)
         expect(result.keys.count).to eq(2)
       end
     end
@@ -66,7 +66,7 @@ RSpec.describe TestingGroundsController do
 
         result = controller.instance_variable_get("@testing_ground_profile").as_json
 
-        expect(result.values.flatten.count).to eq(2)
+        expect(result.values.flatten.count).to eq(4)
         expect(result.keys.count).to eq(2)
       end
 
@@ -382,28 +382,11 @@ RSpec.describe TestingGroundsController do
       patch :update, id: testing_ground.id,
                      testing_ground: update_hash
 
-      expect(testing_ground.reload.technology_profile.as_json).to eq({
-        "lv1"=>[{
-          :name=>"Residential PV panel",
-          :type=>"households_solar_pv_solar_radiation",
-          :behavior=>nil,
-          :profile=>profile.id,
-          :profile_key=>"profile_1",
-          :capacity=>-1.5,
-          :demand=>nil,
-          :volume=>nil,
-          :units=>38,
-          :initial_investment=>nil,
-          :technical_lifetime=>nil,
-          :performance_coefficient=>1.0,
-          :concurrency=>"max",
-          :full_load_hours=>nil,
-          :om_costs_per_year=>nil,
-          :om_costs_per_full_load_hour=>nil,
-          :om_costs_for_ccs_per_full_load_hour=>nil
-        }],
-        "lv2"=>[],
-        "lv3"=>[]
+      result = testing_ground.reload.technology_profile.as_json['lv1'][0]
+
+      expect(result.slice(:profile, :profile_key)).to eq({
+        :profile=>profile.id,
+        :profile_key=>"profile_1",
       })
     end
 

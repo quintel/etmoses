@@ -30,26 +30,14 @@ module TestingGroundsHelper
     testing_ground.scenario_id.present?
   end
 
-  def profile_table_options_for_name(selected_technology)
+  def profile_table_options_for_name
     technologies = @technologies.visible.order(:name).map do |technology|
-      [technology.name, technology.key, data: default_values(technology) ]
+      [technology.name, technology.key, data: default_values(technology).merge(
+        composite: technology.composite)
+      ]
     end
 
-    options_for_select(technologies, selected: selected_key(selected_technology))
-  end
-
-  def selected_key(selected_technology)
-    if selected_technology.type == 'base_load_edsn'
-      'base_load'
-    else
-      selected_technology.type
-    end
-  end
-
-  def node_options(topology, node)
-    @edges ||= Topologies::EdgeNodesFinder.new(topology).find_edge_nodes
-
-    options_for_select(@edges.map(&:key), selected: node)
+    options_for_select(technologies)
   end
 
   def maximum_concurrency?(technology_key, profile)
@@ -89,5 +77,30 @@ module TestingGroundsHelper
     link_to("Save all and view LES", "#",
       data: { url: testing_ground_path(testing_ground) },
       class: "btn btn-success save-all")
+  end
+
+  def end_point_filter_options(profile)
+    options_for_select(profile.keys, profile.keys)
+  end
+
+  def column_filter_options(profile)
+    editables = (%w(node) + InstalledTechnology::EDITABLES[0...-1])
+    selected  = %w(node name profile electrical_capacity volume demand units)
+
+    options_for_select(editables.map(&:to_s).map{|e| [e.humanize, e] }, selected)
+  end
+
+  def concurrency_options
+    @technologies.visible.expandable.with_load_profiles
+  end
+
+  def composites_data
+    composites = @technologies.map do |technology|
+      if technology.technologies.any?
+        [ technology.key, technology.technologies.map(&:key) ]
+      end
+    end
+
+    Hash[composites.compact]
   end
 end
