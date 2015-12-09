@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209171445) do
+ActiveRecord::Schema.define(version: 20151210110212) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -95,7 +95,8 @@ ActiveRecord::Schema.define(version: 20151209171445) do
     t.datetime "updated_at"
   end
 
-  create_table "price_curves", force: true do |t|
+  create_table "profiles", force: true do |t|
+    t.string   "type"
     t.string   "name"
     t.string   "key"
     t.boolean  "public",             default: true
@@ -168,15 +169,16 @@ ActiveRecord::Schema.define(version: 20151209171445) do
   end
 
   create_table "testing_grounds", force: true do |t|
-    t.text     "technology_profile", limit: 16777215
+    t.text     "technology_profile",     limit: 16777215
     t.integer  "user_id"
     t.integer  "topology_id"
     t.integer  "market_model_id"
-    t.boolean  "public",                              default: true, null: false
+    t.integer  "temperature_profile_id"
+    t.boolean  "public",                                  default: true, null: false
     t.integer  "parent_scenario_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name",               limit: 100,      default: "",   null: false
+    t.string   "name",                   limit: 100,      default: "",   null: false
     t.integer  "scenario_id"
   end
 

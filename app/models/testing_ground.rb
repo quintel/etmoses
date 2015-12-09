@@ -10,6 +10,7 @@ class TestingGround < ActiveRecord::Base
   belongs_to :topology
   belongs_to :market_model
   belongs_to :user
+  belongs_to :temperature_profile
 
   has_one :selected_strategy
   has_one :business_case
