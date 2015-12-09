@@ -268,21 +268,6 @@ ul.testing-grounds {
   }
 }
 
-#technologies .technology {
-  background: #eee;
-  border-radius: 5px;
-  font-size: 13px;
-  margin-bottom: 20px;
-
-  .inner {
-    padding: 5px 10px;
-  }
-
-  .quiet {
-    color: #777;
-  }
-}
-
 .or {
   font-size: 11px;
   font-weight: 600;
@@ -336,6 +321,10 @@ table.table.scenarios{
 #profiles-table{
   margin-bottom: 30px;
 
+  .panel-body{
+    padding: 0;
+  }
+
   td:focus{
     outline: 1px dotted #477caa;
   }
@@ -344,15 +333,82 @@ table.table.scenarios{
     padding-left: 0px;
   }
 
-  select{
-    border: none;
-    box-shadow: none;
-    padding-left: 6px;
+  .actions{
+    padding: 15px;
   }
 
-  input{
-    border: none;
-    width: 100%;
+  .technologies .technology{
+    clear: both;
+    border-bottom: 1px solid #eee;
+    padding: 20px 15px 15px 15px;
+    position: relative;
+
+    &.buffer_space_heating, &.buffer_water_heating{
+      box-shadow: 0px 4px 3px -2px rgb(204, 204, 204);
+      z-index: 1;
+    }
+
+    &.buffer-child{
+      background-color: #F7F7F7;
+    }
+
+    .indent.arrow{
+      height: 22px;
+      width: 30px;
+      margin-top: 10px;
+      background-image: url('arrow.png');
+      background-repeat: no-repeat;
+    }
+
+    .wrapper-tech, .indent.arrow{
+      float: left;
+    }
+
+    .wrapper-tech{
+      width: 80%;
+    }
+
+    strong{
+      display: block;
+    }
+
+    strong, span:not(.glyphicon), label.radio-inline{
+      line-height: 34px;
+    }
+
+    .editable{
+      padding: 7px 0;
+
+      &.text, &.advanced{
+        width: 400px;
+        float: left;
+      }
+
+      &.buffer select,
+      &.profile select{
+        width: 550px;
+      }
+
+      a.tooltip-link{
+        margin-bottom: -2px;
+      }
+
+      input[type=radio]{
+        margin-top: 11px;
+      }
+
+      span, input{
+        float: left;
+      }
+
+      span:not(.glyphicon){
+        width: 230px;
+      }
+
+      input[type=text]{
+        width: 150px;
+      }
+    }
   }
 }
 
@@ -554,4 +610,15 @@ table span.static{
   vertical-align: middle;
   white-space: nowrap;
   width: 130px;
+}
+
+.add-technology {
+  .input-group{
+    display: block;
+
+    select{
+      float: left;
+      width: 250px;
+    }
+  }
 }

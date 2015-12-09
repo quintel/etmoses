@@ -8,6 +8,8 @@ class Technology < ActiveRecord::Base
   has_many :technology_profiles, foreign_key: "technology", primary_key: "key", dependent: :delete_all
   has_many :load_profiles, through: :technology_profiles
   has_many :component_behaviors, class_name: 'TechnologyComponentBehavior', dependent: :delete_all
+  has_many :composites, foreign_key: 'composite_id', dependent: :delete_all
+  has_many :technologies, through: :composites
 
   validates :key,
     presence: true,
@@ -24,6 +26,10 @@ class Technology < ActiveRecord::Base
 
   def self.visible
     where(visible: true)
+  end
+
+  def self.expandable
+    where(expandable: true)
   end
 
   def self.with_load_profiles

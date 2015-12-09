@@ -48,8 +48,7 @@ class EtEngineConnector
 
   def gquery(scenario_id)
     if response = update_scenario(scenario_id)
-      gquery_key = @params[:gqueries].first
-      response["gqueries"][gquery_key]
+      response["gqueries"]
     else
       nil
     end

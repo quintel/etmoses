@@ -56,6 +56,10 @@ en:
           Here you can upload a CSV file that contains the technology table from
           another LES (you can save the LES as a CSV once it has been created).
 
+      position_relative_to_buffer:
+        tooltip: >
+          Please change me
+
     strategies:
       no_storage: 'No storage'
       prioritize_local_solar_production: 'Storage in EV prioritising local PV production'

@@ -116,11 +116,12 @@ class TestingGroundsController < ResourceController
 
   # POST /testing_grounds/calculate_concurrency
   def calculate_concurrency
-    concurrency = TestingGround::TechnologyProfileScheme.new(
-                    JSON.parse(params[:technology_distribution])
-                  ).build
-
     @topology = Topology.find(params[:topology_id])
+
+    distribution      = JSON.parse(params[:technology_distribution])
+    tech_distribution = TestingGround::TechnologyDistributor.new(distribution, @topology.graph).build
+    concurrency       = TestingGround::TechnologyProfileScheme.new(tech_distribution).build
+
     @testing_ground_profile = TechnologyList.from_hash(concurrency)
   end
 
@@ -206,7 +207,7 @@ class TestingGroundsController < ResourceController
   end
 
   def load_technologies_and_profiles
-    @technologies = Technology.all
+    @technologies = Technology.includes(:technologies)
     @stakeholders = Stakeholder.all
     @load_profiles = LoadProfile.joins("LEFT JOIN `technology_profiles` ON `load_profiles`.`id` = `technology_profiles`.`load_profile_id`")
                                 .select("`technology_profiles`.`technology`, `load_profiles`.*")

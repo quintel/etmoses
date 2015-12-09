@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+include TechnologyDistributorData
+
 RSpec.describe TestingGround::TechnologyDistributor do
   let(:topology){ FactoryGirl.build(:topology).graph }
   let(:large_topology){ FactoryGirl.build(:large_topology).graph }
@@ -78,7 +80,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
         }
 
         it "distributes houses and buildings as though they are one technology" do
-          expect(new_profile.map{|t| t["node"] }.uniq).to eq([:lv1, :lv2, :lv3])
+          expect(new_profile.map{|t| t["node"] }.uniq).to eq(['lv1', 'lv2', 'lv3'])
         end
       end
 
@@ -91,7 +93,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
         }
 
         it "distributes houses and buildings as though they are one technology" do
-          expect(new_profile.map{|t| t["node"] }.uniq).to eq([:lv1, :lv2, :lv3])
+          expect(new_profile.map{|t| t["node"] }.uniq).to eq(['lv1', 'lv2', 'lv3'])
         end
       end
     end
@@ -130,6 +132,26 @@ RSpec.describe TestingGround::TechnologyDistributor do
       it "divides the technologies correctly" do
         expect(new_profile.map{|t| t['units']}.sum).to eq(10)
       end
+    end
+  end
+
+  # composites
+  describe "setting composites over end points of a topology" do
+    let(:new_profile){ TestingGround::TechnologyDistributor.new(
+                          composite_technologies("10.0"), topology
+                        ).build
+    }
+
+    it "sets the composite values correctly" do
+      expect(new_profile.map{|t| t['composite_value']}.compact).to eq([
+        'buffer_space_heating_1', 'buffer_space_heating_2'
+      ])
+    end
+
+    it "sets the buffer values correctly" do
+      expect(new_profile.map{|t| t['buffer']}.compact).to eq([
+        'buffer_space_heating_1', 'buffer_space_heating_2'
+      ])
     end
   end
 end
