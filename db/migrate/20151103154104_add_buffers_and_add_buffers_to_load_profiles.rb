@@ -1,5 +1,7 @@
 class AddBuffersAndAddBuffersToLoadProfiles < ActiveRecord::Migration
   def change
+    Technology.reset_column_information
+
     #
     # Space heating
     space_heaters = Technology.where("`key` LIKE 'households_space_heater_heatpump%'")
