@@ -13,3 +13,14 @@
       %li
         = link_to price_curve.key, price_curve_path(price_curve)
         %span= I18n.l(price_curve.created_at, format: :short)
+
+%h2 Temperature Profiles
+
+.temperature_profiles
+  %ul
+    - @temperature_profiles.each do |temperature_profile|
+      %li
+        = link_to temperature_profile.key, '#'#tem_path(price_curve)
+        %span= I18n.l(temperature_profile.created_at, format: :short)
+
+
