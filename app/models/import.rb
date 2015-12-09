@@ -124,7 +124,7 @@ class Import
   #
   # Returns an array.
   def composites
-    CompositeBuilder.new(etm_scenario["scaling"]).build
+    CompositeBuilder.new(@scenario_id, etm_scenario["scaling"]).build
   end
 
   # Internal: Retrieves the scenario from ETModel

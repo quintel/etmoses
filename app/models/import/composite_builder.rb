@@ -4,7 +4,13 @@ class Import
 
     COMPOSITE_ATTRS = %w(name key default_demand)
 
-    def initialize(scaling)
+    DEMAND_MAPPING = {
+      'buffer_space_heating' => 'etmoses_space_heating_buffer_demand',
+      'buffer_water_heating' => 'etmoses_hot_water_buffer_demand'
+    }.freeze
+
+    def initialize(scenario_id, scaling)
+      @scenario_id = scenario_id
       @scaling = scaling
     end
 
@@ -28,11 +34,18 @@ class Import
     def composite_attributes(technology)
       { "units"     => scaling_value,
         "composite" => true,
-        "includes"  => technology.technologies.map(&:key) }
+        "includes"  => technology.technologies.map(&:key),
+        "demand"    => demand_for(technology) }
     end
 
     def translations
       { 'key' => 'type', 'default_demand' => 'demand' }
+    end
+
+    def demand_for(technology)
+      Import::DemandCalculator.new(
+        @scenario_id, scaling_value, [DEMAND_MAPPING[technology.key.to_s]]
+      ).calculate
     end
   end
 end
