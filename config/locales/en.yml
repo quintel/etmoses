@@ -32,8 +32,8 @@ en:
       gas_connections: Number of gas connections
       load: Instantaneous load
       kwh: kWh
-      kwh_consumed: kWh consumed
-      kwh_produced: kWh produced
+      kwh_consumed: kWh of electricity consumed
+      kwh_produced: kWh of electricity produced
       kw_max: Monthly maximum kW load
       kw_contracted: Annual maximum kW load ("contracted")
 
