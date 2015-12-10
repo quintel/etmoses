@@ -105,10 +105,9 @@ class TestingGroundsController < ResourceController
   # PATCH /testing_grounds/:id
   def update
     @form_type = params[:testing_ground][:form_type]
-    @testing_ground.update_attributes(testing_ground_params)
 
-    if @testing_ground.business_case
-      @testing_ground.business_case.clear_job!
+    if @testing_ground.update_attributes(testing_ground_params)
+      @testing_ground.business_case && @testing_ground.business_case.clear_job!
     end
 
     respond_with(@testing_ground)
