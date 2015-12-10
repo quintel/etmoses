@@ -10,4 +10,8 @@ class User < ActiveRecord::Base
   def self.orphan
     User.find_by_email("orphan@quintel.com")
   end
+
+  def name
+    super || "somebody else"
+  end
 end
