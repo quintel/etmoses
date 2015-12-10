@@ -28,6 +28,16 @@ var ETHelper = (function () {
                     ETHelper.eachNode(node._children, iterator);
                 }
             });
+        },
+
+        loadsFromTree: function (tree) {
+            var loads = {};
+
+            ETHelper.eachNode([tree], function (node) {
+                loads[node.name] = node.load;
+            });
+
+            return loads;
         }
     };
 }());

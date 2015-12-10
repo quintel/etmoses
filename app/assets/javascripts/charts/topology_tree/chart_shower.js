@@ -82,11 +82,11 @@ var ChartShower = (function () {
         if (this.treeChart.strategyLoads && this.treeChart.strategyShown) {
             load = [{ values: d.altLoad, name: 'Load (with strategies)', area: true, type: 'load_strategies' },
                     { values: d.load,    name: 'Load', area: false, type: 'load' },
-                    { values: d.altLoad, name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
-                    { values: d.load,    name: 'Gas', area: false, type: 'gas' }];
+                    { values: d.altGasLoad, name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
+                    { values: d.gasLoad, name: 'Gas', area: false, type: 'gas' }];
         } else {
             load = [{ values: d.load, name: 'Load', area: true, type: 'load' },
-                    { values: d.load, name: 'Gas',  area: true, type: 'gas' }];
+                    { values: d.gasLoad, name: 'Gas',  area: true, type: 'gas' }];
         }
 
         new LoadChart(load, d.capacity, 'default').render(loadChartClass);

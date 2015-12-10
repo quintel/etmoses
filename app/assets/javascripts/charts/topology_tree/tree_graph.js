@@ -41,9 +41,8 @@ var TreeGraph = (function () {
         },
 
         applyStrategies: function(data) {
-            this.strategyLoads = {};
-
-            ETHelper.eachNode([data.graph], setStrategyLoad.bind(this));
+            this.strategyLoads = ETHelper.loadsFromTree(data.networks.electricity);
+            this.strategyGasLoads = ETHelper.loadsFromTree(data.networks.gas);
 
             LoadChartHelper.forceReload = true
 
@@ -217,18 +216,19 @@ var TreeGraph = (function () {
         initialStrategyCallDone: false
     };
 
-    function setStrategyLoad(node) {
-        this.strategyLoads[node.name] = node.load;
-    };
-
     function setAltLoad(node) {
         this.strategyShown = true;
         if (this.strategyLoads) {
             if (this.strategyToggler.clear()) {
                 this.strategyShown = false;
                 delete node.altLoad;
+                delete node.altGasLoad;
             } else {
                 node.altLoad = this.strategyLoads[node.name];
+
+                if (this.strategyGasLoads.hasOwnProperty(node.name)) {
+                    node.altGasLoad = this.strategyGasLoads[node.name];
+                }
             }
         };
     };
