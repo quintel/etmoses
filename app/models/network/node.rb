@@ -146,11 +146,18 @@ module Network
       get(:techs) || set(:techs, [])
     end
 
-    # Public: An integer that returns the lifetime of yhis node
+    # Public: An integer that returns the lifetime of this node
     #
     # Returns an integer
     def lifetime
       get(:technical_lifetime) || get(:economic_lifetime)
+    end
+
+    # Public: An integer that returns the units of this node
+    #
+    # Returns an integer
+    def units
+      get(:units) || 1
     end
 
     private
