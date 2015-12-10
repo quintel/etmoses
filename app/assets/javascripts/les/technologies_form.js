@@ -1,4 +1,4 @@
-/*global ETHelper,ProfileSelectBox,TemplateUpdater,Technology*/
+/*global ETHelper,TemplateUpdater,Technology*/
 var TechnologiesForm = (function () {
     'use strict';
 

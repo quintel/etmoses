@@ -104,7 +104,9 @@ var TemplateUpdater = (function () {
             return compClass +
                 "[data-composite-value='" + comp.data('compositeValue') + "']";
         } else {
-            return '.technologies .technology:last-child';
+            var id = $(this.technologySelectBox).parents(".panel-collapse").attr("id");
+
+            return '#' + id + ' .technologies .technology:last-child';
         }
     }
 
@@ -114,7 +116,7 @@ var TemplateUpdater = (function () {
                 return bufferFilter.call(this, self.data);
             }).last();
 
-        this.data.append = buildCompSelector(comp);
+        this.data.append = buildCompSelector.call(this, comp);
 
         return comp.length > 0 ? comp.data('compositeValue') : '';
     }
@@ -124,7 +126,7 @@ var TemplateUpdater = (function () {
             this.data.profile = '';
             this.data.profileKey = '';
         } else {
-            var profileSelect = $(".data .profile select." + this.data.type);
+            var profileSelect = $(".data .hidden.profile select." + this.data.type);
 
             this.data.profile = profileSelect.val();
             this.data.profileKey = profileSelect.selectedOption().text();

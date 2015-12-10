@@ -5,7 +5,7 @@ var Technology = (function () {
     Technology.prototype = {
         add: function (button) {
             var subTarget = this.technologyDom.data('append'),
-                target = $(button).parents(".panel-body").find(subTarget);
+                target = $(button).parents(".panel").find(subTarget);
 
             new BufferSelectBox(this.technologyDom).add();
 
