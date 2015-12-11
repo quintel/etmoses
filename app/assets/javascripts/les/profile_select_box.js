@@ -35,10 +35,6 @@ var ProfileSelectBox = (function () {
         for (defaultValue in defaultValues) {
             key = defaultValue.replace(/default/, '').toLowerCase();
 
-            if (key === 'capacity') {
-                key = 'electrical_capacity';
-            }
-
             setCellDefault.call({
                 techBox: this,
                 key: key,

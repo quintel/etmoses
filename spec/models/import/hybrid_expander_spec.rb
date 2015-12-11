@@ -6,7 +6,7 @@ RSpec.describe Import::HybridExpander do
   describe 'expands hybrid technologies into their gas and electricity counter parts' do
     let(:hybrids) {
       [{ 'type' => 'households_water_heater_hybrid_heatpump_air_water_electricity',
-         'number_of_units' => { 'future' => 1, 'present' => 1 } }]
+         'units' => 1 }]
     }
 
     it "expands into a 'gas' and 'electricity' type" do
