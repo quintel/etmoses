@@ -6,31 +6,31 @@ class Import
     # - The gas and electricity parts keys are the same as the parent key + '_gas' or
     #   '_electricity'.
 
+    ELEMENTS = %w(electricity gas)
+
     def initialize(hybrids)
       @hybrids = hybrids
     end
 
     def expand
       @hybrids.inject([]) do |result, hybrid|
-        result += parts(hybrid)
+        result += hybrid_elements(hybrid)
       end
     end
 
     private
 
-    def parts(hybrid)
-      %w(electricity gas).map do |hybrid_part|
+    def hybrid_elements(hybrid)
+      ELEMENTS.map do |element|
         TechnologyBuilder.build(
-          "#{ hybrid.fetch('type') }_#{ hybrid_part }", data_for_part(hybrid)
+          "#{ hybrid.fetch('type') }_#{ element }",
+          units_attribute(hybrid.fetch('units'))
         )
       end
     end
 
-    def data_for_part(hybrid)
-      { 'number_of_units' => {
-          'future'  => hybrid.fetch('units'),
-          'present' => hybrid.fetch('units')
-      } }
+    def units_attribute(units)
+      { 'number_of_units' => { 'future' => units, 'present' => units } }
     end
   end
 end

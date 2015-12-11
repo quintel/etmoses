@@ -34,9 +34,9 @@
       %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: {type: 'demand'} }
       .clearfix
 
-    .editable.text{class: 'electrical_capacity'}
-      %span Electrical capacity [kW]
-      %input.form-control{type: 'text', value: technology.electrical_capacity.try(:round, 4), data: {type: 'electrical_capacity' } }
+    .editable.text{class: 'capacity'}
+      %span Output capacity [kW]
+      %input.form-control{type: 'text', value: technology.capacity.try(:round, 4), data: {type: 'capacity' } }
       .clearfix
 
     .editable.text{class: 'volume'}
