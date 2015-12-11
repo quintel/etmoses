@@ -35,9 +35,10 @@ class Import
     def self.build(key, data)
       units = NumberOfUnitsAttribute.call(data).round
       tech  = Technology.by_key(key)
-      attrs = { 'type'  => key,
-                'name'  => tech.name,
-                'units' => units,
+      attrs = { 'type'    => key,
+                'name'    => tech.name,
+                'units'   => units,
+                'carrier' => tech.carrier,
                 'position_relative_to_buffer' => tech.default_position_relative_to_buffer }
 
       tech.importable_attributes
