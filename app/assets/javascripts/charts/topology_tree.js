@@ -16,6 +16,16 @@ var TopologyTree = (function () {
             this.treeGraph.strategyToggler.toggleLoading();
         }
 
+        // Temporary hacky solution to install gas loads on to endpoint nodes
+        // for display in the load chart.
+        var gasLoads = ETHelper.loadsFromTree(treeData.networks.gas);
+
+        ETHelper.eachNode([treeData.networks.electricity], function(node) {
+            if (gasLoads.hasOwnProperty(node.name)) {
+                node.gasLoad = gasLoads[node.name];
+            }
+        });
+
         this.treeGraph.initialCallDone = true;
         this.treeGraph.showGraph(treeData.networks.electricity);
     }

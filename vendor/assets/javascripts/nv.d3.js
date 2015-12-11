@@ -4318,7 +4318,7 @@ nv.models.ohlcBarChart = function() {
                         }
                         else {
                             /* Custom */
-                            LoadChartHelper.disabledCharts[d.color] = d.disabled;
+                            LoadChartsSettings[d.type].enabled = d.disabled;
                             /* END Custom */
                             d.disabled = !d.disabled;
                             if (data.every(function(series) { return series.disabled})) {
@@ -4327,7 +4327,7 @@ nv.models.ohlcBarChart = function() {
                                 data.forEach(function(series) {
                                   series.disabled = false
                                   /* Custom */
-                                  LoadChartHelper.disabledCharts[series.color] = true;
+                                  LoadChartsSettings[series.type].enabled = true;
                                   /* END Custom */
                                 });
                             }
