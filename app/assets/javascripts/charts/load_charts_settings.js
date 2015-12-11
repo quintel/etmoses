@@ -1,4 +1,8 @@
 var LoadChartsSettings = {
+    undefined: {
+        color: '#d4bc6a',
+        enabled: true
+    },
     load_strategies: {
         color: '#95BB95',
         enabled: true
