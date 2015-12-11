@@ -21,6 +21,10 @@ module Market
 
     private
 
+    # Private: A method that sums the initial costs for the chosen topology. These are
+    # the costs that exist for the network itself.
+    #
+    # Returns a Hash
     def topology_costs
       group_sum(topology_nodes) do |node|
         ( node.get(:investment_cost).to_f / node.lifetime +
@@ -28,6 +32,10 @@ module Market
       end
     end
 
+    # Private: A method that sums the costs for the technologies that are attached
+    # to the network.
+    #
+    # Returns a Hash
     def technology_costs
       group_sum(technology_nodes) do |node|
         node.techs.map(&:installed).sum do |tech|
@@ -36,6 +44,10 @@ module Market
       end
     end
 
+    # Private: Sums specified nodes per unique stakeholder, with a specified
+    # amount.
+    #
+    # Returns a Hash
     def group_sum(nodes)
       nodes.each_with_object(Hash.new(0.0)) do |node, data|
         data[node.get(:stakeholder)] += yield(node)
