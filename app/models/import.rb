@@ -104,16 +104,21 @@ class Import
   #
   # Returns an array
   def default_technologies
-    technologies_from - hybrids
+    technologies_from.reject(&method(:hybrid?))
   end
 
   # Internal: hybrid technologies
   #
   # Returns an array
   def hybrids
-    HybridExpander.new(technologies_from.select do |technology|
-      technology['carrier'] == "hybrid"
-    end).expand
+    HybridExpander.new(technologies_from.select(&method(:hybrid?))).expand
+  end
+
+  # Internal: checks if a certain technology is a hybrid
+  #
+  # Returns a boolean
+  def hybrid?(technology)
+    technology['carrier'] == "hybrid"
   end
 
   # Internal: Given a response, splits out the nodes into discrete technologies.
