@@ -1,23 +1,27 @@
 var StrategyHelper = {
-  getStrategies: function(){
-    var strategies = JSON.parse($(".save_strategies.hidden").text());
-        strategies['capping_fraction'] = parseFloat($("#solar_pv_capping").val()) / 100;
+    getStrategies: function () {
+        'use strict';
 
-    return strategies;
-  },
+        var strategies = JSON.parse($(".save_strategies.hidden").text());
+        strategies.capping_fraction = parseFloat($("#solar_pv_capping").val()) / 100;
 
-  anyStrategies: function(){
-    var strategies = StrategyHelper.getStrategies();
-    var anyStrategy = false;
+        return strategies;
+    },
 
-    for(var key in strategies){
-      if(strategies[key] && key != 'capping_fraction'){
-        anyStrategy = true;
-        break;
-      }
-    };
+    anyStrategies: function () {
+        'use strict';
 
-    return anyStrategy;
-  }
+        var key,
+            strategies = StrategyHelper.getStrategies(),
+            anyStrategy = false;
+
+        for (key in strategies) {
+            if (strategies[key] && key !== 'capping_fraction') {
+                anyStrategy = true;
+                break;
+            }
+        }
+
+        return anyStrategy;
+    }
 };
-

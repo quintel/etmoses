@@ -19,7 +19,6 @@
           %li.divider{role: "separator"}
           %li= link_to 'Create national scenario', export_testing_ground_path(@testing_ground)
 
-
     .load-strategies.btn-group(role="group")
       %select.strategies.multi-select.form-control{multiple: "multiple"}
         = options_for_strategies
@@ -50,6 +49,7 @@
     %span.loading
       %h5
         %span.main Calculating your local energy solution&hellip;
+      .status
       %span.more
         Large local energy solutions may take up to 30 seconds to display. Please be
         patient, and don't hit refresh!
