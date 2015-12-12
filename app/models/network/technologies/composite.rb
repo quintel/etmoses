@@ -3,7 +3,7 @@ module Network
     # Stores and wraps technologies whose profile and storage reserve is shared
     # between them.
     class Composite
-      attr_reader :volume, :techs
+      attr_reader :volume, :techs, :reserve
 
       def initialize(capacity, volume, profile)
         @techs    = []
@@ -17,6 +17,10 @@ module Network
         @reserve = Reserve.new(volume) do |frame, amount|
           wanted = @profile.at(frame)
           decay  = wanted < amount ? wanted : amount
+
+          # If a capacity is defined, the reserve may deplete no more than the
+          # capacity of the composite permits.
+          decay = @capacity if @capacity && decay > @capacity
 
           # Have to adjust the profile to reflect energy provided by the
           # Reserve.
@@ -92,7 +96,7 @@ module Network
 
         def conditional_consumption_at(frame)
           # Boosting technologies will never draw extra energy to fill up the
-          # buffer; the satisfy whatever amount is needed to "boost" production
+          # buffer; they satisfy whatever amount is needed to "boost" production
           # to meet demand and nothing more.
           0.0
         end
