@@ -11,6 +11,14 @@ var LoadChartsSettings = {
         color: '#1F77B4',
         enabled: true
     },
+    price_curve: {
+        color: '#C8C758',
+        enabled: true
+    },
+    temperature_profile: {
+        color: '#C8C758',
+        enabled: true
+    },
     capacity: {
         color: 'darkred',
         enabled: false
