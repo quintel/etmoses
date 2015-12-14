@@ -76,7 +76,11 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
-    Calculation::Context.new([network(:electricity), network(:gas)], options)
+    Calculation::Context.new(
+      [network(:electricity), network(:gas)], options.merge(
+        behavior_profile: behavior_profile.try(:network_curve)
+      )
+    )
   end
 
   # Public: Creates a Network::Graph representing the topology and technologies
