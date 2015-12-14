@@ -1,10 +1,5 @@
 # This file should contain all the record creation needed to seed the database with its default values.
 # The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
 
 # Starting Technologies
 # ---------------------
@@ -59,7 +54,7 @@ Technology.create!(
 Technology.create!({
   key:      "base_load_edsn",
   name:     "Household aggregated",
-  carrier:     'electricity',
+  carrier:  'electricity',
   behavior: "optional",
   visible:  false
 })
@@ -113,7 +108,8 @@ hp_sh_aw = Technology.create!(
   name:        'Heat pump for space heating (air)',
   export_to:   'households_space_heater_heatpump_air_water_electricity_share',
   behavior:    'buffer',
-  carrier:     'electricity'
+  carrier:     'electricity',
+  default_position_relative_to_buffer: "buffering"
 )
 
 hp_sh_gw = Technology.create!(
@@ -121,19 +117,22 @@ hp_sh_gw = Technology.create!(
   name:        'Heat pump for space heating (ground)',
   export_to:   'households_space_heater_heatpump_ground_water_electricity_share',
   behavior:    'buffer',
-  carrier:     'electricity'
+  carrier:     'electricity',
+  default_position_relative_to_buffer: "buffering"
 )
 
 hp_sh_ng = Technology.create!(
   key:         'households_space_heater_network_gas',
   name:        'Households space heater network gas',
-  carrier:     'gas'
+  carrier:     'gas',
+  default_position_relative_to_buffer: "boosting"
 )
 
 hp_sh_cng = Technology.create!(
   key:         'households_space_heater_combined_network_gas',
   name:        'Households space heater combined network gas',
-  carrier:     'gas'
+  carrier:     'gas',
+  default_position_relative_to_buffer: "boosting"
 )
 
 hp_wh_aw = Technology.create!(
@@ -141,7 +140,8 @@ hp_wh_aw = Technology.create!(
   name:        'Heat pump for hot water (air)',
   export_to:   'households_water_heater_heatpump_air_water_electricity_share',
   behavior:    'buffer',
-  carrier:     'electricity'
+  carrier:     'electricity',
+  default_position_relative_to_buffer: "buffering"
 )
 
 hp_wh_gw = Technology.create!(
@@ -149,7 +149,8 @@ hp_wh_gw = Technology.create!(
   name:        'Heat pump for hot water (ground)',
   export_to:   'households_water_heater_heatpump_ground_water_electricity_share',
   behavior:    'buffer',
-  carrier:     'electricity'
+  carrier:     'electricity',
+  default_position_relative_to_buffer: "buffering"
 )
 
 buffer_space_heating = Technology.create!({
@@ -173,6 +174,54 @@ buffer_water_heating = Technology.create!({
 [hp_wh_aw, hp_wh_gw].each do |tech|
   Composite.create!(composite: buffer_water_heating, technology: tech)
 end
+
+# Hybrid heat pump space heater
+Technology.create!({
+  key: 'households_space_heater_hybrid_heatpump_air_water_electricity',
+  name: "Hybrid heat pump space heating",
+  carrier: "hybrid",
+  visible: false
+})
+
+Technology.create!({
+  key: 'households_space_heater_hybrid_heatpump_air_water_electricity_electricity',
+  name: "Hybrid heat pump space heating (electricity)",
+  carrier: "electricity",
+  default_capacity: 4.9,
+  default_position_relative_to_buffer: "buffering"
+})
+
+Technology.create!({
+  key: 'households_space_heater_hybrid_heatpump_air_water_electricity_gas',
+  name: "Hybrid heat pump space heating (gas)",
+  carrier: "gas",
+  default_capacity: 15.0,
+  default_position_relative_to_buffer: "boosting"
+})
+
+# Hybrid heat pump water
+Technology.create!({
+  key: 'households_water_heater_hybrid_heatpump_air_water_electricity',
+  name: "Hybrid heat pump hot water",
+  carrier: "hybrid",
+  visible: false
+})
+
+Technology.create!({
+  key: 'households_water_heater_hybrid_heatpump_air_water_electricity_electricity',
+  name: "Hybrid heat pump hot water (electricity)",
+  carrier: "electricity",
+  default_capacity: 4.9,
+  default_position_relative_to_buffer: "buffering"
+})
+
+Technology.create!({
+  key: 'households_water_heater_hybrid_heatpump_air_water_electricity_gas',
+  name: "Hybrid heat pump space heating (gas)",
+  carrier: "gas",
+  default_capacity: 15.0,
+  default_position_relative_to_buffer: "boosting"
+})
 
 User.create!(
   email: 'guest@quintel.com',

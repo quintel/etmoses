@@ -10,12 +10,6 @@ class LoadProfilesController < ResourceController
 
   skip_before_filter :authenticate_user!, only: [:index, :show]
 
-  def index
-    skip_policy_scope
-    @load_profile_categories = LoadProfileCategory.where(parent_id: nil)
-    @price_curves = PriceCurve.all
-  end
-
   # GET /load_profiles
   def show
     respond_with(@profile)

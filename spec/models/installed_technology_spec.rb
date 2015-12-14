@@ -247,7 +247,7 @@ RSpec.describe InstalledTechnology do
       end
 
       context 'when setting the electrical capacity to 1.0' do
-        before { tech.electrical_capacity = 1.0 }
+        before { tech.carrier_capacity = 1.0 }
 
         it 'sets the capacity to 4.0' do
           expect(tech.capacity).to eq(4.0)
@@ -260,7 +260,7 @@ RSpec.describe InstalledTechnology do
       end # when setting the electrical capacity
 
       context 'when setting the electrical capacity to nil' do
-        before { tech.electrical_capacity = nil }
+        before { tech.carrier_capacity = nil }
 
         it 'sets the capacity to nil' do
           expect(tech.capacity).to be_nil

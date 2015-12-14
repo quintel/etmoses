@@ -27,7 +27,7 @@ class InstalledTechnology
   attribute :associates,                          Array[InstalledTechnology]
   attribute :includes,                            Array[String]
 
-  EDITABLES = %i(name buffer type profile electrical_capacity volume demand units
+  EDITABLES = %i(name buffer type profile carrier_capacity volume demand units
     initial_investment technical_lifetime full_load_hours om_costs_per_year
     om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
     performance_coefficient concurrency composite composite_value
@@ -39,7 +39,7 @@ class InstalledTechnology
     performance_coefficient concurrency includes composite_index
   )
 
-  PRESENTABLES = (EDITABLES - %i(electrical_capacity concurrency) + %i(capacity))
+  PRESENTABLES = (EDITABLES - %i(carrier_capacity concurrency) + %i(capacity))
 
   def initialize(args = nil)
     @id = SecureRandom.hex
@@ -103,7 +103,7 @@ class InstalledTechnology
   # their energy from ambient heat.
   #
   # Returns a numeric.
-  def electrical_capacity
+  def carrier_capacity
     capacity.presence && capacity / performance_coefficient
   end
 
@@ -114,12 +114,12 @@ class InstalledTechnology
   # adjusted appropriately.
   #
   # Returns the given value.
-  def electrical_capacity=(value)
+  def carrier_capacity=(value)
     if value.present?
-      @recent_electrical_capacity = value.to_f
+      @recent_carrier_capacity = value.to_f
       self.capacity = value.to_f * performance_coefficient
     else
-      self.capacity = @recent_electrical_capacity = nil
+      self.capacity = @recent_carrier_capacity = nil
     end
   end
 
@@ -154,10 +154,10 @@ class InstalledTechnology
   def performance_coefficient=(value)
     super(value == 0 ? 1.0 : value)
 
-    if @recent_electrical_capacity
+    if @recent_carrier_capacity
       # If the user set the electrical capacity prior to the COP, we need to
       # re-set the capacity so that it correctly accounts for performance.
-      self.electrical_capacity = @recent_electrical_capacity
+      self.carrier_capacity = @recent_carrier_capacity
     end
   end
 
@@ -215,7 +215,7 @@ class InstalledTechnology
   end
 
   def as_json(*)
-    super.merge('electrical_capacity' => electrical_capacity)
+    super.merge('carrier_capacity' => carrier_capacity)
   end
 
   def yearly_investment
