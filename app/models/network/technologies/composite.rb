@@ -78,6 +78,13 @@ module Network
         def initialize(obj, composite)
           super(obj)
           @composite = composite
+          @handle_decay = respond_to?(:stored)
+        end
+
+        def production_at(frame)
+          # Force evaluation of buffer decay.
+          stored.at(frame) if @handle_decay
+          super
         end
 
         def store(frame, amount)
