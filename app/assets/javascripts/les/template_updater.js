@@ -45,6 +45,10 @@ var TemplateUpdater = (function () {
     }
 
     function parseTemplate() {
+        // Reset the template inputs to nothing
+        this.template.find("input").val('');
+
+        // Continue on parsing
         this.template = setInputs.call(this);
         this.template.find("strong").text(this.data.name);
         this.template.attr("class", this.data.type + ' technology');
