@@ -20,7 +20,7 @@
   %ul
     - @temperature_profiles.each do |temperature_profile|
       %li
-        = link_to temperature_profile.key, '#'#tem_path(price_curve)
+        = link_to temperature_profile.key, profile_path(temperature_profile)
         %span= I18n.l(temperature_profile.created_at, format: :short)
 
 

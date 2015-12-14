@@ -1,9 +1,10 @@
-- if profile.errors.any?
+- if @profile.errors.any?
   %ul.errors
-    - profile.errors.full_messages.uniq.each do |message|
+    - @profile.errors.full_messages.uniq.each do |message|
       %li= message
 
-= form_for profile, url: form_path, html: { multipart: true } do |form|
+= form_for @profile, html: { multipart: true } do |form|
+  = form.hidden_field :type, value: form_type
   .form-group
     = form.label :key
     = tooltip_tag(t(:'load_profiles.form.key.tooltip'))
@@ -29,13 +30,13 @@
     = tooltip_tag(t(:'load_profiles.form.curve.tooltip'))
     = form.file_field :curve, accept: 'text/csv'
 
-    - unless profile.new_record?
+    - unless @profile.new_record?
       .help-block Leave blank if you don't want to change the curve.
 
   .form-group
     = form.submit class: 'btn btn-primary'
     %span.or or
-    - if profile.new_record?
-      = link_to 'Cancel', price_curve_index_path, class: 'btn btn-default'
+    - if @profile.new_record?
+      = link_to 'Cancel', profiles_path, class: 'btn btn-default'
     - else
-      = link_to 'Cancel', price_curve_path(profile), class: 'btn btn-default'
+      = link_to 'Cancel', profile_path(@profile), class: 'btn btn-default'
