@@ -3,6 +3,10 @@ var LoadChartsSettings = {
         color: '#d4bc6a',
         enabled: true
     },
+    default: {
+        color: '#d4bc6a',
+        enabled: true
+    },
     load_strategies: {
         color: '#95BB95',
         enabled: true
