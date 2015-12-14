@@ -51,13 +51,10 @@ module Network
           # Force evaluation of energy taken from buffer.
           stored.at(frame)
 
-          wanted = @profile.at(frame) / @installed.performance_coefficient
-
-          if stored.at(frame).zero? && wanted > 0
-            @capacity.limit_mandatory(frame, wanted)
-          else
-            0.0
-          end
+          @capacity.limit_mandatory(
+            frame,
+            @profile.at(frame) / @installed.performance_coefficient
+          )
         end
       end
 
