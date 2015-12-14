@@ -8,7 +8,7 @@ module Network
         end
 
         def conditional_consumption_at(frame)
-          if @behavior_profile && @behavior_profile.at(frame).zero?
+          if @behavior_profile && ! @behavior_profile.at(frame).zero?
             0.0
           else
             super
