@@ -19,6 +19,10 @@ var TechnologiesForm = (function () {
         $("#testing_ground_technology_profile").text(JSON.stringify(groupedByNode));
     }
 
+    function markAsEditing() {
+      $("ul.nav.nav-tabs li a[href=#technologies]").addClass("editing");
+    }
+
     function updateJSON() {
         var type   = $(this).data('type'),
             target = $(this).parents(".technology"),
@@ -27,6 +31,7 @@ var TechnologiesForm = (function () {
         target.set(type, value);
 
         parseHarmonicaToJSON();
+        markAsEditing();
     }
 
     function updateTemplate() {
@@ -52,6 +57,7 @@ var TechnologiesForm = (function () {
         AddedTechnologiesValidator.validate();
 
         addOnChangeListener.call(newTemplate);
+        markAsEditing();
     }
 
     function toggleAdvancedFeatures(e) {
@@ -103,6 +109,7 @@ var TechnologiesForm = (function () {
         }
 
         parseHarmonicaToJSON();
+        markAsEditing();
     }
 
     function addListenersToNewTechnology() {
