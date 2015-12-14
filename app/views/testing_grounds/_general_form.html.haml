@@ -20,7 +20,7 @@
       You use a private topology or market model therefore your LES is private.
 
 .form-group
-  = form.label :temperature_profile, 'Temperature profile'
+  = form.label :behavior_profile, 'Behavior profile'
   .temperature-profile
-    = form.select :temperature_profile, options_for_temperature_profiles(testing_ground.temperature_profile_id), {}, class: 'form-control'
+    = form.select :behavior_profile, options_for_behavior_profiles(testing_ground.behavior_profile_id), {}, class: 'form-control'
 

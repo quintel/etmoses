@@ -16,11 +16,11 @@
 
 %h2 Temperature Profiles
 
-.temperature_profiles
+.behavior_profiles
   %ul
-    - @temperature_profiles.each do |temperature_profile|
+    - @behavior_profiles.each do |behavior_profile|
       %li
-        = link_to temperature_profile.key, profile_path(temperature_profile)
-        %span= I18n.l(temperature_profile.created_at, format: :short)
+        = link_to behavior_profile.key, profile_path(behavior_profile)
+        %span= I18n.l(behavior_profile.created_at, format: :short)
 
 

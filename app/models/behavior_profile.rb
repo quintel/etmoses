@@ -1,0 +1,2 @@
+class BehaviorProfile < Profile
+end

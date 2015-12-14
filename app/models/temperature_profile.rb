@@ -1,2 +1,0 @@
-class TemperatureProfile < Profile
-end

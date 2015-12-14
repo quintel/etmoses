@@ -13,7 +13,7 @@ class ProfilesController < ResourceController
     skip_policy_scope
     @load_profile_categories = LoadProfileCategory.where(parent_id: nil)
     @price_curves            = PriceCurve.all
-    @temperature_profiles    = TemperatureProfile.all
+    @behavior_profiles       = BehaviorProfile.all
   end
 
   def new

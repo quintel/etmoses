@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   post :validate_business_case, to: "business_cases#validate"
 
   resources :price_curves, as: :price_curve, only: %i(new update)
-  resources :temperature_profiles, as: :temperature_profile, only: %i(new update)
+  resources :behavior_profiles, as: :behavior_profile, only: %i(new update)
   resources :profiles
 
   resources :load_profiles, except: :index do

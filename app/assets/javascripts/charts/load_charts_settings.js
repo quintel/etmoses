@@ -15,7 +15,7 @@ var LoadChartsSettings = {
         color: '#C8C758',
         enabled: true
     },
-    temperature_profile: {
+    behavior_profile: {
         color: '#C8C758',
         enabled: true
     },

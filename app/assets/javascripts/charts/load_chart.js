@@ -187,7 +187,7 @@ var LoadChart = (function () {
             use: '',
             availability: '',
             price_curve: '€',
-            temperature_profile: 'On/Off'
+            behavior_profile: 'On/Off'
         },
 
         render: function (intoSelector, week) {
