@@ -333,8 +333,27 @@ table.table.scenarios{
     padding-left: 0px;
   }
 
+  .panel h4{
+    float: left;
+  }
+
+  .panel h4,
   .actions{
-    padding: 15px;
+    line-height: 30px;
+  }
+
+  .actions{
+    margin-left: 30px;
+    display: inline-block;
+    float: right;
+
+    .add-technology{
+      display: block;
+
+      .input-group{
+        display: table;
+      }
+    }
   }
 
   .technologies .technology{

@@ -112,9 +112,9 @@ var TemplateUpdater = (function () {
             return compClass +
                 "[data-composite-value='" + comp.data('compositeValue') + "']";
         } else {
-            var id = $(this.technologySelectBox).parents(".panel-collapse").attr("id");
+            var id = $(this.technologySelectBox).parents(".panel").find(".panel-collapse").attr("id");
 
-            return '#' + id + ' .technologies .technology:last-child';
+            return '#' + id + ' .technologies .technology:first-child';
         }
     }
 

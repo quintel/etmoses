@@ -6,22 +6,23 @@
           %a{"aria-controls" => "#{node.parameterize}-panel", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "##{node.parameterize}-panel", :role => "button"}
             = node
 
+        .actions
+          .add-technology
+            .input-group{role: "group"}
+              %select.name.form-control{autocomplete: 'off'}
+                = profile_table_options_for_name
+
+              %span.input-group-btn
+                %button{type: "button", class: "btn btn-success"}
+                  Add
+        .clearfix
+
       .panel-collapse.collapse.in{"aria-labelledby" => node.parameterize, :role => "tabpanel", id: "#{node.parameterize}-panel"}
         .panel-body
           .technologies
             .technology.hidden{data: {node: node}}
             - testing_ground_profile[node].each do |technology|
               = render partial: "technology_template", locals: { technology: technology, node: node }
-
-          .actions
-            .add-technology
-              .input-group{role: "group"}
-                %select.name.form-control{autocomplete: 'off'}
-                  = profile_table_options_for_name
-
-                %span.input-group-btn
-                  %button{type: "button", class: "btn btn-success"}
-                    Add
 
 .data
   .hidden.buffer_template
