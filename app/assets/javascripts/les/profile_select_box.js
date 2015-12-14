@@ -22,7 +22,7 @@ var ProfileSelectBox = (function () {
             userInput  = parseFloat(inputField.val()),
             def        = (this.profileDefault || this.techDefault || '');
 
-        $(this.techBox).attr('data-' + this.key, userInput || def);
+        $(this.techBox).set(this.key, userInput || def);
         inputField.val(userInput || def);
     }
 
