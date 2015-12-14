@@ -55,7 +55,7 @@
           %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key} }
       - else
         .editable.advanced.hidden{class: key}
-          %span= key.to_s.humanize
+          %span= t(:"installed_technology_attributes.#{key}")
           %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key } }
           .clearfix
 

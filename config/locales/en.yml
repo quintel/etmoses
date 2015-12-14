@@ -39,6 +39,15 @@ en:
 
   not_authorized: "You don't have permission to view that."
 
+  installed_technology_attributes:
+    initial_investment: Initial investment
+    technical_lifetime: Technical lifetime
+    full_load_hours: Full load hours
+    om_costs_per_year: "O&M Costs per year"
+    om_costs_per_full_load_hour: "O&M costs per full load hour"
+    om_costs_for_ccs_per_full_load_hour: "O&M costs for ccs per full load hour"
+    performance_coefficient: Performance coefficient
+
   testing_grounds:
     error:
       data: 'Sorry, your local energy solution could not be calculated'
