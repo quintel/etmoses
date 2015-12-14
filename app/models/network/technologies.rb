@@ -22,6 +22,9 @@ module Network
           behaviors['deferrable']       = DeferrableConsumer
           behaviors['conserving']       = ConservingProducer
           behaviors['optional']         = OptionalConsumer
+          behaviors['hhp_electricity']  = HHP::Electricity
+          behaviors['hhp_gas']          = HHP::Gas
+          behaviors['null']             = Null
         end.freeze
     end
   end

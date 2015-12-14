@@ -77,7 +77,12 @@ module Calculation
     private
 
     def path_order
-      [ Network::Technologies::OptionalConsumer,
+      # HHP techs come first since their mandatory consumption is instead
+      # treated as conditional. They appear first so that they are processed
+      # immediately after the final mandatory consumption load is assigned.
+      [ Network::Technologies::HHP::Electricity,
+        Network::Technologies::HHP::Gas,
+        Network::Technologies::OptionalConsumer,
         Network::Technologies::ConservingProducer,
         Network::Technologies::ElectricVehicle,
         Network::Technologies::Buffer,
