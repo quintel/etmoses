@@ -120,7 +120,7 @@ var TemplateUpdater = (function () {
 
     function findNearestCompositValue() {
         var self = this,
-            comp = $(this.technologySelectBox).parents(".panel-body").find(".technologies .technology").filter(function () {
+            comp = $(this.technologySelectBox).parents(".endpoint").find(".technologies .technology").filter(function () {
                 return bufferFilter.call(this, self.data);
             }).last();
 

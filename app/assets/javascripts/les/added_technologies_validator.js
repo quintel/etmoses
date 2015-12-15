@@ -2,7 +2,7 @@ var AddedTechnologiesValidator = (function () {
     'use strict';
 
     function checkSelectBoxes(buffer, possibleOptions) {
-        var isDisabled = $(this).parents(".panel-body")
+        var isDisabled = $(this).parents(".endpoint")
                             .find(".technologies .technology." + buffer).length === 0;
 
         $(this).find("option")

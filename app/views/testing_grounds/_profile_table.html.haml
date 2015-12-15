@@ -1,6 +1,6 @@
 #accordion.panel-group{"aria-multiselectable" => "true", :role => "tablist"}
   - edge_nodes_for(topology).each do |node|
-    .panel.panel-default
+    .endpoint.panel.panel-default
       .panel-heading{:role => "tab", id: node.parameterize}
         %h4.panel-title
           %a{"aria-controls" => "#{node.parameterize}-panel", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "##{node.parameterize}-panel", :role => "button"}
