@@ -15,14 +15,14 @@ module Market
       -> { get(measurable) }
     end
 
+    def object
+      @object ||= @realiser.call
+    end
+
     private
 
     def get(node)
       object.node(node.key)
-    end
-
-    def object
-      @object ||= @realiser.call
     end
   end
 end

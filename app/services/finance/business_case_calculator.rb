@@ -77,16 +77,17 @@ module Finance
     def featureless_networks
       @featureless_networks ||= begin
         # Lazily computes the featureless networks only when required.
+
         featureless = Market::Variant.new do
           @testing_ground.to_calculated_graphs
         end
 
         electricity = Market::Variant.new do
-          featureless.detect { |net| net.carrier == :electricity }
+          featureless.object.detect { |net| net.carrier == :electricity }
         end
 
         gas = Market::Variant.new do
-          featureless.detect { |net| net.carrier == :gas }
+          featureless.object.detect { |net| net.carrier == :gas }
         end
 
         { electricity: electricity, gas: gas }
