@@ -66,9 +66,12 @@ module TestingGroundsHelper
   end
 
   def options_for_strategies
-    options_for_select(Strategies.all.map do |strategy|
-      [I18n.t("testing_grounds.strategies.#{strategy[:name]}"), strategy[:ajax_prop]]
-    end)
+    strategies = Strategies.all.map do |strategy|
+      [ I18n.t("testing_grounds.strategies.#{strategy[:name]}"),
+        strategy[:ajax_prop],
+        { selected: !strategy[:enabled], disabled: !strategy[:enabled] } ]
+    end
+    options_for_select(strategies)
   end
 
   def default_strategies

@@ -113,14 +113,14 @@ var StrategyToggler = (function () {
         var appliedStrategies = StrategyHelper.getStrategies();
         changedStrategy = false;
 
-        $(".load-strategies input[type=checkbox]").each(function () {
+        $(".load-strategies li:not(.disabled) input[type=checkbox]").each(function () {
             if (appliedStrategies[$(this).val()] !== $(this).is(":checked")) {
                 changedStrategy = true;
                 return false;
             }
         });
 
-        $(".load-strategies input[type=checkbox]").each(function () {
+        $(".load-strategies li:not(.disabled) input[type=checkbox]").each(function () {
             appliedStrategies[$(this).val()] = $(this).is(":checked");
         });
 

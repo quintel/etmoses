@@ -81,6 +81,7 @@ en:
       postponing_base_load: 'Postponing of individual base-load'
       saving_aggregated_base_load: 'Saving of aggregated base-load'
       capping_solar_pv: 'Capping of solar PV'
+      hhp_gas_congested: 'Switch HHP to gas if congested'
 
   import:
     form:

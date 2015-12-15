@@ -9,7 +9,8 @@ module Strategies
       { name: "buffering_local_solar_space_heating",       ajax_prop: "buffering_space_heating", enabled: true},
       { name: "postponing_base_load",                      ajax_prop: "postponing_base_load", enabled: true},
       { name: "saving_aggregated_base_load",               ajax_prop: "saving_base_load", enabled: true},
-      { name: "capping_solar_pv",                          ajax_prop: "capping_solar_pv", enabled: true}
+      { name: "capping_solar_pv",                          ajax_prop: "capping_solar_pv", enabled: true},
+      { name: "hhp_gas_congested",                         ajax_prop: "hhp_gas_congested", enabled: false}
     ]
   end
 end
