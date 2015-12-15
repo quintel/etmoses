@@ -50,7 +50,7 @@ var TechnologiesForm = (function () {
         e.preventDefault();
 
         var newTemplate = template.clone(true, true),
-            selectTechnology = $(this).parents(".input-group").find("select");
+            selectTechnology = $(this).parents(".add-technology").find("select");
 
         new TemplateUpdater(newTemplate, selectTechnology).increaseCompositeValue();
         new Technology(newTemplate).add(this);

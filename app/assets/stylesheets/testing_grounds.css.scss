@@ -342,17 +342,13 @@ table.table.scenarios{
     line-height: 30px;
   }
 
-  .actions{
-    margin-left: 30px;
-    display: inline-block;
+  .actions {
     float: right;
+    margin-bottom: -2px;
+    margin-top: -2px;
 
-    .add-technology{
-      display: block;
-
-      .input-group{
-        display: table;
-      }
+    .input-group-btn {
+      display: inline-block;
     }
   }
 
