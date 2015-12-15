@@ -66,10 +66,10 @@
         .load-graph.line-chart
           %p.info Click on a network component to view its load and attached technologies
 
-      %i.last-updated
-        %span Last updated
-        %span= time_ago_in_words(@testing_ground.updated_at)
-        %span ago
+        %i.last-updated
+          %span Last updated
+          %span= time_ago_in_words(@testing_ground.updated_at)
+          %span ago
 
       .tab-pane#technologies{role: 'tabpanel'}
         #technologies
