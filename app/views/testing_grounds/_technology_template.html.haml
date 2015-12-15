@@ -1,10 +1,9 @@
 .technology{class: technology_class(technology), data: stringify_values(technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node)) }
-  %div.pull-right
-    .btn-group
-      = link_to "Toggle advanced", "#!", class: "btn btn-primary show-advanced"
+  .advanced-actions.pull-right.btn-group
+    = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
 
-      = link_to "#!", class: "remove-row btn btn-danger" do
-        %span.glyphicon.glyphicon-trash
+    = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
+      %span.glyphicon.glyphicon-trash
 
   .indent.arrow{class: ('hidden' unless technology.buffer.present?) }
 
