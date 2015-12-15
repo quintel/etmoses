@@ -97,14 +97,35 @@ class Import
   #
   # Returns an array.
   def technologies
-    households + buildings + composites + technologies_from
+    households + buildings + composites + default_technologies + hybrids
+  end
+
+  # Internal: non-hybrids
+  #
+  # Returns an array
+  def default_technologies
+    technologies_from.reject(&method(:hybrid?))
+  end
+
+  # Internal: hybrid technologies
+  #
+  # Returns an array
+  def hybrids
+    HybridExpander.new(technologies_from.select(&method(:hybrid?))).expand
+  end
+
+  # Internal: checks if a certain technology is a hybrid
+  #
+  # Returns a boolean
+  def hybrid?(technology)
+    technology['carrier'] == "hybrid"
   end
 
   # Internal: Given a response, splits out the nodes into discrete technologies.
   #
   # Returns an array.
   def technologies_from
-    response.flat_map do |key, data|
+    @technologies_from ||= response.flat_map do |key, data|
       TechnologyBuilder.build(key, data)
     end
   end

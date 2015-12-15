@@ -42,7 +42,7 @@ module Network
       def boosting_enabled_at?(frame)
         # If there was insufficient energy in the reserve to satisfy demand,
         # boosting technologies may be enabled.
-        (@reserve.at(frame).zero? && @profile.at(frame) > 0) ||
+        @profile.at(frame) > 0 ||
           # If more energy is demanded than the buffer has capacity, boosting
           # technologies are enabled.
           (@demand.at(frame) > @capacity)
@@ -54,7 +54,12 @@ module Network
       def add(tech)
         wrapped =
           if tech.installed.position_relative_to_buffer == 'boosting'.freeze
-            BoostingWrapper.new(tech, self)
+            if tech.is_a?(HHP::Base)
+              # Hack :(
+              HHPBoostingWrapper.new(tech, self)
+            else
+              BoostingWrapper.new(tech, self)
+            end
           else
             Wrapper.new(tech, self)
           end
@@ -73,6 +78,13 @@ module Network
         def initialize(obj, composite)
           super(obj)
           @composite = composite
+          @handle_decay = respond_to?(:stored)
+        end
+
+        def production_at(frame)
+          # Force evaluation of buffer decay.
+          stored.at(frame) if @handle_decay
+          super
         end
 
         def store(frame, amount)
@@ -81,6 +93,7 @@ module Network
         end
 
         def receive_mandatory(frame, amount)
+          super
           profile.deplete(frame, amount)
         end
 
@@ -99,6 +112,18 @@ module Network
           # buffer; they satisfy whatever amount is needed to "boost" production
           # to meet demand and nothing more.
           0.0
+        end
+      end
+
+      # All HHP consumption is (currently) classed as conditional, therefore we
+      # expect a non-zero load when boosting HHP consumption occurs.
+      class HHPBoostingWrapper < Wrapper
+        def mandatory_consumption_at(frame)
+          0.0
+        end
+
+        def conditional_consumption_at(frame)
+          @composite.boosting_enabled_at?(frame) ? super : 0.0
         end
       end
     end # Composite

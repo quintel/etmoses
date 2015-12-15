@@ -159,7 +159,7 @@ class TestingGroundsController < ResourceController
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:name, :technology_profile, :public,
+      .permit([:name, :technology_profile, :public, :behavior_profile_id,
                :technology_profile_csv, :scenario_id, :topology_id, :market_model_id])
 
     if tg_params[:technology_profile_csv]

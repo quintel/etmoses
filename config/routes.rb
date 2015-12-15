@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "users" }
 
-  resources :testing_grounds do
+  resources :testing_grounds, except: :new do
     collection do
       get  'import'
       post 'import', to: :perform_import
@@ -30,8 +30,11 @@ Rails.application.routes.draw do
 
   post :validate_business_case, to: "business_cases#validate"
 
-  resources :price_curves, as: :price_curve
-  resources :load_profiles do
+  resources :price_curves, as: :price_curve, only: %i(new update)
+  resources :behavior_profiles, as: :behavior_profile, only: %i(new update)
+  resources :profiles
+
+  resources :load_profiles, except: :index do
     resources :load_profile_component, only: :show
   end
   resources :topologies do

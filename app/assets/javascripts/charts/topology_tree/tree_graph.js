@@ -43,6 +43,7 @@ var TreeGraph = (function () {
         applyStrategies: function(data) {
             this.strategyLoads = ETHelper.loadsFromTree(data.networks.electricity);
             this.strategyGasLoads = ETHelper.loadsFromTree(data.networks.gas);
+            this.strategyLoads = {};
 
             LoadChartHelper.forceReload = true
 

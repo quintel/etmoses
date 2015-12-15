@@ -114,13 +114,18 @@ var LoadChart = (function () {
         var results = [];
 
         this.data.forEach(function (datum) {
+            var color = (
+                LoadChartsSettings[datum.type || this.curve_type] ||
+                LoadChartsSettings['default']
+            ).color
+
             if (datum.values) {
                 results.push({
                     key:    datum.name,
                     type:   datum.type,
                     values: sampledData.call(this, datum.values),
                     area:   datum.area,
-                    color:  LoadChartsSettings[datum.type].color
+                    color:  color
                 });
             }
         }.bind(this));
@@ -186,7 +191,8 @@ var LoadChart = (function () {
             inflex: 'kW',
             use: '',
             availability: '',
-            price: '€'
+            price_curve: '€',
+            behavior_profile: 'On/Off'
         },
 
         render: function (intoSelector, week) {
