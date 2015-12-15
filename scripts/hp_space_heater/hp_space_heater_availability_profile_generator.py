@@ -21,7 +21,7 @@ plt.close()
  
 
 # Data for temperature (15 minutes)
-temperatures =genfromtxt(os.getcwd() + "/../input_data/temparatures_de Bilt_2013_fiteen_minutes.csv", delimiter=" ")
+temperatures =genfromtxt(os.getcwd() + "/../input_data/temperatures_de Bilt_2013_fifteen_minutes.csv", delimiter=" ")
        
 # Solar data (15 minutes)
 irradiance_in_kW = genfromtxt(os.getcwd() + "/../input_data/irradiance_in_kW_per_m_squared_maastricht.csv", delimiter=" ")
