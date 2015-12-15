@@ -112,15 +112,15 @@ var TemplateUpdater = (function () {
             return compClass +
                 "[data-composite-value='" + comp.data('compositeValue') + "']";
         } else {
-            var id = $(this.technologySelectBox).parents(".panel-collapse").attr("id");
+            var id = $(this.technologySelectBox).parents(".panel").find(".panel-collapse").attr("id");
 
-            return '#' + id + ' .technologies .technology:last-child';
+            return '#' + id + ' .technologies .technology:first-child';
         }
     }
 
     function findNearestCompositValue() {
         var self = this,
-            comp = $(this.technologySelectBox).parents(".panel-body").find(".technologies .technology").filter(function () {
+            comp = $(this.technologySelectBox).parents(".endpoint").find(".technologies .technology").filter(function () {
                 return bufferFilter.call(this, self.data);
             }).last();
 
