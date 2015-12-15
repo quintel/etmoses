@@ -12,7 +12,7 @@ class TestingGround < ActiveRecord::Base
   belongs_to :user
   belongs_to :behavior_profile
 
-  has_one :selected_strategy
+  has_one :selected_strategy, dependent: :destroy
   has_one :business_case
 
   has_many :testing_ground_delayed_jobs

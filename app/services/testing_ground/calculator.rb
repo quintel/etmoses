@@ -29,7 +29,7 @@ class TestingGround::Calculator
     return if existing_job
 
     job = @testing_ground.testing_ground_delayed_jobs.create!(job_type: job_type)
-    job.update_column(:job_id, Delayed::Job.enqueue(task))
+    job.update_attribute(:job, Delayed::Job.enqueue(task))
   end
 
   def existing_job

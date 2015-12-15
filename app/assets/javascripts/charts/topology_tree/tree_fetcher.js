@@ -13,8 +13,12 @@ var TreeFetcher = (function () {
         ).displayError();
     }
 
-    function finalCall() {
-        Ajax.json(this.url, this.data, this.cachedCallback.bind(this), failCallback.bind(this));
+    function finalCall(data) {
+        if (data.networks) {
+            this.cachedCallback.call(this, data);
+        } else {
+            this.failCallback.call(this, data);
+        };
     }
 
     /* Private: pendingCalculate

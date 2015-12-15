@@ -218,7 +218,6 @@ var LoadChart = (function () {
     }
 
     return LoadChart;
-
 }());
 
 window.LoadChart = LoadChart;

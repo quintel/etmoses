@@ -20,7 +20,7 @@ var LoadChartsSettings = {
         enabled: true
     },
     behavior_profile: {
-        color: '#C8C758',
+        color: '#1F77B4',
         enabled: true
     },
     capacity: {
