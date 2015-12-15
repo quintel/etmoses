@@ -60,3 +60,8 @@
 
   - else
     Loading ..
+
+  %i.last-updated
+    %span Last updated
+    %span= time_ago_in_words(@business_case.updated_at)
+    %span ago
