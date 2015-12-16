@@ -1,6 +1,9 @@
 var AddedTechnologiesValidator = (function () {
     'use strict';
 
+    /* These methods validate or invalidate the technologies in the slect boxes
+     * based on the fact if the buffers are still available.
+     */
     function checkSelectBoxes(buffer, possibleOptions) {
         var isDisabled = $(this).parents(".endpoint")
                             .find(".technologies .technology." + buffer).length === 0;

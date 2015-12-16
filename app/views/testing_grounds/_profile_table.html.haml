@@ -5,6 +5,7 @@
         %h4.panel-title
           %a{"aria-controls" => "#{node.parameterize}-panel", "aria-expanded" => "false", "data-parent" => "#accordion", "data-toggle" => "collapse", :href => "##{node.parameterize}-panel", :role => "button"}
             = node
+          %span.count="(#{testing_ground_profile[node].count})"
 
         .actions
           .add-technology.form-inline

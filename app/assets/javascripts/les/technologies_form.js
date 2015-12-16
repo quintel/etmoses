@@ -20,7 +20,16 @@ var TechnologiesForm = (function () {
     }
 
     function markAsEditing() {
-      $("ul.nav.nav-tabs li a[href=#technologies]").addClass("editing");
+        $("ul.nav.nav-tabs li a[href=#technologies]").addClass("editing");
+    }
+
+    function updateCounter(add) {
+        var addition = (!!add),
+            amount   = (addition ? 1 : -1),
+            countDom = $(this).parents(".endpoint").find("h4 .count"),
+            count    = parseInt(countDom.text().replace(/[\(\)]/g, ''));
+
+        countDom.text("(" + (count += amount) + ")");
     }
 
     function updateJSON() {
@@ -60,6 +69,7 @@ var TechnologiesForm = (function () {
 
         addOnChangeListener.call(newTemplate);
         markAsEditing();
+        updateCounter.call(this, true);
     }
 
     function toggleAdvancedFeatures(e) {
@@ -102,6 +112,7 @@ var TechnologiesForm = (function () {
 
         if (removeable.call(this)) {
             removeBufferOption.call(technology.data());
+            updateCounter.call(this, false);
 
             technology.remove();
 
