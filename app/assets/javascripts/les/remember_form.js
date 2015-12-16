@@ -3,9 +3,9 @@ $(document).on("page:change", function () {
         localSettings = new LocalSettings(identifier),
         rememberedTab = (localSettings.get('remember_tab') || "#technologies");
 
-    $("ul.nav-tabs li a[role=tab]").off('click').on('click', function () {
+    $("ul.nav-tabs.edit li a[role=tab]").off('click').on('click', function () {
         localSettings.set('remember_tab', $(this).attr("href"));
     });
 
-    $("ul.nav-tabs li a[href='" + rememberedTab + "']").tab('show');
+    $("ul.nav-tabs.edit li a[href='" + rememberedTab + "']").tab('show');
 });

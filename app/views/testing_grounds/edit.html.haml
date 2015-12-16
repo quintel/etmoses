@@ -13,7 +13,7 @@
     - @testing_ground.errors.full_messages.uniq.each do |message|
       %li= message
 
-%ul.nav.nav-tabs{role: "tablist"}
+%ul.nav.nav-tabs.edit{role: "tablist"}
   %li{role: "presentation"}
     = link_to "General", "#general", "aria-controls" => "general", "role" => "tab", data: { toggle: "tab" }
   %li{role: "presentation", class: "active"}
