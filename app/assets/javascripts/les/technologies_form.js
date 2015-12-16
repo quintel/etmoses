@@ -26,8 +26,9 @@ var TechnologiesForm = (function () {
     function updateJSON() {
         var type   = $(this).data('type'),
             target = $(this).parents(".technology"),
-            value  = $(this).val();
+            value  = $(this).val().replace(/[\'\" ]/g, '');
 
+        $(this).val(value);
         target.set(type, value);
 
         parseHarmonicaToJSON();
@@ -114,8 +115,6 @@ var TechnologiesForm = (function () {
     }
 
     function addListenersToNewTechnology() {
-        $(".technologies .technology").find("input, select").on('change', updateJSON);
-
         $(".add-technology select").off().on("change", updateTemplate);
         $(".add-technology button").on("click", addNewTechnologyRow);
         $(".technology .remove-row").on("click", removeTechnologyRow);
