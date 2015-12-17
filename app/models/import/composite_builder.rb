@@ -32,10 +32,12 @@ class Import
     end
 
     def composite_attributes(technology)
-      { "units"     => scaling_value,
-        "composite" => true,
-        "includes"  => technology.technologies.map(&:key),
-        "demand"    => demand_for(technology) }
+      { "units"                       => scaling_value,
+        "composite"                   => true,
+        "includes"                    => technology.technologies.map(&:key),
+        "demand"                      => demand_for(technology),
+        'max_bufferable_temperature'  => technology.max_bufferable_temperature,
+        'volume_in_liters'            => technology.default_volume_in_liters }
     end
 
     def translations

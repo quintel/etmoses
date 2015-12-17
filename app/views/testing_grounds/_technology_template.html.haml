@@ -56,7 +56,12 @@
       %input.form-control{type: 'text', value: technology.carrier_capacity.try(:round, 4), disabled: "disabled", data: { type: 'carrier_capacity' } }
       .clearfix
 
-    .editable.text{class: 'volume'}
+    .editable.text.composite-attribute.liters{class: ('hidden' unless technology.composite)}
+      %span Size [liter]
+      %input.form-control{type: 'text', value: technology.volume_in_liters, data: { type: 'volume-in-liters' }}
+      .clearfix
+
+    .editable.text.volume{class: ('hidden' if technology.composite)}
       %span Volume [kWh]
       %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
       .clearfix
@@ -66,14 +71,15 @@
       %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
       .clearfix
 
-    - InstalledTechnology::HIDDEN.each do |key|
-      - if %i(concurrency includes composite_index).include?(key)
-        .editable.hidden{class: key}
-          %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key} }
-      - else
-        .editable.advanced.hidden{class: key}
-          %span= t(:"installed_technology_attributes.#{key}")
-          %input.form-control{type: 'text', value: technology.public_send(key), data: {type: key } }
+    - InstalledTechnology.attribute_set.each do |attribute|
+      - if attribute.options[:hidden]
+        .editable.hidden{class: attribute.name}
+          %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name } }
+
+      - if attribute.options[:advanced]
+        .editable.advanced.hidden{class: attribute.name}
+          %span= t(:"installed_technology_attributes.#{ attribute.name }")
+          %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name }, disabled: attribute.options[:disabled] }
           .clearfix
 
     .clearfix

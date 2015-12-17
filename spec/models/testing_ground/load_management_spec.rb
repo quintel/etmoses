@@ -45,15 +45,19 @@ RSpec.describe TestingGround do
           "concurrency" => "max"
         },
         {
-          "name"            => "Buffer space heating #1",
-          "type"            => "buffer_space_heating",
-          "composite"       => true,
-          "composite_value" => "buffer_space_heating_1",
-          "behavior"        => nil,
-          "profile"         => heat_pump_load_profile,
-          "volume"          => 0.5,
-          "units"           => 1,
-          "concurrency"     => "max"
+          "name"                       => "Buffer space heating #1",
+          "type"                       => "buffer_space_heating",
+          "composite"                  => true,
+          "composite_value"            => "buffer_space_heating_1",
+          "behavior"                   => nil,
+          "profile"                    => heat_pump_load_profile,
+          # "capacity" => null,
+          # "demand" => 70080.0,
+          "volume"                     => 0.5,
+          "volume_in_liters"           => 1,
+          "max_bufferable_temperature" => 46.25,
+          "units"                      => 1,
+          "concurrency"                => "max"
         },
         {
           "name"        => "Heat pump",

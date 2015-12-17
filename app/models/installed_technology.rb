@@ -20,18 +20,22 @@ class InstalledTechnology
   attribute :type,                                String, default: 'generic'
   attribute :units,                               Integer, default: 1
   attribute :volume,                              Float
+  attribute :volume_in_liters,                    Float
+  attribute :max_bufferable_temperature,          Float
+
+  # Hidden
+  attribute :composite_index,                     Integer, hidden: true
+  attribute :includes,                            Array[String], hidden: true
+  attribute :concurrency,                         String,  default: 'max', hidden: true
 
   # Advanced features
-  attribute :composite_index,                     Integer, hidden: true
-  attribute :concurrency,                         String,  default: 'max', hidden: true
-  attribute :full_load_hours,                     Integer, hidden: true
-  attribute :includes,                            Array[String], hidden: true
-  attribute :initial_investment,                  Float, hidden: true
-  attribute :om_costs_for_ccs_per_full_load_hour, Float, hidden: true
-  attribute :om_costs_per_full_load_hour,         Float, hidden: true
-  attribute :om_costs_per_year,                   Float, hidden: true
-  attribute :performance_coefficient,             Float, hidden: true
-  attribute :technical_lifetime,                  Integer, hidden: true
+  attribute :full_load_hours,                     Integer, advanced: true
+  attribute :initial_investment,                  Float,   advanced: true
+  attribute :om_costs_for_ccs_per_full_load_hour, Float,   advanced: true
+  attribute :om_costs_per_full_load_hour,         Float,   advanced: true
+  attribute :om_costs_per_year,                   Float,   advanced: true
+  attribute :performance_coefficient,             Float,   advanced: true
+  attribute :technical_lifetime,                  Integer, advanced: true
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
@@ -40,7 +44,10 @@ class InstalledTechnology
     attribute_set.select{ |attr| attr.options[:hidden] || false }.map(&:name)
 
   PRESENTABLES =
-    EDITABLES - %i(carrier_capacity concurrency) + %i(capacity)
+
+  WATER_CONSTANT = 0.016
+  MIN_TEMP = 15
+  MAX_TEMP = 95
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
@@ -67,6 +74,18 @@ class InstalledTechnology
   def profile=(profile)
     if profile && profile.is_a?(String) && profile.match(/\A\[.*\]\z/)
       super(JSON.parse(profile))
+    else
+      super
+    end
+  end
+
+  # Public: Returns the volume of a technology
+  #
+  # If the technology is a composite the volume is calculated from the volume
+  # in liters
+  def volume
+    if composite && volume_in_liters && max_bufferable_temperature
+      volume_in_liters * WATER_CONSTANT * (max_bufferable_temperature - MIN_TEMP)
     else
       super
     end

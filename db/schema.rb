@@ -141,7 +141,9 @@ ActiveRecord::Schema.define(version: 20160229174038) do
     t.boolean "composite",                                       default: false
     t.float   "default_capacity",                    limit: 24
     t.float   "default_volume",                      limit: 24
+    t.float   "default_volume_in_liters",            limit: 24
     t.float   "default_demand",                      limit: 24
+    t.float   "max_bufferable_temperature",          limit: 24
     t.string  "default_position_relative_to_buffer"
     t.boolean "expandable",                                      default: true
   end
