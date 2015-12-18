@@ -25,8 +25,9 @@ class TestingGround::TechnologyPartitioner
     technology
   end
 
+  # TODO: This should be cleaned
   def couple_composite(technology, index)
-    technology.composite_index = ((technology.composite_index || 1) - 1) * @size + (index + 1)
+    technology.composite_index = ((technology.composite_index || 1).to_i - 1) * @size + (index + 1)
 
     if technology.composite
       technology.name = technology.get_composite_name
