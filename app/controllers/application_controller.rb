@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user!
   before_filter :load_recent_testing_grounds
 
@@ -39,8 +40,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def configure_permitted_parameters
+    %i(sign_up account_update).each do |action|
+      devise_parameter_sanitizer.for(action) << :name
+    end
+  end
+
   def after_sign_in_path_for(resource)
     session[:previous_url] || root_path
   end
-
 end
