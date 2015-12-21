@@ -36,3 +36,13 @@ svg#topology-graph-full{
      stroke-width: 1px;
    }
 }
+
+.topology-syntax-error a {
+  &:hover {
+    text-decoration: none;
+
+    .text {
+      text-decoration: underline;
+    }
+  }
+}
