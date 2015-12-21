@@ -3,6 +3,10 @@ module Network
   # be the route from the technology to the owner node, or any ancestor node
   # thereof (including the network head node).
   class SubPath < TechnologyPath
+    extend Forwardable
+
+    def_delegators :@full_path, :consume, :received_conditional_at?
+
     # Public: Given a TechnologyPath which describes the path from a technology
     # to the network head, returns an array of all subpaths from the technology
     # to the ancestor nodes.
@@ -28,10 +32,6 @@ module Network
 
       @full_path = full_path
       @flexible  = false
-    end
-
-    def consume(frame, amount, conditional = false)
-      @full_path.consume(frame, amount, conditional)
     end
 
     def distance
