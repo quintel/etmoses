@@ -61,9 +61,10 @@
             %li
               = link_to 'Show all', market_models_path
 
-    .pull-right
+    .pull-right.btn-group.user-actions
       - if current_user
-        = link_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-primary", title: "Signed in as: #{current_user.email}"
+        = link_to "Your account", edit_user_registration_path, class: "btn btn-default btn-sm", title: "Signed in as: #{current_user.email}"
+        = link_to "Sign out", destroy_user_session_path, method: :delete, class: "btn btn-default btn-sm", title: "Sign out of ETMoses"
       - else
-        = link_to "Sign in", new_user_session_path, class: "btn btn-primary"
+        = link_to "Sign in", new_user_session_path, class: "btn btn-primary btn-sm"
 
