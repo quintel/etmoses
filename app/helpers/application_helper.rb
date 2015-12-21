@@ -16,4 +16,8 @@ module ApplicationHelper
       [k, v.to_s]
     end]
   end
+
+  def recent_testing_grounds
+    policy_scope(TestingGround).latest_first.select(:id, :name).limit(5)
+  end
 end

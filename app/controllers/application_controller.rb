@@ -5,7 +5,6 @@ class ApplicationController < ActionController::Base
 
   before_filter :configure_permitted_parameters, if: :devise_controller?
   before_filter :authenticate_user!
-  before_filter :load_recent_testing_grounds
 
   after_filter :store_location
 
@@ -21,10 +20,6 @@ class ApplicationController < ActionController::Base
   end
 
   private
-
-  def load_recent_testing_grounds
-    @recent_testing_grounds = policy_scope(TestingGround).latest_first.limit(5)
-  end
 
   def store_location
     return unless request.get?

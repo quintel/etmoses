@@ -17,13 +17,12 @@
             %li
               = link_to 'Show all', testing_grounds_path
             %li.divider
-            %li{style: 'margin-left: 21px'}
-              %em
-                = "Last saved #{ @recent_testing_grounds.size }"
-            - @recent_testing_grounds.each_with_index do |testing_ground, index|
+            %li.dropdown-header
+              Recent scenarios&hellip;
+            - recent_testing_grounds.each_with_index do |testing_ground, index|
               %li
                 = link_to testing_ground_path(testing_ground) do
-                  = "#{index + 1})"
+                  = "#{index + 1}."
                   = truncate(testing_ground.name, length: 30)
 
         %li.dropdown
