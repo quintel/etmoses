@@ -10,7 +10,8 @@ RSpec.describe Topology do
     it 'requires children to be an array' do
       topology = Topology.new(graph: { name: 'Top', children: 'bla' })
 
-      expect(topology.errors_on(:graph)).to include("contains invalid children")
+      expect(topology.errors_on(:graph)).
+        to include("contains invalid children on Top")
     end
 
     it 'requires each child node to have a name' do
