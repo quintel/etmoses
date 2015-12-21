@@ -44,7 +44,7 @@ module Calculation
         if path.subpath?
           # Subpaths only consume when there is available excess equal to or
           # greater than the amount wanted by the technology.
-          path.consume(frame, wanted, true) if wanted > 0 && wanted < excess
+          path.consume(frame, wanted, true) if wanted > 0 && wanted <= excess
         elsif path.excess_constrained?
           if excess <= 0
             # Some technologies need to be explicitly told that they received
