@@ -7,6 +7,12 @@ RSpec.describe Topology do
       expect(topology.errors_on(:graph)).to include("has an unnamed component")
     end
 
+    it 'requires children to be an array' do
+      topology = Topology.new(graph: { name: 'Top', children: 'bla' })
+
+      expect(topology.errors_on(:graph)).to include("contains invalid children")
+    end
+
     it 'requires each child node to have a name' do
       topology = Topology.new(graph: { name: 'Top', children: [{}] })
       expect(topology.errors_on(:graph)).to include("has an unnamed component")

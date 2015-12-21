@@ -37,7 +37,15 @@ class Topology < ActiveRecord::Base
 
     nodes.compact.map(&:symbolize_keys).each do |node|
       block.call(node)
-      each_node(node[:children], &block) if node[:children]
+
+      if node[:children]
+        if node[:children].is_a?(Array)
+          each_node(node[:children], &block)
+        else
+          errors.add(:graph, "contains invalid children")
+          break
+        end
+      end
     end
   end
 
