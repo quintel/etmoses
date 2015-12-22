@@ -1,40 +1,12 @@
-/*globals Ajax,BufferOptions,BufferSelectBox,CompositeTemplateUpdater,FormHelper,
- ProfileSelectBox*/
+/*globals Ajax,BatteryTemplateUpdater,BufferOptions,BufferSelectBox,
+CompositeTemplateUpdater,FormHelper,ProfileSelectBox,TemplateSettings*/
 var TemplateUpdater = (function () {
     'use strict';
 
     /*
-     * This prototype updates the existing template depending on the
+     * This prototype updates the existing hidden template depending on the
      * chosen technology.
      */
-
-    /*
-     * ignoredTechs
-     *    Technologies that don't exist in et-engine
-     *
-     * etmKeys:
-     *    Attributes that are to be used from et-engine
-     *    The attributes are camelcased due to HTML5 DOM API
-     */
-    var ignoredTechs = [
-            undefined,
-            '',
-            'base_load',
-            'base_load_edsn',
-            'base_load_buildings',
-            'generic',
-            'buffer_space_heating',
-            'buffer_water_heating',
-            'households_water_heater_hybrid_heatpump_air_water_electricity_electricity',
-            'households_water_heater_hybrid_heatpump_air_water_electricity_gas',
-            'households_space_heater_hybrid_heatpump_air_water_electricity_electricity',
-            'households_space_heater_hybrid_heatpump_air_water_electricity_gas'
-        ],
-        etmKeys = [
-            'technicalLifetime', 'initialInvestment', 'fullLoadHours',
-            'omCostsPerYear', 'omCostsPerFullLoadHour', 'omCostsForCcsPerFullLoadHour'
-        ];
-
     function addCount(value, joinCharacter) {
         if (this.data.composite) {
             var bufferIndex = (FormHelper.bufferIndexes[this.data.type] || 0) + 1;
@@ -54,12 +26,7 @@ var TemplateUpdater = (function () {
         return this.template;
     }
 
-    function parseTemplate() {
-        // Reset the template inputs to nothing
-        this.template.find("input").val('');
-
-        // Continue on parsing
-        this.template = setInputs.call(this);
+    function updateDefaults() {
         this.template.find("strong").text(this.data.name);
         this.template.attr("class", this.data.type + ' technology');
         this.template.find("input[type=radio]").attr("name", function () {
@@ -68,7 +35,21 @@ var TemplateUpdater = (function () {
         this.template.find("input[type=radio][value=" + this.data.positionRelativeToBuffer + "]")
             .prop('checked', true);
 
+        return this.template;
+    }
+
+    function parseTemplate() {
+        // Reset the template inputs to nothing
+        this.template.find("input").val('');
+
+        // Continue on parsing
+        this.template = setInputs.call(this);
+        this.template = updateDefaults.call(this);
+    }
+
+    function initializeTemplate() {
         this.template = new CompositeTemplateUpdater(this).update();
+        this.template = new BatteryTemplateUpdater(this).update();
 
         new ProfileSelectBox(this.template).add();
     }
@@ -79,8 +60,8 @@ var TemplateUpdater = (function () {
     function setEtmAttributes(etmData) {
         var index, key;
 
-        for (index in etmKeys) {
-            key = etmKeys[index];
+        for (index in TemplateSettings.etmKeys) {
+            key = TemplateSettings.etmKeys[index];
 
             this.data[key] = etmData[key.underscorize()];
         }
@@ -90,7 +71,7 @@ var TemplateUpdater = (function () {
     }
 
     function shouldFetch() {
-        return ignoredTechs.indexOf(this.data.type) === -1;
+        return TemplateSettings.ignoredTechs.indexOf(this.data.type) === -1;
     }
 
     function fetchEtmAttributes() {
@@ -112,15 +93,18 @@ var TemplateUpdater = (function () {
     }
 
     function buildCompSelector(comp) {
+        var id;
+
         if (comp.length > 0) {
-            var compClass = '.' + comp.attr("class").replace(/\s/g, '.');
-
-            return compClass +
-                "[data-composite-value='" + comp.data('compositeValue') + "']";
+            return ('.' + comp.attr("class").replace(/\s/g, '.') +
+                "[data-composite-value='" + comp.data('compositeValue') + "']");
         } else {
-            var id = $(this.technologySelectBox).parents(".panel").find(".panel-collapse").attr("id");
+            id = $(this.technologySelectBox)
+                    .parents(".panel")
+                    .find(".panel-collapse")
+                    .attr("id");
 
-            return '#' + id + ' .technologies .technology:first-child';
+            return ('#' + id + ' .technologies .technology:first-child');
         }
     }
 
@@ -180,9 +164,10 @@ var TemplateUpdater = (function () {
             fetchEtmAttributes.call(this);
         },
 
-        increaseCompositeValue: function () {
+        addToRow: function () {
             setInitialDataFromSelectBox.call(this);
             parseTemplate.call(this);
+            initializeTemplate.call(this);
         }
     };
 

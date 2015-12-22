@@ -422,8 +422,17 @@ table.table.scenarios{
         float: left;
       }
 
-      span:not(.glyphicon){
+      span:not(.glyphicon):not(.tick){
         width: 230px;
+      }
+
+      span.tick {
+        float: none;
+        display: inline-block;
+      }
+
+      &.battery-slider .slider{
+        line-height: 33px;
       }
 
       input[type=text]{

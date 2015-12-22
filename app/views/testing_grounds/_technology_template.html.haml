@@ -28,6 +28,14 @@
 
       .clearfix
 
+    .editable.battery-slider{class: ('hidden' unless technology.is_battery?) }
+      %span Congestion reserve
+      %span.tick 0%
+      %input.slider{data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => technology.congestion_reserve_percentage, 'type' => 'congestion_reserve_percentage'}}
+      %span.tick 100%
+      = tooltip_tag(t(:'testing_grounds.form.congestion_reserve_percentage.tooltip'))
+      .clearfix
+
     .editable.text{class: 'demand'}
       %span Demand [kWh]
       %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: {type: 'demand'} }

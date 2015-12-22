@@ -1,4 +1,7 @@
+/*globals LocalSettings*/
 $(document).on("page:change", function () {
+    'use strict';
+
     var identifier    = $(".hidden .testing_ground_id").text(),
         localSettings = new LocalSettings(identifier),
         rememberedTab = (localSettings.get('remember_tab') || "#technologies");

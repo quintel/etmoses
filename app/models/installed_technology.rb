@@ -26,12 +26,13 @@ class InstalledTechnology
   attribute :om_costs_for_ccs_per_full_load_hour, Float
   attribute :associates,                          Array[InstalledTechnology]
   attribute :includes,                            Array[String]
+  attribute :congestion_reserve_percentage,       Float
 
   EDITABLES = %i(name buffer type profile carrier_capacity volume demand units
     initial_investment technical_lifetime full_load_hours om_costs_per_year
     om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
     performance_coefficient concurrency composite composite_value
-    position_relative_to_buffer includes composite_index
+    position_relative_to_buffer includes composite_index congestion_reserve_percentage
   )
 
   HIDDEN = %i(initial_investment technical_lifetime full_load_hours om_costs_per_year
@@ -259,6 +260,10 @@ class InstalledTechnology
     else
       profile.present? && load_profile.present?
     end
+  end
+
+  def is_battery?
+    type == 'neighbourhood_battery'
   end
 
   private

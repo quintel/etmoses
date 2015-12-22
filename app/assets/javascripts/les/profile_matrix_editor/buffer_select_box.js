@@ -28,6 +28,13 @@ var BufferSelectBox = (function () {
         }
     }
 
+    function reattachBufferingTechnology(e) {
+        var buffer = $(".technology[data-composite-value='" + $(e.target).val() + "']"),
+            tech = $(e.target).parents(".technology");
+
+        buffer.after(tech);
+    }
+
     /*
      * If the technology template concerns a buffer.
      * It should clone the appropriate composite select box.
@@ -44,13 +51,6 @@ var BufferSelectBox = (function () {
 
             target.replaceWith(template);
         }
-    }
-
-    function reattachBufferingTechnology(e) {
-        var buffer = $(".technology[data-composite-value='" + $(e.target).val() + "']"),
-            tech = $(e.target).parents(".technology");
-
-        buffer.after(tech);
     }
 
     function addChangeListenerToBufferSelectBox() {

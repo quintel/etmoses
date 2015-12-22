@@ -1,4 +1,4 @@
-/*global ETHelper,TemplateUpdater,Technology*/
+/*global AddedTechnologiesValidator,ETHelper,TemplateUpdater,Technology*/
 var TechnologiesForm = (function () {
     'use strict';
 
@@ -27,7 +27,7 @@ var TechnologiesForm = (function () {
         var addition = (!!add),
             amount   = (addition ? 1 : -1),
             countDom = $(this).parents(".endpoint").find("h4 .count"),
-            count    = parseInt(countDom.text().replace(/[\(\)]/g, ''));
+            count    = parseInt(countDom.text().replace(/[\(\)]/g, ''), 10);
 
         countDom.text("(" + (count += amount) + ")");
     }
@@ -49,11 +49,15 @@ var TechnologiesForm = (function () {
     }
 
     function addOnChangeListener() {
+        var eventName;
+
         parseHarmonicaToJSON();
 
-        $(this).find("input, select")
-            .off('change.json_update')
-            .on('change.json_update', updateJSON);
+        $(this).find("input, select").each(function () {
+            eventName = $(this).hasClass("slider") ? 'slideStop' : 'change.json_update';
+
+            $(this).off(eventName).on(eventName, updateJSON);
+        });
     }
 
     function addNewTechnologyRow(e) {
@@ -62,7 +66,7 @@ var TechnologiesForm = (function () {
         var newTemplate = template.clone(true, true),
             selectTechnology = $(this).parents(".add-technology").find("select");
 
-        new TemplateUpdater(newTemplate, selectTechnology).increaseCompositeValue();
+        new TemplateUpdater(newTemplate, selectTechnology).addToRow();
         new Technology(newTemplate).add(this);
 
         AddedTechnologiesValidator.validate();

@@ -72,6 +72,11 @@ en:
           'Buffering' technologies fill the buffer until full. 'Boosting' technologies
           satisfy demand if the buffer is empty or has insufficient capacity.
 
+      congestion_reserve_percentage:
+        tooltip: >
+          This percentage quantifies which part of the battery is reserved for
+          congestion management.
+
     strategies:
       no_storage: 'No storage'
       prioritize_local_solar_production: 'Storage in EV prioritising local PV production'

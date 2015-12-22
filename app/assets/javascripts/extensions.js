@@ -47,6 +47,10 @@ $.fn.extend({
         return $(this).find("option[value='" + (value || $(this).val()) + "']");
     },
 
+    /* $(..).set(option, value);
+     *
+     * Sets the data-attriute aswell as the attribute in the dom.
+     */
     set: function (option, value) {
         'use strict';
 
