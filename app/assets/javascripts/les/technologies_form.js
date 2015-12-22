@@ -137,7 +137,8 @@ var TechnologiesForm = (function () {
     TechnologiesForm.prototype = {
         append: function () {
             $(".technologies .technology:not(.hidden)").each(function () {
-                new Technology(this).update();
+                new ProfileSelectBox(this).add(updateJSON);
+                new BufferSelectBox(this).add();
 
                 addOnChangeListener.call(this);
             });

@@ -1,3 +1,8 @@
+.alert.alert-warning.hidden{role: 'alert'}
+  %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
+  %span.sr-only Warning:
+  %span.error
+
 .header
   %h1
     %span.name= @testing_ground.name
@@ -87,7 +92,7 @@
                       %th Units
                   %tbody
                     - techs.each do |tech|
-                      %tr{ "data-tech" => tech.name }
+                      %tr{ class: ("danger" unless tech.valid?), "data-tech" => tech.name}
                         %td
                           .name= tech.name
                           %i.profile= tech.profile_key

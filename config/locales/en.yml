@@ -54,6 +54,7 @@ en:
       profile_not_found: >
         You are using a non-existent profile called '%{profile}',
         please check your technologies.
+      invalid_technologies: "The profiles used by: %{invalid_technologies} no longer exist. Please assign a new profile"
 
     form:
       public:
@@ -68,7 +69,7 @@ en:
 
       position_relative_to_buffer:
         tooltip: >
-          'Buffering' technologies fill the buffer until full. 'Boosting' technologies 
+          'Buffering' technologies fill the buffer until full. 'Boosting' technologies
           satisfy demand if the buffer is empty or has insufficient capacity.
 
     strategies:

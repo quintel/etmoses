@@ -125,6 +125,10 @@ class TestingGround < ActiveRecord::Base
     self.technology_profile = TechnologyList.from_csv(csv)
   end
 
+  def invalid_technologies
+    technology_profile.list.values.flatten.reject(&:valid?)
+  end
+
   private
 
   # Asserts that the technologies used in the graph have all been defined in

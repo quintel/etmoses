@@ -51,8 +51,6 @@ RSpec.describe TestingGround do
           "composite_value" => "buffer_space_heating_1",
           "behavior"        => nil,
           "profile"         => heat_pump_load_profile,
-          # "capacity" => null,
-          # "demand" => 70080.0,
           "volume"          => 0.5,
           "units"           => 1,
           "concurrency"     => "max"

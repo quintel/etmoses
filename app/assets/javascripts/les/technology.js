@@ -10,11 +10,6 @@ var Technology = (function () {
             new BufferSelectBox(this.technologyDom).add();
 
             $(target).after(this.technologyDom);
-        },
-
-        update: function () {
-            new ProfileSelectBox(this.technologyDom).add();
-            new BufferSelectBox(this.technologyDom).add();
         }
     };
 

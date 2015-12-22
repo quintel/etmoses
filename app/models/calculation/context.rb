@@ -57,7 +57,7 @@ module Calculation
         end
 
         techs.map do |tech|
-          tech.profile.present? ? tech.profile_curve.first.last.length : 1
+          tech.valid_profile? ? tech.profile_curve.first.last.length : 1
         end.max || 1
       end
     end

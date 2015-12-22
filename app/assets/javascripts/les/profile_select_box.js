@@ -68,20 +68,23 @@ var ProfileSelectBox = (function () {
     }
 
     function addChangeListenerToProfileBox() {
-        var currentSelect = $(this.target).find(".editable.profile select");
+        var self = this;
 
-        $(".editable.profile select").add(currentSelect).off().on("change", function () {
+        $(this.target).find(".editable.profile select").off().on("change", function () {
             var technology = $(this).parents(".technology");
 
             technology.set('profile', $(this).val());
             technology.set('profile-key', $(this).selectedOption().text());
 
             updateTextCells.call(technology, this);
+            self.callback.call(this);
         });
     }
 
     ProfileSelectBox.prototype = {
-        add: function () {
+        add: function (callback) {
+            this.callback = (callback || function () { return; });
+
             cloneAndAppendProfileSelect.call(this);
             addChangeListenerToProfileBox.call(this);
         },

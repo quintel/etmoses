@@ -249,6 +249,18 @@ class InstalledTechnology
     "position_relative_to_buffer_#{@id}_#{type}"
   end
 
+  def valid?
+    buffer.present? || valid_profile?
+  end
+
+  def valid_profile?
+    if profile.is_a?(Hash)
+      profile.present?
+    else
+      profile.present? && load_profile.present?
+    end
+  end
+
   private
 
   def has_heat_pump_profiles?
@@ -260,7 +272,9 @@ class InstalledTechnology
   #
   # Returns a Hash[{ <curve_type> => Network::Curve }].
   def profile_curves(scaling = nil)
-    Hash[profile_components.each_curve(scaling).map do |curve_type, curve, ratio|
+    return {} unless valid_profile?
+
+    Hash[load_profile.curves.each_curve(scaling).map do |curve_type, curve, ratio|
       [curve_type, curve * component_factor(curve) * ratio]
     end]
   end
@@ -276,7 +290,7 @@ class InstalledTechnology
     (factor / performance_coefficient) * units
   end
 
-  def profile_components
-    @profile_components ||= LoadProfile.find_by_id(profile).curves
+  def load_profile
+    @load_profile ||= LoadProfile.find_by_id(profile)
   end
 end # end

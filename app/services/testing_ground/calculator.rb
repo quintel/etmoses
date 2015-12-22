@@ -57,7 +57,19 @@ class TestingGround::Calculator
     SelectedStrategy.strategy_type(@strategies)
   end
 
+  def invalid_message
+    invalid_technologies = @testing_ground.invalid_technologies.map do |tech|
+      "'#{tech.name}' on '#{tech.node}'"
+    end
+
+    if invalid_technologies.any?
+      I18n.t("testing_grounds.error.invalid_technologies",
+          invalid_technologies: invalid_technologies.join(", "))
+    end
+  end
+
   def base
-    { technologies: @testing_ground.technology_profile.as_json }
+    { technologies: @testing_ground.technology_profile.as_json,
+      error: invalid_message }
   end
 end
