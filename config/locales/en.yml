@@ -68,7 +68,8 @@ en:
 
       position_relative_to_buffer:
         tooltip: >
-          Please change me
+          'Buffering' technologies fill the buffer until full. 'Boosting' technologies 
+          satisfy demand if the buffer is empty or has insufficient capacity.
 
     strategies:
       no_storage: 'No storage'
