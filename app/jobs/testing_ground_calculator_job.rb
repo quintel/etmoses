@@ -1,18 +1,19 @@
 class TestingGroundCalculatorJob
   def initialize(testing_ground, strategies)
     @testing_ground = testing_ground
-    @strategies = strategies || {}
+    @strategies     = strategies || {}
   end
 
   def perform
-    cache.write(@testing_ground.to_calculated_graphs(@strategies))
+    cache.write(network_calculation)
   end
 
   def success(job)
-    store_strategies
+    if job = @testing_ground.testing_ground_delayed_jobs.for(job_type)
+      TestingGround::StrategyUpdater.new(@testing_ground, strategy_params).update
 
-    @testing_ground.testing_ground_delayed_jobs.for(job_type)
-      .update_column(:finished_at, DateTime.now)
+      job.update_column(:finished_at, DateTime.now)
+    end
   end
 
   def error(job, exception)
@@ -25,17 +26,19 @@ class TestingGroundCalculatorJob
 
   private
 
-  def store_strategies
-    if @strategies.any?
-      @testing_ground.selected_strategy.update_attributes(@strategies.permit(@strategies.keys))
-    end
+  def strategy_params
+    ActionController::Parameters.new(strategies: @strategies.symbolize_keys)
   end
 
   def job_type
     SelectedStrategy.strategy_type(@strategies)
   end
 
+  def network_calculation
+    @testing_ground.to_calculated_graphs(@strategies)
+  end
+
   def cache
-    @cache ||= NetworkCache::Cache.new(@testing_ground, @strategies)
+    NetworkCache::Cache.new(@testing_ground, @strategies)
   end
 end

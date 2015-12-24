@@ -1,4 +1,4 @@
-/*globals CSV,LoadChart,LoadChartHelper*/
+/*globals CSV,LoadChart,LoadChartHelper,StrategyHelper*/
 var ChartShower = (function () {
     'use strict';
 
@@ -29,15 +29,20 @@ var ChartShower = (function () {
     }
 
     function downloadLoad() {
-        var loads = this.load.map(function (value, index) {
-                return value + "," + (this.altLoad ? this.altLoad[index] : '');
-            }.bind(this));
+        var loads      = [],
+            chartTypes = ['load', 'load_strategies', 'gas', 'gas_strategies'];
 
-        if (this.altLoad) {
-            loads.unshift('Strategies On,Strategies Off');
-        } else {
-            loads.unshift('Strategies Off,');
-        }
+        chartTypes.forEach(function (chartType) {
+            if (this[chartType]) {
+                [chartType].concat(this[chartType]).forEach(function (value, i) {
+                    if (loads[i]) {
+                        loads[i] += (','  + value);
+                    } else {
+                        loads[i] = value;
+                    }
+                });
+            }
+        }.bind(this));
 
         CSV.download(loads.join("\n"), (this.name + ' Curve.csv'), "data:text/csv;charset=utf-8");
     }
@@ -79,14 +84,14 @@ var ChartShower = (function () {
 
         $(".load-graph").prepend(loadPlatform);
 
-        if (this.treeChart.strategyLoads && this.treeChart.strategyShown) {
-            load = [{ values: d.altLoad, name: 'Load (with strategies)', area: true, type: 'load_strategies' },
-                    { values: d.load,    name: 'Load', area: false, type: 'load' },
-                    { values: d.altGasLoad, name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
-                    { values: d.gasLoad, name: 'Gas', area: false, type: 'gas' }];
+        if (StrategyHelper.anyStrategies()) {
+            load = [{ values: d.load_strategies, name: 'Load (with strategies)', area: true, type: 'load_strategies' },
+                    { values: d.load,            name: 'Load', area: false, type: 'load' },
+                    { values: d.gas_strategies,  name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
+                    { values: d.gas,             name: 'Gas', area: false, type: 'gas' }];
         } else {
             load = [{ values: d.load, name: 'Load', area: true, type: 'load' },
-                    { values: d.gasLoad, name: 'Gas',  area: true, type: 'gas' }];
+                    { values: d.gas,  name: 'Gas',  area: true, type: 'gas' }];
         }
 
         new LoadChart(load, d.capacity, 'default').render(loadChartClass);

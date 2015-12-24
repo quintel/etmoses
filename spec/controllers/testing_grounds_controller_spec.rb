@@ -157,6 +157,45 @@ RSpec.describe TestingGroundsController do
     end
   end
 
+  describe "#update_strategies.json" do
+    let(:strategies) {
+      {
+        "solar_storage"=>true,
+        "battery_storage"=>false,
+        "solar_power_to_heat"=>false,
+        "solar_power_to_gas"=>false,
+        "buffering_electric_car"=>false,
+        "buffering_space_heating"=>false,
+        "postponing_base_load"=>false,
+        "saving_base_load"=>false,
+        "capping_solar_pv"=>false,
+        "capping_fraction"=>1.0
+      }
+    }
+
+    describe "not signed in" do
+      it "does not update strategies of les" do
+        testing_ground = FactoryGirl.create(:testing_ground, user: user, technology_profile: {})
+
+        post :update_strategies, strategies: strategies, format: :json, id: testing_ground.id
+
+        expect(SelectedStrategy.last.solar_storage).to eq(false)
+      end
+    end
+
+    describe "signed in" do
+      it "updates strategies of les" do
+        sign_in(user)
+
+        testing_ground = FactoryGirl.create(:testing_ground, user: user, technology_profile: {})
+
+        post :update_strategies, strategies: strategies, format: :json, id: testing_ground.id
+
+        expect(SelectedStrategy.last.solar_storage).to eq(true)
+      end
+    end
+  end
+
   describe "#data.json" do
     describe "while signed in" do
       let!(:sign_in_user){ sign_in(user) }
@@ -164,7 +203,7 @@ RSpec.describe TestingGroundsController do
       it "shows the data of a testing ground" do
         testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 
-        get :data, format: :json, id: testing_ground.id
+        get :data, calculation: {}, format: :json, id: testing_ground.id
 
         expect(response.status).to eq(200)
       end
@@ -182,7 +221,7 @@ RSpec.describe TestingGroundsController do
       it "shows the data of a testing ground" do
         testing_ground = FactoryGirl.create(:testing_ground, technology_profile: {})
 
-        get :data, format: :json, id: testing_ground.id
+        get :data, calculation: {}, format: :json, id: testing_ground.id
 
         expect(response.status).to eq(200)
       end

@@ -1,17 +1,16 @@
 class TestingGround::Calculator
-  def initialize(testing_ground, strategies)
+  def initialize(testing_ground, options = {})
     @testing_ground = testing_ground
-    @strategies     = strategies || {}
+    @strategies     = options[:strategies] || {}
+    @nodes          = options[:nodes] || []
+    @resolution     = (options[:resolution] || 'low').to_sym
   end
 
   def calculate
     if ! Settings.cache.networks || cache.present?
       existing_job.destroy if existing_job
 
-      base.merge(networks: {
-        electricity: GraphToTree.convert(network(:electricity)),
-        gas:         GraphToTree.convert(network(:gas))
-      })
+      base.merge(networks: tree)
     else
       calculate_load_in_background
 
@@ -24,6 +23,15 @@ class TestingGround::Calculator
   end
 
   private
+
+  def tree
+    TestingGround::TreeSampler.new(networks).sample(@nodes, @resolution)
+  end
+
+  def networks
+    { electricity: network(:electricity),
+      gas:         network(:gas) }
+  end
 
   def calculate_load_in_background
     return if existing_job

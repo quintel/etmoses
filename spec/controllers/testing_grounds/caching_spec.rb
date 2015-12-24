@@ -10,7 +10,7 @@ RSpec.describe TestingGroundsController do
 
   let!(:sign_in_user) { sign_in(:user, user) }
 
-  let(:topology_graph){ FakeLoadManagement.caching_graph }
+  let(:topology_graph){ FakeLoadManagement.caching_graph(1, [0.0] * 8760) }
 
   let(:topology){ FactoryGirl.create(:topology, graph: topology_graph) }
 
@@ -55,7 +55,7 @@ RSpec.describe TestingGroundsController do
 
       it 'caches the data request for strategies separately' do
         get :data, id: testing_ground,
-                   strategies: FakeLoadManagement.strategies(opts)
+                   calculation: { strategies: FakeLoadManagement.strategies(opts) }
 
         loads = network.node('CONGESTED_END_POINT_0').get(:load)
         expect(loads.length).to eq(8760)

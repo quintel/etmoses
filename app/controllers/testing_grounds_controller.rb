@@ -1,5 +1,6 @@
 class TestingGroundsController < ResourceController
-  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as)
+  RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as
+                        update_strategies)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -75,7 +76,8 @@ class TestingGroundsController < ResourceController
   # POST /testing_grounds/:id/data
   def data
     begin
-      render json: TestingGround::Calculator.new(@testing_ground, params[:strategies]).calculate
+      render json: TestingGround::Calculator.new(
+        @testing_ground, params[:calculation] || {}).calculate
     rescue StandardError => ex
       notify_airbrake(ex) if defined?(Airbrake)
 
@@ -95,6 +97,13 @@ class TestingGroundsController < ResourceController
       end
 
       render json: result, status: 500
+    end
+  end
+
+  # POST /testing_grounds/:id/update_strategies
+  def update_strategies
+    if TestingGround::StrategyUpdater.new(@testing_ground, params).update
+      render json: { status: 'ok' }
     end
   end
 

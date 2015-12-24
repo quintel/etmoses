@@ -28,6 +28,7 @@ class TestingGroundPolicy < ApplicationPolicy
   alias_method :perform_import?, :import?
   alias_method :perform_export?, :export?
   alias_method :save_as?, :edit?
+  alias_method :update_strategies?, :edit?
   alias_method :fetch_etm_values?, :create?
   alias_method :price_curve?, :show?
   alias_method :load_curves?, :show?
