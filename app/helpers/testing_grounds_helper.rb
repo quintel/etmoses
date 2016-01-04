@@ -115,6 +115,7 @@ module TestingGroundsHelper
   def technology_class(technology)
     technology_class = technology.type
     technology_class += " buffer-child" if technology.buffer.present?
+    technology_class += " alert-danger" unless technology.valid?
     technology_class
   end
 end
