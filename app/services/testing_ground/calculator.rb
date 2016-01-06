@@ -25,7 +25,7 @@ class TestingGround::Calculator
   private
 
   def tree
-    TestingGround::TreeSampler.new(networks).sample(@nodes, @resolution)
+    TestingGround::TreeSampler.new(networks).sample(@resolution)
   end
 
   def networks
@@ -51,7 +51,7 @@ class TestingGround::Calculator
   def fetch_networks
     @networks ||=
       if Settings.cache.networks
-        cache.fetch
+        cache.fetch(@nodes)
       else
         @testing_ground.to_calculated_graphs(@strategies)
       end

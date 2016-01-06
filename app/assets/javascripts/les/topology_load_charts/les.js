@@ -3,16 +3,16 @@ var Les = (function () {
     'use strict';
 
     Les.prototype = {
-        nodeData: function (nodes, resolution) {
+        nodeData: function (resolution) {
             this.data = { calculation: {} };
             this.data.type = ($.isEmptyObject(this.strategies) ? 'basic' :  'features');
 
-            if (nodes) {
-                //this.data.calculation.nodes = nodes;
-            }
-
             if (resolution) {
                 this.data.calculation.resolution = resolution;
+            }
+
+            if (resolution === 'high') {
+                this.data.calculation.nodes = LoadChartHelper.nodes;
             }
 
             if (this.strategies) {

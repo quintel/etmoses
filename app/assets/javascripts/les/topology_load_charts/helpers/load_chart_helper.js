@@ -6,6 +6,7 @@ var LoadChartHelper = (function () {
         currentWeek: undefined,
         forceReload: false,
         charts: [],
+        nodes: [],
 
         toggleCapacity: function (currentChartId) {
             var currentChart = this.charts[currentChartId - 1],

@@ -4,7 +4,7 @@ class TestingGround
       @networks = networks
     end
 
-    def sample(nodes = [], resolution)
+    def sample(resolution)
       Hash[@networks.each_pair.map do |carrier, graph|
         graph.nodes.each do |node|
           node.set(:load, downsample(node.load, resolution))

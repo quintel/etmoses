@@ -162,10 +162,10 @@ var LoadChart = (function () {
             renderChart.call(this, value);
         } else if (value === 0) {
             window.currentTree.lesses[1].strategies.toggleLoading();
-            window.currentTree.set([], 'low').update();
+            window.currentTree.set('low').update();
         } else {
             window.currentTree.lesses[1].strategies.toggleLoading();
-            window.currentTree.set([], 'high').update();
+            window.currentTree.set('high').update();
         }
     }
 

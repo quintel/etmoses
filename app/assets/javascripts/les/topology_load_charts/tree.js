@@ -52,8 +52,7 @@ var Tree = (function () {
             this.set().reload();
         },
 
-        set: function (nodes, resolution) {
-            this.nodes      = nodes || [];
+        set: function (resolution) {
             this.resolution = resolution || 'low';
 
             return this;
@@ -61,7 +60,7 @@ var Tree = (function () {
 
         reload: function () {
             new TreeFetcher(this.lesses)
-                .fetch(this.nodes, this.resolution)
+                .fetch(this.resolution)
                 .progress(updateProgress)
                 .done(drawTree.bind(this))
                 .fail(displayError);
@@ -73,7 +72,7 @@ var Tree = (function () {
 
         update: function (lesses) {
             new TreeFetcher(lesses || this.lesses)
-                .fetch(this.nodes, this.resolution)
+                .fetch(this.resolution)
                 .done(updateTree.bind(this))
                 .fail(displayError);
         }

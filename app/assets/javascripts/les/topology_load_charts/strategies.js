@@ -53,7 +53,7 @@ var Strategies = (function () {
     }
 
     function pollTree() {
-        window.currentTree.set([], window.currentTree.resolution).updateStrategies();
+        window.currentTree.set(window.currentTree.resolution).updateStrategies();
     }
 
     function renderSummary() {

@@ -69,7 +69,7 @@ var TreeFetcher = (function () {
         var nodeData, i;
 
         for (i in this.lesses) {
-            nodeData = this.lesses[i].nodeData(this.nodes, this.options);
+            nodeData = this.lesses[i].nodeData(this.resolution);
 
             if (this.lesses[i].anyStrategies()) {
                 this.requests.push(Ajax.json(this.url, nodeData, success, fail));
@@ -90,11 +90,10 @@ var TreeFetcher = (function () {
      * - When all is done return finalData.
      */
     TreeFetcher.prototype = {
-        fetch: function (nodes, options) {
-            polls         = [];
-            this.requests = [];
-            this.nodes    = nodes;
-            this.options  = options;
+        fetch: function (resolution) {
+            polls           = [];
+            this.requests   = [];
+            this.resolution = resolution;
 
             deferred = $.Deferred();
 

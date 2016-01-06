@@ -10,8 +10,8 @@ module NetworkCache
       Writer.from(@testing_ground, @opts).write(networks)
     end
 
-    def fetch
-      Fetcher.from(@testing_ground, @opts).fetch
+    def fetch(nodes = [])
+      Fetcher.from(@testing_ground, @opts).fetch(nodes)
     end
 
     def present?

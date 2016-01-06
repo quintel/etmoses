@@ -97,6 +97,18 @@ var ChartShower = (function () {
         new LoadChart(load, d.capacity, 'default').render(loadChartClass);
     }
 
+    function renderLoadChart(d) {
+        if ((d.load && d.load.length > 0) ||
+            (d.load_strategies && d.load_strategies.length > 0) ||
+            (d.gas && d.gas.length > 0) ||
+            (d.gas_strategies && d.gas_strategies.length > 0)) {
+
+            addNewLoadChartPlatform.call(this, this.nodeData);
+        } else {
+            window.currentTree.update();
+        }
+    }
+
     function showOrLoadPlatform() {
         if (this.existingLoadPlatform.length > 0) {
             this.existingLoadPlatform.show();
@@ -104,8 +116,9 @@ var ChartShower = (function () {
             LoadChartHelper.updateBrush(this.id);
             LoadChartHelper.toggleCapacity(this.id);
         } else {
-            addNewLoadChartPlatform.call(this, this.nodeData);
+            renderLoadChart.call(this, this.nodeData);
             LoadChartHelper.updateBrush(this.id);
+            LoadChartHelper.nodes.push(this.nodeData.name);
         }
 
         toggleDomParts.call(this.nodeData);
