@@ -1,4 +1,4 @@
-/*globals LoadChartHelper,nv,localSettings*/
+/*globals LoadChartHelper,LoadChartsSettings,nv,localSettings*/
 var LoadChart = (function () {
     'use strict';
 
@@ -87,9 +87,9 @@ var LoadChart = (function () {
         return {
             key: "Capacity",
             type: "capacity",
-            color: LoadChartsSettings['capacity'].color,
+            color: LoadChartsSettings.capacity.color,
             values: total,
-            disabled: !LoadChartsSettings['capacity'].enabled
+            disabled: !LoadChartsSettings.capacity.enabled
         };
     }
 
@@ -102,10 +102,12 @@ var LoadChart = (function () {
             startAt   = zeroWeek * chunkSize;
             endAt     = startAt + chunkSize;
 
-            return window.downsampleCurve(loads.slice(startAt, endAt), chunkSize, startAt);
-        } else {
-            return window.downsampleCurve(loads, 365);
+            loads     = loads.slice(startAt, endAt);
         }
+
+        return loads.map(function (y, x) {
+            return { x: x, y: y };
+        });
     }
 
     function renderChart() {
@@ -117,7 +119,7 @@ var LoadChart = (function () {
             var color = (
                 LoadChartsSettings[datum.type || this.curve_type] ||
                 LoadChartsSettings['default']
-            ).color
+            ).color;
 
             if (datum.values) {
                 results.push({
@@ -148,11 +150,23 @@ var LoadChart = (function () {
 
     function selectDatePortion(dateEl) {
         var value = parseInt(dateEl.val(), 10);
+
         LoadChartHelper.currentWeek = value;
         LoadChartHelper.forceReload = true;
         LoadChartHelper.clearBrush();
+
         $("select[name=date-select]").val(value);
-        renderChart.call(this, value);
+
+        // Load large chart
+        if (window.currentTree.resolution === 'high' && value !== 0) {
+            renderChart.call(this, value);
+        } else if (value === 0) {
+            window.currentTree.lesses[1].strategies.toggleLoading();
+            window.currentTree.set('low').update();
+        } else {
+            window.currentTree.lesses[1].strategies.toggleLoading();
+            window.currentTree.set('high').update();
+        }
     }
 
     function drawDateSelect() {
@@ -163,7 +177,7 @@ var LoadChart = (function () {
 
         dateEl.append($('<option value="0">Whole year</option>'));
 
-        for (week = i = 0; i < 52; week = ++i) {
+        for (week = 0; week < 52; week++) {
             startWeek = new Date(epoch.getDate() + (msInWeek * week));
             endWeek = new Date(startWeek.getDate() + (msInWeek * week) + msInWeek - (msInWeek / 7));
             if (week === 51) {
@@ -207,13 +221,14 @@ var LoadChart = (function () {
 
         setGlobalBrushFocus: function () {
             LoadChartHelper.globalBrushExtent = d3.event.target.extent();
+
             localSettings.set('global_brush_extent', d3.event.target.extent());
         }
     };
 
     function LoadChart(data, capacity, curve_type) {
-        this.data = data;
-        this.capacity = capacity;
+        this.data       = data;
+        this.capacity   = capacity;
         this.curve_type = curve_type;
     }
 

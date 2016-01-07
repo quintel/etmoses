@@ -164,31 +164,11 @@ showTopology = (jsonURL, container) ->
 
     update(node)
 
-# Public: Given an array of values, downsamples the array to the given
-# +outLength+. The array is split into "chunks", and the maximum value of each
-# chunk is selected.
-#
-# For example:
-#
-#   downsampleCurve([2, 7, 4, 5, 2, 9], 2) # => [7, 9]
-downsampleCurve = (curve, outLength, startAt = 0) ->
-  curveLength = curve.length
-  chunkLength = Math.floor(curveLength / outLength) or 1
-
-  for startIndex in [0...curveLength] by chunkLength
-    [min, max] = d3.extent(curve[startIndex...(startIndex + chunkLength)])
-
-    {
-      x: startIndex + startAt
-      y: (if Math.abs(min) > Math.abs(max) then min else max)
-    }
-
-window.downsampleCurve = downsampleCurve
-
 $(document).on "page:change", ->
-  $('.testing-ground-view').each (idx, viewEl) ->
-    if $('.loading', viewEl).length
-      new TopologyTree($(viewEl).data('url'), viewEl).showTree()
+  if $('.testing-ground-view').length > 0
+    window.localSettings = new LocalSettings($(".testing_ground_id").text());
+    window.currentTree   = new Tree($('.testing-ground-view'))
+    window.currentTree.create()
 
   $("#testing_ground_technologies_csv").filestyle(buttonBefore: true)
 

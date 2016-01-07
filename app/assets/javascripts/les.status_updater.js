@@ -6,7 +6,9 @@ var StatusUpdater = (function () {
             var box = $(".status"),
                 status = $("<span/>").addClass("g" + this.gravity).text(this.message);
 
-            box.append(status).scrollTop($('.status')[0].scrollHeight);
+            if ($('.status').length > 0) {
+                box.append(status).scrollTop($('.status')[0].scrollHeight);
+            }
         }
     };
 

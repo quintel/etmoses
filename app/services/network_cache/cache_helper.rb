@@ -27,7 +27,7 @@ module NetworkCache
     end
 
     def strategy_prefix
-      SelectedStrategy.strategy_type(@opts) ? 'features' : 'basic'
+      SelectedStrategy.strategy_type(@opts)
     end
   end
 end

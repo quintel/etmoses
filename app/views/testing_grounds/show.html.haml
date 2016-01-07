@@ -50,7 +50,7 @@
     - else
       = default_strategies.to_json
 
-  .testing-ground-view{ data: { url: data_testing_ground_url(@testing_ground, format: :json) } }
+  .testing-ground-view{ data: { id: @testing_ground.id, url: data_testing_ground_url(@testing_ground, format: :json), strategies_url: update_strategies_testing_ground_url(@testing_ground, format: :json) } }
     %span.loading
       %h5
         %span.main Calculating your local energy solution&hellip;

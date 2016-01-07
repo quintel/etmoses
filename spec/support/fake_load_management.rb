@@ -8,12 +8,12 @@ module FakeLoadManagement
     }
   end
 
-  def self.caching_graph(size = 1)
+  def self.caching_graph(size = 1, node_load = [0.0] * 8760)
     { "name"=>"HV",
       "children"=>(size.times.map { |i|
         { "name"=>"CONGESTED_END_POINT_#{i}",
           "capacity"=>100.0,
-          "load" => [0.0] * 8760 }
+          "load" => node_load }
       })
     }
   end
