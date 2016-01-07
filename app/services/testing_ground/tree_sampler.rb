@@ -1,5 +1,7 @@
 class TestingGround
   class TreeSampler
+    RESOLUTION_LENGTH_LOW = 365
+
     def initialize(networks)
       @networks = networks
     end
@@ -17,12 +19,10 @@ class TestingGround
     private
 
     def downsample(node_load, resolution)
-      if resolution == :low
-        node_load.each_slice(96).map do |loads|
-          absolutes = loads.map(&:abs)
+      size = (node_load.length / RESOLUTION_LENGTH_LOW).floor
 
-          loads[absolutes.index(absolutes.max)]
-        end
+      if resolution == :low && size > 0
+        node_load.each_slice(size).map{ |loads| loads.max_by(&:abs) }
       else
         node_load
       end
