@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
   has_many :profiles
   has_many :market_models
 
+  validates_uniqueness_of :email
+
   def self.orphan
     User.find_by_email("orphan@quintel.com")
   end
