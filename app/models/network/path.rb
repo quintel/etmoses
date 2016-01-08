@@ -6,6 +6,8 @@ module Network
 
     def_delegator :@path, :each
 
+    attr_reader :head, :leaf
+
     # Public: Given a leaf node, returns a Path which represents the route
     # back to the root node.
     #
@@ -19,6 +21,7 @@ module Network
     def initialize(nodes)
       @path = nodes
       @leaf = nodes.first
+      @head = nodes.last
     end
 
     # Public: The path as an array, with the leaf node first, with each node
@@ -64,6 +67,10 @@ module Network
     # Returns true or false.
     def congested_at?(frame, correction = 0)
       @path.any? { |node| node.congested_at?(frame, correction) }
+    end
+
+    def surplus_at(frame)
+      @head.production_at(frame) - @head.consumption_at(frame)
     end
 
     # Public: Sends a given amount of energy down the path, increasing the

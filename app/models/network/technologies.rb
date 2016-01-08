@@ -14,17 +14,18 @@ module Network
     def self.behaviors
       @behaviors ||=
         Hash.new { Generic }.tap do |behaviors|
-          behaviors['storage']          = Battery
-          behaviors['electric_vehicle'] = ElectricVehicle
-          behaviors['optional_buffer']  = OptionalBuffer
-          behaviors['siphon']           = Siphon
-          behaviors['buffer']           = Buffer
-          behaviors['deferrable']       = DeferrableConsumer
-          behaviors['conserving']       = ConservingProducer
-          behaviors['optional']         = OptionalConsumer
-          behaviors['hhp_electricity']  = HHP::Electricity
-          behaviors['hhp_gas']          = HHP::Gas
-          behaviors['null']             = Null
+          behaviors['storage']            = Battery
+          behaviors['congestion_battery'] = CongestionBattery
+          behaviors['electric_vehicle']   = ElectricVehicle
+          behaviors['optional_buffer']    = OptionalBuffer
+          behaviors['siphon']             = Siphon
+          behaviors['buffer']             = Buffer
+          behaviors['deferrable']         = DeferrableConsumer
+          behaviors['conserving']         = ConservingProducer
+          behaviors['optional']           = OptionalConsumer
+          behaviors['hhp_electricity']    = HHP::Electricity
+          behaviors['hhp_gas']            = HHP::Gas
+          behaviors['null']               = Null
         end.freeze
     end
   end

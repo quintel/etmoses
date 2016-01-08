@@ -106,6 +106,12 @@ module Network
           @installed.units * @profile.frames_per_hour
       end
 
+      # Internal: Tells the calculator what type of Path object to instantiate
+      # in order to calculate the technology correctly.
+      def path_class
+        TechnologyPath
+      end
+
       def consumer?
         if @installed.demand
           @installed.demand >= 0

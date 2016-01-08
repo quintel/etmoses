@@ -1,6 +1,6 @@
 class Technology < ActiveRecord::Base
   BEHAVIORS = %w(
-    generic storage electric_vehicle siphon optional_buffer
+    generic storage electric_vehicle siphon optional_buffer congestion_battery
     buffer deferrable conserving optional base_load base_load_buildings
   ).freeze
 

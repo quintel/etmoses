@@ -7,12 +7,14 @@ module Network
       :production_at, :mandatory_consumption_at,
       :capacity_constrained?, :excess_constrained?
 
+    def_delegators :@path, :head, :leaf
+
     # Public: Given a leaf node with one or more technologies, returns a
     # TechnologyPath for each technology present, and a path back to the source
     # of the graph.
     def self.find(leaf)
       path = Path.find(leaf)
-      leaf.techs.map { |tech| new(tech, path) }
+      leaf.techs.map { |tech| tech.path_class.new(tech, path) }
     end
 
     attr_reader :technology
@@ -43,8 +45,25 @@ module Network
       @path.congested_at?(frame, correction)
     end
 
-    def production_exceedance_at(frame)
-      @path.map { |node| node.production_exceedance_at(frame) }.max
+    def production_exceedance_at(frame, with = 0.0)
+      @path.map { |node| node.production_exceedance_at(frame, with) }.max
+    end
+
+    def consumption_exceedance_at(frame, with = 0.0)
+      @path.map { |node| node.consumption_exceedance_at(frame, with) }.max
+    end
+
+    def production_margin_at(frame, with = 0.0)
+      @path.map { |node| node.production_margin_at(frame, with) }.min
+    end
+
+    def consumption_margin_at(frame, with = 0.0)
+      @path.map { |node| node.consumption_margin_at(frame, with) }.min
+    end
+
+    def surplus_at(frame)
+      head_load = @path.head.load_at(frame)
+      head_load.zero? ? 0.0 : -head_load
     end
 
     # Public: Sends a given amount of energy down the path, increasing the

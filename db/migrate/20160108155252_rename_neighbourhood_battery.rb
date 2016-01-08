@@ -4,6 +4,8 @@ class RenameNeighbourhoodBattery < ActiveRecord::Migration
 
     tech.key              = 'congestion_battery'
     tech.behavior         = 'congestion_battery'
+    tech.default_capacity = 10.0
+    tech.default_volume   = 100.0
 
     tech.save!
   end
@@ -13,6 +15,8 @@ class RenameNeighbourhoodBattery < ActiveRecord::Migration
 
     tech.key              = 'neighbourhood_battery'
     tech.behavior         = nil
+    tech.default_capacity = nil
+    tech.default_volume   = nil
 
     tech.save!
   end

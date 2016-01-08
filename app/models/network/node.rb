@@ -112,13 +112,25 @@ module Network
     # Public: If the node has a capacity restriction, returns by how much the
     # load may be increased before reaching the limit. Returns infinity if no
     # capacity is present.
-    def available_capacity_at(frame)
-      capacity = get(:capacity)
+    #
+    # TODO This would be better as a separate Constraint class.
+    #
+    # Returns a float.
+    def consumption_margin_at(frame, correction = 0)
+      capacity_margin(load_at(frame) + correction)
+    end
 
-      return Float::INFINITY if capacity.nil?
+    # Legacy alias. TODO Remove.
+    alias_method :available_capacity_at, :consumption_margin_at
 
-      available = capacity - load_at(frame)
-      available <= 0 ? 0.0 : available
+    # Public: Determines by how much production may be increased on this node
+    # before reaching the capacity constraint.
+    #
+    # TODO This would be better as a separate Constraint class.
+    #
+    # Returns a float.
+    def production_margin_at(frame, correction = 0)
+      capacity_margin(-load_at(frame) - correction)
     end
 
     # Public: Determines if the consumption or production of the node exceeds
@@ -127,13 +139,32 @@ module Network
     # Returns true or false.
     def congested_at?(frame, correction = 0)
       capacity = get(:capacity)
-
       capacity && load_at(frame).abs + correction > capacity
     end
 
-    def production_exceedance_at(frame)
-      if congested_at?(frame) && (current_load = load_at(frame)) < 0
+    # Public: Returns by how much production on across this node exceeds the
+    # assigned capacity. Returns zero if there is no exceedance.
+    #
+    # Returns a float.
+    def production_exceedance_at(frame, correction = 0)
+      current_load = (load_at(frame) - correction)
+
+      if congested_at?(frame, correction) && current_load < 0
         current_load.abs - (get(:capacity) || 0)
+      else
+        0
+      end
+    end
+
+    # Public: Returns by how much consumption on across this node exceeds the
+    # assigned capacity. Returns zero if there is no exceedance.
+    #
+    # Returns a float.
+    def consumption_exceedance_at(frame, correction = 0)
+      current_load = current_load = load_at(frame) + correction
+
+      if congested_at?(frame, correction) && current_load > 0
+        current_load - (get(:capacity) || 0)
       else
         0
       end
@@ -176,6 +207,21 @@ module Network
     def recursively(method, frame)
       from_children = memoized_out.sum { |node| node.__send__(method, frame) }
       from_children + techs.sum { |tech| tech.__send__(method, frame) }
+    end
+
+    # Determines how much capacity is available given a particular `load` placed
+    # on the node.
+    #
+    # Returns a float.
+    def capacity_margin(load)
+      capacity = get(:capacity)
+
+      if capacity.nil?
+        return load < 0 ? Float::INFINITY : Float::INFINITY
+      end
+
+      available = capacity - load
+      available <= 0 ? 0.0 : available
     end
   end # Node
 end # Network
