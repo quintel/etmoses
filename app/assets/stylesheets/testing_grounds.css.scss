@@ -430,8 +430,15 @@ table.table.scenarios{
         float: none;
         display: inline-block;
 
+        &.min, &.max {
+          color: #666;
+          font-size: 11px;
+        }
+
         &.value {
           font-weight: bold;
+          margin-left: 5px;
+          vertical-align: middle;
         }
       }
 
