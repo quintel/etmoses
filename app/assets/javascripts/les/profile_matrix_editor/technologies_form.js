@@ -143,6 +143,7 @@ var TechnologiesForm = (function () {
             $(".technologies .technology:not(.hidden)").each(function () {
                 new ProfileSelectBox(this).add(updateJSON);
                 new BufferSelectBox(this).add();
+                new BatteryTemplateUpdater({ data: $(this).data(), template: $(this) }).update();
 
                 addOnChangeListener.call(this);
             });

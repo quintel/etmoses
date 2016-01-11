@@ -251,7 +251,7 @@ class InstalledTechnology
   end
 
   def valid?
-    buffer.present? || valid_profile?
+    buffer.present? || valid_profile? || is_battery?
   end
 
   def valid_profile?
