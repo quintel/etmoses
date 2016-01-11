@@ -8,11 +8,17 @@ var BatteryTemplateUpdater = (function () {
             "households_flexibility_p2p_electricity"
         ],
         sliderSettings = {
-            tooltip: 'show',
+            tooltip: 'hide',
             formatter: function (value) {
                 return value + "%";
             }
         };
+
+    function setSlideStopValue() {
+        var sliderValue = $(this).val();
+
+        $(this).parents(".editable").find(".tick.value").text(sliderValue + "%");
+    }
 
     BatteryTemplateUpdater.prototype = {
         update: function () {
@@ -26,7 +32,10 @@ var BatteryTemplateUpdater = (function () {
             batterySlider.toggleClass("hidden", !isNeighbourhoodBattery);
 
             if (isNeighbourhoodBattery) {
-                sliderInput.slider(sliderSettings).slider('setValue', defaultPercentage);
+                sliderInput.slider(sliderSettings)
+                    .slider('setValue', defaultPercentage)
+                    .on('slide', setSlideStopValue);
+
                 this.template.set(sliderInput.data('type'), defaultPercentage);
             }
 

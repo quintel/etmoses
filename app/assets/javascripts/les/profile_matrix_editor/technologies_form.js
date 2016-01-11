@@ -40,6 +40,10 @@ var TechnologiesForm = (function () {
         $(this).val(value);
         target.set(type, value);
 
+        if ($(this).hasClass("slider")) {
+            $(this).parents(".editable").find(".tick.value").text(value + "%");
+        }
+
         parseHarmonicaToJSON();
         markAsEditing();
     }

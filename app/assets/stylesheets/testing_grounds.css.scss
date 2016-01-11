@@ -429,6 +429,10 @@ table.table.scenarios{
       span.tick {
         float: none;
         display: inline-block;
+
+        &.value {
+          font-weight: bold;
+        }
       }
 
       &.battery-slider .slider{
