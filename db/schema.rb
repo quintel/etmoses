@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151221122233) do
+ActiveRecord::Schema.define(version: 20160108155252) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -138,9 +138,7 @@ ActiveRecord::Schema.define(version: 20151221122233) do
     t.boolean "composite",                                       default: false
     t.float   "default_capacity",                    limit: 24
     t.float   "default_volume",                      limit: 24
-    t.float   "default_volume_in_liters",            limit: 24
     t.float   "default_demand",                      limit: 24
-    t.float   "max_bufferable_temperature",          limit: 24
     t.string  "default_position_relative_to_buffer"
     t.boolean "expandable",                                      default: true
   end

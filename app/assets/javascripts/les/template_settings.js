@@ -14,16 +14,16 @@ var TemplateSettings = (function () {
             undefined,
             '',
             'base_load',
-            'base_load_edsn',
             'base_load_buildings',
-            'generic',
+            'base_load_edsn',
             'buffer_space_heating',
             'buffer_water_heating',
-            'households_water_heater_hybrid_heatpump_air_water_electricity_electricity',
-            'households_water_heater_hybrid_heatpump_air_water_electricity_gas',
+            'congestion_battery',
             'households_space_heater_hybrid_heatpump_air_water_electricity_electricity',
             'households_space_heater_hybrid_heatpump_air_water_electricity_gas',
-            'neighbourhood_battery'
+            'households_water_heater_hybrid_heatpump_air_water_electricity_electricity',
+            'households_water_heater_hybrid_heatpump_air_water_electricity_gas',
+            'generic'
         ],
         etmKeys: [
             'technicalLifetime', 'initialInvestment', 'fullLoadHours',

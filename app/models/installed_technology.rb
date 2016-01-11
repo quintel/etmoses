@@ -263,7 +263,7 @@ class InstalledTechnology
   end
 
   def is_battery?
-    type == 'neighbourhood_battery'
+    type == 'congestion_battery'
   end
 
   private

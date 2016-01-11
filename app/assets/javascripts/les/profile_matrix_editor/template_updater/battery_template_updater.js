@@ -4,7 +4,7 @@ var BatteryTemplateUpdater = (function () {
     var defaultPercentage = 20.0,
         batteryToggles = ".editable.profile",
         batteries = [
-            "neighbourhood_battery",
+            "congestion_battery",
             "households_flexibility_p2p_electricity"
         ],
         sliderSettings = {
@@ -22,16 +22,16 @@ var BatteryTemplateUpdater = (function () {
 
     BatteryTemplateUpdater.prototype = {
         update: function () {
-            var isBattery              = (batteries.indexOf(this.data.type) > -1),
-                isNeighbourhoodBattery = ("neighbourhood_battery" === this.data.type),
-                batterySlider          = this.template.find(".battery-slider"),
-                sliderInput            = batterySlider.find("input");
+            var isBattery           = (batteries.indexOf(this.data.type) > -1),
+                isCongestionBattery = ("congestion_battery" === this.data.type),
+                batterySlider       = this.template.find(".battery-slider"),
+                sliderInput         = batterySlider.find("input");
 
             this.template.find(batteryToggles).toggleClass("hidden", isBattery);
 
-            batterySlider.toggleClass("hidden", !isNeighbourhoodBattery);
+            batterySlider.toggleClass("hidden", !isCongestionBattery);
 
-            if (isNeighbourhoodBattery) {
+            if (isCongestionBattery) {
                 sliderInput.slider(sliderSettings)
                     .slider('setValue', defaultPercentage)
                     .on('slide', setSlideStopValue);
