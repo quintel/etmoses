@@ -34,7 +34,9 @@ var BatteryTemplateUpdater = (function () {
             if (isCongestionBattery) {
                 sliderInput.slider(sliderSettings)
                     .slider('setValue', defaultPercentage)
-                    .on('slide', setSlideStopValue);
+                    .on('slide', setSlideStopValue)
+                    .trigger('slide');
+
 
                 this.template.set(sliderInput.data('type'), defaultPercentage);
             }
