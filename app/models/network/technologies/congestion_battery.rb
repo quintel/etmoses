@@ -16,18 +16,16 @@ module Network
         @soft_max = volume - @soft_min
       end
 
-      # Internal: Keeps track how much energy is stored in the battery at each
-      # point in time. The battery starts the year at its soft_min value, rather
-      # then completely empty.
+      # Public: Returns the "production" of the battery in the given frame; this
+      # is the amount of energy which is stored in the battery. Mandatory
+      # consumption may reclaim some of this to ensure that the capacity of the
+      # battery is not exceeded.
       #
-      # Returns a DefaultArray.
-      def stored
-        @stored ||=
-          DefaultArray.new { |f| mandatory_consumption_at(f) }.tap do |arr|
-            # Force the first point in the year to be equal to the soft min so
-            # that the battery starts partially-charged.
-            arr[0] = @soft_min
-          end
+      # Returns a float.
+      def production_at(frame)
+        # Force the first point in the year to be equal to the soft min so that
+        # the battery starts partially-charged.
+        frame.zero? ? @soft_min : stored[frame - 1]
       end
 
       def conditional_consumption_at(frame, path)
