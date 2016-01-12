@@ -1,4 +1,4 @@
-class MeritController < ApplicationController
+class DataController < ApplicationController
   respond_to :csv
 
   before_filter :find_testing_ground
@@ -14,27 +14,38 @@ class MeritController < ApplicationController
     @merit_curve = merit_order.load_curves
   end
 
+  def electricity_storage
+    respond_with @summary = TestingGround::StorageSummary.new(
+      calculator.network(:electricity)
+    )
+  end
+
   private
 
-  def merit_order
-    calculator = TestingGround::Calculator.new(
+  def calculator
+    @calculator ||= TestingGround::Calculator.new(
       @testing_ground,
-      @testing_ground.selected_strategy.attributes
+      strategies: @testing_ground.selected_strategy.attributes
     )
+  end
 
+  def merit_order
     Market::MeritCurveBuilder.new(
       @testing_ground, calculator.network(:electricity)
     ).merit
   end
 
   def set_csv_headers
-    headers['Content-Disposition'] = "attachment; filename=\"#{params[:action]}.csv\""
+    name = [params[:action], @testing_ground.id, 'csv'].join('.')
+
+    headers['Content-Disposition'] = "attachment; filename=\"#{name}\""
     headers['Content-Type'] ||= 'text/csv'
   end
 
   def find_testing_ground
     @testing_ground = TestingGround.find(params[:testing_ground_id])
     session[:testing_ground_id] = params[:testing_ground_id]
+
     authorize @testing_ground
   end
 end

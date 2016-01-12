@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe MeritController do
+RSpec.describe DataController do
   let(:user){ FactoryGirl.create(:user) }
 
   describe 'merit order' do

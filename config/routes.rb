@@ -21,11 +21,9 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :merit, only: [] do
-      collection do
-        get :price_curve, :load_curves
-      end
-    end
+    get 'data/price_curves'        => 'data#price_curves',        as: :price_curves
+    get 'data/load_curves'         => 'data#load_curves',         as: :load_curves
+    get 'data/electricity_storage' => 'data#electricity_storage', as: :electricity_storage
   end
 
   post :validate_business_case, to: "business_cases#validate"

@@ -1,0 +1,5 @@
+Time,Used volume (kWh),Empty volume (kWh)
+<%- @summary.each do |frame, used, free| -%>
+<%- time = Time.utc(2015, 1, 1) + (60 * 60 / (@summary.length / 8760.0) * frame) %>
+<%= time.to_formatted_s(:short) %>,<%= used %>,<%= free %>
+<% end %>
