@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       end
     end
 
-    get 'data/price_curves'        => 'data#price_curves',        as: :price_curves
+    get 'data/price_curve'         => 'data#price_curve',         as: :price_curves
     get 'data/load_curves'         => 'data#load_curves',         as: :load_curves
     get 'data/electricity_storage' => 'data#electricity_storage', as: :electricity_storage
   end
