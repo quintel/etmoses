@@ -15,8 +15,14 @@ class DataController < ApplicationController
   end
 
   def electricity_storage
+    # Electricity storage requires individual technology loads; therefore we
+    # cannot use the cache which only contains node-level loads.
+    networks = @testing_ground.to_calculated_graphs(
+      @testing_ground.selected_strategy.attributes
+    )
+
     respond_with @summary = TestingGround::StorageSummary.new(
-      calculator.network(:electricity)
+      networks.detect { |net| net.carrier == :electricity }
     )
   end
 
