@@ -222,7 +222,9 @@ var LoadChart = (function () {
         setGlobalBrushFocus: function () {
             LoadChartHelper.globalBrushExtent = d3.event.target.extent();
 
-            localSettings.set('global_brush_extent', d3.event.target.extent());
+            if (typeof(localSettings) !== "undefined") {
+                localSettings.set('global_brush_extent', d3.event.target.extent());
+            }
         }
     };
 
