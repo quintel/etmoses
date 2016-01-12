@@ -25,7 +25,8 @@ class DataController < ApplicationController
   def calculator
     @calculator ||= TestingGround::Calculator.new(
       @testing_ground,
-      strategies: @testing_ground.selected_strategy.attributes
+      strategies: @testing_ground.selected_strategy.attributes,
+      resolution: :high
     )
   end
 
