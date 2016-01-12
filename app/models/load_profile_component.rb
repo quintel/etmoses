@@ -16,4 +16,8 @@ class LoadProfileComponent < ActiveRecord::Base
   validates_attachment :curve, presence: true,
     content_type: { content_type: CurveComponent::VALID_CSV_TYPES },
     size: { less_than: 100.megabytes }
+
+  def filename
+    "#{ load_profile.display_name.gsub(/[^0-9A-Za-z.\-]/, '_') }.#{ curve_type }.csv"
+  end
 end

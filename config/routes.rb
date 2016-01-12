@@ -35,7 +35,9 @@ Rails.application.routes.draw do
   resources :profiles
 
   resources :load_profiles, except: :index do
-    resources :load_profile_component, only: :show
+    resources :load_profile_component, only: :show do
+      get :download
+    end
   end
   resources :topologies do
     member do

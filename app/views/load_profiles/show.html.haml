@@ -1,4 +1,4 @@
-%h1= @profile.key.titleize
+%h1= @profile.display_name.titleize
 .tech
   %span Associated technologies:
   .profiles
@@ -10,7 +10,7 @@
   .profile-graph.line-chart{ class: "id-#{load_profile_component.id}", data: { url: load_profile_load_profile_component_path(@profile, load_profile_component, format: :json), curve_type: load_profile_component.curve_type } }
 
   .commit.pull-right
-    = link_to('Download', load_profile_component.curve.url, class: 'btn btn-default')
+    = link_to 'Download', load_profile_load_profile_component_download_path(@profile, load_profile_component), class: 'btn btn-default'
   .clearfix
   %br
 
