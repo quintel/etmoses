@@ -25,18 +25,26 @@ var BatteryTemplateUpdater = (function () {
             var isBattery           = (batteries.indexOf(this.data.type) > -1),
                 isCongestionBattery = ("congestion_battery" === this.data.type),
                 batterySlider       = this.template.find(".battery-slider"),
-                sliderInput         = batterySlider.find("input");
+                sliderInput         = batterySlider.find("input"),
+                reserveValue;
 
             this.template.find(batteryToggles).toggleClass("hidden", isBattery);
 
             batterySlider.toggleClass("hidden", !isCongestionBattery);
 
             if (isCongestionBattery) {
+                if (this.data.hasOwnProperty('congestionReservePercentage')) {
+                    reserveValue = parseFloat(
+                        this.data.congestionReservePercentage
+                    );
+                } else {
+                    reserveValue = defaultPercentage;
+                }
+
                 sliderInput.slider(sliderSettings)
-                    .slider('setValue', defaultPercentage)
+                    .slider('setValue', reserveValue)
                     .on('slide', setSlideStopValue)
                     .trigger('slide');
-
 
                 this.template.set(sliderInput.data('type'), defaultPercentage);
             }
