@@ -2,12 +2,8 @@ class TestingGround
   class TreeSampler
     RESOLUTION_LENGTH_LOW = 365
 
-    def initialize(networks)
-      @networks = networks
-    end
-
-    def sample(resolution)
-      Hash[@networks.each_pair.map do |carrier, graph|
+    def self.sample(networks, resolution)
+      Hash[networks.each_pair.map do |carrier, graph|
         graph.nodes.each do |node|
           node.set(:load, downsample(node.load, resolution))
         end
@@ -16,9 +12,7 @@ class TestingGround
       end]
     end
 
-    private
-
-    def downsample(node_load, resolution)
+    def self.downsample(node_load, resolution)
       size = (node_load.length / RESOLUTION_LENGTH_LOW).floor
 
       if resolution == :low && size > 0

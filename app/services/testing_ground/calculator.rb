@@ -25,7 +25,7 @@ class TestingGround::Calculator
   private
 
   def tree
-    TestingGround::TreeSampler.new(networks).sample(@resolution)
+    TestingGround::TreeSampler.sample(networks, @resolution)
   end
 
   def networks

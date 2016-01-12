@@ -19,7 +19,7 @@ RSpec.describe TestingGround::TreeSampler do
     let(:graph) { FakeLoadManagement.caching_graph(1, [-15.0, 10.0, 0.0] * 11680) }
 
     it "picks the max deviation from zero" do
-      sampled = TestingGround::TreeSampler.new(networks).sample(:low)
+      sampled = TestingGround::TreeSampler.sample(networks, :low)
 
       expect(sampled[:electricity][:children][0][:load][0]).to eq(-15.0)
     end
@@ -29,13 +29,13 @@ RSpec.describe TestingGround::TreeSampler do
     let(:graph) { FakeLoadManagement.caching_graph(1, [0.0] * 35040) }
 
     it "samples parts of a tree" do
-      sampled = TestingGround::TreeSampler.new(networks).sample(:low)
+      sampled = TestingGround::TreeSampler.sample(networks, :low)
 
       expect(sampled[:electricity][:children][0][:load].length).to eq(365)
     end
 
     it "doesn't sample parts of a tree" do
-      sampled = TestingGround::TreeSampler.new(networks).sample(:high)
+      sampled = TestingGround::TreeSampler.sample(networks, :high)
 
       expect(sampled[:electricity][:children][0][:load].length).to eq(35040)
     end

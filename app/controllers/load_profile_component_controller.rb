@@ -4,6 +4,10 @@ class LoadProfileComponentController < ApplicationController
   respond_to :json, only: :show
 
   def show
-    respond_with(LoadProfileComponent.find(params[:id]))
+    profile_component = LoadProfileComponent.find(params[:id]).as_json
+
+    respond_with(profile_component.update("values" =>
+      TestingGround::TreeSampler.downsample(profile_component.fetch("values"), :low)
+    ))
   end
 end
