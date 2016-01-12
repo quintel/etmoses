@@ -4,7 +4,8 @@ var LoadChart = (function () {
 
     var chartLengths = {
         long: 35040,
-        short: 8760
+        short: 8760,
+        annual: 365
     };
 
     function formatDateFromFrame(frame) {
@@ -15,6 +16,8 @@ var LoadChart = (function () {
             multiplier = 900000;
         } else if (len === chartLengths.short) {
             multiplier = 3600000;
+        } else if (len === chartLengths.annual) {
+            multiplier = 86400000;
         }
 
         if (multiplier === -1) {
