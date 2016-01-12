@@ -28,6 +28,8 @@ var Tree = (function () {
 
         this.treeGraph.setData(data).showGraph();
 
+        $("#collapse-stakeholders select").prop('disabled', false);
+
         if (data.error) {
             $(".alert.alert-warning").removeClass("hidden")
                 .find("span.error")
