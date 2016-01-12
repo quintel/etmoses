@@ -32,4 +32,5 @@ class TestingGroundPolicy < ApplicationPolicy
   alias_method :fetch_etm_values?, :create?
   alias_method :price_curve?, :show?
   alias_method :load_curves?, :show?
+  alias_method :electricity_storage?, :show?
 end

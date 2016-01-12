@@ -16,9 +16,11 @@
         %span.caret
       %ul.dropdown-menu
         %li.disabled= link_to "Download curve", "#", class: "download-curve"
+        %li.divider{role: "separator"}
         %li.disabled= link_to 'Download technologies CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: "technologies-button"
-        %li.disabled= link_to 'Download merit order price curve', price_curve_testing_ground_merit_index_path(@testing_ground, format: :csv), class: "merit-button"
-        %li.disabled= link_to 'Download merit order load curves', load_curves_testing_ground_merit_index_path(@testing_ground, format: :csv), class: "merit-button"
+        %li.disabled= link_to 'Electricity storage curves', testing_ground_electricity_storage_path(@testing_ground, format: :csv), class: "technologies-button"
+        %li.disabled= link_to 'Download merit order price curve', testing_ground_price_curves_path(@testing_ground, format: :csv), class: "merit-button"
+        %li.disabled= link_to 'Download merit order load curves', testing_ground_load_curves_path(@testing_ground, format: :csv), class: "merit-button"
 
         - if can_export?(@testing_ground)
           %li.divider{role: "separator"}
