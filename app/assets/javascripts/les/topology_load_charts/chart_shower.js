@@ -126,6 +126,8 @@ var ChartShower = (function () {
 
     function showLoadChart() {
         showOrLoadPlatform.call(this);
+        $(".load-graph-wrapper a[href='#load']").tab('show');
+
         LoadChartHelper.reloadChart(this.id);
     }
 
