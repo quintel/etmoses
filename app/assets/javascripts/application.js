@@ -21,4 +21,5 @@
 //= require bootstrap-filestyle
 //= require bootstrap-toggle.min
 //= require bootstrap-slider
+//= require featherlight
 //= require_tree .
