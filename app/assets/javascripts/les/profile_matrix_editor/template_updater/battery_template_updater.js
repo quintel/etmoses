@@ -28,7 +28,9 @@ var BatteryTemplateUpdater = (function () {
                 sliderInput         = batterySlider.find("input"),
                 reserveValue;
 
-            this.template.find(batteryToggles).toggleClass("hidden", isBattery);
+            if (isBattery) {
+                this.template.find(batteryToggles).addClass("hidden");
+            }
 
             batterySlider.toggleClass("hidden", !isCongestionBattery);
 
