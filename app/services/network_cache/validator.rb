@@ -29,7 +29,7 @@ module NetworkCache
       [ @testing_ground,
         @testing_ground.topology,
         @testing_ground.market_model ].all? do |target|
-        Time.at(target.updated_at.to_time.to_i) <= Time.at(cache_time.to_i)
+        target && Time.at(target.updated_at.to_time.to_i) <= Time.at(cache_time.to_i)
       end
     end
 

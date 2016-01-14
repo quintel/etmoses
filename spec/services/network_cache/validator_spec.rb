@@ -41,4 +41,11 @@ RSpec.describe NetworkCache::Validator do
 
     expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)
   end
+
+  it "marks the network cache as invalid when there's no market model" do
+    testing_ground.update(market_model_id: nil)
+    NetworkCache::Writer.from(testing_ground).write
+
+    expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)
+  end
 end
