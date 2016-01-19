@@ -27,6 +27,7 @@ var TreeGraph = (function () {
 
     function buildBase() {
         $('.loading').remove();
+        $(container).find("svg").remove();
 
         baseSvg = createBaseSvg();
         svgGroup = baseSvg.append('g');
