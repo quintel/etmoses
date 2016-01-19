@@ -60,7 +60,7 @@ module Market
     def merit_curve
       return @merit_curve if @merit_curve
 
-      @merit_curve ||= MeritCurveBuilder.new(@les, @network).build
+      @merit_curve ||= MeritCurveBuilder.new(@les, @network).merit
     end
   end # FromMarketModelBuidler
 end
