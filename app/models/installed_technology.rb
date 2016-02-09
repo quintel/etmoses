@@ -263,7 +263,7 @@ class InstalledTechnology
   end
 
   def is_battery?
-    type == 'congestion_battery'
+    %w(congestion_battery households_flexibility_p2p_electricity).include?(type)
   end
 
   private
