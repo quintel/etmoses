@@ -21,8 +21,6 @@ var BusinessCaseTable = (function () {
     function BusinessCaseTable(table) {
         this.table = table;
         this.urls  = table.data();
-
-        console.log(this.table.length);
     }
 
     return BusinessCaseTable;
