@@ -1,9 +1,9 @@
-/*globals FinanceTable,Poller,StrategyHelper*/
+/*globals BusinessCaseTable,FinanceTable,Poller,StrategyHelper*/
+
 $(document).on("page:change", function () {
     'use strict';
 
-    var financeTable = $("table.finance-table"),
-        businessCaseTable = $("#business_case_table");
+    var financeTable = $("table.finance-table");
 
     if (financeTable.length > 0) {
         new FinanceTable(financeTable).create();
@@ -13,17 +13,5 @@ $(document).on("page:change", function () {
         });
     }
 
-    function renderSummary() {
-        $.ajax({
-            type: "POST",
-            url: businessCaseTable.data('finishUrl'),
-        });
-    }
-
-    if (businessCaseTable.length > 0) {
-        new Poller({
-            url: businessCaseTable.data('url'),
-            data: StrategyHelper.getStrategies()
-        }).poll().done(renderSummary);
-    }
+    new BusinessCaseTable($("#business_case_table")).create();
 });
