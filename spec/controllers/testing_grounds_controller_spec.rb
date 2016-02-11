@@ -467,5 +467,19 @@ RSpec.describe TestingGroundsController do
 
       expect(TestingGround.last.user).to eq(admin)
     end
+
+    describe "selected strategies" do
+      it "counts 2 selected strategies" do
+        post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "Test" }
+
+        expect(SelectedStrategy.count).to eq(2)
+      end
+
+      it "last selected strategy belongs to the last created testing ground" do
+        post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "Test" }
+
+        expect(SelectedStrategy.last.testing_ground).to eq(TestingGround.last)
+      end
+    end
   end
 end

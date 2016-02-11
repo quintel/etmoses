@@ -149,6 +149,7 @@ class TestingGroundsController < ResourceController
 
   def save_as
     testing_ground = @testing_ground.dup
+    testing_ground.selected_strategy = @testing_ground.selected_strategy.dup
     testing_ground.update_attributes(testing_ground_params)
     testing_ground.update_attribute(:user, current_user)
     testing_ground.save
