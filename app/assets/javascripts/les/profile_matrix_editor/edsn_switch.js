@@ -5,19 +5,26 @@ var EdsnSwitch = (function () {
         validBaseLoads = /^(base_load|base_load_edsn)$/;
 
     function swapSelectBox() {
-        var technology   = $(this.target).data('type'),
-            self         = this,
+        var self         = this,
+            type         = $(this.target).data('type'),
+            profile      = $(this.target).data('profile'),
             unitSelector = $(this.target).find(".units input"),
             units        = parseInt(unitSelector.val(), 10),
             actual       = (units > EDSN_THRESHOLD ? "base_load_edsn" : "base_load"),
-            select       = $(".hidden.profile select." + actual).clone(true, true);
+            options      = $(".hidden.profile select." + actual).find("option").clone(true, true),
+            select       = $(this.target).find('.editable.profile select');
 
-        $(this.target).find('.editable.profile select').replaceWith(select);
-        $(this.target).find("option[value='" + technology + "']").attr('value', actual);
+        select.html(options);
+
+        if(type === actual) {
+            select.val(profile);
+        } else {
+            select.trigger('change');
+        }
+
+        $(this.target).set('type', actual);
 
         unitSelector.off('change.units').on('change.units', swapSelectBox.bind(self));
-
-        return select;
     }
 
     EdsnSwitch.prototype = {
