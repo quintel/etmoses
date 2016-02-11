@@ -10,7 +10,10 @@ var LoadChart = (function () {
 
     function formatDateFromFrame(frame) {
         var multiplier = -1,
-            len = this.data[0].values.length;
+            len        = this.data[0].values.length,
+            offset     = $("select[name=date-select]")
+                            .selectedOption(LoadChartHelper.currentWeek)
+                            .data('startWeek') || 0;
 
         if (len === chartLengths.long) {
             multiplier = 900000;
@@ -23,7 +26,7 @@ var LoadChart = (function () {
         if (multiplier === -1) {
             return frame;
         } else {
-            return LoadChartHelper.formatDate(new Date(frame * multiplier));
+            return LoadChartHelper.formatDate(new Date((frame * multiplier) + offset));
         }
     }
 
@@ -187,6 +190,7 @@ var LoadChart = (function () {
                 endWeek = new Date(endWeek.getDate() - 1000);
             }
             optionEl = $("<option value='" + (week + 1) + "'></option>");
+            optionEl.set('startWeek', startWeek.getTime());
             optionEl.text((LoadChartHelper.formatDate(startWeek)) + " - " + (LoadChartHelper.formatDate(endWeek)));
             dateEl.append(optionEl);
         }

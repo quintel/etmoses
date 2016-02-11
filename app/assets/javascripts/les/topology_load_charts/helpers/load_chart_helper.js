@@ -3,7 +3,7 @@ var LoadChartHelper = (function () {
 
     return {
         globalBrushExtent: undefined,
-        currentWeek: undefined,
+        currentWeek: 0,
         forceReload: false,
         charts: [],
         nodes: [],
