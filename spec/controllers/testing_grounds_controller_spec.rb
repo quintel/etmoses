@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe TestingGroundsController do
   let(:user){ FactoryGirl.create(:user) }
+  let(:profile_json) {
+    TechnologyDistributorData.load_file('solar_pv_and_ev_distribution_two_nodes_lv1_and_lv2').to_json
+  }
 
   it "visits the import path" do
     sign_in(user)

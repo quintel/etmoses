@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe TestingGround::TechnologyProfileScheme do
-  let(:topology){ FactoryGirl.create(:topology).graph.to_json }
-
   describe "no buffers" do
     let!(:technology_profiles){
       5.times do
@@ -18,16 +16,33 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
 
     it 'minimizes concurrency' do
       new_profile = TestingGround::TechnologyProfileScheme.new(
-        ProfileSchemeTestHelper.technology_distribution
+        TechnologyDistributorData.load_file('solar_pv_distribution_two_nodes_lv1_and_lv2')
       ).build
 
       expect(new_profile.values.flatten.map{|t| t['profile'] }.uniq.count).to eq(2)
     end
 
+    describe "maximizes concurrency with one technology to one node of a multi-node topology" do
+      let(:new_profile){
+        TestingGround::TechnologyProfileScheme.new(
+          TechnologyDistributorData.load_file('solar_pv_nodes_maximize_lv1')
+        ).build
+      }
+
+      it "expects only one profile" do
+        expect(new_profile.values.flatten.map{|t| t['profile'] }.uniq.count).to eq(1)
+      end
+
+      it "expects only one technology" do
+        binding.pry
+        expect(new_profile.values.flatten.count).to eq(1)
+      end
+    end
+
     describe "maximizes concurrency" do
       let(:new_profile){
         TestingGround::TechnologyProfileScheme.new(
-          ProfileSchemeTestHelper.minimized_technology_distribution
+          TechnologyDistributorData.load_file('solar_pv_distribution_minimized_concurrency_two_nodes_lv1_and_lv2')
         ).build
       }
 
@@ -46,7 +61,9 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
 
     describe "minimizes concurrency with a subset of technologies" do
       let(:new_profile){
-        TestingGround::TechnologyProfileScheme.new(JSON.parse(profile_json)).build
+        TestingGround::TechnologyProfileScheme.new(
+          TechnologyDistributorData.load_file('solar_pv_and_ev_distribution_two_nodes_lv1_and_lv2')
+        ).build
       }
 
       it "expects only the electric car to have minimum concurrency" do
@@ -71,9 +88,10 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
 
       describe "minimizes concurrency only with EDSN profiles" do
         let(:new_profile){
-          TestingGround::TechnologyProfileScheme.new(
-            ProfileSchemeTestHelper.basic_edsn_houses(31.0)
-          ).build
+          distribution = TechnologyDistributorData.load_file('base_load_edsn')
+          distribution[0]["units"] = 31.0
+
+          TestingGround::TechnologyProfileScheme.new(distribution).build
         }
 
         it 'expects only EDSN profiles' do
@@ -89,9 +107,10 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
 
       describe "minimizes concurrency only with non-EDSN profiles" do
         let(:new_profile){
-          TestingGround::TechnologyProfileScheme.new(
-            ProfileSchemeTestHelper.basic_houses(9.0)
-          ).build
+          distribution = TechnologyDistributorData.load_file('base_load')
+          distribution[0]["units"] = 9.0
+
+          TestingGround::TechnologyProfileScheme.new(distribution).build
         }
 
         it 'only makes use of non-EDSN profiles' do
@@ -117,7 +136,9 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
     }
 
     describe 'minimizes concurrency with buffers' do
-      let(:profile_scheme){ ProfileSchemeTestHelper.technology_distribution_buffers }
+      let(:profile_scheme){
+        TechnologyDistributorData.load_file('space_heater_buffers_two_nodes_lv1_and_lv2')
+      }
 
       it 'minimizes concurrency with buffers' do
         expect(new_profile.values.flatten.map{|t| t['buffer'] }.compact).to eq([
@@ -131,7 +152,9 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
     end
 
     describe 'maximizes concurrency with buffers' do
-      let(:profile_scheme){ ProfileSchemeTestHelper.minimized_technology_distribution_buffers }
+      let(:profile_scheme){
+        TechnologyDistributorData.load_file('space_heater_buffers_minimized_concurrency_two_nodes_lv1_and_lv2')
+      }
 
       it 'maximizes concurrency with buffers' do
         expect(new_profile.values.flatten.count).to eq(3)

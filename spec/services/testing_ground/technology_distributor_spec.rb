@@ -18,7 +18,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
     describe "assiging the correct profiles" do
       let(:testing_ground_topology){
         TestingGround::TechnologyDistributor.new(
-          testing_ground_technologies_without_profiles, topology
+          TechnologyDistributorData.load_file('technologies_with_no_nodes_and_profiles'), topology
         ).build
       }
 

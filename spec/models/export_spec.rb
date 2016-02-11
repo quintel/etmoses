@@ -2,6 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Export do
   let(:topology){ FactoryGirl.create(:topology) }
+  let(:fake_technology_profile) {
+    fake_profile_data = TechnologyDistributorData.load_file('solar_pv_and_ev_distribution_two_nodes_lv1_and_lv2')
+
+    JSON.dump(fake_profile_data.group_by{|t| t['node']})
+  }
 
   let(:testing_ground){
     FactoryGirl.create(:testing_ground,
