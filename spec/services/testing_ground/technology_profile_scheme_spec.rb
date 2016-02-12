@@ -34,7 +34,6 @@ RSpec.describe TestingGround::TechnologyProfileScheme do
       end
 
       it "expects only one technology" do
-        binding.pry
         expect(new_profile.values.flatten.count).to eq(1)
       end
     end

@@ -18,14 +18,24 @@ class TestingGround
     private
 
     def set_technologies(technologies)
-      installed_technologies = technologies.map do |t|
+      technologies.map do |t|
         InstalledTechnology.new(t)
       end
     end
 
     # Returns an array
     def edge_nodes
-      @edge_nodes ||= Topologies::EdgeNodesFinder.new(@topology).find_edge_nodes
+      @edge_nodes ||= begin
+        node_keys = @technologies.map(&:node).compact
+
+        topology_edge_nodes.select do |node|
+          node_keys.include?(node.key) || node_keys.empty?
+        end
+      end
+    end
+
+    def topology_edge_nodes
+      Topologies::EdgeNodesFinder.new(@topology).find_edge_nodes
     end
 
     # Duplicate all technologies according to the amount of units
@@ -84,8 +94,7 @@ class TestingGround
     #
     # Returns an Array of Integers
     def partition
-      TechnologyPartitioner.new(@technology, edge_nodes.size)
-        .partition
+      TechnologyPartitioner.new(@technology, edge_nodes.size).partition
     end
   end
 end
