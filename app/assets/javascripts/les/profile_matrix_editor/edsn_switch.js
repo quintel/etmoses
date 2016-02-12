@@ -22,6 +22,7 @@ var EdsnSwitch = (function () {
             select.trigger('change');
         }
 
+        $(this.target).set('profile', parseInt(select.val(), 10));
         $(this.target).set('type', actual);
 
         unitSelector.off('change.units').on('change.units', swapSelectBox.bind(self));
