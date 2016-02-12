@@ -127,7 +127,7 @@ var TreeGraph = (function () {
     }
 
     function overCapacity(d) {
-        var load = (d.altLoad || d.load),
+        var load = (d.load_strategies || d.load),
             // add 1e-5 so that we don't wrongly highlight nodes whose load has tiny
             // variations due to floating-point arithmetic.
             capacity = d.capacity + 1e-5;
