@@ -32,6 +32,12 @@ var TechnologiesForm = (function () {
         countDom.text("(" + (count += amount) + ")");
     }
 
+    function calculateInputCapacity() {
+        $(this).find('.carrier_capacity input').val(
+            Calculations.calculateInputCapacity.call($(this).data())
+        );
+    }
+
     function updateJSON() {
         var type   = $(this).data('type'),
             target = $(this).parents(".technology"),
@@ -39,6 +45,10 @@ var TechnologiesForm = (function () {
 
         $(this).val(value);
         target.set(type, value);
+
+        if (type == 'capacity' || type == 'performance_coefficient') {
+            calculateInputCapacity.call(target);
+        }
 
         if ($(this).hasClass("slider")) {
             $(this).parents(".editable").find(".tick.value").text(value + "%");
@@ -138,16 +148,18 @@ var TechnologiesForm = (function () {
         $(".add-technology button").on("click", addNewTechnologyRow);
         $(".technology .remove-row").on("click", removeTechnologyRow);
         $(".technology .show-advanced").on("click", toggleAdvancedFeatures);
-
         $(".add-technology select").first().trigger('change');
     }
 
     TechnologiesForm.prototype = {
         append: function () {
             $(".technologies .technology:not(.hidden)").each(function () {
+                new TemplateUpdater($(this)).updateExisting();
                 new ProfileSelectBox(this).add(updateJSON);
                 new BufferSelectBox(this).add();
-                new BatteryTemplateUpdater({ data: $(this).data(), template: $(this) }).update();
+                new BatteryTemplateUpdater({
+                    data: $(this).data(), template: $(this)
+                }).update();
 
                 addOnChangeListener.call(this);
             });

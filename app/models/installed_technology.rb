@@ -42,12 +42,6 @@ class InstalledTechnology
 
   PRESENTABLES = (EDITABLES - %i(carrier_capacity concurrency) + %i(capacity))
 
-  def initialize(args = nil)
-    @id = SecureRandom.hex
-
-    super
-  end
-
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
     Hash[ self.attribute_set.map do |attr|
@@ -247,7 +241,7 @@ class InstalledTechnology
   end
 
   def position_relative_to_buffer_name
-    "position_relative_to_buffer_#{@id}_#{type}"
+    "position_relative_to_buffer_#{type}__"
   end
 
   def valid?

@@ -54,7 +54,7 @@ $.fn.extend({
     set: function (option, value) {
         'use strict';
 
-        $(this).data(option, value)
+        $(this).data(option.camelize(), value)
                .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
     }
 });
@@ -66,3 +66,11 @@ String.prototype.underscorize = function () {
         return "_" + a.toLowerCase();
     });
 };
+
+String.prototype.camelize = function () {
+    'use strict';
+
+    return this.replace(/[-_\s]+(.)?/g, function (_, c) {
+      return c ? c.toUpperCase() : '';
+    });
+}
