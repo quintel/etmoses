@@ -187,10 +187,9 @@ ul.testing-grounds {
   }
 
   .load-graph{
-    .chart{
-      select{
-        margin: 0 10px;
-      }
+    .chart select{
+      margin: 0 10px;
+      max-width: 300px;
     }
     .chart svg {
       height: 500px;
