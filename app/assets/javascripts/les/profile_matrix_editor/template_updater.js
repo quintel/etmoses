@@ -48,8 +48,6 @@ var TemplateUpdater = (function () {
     }
 
     function updateDefaults() {
-        var adjective = btoa(Date.now());
-
         this.template.find("strong").text(this.data.name);
         this.template.attr("class", this.data.type + ' technology');
         updatePositionOfTechnology.call(this);
@@ -185,11 +183,7 @@ var TemplateUpdater = (function () {
         },
 
         updateExisting: function () {
-<<<<<<< HEAD
-            updateDefaults.call(this);
-=======
             updatePositionOfTechnology.call(this);
->>>>>>> 6673e6f... Adding carrier to input capacity in the front end to make clear which capacity is edited
         },
 
         addToRow: function () {
