@@ -18,7 +18,7 @@ RSpec.describe NetworkCache::Validator do
   end
 
   it 'validates the network cache with strategies' do
-    old_strategies = FakeLoadManagement.strategies(solar_storage: true)
+    old_strategies = FakeLoadManagement.strategies(ev_storage: true)
     SelectedStrategy.create!(old_strategies.merge(testing_ground: testing_ground))
     NetworkCache::Writer.from(testing_ground, old_strategies).write
 
@@ -26,7 +26,7 @@ RSpec.describe NetworkCache::Validator do
   end
 
   it 'marks the network cache as invalid with the wrong strategies' do
-    old_strategies = FakeLoadManagement.strategies(solar_storage: true)
+    old_strategies = FakeLoadManagement.strategies(ev_storage: true)
     SelectedStrategy.create!(old_strategies.merge(testing_ground: testing_ground))
     NetworkCache::Writer.from(testing_ground, old_strategies).write
 

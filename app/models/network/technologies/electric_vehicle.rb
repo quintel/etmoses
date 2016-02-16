@@ -7,20 +7,21 @@ module Network
     # and may not supply or consume any energy until reconnected. An
     # ElectricVehicle reconnects with zero energy stored.
     class ElectricVehicle < Storage
-      extend Availability
-
       def initialize(installed, profile,
-                     buffering_electric_car: true,
-                     solar_storage: false, **)
+                     ev_capacity_constrained: false,
+                     ev_excess_constrained: false,
+                     ev_storage: false,
+                     **)
         super
 
-        @storage       = solar_storage
-        @buffering     = buffering_electric_car
-        @recent_excess = 0.0
+        @discharge_surplus    = ev_storage
+        @capacity_constrained = ev_capacity_constrained
+        @excess_constrained   = ev_excess_constrained
+        @recent_excess        = 0.0
       end
 
       def self.disabled?(options)
-        !options[:solar_storage] && !options[:buffering_electric_car]
+        false
       end
 
       def production_at(frame)
@@ -41,7 +42,7 @@ module Network
           # When storage mode is turned off, the EV is not allowed to
           # discharge energy for use in other technologies; it is exclusively
           # for its own use.
-          required = stored if ! @storage && stored > required
+          required = stored if ! @discharge_surplus && stored > required
 
           @capacity.limit_mandatory(frame, required)
         end
@@ -57,12 +58,12 @@ module Network
 
       # Public: EVs should not overload the network.
       def capacity_constrained?
-        true
+        @capacity_constrained
       end
 
       # Public: EV conditional load may come from the grid.
       def excess_constrained?
-        ! @buffering
+        @excess_constrained
       end
 
       private

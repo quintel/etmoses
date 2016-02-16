@@ -289,7 +289,7 @@ RSpec.describe TestingGround do
     end
 
     it "applies saving of base load (i.e. shaving of the flex profile)" do
-      old_strategies = FakeLoadManagement.strategies(solar_storage: true)
+      old_strategies = FakeLoadManagement.strategies(ev_storage: true)
       testing_ground.selected_strategy.update_attributes(old_strategies)
       NetworkCache::Writer.from(testing_ground, old_strategies).write
 

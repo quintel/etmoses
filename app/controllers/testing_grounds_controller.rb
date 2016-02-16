@@ -190,10 +190,19 @@ class TestingGroundsController < ResourceController
   end
 
   def strategy_params
-    params.require(:strategies).permit(:solar_storage, :battery_storage,
-      :solar_power_to_heat, :solar_power_to_gas, :buffering_electric_car,
-      :buffering_space_heating, :postponing_base_load, :saving_base_load,
-      :capping_solar_pv, :capping_fraction)
+    params.require(:strategies).permit(
+      :battery_storage,
+      :ev_capacity_constrained,
+      :ev_excess_constrained,
+      :ev_storage,
+      :solar_power_to_heat,
+      :solar_power_to_gas,
+      :buffering_space_heating,
+      :postponing_base_load,
+      :saving_base_load,
+      :capping_solar_pv,
+      :capping_fraction
+    )
   end
 
   # Internal: Given a hash and an attribute key, assumes the value is a YAML

@@ -3,11 +3,12 @@ module Moses
     module Network
       DEFAULT_OPTS = {
         battery_storage: true,
-        solar_storage: true,
+        ev_capacity_constrained: true,
+        ev_excess_constrained: true,
+        ev_storage: true,
         solar_power_to_heat: true,
         capping_solar_pv: true,
         postponing_base_load: true,
-        buffering_electric_car: true,
         saving_base_load: true,
         buffering_space_heating: true,
         solar_power_to_gas: true

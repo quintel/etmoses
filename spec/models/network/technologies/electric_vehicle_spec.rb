@@ -51,7 +51,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end # with storage on
 
       context 'with storage off' do
-        let(:opts) { { solar_storage: false } }
+        let(:opts) { { ev_storage: false } }
 
         it 'has production of 0.5' do
           expect(tech.production_at(1)).to eq(0.5)
@@ -273,7 +273,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end # when reconnected
 
       context 'immediately after disconnection with storage off' do
-        let(:opts) { super().merge(solar_storage: false) }
+        let(:opts) { super().merge(ev_storage: false) }
 
         it 'has production of 0.3' do
           expect(tech.production_at(1)).to eq(0.3)
@@ -422,17 +422,13 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     end
   end # when the previous frame was a disconnection
 
-  context 'when disabled' do
+  context 'with storage' do
     let(:profile) { [0.0] * 8760 }
 
     let(:tech) do
       network_technology(
         build(:installed_ev, profile: profile, volume: 3.0),
-        2, solar_storage: false, buffering_electric_car: false)
-    end
-
-    it 'becomes a consumer' do
-      expect(tech).to be_consumer
+        2, ev_storage: false)
     end
 
     context 'with a negative profile value in frame 0' do
@@ -458,8 +454,8 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         expect(tech.mandatory_consumption_at(1)).to be_zero
       end
 
-      it 'has no conditional consumption in frame 1' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
+      it 'has conditional consumption equal to volume in frame 1' do
+        expect(tech.conditional_consumption_at(1)).to eq(3.0)
       end
     end # with a negative profile value in frame 0
 
@@ -471,11 +467,11 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has no mandatory consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
+        expect(tech.mandatory_consumption_at(1)).to be_zero
       end
 
-      it 'has no conditional consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
+      it 'has conditional consumption equal to volume' do
+        expect(tech.conditional_consumption_at(1)).to eq(3.0)
       end
     end # and a profile value of zero
 
@@ -490,8 +486,8 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         expect(tech.mandatory_consumption_at(1)).to eq(1.0)
       end
 
-      it 'has no conditional consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
+      it 'has conditional consumption of 2.0' do
+        expect(tech.conditional_consumption_at(1)).to eq(2.0)
       end
     end # and a profile value of 1.0
 
@@ -510,5 +506,5 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         expect(tech.conditional_consumption_at(1)).to be_zero
       end
     end # with a profile -1.0
-  end # when disabled
+  end # with storage disabled
 end

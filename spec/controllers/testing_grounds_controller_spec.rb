@@ -160,11 +160,12 @@ RSpec.describe TestingGroundsController do
   describe "#update_strategies.json" do
     let(:strategies) {
       {
-        "solar_storage"=>true,
+        "ev_capacity_constrained"=>true,
+        "ev_excess_constrained"=>true,
+        "ev_storage"=>true,
         "battery_storage"=>false,
         "solar_power_to_heat"=>false,
         "solar_power_to_gas"=>false,
-        "buffering_electric_car"=>false,
         "buffering_space_heating"=>false,
         "postponing_base_load"=>false,
         "saving_base_load"=>false,
@@ -179,7 +180,7 @@ RSpec.describe TestingGroundsController do
 
         post :update_strategies, strategies: strategies, format: :json, id: testing_ground.id
 
-        expect(SelectedStrategy.last.solar_storage).to eq(false)
+        expect(SelectedStrategy.last.ev_storage).to eq(false)
       end
     end
 
@@ -191,7 +192,7 @@ RSpec.describe TestingGroundsController do
 
         post :update_strategies, strategies: strategies, format: :json, id: testing_ground.id
 
-        expect(SelectedStrategy.last.solar_storage).to eq(true)
+        expect(SelectedStrategy.last.ev_storage).to eq(true)
       end
     end
   end
