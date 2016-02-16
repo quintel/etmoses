@@ -2,7 +2,7 @@ class TestingGround::Calculator
   def initialize(testing_ground, options = {})
     @testing_ground = testing_ground
     @strategies     = options[:strategies] || {}
-    @nodes          = options[:nodes] || []
+    @nodes          = options[:nodes]
     @resolution     = (options[:resolution] || 'low').to_sym
   end
 
@@ -25,7 +25,7 @@ class TestingGround::Calculator
   private
 
   def tree
-    TestingGround::TreeSampler.sample(networks, @resolution)
+    TestingGround::TreeSampler.sample(networks, @resolution, @nodes)
   end
 
   def networks

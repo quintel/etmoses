@@ -12,5 +12,13 @@ module Network
     def head
       @head ||= nodes.detect { |n| n.edges(:in).none? }
     end
+
+    def set_loads(selected_nodes)
+      keys = selected_nodes || nodes.map(&:key)
+
+      keys.map{ |key| node(key) }.compact.each do |node|
+        node.set(:load, yield(node))
+      end
+    end
   end # Graph
 end

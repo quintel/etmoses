@@ -20,9 +20,23 @@ RSpec.describe NetworkCache::Fetcher do
     NetworkCache::Writer.from(testing_ground).write(written_cache)
   }
 
-  let(:cache) { NetworkCache::Fetcher.from(testing_ground).fetch }
+  describe "full cache" do
+    let(:cache) { NetworkCache::Fetcher.from(testing_ground).fetch }
 
-  it "fetches two graphs from cache" do
-    expect(cache.length).to eq(2)
+    it "fetches two graphs from cache" do
+      expect(cache.length).to eq(2)
+    end
+
+    it "fetches cache" do
+      expect(cache[0].nodes.map(&:load)).to eq([[1.2], [1.2], [1.2], [0.0]])
+    end
+  end
+
+  describe "partial cache" do
+    let(:cache) { NetworkCache::Fetcher.from(testing_ground).fetch(%w(lv1)) }
+
+    it "fetches two graphs from cache" do
+      expect(cache[0].nodes.map(&:load)).to eq([[], [], [1.2], []])
+    end
   end
 end
