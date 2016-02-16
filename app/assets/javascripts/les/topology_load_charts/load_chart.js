@@ -67,13 +67,6 @@ var LoadChart = (function () {
         return chart;
     }
 
-    function addGraph(data) {
-        var chart = createChart.call(this);
-        d3.select(this.intoSelector).datum(data).call(chart);
-        chart.update();
-        LoadChartHelper.toggleCapacity(loadChartLocation.call(this));
-    }
-
     function generateCapacity(data) {
         var total,
             top_line = data[0].values.map(function (sample) {
@@ -119,9 +112,80 @@ var LoadChart = (function () {
     function renderChart() {
         $(this.intoSelector).empty();
 
+        nv.addGraph(this.updateGraph.bind(this));
+    }
+
+    function renderPartOfChart(value) {
+        // Load large chart
+        if (window.currentTree.resolution === 'high' && value !== 0) {
+            renderChart.call(this);
+        } else if (value === 0) {
+            window.currentTree.lesses[1].strategies.toggleLoading();
+            window.currentTree.set('low').update();
+        } else {
+            window.currentTree.lesses[1].strategies.toggleLoading();
+            window.currentTree.set('high').update();
+        }
+    }
+
+    function selectDatePortion(dateEl) {
+        var value = parseInt(dateEl.val(), 10);
+
+        LoadChartHelper.currentWeek = value;
+        LoadChartHelper.forceReload = true;
+        LoadChartHelper.clearBrush();
+
+        if (this.dateSelectCallback) {
+            this.dateSelectCallback(value);
+        } else {
+            $("select[name=date-select]").val(value);
+
+            renderPartOfChart.call(this, value);
+        }
+    }
+
+    function generateWeeks() {
+        var startWeek, endWeek, optionEl, week,
+            epoch    = new Date(0),
+            msInWeek = 604800000;
+
+        $(this).append($('<option value="0">Whole year</option>'));
+
+        for (week = 0; week < 52; week++) {
+            startWeek = new Date(epoch.getDate() + (msInWeek * week));
+            endWeek   = new Date(startWeek.getDate() + (msInWeek * week)
+                                 + msInWeek - (msInWeek / 7));
+
+            if (week === 51) {
+                endWeek = new Date(endWeek.getDate() - 1000);
+            }
+
+            optionEl = $("<option value='" + (week + 1) + "'></option>");
+            optionEl.set('startWeek', startWeek.getTime());
+            optionEl.text((LoadChartHelper.formatDate(startWeek)) + " - " +
+                          (LoadChartHelper.formatDate(endWeek)));
+
+            $(this).append(optionEl);
+        }
+    }
+
+    function drawDateSelect() {
+        var dateEl = $('<select name="date-select" class="form-control"></select>');
+
+        generateWeeks.call(dateEl);
+        dateEl.change(selectDatePortion.bind(this, dateEl));
+
+        $(this.intoSelector).after(dateEl);
+
+        if (LoadChartHelper.currentWeek) {
+            return $("select[name=date-select]").val(LoadChartHelper.currentWeek);
+        }
+    }
+
+    function mapData(rawData) {
         var results = [];
 
-        this.data.forEach(function (datum) {
+        rawData.forEach(function (datum) {
             var color = (
                 LoadChartsSettings[datum.type || this.curve_type] ||
                 LoadChartsSettings['default']
@@ -151,61 +215,12 @@ var LoadChart = (function () {
             }
         });
 
-        nv.addGraph(addGraph.bind(this, results));
-    }
-
-    function selectDatePortion(dateEl) {
-        var value = parseInt(dateEl.val(), 10);
-
-        LoadChartHelper.currentWeek = value;
-        LoadChartHelper.forceReload = true;
-        LoadChartHelper.clearBrush();
-
-        $("select[name=date-select]").val(value);
-
-        // Load large chart
-        if (window.currentTree.resolution === 'high' && value !== 0) {
-            renderChart.call(this, value);
-        } else if (value === 0) {
-            window.currentTree.lesses[1].strategies.toggleLoading();
-            window.currentTree.set('low').update();
-        } else {
-            window.currentTree.lesses[1].strategies.toggleLoading();
-            window.currentTree.set('high').update();
-        }
-    }
-
-    function drawDateSelect() {
-        var endWeek, optionEl, startWeek, week, i,
-            epoch = new Date(0),
-            msInWeek = 604800000,
-            dateEl = $('<select name="date-select" class="form-control" style="max-width: 300px"></select>');
-
-        dateEl.append($('<option value="0">Whole year</option>'));
-
-        for (week = 0; week < 52; week++) {
-            startWeek = new Date(epoch.getDate() + (msInWeek * week));
-            endWeek = new Date(startWeek.getDate() + (msInWeek * week) + msInWeek - (msInWeek / 7));
-            if (week === 51) {
-                endWeek = new Date(endWeek.getDate() - 1000);
-            }
-            optionEl = $("<option value='" + (week + 1) + "'></option>");
-            optionEl.set('startWeek', startWeek.getTime());
-            optionEl.text((LoadChartHelper.formatDate(startWeek)) + " - " + (LoadChartHelper.formatDate(endWeek)));
-            dateEl.append(optionEl);
-        }
-
-        dateEl.change(selectDatePortion.bind(this, dateEl));
-
-        $(this.intoSelector).after(dateEl);
-
-        if (LoadChartHelper.currentWeek) {
-            return $("select[name=date-select]").val(LoadChartHelper.currentWeek);
-        }
+        return results;
     }
 
     LoadChart.prototype = {
         intoSelector: null,
+        chart: null,
         axisLabels: {
             "default": 'kW',
             flex: 'kW',
@@ -216,22 +231,33 @@ var LoadChart = (function () {
             behavior_profile: 'On/Off'
         },
 
-        render: function (intoSelector, week) {
-            if (week === null) {
-                week = 0;
+        updateGraph: function() {
+            if (!this.chart) {
+                this.chart = createChart.call(this);
             }
 
-            this.intoSelector = intoSelector;
-            renderChart.call(this, week);
-            drawDateSelect.call(this);
+            d3.select(this.intoSelector)
+                .datum(mapData.call(this, this.data))
+                .call(this.chart);
+
+            this.chart.update();
+            LoadChartHelper.toggleCapacity(loadChartLocation.call(this));
         },
 
         setGlobalBrushFocus: function () {
             LoadChartHelper.globalBrushExtent = d3.event.target.extent();
 
-            if (typeof(localSettings) !== "undefined") {
+            if (window.localSettings) {
                 localSettings.set('global_brush_extent', d3.event.target.extent());
             }
+        },
+
+        render: function (intoSelector, dateSelectCallback) {
+            this.intoSelector = intoSelector;
+            this.dateSelectCallback = dateSelectCallback || false;
+
+            renderChart.call(this);
+            drawDateSelect.call(this);
         }
     };
 
@@ -243,5 +269,3 @@ var LoadChart = (function () {
 
     return LoadChart;
 }());
-
-window.LoadChart = LoadChart;
