@@ -154,7 +154,7 @@ var TechnologiesForm = (function () {
     TechnologiesForm.prototype = {
         append: function () {
             $(".technologies .technology:not(.hidden)").each(function () {
-                new TemplateUpdater($(this)).updatePositionOfTechnology();
+                new TemplateUpdater($(this)).updateExisting();
                 new ProfileSelectBox(this).add(updateJSON);
                 new BufferSelectBox(this).add();
                 new BatteryTemplateUpdater({
