@@ -4,7 +4,7 @@ class TestingGround
 
     def self.sample(networks, resolution = :low, nodes = nil)
       Hash[networks.each_pair.map do |carrier, graph|
-        graph.set_loads(nodes) do |node|
+        NetworkCache::LoadSetter.set(graph, nodes) do |node|
           downsample(node.load, resolution)
         end
 

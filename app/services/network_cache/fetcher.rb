@@ -10,7 +10,7 @@ module NetworkCache
     # Fetches all cache and sets is as the load attribute for a node
     def fetch(nodes = nil)
       tree_scope.each do |network|
-        network.set_loads(nodes) do |node|
+        LoadSetter.set(network, nodes) do |node|
           read(network.carrier, node.key) || []
         end
       end
