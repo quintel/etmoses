@@ -35,7 +35,8 @@ module TestingGroundsHelper
       [technology.name, technology.key, data: default_values(technology).merge(
         position_relative_to_buffer: technology.default_position_relative_to_buffer,
                           composite: technology.composite,
-                           includes: technology.technologies.map(&:key))
+                           includes: technology.technologies.map(&:key),
+                            carrier: technology.carrier)
       ]
     end
 

@@ -1,8 +1,10 @@
 var Calculations = (function () {
     return {
         calculateInputCapacity: function() {
-            return (Math.round(
-                (this.capacity / (this.performanceCoefficient || 1)) * 10000)
+            var capacity               = this.capacity || 0,
+                performanceCoefficient = this.performanceCoefficient || 1;
+
+            return (Math.round(capacity / performanceCoefficient * 10000)
                 / 10000);
         }
     };

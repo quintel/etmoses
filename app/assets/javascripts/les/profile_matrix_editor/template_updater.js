@@ -50,6 +50,7 @@ var TemplateUpdater = (function () {
     function updateDefaults() {
         this.template.find("strong").text(this.data.name);
         this.template.attr("class", this.data.type + ' technology');
+        this.template.find("span.carrier").text(this.carrier);
         updatePositionOfTechnology.call(this);
 
         return this.template;
@@ -161,6 +162,8 @@ var TemplateUpdater = (function () {
     function setInitialDataFromSelectBox() {
         var option                         = $(this.technologySelectBox).selectedOption();
 
+        this.carrier                       = option.data('carrier');
+
         this.data.node                     = $(this.data.append).data('node');
         this.data.type                     = $(this.technologySelectBox).val();
         this.data.composite                = option.data('composite');
@@ -176,6 +179,7 @@ var TemplateUpdater = (function () {
     }
 
     TemplateUpdater.prototype = {
+        carrier: null,
         data: {},
         update: function () {
             setInitialDataFromSelectBox.call(this);

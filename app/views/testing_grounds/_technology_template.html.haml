@@ -38,18 +38,21 @@
       = tooltip_tag(t(:'testing_grounds.form.congestion_reserve_percentage.tooltip'))
       .clearfix
 
-    .editable.text{class: 'demand'}
-      %span Demand [kWh]
-      %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: { type: 'demand'} }
-      .clearfix
-
     .editable.text{class: 'capacity'}
       %span Output capacity [kW]
       %input.form-control{type: 'text', value: technology.capacity.try(:round, 4), data: { type: 'capacity' } }
       .clearfix
 
+    .editable.text{class: 'demand'}
+      %span Demand [kWh]
+      %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: { type: 'demand'} }
+      .clearfix
+
     .editable.text{class: 'carrier_capacity'}
-      %span= "Input capacity (#{ technology.carrier }) [kW]"
+      %span
+        %span.tick> Input capacity (
+        %span.tick.carrier>= technology.carrier
+        %span.tick ) [kW]
       %input.form-control{type: 'text', value: technology.carrier_capacity.try(:round, 4), disabled: "disabled", data: { type: 'carrier_capacity' } }
       .clearfix
 
