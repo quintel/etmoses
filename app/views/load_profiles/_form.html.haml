@@ -40,6 +40,12 @@
       = form.radio_button :public, false
       = form.label :public, "Private", class: "radio-label"
 
+  - if current_user.admin?
+    .form-group
+      %label
+        = form.check_box :included_in_concurrency
+        Included in concurrency
+
   .form-group
     = form.label :load_profile_category_id
     = form.select :load_profile_category_id, load_profile_categories_select_options(@profile), {}, class: 'form-control'

@@ -63,7 +63,7 @@ class LoadProfilesController < ResourceController
   def profile_params
     params.require(:load_profile).permit(
       :key, :name, :public, :load_profile_category_id, :default_capacity,
-      :default_demand, :default_volume,
+      :default_demand, :default_volume, :included_in_concurrency,
       { technology_profiles_attributes: [:id, :technology, :_destroy] },
       { load_profile_components_attributes: [:id, :curve, :curve_type]}
     )
