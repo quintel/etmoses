@@ -60,7 +60,7 @@ class TestingGround
         dup_technology.buffer = dup_technology.get_buffer(buffer)
       end
 
-      dup_technology.node = edge_nodes[index + edge_nodes_index].key
+      dup_technology.node ||= edge_nodes[index + edge_nodes_index].key
       dup_technology
     end
 
