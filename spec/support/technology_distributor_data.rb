@@ -1,4 +1,8 @@
 module TechnologyDistributorData
+  def self.load_file(file)
+    YAML.load(File.read("#{Rails.root}/spec/fixtures/data/technology_distributions/#{ file }.yml"))
+  end
+
   def basic_technologies(units = '2.0')
     [{ "name"=>"Residential PV panel",
       "type"=>"households_solar_pv_solar_radiation",

@@ -1,0 +1,5 @@
+- name: Household
+  type: base_load
+  demand: '5'
+  units: 1
+  concurrency: min

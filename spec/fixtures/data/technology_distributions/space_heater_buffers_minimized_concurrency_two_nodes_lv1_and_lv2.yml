@@ -1,0 +1,53 @@
+- node: lv1
+  buffer: buffer_1
+  name: Space heater 1
+  type: households_space_heater_heatpump_ground_water_electricity
+  concurrency: max
+  capacity: "-1.5"
+  units: '1'
+  composite: false
+- node: lv1
+  buffer: buffer_1
+  name: Space heater 2
+  type: households_space_heater_heatpump_air_water_electricity
+  concurrency: max
+  capacity: "-1.5"
+  units: '1'
+  composite: false
+- node: lv1
+  profile: buffer_1_profile
+  name: Buffer
+  composite_value: buffer_1
+  type: buffer_space_heating
+  capacity: "-1.5"
+  concurrency: max
+  units: '2'
+  composite: true
+  buffer:
+- node: lv1
+  buffer: buffer_2
+  name: Space heater 3
+  type: households_space_heater_heatpump_ground_water_electricity
+  concurrency: max
+  capacity: "-1.5"
+  units: '1'
+  composite: false
+- node: lv1
+  buffer: buffer_2
+  name: Space heater 4
+  type: households_space_heater_heatpump_air_water_electricity
+  concurrency: max
+  capacity: "-1.5"
+  units: '1'
+  composite: false
+- node: lv1
+  profile: buffer_2_profile
+  name: Buffer
+  composite_value: buffer_2
+  type: buffer_space_heating
+  capacity: "-1.5"
+  concurrency: max
+  units: '2'
+  composite: true
+  buffer:
+
