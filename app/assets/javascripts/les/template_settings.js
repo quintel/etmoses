@@ -27,7 +27,8 @@ var TemplateSettings = (function () {
         ],
         etmKeys: [
             'technicalLifetime', 'initialInvestment', 'fullLoadHours',
-            'omCostsPerYear', 'omCostsPerFullLoadHour', 'omCostsForCcsPerFullLoadHour'
+            'omCostsPerYear', 'omCostsPerFullLoadHour', 'omCostsForCcsPerFullLoadHour',
+            'capacity', 'volume', 'demand'
         ]
     };
 }());
