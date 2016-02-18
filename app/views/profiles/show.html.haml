@@ -4,6 +4,9 @@
 
 .profile-graph.line-chart{ data: { url: profile_path(@profile, format: :json), curve_type: @profile.class.name.underscore } }
 
+%select.load-date.form-control
+  = load_date_options
+
 .commit
   = link_to('Download', @profile.curve.url, class: 'btn')
   %span.or or

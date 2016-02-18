@@ -119,4 +119,17 @@ module TestingGroundsHelper
     technology_class += " alert-danger" unless technology.valid?
     technology_class
   end
+
+  def load_date_options
+    weeks = [["Whole year", 0]]
+
+    (Date.new(1970, 1, 1)...Date.new(1970, 12, 31))
+      .map{|d| d.strftime("%d %B") }
+      .each_slice(7)
+      .with_index do |(*a), i|
+        weeks << ["#{ a.first } - #{ a.last }" , i + 1]
+      end
+
+    options_for_select(weeks)
+  end
 end

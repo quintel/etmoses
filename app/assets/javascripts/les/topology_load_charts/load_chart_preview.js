@@ -1,29 +1,35 @@
+/*globals D3LoadChart */
 var LoadChartPreview = (function () {
     "use strict";
 
     function loadChartData(profile) {
-        return [{
-            values: profile.values,
-            name:   profile.name || profile.key,
-            area:   true
-        }];
+        var data = {
+            type: this.curveData.curveType || profile.curveType || 'default',
+            name: profile.name || profile.key,
+            area: true
+        };
+
+        data[data.type] = profile.values;
+
+        return data;
     }
 
-    function renderHighResolutionPreview(value) {
-        this.resolution = (value === 0 ? 'low' : 'high');
-
-        $.getJSON(this.curveData.url, { resolution: this.resolution })
-            .success(function(data) {
-                this.loadChart.data = loadChartData(data);
-                this.loadChart.updateGraph();
+    function renderHighResolutionPreview() {
+        $.getJSON(this.curveData.url, { resolution: 'high' })
+            .success(function (profile) {
+                this.loadChart.update(loadChartData.call(this, profile));
             }.bind(this));
     }
 
     function render(profile) {
-        $(this.context).empty().html("<svg></svg>");
+        $(this.context).empty();
 
-        this.loadChart = new LoadChart(loadChartData(profile), null, this.curveData.curveType);
-        this.loadChart.render(this.renderClass, renderHighResolutionPreview.bind(this));
+        this.loadChart = new D3LoadChart(this.renderClass, this.curveData.curveType, {
+            load:         loadChartData.call(this, profile),
+            dateCallback: renderHighResolutionPreview.bind(this),
+            width:        1140
+        });
+        this.loadChart.render(loadChartData.call(this, profile));
     }
 
     LoadChartPreview.prototype = {
@@ -38,8 +44,7 @@ var LoadChartPreview = (function () {
         this.resolution  = 'low';
         this.context     = context;
         this.curveData   = $(context).data();
-        this.renderClass = "." + $(context).attr("class")
-                            .replace(/\s/g, '.') + " svg";
+        this.renderClass = "." + $(context).attr("class").replace(/\s/g, '.');
     }
 
     return LoadChartPreview;

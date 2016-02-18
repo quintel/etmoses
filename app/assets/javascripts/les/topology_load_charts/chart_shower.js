@@ -1,4 +1,4 @@
-/*globals CSV,LoadChart,LoadChartHelper,StrategyHelper*/
+/*globals CSV,D3LoadChart*/
 var ChartShower = (function () {
     'use strict';
 
@@ -70,65 +70,38 @@ var ChartShower = (function () {
 
     function toggleDomParts() {
         $('#technologies .row-fluid, p.info').hide();
+        $(".load-graph-wrapper a[href='#load']").tab('show');
+        $("select.load-date").removeClass("hidden");
+
         showTechnologies.call(this);
         setHeader.call(this);
         toggleSelectedNode.call(this);
     }
 
-    function addNewLoadChartPlatform(d) {
-        var load,
-            loadChartClass = ('.' + this.uniqueId + ' svg'),
-            loadPlatform = $("<div>").addClass(this.uniqueId).addClass("chart");
+    function addNewLoadChartPlatform() {
+        var loadGraphClass = ".load-graph .chart";
 
-        loadPlatform.html('<svg></svg>');
-
-        $(".load-graph").prepend(loadPlatform);
-
-        if (StrategyHelper.anyStrategies()) {
-            load = [{ values: d.load_strategies, name: 'Load (with strategies)', area: true, type: 'load_strategies' },
-                    { values: d.load,            name: 'Load', area: false, type: 'load' },
-                    { values: d.gas_strategies,  name: 'Gas (with strategies)', area: true, type: 'gas_strategies' },
-                    { values: d.gas,             name: 'Gas', area: false, type: 'gas' }];
+        if ($(loadGraphClass).length > 0) {
+            window.currentTree.d3Chart.update(this.nodeData);
         } else {
-            load = [{ values: d.load, name: 'Load', area: true, type: 'load' },
-                    { values: d.gas,  name: 'Gas',  area: true, type: 'gas' }];
-        }
+            $(".load-graph").prepend($("<div/>").addClass("chart"));
 
-        new LoadChart(load, d.capacity, 'default').render(loadChartClass);
+            window.currentTree.d3Chart.render(this.nodeData);
+        }
     }
 
-    function renderLoadChart(d) {
-        if ((d.load && d.load.length > 0) ||
-            (d.load_strategies && d.load_strategies.length > 0) ||
-            (d.gas && d.gas.length > 0) ||
-            (d.gas_strategies && d.gas_strategies.length > 0)) {
+    function renderLoadChart() {
+        var d = this.nodeData;
 
-            addNewLoadChartPlatform.call(this, this.nodeData);
+        if ((d.load && d.load.length > 0) ||
+                (d.load_strategies && d.load_strategies.length > 0) ||
+                (d.gas && d.gas.length > 0) ||
+                (d.gas_strategies && d.gas_strategies.length > 0)) {
+
+            addNewLoadChartPlatform.call(this);
         } else {
             window.currentTree.update();
         }
-    }
-
-    function showOrLoadPlatform() {
-        if (this.existingLoadPlatform.length > 0) {
-            this.existingLoadPlatform.show();
-
-            LoadChartHelper.updateBrush(this.id);
-            LoadChartHelper.toggleCapacity(this.id);
-        } else {
-            renderLoadChart.call(this, this.nodeData);
-            LoadChartHelper.updateBrush(this.id);
-            LoadChartHelper.nodes.push(this.nodeData.name);
-        }
-
-        toggleDomParts.call(this.nodeData);
-    }
-
-    function showLoadChart() {
-        showOrLoadPlatform.call(this);
-        $(".load-graph-wrapper a[href='#load']").tab('show');
-
-        LoadChartHelper.reloadChart(this.id);
     }
 
     ChartShower.prototype = {
@@ -137,20 +110,9 @@ var ChartShower = (function () {
                 return false;
             }
 
-            this.id = this.nodeData.id;
-            this.uniqueId = ("chart-id-" + this.id);
-            this.existingLoadPlatform = $(".load-graph ." + this.uniqueId);
-
-            $(".load-graph .chart").hide();
-            showLoadChart.call(this);
-        },
-
-        reload: function () {
-            if (LoadChartHelper.forceReload) {
-                $(".load-graph .chart").remove();
-                LoadChartHelper.forceReload = false;
-            }
-            return this;
+            window.currentTree.nodes.push(this.nodeData.name);
+            renderLoadChart.call(this, this.nodeData);
+            toggleDomParts.call(this.nodeData);
         }
     };
 

@@ -1,4 +1,4 @@
-/*global Ajax,StrategyHelper,LoadChartHelper,Poller,TreeFetcher*/
+/*global Ajax,StrategyHelper,Poller*/
 var Strategies = (function () {
     'use strict';
 
@@ -48,14 +48,6 @@ var Strategies = (function () {
         return selected;
     }
 
-    function clearStrategiesFromChart() {
-        window.currentTree.treeGraph.clearStrategies().reload();
-    }
-
-    function pollTree() {
-        window.currentTree.set(window.currentTree.resolution).updateStrategies();
-    }
-
     function renderSummary() {
         $.ajax({
             type: "POST",
@@ -87,33 +79,28 @@ var Strategies = (function () {
     }
 
     function saveSelectedStrategies(toggle, strategies) {
-        var self = this;
-
         Ajax.json(
             window.currentTree.strategiesUrl,
             { strategies: strategies },
             function () {
                 if (toggle) {
-                    self.toggleLoading();
+                    window.currentTree.toggleLoading();
                 }
             }
         );
     }
 
     function toggleStrategies(appliedStrategies) {
-        this.toggleLoading();
-
         if (changedStrategy && !StrategyHelper.anyStrategies()) {
-            LoadChartHelper.forceReload = true;
-
             saveSelectedStrategies.call(this, true, appliedStrategies);
-            clearStrategiesFromChart.call(this);
+            window.currentTree.treeGraph.clearStrategies().reload();
+            window.currentTree.toggleLoading();
             pollBusinessCase.call(this);
         } else if (changedStrategy) {
-            pollTree.call(this);
+            window.currentTree.updateStrategies();
             pollBusinessCase.call(this);
         } else {
-            this.toggleLoading();
+            window.currentTree.toggleLoading();
         }
     }
 
@@ -163,21 +150,14 @@ var Strategies = (function () {
         applyStrategyButton.on("click", setChangedStrategy.bind(this));
     }
 
-    Strategies.prototype = {
-        toggleLoading: function () {
-            var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
-            loadingSpinner.toggleClass("on");
-
-            applyStrategyButton.prop("disabled", loadingSpinner.hasClass("on"));
-        }
-    };
-
     function Strategies() {
         applyStrategyButton = $("button.apply_strategies");
         businessCaseTable   = $("#business_case_table");
 
         setStrategies.call(this);
         addOnChangeListener.call(this);
+
+        return StrategyHelper.getStrategies();
     }
 
     return Strategies;

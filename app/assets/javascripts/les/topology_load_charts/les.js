@@ -3,8 +3,8 @@ var Les = (function () {
     'use strict';
 
     Les.prototype = {
+        data: { calculation: {} },
         nodeData: function (resolution) {
-            this.data = { calculation: {} };
             this.data.type = ($.isEmptyObject(this.strategies) ? 'basic' :  'features');
 
             if (resolution) {
@@ -12,7 +12,7 @@ var Les = (function () {
             }
 
             if (resolution === 'high') {
-                this.data.calculation.nodes = LoadChartHelper.nodes;
+                this.data.calculation.nodes = window.currentTree.nodes;
             }
 
             if (this.strategies) {
@@ -23,8 +23,8 @@ var Les = (function () {
         },
 
         anyStrategies: function () {
-            return (this.data.calculation.strategies === undefined ||
-                    (this.data.calculation.strategies && StrategyHelper.anyStrategies()));
+            return (this.strategies === undefined ||
+                    (this.strategies && StrategyHelper.anyStrategies()));
         }
     };
 
