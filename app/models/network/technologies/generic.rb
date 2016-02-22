@@ -9,6 +9,7 @@ module Network
 
       attr_reader   :installed
       attr_accessor :profile
+      attr_writer   :volume
 
       def initialize(installed, profile, **)
         @installed = installed
@@ -101,9 +102,10 @@ module Network
       #
       # Returns a numeric.
       def volume
-        ((@installed.volume || Float::INFINITY) /
-          (@installed.performance_coefficient || 1.0)) *
-          @installed.units * @profile.frames_per_hour
+        @volume ||=
+          ((@installed.volume || Float::INFINITY) /
+            (@installed.performance_coefficient || 1.0)) *
+            @installed.units * @profile.frames_per_hour
       end
 
       # Internal: Tells the calculator what type of Path object to instantiate
