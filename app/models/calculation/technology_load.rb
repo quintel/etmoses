@@ -63,8 +63,8 @@ module Calculation
     def comps_for(node)
       node.get(:installed_comps).each_with_object({}) do |comp, hash|
         hash[comp.composite_value] = Network::Technologies::Composite.new(
-          comp.capacity || Float::INFINITY,
-          comp.volume,
+          (comp.capacity || Float::INFINITY) * comp.units,
+          comp.volume * comp.units,
           comp.profile_curve.fetch('default'.freeze)
         )
       end

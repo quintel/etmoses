@@ -66,10 +66,10 @@ module Network
         return 0.0 unless @buffering
 
         @cond_loads[frame] ||= begin
-          remaining_cap = super
-          available     = stored.unfilled_at(frame)
-
-          remaining_cap > available ? available : remaining_cap
+          @capacity.limit_conditional(
+            frame,
+            stored.unfilled_at(frame) / @installed.performance_coefficient
+          )
         end
       end
 
