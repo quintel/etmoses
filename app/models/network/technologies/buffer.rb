@@ -86,8 +86,6 @@ module Network
       def store(frame, amount)
         stored.add(frame, amount * @installed.performance_coefficient)
       end
-
-      alias_method :receive_mandatory, :store
     end # Buffer
   end
 end
