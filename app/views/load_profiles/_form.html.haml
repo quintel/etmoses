@@ -40,7 +40,7 @@
       = form.radio_button :public, false
       = form.label :public, "Private", class: "radio-label"
 
-  - if current_user.admin?
+  - if policy(:load_profile).modify_concurrency?
     .form-group
       %label
         = form.check_box :included_in_concurrency
