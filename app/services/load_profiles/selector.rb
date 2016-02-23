@@ -8,8 +8,8 @@ module LoadProfiles
     # Public: Creates a ProfileSelector which selects profiles for the given
     # +technologies+ keys.
     def initialize(profiles, technology)
+      @profiles   = profiles[technology.type]
       @technology = technology
-      @profiles   = selected_profiles(profiles)
     end
 
     def select_profile
@@ -45,10 +45,6 @@ module LoadProfiles
 
     def minimize_concurrency?
       @technology.concurrency == 'min' && !is_edsn?
-    end
-
-    def selected_profiles(profiles)
-      profiles[@technology.type]
     end
   end
 end

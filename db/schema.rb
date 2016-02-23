@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160215144730) do
+ActiveRecord::Schema.define(version: 20160217130917) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -81,6 +81,7 @@ ActiveRecord::Schema.define(version: 20160215144730) do
     t.float    "default_demand",           limit: 24
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "included_in_concurrency",             default: false
   end
 
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
