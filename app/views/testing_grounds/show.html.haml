@@ -99,8 +99,8 @@
                         %td
                           .name= tech.name
                           %i.profile= tech.profile_key
-                        %td= tech.capacity.round(2)
-                        %td= tech.carrier_capacity.round(2)
+                        %td= tech.capacity && tech.capacity.round(2)
+                        %td= tech.carrier_capacity && tech.carrier_capacity.round(2)
                         %td= tech.volume
                         %td= tech.demand
                         %td= tech.units
