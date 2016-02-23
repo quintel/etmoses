@@ -1,7 +1,7 @@
 ---
 host:          'beta.moses.et-model.com'
 etengine_host: 'beta.et-engine.com'
-etmodel_host:  'beta.pro.energytransitionmodel.com/'
+etmodel_host:  'beta.pro.energytransitionmodel.com'
 
 cache:
   # Cache the results of network calculations.
