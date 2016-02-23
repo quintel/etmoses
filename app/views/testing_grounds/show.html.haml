@@ -88,7 +88,8 @@
                   %thead
                     %tr
                       %th Name (Profile)
-                      %th Capacity [kW]
+                      %th Output Capacity [kW]
+                      %th Input Capacity [kW]
                       %th Storage volume [kWh]
                       %th Yearly demand [kWh]
                       %th Units
@@ -98,7 +99,8 @@
                         %td
                           .name= tech.name
                           %i.profile= tech.profile_key
-                        %td= tech.carrier_capacity
+                        %td= tech.capacity.round(2)
+                        %td= tech.carrier_capacity.round(2)
                         %td= tech.volume
                         %td= tech.demand
                         %td= tech.units

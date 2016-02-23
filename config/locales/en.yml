@@ -46,7 +46,7 @@ en:
     om_costs_per_year: "O&M Costs per year"
     om_costs_per_full_load_hour: "O&M costs per full load hour"
     om_costs_for_ccs_per_full_load_hour: "O&M costs for ccs per full load hour"
-    performance_coefficient: Performance coefficient
+    performance_coefficient: "COP / Efficiency"
 
   testing_grounds:
     error:

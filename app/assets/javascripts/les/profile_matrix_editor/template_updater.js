@@ -1,5 +1,6 @@
 /*globals Ajax,BatteryTemplateUpdater,BufferOptions,BufferSelectBox,
-CompositeTemplateUpdater,FormHelper,ProfileSelectBox,TemplateSettings*/
+Calculations, CompositeTemplateUpdater,FormHelper,ProfileSelectBox,
+TemplateSettings, btoa*/
 var TemplateUpdater = (function () {
     'use strict';
 
@@ -17,23 +18,40 @@ var TemplateUpdater = (function () {
     }
 
     function setInputs() {
-        var key;
+        var key, input;
         for (key in this.data) {
-            this.template.set(key, this.data[key]);
-            this.template.find("." + key.underscorize() + " input").val(this.data[key]);
+            input = this.template.find("." + key.underscorize() + " input")
+            input.val(this.data[key]);
+
+            if (!(input.attr("disabled") === "disabled")) {
+                this.template.set(key, this.data[key]);
+            }
         }
 
         return this.template;
     }
 
+    function updatePositionOfTechnology() {
+        var uniqueIdentifier = btoa(Date.now()),
+            positionRelativeToBuffer = $(this.template).data('positionRelativeToBuffer');
+
+        this.template.find("input[type=radio]").attr("name", function () {
+            return $(this).attr("name")
+                       .replace(/[A-Za-z0-9=]+\_{2}$/, uniqueIdentifier + '__');
+        });
+
+        if (positionRelativeToBuffer) {
+            this.template
+                .find("input[type=radio][value=" + positionRelativeToBuffer + "]")
+                .prop('checked', true);
+        }
+    }
+
     function updateDefaults() {
         this.template.find("strong").text(this.data.name);
         this.template.attr("class", this.data.type + ' technology');
-        this.template.find("input[type=radio]").attr("name", function () {
-            return $(this).attr("name").replace(/\_{2}/, '_' + $(".technology").length);
-        });
-        this.template.find("input[type=radio][value=" + this.data.positionRelativeToBuffer + "]")
-            .prop('checked', true);
+        this.template.find("span.carrier").text(this.carrier);
+        updatePositionOfTechnology.call(this);
 
         return this.template;
     }
@@ -144,13 +162,16 @@ var TemplateUpdater = (function () {
     function setInitialDataFromSelectBox() {
         var option                         = $(this.technologySelectBox).selectedOption();
 
+        this.carrier                       = option.data('carrier');
+
+        this.data.node                     = $(this.data.append).data('node');
         this.data.type                     = $(this.technologySelectBox).val();
         this.data.composite                = option.data('composite');
         this.data.includes                 = option.data('includes');
         this.data.positionRelativeToBuffer = option.data('positionRelativeToBuffer');
         this.data.name                     = addCount.call(this, option.text(), ' #');
         this.data.buffer                   = findNearestCompositValue.call(this);
-        this.data.node                     = $(this.data.append).data('node');
+        this.data.carrierCapacity          = Calculations.calculateInputCapacity.call(this.data);
         this.data.units                    = 1;
 
         setCompositeValues.call(this);
@@ -158,10 +179,15 @@ var TemplateUpdater = (function () {
     }
 
     TemplateUpdater.prototype = {
+        carrier: null,
         data: {},
         update: function () {
             setInitialDataFromSelectBox.call(this);
             fetchEtmAttributes.call(this);
+        },
+
+        updateExisting: function () {
+            updatePositionOfTechnology.call(this);
         },
 
         addToRow: function () {

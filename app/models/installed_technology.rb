@@ -1,52 +1,46 @@
 class InstalledTechnology
   include Virtus.model
 
-  attribute :node,                                String
-  attribute :name,                                String
+  # Non editables
+  attribute :associates,                          Array[InstalledTechnology], editable: false
+  attribute :behavior,                            String, editable: false
+  attribute :node,                                String, editable: false
+  attribute :profile_key,                         String, editable: false
+
+  # Editables
   attribute :buffer,                              String
-  attribute :composite,                           Boolean, default: false
-  attribute :composite_index,                     Integer
-  attribute :composite_value,                     String
-  attribute :position_relative_to_buffer,         String
-  attribute :type,                                String, default: 'generic'
-  attribute :behavior,                            String
-  attribute :profile,                             Integer
-  attribute :profile_key,                         String
   attribute :capacity,                            Float
-  attribute :demand,                              Float
-  attribute :volume,                              Float
-  attribute :units,                               Integer, default: 1
-  attribute :initial_investment,                  Float
-  attribute :technical_lifetime,                  Integer
-  attribute :performance_coefficient,             Float
-  attribute :concurrency,                         String,  default: 'max'
-  attribute :full_load_hours,                     Integer
-  attribute :om_costs_per_year,                   Float
-  attribute :om_costs_per_full_load_hour,         Float
-  attribute :om_costs_for_ccs_per_full_load_hour, Float
-  attribute :associates,                          Array[InstalledTechnology]
-  attribute :includes,                            Array[String]
+  attribute :composite,                           Boolean, default: false
+  attribute :composite_value,                     String
   attribute :congestion_reserve_percentage,       Float
+  attribute :demand,                              Float
+  attribute :name,                                String
+  attribute :position_relative_to_buffer,         String
+  attribute :profile,                             Integer
+  attribute :type,                                String, default: 'generic'
+  attribute :units,                               Integer, default: 1
+  attribute :volume,                              Float
 
-  EDITABLES = %i(name buffer type profile carrier_capacity volume demand units
-    initial_investment technical_lifetime full_load_hours om_costs_per_year
-    om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
-    performance_coefficient concurrency composite composite_value
-    position_relative_to_buffer includes composite_index congestion_reserve_percentage
-  )
+  # Advanced features
+  attribute :composite_index,                     Integer, hidden: true
+  attribute :concurrency,                         String,  default: 'max', hidden: true
+  attribute :full_load_hours,                     Integer, hidden: true
+  attribute :includes,                            Array[String], hidden: true
+  attribute :initial_investment,                  Float, hidden: true
+  attribute :om_costs_for_ccs_per_full_load_hour, Float, hidden: true
+  attribute :om_costs_per_full_load_hour,         Float, hidden: true
+  attribute :om_costs_per_year,                   Float, hidden: true
+  attribute :performance_coefficient,             Float, hidden: true
+  attribute :technical_lifetime,                  Integer, hidden: true
 
-  HIDDEN = %i(initial_investment technical_lifetime full_load_hours om_costs_per_year
-    om_costs_per_full_load_hour om_costs_for_ccs_per_full_load_hour
-    performance_coefficient concurrency includes composite_index
-  )
+  EDITABLES =
+    attribute_set.select{ |attr| attr.options[:editable] || true }.map(&:name)
 
-  PRESENTABLES = (EDITABLES - %i(carrier_capacity concurrency) + %i(capacity))
+  HIDDEN =
+    attribute_set.select{ |attr| attr.options[:hidden] || false }.map(&:name)
 
-  def initialize(args = nil)
-    @id = SecureRandom.hex
-
-    super
-  end
+  PRESENTABLES =
+    EDITABLES - %i(carrier_capacity concurrency) + %i(capacity)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
@@ -247,7 +241,7 @@ class InstalledTechnology
   end
 
   def position_relative_to_buffer_name
-    "position_relative_to_buffer_#{@id}_#{type}"
+    "position_relative_to_buffer_#{type}__"
   end
 
   def valid?
