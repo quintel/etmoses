@@ -1,11 +1,6 @@
 /*globals LoadChartHelper,LoadChartsSettings,StrategyHelper,Transformator,
 StackTransformator*/
 
-// TODO
-// - [ ] Make a toggle between strategies turned on yes or no
-// - [ ] Make a toggle for electricity and gas
-// - [ ]
-
 var D3LoadChart = (function () {
     'use strict';
 
@@ -414,6 +409,11 @@ var D3LoadChart = (function () {
             range_start: 0,
             range_end:   weekResolution
         },
+        view: function (newViewAs) {
+            viewAsStacked = newViewAs;
+
+            return this;
+        },
         update: function (data) {
             this.lastRequestedData = data || this.lastRequestedData;
 
@@ -471,7 +471,7 @@ var D3LoadChart = (function () {
 
             svg.selectAll("path").remove();
 
-            //for slider part--------------------------------------------------
+            ////for slider part--------------------------------------------------
 
             var contextArea = d3.svg.area()
                 .interpolate("step-after")
