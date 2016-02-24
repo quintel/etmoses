@@ -12,6 +12,7 @@ Rails.application.configure do
   config.active_support.deprecation                = :notify
   config.log_formatter                             = ::Logger::Formatter.new
   config.active_record.dump_schema_after_migration = false
+  config.force_ssl                                 = true
 
   # Temporarily use in-memory caching.
   config.cache_store = :memory_store, { size: 64.megabytes }
