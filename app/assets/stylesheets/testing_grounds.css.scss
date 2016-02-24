@@ -178,7 +178,7 @@ ul.testing-grounds {
 
 select.load-date {
   margin: 0 10px;
-  max-width: 300px;
+  max-width: 230px;
 }
 
 .load-graph-wrapper{
@@ -207,6 +207,7 @@ select.load-date {
           margin-right: 5px;
           margin-top: -2px;
           vertical-align: middle;
+          opacity: 0.6;
         }
       }
       svg {
@@ -216,6 +217,11 @@ select.load-date {
       .axis line {
         stroke-width: 1px;
       }
+    }
+    select.load-date,
+    .toggle {
+      float: left;
+      margin-right: 10px;
     }
   }
 }

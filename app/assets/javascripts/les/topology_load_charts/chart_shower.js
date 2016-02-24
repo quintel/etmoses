@@ -68,10 +68,26 @@ var ChartShower = (function () {
         enableCsvDownloadCurveButton.call(this);
     }
 
+    function changeViewOfD3() {
+        window.currentTree.d3Chart.view($(this).prop('checked')).update();
+    }
+
+    function toggleTechnologiesOfD3() {
+        // do some magic
+    }
+
+    function toggleStrategiesOfD3() {
+        // do some magic
+    }
+
     function toggleDomParts() {
         $('#technologies .row-fluid, p.info').hide();
         $(".load-graph-wrapper a[href='#load']").tab('show');
         $("select.load-date").removeClass("hidden");
+
+        $('input.chart-view.stacked').on('change', changeViewOfD3);
+        $('input.chart-view.electric').on('change', toggleTechnologiesOfD3);
+        $('input.chart-view.strategies').on('change', toggleStrategiesOfD3);
 
         showTechnologies.call(this);
         setHeader.call(this);
@@ -91,17 +107,25 @@ var ChartShower = (function () {
     }
 
     function renderLoadChart() {
-        var d = this.nodeData;
-
-        if ((d.load && d.load.length > 0) ||
-                (d.load_strategies && d.load_strategies.length > 0) ||
-                (d.gas && d.gas.length > 0) ||
-                (d.gas_strategies && d.gas_strategies.length > 0)) {
-
+        if (isValidNodeData.call(this)) {
             addNewLoadChartPlatform.call(this);
         } else {
             window.currentTree.update();
         }
+    }
+
+    function isValidNodeData() {
+        var d = this.nodeData,
+            valid = false;
+
+        ['load', 'load_strategies', 'gas', 'gas_strategies'].forEach(function (attr) {
+            if (d[attr] && d[attr].length > 0) {
+                valid = true;
+                return false;
+            }
+        });
+
+        return valid;
     }
 
     ChartShower.prototype = {
