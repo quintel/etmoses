@@ -2,7 +2,7 @@ module Network
   # Represents a Curve whose values are reduced as loads are assigned to the
   # technology which owns the profile. Used by technologies which share a single
   # profile, where the demand may be met by one or more of the techs.
-  class DepletingCurve < SimpleDelegator
+  class DepletingCurve < FastDelegator.create(Curve)
     def self.from(enumerable)
       if enumerable.is_a?(self)
         enumerable

@@ -75,11 +75,16 @@ module Network
 
       # Wraps technologies which are part of a component to ensure that the
       # depleting profile is correctly adjusted for received energy.
-      class Wrapper < SimpleDelegator
+      #
+      # The delegator is based on Buffer, since it is the most complex of the
+      # technologies modelled. This is not particularly future-proof: if another
+      # technology is added with public methods not defined by Buffer, the
+      # delegation will not work correctly (raising a NoMethodError).
+      class Wrapper < FastDelegator.create(Buffer)
         def initialize(obj, composite)
           super(obj)
           @composite = composite
-          @handle_decay = respond_to?(:stored)
+          @handle_decay = obj.respond_to?(:stored)
         end
 
         def production_at(frame)
