@@ -11,7 +11,7 @@ module Strategies
       { name: "postponing_base_load",                      ajax_prop: "postponing_base_load", enabled: true},
       { name: "saving_aggregated_base_load",               ajax_prop: "saving_base_load", enabled: true},
       { name: "capping_solar_pv",                          ajax_prop: "capping_solar_pv", enabled: true},
-      { name: "hhp_gas_congested",                         ajax_prop: "hhp_gas_congested", enabled: false}
+      { name: "hhp_switch_to_gas",                         ajax_prop: "hhp_switch_to_gas", enabled: true}
     ]
   end
 end

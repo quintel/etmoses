@@ -2,9 +2,14 @@ module Network
   module Technologies
     module HHP
       class Electricity < Base
-        def initialize(installed, profile, options)
+        def initialize(installed, profile,
+                       behavior_profile:,
+                       hhp_switch_to_gas: false,
+                       **)
           super
-          @behavior_profile = options[:behavior_profile]
+
+          @behavior_profile     = behavior_profile
+          @capacity_constrained = hhp_switch_to_gas
         end
 
         def conditional_consumption_at(frame)
@@ -13,6 +18,10 @@ module Network
           else
             super
           end
+        end
+
+        def capacity_constrained?
+          @capacity_constrained
         end
       end # Electricity
     end # HHP

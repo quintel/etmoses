@@ -20,6 +20,7 @@ class TestingGround::StrategyUpdater
       :solar_power_to_heat,
       :solar_power_to_gas,
       :hp_capacity_constrained,
+      :hhp_switch_to_gas,
       :postponing_base_load,
       :saving_base_load,
       :capping_solar_pv,

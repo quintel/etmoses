@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229121203) do
+ActiveRecord::Schema.define(version: 20160229174038) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 20160229121203) do
     t.boolean "solar_power_to_heat",                default: false
     t.boolean "solar_power_to_gas",                 default: false
     t.boolean "hp_capacity_constrained",            default: false
+    t.boolean "hhp_switch_to_gas",                  default: false
     t.boolean "postponing_base_load",               default: false
     t.boolean "saving_base_load",                   default: false
     t.boolean "capping_solar_pv",                   default: false
