@@ -273,4 +273,10 @@ RSpec.describe InstalledTechnology do
       end # when setting the electrical capacity
     end # when set to 4.0
   end
+
+  describe "editables" do
+    it "does not include associates" do
+      expect(InstalledTechnology::EDITABLES).to_not include(:associates)
+    end
+  end
 end # InstalledTechnology
