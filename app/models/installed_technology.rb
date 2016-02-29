@@ -213,11 +213,19 @@ class InstalledTechnology
     super.merge('carrier_capacity' => carrier_capacity)
   end
 
-  def yearly_investment
-    om_costs_per_year.to_f                   +
-    initial_investment.to_f                  / (technical_lifetime || 1) +
-    om_costs_per_full_load_hour.to_f         / (full_load_hours || 1) +
-    om_costs_for_ccs_per_full_load_hour.to_f / (full_load_hours || 1)
+  def total_yearly_costs
+    (depreciation_costs     +
+     om_costs_per_year.to_f +
+     yearly_variable_om_costs) * units
+  end
+
+  def depreciation_costs
+    (initial_investment.to_f / (technical_lifetime || 1))
+  end
+
+  def yearly_variable_om_costs
+    (om_costs_per_full_load_hour.to_f +
+     om_costs_for_ccs_per_full_load_hour.to_f) * full_load_hours.to_f
   end
 
   def parent_key
