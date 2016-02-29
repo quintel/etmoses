@@ -11,18 +11,9 @@ module Network
         self
       end
 
-      def self.build(installed, profile, options)
-        if installed.buffer.blank? && ! options[:no_legacy_fallback]
-          LegacyBuffer.build(installed, profile, options)
-        else
-          super
-        end
-      end
-
-      def initialize(installed, profile, buffering_space_heating: false, **)
+      def initialize(installed, profile, **)
         super
 
-        @buffering  = buffering_space_heating
         @mand_loads = []
         @cond_loads = []
       end
@@ -63,8 +54,6 @@ module Network
       #
       # Returns a numeric.
       def conditional_consumption_at(frame)
-        return 0.0 unless @buffering
-
         @cond_loads[frame] ||= begin
           @capacity.limit_conditional(
             frame,

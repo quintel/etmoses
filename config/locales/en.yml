@@ -82,7 +82,7 @@ en:
       prioritize_local_solar_battery_production: 'Storage in batteries prioritising local PV production'
       conversion_local_solar_power_to_heat: 'Conversion of local PV excess using P2H'
       conversion_local_solar_power_to_gas: 'Conversion of local PV excess using P2G'
-      buffering_local_solar_space_heating: 'Buffering of heat in heat pumps'
+      hp_capacity_constrained: 'Only buffer using heat humps if network has spare capacity'
       postponing_base_load: 'Postponing of individual base-load'
       saving_aggregated_base_load: 'Saving of aggregated base-load'
       capping_solar_pv: 'Capping of solar PV'

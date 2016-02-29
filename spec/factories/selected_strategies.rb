@@ -3,7 +3,7 @@ FactoryGirl.define do
     battery_storage false
     solar_power_to_heat false
     solar_power_to_gas false
-    buffering_space_heating false
+    hp_capacity_constrained false
     postponing_base_load false
     saving_base_load false
     capping_solar_pv false

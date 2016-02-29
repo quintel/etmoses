@@ -13,8 +13,7 @@ RSpec.describe Network::Technologies::Buffer do
           capacity: capacity, volume: volume,
           performance_coefficient: performance,
           buffer: 'one'
-        ), 8760,
-        buffering_space_heating: true
+        ), 8760
       )
 
       dprofile  = Network::DepletingCurve.new(profile)
@@ -259,54 +258,4 @@ RSpec.describe Network::Technologies::Buffer do
       end
     end
   end # with a storage volume of 50
-
-  context 'when disabled' do
-    let(:profile) { [0.0] * 8760 }
-
-    let(:tech) do
-      network_technology(
-        build(
-          :installed_heat_pump, profile: profile,
-          capacity: 5.0, volume: 50.0, buffer: 'one'
-        ), 8760,
-        buffering_space_heating: false
-      )
-    end
-
-    it 'becomes a Generic' do
-      expect(tech).to be_a(Network::Technologies::Generic)
-    end
-
-    context 'and a profile value of zero' do
-      let(:avail_profile) { [0.0] * 8760 }
-
-      it 'has no production' do
-        expect(tech.production_at(1)).to be_zero
-      end
-
-      it 'has no mandatory consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
-      end
-
-      it 'has no conditional consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
-      end
-    end # and a profile value of zero
-
-    context 'and a profile value of 1.0' do
-      let(:profile) { [0.0, 1.0] * 4380 }
-
-      it 'has no production' do
-        expect(tech.production_at(1)).to be_zero
-      end
-
-      it 'has mandatory consumption of 1.0' do
-        expect(tech.mandatory_consumption_at(1)).to eq(1.0)
-      end
-
-      it 'has no conditional consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
-      end
-    end # and a profile value of 1.0
-  end # when disabled
 end
