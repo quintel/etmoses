@@ -18,4 +18,4 @@
 %span.or or
 = link_to_if(policy(@profile).destroy?, 'Delete', load_profile_path(@profile), class: 'button', method: 'delete', data: { confirm: 'Are you sure you want to delete this profile?' })
 %br
-= link_to '◄ All load profiles', load_profiles_path, class: 'button button-primary'
+= link_to '◄ All load profiles', profiles_path, class: 'button button-primary'
