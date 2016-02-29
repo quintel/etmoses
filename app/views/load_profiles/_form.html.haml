@@ -92,6 +92,6 @@
     = form.submit class: 'btn btn-primary'
     %span.or or
     - if @profile.new_record?
-      = link_to 'Cancel', load_profiles_path, class: 'btn btn-default'
+      = link_to 'Cancel', profiles_path, class: 'btn btn-default'
     - else
       = link_to 'Cancel', load_profile_path(@profile), class: 'btn btn-default'
