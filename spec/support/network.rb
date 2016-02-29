@@ -10,7 +10,7 @@ module Moses
         capping_solar_pv: true,
         postponing_base_load: true,
         saving_base_load: true,
-        buffering_space_heating: true,
+        hp_capacity_constrained: true,
         solar_power_to_gas: true
       }.freeze
 

@@ -194,7 +194,7 @@ class TestingGroundsController < ResourceController
       :ev_storage,
       :solar_power_to_heat,
       :solar_power_to_gas,
-      :buffering_space_heating,
+      :hp_capacity_constrained,
       :postponing_base_load,
       :saving_base_load,
       :capping_solar_pv,

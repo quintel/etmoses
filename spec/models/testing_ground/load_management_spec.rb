@@ -76,25 +76,23 @@ RSpec.describe TestingGround do
         allow_any_instance_of(Network::Curve).to receive(:frames_per_hour).and_return(4.0)
       }
 
+      let(:topology_graph) { super().merge('capacity' => 0.75) }
+
+      let(:technology_profile) do
+        profile = super()
+
+        # Remove PV supply which would otherwise render the capacity constrain
+        # useless.
+        profile['CONGESTED_END_POINT_1'].reject! do |tech|
+          tech['type'] == 'households_solar_pv_solar_radiation'
+        end
+
+        profile
+      end
+
       describe "#buffering_heat_pumps" do
         it "no strategy applied" do
           results = calculate
-
-          expected = [
-            0.0, 0.0, 0.0, 0.0,
-            # 0.5 kWh used by the profile
-            0.5,
-            0.0
-          ]
-
-          expect(results.map do |val|
-            # Adjust loads by solar production.
-            val - solar_load_profile['default'].first
-          end).to eq(expected)
-        end
-
-        it "buffering heat pumps strategy applied" do
-          results = calculate(buffering_space_heating: true)
 
           expected = [
             # Buffering limited by capacity. 2x 1.0 kW = 0.5 kWh stored.
@@ -106,10 +104,24 @@ RSpec.describe TestingGround do
             0.5, 0.0
           ]
 
-          expect(results.map do |val|
-            # Adjust loads by solar production.
-            val - solar_load_profile['default'].first
-          end).to eq(expected)
+          expect(results).to eq(expected)
+        end
+
+        it "buffering heat pumps strategy applied" do
+          results = calculate(hp_capacity_constrained: true)
+
+          expected = [
+            # Buffering limited by capacity.
+            # 2x 0.75 kW + 0.5 kW = 0.5 kWh stored.
+            0.75, 0.75, 0.5,
+            # Buffer is full.
+            0.0,
+            # 0.5 kW is now subtracted from the buffer, and we can start
+            # buffering again...
+            0.5, 0.0
+          ]
+
+          expect(results).to eq(expected)
         end
       end
     end
@@ -119,41 +131,51 @@ RSpec.describe TestingGround do
         allow_any_instance_of(Network::Curve).to receive(:frames_per_hour).and_return(1.0)
       }
 
+      let(:topology_graph) { super().merge('capacity' => 0.25) }
+
+      let(:technology_profile) do
+        profile = super()
+
+        # Remove PV supply which would otherwise render the capacity constrain
+        # useless.
+        profile['CONGESTED_END_POINT_1'].reject! do |tech|
+          tech['type'] == 'households_solar_pv_solar_radiation'
+        end
+
+        profile
+      end
+
       describe "#buffering_heat_pumps" do
         it "no strategy applied" do
           results = calculate
 
           expected = [
-            0.0, 0.0, 0.0, 0.0,
+            # Fill buffer.
+            0.5,
+            # Buffer is now full.
+            0.0, 0.0, 0.0,
             # 0.5 kWh used by the use profile.
             0.5,
             0.0
           ]
 
-          expect(results.map do |val|
-            # Account for solar production.
-            val.round(2) - solar_load_profile['default'].first
-          end).to eq(expected)
+          expect(results).to eq(expected)
         end
 
-        it "buffering heat pumps strategy applied" do
-          results = calculate(buffering_space_heating: true)
+        it "heat pump capacity-constrained strategy applied" do
+          results = calculate(hp_capacity_constrained: true)
 
           expected = [
-            # Buffer 0.5 kW in the first hour. This fills the buffers 0.5 kWh
-            # volume.
-            0.5,
+            # Buffer 0.25 kW for the first two hours. This fills the buffers
+            # 0.5 kWh volume.
+            0.25, 0.25,
             # Buffer is full...
-            0.0, 0.0, 0.0,
+            0.0, 0.0,
             # 0.5 kWh used by the use profile, buffer refills.
-            0.5,
-            0.0
+            0.25, 0.25
           ]
 
-          expect(results.map do |val|
-            # Account for solar production.
-            val.round(2) - solar_load_profile['default'].first
-          end).to eq(expected)
+          expect(results).to eq(expected)
         end
       end
     end

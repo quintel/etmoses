@@ -18,12 +18,12 @@ module Network
       end
 
       def initialize(installed, profile,
-                     buffering_space_heating: false,
+                     hp_capacity_constrained: false,
                      additional_profile:, **)
         super
 
-        @use_profile = additional_profile
-        @buffering   = buffering_space_heating
+        @use_profile          = additional_profile
+        @capacity_constrained = hp_capacity_constrained
       end
 
       # Keep the original production_at which tells us how much energy is stored
@@ -58,17 +58,9 @@ module Network
         @capacity.limit_mandatory(frame, required)
       end
 
-      # Public: Describes the unfilled storage capacity which may be assigned
-      # from excess production in the network.
-      #
-      # Returns a numeric.
-      def conditional_consumption_at(frame)
-        @buffering && super || 0.0
-      end
-
       # Public: EVs should not overload the network.
       def capacity_constrained?
-        true
+        @capacity_constrained
       end
 
       # Public: EV conditional load may come from the grid.
