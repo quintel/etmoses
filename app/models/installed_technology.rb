@@ -34,7 +34,7 @@ class InstalledTechnology
   attribute :technical_lifetime,                  Integer, hidden: true
 
   EDITABLES =
-    attribute_set.select{ |attr| attr.options[:editable] || true }.map(&:name)
+    attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
 
   HIDDEN =
     attribute_set.select{ |attr| attr.options[:hidden] || false }.map(&:name)
