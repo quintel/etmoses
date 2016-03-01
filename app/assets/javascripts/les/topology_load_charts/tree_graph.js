@@ -220,8 +220,8 @@ var TreeGraph = (function () {
     }
 
     function setLastClickedNode() {
-        var currentNode,
-            settings = window.localSettings.getAll();
+        var currentNode = this.root,
+            settings    = window.localSettings.getAll();
 
         if (settings && settings.current_chart_id) {
             ETHelper.eachNode([this.root], function (node) {
@@ -230,9 +230,9 @@ var TreeGraph = (function () {
                     return false;
                 }
             });
-            this.lastClicked = currentNode;
         }
 
+        this.lastClicked = currentNode;
         reloadLast.call(this);
     }
 
