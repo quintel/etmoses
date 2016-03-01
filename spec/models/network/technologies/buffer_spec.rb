@@ -17,7 +17,7 @@ RSpec.describe Network::Technologies::Buffer do
       )
 
       dprofile  = Network::DepletingCurve.new(profile)
-      composite = Network::Technologies::Composite.new(
+      composite = Network::Technologies::Composite::Manager.new(
         Float::INFINITY, volume, dprofile)
 
       composite.add(tech)

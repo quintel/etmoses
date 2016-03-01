@@ -13,7 +13,7 @@ RSpec.describe Network::Technologies::Composite do
   end
 
   let(:tech) do
-    comp = Network::Technologies::Composite.new(
+    comp = Network::Technologies::Composite::Manager.new(
       capacity, Float::INFINITY, profile
     )
 
