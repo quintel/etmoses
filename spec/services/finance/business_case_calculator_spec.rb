@@ -110,7 +110,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
                     "units"                               => 2,
                     "initial_investment"                  => nil,
                     "technical_lifetime"                  => nil,
-                    "full_load_hours"                     => 2,
+                    "full_load_hours"                     => 0,
                     "om_costs_per_year"                   => 5.5,
                     "om_costs_per_full_load_hour"         => 25.0,
                     "om_costs_for_ccs_per_full_load_hour" => nil,
@@ -130,6 +130,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
 
     it "determines the initial investments for the stakeholders" do
       expect(business_case.rows.last['system operator'].last).to eq(11000.0)
+      expect(business_case.rows[1]['customer'][1]).to eq(26.5)
     end
   end
 end

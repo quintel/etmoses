@@ -38,9 +38,7 @@ module Market
     # Returns a Hash
     def technology_costs
       group_sum(technology_nodes) do |node|
-        node.techs.map(&:installed).sum do |tech|
-          tech.yearly_investment * tech.units
-        end
+        node.techs.map(&:installed).sum(&:total_yearly_costs)
       end
     end
 
