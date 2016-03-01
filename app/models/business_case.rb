@@ -5,22 +5,28 @@ class BusinessCase < ActiveRecord::Base
   serialize :financials, JSON
 
   def freeform
-    if financials && freeform_row = financials.detect{|t| t['freeform'] }
-      freeform_row
+    if financials
+      financials.detect { |r| r['freeform'] } || empty_freeform
     else
-      {'freeform' => [nil] * financials.size }
+      empty_freeform
     end
   end
 
   def financials=(financials)
-    if(financials.is_a?(Array))
+    if financials.is_a?(Array)
       super(financials)
-    else
+    elsif financials.is_a?(String)
       super(JSON.parse(financials))
     end
   end
 
   def clear_job!
     update_attributes(job_finished_at: nil, job_id: nil)
+  end
+
+  private
+
+  def empty_freeform
+    { 'freeform' => [nil] * financials.size }
   end
 end
