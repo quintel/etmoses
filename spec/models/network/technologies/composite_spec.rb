@@ -99,8 +99,8 @@ RSpec.describe Network::Technologies::Composite do
     context 'with insufficient composite capacity' do
       let(:capacity) { 0.1 }
 
-      it 'runs with buffering technologies' do
-        expect(component_one.mandatory_consumption_at(0)).to eq(0.8)
+      it 'limits buffering consumption to the comp. capacity' do
+        expect(component_one.mandatory_consumption_at(0)).to eq(0.1)
       end
 
       it 'turns on boosting technologies' do
@@ -123,7 +123,7 @@ RSpec.describe Network::Technologies::Composite do
         end
 
         it 'runs with buffering technologies' do
-          expect(component_one.mandatory_consumption_at(1)).to eq(0.8)
+          expect(component_one.mandatory_consumption_at(1)).to eq(0.4)
         end
 
         it 'turns on boosting technologies' do

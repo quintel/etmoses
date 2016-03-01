@@ -11,6 +11,7 @@ module Network
         @capacity = capacity
         @demand   = profile
         @profile  = DepletingCurve.new(profile)
+        @inputs   = DefaultArray.new { 0.0 }
 
         @volume = (volume || 0.0) * profile.frames_per_hour
 
@@ -28,8 +29,35 @@ module Network
 
           decay
         end
+      end
 
-        techs.each { |tech| add(tech) }
+      # Public: All the technologies which are contained in the composite.
+      # Buffers first.
+      #
+      # Returns an array of Composite:Wrappers.
+      def techs
+        @techs.partition(&:buffering?).flatten
+      end
+
+      # Public: Informs the composite that an amount of energy has been received
+      # which contributes to the consumption of the device.
+      #
+      # An input is energy delivered to to the composite using a buffering
+      # technology; boostinh techs are not onstrained by the capacity of the
+      # composite, and therefore their consumption is not included.
+      #
+      # Returns the total input in the current frame.
+      def input(frame, amount)
+        @inputs[frame] += amount
+      end
+
+      # Public: Determines how much more buffering energy may be input to the
+      # composite before it runs out of capacity.
+      #
+      # Returns a numeric.
+      def consumption_margin_at(frame)
+        margin = @capacity - @inputs[frame]
+        margin > 0 ? margin : 0.0
       end
 
       # Public: Determines if boosting technologies are permitted (or required)
@@ -61,7 +89,7 @@ module Network
               BoostingWrapper.new(tech, self)
             end
           else
-            Wrapper.new(tech, self)
+            BufferingWrapper.new(tech, self)
           end
 
         @techs.push(wrapped)
@@ -103,10 +131,49 @@ module Network
           profile.deplete(frame, amount)
         end
 
+        # Public: Returns if the technology is a buffering technology. If false,
+        # it is "boosting".
+        #
+        # Returns true or false.
+        def buffering?
+          false
+        end
+
         def inspect
           "#<#{ self.class.name } #{ __getobj__.inspect }>"
         end
       end # Wrapper
+
+      class BufferingWrapper < Wrapper
+        def store(frame, amount)
+          super
+          @composite.input(frame, amount)
+        end
+
+        def receive_mandatory(frame, amount)
+          super
+          @composite.input(frame, amount)
+        end
+
+        def mandatory_consumption_at(frame)
+          constrain(frame, super)
+        end
+
+        def conditional_consumption_at(frame)
+          constrain(frame, super)
+        end
+
+        def buffering?
+          true
+        end
+
+        private
+
+        def constrain(frame, amount)
+          margin = @composite.consumption_margin_at(frame)
+          amount < margin ? amount : margin
+        end
+      end
 
       class BoostingWrapper < Wrapper
         def mandatory_consumption_at(frame)
