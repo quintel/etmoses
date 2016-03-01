@@ -7,12 +7,7 @@ var BatteryTemplateUpdater = (function () {
             "congestion_battery",
             "households_flexibility_p2p_electricity"
         ],
-        sliderSettings = {
-            tooltip: 'hide',
-            formatter: function (value) {
-                return value + "%";
-            }
-        };
+        sliderSettings = { tooltip: 'hide' };
 
     function setSlideStopValue() {
         var sliderValue = $(this).val();
