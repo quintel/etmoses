@@ -65,16 +65,16 @@ var TreeFetcher = (function () {
             });
     }
 
-    function fetchInitialLes() {
-        var nodeData, i;
+    function loadInitialLes(les) {
+        var nodeData = les.nodeData(this.resolution);
 
-        for (i in this.lesses) {
-            nodeData = this.lesses[i].nodeData(this.resolution);
-
-            if (this.lesses[i].anyStrategies()) {
-                this.requests.push(Ajax.json(this.url, nodeData, success, fail));
-            }
+        if (les.anyStrategies.call(nodeData)) {
+            this.requests.push(Ajax.json(this.url, nodeData, success, fail));
         }
+    }
+
+    function fetchInitialLes() {
+        this.lesses.forEach(loadInitialLes.bind(this));
 
         $.when.apply(null, this.requests).done(finish.bind(this)).fail(fail);
     }

@@ -1,38 +1,68 @@
 var LoadChartsSettings = {
     undefined: {
+        name: "Undefined",
         color: '#d4bc6a',
-        enabled: true
+        visible: true,
+        axisLabel: ''
+    },
+    flex: {
+        name: 'Flex',
+        color: '#d4bc6a',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    inflex: {
+        name: 'Inflex',
+        color: '#d4bc6a',
+        visible: true,
+        axisLabel: 'kW'
     },
     default: {
+        name: "Default",
         color: '#d4bc6a',
-        enabled: true
+        visible: true,
+        axisLabel: 'kW'
     },
     load_strategies: {
+        name: "Load (with strategies)",
         color: '#95BB95',
-        enabled: true
+        visible: true,
+        axisLabel: 'kW'
     },
     load: {
+        name: "Load",
         color: '#1F77B4',
-        enabled: true
+        visible: true,
+        axisLabel: 'kW'
     },
     price_curve: {
+        name: "Price",
         color: '#C8C758',
-        enabled: true
+        visible: true,
+        axisLabel: '€'
     },
     behavior_profile: {
+        name: "Behavior",
         color: '#1F77B4',
-        enabled: true
+        visible: true,
+        axisLabel: 'On/Off'
     },
     capacity: {
+        name: "Capacity",
         color: 'darkred',
-        enabled: false
+        visible: false,
+        axisLabel: 'kW'
     },
     gas_strategies: {
+        name: "Gas (with strategies)",
         color: '#C8C758',
-        enabled: true
+        visible: true,
+        axisLabel: 'kW'
     },
     gas: {
+        name: "Gas",
         color: '#9B5191',
-        enabled: true
+        visible: true,
+        axisLabel: 'kW'
     }
 };

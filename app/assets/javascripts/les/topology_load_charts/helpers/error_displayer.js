@@ -1,4 +1,4 @@
-var ErrorDisplayer = (function(){
+var ErrorDisplayer = (function () {
     'use strict';
 
     var error, target,
@@ -7,20 +7,20 @@ var ErrorDisplayer = (function(){
         detailEl   = $('<div class="detail"></div>'),
         backtracEl = $('<pre class="backtrace"></pre>');
 
-    function displayMessage(){
-        if(error.message){
-            errorEl.append(detailEl.text(error.message))
+    function displayMessage() {
+        if (error.message) {
+            errorEl.append(detailEl.text(error.message));
         }
     }
 
-    function displayBacktrace(){
-        if(error.backtrace){
+    function displayBacktrace() {
+        if (error.backtrace) {
             errorEl.append(backtracEl.html(error.backtrace.join('<br/>')));
         }
     }
 
     ErrorDisplayer.prototype = {
-        displayError: function(){
+        displayError: function () {
             $('.loading').remove();
             $(target).append(errorEl.append(messageEl.text(error.error)));
             displayMessage();
@@ -28,10 +28,10 @@ var ErrorDisplayer = (function(){
         }
     };
 
-    function ErrorDisplayer(_error, _target){
-        error = _error;
-        target = _target;
+    function ErrorDisplayer(thisError, thisTarget) {
+        error = thisError;
+        target = thisTarget;
     }
 
     return ErrorDisplayer;
-})();
+}());

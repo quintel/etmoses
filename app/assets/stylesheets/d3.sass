@@ -1,0 +1,64 @@
+.area
+  &.load
+    fill: steelblue
+
+  &.gas
+    fill: purple
+
+  &.capacity
+    fill: #FF0000
+
+.x-axis1, .axis
+  path, line
+    fill: none
+    stroke: #000
+    shape-rendering: crispEdges
+
+.brush .extent
+  stroke: #fff
+  fill-opacity: .25
+  shape-rendering: crispEdges
+
+svg.test
+  width: auto
+  height: auto
+
+line
+  fill: none
+  stroke-width: 1.5px
+
+.legend-box
+  cursor: pointer
+
+#mouse-tracker
+  stroke: #E6E7E8
+  stroke-width: 1px
+
+.hover-line
+  stroke: #E6E7E8
+  fill: none
+  stroke-width: 1px
+  left: 10px
+  shape-rendering: crispEdges
+  opacity: 1e-6
+
+.hover-text
+  stroke: none
+  fill: #000000
+
+.tooltip
+  font-weight: normal
+
+.pop-over-load-graph
+  position: absolute
+  top: 120px
+  left: 0px
+
+  span.wrap
+    display: block
+
+    span.square
+      display: inline-block
+      width: 12px
+      height: 12px
+      margin-right: 5px

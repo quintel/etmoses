@@ -1,4 +1,4 @@
-/*globals Blob*/
+/*globals Blob,navigator*/
 var CSV = {
     download: function (content, fileName, mimeType) {
         'use strict';

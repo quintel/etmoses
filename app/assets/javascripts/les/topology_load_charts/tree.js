@@ -1,4 +1,4 @@
-/*globals ErrorDisplayer,Les,StatusUpdater,Strategies,TreeFetcher,TreeGraph*/
+/*globals D3LoadChart,ErrorDisplayer,Les,StatusUpdater,Strategies,TreeFetcher,TreeGraph*/
 var Tree = (function () {
     'use strict';
 
@@ -18,7 +18,7 @@ var Tree = (function () {
     }
 
     function updateTree(data) {
-        this.lesses[1].strategies.toggleLoading();
+        this.toggleLoading()
 
         this.treeGraph.setData(data).reload();
     }
@@ -45,24 +45,20 @@ var Tree = (function () {
     }
 
     Tree.prototype = {
+        nodes: [],
         create: function () {
             updateDomElements();
 
+            this.d3Chart    = new D3LoadChart(".load-graph .chart", "default");
             this.treeGraph  = new TreeGraph(this.target.selector);
             this.strategies = new Strategies();
             this.lesses     = [ new Les(), new Les(this.strategies) ];
-            this.set().reload();
-        },
-
-        set: function (resolution) {
-            this.resolution = resolution || 'low';
-
-            return this;
+            this.reload();
         },
 
         reload: function () {
             new TreeFetcher(this.lesses)
-                .fetch(this.resolution)
+                .fetch(this.d3Chart.resolution)
                 .progress(updateProgress)
                 .done(drawTree.bind(this))
                 .fail(displayError);
@@ -73,10 +69,19 @@ var Tree = (function () {
         },
 
         update: function (lesses) {
+            this.toggleLoading();
+
             new TreeFetcher(lesses || this.lesses)
-                .fetch(this.resolution)
+                .fetch(this.d3Chart.resolution)
                 .done(updateTree.bind(this))
                 .fail(displayError);
+        },
+
+        toggleLoading: function () {
+            var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
+            loadingSpinner.toggleClass("on");
+
+            $("button.apply_strategies").prop("disabled", loadingSpinner.hasClass("on"));
         }
     };
 

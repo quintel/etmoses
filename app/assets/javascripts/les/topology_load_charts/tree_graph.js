@@ -1,11 +1,11 @@
-/*globals ChartShower,CSV,ETHelper,LoadChartHelper,LocalSettings*/
+/*globals ChartShower,CSV,ETHelper,LocalSettings*/
 var TreeGraph = (function () {
     'use strict';
 
     var self, container, dragListener, zoomListener, node, baseSvg, tree, diagonal,
         svgGroup,
         maxLabelLength  = 0,
-        viewerHeight    = 570,
+        viewerHeight    = 700,
         viewerWidth     = 500,
         duration        = 250,
         nodeSize        = 50,
@@ -220,8 +220,8 @@ var TreeGraph = (function () {
     }
 
     function setLastClickedNode() {
-        var currentNode,
-            settings = window.localSettings.getAll();
+        var currentNode = this.root,
+            settings    = window.localSettings.getAll();
 
         if (settings && settings.current_chart_id) {
             ETHelper.eachNode([this.root], function (node) {
@@ -230,9 +230,9 @@ var TreeGraph = (function () {
                     return false;
                 }
             });
-            this.lastClicked = currentNode;
         }
 
+        this.lastClicked = currentNode;
         reloadLast.call(this);
     }
 
@@ -273,15 +273,13 @@ var TreeGraph = (function () {
         },
 
         reload: function () {
-            LoadChartHelper.forceReload = true;
-
             this.update(this.root);
 
             setLastClickedNode.call(this);
         },
 
         showChart: function (d) {
-            new ChartShower(this, d).reload().show();
+            new ChartShower(this, d).show();
         },
 
         update: function (source) {

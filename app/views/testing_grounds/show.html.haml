@@ -71,6 +71,9 @@
     .tab-content
       .tab-pane.active#load{role: 'tabpanel'}
         .load-graph.line-chart
+          %select.load-date.form-control.hidden
+            = load_date_options
+
           %p.info Click on a network component to view its load and attached technologies
 
         %i.last-updated

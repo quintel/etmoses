@@ -1,4 +1,4 @@
-/*globals BusinessCaseTable,FinanceTable,Poller,StrategyHelper*/
+/*globals BusinessCaseTable,FinanceTable*/
 
 $(document).on("page:change", function () {
     'use strict';

@@ -176,6 +176,11 @@ ul.testing-grounds {
   }
 }
 
+select.load-date {
+  margin: 0 10px;
+  max-width: 300px;
+}
+
 .load-graph-wrapper{
   position: relative;
   width: 50%;
@@ -186,23 +191,30 @@ ul.testing-grounds {
     margin: 17px 10px 0px 10px;
   }
 
-  .load-graph{
-    .chart select{
-      margin: 0 10px;
-      max-width: 300px;
-    }
-    .chart svg {
-      height: 500px;
-      margin-bottom: 25px;
-
-      .nv-x .nv-axisMaxMin {
-        text {
-          text-anchor: start !important;
+  .load-graph {
+    .chart {
+      .legend {
+        text-align: right;
+        margin-top: 10px;
+        .legend-item {
+          padding-right: 10px;
+          cursor: pointer;
         }
-
-        &:last-child text {
-          text-anchor: end !important;
+        .square {
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          margin-right: 5px;
+          margin-top: -2px;
+          vertical-align: middle;
         }
+      }
+      svg {
+        height: 565px;
+        shape-rendering: crispEdges;
+      }
+      .axis line {
+        stroke-width: 1px;
       }
     }
   }
@@ -488,7 +500,7 @@ label.disabled{
 select#stakeholders{
   width: 300px;
   margin-left: 12px;
-  top: 575px;
+  top: 642px;
   position: absolute;
 }
 
