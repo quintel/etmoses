@@ -20,30 +20,25 @@ RSpec.describe NetworkCache::Validator do
   it 'validates the network cache with strategies' do
     old_strategies = FakeLoadManagement.strategies(ev_storage: true)
     SelectedStrategy.create!(old_strategies.merge(testing_ground: testing_ground))
-    NetworkCache::Writer.from(testing_ground, old_strategies).write
+    NetworkCache::Writer.from(testing_ground, strategies: old_strategies).write
 
-    expect(NetworkCache::Validator.from(testing_ground, old_strategies).valid?).to eq(true)
+    expect(NetworkCache::Validator.from(testing_ground,
+      strategies: old_strategies).valid?).to eq(true)
   end
 
   it 'marks the network cache as invalid with the wrong strategies' do
     old_strategies = FakeLoadManagement.strategies(ev_storage: true)
     SelectedStrategy.create!(old_strategies.merge(testing_ground: testing_ground))
-    NetworkCache::Writer.from(testing_ground, old_strategies).write
+    NetworkCache::Writer.from(testing_ground, strategies: old_strategies).write
 
     new_strategies = FakeLoadManagement.strategies(battery_storage: true)
 
-    expect(NetworkCache::Validator.from(testing_ground, new_strategies).valid?).to eq(false)
+    expect(NetworkCache::Validator.from(testing_ground,
+      strategies: new_strategies).valid?).to eq(false)
   end
 
   it 'marks the network cache as invalid with the wrong strategies' do
     testing_ground.update(updated_at: Time.now + 1.hour)
-    NetworkCache::Writer.from(testing_ground).write
-
-    expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)
-  end
-
-  it "marks the network cache as invalid when there's no market model" do
-    testing_ground.update(market_model_id: nil)
     NetworkCache::Writer.from(testing_ground).write
 
     expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)

@@ -1,5 +1,7 @@
 module Calculation
   class TechnologyLoad
+    HOURS_IN_YEAR = 8760.0
+
     def self.call(context)
       new(context).run
     end
@@ -9,7 +11,7 @@ module Calculation
     end
 
     def run
-      resolution = 8760.0 / @context.length
+      resolution = HOURS_IN_YEAR / @context.length
 
       @context.graphs.each do |graph|
         graph.nodes.each { |node| node.set(:resolution, resolution) }

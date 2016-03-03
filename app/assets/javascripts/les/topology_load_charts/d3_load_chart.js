@@ -28,12 +28,21 @@ var D3LoadChart = (function () {
         width,
         hoverLineGroup,
         hoverLine,
+        dateSelect,
 
-        currentWeek     = 0,
-        margin          = { top: 20, right: 200, bottom: 70, left: 50 },
+        currentWeek     = 1,
+        margin          = { top: 20, right: 200, bottom: 70, left: 75 },
         height          = 500 - margin.top - margin.bottom,
         height2         = 50,
         msInWeek        = 6.048e+8,
+        weeksInYear     = (365 / 7.0),
+
+        // This is assuming every LES has a length of 35040. Shorter LES's will
+        // break because of this line.
+        //
+        // TODO: Fix this static value so the 'resolution' of the LES is taken
+        // into account.
+        weekResolution  = 672,
         scaleCorrection = 1.05,
         chartLengths    = {
             long: 35040,
@@ -44,7 +53,7 @@ var D3LoadChart = (function () {
             ["%H:%M", function (d) { return d.getUTCMinutes(); }],
             ["%H:%M", function (d) { return d.getUTCHours(); }],
             ["%b %d", function (d) { return d.getUTCDate() !== 1; }],
-            ["%d %b", function (d) { return true; }]
+            ["%d %b", function () { return true; }]
         ]);
 
 
@@ -83,17 +92,6 @@ var D3LoadChart = (function () {
     }
 
     function sampledData(loads) {
-        var chunkSize, endAt, startAt, zeroWeek;
-
-        if (currentWeek && currentWeek !== 0) {
-            chunkSize = Math.floor(loads.length / 52);
-            zeroWeek  = currentWeek - 1;
-            startAt   = zeroWeek * chunkSize;
-            endAt     = startAt + chunkSize;
-
-            loads     = loads.slice(startAt, endAt);
-        }
-
         return loads.map(function (y, x) {
             return { x: formatDateFromFrame(loads, x), y: y };
         });
@@ -168,18 +166,19 @@ var D3LoadChart = (function () {
         }.bind(this));
     }
 
-    function renderPartOfChart(value) {
-        if (this.resolution === 'high' && value !== 0) {
-            this.update();
-        } else if (staticSettings.dateCallback) {
-            this.resolution = 'high';
-            staticSettings.dateCallback(value);
-        } else if (value === 0) {
-            this.resolution = 'low';
-            window.currentTree.update();
+    function setLesOptions() {
+        if (currentWeek !== 0) {
+            this.lesOptions = {
+                resolution:  'high',
+                range_start: weekResolution * (currentWeek - 1),
+                range_end:   weekResolution * currentWeek
+            };
         } else {
-            this.resolution = 'high';
-            window.currentTree.update();
+            this.lesOptions = {
+                resolution: 'low',
+                range_start: 0,
+                range_end:   weekResolution * weeksInYear
+            };
         }
     }
 
@@ -190,7 +189,19 @@ var D3LoadChart = (function () {
 
         scope.brush.clear();
 
-        renderPartOfChart.call(this, value);
+        dateSelect.prop("disabled", true);
+
+        if (staticSettings.dateCallback) {
+            staticSettings.dateCallback(value);
+        } else if (currentWeek !== 0) {
+            setLesOptions.call(this);
+            window.currentTree.businessCase.setNoCaseMessage();
+            window.currentTree.update();
+        } else {
+            setLesOptions.call(this);
+            window.currentTree.businessCase.reload();
+            window.currentTree.update();
+        }
     }
 
     function all() {
@@ -254,7 +265,7 @@ var D3LoadChart = (function () {
     }
 
     function roundDate(date) {
-        var roundTo  = this.resolution === 'high' ? 15 : 60 * 24,
+        var roundTo  = this.lesOptions.resolution === 'high' ? 15 : 60 * 24,
             rounding = 1000 * 60 * roundTo;
 
         return new Date(Math.floor(date.getTime() / rounding) * rounding);
@@ -308,10 +319,9 @@ var D3LoadChart = (function () {
             .style("pointer-events", "none")
             .style("stroke", function (d) { return d.color; })
             .style("fill", "none")
-            .attr("class", "line")
             .attr("clip-path", "url(#clip-" + clip + ")")
-            .attr("id", function (d) {
-                return "line-" + d.type;
+            .attr("class", function (d) {
+                return "line " + d.type;
             })
             .attr("d", function (d) {
                 return d.visible ? d3Line(d.values) : null;
@@ -336,6 +346,11 @@ var D3LoadChart = (function () {
 
     D3LoadChart.prototype = {
         lastRequestedData: null,
+        lesOptions: {
+            resolution:  'high',
+            range_start: 0,
+            range_end:   weekResolution
+        },
         update: function (data) {
             this.lastRequestedData = data || this.lastRequestedData;
 
@@ -414,9 +429,9 @@ var D3LoadChart = (function () {
                             return d.color;
                         });
 
-                    d3.select("#line-" + d.type)
+                    d3.select(".line." + d.type)
                         .transition()
-                        .style("stroke-width", 2.5);
+                        .style("stroke-width", 1.5);
                 })
                 .on("mouseout", function (d) {
                     d3.select(this)
@@ -426,9 +441,9 @@ var D3LoadChart = (function () {
                             return d.visible ? d.color : "#F1F1F2";
                         });
 
-                    d3.select("#line-" + d.type)
+                    d3.select(".line." + d.type)
                         .transition()
-                        .style("stroke-width", 1.5);
+                        .style("stroke-width", 1.0);
                 });
 
             legendItem.append("span")
@@ -443,6 +458,8 @@ var D3LoadChart = (function () {
                 });
 
             legendItem.exit().remove();
+
+            dateSelect.prop("disabled", false);
 
             brushed();
         },
@@ -464,7 +481,7 @@ var D3LoadChart = (function () {
                         .ticks(6);
 
             yAxis   = d3.svg.axis().scale(yScale).orient("left");
-            yAxis2  = d3.svg.axis().scale(yScale2).orient("left")
+            yAxis2  = d3.svg.axis().scale(yScale2).orient("left");
 
             brush   = d3.svg.brush()
                         .x(xScale2)
@@ -503,7 +520,7 @@ var D3LoadChart = (function () {
                 .attr("class", "axis x-axis1")
                 .attr("transform", "translate(0," + height2 + ")");
 
-            defs = svg.append("defs")
+            defs = svg.append("defs");
 
             defs.append("clipPath")
                   .attr("id", "clip-issue")
@@ -561,8 +578,9 @@ var D3LoadChart = (function () {
                 });
 
             // Add mouseover events for hover line.
-            $("select.load-date")
-                .val('0')
+            dateSelect = $("select.load-date");
+            dateSelect.removeClass("hidden")
+                .val(currentWeek.toString())
                 .off('change')
                 .on('change', function (e) {
                     renderWeek.call(self, { target: e.target, brush: brush });
@@ -573,7 +591,6 @@ var D3LoadChart = (function () {
     };
 
     function D3LoadChart(chartClass, curveType, settings) {
-        this.resolution = 'low';
         this.chartClass = chartClass;
         this.curveType  = curveType;
         staticSettings  = settings || {};

@@ -71,7 +71,6 @@ var ChartShower = (function () {
     function toggleDomParts() {
         $('#technologies .row-fluid, p.info').hide();
         $(".load-graph-wrapper a[href='#load']").tab('show');
-        $("select.load-date").removeClass("hidden");
 
         showTechnologies.call(this);
         setHeader.call(this);

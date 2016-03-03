@@ -66,7 +66,7 @@ var TreeFetcher = (function () {
     }
 
     function loadInitialLes(les) {
-        var nodeData = les.nodeData(this.resolution);
+        var nodeData = les.nodeData(this.lesOptions);
 
         if (les.anyStrategies.call(nodeData.calculation)) {
             this.requests.push(Ajax.json(this.url, nodeData, success, fail));
@@ -90,10 +90,10 @@ var TreeFetcher = (function () {
      * - When all is done return finalData.
      */
     TreeFetcher.prototype = {
-        fetch: function (resolution) {
+        fetch: function (lesOptions) {
             polls           = [];
             this.requests   = [];
-            this.resolution = resolution;
+            this.lesOptions = lesOptions;
 
             deferred = $.Deferred();
 

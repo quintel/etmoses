@@ -2,7 +2,7 @@ module NetworkCache
   class Cache
     include CacheHelper
 
-    def self.from(testing_ground, opts = {})
+    def self.from(testing_ground, opts = nil)
       new(testing_ground, opts)
     end
 

@@ -2,16 +2,18 @@ module Moses
   module Spec
     module Network
       DEFAULT_OPTS = {
-        battery_storage: true,
-        ev_capacity_constrained: true,
-        ev_excess_constrained: true,
-        ev_storage: true,
-        solar_power_to_heat: true,
-        capping_solar_pv: true,
-        postponing_base_load: true,
-        saving_base_load: true,
-        hp_capacity_constrained: true,
-        solar_power_to_gas: true
+        strategies: {
+          battery_storage: true,
+          ev_capacity_constrained: true,
+          ev_excess_constrained: true,
+          ev_storage: true,
+          solar_power_to_heat: true,
+          capping_solar_pv: true,
+          postponing_base_load: true,
+          saving_base_load: true,
+          hp_capacity_constrained: true,
+          solar_power_to_gas: true
+        }
       }.freeze
 
       # Public: Given an installed technology, creates a Network::Technology which

@@ -51,7 +51,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end # with storage on
 
       context 'with storage off' do
-        let(:opts) { { ev_storage: false } }
+        let(:opts) { { strategies: { ev_storage: false } } }
 
         it 'has production of 0.5' do
           expect(tech.production_at(1)).to eq(0.5)

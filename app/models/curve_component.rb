@@ -14,20 +14,21 @@ module CurveComponent
 
   # Public: Returns the Network::Curve which containing each of the load profile
   # values.
-  def network_curve(scaling = :original)
-    cache_key = "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ scaling }"
+  def network_curve(range = nil, scaling = :original)
+    cache_key = "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ range}.#{ scaling }"
 
     Rails.cache.fetch(cache_key) do
-      Network::Curve.load_file(curve.path(scaling))
+      values = File.foreach(curve.path(scaling)).map(&:to_f)
+      Network::Curve.new(range ? values[range] : values)
     end
   end
 
-  def scaled_network_curve(scaling)
+  def scaled_network_curve(scaling, range)
     Network::Curve.new(
       case scaling
-        when :capacity_scaled then Paperclip::ScaledCurve.scale(network_curve, :max)
-        when :demand_scaled   then Paperclip::ScaledCurve.scale(network_curve, :sum)
-        else network_curve
+        when :capacity_scaled then Paperclip::ScaledCurve.scale(network_curve(range), :max)
+        when :demand_scaled   then Paperclip::ScaledCurve.scale(network_curve(range), :sum)
+        else network_curve(range)
       end.to_a
     )
   end

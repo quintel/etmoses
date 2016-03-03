@@ -6,7 +6,9 @@ module Network
     # Returns a Technology.
     def self.from_installed(installed, profile, options = {})
       behavior = installed.behavior_with_curve(options[:curve_type])
-      behaviors[behavior].build(installed, profile, options)
+      options  = options.delete(:strategies).merge(options)
+
+      behaviors[behavior].build(installed, profile, options.symbolize_keys)
     end
 
     # Public: A hash containing the permitted behaviors which may be used by

@@ -2,22 +2,40 @@
 var LoadChartPreview = (function () {
     "use strict";
 
-    function loadChartData(profile) {
+    function sliceLoad(loads, week) {
+        var chunkSize;
+
+        if (week && week !== 0) {
+            chunkSize = Math.floor(loads.length / 52);
+
+            loads = loads.slice((week - 1) * chunkSize, week * chunkSize);
+        }
+
+        return loads;
+    }
+
+    function loadChartData(profile, week) {
         var data = {
             type: this.curveData.curveType || profile.curveType || 'default',
             name: profile.name || profile.key,
             area: true
         };
 
-        data[data.type] = profile.values;
+        data[data.type] = sliceLoad(profile.values, week);
 
         return data;
     }
 
-    function renderHighResolutionPreview() {
-        $.getJSON(this.curveData.url, { resolution: 'high' })
+    function resolution(week) {
+        return {
+            resolution: (week === 0 ? 'low' : 'high')
+        };
+    }
+
+    function renderHighResolutionPreview(week) {
+        $.getJSON(this.curveData.url, resolution(week))
             .success(function (profile) {
-                this.loadChart.update(loadChartData.call(this, profile));
+                this.loadChart.update(loadChartData.call(this, profile, week));
             }.bind(this));
     }
 

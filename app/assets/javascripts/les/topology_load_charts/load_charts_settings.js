@@ -5,6 +5,18 @@ var LoadChartsSettings = {
         visible: true,
         axisLabel: ''
     },
+    availability: {
+        name: 'Availability',
+        color: '#d4bc6a',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    use: {
+        name: 'Use',
+        color: '#d4bc6a',
+        visible: true,
+        axisLabel: 'kW'
+    },
     flex: {
         name: 'Flex',
         color: '#d4bc6a',
