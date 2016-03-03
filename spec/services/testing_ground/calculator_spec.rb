@@ -10,7 +10,14 @@ RSpec.describe TestingGround::Calculator do
   it 'sets a testing ground delayed job' do
     TestingGround::Calculator.new(testing_ground, {}).calculate
 
-    expect(TestingGroundDelayedJob.count).to eq(1)
+    expect(Delayed::Job.count).to eq(1)
+  end
+
+  it "should calculate when the 'testing_ground_delayed_job' is still present but the delayed job isn't" do
+    TestingGroundDelayedJob.create!(testing_ground: testing_ground, job_type: 'basic', job_id: 0)
+    TestingGround::Calculator.new(testing_ground, {}).calculate
+
+    expect(Delayed::Job.count).to eq(1)
   end
 
   context 'with a fresh cache' do

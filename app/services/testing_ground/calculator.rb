@@ -8,13 +8,11 @@ class TestingGround::Calculator
 
   def calculate
     if ! Settings.cache.networks || cache.present?
-      existing_job.destroy if existing_job
-
       base.merge(networks: tree)
     else
       calculate_load_in_background
 
-      @strategies.merge(pending: existing_job.finished_at.blank?)
+      @strategies.merge(pending: existing_job.present?)
     end
   end
 
@@ -34,7 +32,7 @@ class TestingGround::Calculator
   end
 
   def calculate_load_in_background
-    return if existing_job
+    return if existing_job && existing_job.job
 
     job = @testing_ground.testing_ground_delayed_jobs.create!(job_type: job_type)
     job.update_attribute(:job, Delayed::Job.enqueue(task))

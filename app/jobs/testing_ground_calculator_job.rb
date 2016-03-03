@@ -12,7 +12,7 @@ class TestingGroundCalculatorJob
     if job = @testing_ground.testing_ground_delayed_jobs.for(job_type)
       TestingGround::StrategyUpdater.new(@testing_ground, strategy_params).update
 
-      job.update_column(:finished_at, DateTime.now)
+      job.destroy
     end
   end
 
