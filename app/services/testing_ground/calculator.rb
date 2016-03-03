@@ -34,7 +34,7 @@ class TestingGround::Calculator
   end
 
   def calculate_load_in_background
-    return if existing_job
+    return if existing_job && existing_job.job
 
     job = @testing_ground.testing_ground_delayed_jobs.create!(job_type: job_type)
     job.update_attribute(:job, Delayed::Job.enqueue(task))
