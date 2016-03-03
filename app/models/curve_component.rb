@@ -20,12 +20,12 @@ module CurveComponent
     end
   end
 
-  def scaled_network_curve(scaling)
+  def scaled_network_curve(scaling, range)
     Network::Curve.new(
       case scaling
-        when :capacity_scaled then Paperclip::ScaledCurve.scale(network_curve, :max)
-        when :demand_scaled   then Paperclip::ScaledCurve.scale(network_curve, :sum)
-        else network_curve
+        when :capacity_scaled then Paperclip::ScaledCurve.scale(network_curve(range), :max)
+        when :demand_scaled   then Paperclip::ScaledCurve.scale(network_curve(range), :sum)
+        else network_curve(range)
       end.to_a
     )
   end

@@ -33,7 +33,7 @@ module NetworkCache
     end
 
     def file_path
-      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}")
+      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}/#{resolution}")
     end
 
     def strategy_prefix

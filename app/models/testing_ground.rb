@@ -81,6 +81,8 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
+    technology_profile.prepare_calculation(options[:range])
+
     Calculation::Context.new(
       [network(:electricity), network(:gas)], options.merge(
         behavior_profile: behavior_profile.try(:network_curve)
