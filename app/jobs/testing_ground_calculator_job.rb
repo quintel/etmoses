@@ -1,7 +1,8 @@
 class TestingGroundCalculatorJob
-  def initialize(testing_ground, strategies)
+  def initialize(testing_ground, options)
     @testing_ground = testing_ground
-    @strategies     = strategies || {}
+    @options        = options
+    @strategies     = options.fetch(:strategies)
   end
 
   def perform
@@ -10,6 +11,8 @@ class TestingGroundCalculatorJob
 
   def success(job)
     if job = @testing_ground.testing_ground_delayed_jobs.for(job_type)
+      @testing_ground.update_attribute(:range, @options[:range])
+
       TestingGround::StrategyUpdater.new(@testing_ground, strategy_params).update
 
       job.destroy
@@ -35,10 +38,10 @@ class TestingGroundCalculatorJob
   end
 
   def network_calculation
-    @testing_ground.to_calculated_graphs(@strategies)
+    @testing_ground.to_calculated_graphs(@options)
   end
 
   def cache
-    NetworkCache::Cache.new(@testing_ground, @strategies)
+    NetworkCache::Cache.new(@testing_ground, @options)
   end
 end

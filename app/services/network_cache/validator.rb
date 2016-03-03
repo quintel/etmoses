@@ -2,13 +2,13 @@ module NetworkCache
   class Validator
     include CacheHelper
 
-    def self.from(testing_ground, opts = {})
+    def self.from(testing_ground, opts = nil)
       new(testing_ground, opts)
     end
 
     def valid?
       Settings.cache.networks && cache_intact? &&
-        identical_strategies? && fresh?
+        identical_strategies? && identical_range? && fresh?
     end
 
     private
@@ -22,13 +22,16 @@ module NetworkCache
     end
 
     def identical_strategies?
-      @opts.empty? || strategy_attributes == @opts
+      @opts[:strategies].empty? || strategy_attributes == @opts[:strategies]
+    end
+
+    def identical_range?
+      @opts[:range].nil? || (@testing_ground.range == @opts[:range])
     end
 
     def fresh?
       [ @testing_ground,
-        @testing_ground.topology,
-        @testing_ground.market_model ].all? do |target|
+        @testing_ground.topology ].all? do |target|
         target && Time.at(target.updated_at.to_time.to_i) <= Time.at(cache_time.to_i)
       end
     end

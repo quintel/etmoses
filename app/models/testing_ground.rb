@@ -63,6 +63,8 @@ class TestingGround < ActiveRecord::Base
       Calculation::Flows
     ]
 
+    opts[:strategies] ||= {}
+
     context = calculators
       .reduce(to_calculation_context(opts.symbolize_keys)) do |cxt, calculator|
         calculator.call(cxt)
@@ -76,6 +78,8 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
+    technology_profile.prepare_calculation(options[:range])
+
     Calculation::Context.new(
       [network(:electricity), network(:gas)], options.merge(
         behavior_profile: behavior_profile.try(:network_curve)
@@ -125,8 +129,15 @@ class TestingGround < ActiveRecord::Base
     self.technology_profile = TechnologyList.from_csv(csv)
   end
 
-  def invalid_technologies
-    technology_profile.list.values.flatten.reject(&:valid?)
+  def range
+    range_start..range_end
+  end
+
+  def range=(range)
+    return unless range.is_a?(Range)
+
+    self.range_start = range.begin
+    self.range_end   = range.end
   end
 
   private

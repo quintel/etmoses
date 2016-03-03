@@ -15,8 +15,9 @@ RSpec.describe TestingGround do
   }
 
   def calculate(strategies = {})
-    fake_strategies = FakeLoadManagement.strategies(strategies)
-    GraphToTree.convert(testing_ground.to_calculated_graph(fake_strategies)).fetch(:load)
+    GraphToTree.convert(
+      testing_ground.to_calculated_graph(strategies: strategies)
+    ).fetch(:load)
   end
 
   # Testing of the buffering of local PV excess in heat pumps

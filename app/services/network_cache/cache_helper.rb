@@ -2,9 +2,9 @@ module NetworkCache
   module CacheHelper
     CARRIERS = [:electricity, :gas]
 
-    def initialize(testing_ground, opts)
+    def initialize(testing_ground, opts = nil)
       @testing_ground = testing_ground
-      @opts = opts || {}
+      @opts           = opts || { strategies: {} }
     end
 
     def tree_scope
@@ -23,11 +23,15 @@ module NetworkCache
     end
 
     def file_path
-      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}")
+      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}/#{resolution}")
     end
 
     def strategy_prefix
-      SelectedStrategy.strategy_type(@opts)
+      SelectedStrategy.strategy_type(@opts[:strategies] || {})
+    end
+
+    def resolution
+      @opts[:range] && @opts[:range].size === 35041 ? 'low' : 'high'
     end
   end
 end

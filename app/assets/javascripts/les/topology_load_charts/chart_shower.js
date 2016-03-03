@@ -83,7 +83,6 @@ var ChartShower = (function () {
     function toggleDomParts() {
         $('#technologies .row-fluid, p.info').hide();
         $(".load-graph-wrapper a[href='#load']").tab('show');
-        $("select.load-date").removeClass("hidden");
 
         $('input.chart-view.stacked').on('change', changeViewOfD3);
         $('input.chart-view.electric').on('change', toggleTechnologiesOfD3);

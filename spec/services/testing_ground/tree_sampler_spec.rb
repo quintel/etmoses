@@ -2,13 +2,15 @@ require 'rails_helper'
 
 RSpec.describe TestingGround::TreeSampler do
   let(:graph) { FakeLoadManagement.caching_graph(1, 35040) }
+
   let(:topology){ FactoryGirl.create(:topology, graph: graph) }
+
   let(:technology_profile) {
     TechnologyList.from_hash({})
   }
+
   let(:networks){
-    { electricity: network(:electricity),
-      gas:         network(:gas) }
+    [ network(:electricity), network(:gas) ]
   }
 
   def network(carrier)
@@ -29,13 +31,13 @@ RSpec.describe TestingGround::TreeSampler do
     let(:graph) { FakeLoadManagement.caching_graph(1, [0.0] * 35040) }
 
     it "samples parts of a tree" do
-      sampled = TestingGround::TreeSampler.sample(networks)
+      sampled = TestingGround::TreeSampler.sample(networks, :low)
 
       expect(sampled[:electricity][:children][0][:load].length).to eq(365)
     end
 
     it "doesn't sample parts of a tree" do
-      sampled = TestingGround::TreeSampler.sample(networks, :high)
+      sampled = TestingGround::TreeSampler.sample(networks)
 
       expect(sampled[:electricity][:children][0][:load].length).to eq(35040)
     end

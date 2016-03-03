@@ -6,7 +6,7 @@ var TreeGraph = (function () {
         svgGroup,
         maxLabelLength  = 0,
         viewerHeight    = 700,
-        viewerWidth     = 500,
+        viewerWidth     = 550,
         duration        = 250,
         nodeSize        = 50,
         ease            = 'cubic-out',
@@ -135,7 +135,8 @@ var TreeGraph = (function () {
             // variations due to floating-point arithmetic.
             capacity = d.capacity + 1e-5;
 
-        return d.capacity && (d3.max(load) > capacity || d3.min(load) < -capacity);
+        return load && (d.capacity &&
+            (d3.max(load) > capacity || d3.min(load) < -capacity));
     }
 
     function setNodeClass(data) {
@@ -171,7 +172,12 @@ var TreeGraph = (function () {
 
     // Toggle children on click.
     function click(d) {
-        if (d3.event && d3.event.defaultPrevented) { return; } // click suppressed
+        // Click suppressed
+        if ((d3.event && d3.event.defaultPrevented)
+            || !d.load
+            || window.currentTree.loading) {
+            return false;
+        }
 
         window.localSettings.set('current_chart_id', d.id);
 
@@ -241,7 +247,12 @@ var TreeGraph = (function () {
 
     TreeGraph.prototype = {
         setData: function (treeData) {
-            this.treeData = setDataFromTree(treeData);
+            if (treeData.graph) {
+                this.treeData = treeData.graph;
+            } else {
+                this.treeData = setDataFromTree(treeData);
+            }
+
             this.root     = this.treeData;
             this.root.x0  = viewerHeight / 2;
             this.root.y0  = 0;

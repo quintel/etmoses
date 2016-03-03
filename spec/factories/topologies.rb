@@ -12,6 +12,25 @@ FactoryGirl.define do
     YML
   end
 
+  factory :topology_with_capacity, class: Topology do
+    name "Topology"
+    graph { YAML.load(<<-YML.strip_heredoc) }
+      ---
+      name: :hv
+      capacity: 1
+      children:
+      - name: :mv
+        capacity: 1
+        children:
+        - name: :lv1
+          capacity: 1
+          units: 1
+        - name: :lv2
+          capacity: 1
+          units: 1
+    YML
+  end
+
   factory :topology_caching, class: Topology do
     name "Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }

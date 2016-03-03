@@ -4,13 +4,13 @@ class TestingGround
 
     module_function
 
-    def sample(networks, resolution = nil, nodes = nil)
-      Hash[networks.each_pair.map do |carrier, graph|
-        NetworkCache::LoadSetter.set(graph, nodes) do |node|
-          downsample(node.load, resolution || :low)
+    def sample(networks, resolution = :high, nodes = nil)
+      Hash[networks.map do |network|
+        NetworkCache::LoadSetter.set(network, nodes) do |node|
+          downsample(node.load.compact, resolution)
         end
 
-        [carrier, GraphToTree.convert(graph)]
+        [network.carrier, GraphToTree.convert(network)]
       end]
     end
 

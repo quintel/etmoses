@@ -1,0 +1,19 @@
+---
+lv1:
+- :demand: 1
+  :composite: false
+  :name: Base load
+  :type: base_load
+  :units: 1
+  :concurrency: max
+  :full_load_hours: 0
+  :includes: []
+  :initial_investment: 6178.9
+  :om_costs_for_ccs_per_full_load_hour:
+  :om_costs_per_full_load_hour: 0.0
+  :om_costs_per_year: 0.0
+  :performance_coefficient: 1.0
+  :technical_lifetime: 10
+  :associates: []
+  :behavior:
+  :node: lv1

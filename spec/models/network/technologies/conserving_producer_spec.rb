@@ -6,7 +6,7 @@ RSpec.describe Network::Technologies::ConservingProducer do
   end
 
   let(:tech) do
-    Network::Technologies.from_installed(installed, profile, options)
+    Network::Technologies.from_installed(installed, profile, strategies: options)
   end
 
   describe "default profile" do
