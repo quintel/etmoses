@@ -520,7 +520,6 @@ var D3LoadChart = (function () {
                 .attr("transform", "translate(0," + height + ")")
                 .call(xAxis);
 
-            console.log(data.type);
             svg.append("g")
                 .attr("class", "y axis")
                 .call(yAxis)

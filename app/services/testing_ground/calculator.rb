@@ -8,13 +8,11 @@ class TestingGround::Calculator
 
   def calculate
     if ! Settings.cache.networks || cache.present?
-      existing_job.destroy if existing_job
-
       base.merge(networks: tree)
     else
       calculate_load_in_background
 
-      @strategies.merge(pending: existing_job.finished_at.blank?)
+      @strategies.merge(pending: existing_job.present?)
     end
   end
 
