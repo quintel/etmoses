@@ -47,6 +47,7 @@ en:
     om_costs_per_full_load_hour: "O&M costs per full load hour"
     om_costs_for_ccs_per_full_load_hour: "O&M costs for ccs per full load hour"
     performance_coefficient: "COP / Efficiency"
+    max_bufferable_temperature: "Thermostat temperature [℃]"
 
   testing_grounds:
     error:
