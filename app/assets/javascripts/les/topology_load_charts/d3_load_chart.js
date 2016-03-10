@@ -529,7 +529,7 @@ var D3LoadChart = (function () {
                 .attr("x", -10)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text(LoadChartsSettings[data.type].axisLabel);
+                .text(LoadChartsSettings[data.type || this.curveType].axisLabel);
 
             // Hover line
             hoverLineGroup = svg.append("g")

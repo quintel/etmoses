@@ -34,8 +34,7 @@ var TreeGraph = (function () {
     }
 
     function setDataFromTree(treeData) {
-        var chartType, carrier, attribute, chart,
-            data = treeData.basic.electricity,
+        var chartType, carrier, attribute, chart, data,
             loads = {};
 
         for (chartType in attributes) {
@@ -43,6 +42,10 @@ var TreeGraph = (function () {
                 attribute = attributes[chartType][carrier];
                 chart     = treeData[chartType][carrier];
                 loads     = ETHelper.loadsFromTree(chart);
+
+                if (!data) {
+                    data = chart;
+                }
 
                 ETHelper.eachNode([data], function (node) {
                     node[attribute] = loads[node.name];
