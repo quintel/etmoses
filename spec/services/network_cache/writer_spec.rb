@@ -24,7 +24,7 @@ RSpec.describe NetworkCache::Writer do
   end
 
   context 'with calculation options' do
-    let(:opts) { { saving_base_load: true } }
+    let(:opts) { { strategies: { saving_base_load: true } } }
 
     it 'writes strategies to a separate cache' do
       NetworkCache::Writer.from(testing_ground, opts).write

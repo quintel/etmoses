@@ -3,7 +3,7 @@ module NetworkCache
     include CacheHelper
 
     def self.from(testing_ground, opts = {})
-      new(testing_ground, opts)
+      new(testing_ground, **opts)
     end
 
     #

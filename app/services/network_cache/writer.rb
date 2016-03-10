@@ -3,7 +3,7 @@ module NetworkCache
     include CacheHelper
 
     def self.from(testing_ground, opts = {})
-      new(testing_ground, opts)
+      new(testing_ground, **opts)
     end
 
     #
@@ -19,7 +19,7 @@ module NetworkCache
     private
 
     def write_network(path, network)
-      directory = path.join(network.carrier.to_s)
+      directory = path.join(network.carrier.to_s, time_frame)
 
       FileUtils.mkdir_p(directory) unless directory.directory?
 

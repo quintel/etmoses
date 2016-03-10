@@ -3,7 +3,7 @@ module NetworkCache
     include CacheHelper
 
     def self.from(testing_ground, opts = {})
-      new(testing_ground, opts)
+      new(testing_ground, **opts)
     end
 
     #
@@ -11,15 +11,21 @@ module NetworkCache
     def fetch(nodes = nil)
       tree_scope.each do |network|
         LoadSetter.set(network, nodes) do |node|
-          read(network.carrier, node.key) || []
+          caches = FOLDERS.values.map do |frame|
+            read(file_name(network.carrier, node.key, frame))
+          end
+
+          (caches.detect(&:present?) || [])[@range ? @range : 0..-1]
         end
       end
 
       tree_scope
     end
 
-    def read(carrier, key)
-      MessagePack.unpack(File.read(file_name(carrier, key)))
+    def read(file)
+      if File.exists?(file)
+        MessagePack.unpack(File.read(file))
+      end
     end
   end
 end

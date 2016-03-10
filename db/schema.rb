@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308152253) do
+ActiveRecord::Schema.define(version: 20160310111312) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -180,6 +180,7 @@ ActiveRecord::Schema.define(version: 20160308152253) do
     t.integer  "parent_scenario_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "cache_updated_at"
     t.string   "name",                limit: 100,      default: "",   null: false
     t.integer  "scenario_id"
     t.integer  "range_start",                          default: 0
