@@ -57,7 +57,7 @@ class TestingGround::Calculator
   end
 
   def calculation_options
-    { strategies: strategies, range: range }
+    { strategies: strategies, range: range, resolution: resolution }
   end
 
   def cache

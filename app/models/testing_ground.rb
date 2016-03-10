@@ -4,6 +4,7 @@ class TestingGround < ActiveRecord::Base
   include Privacy
 
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
+  CACHE_CLEARING_ATTRS = %w(technology_profile topology_id)
 
   serialize :technology_profile, TechnologyList
 
@@ -27,6 +28,8 @@ class TestingGround < ActiveRecord::Base
   validate  :validate_load_profiles
 
   attr_accessor :technology_distribution
+
+  after_save :set_cache_updated_at
 
   def self.latest_first
     order(created_at: :desc)
@@ -195,6 +198,16 @@ class TestingGround < ActiveRecord::Base
         "may not have an inline curve with non-numeric values " \
         "(on #{ tech.name })"
       )
+    end
+  end
+
+  def set_cache_updated_at
+    touch(:cache_updated_at) if clear_cache?
+  end
+
+  def clear_cache?
+    CACHE_CLEARING_ATTRS.any? do |attr|
+      public_send("#{ attr }_changed?")
     end
   end
 end # TestingGround

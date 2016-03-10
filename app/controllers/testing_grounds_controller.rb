@@ -176,7 +176,7 @@ class TestingGroundsController < ResourceController
 
       # Some attributes which should be considered "not present" are submitted
       # by the technology table as an empty string. The same accounts for
-      # attribute which are not present as editable. Delete them.
+      # attributes which are not present as editable. Delete them.
       tg_params[:technology_profile].each do |_, techs|
         techs.each do |tech|
           tech.delete_if do |attr, value|
