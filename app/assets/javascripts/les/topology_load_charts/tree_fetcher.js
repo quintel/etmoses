@@ -68,7 +68,7 @@ var TreeFetcher = (function () {
     function loadInitialLes(les) {
         var nodeData = les.nodeData(this.resolution);
 
-        if (les.anyStrategies.call(nodeData)) {
+        if (les.anyStrategies.call(nodeData.calculation)) {
             this.requests.push(Ajax.json(this.url, nodeData, success, fail));
         }
     }

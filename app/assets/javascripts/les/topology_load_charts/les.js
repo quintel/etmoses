@@ -17,6 +17,8 @@ var Les = (function () {
 
             if (this.strategies) {
                 this.data.calculation.strategies = StrategyHelper.getStrategies();
+            } else {
+                delete this.data.calculation.strategies;
             }
 
             return this.data;
