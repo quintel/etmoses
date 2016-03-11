@@ -5,8 +5,8 @@ class Import
 
   validates :provider,    inclusion: { in: [Settings.etengine_host] }
   validates :scenario_id, numericality: { only_integer: true }
-  validate :etm_scenario_present, if: -> { scenario_id.present? }
-  validate :is_scaled_scenario, if: -> { scenario_id.present? }
+  validate :etm_scenario_present, if: -> { valid_scenario? }
+  validate :is_scaled_scenario, if: -> { valid_scenario? }
 
   # Public: Returns a hash of technologies which we can import from ETEngine.
   #
@@ -71,6 +71,10 @@ class Import
   end
 
   private
+
+  def valid_scenario?
+    scenario_id.present? && scenario_id =~ /^\d+$/
+  end
 
   def is_scaled_scenario
     unless etm_scenario["scaling"].present?
