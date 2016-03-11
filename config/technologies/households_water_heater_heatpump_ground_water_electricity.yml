@@ -1,0 +1,21 @@
+---
+name: Heat pump for hot water (ground)
+export_to: households_water_heater_heatpump_ground_water_electricity_share
+carrier: electricity
+behavior: buffer
+visible: true
+composite: false
+default_capacity: 3.33333
+default_volume: 
+default_demand: 
+default_position_relative_to_buffer: buffering
+expandable: true
+importable_attributes:
+- coefficient_of_performance
+- fixed_operation_and_maintenance_costs_per_year
+- full_load_hours
+- initial_investment
+- input_capacity
+- technical_lifetime
+- variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
+- variable_operation_and_maintenance_costs_per_full_load_hour

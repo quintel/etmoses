@@ -63,9 +63,11 @@ class TechnologyList
   end
 
   def self.technologies_in_csv(parsed)
-    names = parsed.map{|row| row['name'] }.uniq
+    names = parsed.map { |row| row['name'] }.uniq
 
-    Hash[Technology.where(name: names).pluck(:name, :key)]
+    Hash[Technology.where(name: names).map do |t|
+      [t.name, t.key]
+    end]
   end
 
   # Public: Given a CSV file as a string, creates a TechnologyList.

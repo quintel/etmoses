@@ -16,8 +16,9 @@ class Import
   #
   # Returns a hash.
   def self.import_targets
-    Technology.joins(:importable_attributes)
-      .group('importable_attributes.technology_key')
+    Hash[Technology.importable.map do |t|
+      [t.key, t.importable_attributes]
+    end]
   end
 
   # Public: Creates a new Import with the given provider and scenario.
@@ -87,7 +88,7 @@ class Import
   # the JSON response as a Hash.
   def response
     @response ||= EtEngineConnector.new(
-      { keys: self.class.import_targets.map(&:key) }
+      { keys: self.class.import_targets.keys }
     ).stats(@scenario_id)['nodes']
   end
 

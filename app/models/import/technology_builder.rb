@@ -41,8 +41,7 @@ class Import
                 'carrier' => tech.carrier,
                 'position_relative_to_buffer' => tech.default_position_relative_to_buffer }
 
-      tech.importable_attributes
-        .map  { |attr| attribute(attr.name) }
+      tech.importable_attributes.map(&method(:attribute))
         .each { |attr| attrs[attr.local_name] = attr.call(data) }
 
       attrs

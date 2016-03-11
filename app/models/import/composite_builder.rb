@@ -33,8 +33,10 @@ class Import
 
     def composite_attributes(technology)
       { "units"     => scaling_value,
+        "type"      => technology.key,
+        "name"      => technology.name,
         "composite" => true,
-        "includes"  => technology.technologies.map(&:key),
+        "includes"  => technology.technologies,
         "demand"    => demand_for(technology) }
     end
 

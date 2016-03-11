@@ -14,11 +14,12 @@ RSpec.describe Import do
 
   before do
     %w(tech_one tech_two).each do |key|
-      Technology.create!(key: key, carrier: 'electricity')
-
-      ImportableAttribute.create!(
-        technology_key: key,
-        name: 'electricity_output_capacity'
+      Technology.create!(
+        key: key,
+        carrier: 'electricity',
+        importable_attributes: [
+          'electricity_output_capacity'
+        ]
       )
     end
 
@@ -82,6 +83,11 @@ RSpec.describe Import do
 
       let(:tech) { find_techs(testing_ground, 'tech_one').first }
 
+      before do
+        technology = Technology.by_key('tech_one')
+        technology.importable_attributes = ['electricity_output_capacity']
+      end
+
       it 'saves the attribute value as "capacity"' do
         expect(tech['capacity']).to be
       end
@@ -97,9 +103,8 @@ RSpec.describe Import do
 
     context 'importing the input_capacity attribute' do
       before do
-        Technology.by_key('tech_one')
-          .importable_attributes.first
-          .update_attributes!(name: 'input_capacity')
+        technology = Technology.by_key('tech_one')
+        technology.importable_attributes = ['input_capacity']
       end
 
       let(:response) { { 'tech_one' => {
@@ -120,9 +125,8 @@ RSpec.describe Import do
 
     context 'importing the demand attribute' do
       before do
-        Technology.by_key('tech_one')
-          .importable_attributes.first
-          .update_attributes!(name: 'demand')
+        technology = Technology.by_key('tech_one')
+        technology.importable_attributes = ['demand']
       end
 
       let(:response) { { 'tech_one' => {

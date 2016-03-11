@@ -1,0 +1,13 @@
+---
+name: Hybrid heat pump hot water (gas)
+export_to: 
+carrier: gas
+behavior: hhp_gas
+visible: true
+composite: false
+default_capacity: 24.4444
+default_volume: 
+default_demand: 
+default_position_relative_to_buffer: boosting
+expandable: true
+importable_attributes: []

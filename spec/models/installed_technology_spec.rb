@@ -12,16 +12,11 @@ RSpec.describe InstalledTechnology do
 
     it 'returns true when :type is set to a real technology' do
       create(:technology, key: 'tech_one')
-      expect(InstalledTechnology.new(type: 'tech_one')).to be_exists
+      expect(InstalledTechnology.new(type: 'base_load')).to be_exists
     end
   end
 
   describe '#technology' do
-    it 'raises ActiveRecord::RecordNotFound when no such tech exists' do
-      expect { InstalledTechnology.new(type: 'nope').technology }.
-        to raise_error(ActiveRecord::RecordNotFound)
-    end
-
     it 'returns a generic tech when :type is not set' do
       lib = InstalledTechnology.new.technology
 

@@ -226,7 +226,7 @@ class TestingGroundsController < ResourceController
   end
 
   def load_technologies_and_profiles
-    @technologies = Technology.includes(:technologies)
+    @technologies = Technology.all
     @stakeholders = Stakeholder.all
     @load_profiles = LoadProfile.joins("LEFT JOIN `technology_profiles` ON `load_profiles`.`id` = `technology_profiles`.`load_profile_id`")
                                 .select("`technology_profiles`.`technology`, `load_profiles`.*")

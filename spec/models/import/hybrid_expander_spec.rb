@@ -20,7 +20,7 @@ RSpec.describe Import::HybridExpander do
         },
         {
           "type"=>"households_water_heater_hybrid_heatpump_air_water_electricity_gas",
-          "name"=>"Hybrid heat pump space heating (gas)",
+          "name"=>"Hybrid heat pump hot water (gas)",
           "units"=>1,
           "carrier"=>"gas",
           "position_relative_to_buffer"=>"boosting"

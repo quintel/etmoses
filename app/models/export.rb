@@ -43,8 +43,7 @@ class Export
     end
 
     count.reject do |key, _|
-      (! Technology.exists?(key: key)) ||
-        Technology.by_key(key).export_to.blank?
+      (! Technology.exists?(key)) || Technology.by_key(key).export_to.blank?
     end
   end
 

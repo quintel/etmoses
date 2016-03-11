@@ -22,6 +22,8 @@ RSpec.describe TestingGroundsController do
       stub_et_engine_request
       stub_scenario_request
 
+      expect(Technology).to receive(:importable).and_return([technology])
+
       expect_any_instance_of(Import).to receive(:buildings)
         .at_least(1).times.and_return([])
 

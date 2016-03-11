@@ -1,0 +1,16 @@
+---
+name: Household
+export_to:
+carrier: electricity
+behavior: base_load
+visible: true
+composite: false
+default_capacity:
+default_volume:
+default_demand:
+default_position_relative_to_buffer:
+expandable: true
+importable_attributes: []
+technology_component_behavior:
+  flex: deferrable
+  inflex: generic
