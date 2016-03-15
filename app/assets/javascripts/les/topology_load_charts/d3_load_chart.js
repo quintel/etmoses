@@ -215,6 +215,10 @@ var D3LoadChart = (function () {
             ydomain[0] = 0;
         }
 
+        if (ydomain[1] < 0) {
+            ydomain[1] = 0;
+        }
+
         yScale.domain(ydomain).nice();
     }
 
