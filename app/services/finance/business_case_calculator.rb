@@ -1,6 +1,6 @@
 module Finance
   class BusinessCaseCalculator
-    def initialize(testing_ground, strategies = {})
+    def initialize(testing_ground, strategies = nil)
       @testing_ground = testing_ground
       @strategies = strategies
     end
@@ -17,6 +17,10 @@ module Finance
     end
 
     private
+
+    def strategies
+      @strategies.presence || @testing_ground.selected_strategy.attributes
+    end
 
     def topology_stakeholders
       networks[:electricity].nodes.map{ |n| n.get(:stakeholder) }
@@ -61,7 +65,7 @@ module Finance
 
     def networks
       @networks ||= Hash[
-        @testing_ground.to_calculated_graphs(@strategies).map do |network|
+        @testing_ground.to_calculated_graphs(strategies).map do |network|
           [network.carrier, network]
         end
       ]
