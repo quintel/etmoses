@@ -9,6 +9,9 @@ module Network
 
     def_delegators :@path, :head, :leaf, :to_a, :length
 
+    # Used by SubPaths
+    attr_reader :receipts
+
     # Public: Given a leaf node with one or more technologies, returns a
     # TechnologyPath for each technology present, and a path back to the source
     # of the graph.
@@ -18,12 +21,17 @@ module Network
     end
 
     attr_reader :technology
+    attr_reader :path
 
     def initialize(technology, path)
       @technology = technology
       @path       = path
       @flexible   = @technology.flexible_conditional?
-      @receipts   = []
+      @receipts   = DefaultArray.new { |_| 0.0 }
+    end
+
+    def sub_paths
+      @sub_paths ||= sub_path_class.from(self)
     end
 
     # Public: Returns the conditional consumption required by the technology in
@@ -82,7 +90,7 @@ module Network
     # Public: Returns true if a conditional consumption load has been assigned
     # to this path in the given frame. False otherwise.
     def received_conditional_at?(frame)
-      @receipts[frame]
+      @receipts[frame] && ! @receipts[frame].zero?
     end
 
     # Public: Returns how far the head node of the path is from the head node of
@@ -112,7 +120,7 @@ module Network
       if conditional
         # TODO: "store" should be renamed to "consume_conditional"
         @technology.store(frame, amount)
-        @receipts[frame] = true
+        receipts[frame] += amount
       else
         # Hack hack hack. Required to tell components in a "composite"
         # technology what they have received.
@@ -139,6 +147,10 @@ module Network
       else
         amount
       end
+    end
+
+    def sub_path_class
+      SubPath
     end
   end # TechnologyPath
 end # Network
