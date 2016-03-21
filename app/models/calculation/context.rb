@@ -60,7 +60,7 @@ module Calculation
         by_level = Hash.new { |hash, key| hash[key] = [] }
         data     = {}
 
-        paths.map { |path| Network::SubPath.from(path) }.each do |subpaths|
+        paths.map { |path| path.sub_paths }.each do |subpaths|
           subpaths.each { |path| by_level[path.distance].push(path) }
         end
 
