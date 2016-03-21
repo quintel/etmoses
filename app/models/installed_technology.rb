@@ -1,6 +1,5 @@
 class InstalledTechnology
   include Virtus.model
-  include ProfileCurve
 
   # Editables
   attribute :buffer,                              String
