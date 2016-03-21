@@ -11,7 +11,7 @@ RSpec.describe TestingGroundsController do
   let(:testing_ground) {
     FactoryGirl.create(:testing_ground, technology_profile: {
       'lv1' => [
-        { name: "Technology X",
+        { name: "Generic technology",
           capacity: 1,
           profile: load_profile.id
         }

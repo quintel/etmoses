@@ -25,15 +25,6 @@ class TestingGround::Calculator
 
   private
 
-  def tree
-    TestingGround::TreeSampler.sample(networks, @resolution, @nodes)
-  end
-
-  def networks
-    { electricity: network(:electricity),
-      gas:         network(:gas) }
-  end
-
   def base
     { technologies: @testing_ground.technology_profile.as_json,
       error: validation_error }
