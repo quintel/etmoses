@@ -56,7 +56,7 @@ module Calculation
           node.get(:installed_techs) + node.get(:installed_comps)
         end
 
-        techs.map(&:profile_length).max || 1
+        techs.map(&:profile_curve).map(&:length).max || 1
       end
     end
 

@@ -29,7 +29,7 @@ module Calculation
 
     def techs_for(node)
       suitable_technologies(node).flat_map do |tech|
-        tech.each_profile_curve do |curve_type, curve, additional_curve|
+        tech.profile_curve.each do |curve_type, curve, additional_curve|
           if tech.buffer.present?
             # Returns the technology wrapped in a Composite::Wrapper.
             # composite(node, tech.buffer).add(net_tech)
@@ -68,7 +68,7 @@ module Calculation
           Network::Technologies::Composite::Manager.new(
             (comp.capacity || Float::INFINITY) * comp.units,
             comp.volume * comp.units,
-            comp.profile_curve.fetch('default'.freeze)
+            comp.profile_curve.curves.fetch('default'.freeze)
           )
       end
     end

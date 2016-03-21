@@ -29,7 +29,7 @@ RSpec.describe NetworkCache::Fetcher do
       end
 
       it "fetches cache" do
-        expect(cache[0].nodes.map(&:load)).to eq([[1.2], [1.2], [1.2], [0.0]])
+        expect(cache[0].nodes.map(&:load).map(&:first)).to eq([1.2, 1.2, 1.2, 0.0])
       end
     end
 
@@ -37,7 +37,7 @@ RSpec.describe NetworkCache::Fetcher do
       let(:cache) { NetworkCache::Fetcher.from(testing_ground).fetch(%w(lv1)) }
 
       it "fetches two graphs from cache" do
-        expect(cache[0].nodes.map(&:load)).to eq([[], [], [1.2], []])
+        expect(cache[0].nodes.map(&:load).map(&:first)).to eq([nil, nil, 1.2, nil])
       end
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe NetworkCache::Fetcher do
         resolution: 'high', strategies: {}, range: 0..20).fetch }
 
       it "fetches cache" do
-        expect(cache[0].nodes.map(&:load)).to eq([[1.2], [1.2], [1.2], [0.0]])
+        expect(cache[0].nodes.map(&:load).map(&:first)).to eq([1.2, 1.2, 1.2, 0.0])
       end
     end
   end

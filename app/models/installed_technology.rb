@@ -1,6 +1,5 @@
 class InstalledTechnology
   include Virtus.model
-  include ProfileCurve
 
   # Editables
   attribute :buffer,                              String
@@ -85,7 +84,26 @@ class InstalledTechnology
   end
 
   def profile_curve
-    @profile_curve ||= (curve || get_profile)
+    @profile_curve ||= ProfileCurve.new(curves: (curve || get_profile))
+  end
+
+  def get_profile
+    if profile.nil?
+      { default: nil }
+    elsif profile.is_a?(Array)
+      curve = Network::Curve.new(sliced_profile(profile))
+      { default: curve * component_factor(curve) }
+    elsif profile.is_a?(Hash)
+      Hash[profile.each_pair.map do |curve_type, curve|
+        [curve_type, Network::Curve.new(sliced_profile(curve))]
+      end]
+    elsif demand
+      profile_curves(:demand_scaled)
+    elsif volume.blank? && capacity
+      profile_curves(:capacity_scaled)
+    else
+      profile_curves
+    end
   end
 
   def load_profile
@@ -266,6 +284,22 @@ class InstalledTechnology
   end
 
   private
+
+  def sliced_profile(profile)
+    profile_range ? profile[profile_range] : profile
+  end
+
+  # Internal: Retrieves the Network::Curve used by the technology, with
+  # scaling applied for demand or capacity and a ratio.
+  #
+  # Returns a Hash[{ <curve_type> => Network::Curve }].
+  def profile_curves(scaling = nil)
+    return {} unless valid_profile?
+
+    Hash[load_profile.curves(profile_range).each_curve(scaling).map do |curve_type, curve, ratio|
+      [curve_type, curve * component_factor(curve) * ratio]
+    end]
+  end
 
   def component_factor(curve)
     factor =
