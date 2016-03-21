@@ -31,7 +31,13 @@ module Network
       super(full_path.technology, sub_path)
 
       @full_path = full_path
-      @flexible  = false
+    end
+
+    def conditional_consumption_at(frame)
+      wanted = super
+      excess = excess_at(frame)
+
+      wanted < excess ? wanted : excess
     end
 
     def distance
