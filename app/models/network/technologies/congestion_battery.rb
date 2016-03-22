@@ -67,10 +67,50 @@ module Network
       end
 
       class Path < TechnologyPath
+        # Public: Returns the sub-paths to the head node.
+        def sub_paths
+          # The congestion battery currently does not work correctly if computed
+          # multiple times; as a result, we have to limit it to only resolving
+          # congestion problems on the parent node.
+          @sub_paths ||= [super[1]]
+        end
+
         def conditional_consumption_at(frame)
           constrain(frame, @technology.conditional_consumption_at(frame, self))
         end
-      end
+
+        private def sub_path_class
+          CongestionSubPath
+        end
+      end # Path
+
+      class CongestionSubPath < SubPath
+        def conditional_consumption_at(frame)
+          amount    = @technology.conditional_consumption_at(frame, self)
+          available = @full_path.consumption_margin_at(frame)
+
+          amount < available ? amount : available
+        end
+
+        def consume(frame, amount, conditional = false)
+          return if amount < 1e-10
+
+          if conditional
+            excess = excess_at(frame)
+
+            if amount > excess
+              # Consume using the full path however much is not available as
+              # excess; this energy is coming from the HV network.
+              @full_path.consume(frame, amount - excess, true)
+              super(frame, excess, true)
+            else
+              super
+            end
+          else
+            super
+          end
+        end
+      end # CongestionSubPath
     end # CongestionBattery
   end
 end

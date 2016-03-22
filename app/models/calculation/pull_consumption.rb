@@ -13,8 +13,7 @@ module Calculation
     def call(context)
       context.frames do |frame|
         mandatory_consumption!(frame, context)
-        non_excess_conditional_consumption!(frame, context)
-        excess_conditional_consumption!(frame, context)
+        conditional_consumption!(frame, context)
         conservable_production!(frame, context)
       end
 
@@ -34,47 +33,32 @@ module Calculation
 
     private_class_method :mandatory_consumption!
 
-    # Internal: Technologies which are do not care about excesses, and may take
-    # energy from the grid, come next.
-    #
-    # Returns nothing.
-    def non_excess_conditional_consumption!(frame, context)
-      context.paths.each do |path|
-        unless path.excess_constrained?
+
+    def conditional_consumption!(frame, context)
+      context.subpaths.each do |path|
+        wanted = path.conditional_consumption_at(frame)
+        excess = path.excess_at(frame)
+
+        if path.subpath?
+          # Subpaths only consume when there is available excess equal to or
+          # greater than the amount wanted by the technology.
+          path.consume(frame, wanted, true) if wanted > 0
+        elsif path.excess_constrained?
+          if excess <= 0
+            # Some technologies need to be explicitly told that they received
+            # nothing, as they have further actions to take.
+            path.consume(frame, 0.0, true)
+          else
+            assignable = excess < wanted ? excess : wanted
+            path.consume(frame, assignable, true)
+          end
+        else
           path.consume(frame, path.conditional_consumption_at(frame), true)
         end
       end
     end
 
-    private_class_method :non_excess_conditional_consumption!
-
-    # Internal: Compute the loads of technologies whose conditional loads are
-    # only satisfied when there is enough production in the LES.
-    #
-    # Returns nothing.
-    def excess_conditional_consumption!(frame, context)
-      excess = context.head.production_at(frame) -
-        context.head.consumption_at(frame)
-
-      context.paths.each do |path|
-        next unless path.excess_constrained?
-
-        if excess <= 0
-          # Some technologies need to be explicitly told that they received
-          # nothing, as they have further actions to take.
-          path.consume(frame, 0.0, true)
-        else
-          wanted     = path.conditional_consumption_at(frame)
-          assignable = excess < wanted ? excess : wanted
-
-          path.consume(frame, assignable, true)
-
-          excess -= assignable
-        end
-      end
-    end
-
-    private_class_method :excess_conditional_consumption!
+    private_class_method :conditional_consumption!
 
     # Internal: Send loads through the network where over-production results in
     # a (negative) capacity exceedance.
