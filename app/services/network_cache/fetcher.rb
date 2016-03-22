@@ -13,6 +13,10 @@ module NetworkCache
         LoadSetter.set(network, nodes) do |node|
           read(network.carrier, node.key) || []
         end
+
+        LoadSetter.set(network, nodes, :tech_loads) do |node|
+          read_tech_loads(network.carrier, node.key) || {}
+        end
       end
 
       tree_scope
@@ -20,6 +24,10 @@ module NetworkCache
 
     def read(carrier, key)
       MessagePack.unpack(File.read(file_name(carrier, key)))
+    end
+
+    def read_tech_loads(carrier, key)
+      MessagePack.unpack(File.read(tech_load_file_name(carrier, key)))
     end
   end
 end

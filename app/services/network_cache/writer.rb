@@ -19,14 +19,18 @@ module NetworkCache
     private
 
     def write_network(path, network)
-      directory = path.join(network.carrier.to_s)
-
-      FileUtils.mkdir_p(directory) unless directory.directory?
+      FileUtils.mkdir_p(carrier_path(network.carrier))
 
       network.nodes.each do |node|
         File.write(
           file_name(network.carrier, node.key),
           node.get(:load).to_msgpack,
+          mode: 'wb'
+        )
+
+        File.write(
+          tech_load_file_name(network.carrier, node.key),
+          TestingGround::TechLoadSummary.new(node).loads.to_msgpack,
           mode: 'wb'
         )
       end

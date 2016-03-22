@@ -19,7 +19,11 @@ module NetworkCache
     end
 
     def file_name(carrier, key)
-      file_path.join(carrier.to_s).join("#{Digest::SHA256.hexdigest(key)}.tmp")
+      carrier_path(carrier).join(file_key(key))
+    end
+
+    def tech_load_file_name(carrier, key)
+      carrier_path(carrier).join(file_key(key, 'techs'))
     end
 
     def file_path
@@ -28,6 +32,16 @@ module NetworkCache
 
     def strategy_prefix
       SelectedStrategy.strategy_type(@opts)
+    end
+
+    private
+
+    def carrier_path(carrier)
+      file_path.join(carrier.to_s)
+    end
+
+    def file_key(key, *extras)
+      [Digest::SHA256.hexdigest(key.to_s), *extras, 'tmp'].join('.')
     end
   end
 end

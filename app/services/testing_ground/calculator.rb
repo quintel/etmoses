@@ -8,7 +8,7 @@ class TestingGround::Calculator
 
   def calculate
     if ! Settings.cache.networks || cache.present?
-      base.merge(networks: tree)
+      base.merge(networks: tree, tech_loads: tech_loads)
     else
       calculate_load_in_background
 
@@ -24,6 +24,12 @@ class TestingGround::Calculator
 
   def tree
     TestingGround::TreeSampler.sample(networks, @resolution, @nodes)
+  end
+
+  def tech_loads
+    networks.each_with_object({}) do |(carrier, network), data|
+      data[carrier] = TestingGround::TechLoadSummary.summarize(network)
+    end
   end
 
   def networks
