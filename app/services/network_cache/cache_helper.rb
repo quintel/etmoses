@@ -24,8 +24,12 @@ module NetworkCache
       end
     end
 
-    def file_name(carrier, key, time_frame = time_frame)
-      file_path.join(carrier.to_s, time_frame).join("#{Digest::SHA256.hexdigest(key)}.tmp")
+    def file_name(carrier, key)
+      carrier_path(carrier).join(file_key(key))
+    end
+
+    def tech_load_file_name(carrier, key)
+      carrier_path(carrier).join(file_key(key, 'techs'))
     end
 
     def file_path
@@ -38,6 +42,16 @@ module NetworkCache
 
     def time_frame
       FOLDERS[@resolution] || FOLDERS.values.last
+    end
+
+    private
+
+    def carrier_path(carrier)
+      file_path.join(carrier.to_s)
+    end
+
+    def file_key(key, *extras)
+      [Digest::SHA256.hexdigest(key.to_s), *extras, 'tmp'].join('.')
     end
   end
 end

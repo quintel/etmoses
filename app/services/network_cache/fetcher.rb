@@ -17,6 +17,10 @@ module NetworkCache
             current_week
           end
         end
+
+        LoadSetter.set(network, nodes, :tech_loads) do |node|
+          read_tech_loads(network.carrier, node.key) || {}
+        end
       end
 
       tree_scope
@@ -28,6 +32,10 @@ module NetworkCache
       if File.exists?(file)
         MessagePack.unpack(File.read(file))
       end
+    end
+
+    def read_tech_loads(carrier, key)
+      MessagePack.unpack(File.read(tech_load_file_name(carrier, key)))
     end
   end
 end

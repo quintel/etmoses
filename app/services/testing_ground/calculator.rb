@@ -11,7 +11,7 @@ class TestingGround::Calculator
     if ! Settings.cache.networks || cache.present?
       destroy_background_job
 
-      base.merge(networks: tree)
+      base.merge(networks: tree, tech_loads: tech_loads)
     else
       calculate_background_job
 
