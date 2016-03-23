@@ -93,12 +93,6 @@ module Network
       flow < 0 ? flow.abs : 0.0
     end
 
-    # Public: Returns true if a conditional consumption load has been assigned
-    # to this path in the given frame. False otherwise.
-    def received_conditional_at?(frame)
-      @receipts[frame] && ! @receipts[frame].zero?
-    end
-
     # Public: Returns how far the head node of the path is from the head node of
     # the network. See SubPath#distance.
     #
