@@ -2,6 +2,7 @@ var Transformator = (function () {
     'use strict';
 
     var currentWeek,
+        msInWeek     = 6.048e+8,
         chartLengths = {
             long: 35040,
             short: 8760,
@@ -57,22 +58,10 @@ var Transformator = (function () {
     }
 
     function sampledData(loads) {
-        var chunkSize, endAt, startAt, zeroWeek;
-
-        if (currentWeek && currentWeek !== 0) {
-            chunkSize = Math.floor(loads.length / 52);
-            zeroWeek  = currentWeek - 1;
-            startAt   = zeroWeek * chunkSize;
-            endAt     = startAt + chunkSize;
-
-            loads     = loads.slice(startAt, endAt);
-        }
-
         return loads.map(function (y, x) {
             return { x: formatDateFromFrame(loads, x), y: y };
         });
     }
-
 
     Transformator.prototype = {
         transform: function (viewAsStacked) {

@@ -37,6 +37,7 @@ var TreeGraph = (function () {
         var chartType, carrier, attribute, chart, data,
             loads = {};
 
+        console.log(treeData);
         for (chartType in attributes) {
             for (carrier in treeData[chartType]) {
                 attribute = attributes[chartType][carrier];

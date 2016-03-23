@@ -84,7 +84,10 @@ var ChartShower = (function () {
         $('#technologies .row-fluid, p.info').hide();
         $(".load-graph-wrapper a[href='#load']").tab('show');
         $("select.load-date").removeClass("hidden");
-        $('input.chart-view').on('change', changeViewOfD3);
+
+        $('input.chart-view.stacked').on('change', changeViewOfD3);
+        $('input.chart-view.electric').on('change', toggleTechnologiesOfD3);
+        $('input.chart-view.strategies').on('change', toggleStrategiesOfD3);
 
         $('input.chart-view.stacked').on('change', changeViewOfD3);
         $('input.chart-view.electric').on('change', toggleTechnologiesOfD3);

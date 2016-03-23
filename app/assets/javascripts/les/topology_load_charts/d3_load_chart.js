@@ -1,6 +1,11 @@
 /*globals LoadChartHelper,LoadChartsSettings,StrategyHelper,Transformator,
 StackTransformator*/
 
+// TODO
+// - [ ] Make a toggle between strategies turned on yes or no
+// - [ ] Make a toggle for electricity and gas (?)
+// - [ ]
+
 var D3LoadChart = (function () {
     'use strict';
 
@@ -33,7 +38,6 @@ var D3LoadChart = (function () {
         margin          = { top: 20, right: 200, bottom: 70, left: 75 },
         height          = 500 - margin.top - margin.bottom,
         height2         = 50,
-        msInWeek        = 6.048e+8,
         weeksInYear     = (365 / 7.0),
 
         // This is assuming every LES has a length of 35040. Shorter LES's will
@@ -46,11 +50,6 @@ var D3LoadChart = (function () {
         viewAsStacked   = true,
         viewStrategies  = true,
         colorScale      = d3.scale.category10(),
-        chartLengths    = {
-            long: 35040,
-            short: 8760,
-            annual: 365
-        },
         customTimeFormat = d3.time.format.utc.multi([
             ["%H:%M", function (d) { return d.getUTCMinutes(); }],
             ["%H:%M", function (d) { return d.getUTCHours(); }],
@@ -72,90 +71,13 @@ var D3LoadChart = (function () {
 
     function fakeData() {
         var i, fake = [];
-        for(i = 0; i < 673; i++) {
+        for (i = 0; i < 673; i += 1) {
             fake[i] = {
                 x: new Date(i * 1000 * 60 * 60 * 24),
                 y: Math.cos(i / 2) + Math.random()
-            }
+            };
         }
         return fake;
-    }
-
-    function generateCapacity(capacity, data) {
-        var extent = d3.extent(data[0].values, function (d) { return d.x; });
-
-        return {
-            key:      "Capacity",
-            type:     "capacity",
-            color:    LoadChartsSettings.capacity.color,
-            area:     false,
-            visible:  LoadChartsSettings.capacity.visible,
-            values:   [
-                { x: extent[0], y: capacity },
-                { x: extent[1], y: capacity },
-                { x: extent[0], y: capacity * -1 },
-                { x: extent[1], y: capacity * -1 }
-            ]
-        };
-    }
-
-    function formatDateFromFrame(loads, frame) {
-        var multiplier = -1,
-            len        = loads.length,
-            offset     = currentWeek === 0 ? 0 : (currentWeek - 1) * msInWeek;
-
-        if (len === chartLengths.long || len === 673) {
-            multiplier = 900000;
-        } else if (len === chartLengths.short) {
-            multiplier = 3600000;
-        } else if (len === chartLengths.annual) {
-            multiplier = 86400000;
-        }
-
-        return new Date((frame * multiplier) + offset);
-    }
-
-    function sampledData(loads) {
-        return loads.map(function (y, x) {
-            return { x: formatDateFromFrame(loads, x), y: y };
-        });
-    }
-
-    function fetchLoad() {
-        if (staticSettings.load) {
-            return [staticSettings.load];
-        } else if (StrategyHelper.anyStrategies()) {
-            return [{ area: true,  type: 'load_strategies' },
-                    { area: false, type: 'load' },
-                    { area: true,  type: 'gas_strategies' },
-                    { area: false, type: 'gas' }];
-        } else {
-            return [{ area: true, type: 'load' },
-                    { area: true, type: 'gas' }];
-        }
-    }
-
-    function transformData() {
-        var settings, values,
-            results = [],
-            load    = fetchLoad(),
-            data    = this.lastRequestedData;
-
-        load.forEach(function (datum) {
-            values   = data[datum.type];
-            settings = LoadChartsSettings[datum.type || this.curveType || 'default'];
-
-            if (values) {
-                results.push({
-                    key:     settings.name,
-                    type:    datum.type,
-                    values:  sampledData(values),
-                    area:    datum.area,
-                    color:   settings.color,
-                    visible: settings.visible
-                });
-            }
-        });
     }
 
     function drawPopOver(mousePosX, results) {
@@ -417,40 +339,42 @@ var D3LoadChart = (function () {
         update: function (data) {
             this.lastRequestedData = data || this.lastRequestedData;
 
-            chartData = [
-                {   area: true,
-                    color: colorScale(0),
-                    key: "Electric vehicle",
-                    type: "electric_vehicle",
-                    visible: true,
-                    values: fakeData()
-                },
-                {   area: true,
-                    color: colorScale(1),
-                    key: "Solar PV",
-                    type: "solar_pv",
-                    visible: true,
-                    values: fakeData()
-                },
-                {   area: true,
-                    color: colorScale(2),
-                    key: "Base Load",
-                    type: "base_load",
-                    visible: true,
-                    values: fakeData()
-                },
-                {   area: true,
-                    color: colorScale(3),
-                    key: "Battery",
-                    type: "battery",
-                    visible: true,
-                    values: fakeData()
-                }
-            ]
+            //chartData = [
+            //    {   area: true,
+            //        color: colorScale(0),
+            //        key: "Electric vehicle",
+            //        type: "electric_vehicle",
+            //        visible: true,
+            //        values: fakeData()
+            //    },
+            //    {   area: true,
+            //        color: colorScale(1),
+            //        key: "Solar PV",
+            //        type: "solar_pv",
+            //        visible: true,
+            //        values: fakeData()
+            //    },
+            //    {   area: true,
+            //        color: colorScale(2),
+            //        key: "Base Load",
+            //        type: "base_load",
+            //        visible: true,
+            //        values: fakeData()
+            //    },
+            //    {   area: true,
+            //        color: colorScale(3),
+            //        key: "Battery",
+            //        type: "battery",
+            //        visible: true,
+            //        values: fakeData()
+            //    }
+            //]
 
-            //chartData = new Transformator(
-            //    this, staticSettings.load, currentWeek
-            //).transform(viewAsStacked);
+            chartData = new Transformator(
+                this,
+                staticSettings.load,
+                currentWeek
+            ).transform(viewAsStacked);
 
             if (viewAsStacked) {
                 chartData = new StackTransformator(chartData).transform();
@@ -471,7 +395,7 @@ var D3LoadChart = (function () {
 
             svg.selectAll("path").remove();
 
-            ////for slider part--------------------------------------------------
+            //for slider part--------------------------------------------------
 
             var contextArea = d3.svg.area()
                 .interpolate("step-after")
