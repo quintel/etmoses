@@ -13,7 +13,7 @@ RSpec.describe DataController do
     end
 
     it 'creates a merit order' do
-      stub_request(:get, "http://beta.et-engine.com/api/v3/scenarios/1/merit").
+      stub_request(:get, "https://beta.et-engine.com/api/v3/scenarios/1/merit").
         with(:headers => {'Accept'=>'application/json', 'Accept-Encoding'=>'gzip, deflate', 'Content-Type'=>'application/json', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => JSON.dump({participants: [], profiles: []}))
 
