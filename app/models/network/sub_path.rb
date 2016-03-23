@@ -33,11 +33,12 @@ module Network
       @full_path = full_path
     end
 
-    def conditional_consumption_at(frame)
-      wanted = super
-      excess = excess_at(frame)
+    def mandatory_consumption_at(frame)
+      limit_to_excess(frame, super)
+    end
 
-      wanted < excess ? wanted : excess
+    def conditional_consumption_at(frame)
+      limit_to_excess(frame, super)
     end
 
     def distance
@@ -46,6 +47,13 @@ module Network
 
     def subpath?
       true
+    end
+
+    private
+
+    def limit_to_excess(frame, amount)
+      excess = excess_at(frame)
+      amount < excess ? amount : excess
     end
   end # SubPath
 end

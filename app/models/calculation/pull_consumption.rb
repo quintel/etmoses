@@ -12,8 +12,11 @@ module Calculation
     # Returns the context.
     def call(context)
       context.frames do |frame|
-        mandatory_consumption!(frame, context)
-        conditional_consumption!(frame, context)
+        context.subpaths.each do |paths|
+          mandatory_consumption!(frame, context, paths)
+          conditional_consumption!(frame, context, paths)
+        end
+
         conservable_production!(frame, context)
       end
 
@@ -25,17 +28,16 @@ module Calculation
     # Internal: Push mandatory flows through the network.
     #
     # Returns nothing.
-    def mandatory_consumption!(frame, context)
-      context.paths.each do |path|
+    def mandatory_consumption!(frame, context, paths)
+      paths.each do |path|
         path.consume(frame, path.mandatory_consumption_at(frame))
       end
     end
 
     private_class_method :mandatory_consumption!
 
-
-    def conditional_consumption!(frame, context)
-      context.subpaths.each do |path|
+    def conditional_consumption!(frame, context, paths)
+      paths.each do |path|
         wanted = path.conditional_consumption_at(frame)
         excess = path.excess_at(frame)
 
