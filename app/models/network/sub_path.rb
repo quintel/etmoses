@@ -5,7 +5,7 @@ module Network
   class SubPath < TechnologyPath
     extend Forwardable
 
-    def_delegators :@full_path, :consume, :received_conditional_at?, :receipts
+    def_delegators :@full_path, :consume, :receipts
 
     # Public: Given a TechnologyPath which describes the path from a technology
     # to the network head, returns an array of all subpaths from the technology
