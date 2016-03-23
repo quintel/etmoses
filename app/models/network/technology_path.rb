@@ -27,11 +27,16 @@ module Network
       @technology = technology
       @path       = path
       @flexible   = @technology.flexible_conditional?
-      @receipts   = DefaultArray.new { |_| 0.0 }
+      @receipts   = Receipts.new
     end
 
     def sub_paths
       @sub_paths ||= sub_path_class.from(self)
+    end
+
+    def mandatory_consumption_at(frame)
+      amount = @technology.mandatory_consumption_at(frame) - receipts.mandatory[frame]
+      amount <= 0 ? 0.0 : amount
     end
 
     # Public: Returns the conditional consumption required by the technology in
@@ -40,7 +45,7 @@ module Network
     #
     # Returns a numeric.
     def conditional_consumption_at(frame)
-      amount = @technology.conditional_consumption_at(frame) - receipts[frame]
+      amount = @technology.conditional_consumption_at(frame) - receipts.conditional[frame]
       amount <= 0 ? 0.0 : constrain(frame, amount)
     end
 
@@ -121,11 +126,12 @@ module Network
       if conditional
         # TODO: "store" should be renamed to "consume_conditional"
         @technology.store(frame, amount)
-        receipts[frame] += amount
+        receipts.conditional[frame] += amount
       else
         # Hack hack hack. Required to tell components in a "composite"
         # technology what they have received.
         @technology.receive_mandatory(frame, amount)
+        receipts.mandatory[frame] += amount
       end
 
       currently = @technology.consumption[frame] || 0.0

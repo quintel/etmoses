@@ -54,6 +54,9 @@ module Calculation
     # more fairly (instead of the first node being given preference over the
     # others).
     #
+    # TODO Extract into a PathCollection object so that we may call something
+    #      like context.subpaths.each_level { ... }
+    #
     # Returns an array of TechnologyPath instances.
     def subpaths
       @subpaths ||= begin
@@ -74,7 +77,7 @@ module Calculation
         end
 
         # Shortest subpaths first.
-        data.keys.sort.reverse.flat_map { |key| data[key] }
+        data.keys.sort.reverse.map { |key| data[key] }
       end
     end
 
