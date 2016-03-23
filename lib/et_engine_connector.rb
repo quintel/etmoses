@@ -4,11 +4,11 @@ class EtEngineConnector
   #
 
   ETM_URLS = {
-    stats:     'http://%s/api/v3/scenarios/%d/converters/stats',
-    scenario:  'http://%s/api/v3/scenarios/%d',
-    scenarios: 'http://%s/api/v3/scenarios',
-    merit:     'http://%s/api/v3/scenarios/%d/merit',
-    inputs:    'http://%s/api/v3/scenarios/%d/inputs'
+    stats:     'https://%s/api/v3/scenarios/%d/converters/stats',
+    scenario:  'https://%s/api/v3/scenarios/%d',
+    scenarios: 'https://%s/api/v3/scenarios',
+    merit:     'https://%s/api/v3/scenarios/%d/merit',
+    inputs:    'https://%s/api/v3/scenarios/%d/inputs'
   }.freeze
 
   HEADERS = { content_type: :json, accept: :json }
