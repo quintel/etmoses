@@ -63,8 +63,18 @@ var Transformator = (function () {
         });
     }
 
+    function isShown(chartType) {
+        var type = (this.electricity ? 'load' : 'gas');
+
+        if (this.strategies && StrategyHelper.anyStrategies()) {
+            type += "_strategies";
+        }
+
+        return chartType === type;
+    }
+
     Transformator.prototype = {
-        transform: function (viewAsStacked) {
+        transform: function (shown) {
             var settings, values,
                 results = [],
                 load    = fetchLoad.call(this),
@@ -74,19 +84,19 @@ var Transformator = (function () {
                 values   = data[datum.type];
                 settings = LoadChartsSettings[datum.type || this.d3Chart.curveType];
 
-                if (values) {
+                if (values && isShown.call(shown, datum.type)) {
                     results.push({
                         key:     settings.name,
                         type:    datum.type,
                         values:  sampledData(values),
-                        area:    viewAsStacked || datum.area,
+                        area:    shown.stacked || datum.area,
                         color:   settings.color,
                         visible: settings.visible
                     });
                 }
             }.bind(this));
 
-            if (data.capacity && !viewAsStacked) {
+            if (data.capacity && !shown.stacked) {
                 results.push(generateCapacity(data.capacity, results));
             }
 

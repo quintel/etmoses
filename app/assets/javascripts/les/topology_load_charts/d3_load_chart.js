@@ -45,11 +45,9 @@ var D3LoadChart = (function () {
         //
         // TODO: Fix this static value so the 'resolution' of the LES is taken
         // into account.
-        weekResolution  = 672,
-        scaleCorrection = 1.05,
-        viewAsStacked   = true,
-        viewStrategies  = true,
-        colorScale      = d3.scale.category10(),
+        weekResolution   = 672,
+        scaleCorrection  = 1.05,
+        colorScale       = d3.scale.category10(),
         customTimeFormat = d3.time.format.utc.multi([
             ["%H:%M", function (d) { return d.getUTCMinutes(); }],
             ["%H:%M", function (d) { return d.getUTCHours(); }],
@@ -67,6 +65,11 @@ var D3LoadChart = (function () {
                 colorArea: undefined,
                 stackedArea: undefined
             }
+        },
+        shown = {
+            stacked: true,
+            electricity: true,
+            strategies: false
         };
 
     function fakeData() {
@@ -158,7 +161,7 @@ var D3LoadChart = (function () {
         var extent = brush.extent(),
             ydomain = d3.extent(all.call(chartData), function (d) {
                 if (brush.empty() || (extent[0] <= d.x && extent[1] >= d.x)) {
-                    if (viewAsStacked) {
+                    if (shown.stacked) {
                         return (d.y + d.offset) * scaleCorrection;
                     } else {
                         return d.y * scaleCorrection;
@@ -178,7 +181,7 @@ var D3LoadChart = (function () {
     }
 
     function setLine(d, scope) {
-        if (d.visible && !viewAsStacked) {
+        if (d.visible && !shown.stacked) {
             return chartParts[scope].line(d.values);
         } else {
             return null;
@@ -186,7 +189,7 @@ var D3LoadChart = (function () {
     }
 
     function setArea(d, scope) {
-        if (d.visible && d.area && viewAsStacked) {
+        if (d.visible && d.area && shown.stacked) {
             return chartParts[scope].stackedArea(d.values);
         } else {
             return null;
@@ -332,7 +335,17 @@ var D3LoadChart = (function () {
             range_end:   weekResolution
         },
         view: function (newViewAs) {
-            viewAsStacked = newViewAs;
+            shown.stacked = newViewAs;
+
+            return this;
+        },
+        toggleTechnologies: function (toggle) {
+            shown.electricity = toggle;
+
+            return this;
+        },
+        toggleStrategies: function (toggle) {
+            shown.strategies = toggle;
 
             return this;
         },
@@ -374,9 +387,9 @@ var D3LoadChart = (function () {
                 this,
                 staticSettings.load,
                 currentWeek
-            ).transform(viewAsStacked);
+            ).transform(shown);
 
-            if (viewAsStacked) {
+            if (shown.stacked) {
                 chartData = new StackTransformator(chartData).transform();
             }
 
@@ -427,7 +440,7 @@ var D3LoadChart = (function () {
             legendItem.enter().append("span")
                 .attr("class", "legend-item")
                 .on("click", function (d) {
-                    if (viewAsStacked) {
+                    if (shown.stacked) {
                         return false;
                     }
 

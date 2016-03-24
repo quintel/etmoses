@@ -33,28 +33,21 @@ var TreeGraph = (function () {
         svgGroup = baseSvg.append('g');
     }
 
-    function setDataFromTree(treeData) {
-        var chartType, carrier, attribute, chart, data,
+    function setDataFromTree(data) {
+        var chartType, carrier,
             loads = {};
 
-        console.log(treeData);
         for (chartType in attributes) {
-            for (carrier in treeData[chartType]) {
-                attribute = attributes[chartType][carrier];
-                chart     = treeData[chartType][carrier];
-                loads     = ETHelper.loadsFromTree(chart);
+            for (carrier in data[chartType]) {
+                loads = ETHelper.loadsFromTree(data[chartType][carrier]);
 
-                if (!data) {
-                    data = chart;
-                }
-
-                ETHelper.eachNode([data], function (node) {
-                    node[attribute] = loads[node.name];
+                ETHelper.eachNode([this.treeData], function (node) {
+                    node[attributes[chartType][carrier]] = loads[node.name];
                 });
             }
         }
 
-        return data;
+        return this.treeData;
     }
 
     function reloadLast() {
@@ -251,7 +244,7 @@ var TreeGraph = (function () {
             if (treeData.graph) {
                 this.treeData = treeData.graph;
             } else {
-                this.treeData = setDataFromTree(treeData);
+                this.treeData = setDataFromTree.call(this, treeData);
             }
 
             this.root     = this.treeData;

@@ -73,11 +73,11 @@ var ChartShower = (function () {
     }
 
     function toggleTechnologiesOfD3() {
-        // do some magic
+        window.currentTree.d3Chart.toggleTechnologies($(this).prop('checked')).update();
     }
 
     function toggleStrategiesOfD3() {
-        // do some magic
+        window.currentTree.d3Chart.toggleStrategies($(this).prop('checked')).update();
     }
 
     function toggleDomParts() {
@@ -119,17 +119,9 @@ var ChartShower = (function () {
     }
 
     function isValidNodeData() {
-        var d = this.nodeData,
-            valid = false;
+        var d = this.nodeData;
 
-        ['load', 'load_strategies', 'gas', 'gas_strategies'].forEach(function (attr) {
-            if (d[attr] && d[attr].length > 0) {
-                valid = true;
-                return false;
-            }
-        });
-
-        return valid;
+        return (d.load && d.load.length > 0) || (d.gas && d.gas.length > 0);
     }
 
     ChartShower.prototype = {
