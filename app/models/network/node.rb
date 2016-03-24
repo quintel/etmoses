@@ -17,6 +17,14 @@ module Network
       get(:load) || set(:load, [])
     end
 
+    # Public: An array describing the load of each technology on this node for
+    # each time step.
+    #
+    # Returns a Hash[String => Array]
+    def tech_loads
+      get(:tech_loads) || set(:tech_loads, Hash.new { |h, k| h[k] = [] })
+    end
+
     # Public: The net load of the node in the given time step. A positive number
     # indicates that the node is consuming energy, a negative that it is
     # supplying energy to its parent.

@@ -34,6 +34,14 @@ class TestingGround::Calculator
     TestingGround::TreeSampler.sample(networks, resolution, @options[:nodes])
   end
 
+  def tech_loads
+    networks.each_with_object({}) do |(carrier, network), data|
+      data[carrier] = network.nodes.each_with_object({}) do |node, node_data|
+        node_data[node.key] = node.get(:tech_loads)
+      end
+    end
+  end
+
   def networks
     [ network(:electricity), network(:gas) ]
   end
