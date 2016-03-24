@@ -1,4 +1,5 @@
-/*globals D3LoadChart,ErrorDisplayer,Les,StatusUpdater,Strategies,TreeFetcher,TreeGraph*/
+/*globals BusinessCaseTable,D3LoadChart,ErrorDisplayer,Les,StatusUpdater,
+Strategies,TreeFetcher,TreeGraph*/
 var Tree = (function () {
     'use strict';
 
@@ -9,26 +10,10 @@ var Tree = (function () {
         $("#collapse-stakeholders select").prop('disabled', true);
     }
 
-    function updateProgress(data) {
-        if (data) {
-            new StatusUpdater("Done calculating!", 1).append();
-        } else {
-            new StatusUpdater("..", 1).append();
-        }
-    }
-
     function updateTree(data) {
-        this.toggleLoading()
+        this.toggleLoading();
 
         this.treeGraph.setData(data).reload();
-    }
-
-    function drawTree(data) {
-        new StatusUpdater("Calculation finished!").append();
-
-        this.treeGraph.setData(data).showGraph();
-
-        $("#collapse-stakeholders select").prop('disabled', false);
 
         if (data.error) {
             $(".alert.alert-warning").removeClass("hidden")
@@ -44,24 +29,36 @@ var Tree = (function () {
         ).displayError();
     }
 
+    function getTopology(callback) {
+        $.ajax({
+            type:        "GET",
+            contentType: "application/json",
+            dataType:    "json",
+            url:         this.topologyUrl,
+            success:     callback.bind(this),
+            error:       displayError
+        });
+    }
+
     Tree.prototype = {
         nodes: [],
+        loading: false,
         create: function () {
             updateDomElements();
 
-            this.d3Chart    = new D3LoadChart(".load-graph .chart", "default");
-            this.treeGraph  = new TreeGraph(this.target.selector);
-            this.strategies = new Strategies();
-            this.lesses     = [ new Les(), new Les(this.strategies) ];
-            this.reload();
-        },
+            this.treeGraph    = new TreeGraph(this.target.selector);
+            this.d3Chart      = new D3LoadChart(".load-graph .chart", "load");
+            this.strategies   = new Strategies();
+            this.lesses       = [ new Les(), new Les(this.strategies) ];
+            this.businessCase = new BusinessCaseTable("#business_case_table");
 
-        reload: function () {
-            new TreeFetcher(this.lesses)
-                .fetch(this.d3Chart.resolution)
-                .progress(updateProgress)
-                .done(drawTree.bind(this))
-                .fail(displayError);
+            this.businessCase.setNoCaseMessage();
+
+            getTopology.call(this, function (data) {
+                $("#collapse-stakeholders select").prop('disabled', false);
+
+                this.treeGraph.setData(data).showGraph();
+            });
         },
 
         updateStrategies: function () {
@@ -71,8 +68,9 @@ var Tree = (function () {
         update: function (lesses) {
             this.toggleLoading();
 
+            // Expand with node_start  and node_end
             new TreeFetcher(lesses || this.lesses)
-                .fetch(this.d3Chart.resolution)
+                .fetch(this.d3Chart.lesOptions)
                 .done(updateTree.bind(this))
                 .fail(displayError);
         },
@@ -80,6 +78,8 @@ var Tree = (function () {
         toggleLoading: function () {
             var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
             loadingSpinner.toggleClass("on");
+
+            this.loading = !this.loading;
 
             $("button.apply_strategies").prop("disabled", loadingSpinner.hasClass("on"));
         }
@@ -90,6 +90,7 @@ var Tree = (function () {
         this.data          = target.data();
         this.url           = this.data.url;
         this.strategiesUrl = this.data.strategiesUrl;
+        this.topologyUrl   = this.data.topologyUrl;
         this.id            = this.data.id;
     }
 

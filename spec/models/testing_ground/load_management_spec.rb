@@ -15,8 +15,9 @@ RSpec.describe TestingGround do
   }
 
   def calculate(strategies = {})
-    fake_strategies = FakeLoadManagement.strategies(strategies)
-    GraphToTree.convert(testing_ground.to_calculated_graph(fake_strategies)).fetch(:load)
+    GraphToTree.convert(
+      testing_ground.to_calculated_graph(strategies: strategies)
+    ).fetch(:load)
   end
 
   # Testing of the buffering of local PV excess in heat pumps
@@ -313,7 +314,7 @@ RSpec.describe TestingGround do
     it "applies saving of base load (i.e. shaving of the flex profile)" do
       old_strategies = FakeLoadManagement.strategies(ev_storage: true)
       testing_ground.selected_strategy.update_attributes(old_strategies)
-      NetworkCache::Writer.from(testing_ground, old_strategies).write
+      NetworkCache::Writer.from(testing_ground, strategies: old_strategies).write
 
       expect(calculate(saving_base_load: true)).to eq([1.0, 1.8, 2.7])
     end

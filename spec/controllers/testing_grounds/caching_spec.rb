@@ -41,7 +41,7 @@ RSpec.describe TestingGroundsController do
   end
 
   describe 'caching' do
-    let(:opts) { {} }
+    let(:opts) { { strategies: {} } }
 
     it 'caches the data request' do
       get :data, id: testing_ground
@@ -51,11 +51,11 @@ RSpec.describe TestingGroundsController do
     end
 
     context 'with custom calculation options' do
-      let(:opts) { { saving_base_load: true } }
+      let(:opts) { { strategies: { saving_base_load: true } } }
 
       it 'caches the data request for strategies separately' do
         get :data, id: testing_ground,
-                   calculation: { strategies: FakeLoadManagement.strategies(opts) }
+                   calculation: opts
 
         loads = network.node('CONGESTED_END_POINT_0').get(:load)
         expect(loads.length).to eq(8760)

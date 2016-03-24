@@ -2,7 +2,7 @@
 var Strategies = (function () {
     'use strict';
 
-    var applyStrategyButton, businessCaseTable, savedStrategies,
+    var applyStrategyButton, savedStrategies,
         changedStrategy,
         sliderSettings = {
             focus: true,
@@ -48,57 +48,21 @@ var Strategies = (function () {
         return selected;
     }
 
-    function renderSummary() {
-        $.ajax({
-            type: "POST",
-            url: businessCaseTable.data('finishUrl')
-        });
-        $("#business_case_table .loading-spinner").removeClass("on");
-        $("select#compare").prop('disabled', false);
-    }
-
-    function showLoadingSpinner() {
-        $("#business_case_table .loading-spinner").addClass("on");
-        $("select#compare").prop('disabled', true);
-    }
-
-    function pollBusinessCase() {
-        var businessCaseOptions = {
-            url: businessCaseTable.data('url'),
-            data: {
-                strategies: StrategyHelper.getStrategies()
-            },
-            first_data: {
-                clear: true
-            }
-        };
-
-        new Poller(businessCaseOptions).poll()
-            .done(renderSummary)
-            .progress(showLoadingSpinner);
-    }
-
-    function saveSelectedStrategies(toggle, strategies) {
+    function saveSelectedStrategies(strategies) {
         Ajax.json(
             window.currentTree.strategiesUrl,
-            { strategies: strategies },
-            function () {
-                if (toggle) {
-                    window.currentTree.toggleLoading();
-                }
-            }
+            { strategies: strategies }
         );
     }
 
     function toggleStrategies(appliedStrategies) {
         if (changedStrategy && !StrategyHelper.anyStrategies()) {
-            saveSelectedStrategies.call(this, true, appliedStrategies);
+            saveSelectedStrategies.call(this, appliedStrategies);
             window.currentTree.treeGraph.clearStrategies().reload();
-            window.currentTree.toggleLoading();
-            pollBusinessCase.call(this);
+            window.currentTree.businessCase.reload();
         } else if (changedStrategy) {
             window.currentTree.updateStrategies();
-            pollBusinessCase.call(this);
+            window.currentTree.businessCase.reload();
         } else {
             window.currentTree.toggleLoading();
         }
@@ -152,7 +116,6 @@ var Strategies = (function () {
 
     function Strategies() {
         applyStrategyButton = $("button.apply_strategies");
-        businessCaseTable   = $("#business_case_table");
 
         setStrategies.call(this);
         addOnChangeListener.call(this);

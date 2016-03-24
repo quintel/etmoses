@@ -81,7 +81,7 @@ module Calculation
     #
     # Returns nothing.
     def conservable_production!(frame, context)
-      return unless context.options[:capping_solar_pv]
+      return unless context.options[:strategies][:capping_solar_pv]
 
       context.paths.each do |path|
         conservable = path.technology.conservable_production_at(frame)

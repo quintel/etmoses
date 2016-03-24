@@ -1,10 +1,16 @@
 module NetworkCache
   module CacheHelper
     CARRIERS = [:electricity, :gas]
+    FOLDERS  = {
+      low:  'year',
+      high: 'current_week'
+    }.freeze
 
-    def initialize(testing_ground, opts)
+    def initialize(testing_ground, strategies: {}, range: nil, resolution: :high)
       @testing_ground = testing_ground
-      @opts = opts || {}
+      @strategies     = strategies
+      @range          = range
+      @resolution     = resolution
     end
 
     def tree_scope
@@ -18,8 +24,8 @@ module NetworkCache
       end
     end
 
-    def file_name(carrier, key)
-      file_path.join(carrier.to_s).join("#{Digest::SHA256.hexdigest(key)}.tmp")
+    def file_name(carrier, key, time_frame = time_frame)
+      file_path.join(carrier.to_s, time_frame).join("#{Digest::SHA256.hexdigest(key)}.tmp")
     end
 
     def file_path
@@ -27,7 +33,11 @@ module NetworkCache
     end
 
     def strategy_prefix
-      SelectedStrategy.strategy_type(@opts)
+      SelectedStrategy.strategy_type(@strategies)
+    end
+
+    def time_frame
+      FOLDERS[@resolution] || FOLDERS.values.last
     end
   end
 end

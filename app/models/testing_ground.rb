@@ -4,6 +4,7 @@ class TestingGround < ActiveRecord::Base
   include Privacy
 
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
+  CACHE_CLEARING_ATTRS = %w(technology_profile topology_id)
 
   serialize :technology_profile, TechnologyList
 
@@ -27,6 +28,8 @@ class TestingGround < ActiveRecord::Base
   validate  :validate_load_profiles
 
   attr_accessor :technology_distribution
+
+  after_save :set_cache_updated_at
 
   def self.latest_first
     order(created_at: :desc)
@@ -63,6 +66,8 @@ class TestingGround < ActiveRecord::Base
       Calculation::Flows
     ]
 
+    opts[:strategies] ||= {}
+
     context = calculators
       .reduce(to_calculation_context(opts.symbolize_keys)) do |cxt, calculator|
         calculator.call(cxt)
@@ -76,6 +81,8 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
+    technology_profile.prepare_calculation(options[:range])
+
     Calculation::Context.new(
       [network(:electricity), network(:gas)], options.merge(
         behavior_profile: behavior_profile.try(:network_curve)
@@ -125,8 +132,15 @@ class TestingGround < ActiveRecord::Base
     self.technology_profile = TechnologyList.from_csv(csv)
   end
 
-  def invalid_technologies
-    technology_profile.list.values.flatten.reject(&:valid?)
+  def range
+    range_start..range_end
+  end
+
+  def range=(range)
+    return unless range.is_a?(Range)
+
+    self.range_start = range.begin
+    self.range_end   = range.end
   end
 
   private
@@ -184,6 +198,16 @@ class TestingGround < ActiveRecord::Base
         "may not have an inline curve with non-numeric values " \
         "(on #{ tech.name })"
       )
+    end
+  end
+
+  def set_cache_updated_at
+    touch(:cache_updated_at) if clear_cache?
+  end
+
+  def clear_cache?
+    CACHE_CLEARING_ATTRS.any? do |attr|
+      public_send("#{ attr }_changed?")
     end
   end
 end # TestingGround

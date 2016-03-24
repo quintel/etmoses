@@ -12,6 +12,8 @@ FactoryGirl.define do
 
     user
 
+    cache_updated_at DateTime.now
+
     technology_profile { YAML.load(<<-YML.strip_heredoc) }
       ---
       lv1:

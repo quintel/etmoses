@@ -6,7 +6,7 @@ var TreeGraph = (function () {
         svgGroup,
         maxLabelLength  = 0,
         viewerHeight    = 700,
-        viewerWidth     = 500,
+        viewerWidth     = 550,
         duration        = 250,
         nodeSize        = 50,
         ease            = 'cubic-out',
@@ -33,27 +33,21 @@ var TreeGraph = (function () {
         svgGroup = baseSvg.append('g');
     }
 
-    function setDataFromTree(treeData) {
-        var chartType, carrier, attribute, chart, data,
+    function setDataFromTree(data) {
+        var chartType, carrier,
             loads = {};
 
         for (chartType in attributes) {
-            for (carrier in treeData[chartType]) {
-                attribute = attributes[chartType][carrier];
-                chart     = treeData[chartType][carrier];
-                loads     = ETHelper.loadsFromTree(chart);
+            for (carrier in data[chartType]) {
+                loads = ETHelper.loadsFromTree(data[chartType][carrier]);
 
-                if (!data) {
-                    data = chart;
-                }
-
-                ETHelper.eachNode([data], function (node) {
-                    node[attribute] = loads[node.name];
+                ETHelper.eachNode([this.treeData], function (node) {
+                    node[attributes[chartType][carrier]] = loads[node.name];
                 });
             }
         }
 
-        return data;
+        return this.treeData;
     }
 
     function reloadLast() {
@@ -135,7 +129,8 @@ var TreeGraph = (function () {
             // variations due to floating-point arithmetic.
             capacity = d.capacity + 1e-5;
 
-        return d.capacity && (d3.max(load) > capacity || d3.min(load) < -capacity);
+        return load && (d.capacity &&
+            (d3.max(load) > capacity || d3.min(load) < -capacity));
     }
 
     function setNodeClass(data) {
@@ -171,7 +166,12 @@ var TreeGraph = (function () {
 
     // Toggle children on click.
     function click(d) {
-        if (d3.event && d3.event.defaultPrevented) { return; } // click suppressed
+        // Click suppressed
+        if ((d3.event && d3.event.defaultPrevented)
+            || !d.load
+            || window.currentTree.loading) {
+            return false;
+        }
 
         window.localSettings.set('current_chart_id', d.id);
 
@@ -241,7 +241,12 @@ var TreeGraph = (function () {
 
     TreeGraph.prototype = {
         setData: function (treeData) {
-            this.treeData = setDataFromTree(treeData);
+            if (treeData.graph) {
+                this.treeData = treeData.graph;
+            } else {
+                this.treeData = setDataFromTree.call(this, treeData);
+            }
+
             this.root     = this.treeData;
             this.root.x0  = viewerHeight / 2;
             this.root.y0  = 0;
