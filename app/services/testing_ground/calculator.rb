@@ -28,7 +28,9 @@ class TestingGround::Calculator
 
   def tech_loads
     networks.each_with_object({}) do |(carrier, network), data|
-      data[carrier] = TestingGround::TechLoadSummary.summarize(network)
+      data[carrier] = network.nodes.each_with_object({}) do |node, node_data|
+        node_data[node.key] = node.get(:tech_loads)
+      end
     end
   end
 

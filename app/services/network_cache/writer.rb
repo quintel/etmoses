@@ -30,7 +30,7 @@ module NetworkCache
 
         File.write(
           tech_load_file_name(network.carrier, node.key),
-          TestingGround::TechLoadSummary.new(node).loads.to_msgpack,
+          node.get(:tech_loads).to_msgpack,
           mode: 'wb'
         )
       end
