@@ -15,11 +15,10 @@ module CurveComponent
   # Public: Returns the Network::Curve which containing each of the load profile
   # values.
   def network_curve(range = nil, scaling = :original)
-    cache_key = "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ range}.#{ scaling }"
+    return full_curve(scaling) if range.nil?
 
-    Rails.cache.fetch(cache_key) do
-      values = Network::Curve.load_file(curve.path(scaling))
-      range ? values[range] : values
+    Rails.cache.fetch(cache_key(range || :full, scaling)) do
+      full_curve(scaling)[range]
     end
   end
 
@@ -50,5 +49,18 @@ module CurveComponent
         "must have 35,040 values, but the uploaded file has #{ length }"
       )
     end
+  end
+
+  # Internal: Returns the full curve with the chosen scaling.
+  #
+  # Returns a Network::Curve.
+  def full_curve(scaling)
+    Rails.cache.fetch(cache_key(:full, scaling)) do
+      Network::Curve.load_file(curve.path(scaling))
+    end
+  end
+
+  def cache_key(range, scaling)
+    "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ range }.#{ scaling }"
   end
 end
