@@ -18,8 +18,8 @@ module CurveComponent
     cache_key = "profile.#{ id }.#{ curve_updated_at.to_s(:db) }.#{ range}.#{ scaling }"
 
     Rails.cache.fetch(cache_key) do
-      values = File.foreach(curve.path(scaling)).map(&:to_f)
-      Network::Curve.new(range ? values[range] : values)
+      values = Network::Curve.load_file(curve.path(scaling))
+      range ? values[range] : values
     end
   end
 
