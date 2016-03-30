@@ -129,14 +129,6 @@ class TechnologyList
     end
   end
 
-  def prepare_calculation(range)
-    each_tech do |tech|
-      tech.profile_range        = range
-      tech.preset_load_profile  = profiles[tech.profile]
-      tech.curve                = tech.get_profile
-    end
-  end
-
   # Public: Converts the technology list to a CSV file.
   def to_csv
     attributes = InstalledTechnology::PRESENTABLES

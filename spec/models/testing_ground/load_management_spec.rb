@@ -16,7 +16,7 @@ RSpec.describe TestingGround do
 
   def calculate(strategies = {})
     GraphToTree.convert(
-      testing_ground.to_calculated_graph(strategies: strategies)
+      testing_ground.to_calculated_graph(strategies: strategies, range: 0..35040)
     ).fetch(:load)
   end
 

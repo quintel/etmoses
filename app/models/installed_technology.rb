@@ -39,9 +39,6 @@ class InstalledTechnology
   attribute :behavior,                            String, editable: false
   attribute :node,                                String, editable: false
   attribute :profile_key,                         String, editable: false
-  attribute :profile_range,                       Range, editable: false
-  attribute :curve,                               Object, editable: false
-  attribute :preset_load_profile,                 LoadProfile, editable: false
   attribute :curve_behavior,                      String, editable: false
 
   EDITABLES =
@@ -83,19 +80,19 @@ class InstalledTechnology
     end
   end
 
-  def profile_curve
-    @profile_curve ||= ProfileCurve.new(curves: (curve || get_profile))
+  def profile_curve(range = nil)
+    @profile_curve ||= ProfileCurve.new(curves: get_profile, range: range)
   end
 
   def get_profile
     if profile.nil?
       { default: nil }
     elsif profile.is_a?(Array)
-      curve = Network::Curve.new(sliced_profile(profile))
+      curve = Network::Curve.new(profile)
       { default: curve * component_factor(curve) }
     elsif profile.is_a?(Hash)
       Hash[profile.each_pair.map do |curve_type, curve|
-        [curve_type, Network::Curve.new(sliced_profile(curve))]
+        [curve_type, Network::Curve.new(curve)]
       end]
     elsif demand
       profile_curves(:demand_scaled)
@@ -107,7 +104,7 @@ class InstalledTechnology
   end
 
   def load_profile
-    @load_profile ||= (preset_load_profile || LoadProfile.find_by_id(profile))
+    @load_profile ||= LoadProfile.find_by_id(profile)
   end
 
   # Public: Returns if the technology has been defined in the data/technologies
@@ -285,10 +282,6 @@ class InstalledTechnology
 
   private
 
-  def sliced_profile(profile)
-    profile_range ? profile[profile_range] : profile
-  end
-
   # Internal: Retrieves the Network::Curve used by the technology, with
   # scaling applied for demand or capacity and a ratio.
   #
@@ -296,8 +289,8 @@ class InstalledTechnology
   def profile_curves(scaling = nil)
     return {} unless valid_profile?
 
-    Hash[load_profile.curves(profile_range).each_curve(scaling).map do |curve_type, curve, ratio|
-      [curve_type, curve * component_factor(curve) * ratio]
+    Hash[load_profile.curves.each_curve(scaling).map do |curve_type, curve, ratio|
+      [curve_type, (curve * component_factor(curve) * ratio)]
     end]
   end
 

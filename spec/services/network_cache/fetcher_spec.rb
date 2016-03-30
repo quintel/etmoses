@@ -14,7 +14,7 @@ RSpec.describe NetworkCache::Fetcher do
     FactoryGirl.create(:testing_ground, technology_profile: technology_profile)
   }
 
-  let(:written_cache) { testing_ground.to_calculated_graphs }
+  let(:written_cache) { testing_ground.to_calculated_graphs(range: 0..35040) }
 
   describe "default behavior" do
     let!(:write_cache) {
