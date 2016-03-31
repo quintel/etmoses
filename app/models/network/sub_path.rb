@@ -32,6 +32,8 @@ module Network
 
       # The final full-length path should not be limited to excess.
       @full_length = @full_path.length == sub_path.length
+
+      @applied_negative_loads = []
     end
 
     def mandatory_consumption_at(frame)
@@ -52,18 +54,34 @@ module Network
 
       type = @full_path.technology.installed.type
 
+      # HACK Storage technologies frequently emit energy only to reclaim it
+      # later if nothing wants it. We need to log this load (as a negative) so
+      # that reclaiming later does not result in consumption being counted
+      # twice.
+      if negative_storage_tech_load? && ! @applied_negative_loads[frame]
+        @path.each do |node|
+          node.tech_loads[type][frame] ||= 0.0
+
+          node.tech_loads[type][frame] -=
+            @full_path.technology.production_at(frame)
+        end
+
+        @applied_negative_loads[frame] = true
+      end
+
       @path.each do |node|
-        node.tech_loads[type][frame] ||=
-          if length == 1
-            # Avoid consumption anomalies for techs which emit their stored
-            # energy (for optional use by other technologies) before claiming it
-            # back.
-            -@full_path.technology.production_at(frame)
-          else
-            0.0
-          end
+        node.tech_loads[type][frame] ||= 0.0
         node.tech_loads[type][frame] += amount
       end
+    end
+
+    # Internal: Describes the length that the path should be in which we apply
+    # a negative tech load to each node in the path, to fix the anomalous
+    # double-counting of reclaimed storage energy.
+    #
+    # Returns an integer.
+    def negative_storage_tech_load?
+      length == 1 && @full_path.technology.is_a?(Technologies::Storage)
     end
 
     def distance
