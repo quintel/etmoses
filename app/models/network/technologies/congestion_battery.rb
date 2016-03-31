@@ -41,15 +41,8 @@ module Network
         # much as to enter the upper congestion zone (we may have already done
         # so when trying to eliminate the production exceedance).
 
-        if (surplus = (path.surplus_at(frame) - wanted)) > 0
-          conditional_max = @soft_max - mandatory_consumption_at(frame)
-
-          if wanted + surplus > conditional_max
-            wanted = conditional_max
-          else
-            wanted += surplus
-          end
-        end
+        conditional_max = @soft_max - mandatory_consumption_at(frame)
+        wanted = conditional_max if wanted < conditional_max
 
         # Finally, if there is a consumption exceedance, we reduce the load so
         # as to fix that.
@@ -75,6 +68,14 @@ module Network
           @sub_paths ||= [super[1]]
         end
 
+        # Internal: A copy of the sub-path between the head network node and the
+        # technology. Used to take energy from the grid.
+        def full_sub_path
+          # This is a SubPath, without the special features of
+          # CongestionSubPath.
+          @full_sub_path = SubPath.from(self).last
+        end
+
         def conditional_consumption_at(frame)
           constrain(frame, @technology.conditional_consumption_at(frame, self))
         end
@@ -95,20 +96,20 @@ module Network
         def consume(frame, amount, conditional = false)
           return if amount < 1e-10
 
-          if conditional
-            excess = excess_at(frame)
+          excess = excess_at(frame)
 
-            if amount > excess
-              # Consume using the full path however much is not available as
-              # excess; this energy is coming from the HV network.
-              @full_path.consume(frame, amount - excess, true)
-              super(frame, excess, true)
-            else
-              super
-            end
+          if amount > excess
+            # Consume using the full path however much is not available as
+            # excess; this energy is coming from the HV network.
+            @full_path.full_sub_path.consume(frame, amount - excess, conditional)
+            super(frame, excess, conditional)
           else
             super
           end
+        end
+
+        def negative_storage_tech_load?
+          length == 2 && @full_path.technology.is_a?(Technologies::Storage)
         end
       end # CongestionSubPath
     end # CongestionBattery
