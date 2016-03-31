@@ -7,3 +7,33 @@ en:
     households_water_heater_heatpump_ground_water_electricity_share: Hot water - heat pump (ground)
     households_water_heater_heatpump_air_water_electricity_share: Hot water - heat pump (air)
     transport_car_using_electricity_share: Percentage of electric cars
+
+    households_solar_pv_solar_radiation: Residential PV panel
+    households_space_heater_heatpump_air_water_electricity: Heat pump for space heating (air)
+    households_space_heater_heatpump_ground_water_electricity: Heat pump for space heating (ground)
+    households_water_heater_heatpump_air_water_electricity: Heat pump for hot water (air)
+    households_water_heater_heatpump_ground_water_electricity: Heat pump for hot water (ground)
+    transport_car_using_electricity: Electric car
+    households_flexibility_p2p_electricity: Battery
+    energy_flexibility_p2g_electricity: Power-To-Gas
+    households_flexibility_p2h_electricity: Power-To-Heat
+    base_load: Household
+    generic: Other
+    base_load_buildings: Buildings
+    base_load_edsn: Household aggregated
+    households_space_heater_network_gas: Households space heater network gas
+    households_space_heater_combined_network_gas: Households space heater combined network gas
+    households_space_heater_micro_chp_network_gas: Households space heater micro chp network gas
+    households_water_heater_network_gas: Households water heater network gas
+    households_water_heater_combined_network_gas: Households water heater combined network gas
+    households_water_heater_micro_chp_network_gas: Households water heater micro chp network gas
+    households_water_heater_fuel_cell_chp_network_gas: Households water heater fuel cell chp network gas
+    buffer_space_heating: Buffer space heating
+    buffer_water_heating: Buffer water heating
+    households_space_heater_hybrid_heatpump_air_water_electricity: Hybrid heat pump space heating
+    households_space_heater_hybrid_heatpump_air_water_electricity_electricity: Hybrid heat pump space heating (electricity)
+    households_space_heater_hybrid_heatpump_air_water_electricity_gas: Hybrid heat pump space heating (gas)
+    households_water_heater_hybrid_heatpump_air_water_electricity: Hybrid heat pump hot water
+    households_water_heater_hybrid_heatpump_air_water_electricity_electricity: Hybrid heat pump hot water (electricity)
+    households_water_heater_hybrid_heatpump_air_water_electricity_gas: Hybrid heat pump hot water (gas)
+    congestion_battery: Neighbourhood battery

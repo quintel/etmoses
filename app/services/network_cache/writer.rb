@@ -22,17 +22,13 @@ module NetworkCache
       FileUtils.mkdir_p(carrier_path(network.carrier))
 
       network.nodes.each do |node|
-        File.write(
-          file_name(network.carrier, node.key),
-          node.get(:load).to_msgpack,
-          mode: 'wb'
-        )
-
-        File.write(
-          tech_load_file_name(network.carrier, node.key),
-          node.get(:tech_loads).to_msgpack,
-          mode: 'wb'
-        )
+        ATTRS.each do |attr|
+          File.write(
+            file_name(network.carrier, node.key, attr),
+            node.get(attr).to_msgpack,
+            mode: 'wb'
+          )
+        end
       end
     end
   end

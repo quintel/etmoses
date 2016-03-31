@@ -27,6 +27,8 @@ module Moses
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    I18n.config.available_locales = %i(nl en)
+
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.autoload_paths += Dir["#{config.root}/models/profile/*"]
 

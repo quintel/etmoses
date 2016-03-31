@@ -1,5 +1,6 @@
 module NetworkCache
   module CacheHelper
+    ATTRS    = [:load, :tech_loads]
     CARRIERS = [:electricity, :gas]
     FOLDERS  = {
       low:  'year',
@@ -24,16 +25,12 @@ module NetworkCache
       end
     end
 
-    def file_name(carrier, key)
-      carrier_path(carrier).join(file_key(key))
-    end
-
-    def tech_load_file_name(carrier, key)
-      carrier_path(carrier).join(file_key(key, 'techs'))
+    def file_name(carrier, key, attr = 'load', time_frame = time_frame)
+      carrier_path(carrier).join(file_key(key, attr, time_frame))
     end
 
     def file_path
-      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}")
+      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}/")
     end
 
     def strategy_prefix

@@ -8,6 +8,10 @@ module NetworkCache
 
     #
     # Fetches all cache and sets is as the load attribute for a node
+    #
+    # It checks both 'FOLDERS'; as in scopes (current week and year)
+    # for a cache. If the full year cache is already present it should use
+    # that cache and cut that range out.
     def fetch(nodes = nil)
       tree_scope.each do |network|
         ATTRS.each do |attr|

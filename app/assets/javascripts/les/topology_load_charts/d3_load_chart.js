@@ -1,4 +1,5 @@
-/*globals LoadChartHelper,LoadChartsSettings,StrategyHelper*/
+/*globals LoadChartHelper,LoadChartsSettings,StrategyHelper,Transformator,
+StackTransformator*/
 
 var D3LoadChart = (function () {
     'use strict';
@@ -17,8 +18,6 @@ var D3LoadChart = (function () {
         previewLine,
         previewColorArea,
         issue,
-        line,
-        colorArea,
         legend,
         popOverEl,
         legendItem,
@@ -34,7 +33,6 @@ var D3LoadChart = (function () {
         margin          = { top: 20, right: 200, bottom: 70, left: 75 },
         height          = 500 - margin.top - margin.bottom,
         height2         = 50,
-        msInWeek        = 6.048e+8,
         weeksInYear     = (365 / 7.0),
 
         // This is assuming every LES has a length of 35040. Shorter LES's will
@@ -42,128 +40,67 @@ var D3LoadChart = (function () {
         //
         // TODO: Fix this static value so the 'resolution' of the LES is taken
         // into account.
-        weekResolution  = 672,
-        scaleCorrection = 1.05,
-        chartLengths    = {
-            long: 35040,
-            short: 8760,
-            annual: 365
-        },
+        weekResolution   = 672,
+        scaleCorrection  = 1.05,
         customTimeFormat = d3.time.format.utc.multi([
             ["%H:%M", function (d) { return d.getUTCMinutes(); }],
             ["%H:%M", function (d) { return d.getUTCHours(); }],
             ["%b %d", function (d) { return d.getUTCDate() !== 1; }],
             ["%d %b", function () { return true; }]
-        ]);
-
-
-    function generateCapacity(capacity, data) {
-        var extent = d3.extent(data[0].values, function (d) { return d.x; });
-
-        return {
-            key:      "Capacity",
-            type:     "capacity",
-            color:    LoadChartsSettings.capacity.color,
-            area:     false,
-            visible:  LoadChartsSettings.capacity.visible,
-            values:   [
-                { x: extent[0], y: capacity },
-                { x: extent[1], y: capacity },
-                { x: extent[0], y: capacity * -1 },
-                { x: extent[1], y: capacity * -1 }
-            ]
-        };
-    }
-
-    function formatDateFromFrame(loads, frame) {
-        var multiplier = -1,
-            len        = loads.length,
-            offset     = currentWeek === 0 ? 0 : (currentWeek - 1) * msInWeek;
-
-        if (len === chartLengths.long || len === 673) {
-            multiplier = 900000;
-        } else if (len === chartLengths.short) {
-            multiplier = 3600000;
-        } else if (len === chartLengths.annual) {
-            multiplier = 86400000;
-        }
-
-        return new Date((frame * multiplier) + offset);
-    }
-
-    function sampledData(loads) {
-        return loads.map(function (y, x) {
-            return { x: formatDateFromFrame(loads, x), y: y };
-        });
-    }
-
-    function fetchLoad() {
-        if (staticSettings.load) {
-            return [staticSettings.load];
-        } else if (StrategyHelper.anyStrategies()) {
-            return [{ area: true,  type: 'load_strategies' },
-                    { area: false, type: 'load' },
-                    { area: true,  type: 'gas_strategies' },
-                    { area: false, type: 'gas' }];
-        } else {
-            return [{ area: true, type: 'load' },
-                    { area: true, type: 'gas' }];
-        }
-    }
-
-    function transformData() {
-        var settings, values,
-            results = [],
-            load    = fetchLoad(),
-            data    = this.lastRequestedData;
-
-        load.forEach(function (datum) {
-            values   = data[datum.type];
-            settings = LoadChartsSettings[datum.type || this.curveType || 'default'];
-
-            if (values) {
-                results.push({
-                    key:     settings.name,
-                    type:    datum.type,
-                    values:  sampledData(values),
-                    area:    datum.area,
-                    color:   settings.color,
-                    visible: settings.visible
-                });
+        ]),
+        chartParts = {
+            preview_issue: {
+                line: undefined,
+                colorArea: undefined,
+                stackedArea: undefined
+            },
+            issue: {
+                line: undefined,
+                colorArea: undefined,
+                stackedArea: undefined
             }
-        }.bind(this));
+        },
+        shown = {
+            view_as: 'total',
+            electricity: true,
+            strategies: false
+        };
 
-        if (data.capacity || data.capacity === 0) {
-            results.push(generateCapacity(data.capacity, results));
+    function fakeData() {
+        var i, fake = [];
+        for (i = 0; i < 673; i += 1) {
+            fake[i] = {
+                x: new Date(i * 1000 * 60 * 60 * 24),
+                y: Math.cos(i / 2) + Math.random()
+            };
         }
-
-        return results;
+        return fake;
     }
 
     function drawPopOver(mousePosX, results) {
-        var span, square, spanValue,
-            keys = Object.keys(LoadChartsSettings);
+        var span, square, spanValue, color;
 
         this.show();
         this.html('');
         this.css("left", mousePosX + "px");
 
-        keys.shift();
-
-        keys.forEach(function (chart) {
-            if (results[chart]) {
+        for (var type in results) {
+            if (results[type] && results[type].values && LoadChartsSettings[type].visible) {
                 span   = $("<span>").addClass("wrap");
-                square = $("<span>").addClass("square")
-                                    .css("background-color", LoadChartsSettings[chart].color);
+                square = $("<span>").addClass("square").css({
+                    "background-color": results[type].color,
+                    "opacity": 0.6
+                });
+
                 spanValue = $("<span>").text(function () {
-                    return Math.round(results[chart].y * 100) / 100;
+                    return Math.round(results[type].values.y * 100) / 100;
                 });
 
                 span.append(square, spanValue);
 
                 this.append(span);
             }
-        }.bind(this));
+        }
     }
 
     function setLesOptions() {
@@ -218,7 +155,11 @@ var D3LoadChart = (function () {
         var extent = brush.extent(),
             ydomain = d3.extent(all.call(chartData), function (d) {
                 if (brush.empty() || (extent[0] <= d.x && extent[1] >= d.x)) {
-                    return d.y * scaleCorrection;
+                    if (shown.view_as === 'stacked') {
+                        return (d.y + d.offset) * scaleCorrection;
+                    } else {
+                        return d.y * scaleCorrection;
+                    }
                 }
             });
 
@@ -233,17 +174,33 @@ var D3LoadChart = (function () {
         yScale.domain(ydomain).nice();
     }
 
+    function setLine(d, scope) {
+        if (d.visible && !(shown.view_as === 'stacked')) {
+            return chartParts[scope].line(d.values);
+        } else {
+            return null;
+        }
+    }
+
+    function setArea(d, scope) {
+        if (d.visible && d.area) {
+            return chartParts[scope].stackedArea(d.values);
+        } else {
+            return null;
+        }
+    }
+
     function redrawPaths() {
         issue.select("path.line")
             .transition().duration(0)
             .attr("d", function (d) {
-                return d.visible ? line(d.values) : null;
+                return setLine(d, 'issue');
             });
 
         issue.select("path.line-bg")
             .transition().duration(0)
             .attr("d", function (d) {
-                return d.visible && d.area ? colorArea(d.values) : null;
+                return setArea(d, 'issue');
             });
     }
 
@@ -278,10 +235,13 @@ var D3LoadChart = (function () {
             results    = {};
 
         chartData.forEach(function (d) {
-            results[d.type] = d.values.find(function (val) {
-                return typeof (val.x.getTime) === 'function'
-                    && graphX.getTime() === val.x.getTime();
-            });
+            results[d.type] = {
+                color:  d.color,
+                values: d.values.find(function (val) {
+                    return typeof (val.x.getTime) === 'function'
+                        && graphX.getTime() === val.x.getTime();
+                })
+            };
         });
 
         drawPopOver.call(popOverEl, mousePos[0] + 60, results);
@@ -300,7 +260,7 @@ var D3LoadChart = (function () {
             .defined(function (d) { return d.x; });
     }
 
-    function generateArea(x, y) {
+    function generateColorArea(x, y) {
         return d3.svg.area()
             .interpolate('step-after')
             .x(function (d) { return x(d.x); })
@@ -308,9 +268,23 @@ var D3LoadChart = (function () {
             .y1(function (d) { return y(d.y); });
     }
 
-    function drawChartPart(klass, d3Line, d3Area) {
+    function generateStackedArea(x, y) {
+        return d3.svg.area()
+            .interpolate('step-after')
+            .x(function (d) {  return x(d.x); })
+            .y0(function (d) { return y(d.offset); })
+            .y1(function (d) { return y(d.offset + d.y); });
+    }
+
+    function setShapes(scope, x, y) {
+        chartParts[scope].line = generateLine(x, y);
+        chartParts[scope].colorArea = generateColorArea(x, y);
+        chartParts[scope].stackedArea = generateStackedArea(x, y);
+    }
+
+    function drawChartPart(klass) {
         var part = this.selectAll(klass).data(chartData),
-            clip = klass.replace(/\./, '');
+            scope = klass.replace(/\./, '');
 
         part.enter().append("g")
             .attr("class", klass);
@@ -319,12 +293,13 @@ var D3LoadChart = (function () {
             .style("pointer-events", "none")
             .style("stroke", function (d) { return d.color; })
             .style("fill", "none")
-            .attr("clip-path", "url(#clip-" + clip + ")")
-            .attr("class", function (d) {
-                return "line " + d.type;
+            .attr("class", "line")
+            .attr("clip-path", "url(#clip-" + scope + ")")
+            .attr("id", function (d) {
+                return "line-" + d.type;
             })
             .attr("d", function (d) {
-                return d.visible ? d3Line(d.values) : null;
+                return setLine(d, scope);
             });
 
         part.append("path")
@@ -332,16 +307,27 @@ var D3LoadChart = (function () {
             .style("fill", function (d) {
                 return d.color;
             })
-            .attr("clip-path", "url(#clip-" + clip + ")")
+            .attr("clip-path", "url(#clip-" + scope + ")")
             .attr("opacity", 0.5)
             .attr("class", "line-bg")
             .attr("d", function (d) {
-                return d.visible && d.area ? d3Area(d.values) : null;
+                return setArea(d, scope);
             });
 
         part.exit().remove();
 
         return part;
+    }
+
+    function transformData() {
+        var data = new Transformator(this, staticSettings.load, currentWeek)
+            .transform(shown);
+
+        if (shown.view_as === 'stacked') {
+            data = new StackTransformator(data).transform();
+        }
+
+        return data;
     }
 
     D3LoadChart.prototype = {
@@ -351,7 +337,14 @@ var D3LoadChart = (function () {
             range_start: 0,
             range_end:   weekResolution
         },
+        view: function (attr, newAttr) {
+            shown[attr] = newAttr;
+
+            return this;
+        },
         update: function (data) {
+            var contextArea, legendItemClass;
+
             this.lastRequestedData = data || this.lastRequestedData;
 
             chartData = transformData.call(this);
@@ -373,7 +366,7 @@ var D3LoadChart = (function () {
 
             //for slider part--------------------------------------------------
 
-            var contextArea = d3.svg.area()
+            contextArea = d3.svg.area()
                 .interpolate("step-after")
                 .x(function (d) { return xScale2(d.x); })
                 .y0(height2)
@@ -385,8 +378,8 @@ var D3LoadChart = (function () {
                 .attr("fill", "#F1F1F2");
 
             //end slider part--------------------------------------------------
-            drawChartPart.call(context, ".preview-issue", previewLine, previewColorArea);
-            issue = drawChartPart.call(svg, ".issue", line, colorArea);
+            drawChartPart.call(context, ".preview_issue");
+            issue = drawChartPart.call(svg, ".issue");
 
             context.append("g")
                 .attr("class", "x brush")
@@ -400,9 +393,16 @@ var D3LoadChart = (function () {
             legend.selectAll(".legend-item").remove();
             legendItem = legend.selectAll(".legend-item").data(chartData);
 
+            legendItemClass = "legend-item";
+            legendItemClass += (chartData.length > 3) ? " side" : "";
+
             legendItem.enter().append("span")
-                .attr("class", "legend-item")
+                .attr("class", legendItemClass)
                 .on("click", function (d) {
+                    if (shown.view_as === 'stacked') {
+                        return false;
+                    }
+
                     d.visible = !d.visible;
 
                     LoadChartsSettings[d.type].visible = d.visible;
@@ -487,10 +487,8 @@ var D3LoadChart = (function () {
                         .x(xScale2)
                         .on("brush", brushed);
 
-            line             = generateLine(xScale, yScale);
-            colorArea        = generateArea(xScale, yScale);
-            previewLine      = generateLine(xScale2, yScale2);
-            previewColorArea = generateArea(xScale2, yScale2);
+            setShapes('issue', xScale, yScale);
+            setShapes('preview_issue', xScale2, yScale2);
 
             legend = d3.select(this.chartClass).append("div")
                 .attr("class", "legend");
@@ -529,7 +527,7 @@ var D3LoadChart = (function () {
                   .attr("height", height);
 
             defs.append("clipPath")
-                  .attr("id", "clip-preview-issue")
+                  .attr("id", "clip-preview_issue")
                 .append("rect")
                   .attr("width", width)
                   .attr("height", height2);
@@ -592,7 +590,7 @@ var D3LoadChart = (function () {
 
     function D3LoadChart(chartClass, curveType, settings) {
         this.chartClass = chartClass;
-        this.curveType  = curveType;
+        this.curveType  = curveType || 'default';
         staticSettings  = settings || {};
         width           = (staticSettings.width || 750 - margin.left - margin.right);
     }

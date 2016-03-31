@@ -176,11 +176,6 @@ ul.testing-grounds {
   }
 }
 
-select.load-date {
-  margin: 0 10px;
-  max-width: 300px;
-}
-
 .load-graph-wrapper{
   position: relative;
   width: 50%;
@@ -194,11 +189,16 @@ select.load-date {
   .load-graph {
     .chart {
       .legend {
-        text-align: right;
-        margin-top: 10px;
+        text-align: left;
+        margin: 10px;
         .legend-item {
           padding-right: 10px;
           cursor: pointer;
+          display: inline-block;
+
+          &.side {
+            min-width: 265px;
+          }
         }
         .square {
           width: 12px;
@@ -207,6 +207,7 @@ select.load-date {
           margin-right: 5px;
           margin-top: -2px;
           vertical-align: middle;
+          opacity: 0.6;
         }
       }
       svg {
@@ -216,6 +217,18 @@ select.load-date {
       .axis line {
         stroke-width: 1px;
       }
+    }
+    select.load-date {
+      margin: 0 10px;
+      max-width: 210px;
+    }
+    select[name='view_as'] {
+      max-width: 105px;
+    }
+    select,
+    .toggle {
+      float: left;
+      margin-right: 10px;
     }
   }
 }
