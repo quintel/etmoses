@@ -43,6 +43,13 @@ ActiveRecord::Schema.define(version: 20160408084137) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "gas_asset_lists", force: true do |t|
+    t.integer  "testing_ground_id"
+    t.text     "asset_list"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "importable_attributes", force: true do |t|
     t.integer "technology_id"
     t.string  "name",          limit: 100
