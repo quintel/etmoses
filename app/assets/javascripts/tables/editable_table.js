@@ -1,3 +1,5 @@
+/*globals GasAssetListTable,MarketModelTable*/
+
 var EditableTable = (function () {
     'use strict';
 
@@ -14,7 +16,8 @@ var EditableTable = (function () {
     }
 
     function tableRows() {
-        return $(this.selector).find("tbody tr").toArray().map(extractTextfromCells);
+        return $(this.selector).find("tbody tr:not(.blank)")
+            .toArray().map(extractTextfromCells);
     }
 
     function tableHeader(index) {
@@ -51,7 +54,7 @@ var EditableTable = (function () {
             e.preventDefault();
 
             var row       = $(e.currentTarget).parents("tr"),
-                clonedRow = row.clone(true, true);
+                clonedRow = row.clone(true, true).removeClass("blank");
 
             clonedRow.insertAfter(row);
             this.changeListener();
@@ -91,3 +94,22 @@ var EditableTable = (function () {
 
     return EditableTable;
 }());
+
+$(document).on("page:change", function () {
+    'use strict';
+
+    var tableType, tableClass, variableTable,
+        tables = {
+            market_model_table:   MarketModelTable,
+            gas_asset_list_table: GasAssetListTable
+        };
+
+    $("table.table.interactions").each(function () {
+        tableType     = $(this).data('type');
+        tableClass    = $(this).attr('class').replace(/\s/g, '.');
+        variableTable = ("current_"  + tableType).camelize();
+
+        window[variableTable] = new tables[tableType](tableClass);
+        window[variableTable].append();
+    });
+});

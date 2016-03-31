@@ -22,6 +22,8 @@ GEM
       activesupport (= 4.1.8)
       builder (~> 3.1)
       erubis (~> 2.7.0)
+    active_hash (1.4.1)
+      activesupport (>= 2.2.2)
     activemodel (4.1.8)
       activesupport (= 4.1.8)
       builder (~> 3.1)
@@ -343,6 +345,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_hash
   airbrake
   better_errors
   binding_of_caller
