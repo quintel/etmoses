@@ -11,7 +11,7 @@ class InstalledTechnology
 
     def each
       if has_heat_pump_profiles?
-        yield(cut_curves.keys.sort.join('_'), *curves.values)
+        yield(cut_curves.keys.sort.join('_'), *cut_curves.values)
       else
         cut_curves.each_pair.map do |curve_type, curve|
           yield(curve_type, curve)
@@ -23,13 +23,13 @@ class InstalledTechnology
       curves.keys.sort == %w(availability use)
     end
 
-    private
-
     def cut_curves
       Hash[curves.map do |curve_type, curve|
         [curve_type, curve ? slice_curve(curve) : nil]
       end]
     end
+
+    private
 
     def slice_curve(curve)
       curve_range = (range ? range : 0...(curve.size / 52))

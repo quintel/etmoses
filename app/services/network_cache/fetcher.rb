@@ -11,18 +11,20 @@ module NetworkCache
     def fetch(nodes = nil)
       tree_scope.each do |network|
         LoadSetter.set(network, nodes) do |node|
-          caches = FOLDERS.values.map do |frame|
-            read(file_name(network.carrier, node.key, frame))
+          if year = read(network.carrier, node.key, 'year')
+            year[@range ? @range : 0..-1]
+          elsif current_week = read(network.carrier, node.key, 'current_week')
+            current_week
           end
-
-          (caches.detect(&:present?) || [])[@range ? @range : 0..-1]
         end
       end
 
       tree_scope
     end
 
-    def read(file)
+    def read(carrier, key, time_frame)
+      file = file_name(carrier, key, time_frame)
+
       if File.exists?(file)
         MessagePack.unpack(File.read(file))
       end

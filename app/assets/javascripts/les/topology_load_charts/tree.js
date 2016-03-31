@@ -82,6 +82,12 @@ var Tree = (function () {
             this.loading = !this.loading;
 
             $("button.apply_strategies").prop("disabled", loadingSpinner.hasClass("on"));
+        },
+
+        addNode: function (name) {
+            if (!(this.nodes.indexOf(name) > -1)) {
+                this.nodes.push(name);
+            }
         }
     };
 
