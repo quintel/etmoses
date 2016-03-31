@@ -29,9 +29,8 @@ var BusinessCaseTable = (function () {
 
     BusinessCaseTable.prototype = {
         reload: function () {
-            if (this.table.length < 1 ||
-                window.currentTree.d3Chart.lesOptions.resolution === "high") {
-                return false
+            if (this.table.length < 1 || window.currentTree.d3Chart.lesOptions.resolution === "high") {
+                return false;
             }
 
             $(".no-business-case-message").addClass("hidden");

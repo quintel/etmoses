@@ -64,6 +64,12 @@ RSpec.describe TestingGroundsController do
       expect(BusinessCase.last.testing_ground).to eq(TestingGround.last)
     end
 
+    it "creates a gas asset list" do
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+
+      expect(GasAssetList.last.testing_ground).to eq(TestingGround.last)
+    end
+
     it "redirects to show page" do
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 

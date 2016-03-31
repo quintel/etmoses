@@ -49,12 +49,12 @@ module TestingGroundsHelper
     technology ? (technology[:concurrency] == "max") : true
   end
 
-  def options_for_stakeholders
+  def options_for_stakeholders(stakeholder = nil)
     options = @testing_ground.topology.each_node.map do |n|
       n[:stakeholder]
     end.compact.uniq.sort
 
-    options_for_select options.uniq
+    options_for_select options.uniq, stakeholder
   end
 
   def options_for_testing_grounds(testing_ground)

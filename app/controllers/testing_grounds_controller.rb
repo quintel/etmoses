@@ -62,6 +62,7 @@ class TestingGroundsController < ResourceController
     if @testing_ground.valid?
       BusinessCase.create!(testing_ground: @testing_ground)
       SelectedStrategy.create!(testing_ground: @testing_ground)
+      GasAssetList.create!(testing_ground: @testing_ground, asset_list: [])
 
       Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
     end
