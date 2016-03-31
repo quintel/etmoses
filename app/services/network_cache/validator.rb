@@ -3,33 +3,37 @@ module NetworkCache
     include CacheHelper
 
     def self.from(testing_ground, opts = {})
-      new(testing_ground, opts)
+      new(testing_ground, **opts)
     end
 
     def valid?
-      Settings.cache.networks && cache_intact? &&
-        identical_strategies? && fresh?
+      Settings.cache.networks &&
+        (cache_intact?('year') || (cache_intact? && identical_range?)) &&
+        fresh? && identical_strategies?
     end
 
     private
 
-    def cache_intact?
+    def cache_intact?(time_frame = time_frame)
       tree_scope.all? do |network|
         network.nodes.all? do |node|
-          File.exists?(file_name(network.carrier, node.key))
+          File.exists?(file_name(network.carrier, node.key, time_frame))
         end
       end
     end
 
     def identical_strategies?
-      @opts.empty? || strategy_attributes == @opts
+      @strategies.empty? || strategy_attributes == @strategies
+    end
+
+    def identical_range?
+      @range.nil? || (@testing_ground.range == @range)
     end
 
     def fresh?
-      [ @testing_ground,
-        @testing_ground.topology,
-        @testing_ground.market_model ].all? do |target|
-        target && Time.at(target.updated_at.to_time.to_i) <= Time.at(cache_time.to_i)
+      [ @testing_ground.cache_updated_at,
+        @testing_ground.topology.updated_at].all? do |timestamp|
+          Time.at(timestamp.to_time.to_i) <= Time.at(cache_time.to_i)
       end
     end
 

@@ -65,7 +65,7 @@ module Finance
 
     def networks
       @networks ||= Hash[
-        @testing_ground.to_calculated_graphs(strategies).map do |network|
+        @testing_ground.to_calculated_graphs(strategies: @strategies).map do |network|
           [network.carrier, network]
         end
       ]

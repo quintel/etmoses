@@ -117,6 +117,18 @@ class TechnologyList
     end
   end
 
+  def profiles
+    @profiles ||= begin
+      profile_ids = @list.values.flatten.map(&:profile).reject do |profile|
+        profile.is_a?(Array) || profile.is_a?(Hash)
+      end
+
+      Hash[LoadProfile.where(id: profile_ids.compact.uniq).map do |load_profile|
+        [load_profile.id, load_profile]
+      end]
+    end
+  end
+
   # Public: Converts the technology list to a CSV file.
   def to_csv
     attributes = InstalledTechnology::PRESENTABLES

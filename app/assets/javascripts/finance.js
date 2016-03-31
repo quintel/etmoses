@@ -12,6 +12,4 @@ $(document).on("page:change", function () {
             $(".edit_business_case, a[href='#business-case']").addClass("editing");
         });
     }
-
-    new BusinessCaseTable($("#business_case_table")).create();
 });

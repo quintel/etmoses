@@ -8,7 +8,7 @@ RSpec.describe Network::Technologies::Generic do
   end
 
   let(:tech) do
-    Network::Technologies.from_installed(installed, profile)
+    Network::Technologies.from_installed(installed, profile, strategies: {})
   end
 
   context 'with a positive capacity' do

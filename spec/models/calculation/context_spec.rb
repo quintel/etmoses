@@ -37,22 +37,22 @@ RSpec.describe Calculation::Context do
       }]}
     end
 
-    it 'has a length equal to the load curve' do
-      expect(context.length).to eq(profile.load_profile_components.first.network_curve.length)
+    it 'has a length equal to the first week of the load curve' do
+      expect(context.length).to eq(profile.load_profile_components.first.network_curve.length / 52)
     end
 
     it 'permits iteration of each frame' do
       results = []
       context.frames { |frame| results.push(frame) }
 
-      expect(results.length).to eq(8760)
+      expect(results.length).to eq(8760 / 52)
       expect(results.take(5)).to eq([0, 1, 2, 3, 4])
     end
 
     it 'permits chained iteration of each frame' do
       results = context.frames.map.to_a
 
-      expect(results.length).to eq(8760)
+      expect(results.length).to eq(8760 / 52)
       expect(results.take(5)).to eq([0, 1, 2, 3, 4])
     end
   end

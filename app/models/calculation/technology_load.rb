@@ -1,5 +1,7 @@
 module Calculation
   class TechnologyLoad
+    HOURS_IN_YEAR = 8760.0
+
     def self.call(context)
       new(context).run
     end
@@ -9,7 +11,7 @@ module Calculation
     end
 
     def run
-      resolution = 8760.0 / @context.length
+      resolution = HOURS_IN_YEAR / @context.length
 
       @context.graphs.each do |graph|
         graph.nodes.each { |node| node.set(:resolution, resolution) }
@@ -27,7 +29,7 @@ module Calculation
 
     def techs_for(node)
       suitable_technologies(node).flat_map do |tech|
-        tech.each_profile_curve do |curve_type, curve, additional_curve|
+        tech.profile_curve(@context.options[:range]).each do |curve_type, curve, additional_curve|
           if tech.buffer.present?
             # Returns the technology wrapped in a Composite::Wrapper.
             # composite(node, tech.buffer).add(net_tech)
@@ -66,7 +68,7 @@ module Calculation
           Network::Technologies::Composite::Manager.new(
             (comp.capacity || Float::INFINITY) * comp.units,
             comp.volume * comp.units,
-            comp.profile_curve.fetch('default'.freeze)
+            comp.profile_curve.curves.fetch('default'.freeze)
           )
       end
     end

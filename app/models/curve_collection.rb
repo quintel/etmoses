@@ -1,5 +1,4 @@
 class CurveCollection
-  extend  Forwardable
   include Enumerable
 
   def initialize(components)

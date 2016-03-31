@@ -4,14 +4,12 @@ var Les = (function () {
 
     Les.prototype = {
         data: { calculation: {} },
-        nodeData: function (resolution) {
+        nodeData: function (lesOptions) {
+            $.extend(this.data.calculation, lesOptions);
+
             this.data.type = ($.isEmptyObject(this.strategies) ? 'basic' :  'features');
 
-            if (resolution) {
-                this.data.calculation.resolution = resolution;
-            }
-
-            if (resolution === 'high') {
+            if (this.data.calculation.resolution === 'high') {
                 this.data.calculation.nodes = window.currentTree.nodes;
             }
 

@@ -120,14 +120,22 @@ module TestingGroundsHelper
     technology_class
   end
 
+  def testing_ground_view_options(testing_ground)
+    { id:             testing_ground.id,
+      url:            data_testing_ground_url(testing_ground, format: :json),
+      topology_url:   topology_url(testing_ground.topology, format: :json),
+      strategies_url: update_strategies_testing_ground_url(testing_ground, format: :json)
+    }
+  end
+
   def load_date_options
     weeks = [["Whole year", 0]]
 
-    (Date.new(1970, 1, 1)...Date.new(1970, 12, 31))
+    (Date.new(2013, 1, 1)...Date.new(2013, 12, 31))
       .map{|d| d.strftime("%d %B") }
       .each_slice(7)
       .with_index do |(*a), i|
-        weeks << ["#{ a.first } - #{ a.last }" , i + 1]
+        weeks << [ "#{ a.first } - #{ a.last }" , i + 1 ]
       end
 
     options_for_select(weeks)

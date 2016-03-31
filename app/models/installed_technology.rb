@@ -1,12 +1,6 @@
 class InstalledTechnology
   include Virtus.model
 
-  # Non editables
-  attribute :associates,                          Array[InstalledTechnology], editable: false
-  attribute :behavior,                            String, editable: false
-  attribute :node,                                String, editable: false
-  attribute :profile_key,                         String, editable: false
-
   # Editables
   attribute :buffer,                              String
   attribute :capacity,                            Float
@@ -21,17 +15,31 @@ class InstalledTechnology
   attribute :units,                               Integer, default: 1
   attribute :volume,                              Float
 
-  # Advanced features
+  # Hidden features
+  #
+  # Are submitted with the profile matrix but are not editable by the user.
   attribute :composite_index,                     Integer, hidden: true
   attribute :concurrency,                         String,  default: 'max', hidden: true
   attribute :full_load_hours,                     Integer, hidden: true
   attribute :includes,                            Array[String], hidden: true
-  attribute :initial_investment,                  Float, hidden: true
-  attribute :om_costs_for_ccs_per_full_load_hour, Float, hidden: true
-  attribute :om_costs_per_full_load_hour,         Float, hidden: true
-  attribute :om_costs_per_year,                   Float, hidden: true
-  attribute :performance_coefficient,             Float, hidden: true
-  attribute :technical_lifetime,                  Integer, hidden: true
+
+  # Advanced features
+  #
+  # Are invisible upon initial loading the profile matrix but can be made
+  # visible by clicking the 'Toggle advanced' button.
+  attribute :initial_investment,                  Float, advanced: true
+  attribute :om_costs_for_ccs_per_full_load_hour, Float, advanced: true
+  attribute :om_costs_per_full_load_hour,         Float, advanced: true
+  attribute :om_costs_per_year,                   Float, advanced: true
+  attribute :performance_coefficient,             Float, advanced: true
+  attribute :technical_lifetime,                  Integer, advanced: true
+
+  # Non editables
+  attribute :associates,                          Array[InstalledTechnology], editable: false
+  attribute :behavior,                            String, editable: false
+  attribute :node,                                String, editable: false
+  attribute :profile_key,                         String, editable: false
+  attribute :curve_behavior,                      String, editable: false
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
@@ -70,6 +78,33 @@ class InstalledTechnology
     else
       super
     end
+  end
+
+  def profile_curve(range = nil)
+    @profile_curve ||= ProfileCurve.new(curves: get_profile, range: range)
+  end
+
+  def get_profile
+    if profile.nil?
+      { default: nil }
+    elsif profile.is_a?(Array)
+      curve = Network::Curve.new(profile)
+      { default: curve * component_factor(curve) }
+    elsif profile.is_a?(Hash)
+      Hash[profile.each_pair.map do |curve_type, curve|
+        [curve_type, Network::Curve.new(curve)]
+      end]
+    elsif demand
+      profile_curves(:demand_scaled)
+    elsif volume.blank? && capacity
+      profile_curves(:capacity_scaled)
+    else
+      profile_curves
+    end
+  end
+
+  def load_profile
+    @load_profile ||= LoadProfile.find_by_id(profile)
   end
 
   # Public: Returns if the technology has been defined in the data/technologies
@@ -163,6 +198,15 @@ class InstalledTechnology
     technology.carrier.to_sym
   end
 
+  def technology_component_behaviors
+    @@behaviors ||= Hash[TechnologyComponentBehavior.all
+      .group_by(&:technology_id).map do |tech_id, components|
+        [tech_id, Hash[components.map do |component|
+          [component.curve_type.to_sym, component.behavior]
+        end]]
+      end]
+  end
+
   # Public: Determines the network behavior of this technology with a particular
   # curve type. Base load technologies will behave differently depending on the
   # use of a flexible or inflexible curve.
@@ -173,40 +217,8 @@ class InstalledTechnology
 
     return behavior if curve_type.nil? || curve_type == 'default'.freeze
 
-    component_behavior = technology.component_behaviors.for_type(curve_type)
-    component_behavior.try(:behavior) || behavior
-  end
-
-  # Public: Returns the load profile Curve, if the :profile attribute is set.
-  #
-  # Returns a Hash[{ <curve_type> => Network::Curve }]
-  def profile_curve
-    if profile.nil?
-      { default: nil }
-    elsif profile.is_a?(Array)
-      curve = Network::Curve.new(profile)
-      { default: curve * component_factor(curve) }
-    elsif profile.is_a?(Hash)
-      Hash[profile.each_pair.map do |curve_type, curve|
-        [curve_type, Network::Curve.new(curve)]
-      end]
-    elsif demand
-      profile_curves(:demand_scaled)
-    elsif volume.blank? && capacity
-      profile_curves(:capacity_scaled)
-    else
-      profile_curves
-    end
-  end
-
-  def each_profile_curve
-    if has_heat_pump_profiles?
-      yield(profile_curve.keys.sort.join('_'), *profile_curve.values)
-    else
-      profile_curve.each_pair.map do |curve_type, curve|
-        yield(curve_type, curve)
-      end
-    end
+    component_behavior = technology_component_behaviors[technology.id]
+    component_behavior ? component_behavior[curve_type.to_sym] : behavior
   end
 
   def as_json(*)
@@ -270,10 +282,6 @@ class InstalledTechnology
 
   private
 
-  def has_heat_pump_profiles?
-    profile_curve.keys.sort == %w(availability use)
-  end
-
   # Internal: Retrieves the Network::Curve used by the technology, with
   # scaling applied for demand or capacity and a ratio.
   #
@@ -282,7 +290,7 @@ class InstalledTechnology
     return {} unless valid_profile?
 
     Hash[load_profile.curves.each_curve(scaling).map do |curve_type, curve, ratio|
-      [curve_type, curve * component_factor(curve) * ratio]
+      [curve_type, (curve * component_factor(curve) * ratio)]
     end]
   end
 
@@ -295,9 +303,5 @@ class InstalledTechnology
       end
 
     (factor / performance_coefficient) * units
-  end
-
-  def load_profile
-    @load_profile ||= LoadProfile.find_by_id(profile)
   end
 end # end
