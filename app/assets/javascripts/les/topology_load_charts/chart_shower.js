@@ -109,7 +109,7 @@ var ChartShower = (function () {
                 return false;
             }
 
-            window.currentTree.nodes.push(this.nodeData.name);
+            window.currentTree.addNode(this.nodeData.name);
             renderLoadChart.call(this, this.nodeData);
             toggleDomParts.call(this.nodeData);
         }

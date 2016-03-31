@@ -68,7 +68,7 @@ module Calculation
           Network::Technologies::Composite::Manager.new(
             (comp.capacity || Float::INFINITY) * comp.units,
             comp.volume * comp.units,
-            comp.profile_curve.curves.fetch('default'.freeze)
+            comp.profile_curve(@context.options[:range]).cut_curves.fetch('default'.freeze)
           )
       end
     end
