@@ -1,0 +1,52 @@
+%table.table.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
+  %thead
+    %tr
+      %th.col-sm-1{ data: { header: 'pressure_level' } } Pressure level
+      %th{ data: { header: 'part' } } Asset
+      %th{ data: { header: 'type' } } Type
+      %th.col-sm-1{ data: { header: 'amount' } } Amount (#)
+      %th{ data: { header: 'stakeholder' } } Stakeholder
+      %th.col-sm-2{ data: { header: 'building_year' } } Building year
+      %th
+      %th
+
+  %tbody
+    - gas_asset_list.sorted_asset_list.each do |list_item|
+      %tr{class: ("blank" if list_item['type'] == "blank") }
+        %td.editable
+          %select.form-control.pressure_level
+            = options_for_pressure_levels(list_item['pressure_level'])
+
+        %td.editable
+          %select.form-control.part
+            = options_for_gas_parts(list_item['part'])
+
+        %td.editable
+          %select.form-control.type{data: { type: list_item['type'] } }
+
+        %td.editable
+          %input.form-control{name: 'amount', value: list_item['amount']}
+
+        %td.editable
+          %select.form-control.stakeholder
+            = options_for_stakeholders(list_item['stakeholder'])
+
+        %td.editable
+          %input.form-control{name: 'building_year', value: list_item['building_year']}
+
+        %td
+          = link_to "#", class: "add-row text-success" do
+            %span.glyphicon.glyphicon-plus
+
+        %td
+          = link_to "#", class: "remove-row text-danger" do
+            %span.glyphicon.glyphicon-remove
+
+= form_for [testing_ground, gas_asset_list], html: { remote: true } do |f|
+  .hidden
+    = f.text_area :asset_list, value: JSON.dump(gas_asset_list.asset_list)
+
+  .btn-group
+    = f.submit "Update gas asset list", class: "btn btn-primary"
+    = save_all_button(testing_ground)
+    %span.wait.hidden= image_tag "wait.gif"

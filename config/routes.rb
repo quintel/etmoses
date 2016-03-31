@@ -21,6 +21,12 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :gas_asset_lists, only: [:update] do
+      collection do
+        post 'get_types'
+      end
+    end
+
     get 'data/price_curve'         => 'data#price_curve',         as: :price_curves
     get 'data/load_curves'         => 'data#load_curves',         as: :load_curves
     get 'data/electricity_storage' => 'data#electricity_storage', as: :electricity_storage

@@ -1,24 +1,23 @@
-var MarketModelTable = (function() {
+/*globals EditableTable*/
+
+var MarketModelTable = (function () {
+    'use strict';
+
     var editableTable;
 
-    function MarketModelTable(_selector) {
-        editableTable = new EditableTable(_selector);
-    };
-
     MarketModelTable.prototype = {
-        append: function() {
+        append: function () {
             editableTable.append(this.updateTable);
         },
 
-        updateTable: function() {
+        updateTable: function () {
             $("#market_model_interactions").text(JSON.stringify(editableTable.getData()));
         }
     };
 
-    return MarketModelTable;
-})();
+    function MarketModelTable(selector) {
+        editableTable = new EditableTable(selector);
+    }
 
-$(document).on("page:change", function() {
-    window.currentMarketTable = new MarketModelTable("table.table.interactions");
-    window.currentMarketTable.append();
-});
+    return MarketModelTable;
+}());

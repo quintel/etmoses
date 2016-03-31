@@ -31,6 +31,10 @@
     %li{role: "presentation"}
       = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
 
+  - if @testing_ground.gas_asset_list
+    %li{role: "presentation"}
+      = link_to "Gas asset list", "#gas-asset-list", "aria-controls" => "gas-asset-list", "role" => "tab", data: { toggle: "tab" }
+
 .tab-content
   .tab-pane.remote.edit#general{role: "tabpanel"}
     = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), html: { remote: true } do |form|
@@ -66,6 +70,10 @@
   - if @testing_ground.business_case && @testing_ground.business_case.financials
     .tab-pane.remote.edit#business-case{role: "tabpanel"}
       = render partial: 'business_cases/form', locals: { testing_ground: @testing_ground, business_case: @testing_ground.business_case }
+
+  - if @testing_ground.gas_asset_list
+    .tab-pane.remote.edit#gas-asset-list{role: "tabpanel"}
+      = render partial: 'gas_asset_lists/form', locals: { testing_ground: @testing_ground, gas_asset_list: @testing_ground.gas_asset_list }
 
 .last-btns
   %span.save-all.wait.hidden= image_tag 'wait.gif'
