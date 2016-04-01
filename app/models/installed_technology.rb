@@ -265,7 +265,7 @@ class InstalledTechnology
   end
 
   def valid?
-    buffer.present? || valid_profile? || is_battery?
+    buffer.present? || valid_profile? || no_profile?
   end
 
   def valid_profile?
@@ -276,8 +276,10 @@ class InstalledTechnology
     end
   end
 
-  def is_battery?
-    %w(congestion_battery households_flexibility_p2p_electricity).include?(type)
+  def no_profile?
+    %w(congestion_battery
+       households_flexibility_p2p_electricity
+       energy_flexibility_p2g_electricity).include?(type)
   end
 
   private

@@ -66,17 +66,6 @@ var D3LoadChart = (function () {
             strategies: false
         };
 
-    function fakeData() {
-        var i, fake = [];
-        for (i = 0; i < 673; i += 1) {
-            fake[i] = {
-                x: new Date(i * 1000 * 60 * 60 * 24),
-                y: Math.cos(i / 2) + Math.random()
-            };
-        }
-        return fake;
-    }
-
     function drawPopOver(mousePosX, results) {
         var span, square, spanValue, color;
 
