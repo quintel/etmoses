@@ -32,7 +32,7 @@
       %span.check_box
         - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
         = check_box_tag technology.key, "max", max, {data: {toggle: "toggle", on: "Max", off: "Min"}}
-        %span= technology.name
+        %span= t("technologies.#{ technology.key }.plural")
 
     .buttons
       = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"

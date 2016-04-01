@@ -1,0 +1,26 @@
+en:
+  technologies:
+    base_load:
+      singular: Household
+      plural: Households
+    base_load_buildings:
+      singular: Building
+      plural: Buildings
+    buffer_space_heating:
+      singular: Buffer space heating
+      plural: Buffer space heating
+    buffer_water_heating:
+      singular: Buffer water heating
+      plural: Buffer water heating
+    energy_flexibility_p2g_electricity:
+      singular: "Power-To-Gas"
+      plural: "Power-To-Gas"
+    households_flexibility_p2p_electricity:
+      singular: Battery
+      plural: Batteries
+    households_solar_pv_solar_radiation:
+      singular: Residential PV panel
+      plural: Residential PV panels
+    transport_car_using_electricity:
+      singular: Electric car
+      plural: Electric cars
