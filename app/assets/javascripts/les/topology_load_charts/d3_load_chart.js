@@ -133,7 +133,7 @@ var D3LoadChart = (function () {
             }
         }.bind(this));
 
-        if (data.capacity) {
+        if (data.capacity || data.capacity === 0) {
             results.push(generateCapacity(data.capacity, results));
         }
 
