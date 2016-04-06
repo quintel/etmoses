@@ -28,7 +28,7 @@ var SaveAll = (function () {
     function done(doneCallback) {
         this.completeCount += 1;
 
-        if (this.completeCount === $(".remote form").length) {
+        if (this.completeCount === $(".remote form.editing").length) {
             doneCallback.call(this);
         }
     }
@@ -40,7 +40,7 @@ var SaveAll = (function () {
 
         submitForms: function (success) {
             var self = this;
-            $(".remote form").each(function () {
+            $(".remote form.editing").each(function () {
                 $(this).submit();
                 $(this).on("ajax:success", done.bind(self, success));
             });
@@ -58,19 +58,21 @@ var SaveAll = (function () {
 $(document).on("page:change", function () {
     'use strict';
 
-    $(".tab-content .remote form").on("submit", function () {
-        $(this).find("input[type=submit]").addClass("disabled");
-        $(this).find("span.wait").removeClass("hidden");
-    });
+    if ($(".remote form").length > 0) {
+        $(".tab-content .remote form").on("submit", function () {
+            $(this).find("input[type=submit]").addClass("disabled");
+            $(this).find("span.wait").removeClass("hidden");
+        });
 
-    $(".remote form").on("change", function () {
-        var tabTarget = $(this).parent().attr("id"),
-            tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
+        $(".remote form").on("change", function () {
+            var tabTarget = $(this).parent().attr("id"),
+                tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
 
-        tabHeader.addClass("editing");
-        $(this).addClass("editing");
-    });
+            tabHeader.addClass("editing");
+            $(this).addClass("editing");
+        });
 
-    window.saveAll = new SaveAll();
-    window.saveAll.append();
+        window.saveAll = new SaveAll();
+        window.saveAll.append();
+    }
 });
