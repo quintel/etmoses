@@ -1,12 +1,11 @@
-investment_cost: 500
-lifetime: 50
 capacity: 5
-yearly_o_and_m_cost: 100
 digging_costs_per_density:
   low: 1
   medium: 2
   high: 3
+investment_cost: 500
+lifetime: 50
 pressure_levels:
 - 0.1
 - 4
-
+yearly_o_and_m_cost: 100

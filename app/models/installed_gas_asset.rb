@@ -1,7 +1,7 @@
 class InstalledGasAsset
   include Virtus.model
 
-  attribute :pressure_level, Float
+  attribute :pressure_level_index, Integer
   attribute :part, String
   attribute :type, String
   attribute :amount, Integer

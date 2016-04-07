@@ -1,4 +1,8 @@
 /*globals LocalSettings*/
+
+// This code exists to remember which form you last opened on the edit page
+// of a LES.
+
 $(document).on("page:change", function () {
     'use strict';
 
