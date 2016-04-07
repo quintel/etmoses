@@ -1,3 +1,5 @@
+/*globals Ajax*/
+
 var Poller = (function () {
     'use strict';
 
