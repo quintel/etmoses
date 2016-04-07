@@ -21,4 +21,16 @@ RSpec.describe GasAssetList do
       "stakeholder"=>"system_operator", "building_year"=>"1970"
     }])
   end
+
+  describe "creating a default asset list" do
+    it "creates a default asset list based on the contents of the testing ground" do
+      testing_ground = FactoryGirl.create(:testing_ground,
+        technology_profile: YAML.load(File.read("#{ Rails.root }/spec/fixtures/data/technology_profiles/gas_technologies.yml")))
+
+      gas_asset_list = FactoryGirl.create(:gas_asset_list,
+        testing_ground: testing_ground)
+
+      expect(gas_asset_list.asset_list).to eq([])
+    end
+  end
 end
