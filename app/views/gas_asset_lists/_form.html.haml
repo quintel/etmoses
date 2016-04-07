@@ -1,51 +1,5 @@
-%table.table.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
-  %thead
-    %tr
-      %th.col-sm-1{ data: { header: 'pressure_level' } } Pressure level
-      %th{ data: { header: 'part' } } Asset
-      %th{ data: { header: 'type' } } Type
-      %th.col-sm-1{ data: { header: 'amount' } } Quantity
-      %th{ data: { header: 'stakeholder' } } Stakeholder
-      %th.col-sm-1{ data: { header: 'building_year' } } Building year
-      %th
-      %th
-
-  %tbody
-    - gas_asset_list.sorted_asset_list.each do |list_item|
-      %tr{class: ("blank" if list_item['type'] == "blank") }
-        %td.editable
-          %select.form-control.pressure_level
-            = options_for_pressure_levels(list_item['pressure_level'])
-
-        %td.editable
-          %select.form-control.part
-            = options_for_gas_parts(list_item['part'])
-
-        %td.editable
-          %select.form-control.type{data: { type: list_item['type'] } }
-
-        %td.editable
-          %input.form-control{name: 'amount', value: list_item['amount']}
-          %span.unit
-            %span.pipes
-              m
-            %span.connectors
-              = '#'
-
-        %td.editable
-          %select.form-control.stakeholder
-            = options_for_stakeholders(list_item['stakeholder'])
-
-        %td.editable
-          %input.form-control{name: 'building_year', value: list_item['building_year']}
-
-        %td
-          = link_to "#", class: "add-row text-success" do
-            %span.glyphicon.glyphicon-plus
-
-        %td
-          = link_to "#", class: "remove-row text-danger" do
-            %span.glyphicon.glyphicon-remove
+.table-holder
+  = render partial: "gas_asset_lists/table", locals: { testing_ground: testing_ground, gas_asset_list: gas_asset_list }
 
 - if gas_asset_list
   .graph.npv-chart{ data: { url: calculate_net_present_value_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), title: "Net present value (€)" } }
@@ -58,5 +12,6 @@
 
     .btn-group
       = f.submit "Update gas asset list", class: "btn btn-primary"
-      %button.btn.btn-success Reload gas asset list
+      %button.btn.btn-success.reload-gas-asset-list{ data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), confirmation: "Are you sure?" } }
+        Reload gas asset list
       %span.wait.hidden= image_tag "wait.gif"

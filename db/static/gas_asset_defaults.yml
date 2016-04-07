@@ -1,0 +1,14 @@
+1960:
+  magic_pipe:
+    '0.1': 100000
+    '4':   50000
+
+  ye_olde_pipe:
+    '0.1': 100000
+    '4':   50000
+
+  magic_connector:
+    '4':   50000
+
+  ye_olde_connector:
+    '0.1': 100000

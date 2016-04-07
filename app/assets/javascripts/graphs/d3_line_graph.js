@@ -29,6 +29,9 @@ var D3LineGraph = (function () {
         x.domain(d3.extent(data, function (d) { return d.x; }));
         y.domain([0, d3.max(data, function (d) { return d.y; })]);
 
+        this.svg.select("g .x.axis").call(xAxis);
+        this.svg.select("g .y.axis").call(yAxis);
+
         this.svg.select("path.line").remove();
         this.svg.append("path")
             .datum(data)

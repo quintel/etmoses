@@ -1,5 +1,5 @@
 module GasAssetLists
-  class CumulativeInvestmentCalculator < Base
+  class CumulativeInvestmentCalculator < Calculator
     def calculate
       total = 0
       time_range.map.each_with_object({}) do |year, result|

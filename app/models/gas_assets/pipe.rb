@@ -1,3 +1,7 @@
 module GasAssets
-  class Pipe < Base; end
+  class Pipe < Base
+    def part_type
+      'pipe'
+    end
+  end
 end

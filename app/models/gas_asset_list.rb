@@ -1,11 +1,12 @@
 class GasAssetList < ActiveRecord::Base
+  PRESSURE_LEVELS = [0.1, 4, 8, 40]
   DEFAULT = {
-    "pressure_level" => "0.1",
-    "part"           => "connectors",
-    "type"           => "blank",
-    "amount"         => "1",
-    "stakeholder"    => "cooperation",
-    "building_year"  => "1960"
+    "pressure_level_index" => 0,
+    "part"                 => "connectors",
+    "type"                 => "blank",
+    "amount"               => "1",
+    "stakeholder"          => "cooperation",
+    "building_year"        => "1960"
   }
 
   belongs_to :testing_ground
@@ -14,7 +15,7 @@ class GasAssetList < ActiveRecord::Base
 
   def sorted_asset_list
     ([DEFAULT] + asset_list).sort_by do |part|
-      part['pressure_level'].to_f
+      part['pressure_level_index'].to_i || -1
     end
   end
 
