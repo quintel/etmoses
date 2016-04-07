@@ -35,7 +35,7 @@ var GasAssetListTable = (function () {
         var row = $(target).parents("tr"),
             assetData = {
                 part: row.find("select.part").val(),
-                pressure_level: row.find("select.pressure_level").val()
+                pressure_level_index: row.find("select.pressure_level").val()
             };
 
         return assetData;
@@ -67,7 +67,23 @@ var GasAssetListTable = (function () {
         getMultipleAssetTypes(data);
     }
 
+    function reloadGasAssetList(e) {
+        var reloadButton = $(e.target).data();
+
+        if (confirm(reloadButton.confirmation)) {
+            Ajax.json(reloadButton.url, {}, function (data) {
+                //$(editableTable.selector).find("tr:not(.blank)").remove();
+                $("#gas_asset_list_asset_list").text(JSON.stringify(data));
+                $("form.edit_gas_asset_list").submit();
+            });
+        }
+    }
+
     function setEventListeners() {
+        $(".btn.reload-gas-asset-list")
+            .off('click')
+            .on("click", reloadGasAssetList);
+
         $(editableTable.selector).find("select.part, select.pressure_level")
             .off("change")
             .on("change", getAssetTypes);
@@ -75,9 +91,19 @@ var GasAssetListTable = (function () {
 
     GasAssetListTable.prototype = {
         append: function () {
+            this.addEventListenerToForm();
+
             editableTable.append(this.updateTable);
             setInitialSelectBoxes.call(this);
             setEventListeners();
+        },
+
+        addEventListenerToForm: function () {
+            $('form.edit_gas_asset_list').on("ajax:success", function () {
+                window.graphs.forEach(function (graph) {
+                    graph.reload();
+                });
+            });
         },
 
         updateTable: function () {

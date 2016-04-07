@@ -1,5 +1,5 @@
 module GasAssetLists
-  class Base
+  class Calculator
     def initialize(gas_asset_list)
       @gas_asset_list = GasAssetListDecorator.new(gas_asset_list).decorate
     end

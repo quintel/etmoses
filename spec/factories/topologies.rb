@@ -8,7 +8,9 @@ FactoryGirl.define do
       - name: :mv
         children:
         - name: :lv1
+          capacity: 100
         - name: :lv2
+          capacity: 100
     YML
   end
 

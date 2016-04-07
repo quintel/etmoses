@@ -1,3 +1,6 @@
 $("#gas-asset-list span.wait").addClass("hidden");
 $("#gas-asset-list input[type=submit]").removeClass("disabled");
 
+$(".table-holder").html("<%= escape_javascript(render partial: 'gas_asset_lists/table', locals: {gas_asset_list: @gas_asset_list, testing_ground: @gas_asset_list.testing_ground } ) %>");
+
+window.currentGasAssetListTable.append();

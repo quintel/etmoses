@@ -19,7 +19,10 @@
     .info
       You use a private topology or market model therefore your LES is private.
 
-- unless testing_ground.new_record?
+- if testing_ground.new_record?
+  = form.hidden_field :parent_scenario_id, value: testing_ground.parent_scenario_id
+
+- else
   .form-group
     = form.label :behavior_profile_id, 'Behavior profile'
     .temperature-profile
