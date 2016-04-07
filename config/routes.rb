@@ -25,6 +25,10 @@ Rails.application.routes.draw do
       collection do
         post 'get_types'
       end
+
+      member do
+        post 'calculate_net_present_value', 'calculate_cumulative_investment'
+      end
     end
 
     get 'data/price_curve'         => 'data#price_curve',         as: :price_curves

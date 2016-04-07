@@ -8,4 +8,7 @@ class GasAssetListPolicy < ApplicationPolicy
   def get_types?
     true
   end
+
+  alias :calculate_cumulative_investment? :update?
+  alias :calculate_net_present_value? :update?
 end

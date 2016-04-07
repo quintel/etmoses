@@ -5,8 +5,14 @@ var GasAssetListTable = (function () {
 
     var editableTable, assetUrl;
 
+    function setCorrectUnit(part) {
+        $(this).find("span.unit span").hide();
+        $(this).find("span.unit span." + part).show();
+    }
+
     function setAssetTypeOptions(data, initial) {
-        var options = [];
+        var options = [],
+            row = $(this).parents("tr");
 
         data.forEach(function (option) {
             options.push(
@@ -14,7 +20,9 @@ var GasAssetListTable = (function () {
             );
         });
 
-        $(this).parents("tr").find("select.type")
+        setCorrectUnit.call(row, row.find("select.part").val());
+
+        row.find("select.type")
             .html(options)
             .val(function () {
                 var type = $(this).data('type');
