@@ -1,3 +1,5 @@
+/*globals Ajax*/
+
 var BusinessCaseValidator = function (form) {
     'use strict';
 
