@@ -1,3 +1,7 @@
 module GasAssets
-  class Connector < Base; end
+  class Connector < Base
+    def part_type
+      'connector'
+    end
+  end
 end

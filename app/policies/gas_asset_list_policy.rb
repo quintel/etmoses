@@ -11,4 +11,5 @@ class GasAssetListPolicy < ApplicationPolicy
 
   alias :calculate_cumulative_investment? :update?
   alias :calculate_net_present_value? :update?
+  alias :reload_gas_asset_list? :update?
 end

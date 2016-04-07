@@ -8,6 +8,10 @@ module GasAssetListHelper
   end
 
   def options_for_pressure_levels(pressure_level)
-    options_for_select([0.1, 4, 8, 40], pressure_level)
+    options = GasAssetList::PRESSURE_LEVELS.each_with_index.map do |item, index|
+      [item, index]
+    end
+
+    options_for_select(options, selected: pressure_level)
   end
 end
