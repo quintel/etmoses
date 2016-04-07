@@ -11,12 +11,16 @@ $(document).on('page:change', function () {
             line: D3LineGraph
         };
 
+    window.graphs = [];
+
     $(".graph").each(function () {
         var data  = $(this).data(),
             Graph = graphs[data.type || defaults.type];
 
         if (Graph) {
-            new Graph(this, $.extend(defaults, data)).append();
+            window.graphs.push(
+                new Graph(this, $.extend(defaults, data)).draw()
+            );
         }
     });
 });
