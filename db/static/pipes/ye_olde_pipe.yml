@@ -1,4 +1,4 @@
-investment_costs: 500
+investment_cost: 500
 lifetime: 50
 capacity: 5
 yearly_o_and_m_cost: 100
