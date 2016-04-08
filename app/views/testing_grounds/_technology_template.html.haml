@@ -28,7 +28,7 @@
 
       .clearfix
 
-    .editable.battery-slider{class: ('hidden' unless technology.is_battery?) }
+    .editable.battery-slider{class: ('hidden' if technology.technology.profile_required?) }
       %span Congestion reserve
       %span.tick.min 0%
       %input.slider{data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => technology.congestion_reserve_percentage, 'type' => 'congestion_reserve_percentage'}}

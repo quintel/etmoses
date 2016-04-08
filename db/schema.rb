@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160401074347) do
+ActiveRecord::Schema.define(version: 20160408084137) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 20160401074347) do
     t.string  "carrier",                             limit: 32,                  null: false
     t.string  "behavior",                            limit: 50
     t.boolean "visible",                                         default: true
+    t.boolean "profile_required",                                default: true
     t.boolean "composite",                                       default: false
     t.float   "default_capacity",                    limit: 24
     t.float   "default_volume",                      limit: 24
