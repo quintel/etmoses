@@ -435,4 +435,16 @@ RSpec.describe TestingGroundsController do
       expect(JSON.parse(response.body)["performance_coefficient"]).to eq(1.0)
     end
   end
+
+  describe "gas load" do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:sign_in_user) { sign_in(user) }
+    let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+
+    it "grabs gas load" do
+      get :gas_load, id: testing_ground.id
+
+      expect(response.status).to eq(200)
+    end
+  end
 end

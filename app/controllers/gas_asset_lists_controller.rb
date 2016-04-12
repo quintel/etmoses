@@ -31,6 +31,15 @@ class GasAssetListsController < ResourceController
       .new(@gas_asset_list).calculate
   end
 
+  def fake_stacked_bar
+    render json: [
+      { pressure_level: 'End-points <-> 0.125',  stacked: { loss: -1, feed_in: -2, consumption: 1 } },
+      { pressure_level: '0.125 <-> 4.0',  stacked: { loss: -0.2, feed_in: -3.2, consumption: 2 } },
+      { pressure_level: '4.0 <-> 8.0',  stacked: { loss: -1.2, feed_in: -1, consumption: 1 } },
+      { pressure_level: '8.0 <-> 40.0', stacked: { loss: -0.5, feed_in: -2, consumption: 2 } }
+    ]
+  end
+
   private
 
   def gas_asset_list_attributes
