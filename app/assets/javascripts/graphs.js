@@ -1,4 +1,4 @@
-/*globals D3LineGraph*/
+/*globals D3LineGraph,D3StackedBarGraph*/
 
 $(document).on('page:change', function () {
     'use strict';
@@ -8,7 +8,8 @@ $(document).on('page:change', function () {
             interpolate: 'linear'
         },
         graphs = {
-            line: D3LineGraph
+            line: D3LineGraph,
+            stacked_bar: D3StackedBarGraph
         };
 
     window.graphs = [];

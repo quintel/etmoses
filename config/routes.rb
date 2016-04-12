@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get  'export', 'technology_profile'
+      get  'export', 'technology_profile', 'gas_load'
       post 'data', 'update_strategies'
       post 'export', to: :perform_export
       patch 'save_as'
@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
       member do
         post 'calculate_net_present_value', 'calculate_cumulative_investment',
-             'reload_gas_asset_list'
+             'reload_gas_asset_list', 'fake_stacked_bar'
       end
     end
 
