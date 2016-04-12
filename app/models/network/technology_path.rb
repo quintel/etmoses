@@ -7,7 +7,10 @@ module Network
       :production_at, :mandatory_consumption_at,
       :capacity_constrained?, :excess_constrained?
 
-    def_delegators :@path, :head, :leaf
+    def_delegators :@path, :head, :leaf, :to_a, :length
+
+    # Used by SubPaths
+    attr_reader :receipts
 
     # Public: Given a leaf node with one or more technologies, returns a
     # TechnologyPath for each technology present, and a path back to the source
@@ -18,10 +21,22 @@ module Network
     end
 
     attr_reader :technology
+    attr_reader :path
 
     def initialize(technology, path)
       @technology = technology
       @path       = path
+      @flexible   = @technology.flexible_conditional?
+      @receipts   = Receipts.new
+    end
+
+    def sub_paths
+      @sub_paths ||= sub_path_class.from(self)
+    end
+
+    def mandatory_consumption_at(frame)
+      amount = @technology.mandatory_consumption_at(frame) - receipts.mandatory[frame]
+      amount <= 0 ? 0.0 : amount
     end
 
     # Public: Returns the conditional consumption required by the technology in
@@ -30,7 +45,8 @@ module Network
     #
     # Returns a numeric.
     def conditional_consumption_at(frame)
-      constrain(frame, @technology.conditional_consumption_at(frame))
+      amount = @technology.conditional_consumption_at(frame) - receipts.conditional[frame]
+      amount <= 0 ? 0.0 : constrain(frame, amount)
     end
 
     def inspect
@@ -38,7 +54,8 @@ module Network
     end
 
     def to_s
-      "#{ @technology } | {#{ @path.map(&:key).join(', ') }}"
+      "#{ @technology.installed.technology.name.inspect } | " \
+        "{#{ @path.map(&:key).join(', ') }}"
     end
 
     def congested_at?(frame, correction = 0)
@@ -66,6 +83,28 @@ module Network
       head_load.zero? ? 0.0 : -head_load
     end
 
+    # Public: Describes the amount of excess energy available at the head of
+    # the path. There is an excess if (available) production exceeds
+    # consumption.
+    #
+    # Returns a numeric.
+    def excess_at(frame)
+      flow = head.load_at(frame)
+      flow < 0 ? flow.abs : 0.0
+    end
+
+    # Public: Returns how far the head node of the path is from the head node of
+    # the network. See SubPath#distance.
+    #
+    # Returns an integer.
+    def distance
+      0
+    end
+
+    def subpath?
+      false
+    end
+
     # Public: Sends a given amount of energy down the path, increasing the
     # consumption flow of each node.
     #
@@ -78,13 +117,15 @@ module Network
       # (conditional) consumption.
       return if amount.zero? && ! @technology.respond_to?(:store)
 
-      # TODO: "store" should be renamed to "consume_conditional"
       if conditional
+        # TODO: "store" should be renamed to "consume_conditional"
         @technology.store(frame, amount)
+        receipts.conditional[frame] += amount
       else
         # Hack hack hack. Required to tell components in a "composite"
         # technology what they have received.
         @technology.receive_mandatory(frame, amount)
+        receipts.mandatory[frame] += amount
       end
 
       currently = @technology.consumption[frame] || 0.0
@@ -103,10 +144,14 @@ module Network
       if headroom < amount
         # Some techs work on the principle that if all of their conditional
         # consumption cannot be satisfied, none of it should.
-        @technology.flexible_conditional? ? headroom : 0.0
+        @flexible ? headroom : 0.0
       else
         amount
       end
+    end
+
+    def sub_path_class
+      SubPath
     end
   end # TechnologyPath
 end # Network

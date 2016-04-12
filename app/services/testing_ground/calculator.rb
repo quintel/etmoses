@@ -11,7 +11,7 @@ class TestingGround::Calculator
     if ! Settings.cache.networks || cache.present?
       destroy_background_job
 
-      base.merge(networks: tree)
+      base.merge(networks: tree, tech_loads: tech_loads)
     else
       calculate_background_job
 
@@ -32,6 +32,14 @@ class TestingGround::Calculator
 
   def tree
     TestingGround::TreeSampler.sample(networks, resolution, @options[:nodes])
+  end
+
+  def tech_loads
+    networks.each_with_object({}) do |network, data|
+      data[network.carrier] = network.nodes.each_with_object({}) do |node, node_data|
+        node_data[node.key] = node.get(:tech_loads)
+      end
+    end
   end
 
   def networks

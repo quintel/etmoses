@@ -1,8 +1,9 @@
 class CurveCollection
   include Enumerable
 
-  def initialize(components)
+  def initialize(components, range = nil)
     @components = components
+    @range      = range
   end
 
   # Public: Iterates through each curve component, in order of their curve type
@@ -26,7 +27,7 @@ class CurveCollection
     each do |component|
       yield([
         component.curve_type,
-        component.scaled_network_curve(scaling),
+        component.scaled_network_curve(scaling, @range),
         ratio(component)
       ])
     end

@@ -1,5 +1,6 @@
 module NetworkCache
   module CacheHelper
+    ATTRS    = [:load, :tech_loads]
     CARRIERS = [:electricity, :gas]
     FOLDERS  = {
       low:  'year',
@@ -24,12 +25,12 @@ module NetworkCache
       end
     end
 
-    def file_name(carrier, key, time_frame = time_frame)
-      file_path.join(carrier.to_s, time_frame).join("#{Digest::SHA256.hexdigest(key)}.tmp")
+    def file_name(carrier, key, attr = 'load', time_frame = time_frame)
+      carrier_path(carrier).join(file_key(key, attr, time_frame))
     end
 
     def file_path
-      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}")
+      Rails.root.join("tmp/networks/#{Rails.env}/#{@testing_ground.id}/#{strategy_prefix}/")
     end
 
     def strategy_prefix
@@ -38,6 +39,16 @@ module NetworkCache
 
     def time_frame
       FOLDERS[@resolution] || FOLDERS.values.last
+    end
+
+    private
+
+    def carrier_path(carrier)
+      file_path.join(carrier.to_s)
+    end
+
+    def file_key(key, *extras)
+      [Digest::SHA256.hexdigest(key.to_s), *extras, 'tmp'].join('.')
     end
   end
 end

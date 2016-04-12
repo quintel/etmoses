@@ -68,9 +68,43 @@ var ChartShower = (function () {
         enableCsvDownloadCurveButton.call(this);
     }
 
+    function changeViewOfD3(e) {
+        var d3Chart = window.currentTree.d3Chart,
+            attrName = $(e.target).attr('name');
+
+        if (attrName === 'view_as') {
+            d3Chart.view('view_as', $(e.target).val()).update();
+        } else {
+            d3Chart.view(attrName, $(e.target).prop('checked')).update();
+        }
+        updateChartViewInputs.call(this);
+    }
+
+    function updateChartViewInputs() {
+        var viewAs = $("select.chart-view"),
+            showViewAs = !((this.load && this.load.tech_loads) ||
+                           (this.gas  && this.gas.tech_loads));
+
+        if (viewAs.val() === 'total') {
+            $(".chart-view[type='checkbox']").bootstrapToggle('disable');
+            viewAs.prop('disabled', showViewAs);
+        } else {
+            toggleChartView('electricity', this.gas.total);
+            toggleChartView('strategies', StrategyHelper.anyStrategies());
+        }
+    }
+
+    function toggleChartView(name, predicate) {
+       $(".chart-view[name='" + name + "']")
+           .bootstrapToggle(predicate ? 'enable' : 'disable');
+    }
+
     function toggleDomParts() {
         $('#technologies .row-fluid, p.info').hide();
         $(".load-graph-wrapper a[href='#load']").tab('show');
+        $("select.load-date").removeClass("hidden");
+
+        $('.chart-view').on('change', changeViewOfD3.bind(this));
 
         showTechnologies.call(this);
         setHeader.call(this);
@@ -90,17 +124,18 @@ var ChartShower = (function () {
     }
 
     function renderLoadChart() {
-        var d = this.nodeData;
-
-        if ((d.load && d.load.length > 0) ||
-                (d.load_strategies && d.load_strategies.length > 0) ||
-                (d.gas && d.gas.length > 0) ||
-                (d.gas_strategies && d.gas_strategies.length > 0)) {
-
+        if (isValidNodeData.call(this)) {
             addNewLoadChartPlatform.call(this);
         } else {
             window.currentTree.update();
         }
+    }
+
+    function isValidNodeData() {
+        var d = this.nodeData;
+
+        return (d.load && d.load.total.length > 0) ||
+               (d.gas && d.gas.total.length > 0);
     }
 
     ChartShower.prototype = {
@@ -112,6 +147,7 @@ var ChartShower = (function () {
             window.currentTree.addNode(this.nodeData.name);
             renderLoadChart.call(this, this.nodeData);
             toggleDomParts.call(this.nodeData);
+            updateChartViewInputs.call(this.nodeData);
         }
     };
 

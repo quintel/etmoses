@@ -45,12 +45,12 @@ RSpec.describe NetworkCache::Fetcher do
   describe "year current week behavior" do
     let!(:write_cache) {
       NetworkCache::Writer.from(testing_ground,
-        resolution: 'low', strategies: {}, range: 0..35040).write(written_cache)
+        resolution: :low, strategies: {}, range: 0..35040).write(written_cache)
     }
 
     describe "when fetching low resolution cache it should just fetch" do
       let(:cache) { NetworkCache::Fetcher.from(testing_ground,
-        resolution: 'high', strategies: {}, range: 0..20).fetch }
+        resolution: :high, strategies: {}, range: 0..20).fetch }
 
       it "fetches cache" do
         expect(cache[0].nodes.map(&:load).map(&:first)).to eq([1.2, 1.2, 1.2, 0.0])

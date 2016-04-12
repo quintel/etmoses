@@ -8,13 +8,19 @@ module NetworkCache
 
     #
     # Fetches all cache and sets is as the load attribute for a node
+    #
+    # It checks both 'FOLDERS'; as in scopes (current week and year)
+    # for a cache. If the full year cache is already present it should use
+    # that cache and cut that range out.
     def fetch(nodes = nil)
       tree_scope.each do |network|
-        LoadSetter.set(network, nodes) do |node|
-          if year = read(network.carrier, node.key, 'year')
-            year[@range ? @range : 0..-1]
-          elsif current_week = read(network.carrier, node.key, 'current_week')
-            current_week
+        ATTRS.each do |attr|
+          LoadSetter.set(network, nodes, attr) do |node|
+            if year = read(network.carrier, node.key, attr, 'year')
+              year[@range ? @range : 0..-1]
+            elsif current_week = read(network.carrier, node.key, attr, 'current_week')
+              current_week
+            end
           end
         end
       end
@@ -22,8 +28,8 @@ module NetworkCache
       tree_scope
     end
 
-    def read(carrier, key, time_frame)
-      file = file_name(carrier, key, time_frame)
+    def read(carrier, key, attr, time_frame)
+      file = file_name(carrier, key, attr, time_frame)
 
       if File.exists?(file)
         MessagePack.unpack(File.read(file))

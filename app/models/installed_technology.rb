@@ -123,7 +123,7 @@ class InstalledTechnology
   # Returns a Technology, or raises ActiveRecord::RecordNotFound if the tech
   # does not exist.
   def technology
-    type.present? ? Technology.by_key(type) : Technology.generic
+    @technology ||= type.present? ? Technology.by_key(type) : Technology.generic
   end
 
   # Public: Describes the electrical capacity of the technology.
@@ -265,7 +265,7 @@ class InstalledTechnology
   end
 
   def valid?
-    buffer.present? || valid_profile? || is_battery?
+    buffer.present? || valid_profile? || !technology.profile_required?
   end
 
   def valid_profile?
@@ -274,10 +274,6 @@ class InstalledTechnology
     else
       profile.present? && load_profile.present?
     end
-  end
-
-  def is_battery?
-    %w(congestion_battery households_flexibility_p2p_electricity).include?(type)
   end
 
   private

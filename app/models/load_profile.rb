@@ -38,8 +38,8 @@ class LoadProfile < ActiveRecord::Base
 
   # Public: Returns all the curve components belonging to this profile within
   # a CurveCollection.
-  def curves
-    CurveCollection.new(load_profile_components)
+  def curves(range = nil)
+    CurveCollection.new(load_profile_components, range)
   end
 
   # Public: Given the unique key representing a load profile, returns the

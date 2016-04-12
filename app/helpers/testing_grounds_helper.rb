@@ -140,4 +140,12 @@ module TestingGroundsHelper
 
     options_for_select(weeks)
   end
+
+  def view_as_options
+    options_for_select([
+      ['Total', 'total'],
+      ['Stacked', 'stacked'],
+      ['Individual', 'individual']
+    ])
+  end
 end

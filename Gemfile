@@ -11,6 +11,7 @@ gem 'bootstrap-filestyle-rails'
 gem 'uglifier',     '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer', '~> 0.12.1', platforms: :ruby
+gem 'i18n-js', ">= 3.0.0.rc11"
 
 gem 'haml-rails'
 gem 'paperclip', '~> 4.2'

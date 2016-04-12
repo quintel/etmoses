@@ -7,7 +7,10 @@ var TreeFetcher = (function () {
         finalData = {};
 
     function setFinalData(data, lesType) {
-        finalData[lesType] = data.networks;
+        finalData[lesType] = {
+            networks:   data.networks,
+            tech_loads: data.tech_loads
+        }
 
         if (data.error) {
             finalData.error = data.error;

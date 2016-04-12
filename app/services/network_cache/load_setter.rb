@@ -7,11 +7,11 @@ module NetworkCache
     # loads to be assigned.
     #
     # Returns the network.
-    def set(network, selected_nodes = nil)
+    def set(network, selected_nodes = nil, attr = :load)
       keys = selected_nodes || network.nodes.map(&:key)
 
       keys.map { |key| network.node(key) }.compact.each do |node|
-        node.set(:load, yield(node))
+        node.set(attr, yield(node))
       end
 
       network
