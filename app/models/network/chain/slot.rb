@@ -32,6 +32,8 @@ module Network
     #   Slot.downward(efficiency: 0.5)
     #
     class Slot
+      include Equalizer.new(:capacity, :efficiency)
+
       class << self
         alias_method :upward, :new
         protected :new
@@ -40,6 +42,13 @@ module Network
           Downward.new(*args)
         end
       end
+
+      # Public: The capacity of the slot. Defaults to Infinity.
+      attr_reader :capacity
+
+      # Public: The efficiency of energy flowing through the slot. Defaults to
+      # 1.0.
+      attr_reader :efficiency
 
       def initialize(capacity: Float::INFINITY, efficiency: 1.0)
         @capacity   = Types::Capacity[capacity]

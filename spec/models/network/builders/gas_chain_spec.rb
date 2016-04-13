@@ -3,7 +3,8 @@ require 'rails_helper'
 module Network
   RSpec.describe Builders::GasChain do
     let(:source) { Graph.new(:gas) }
-    let(:chain)  { Builders::GasChain.build(source) }
+    let(:chain)  { Builders::GasChain.build(source, assets) }
+    let(:assets) { [] }
 
     context 'with nil' do
       let(:chain) { Builders::GasChain.build }
@@ -129,5 +130,107 @@ module Network
         expect(chain.forty.call(1)).to eql(6.0)
       end
     end # with a gas connection containing a head node; load of 4.0, 6.0
+
+    context 'with some assets' do
+      let(:source) do
+        graph = Graph.new(:gas)
+        graph.add(Node.new(:head, load: [4.0, 6.0]))
+        graph
+      end
+
+      let(:assets) do
+        [
+          InstalledGasAsset.new(
+            pressure_level_index: 1, # eight->four
+            part: 'connectors',
+            type: 'inefficient_connector',
+            amount: 6
+          ),
+          InstalledGasAsset.new(
+            pressure_level_index: 2, # forty->eight
+            part: 'connectors',
+            type: 'inefficient_connector',
+            amount: 10
+          )
+        ]
+      end
+
+      context 'the asset on :eight->:four' do
+        let(:connection) { chain.eight.children.first }
+
+        it 'sets the upward efficiency' do
+          expect(connection.upward.efficiency).to eq(0.8)
+        end
+
+        it 'sets the downward efficiency' do
+          expect(connection.downward.efficiency).to eq(0.5)
+        end
+
+        it 'sets the upward capacity' do
+          expect(connection.upward.capacity).to eq(18.0)
+        end
+
+        it 'sets the downward capacity' do
+          expect(connection.downward.capacity).to eq(12.0)
+        end
+      end
+
+      context 'the asset on :forty->:eight' do
+        let(:connection) { chain.forty.children.first }
+
+        it 'sets the upward efficiency' do
+          expect(connection.upward.efficiency).to eq(0.8)
+        end
+
+        it 'sets the downward efficiency' do
+          expect(connection.downward.efficiency).to eq(0.5)
+        end
+
+        it 'sets the upward capacity' do
+          expect(connection.upward.capacity).to eq(30.0)
+        end
+
+        it 'sets the downward capacity' do
+          expect(connection.downward.capacity).to eq(20.0)
+        end
+      end
+
+      context 'in frame 0' do
+        it 'computes load of 16.0 on the 40-bar network' do
+          expect(chain.forty.call(0)).to eql(4.0 / 0.5 / 0.5)
+        end
+
+        it 'computes load of 8.0 on the 8-bar network' do
+          expect(chain.eight.call(0)).to eql(4.0 / 0.5)
+        end
+
+        it 'computes load of 4.0 on the 4-bar network' do
+          expect(chain.four.call(0)).to eql(4.0)
+        end
+
+        it 'computes load of 4.0 on the local network' do
+          expect(chain.local.call(0)).to eql(4.0)
+        end
+      end
+
+      context 'in frame 1' do
+        it 'computes load of 20.0 on the 40-bar network' do
+          # capacity (20) is less than demand (24)
+          expect(chain.forty.call(1)).to eql(20.0)
+        end
+
+        it 'computes load of 12.0 on the 8-bar network' do
+          expect(chain.eight.call(1)).to eql(6.0 / 0.5)
+        end
+
+        it 'computes load of 4.0 on the 4-bar network' do
+          expect(chain.four.call(1)).to eql(6.0)
+        end
+
+        it 'computes load of 6.0 on the local network' do
+          expect(chain.local.call(1)).to eql(6.0)
+        end
+      end
+    end # with some assets
   end # describe Builders::GasChain
 end # Network

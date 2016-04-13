@@ -80,6 +80,7 @@ end
 gem 'rest-client'
 gem 'virtus'
 gem 'dry-types'
+gem 'dry-equalizer'
 gem 'devise'
 gem 'turbine-graph', require: 'turbine'
 gem 'quintel_merit', github: 'quintel/merit', branch: 'arbitrary-length'
