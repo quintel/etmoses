@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Market::InitialCosts do
   let(:network){ Network::Builders::Electricity.build(tree) }
+  let(:gas_asset_list){ FactoryGirl.create(:gas_asset_list) }
 
   describe "calculates the initial costs" do
     let(:tree){
@@ -14,7 +15,7 @@ RSpec.describe Market::InitialCosts do
     }
 
     it "calculates" do
-      expect(Market::InitialCosts.new(network).calculate).to eq({
+      expect(Market::InitialCosts.new(network, gas_asset_list).calculate).to eq({
         "system operator" => 50.0
       })
     end
@@ -32,7 +33,7 @@ RSpec.describe Market::InitialCosts do
     }
 
     it "calculates" do
-      expect(Market::InitialCosts.new(network).calculate).to eq({
+      expect(Market::InitialCosts.new(network, gas_asset_list).calculate).to eq({
         "system operator" => 100.0
       })
     end

@@ -9,13 +9,14 @@ module Market
   class InitialCosts
     TOPOLOGY_REQUIRED = %i(investment_cost stakeholder)
 
-    def initialize(network)
-      @network = network
+    def initialize(network, gas_asset_list)
+      @network        = network
+      @gas_asset_list = gas_asset_list
     end
 
     def calculate
-      technology_costs.merge(topology_costs) do |_, tech_cost, topology_cost|
-        tech_cost + topology_cost
+      [topology_costs, technology_costs, gas_assets_costs].inject do |total, costs|
+        total.merge(costs) { |_, costs_a, costs_b| costs_a + costs_b }
       end
     end
 
@@ -42,13 +43,24 @@ module Market
       end
     end
 
+    # Private: Calculates the gas assets totals
+    #
+    # Returns a Hash
+    def gas_assets_costs
+      return {} if @gas_asset_list.nil?
+
+      group_sum(GasAssetListDecorator.new(@gas_asset_list).decorate) do |asset|
+        asset.total_investment_costs
+      end
+    end
+
     # Private: Sums specified nodes per unique stakeholder, with a specified
     # amount.
     #
     # Returns a Hash
     def group_sum(nodes)
       nodes.each_with_object(Hash.new(0.0)) do |node, data|
-        data[node.get(:stakeholder)] += yield(node)
+        data[node.stakeholder] += yield(node)
       end
     end
 

@@ -1,0 +1,40 @@
+---
+hh1:
+- name: Solar Panel 1
+  type: households_solar_pv_solar_radiation
+  profile:
+  profile_key:
+  capacity: -1.5
+  units: 1
+  initial_investment: 10
+  technical_lifetime: 1
+  performance_coefficient: 1.0
+  concurrency: max
+- name: Solar Panel 2
+  type: households_solar_pv_solar_radiation
+  profile:
+  profile_key:
+  capacity: -1.5
+  units: 1
+  initial_investment:
+  technical_lifetime:
+  full_load_hours:
+  om_costs_per_year: 5.5
+  om_costs_per_full_load_hour:
+  om_costs_for_ccs_per_full_load_hour:
+  performance_coefficient: 1.0
+  concurrency: max
+- name: Solar Panel 3
+  type: households_solar_pv_solar_radiation
+  profile:
+  profile_key:
+  capacity: -1.5
+  units: 2
+  initial_investment:
+  technical_lifetime:
+  full_load_hours: 0
+  om_costs_per_year: 5.5
+  om_costs_per_full_load_hour: 25.0
+  om_costs_for_ccs_per_full_load_hour:
+  performance_coefficient: 1.0
+  concurrency: max
