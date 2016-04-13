@@ -85,7 +85,7 @@ var TemplateUpdater = (function () {
         }
 
         parseTemplate.call(this);
-        $(this.technologySelectBox).parent().find("button").removeClass("disabled");
+        this.scope.find(".add-technology button").removeClass("disabled");
     }
 
     function shouldFetch() {
@@ -96,7 +96,7 @@ var TemplateUpdater = (function () {
         if (shouldFetch.call(this)) {
             var url = $("#profiles-table").data("fetchUrl");
 
-            $(this.technologySelectBox).parent().find("button").addClass("disabled");
+            this.scope.find(".add-technology button").addClass("disabled");
 
             Ajax.json(url, { key: this.data.type }, setEtmAttributes.bind(this));
         } else {
@@ -117,10 +117,7 @@ var TemplateUpdater = (function () {
             return ('.' + comp.attr("class").replace(/\s/g, '.') +
                 "[data-composite-value='" + comp.data('compositeValue') + "']");
         } else {
-            id = $(this.technologySelectBox)
-                    .parents(".panel")
-                    .find(".panel-collapse")
-                    .attr("id");
+            id = this.scope.find(".panel-collapse").attr("id");
 
             return ('#' + id + ' .technologies .technology:first-child');
         }
@@ -128,7 +125,7 @@ var TemplateUpdater = (function () {
 
     function findNearestCompositValue() {
         var self = this,
-            comp = $(this.technologySelectBox).parents(".endpoint").find(".technologies .technology").filter(function () {
+            comp = this.scope.find(".technologies .technology").filter(function () {
                 return bufferFilter.call(this, self.data);
             }).last();
 
@@ -200,6 +197,7 @@ var TemplateUpdater = (function () {
     function TemplateUpdater(template, technologySelectBox) {
         this.template = template;
         this.technologySelectBox = technologySelectBox;
+        this.scope = $(this.technologySelectBox).parents('.panel.endpoint');
     }
 
     return TemplateUpdater;
