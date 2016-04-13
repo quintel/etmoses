@@ -29,8 +29,8 @@ module Network
       # empty, no Source is attached and the gas loads will always be zero.
       #
       # Returns a GasNetwork.
-      def self.build(gas_network = Network::Graph.new(:gas))
-        new(gas_network).to_network
+      def self.build(gas_network = Network::Graph.new(:gas), assets = [])
+        new(gas_network, assets).to_network
       end
 
       # Public: Creates the gas chain network.
@@ -50,8 +50,9 @@ module Network
 
       private
 
-      def initialize(gas_network)
+      def initialize(gas_network, assets)
         @gas_network = gas_network
+        @assets      = assets
       end
 
       # Internal: Creates the basic chain network with three levels.
@@ -65,9 +66,9 @@ module Network
           Chain::Layer.new  # 0.125-bar
         )
 
-        connect(network.forty, network.eight)
-        connect(network.eight, network.four)
-        connect(network.four,  network.local)
+        connect(network.forty, network.eight, :eight)
+        connect(network.eight, network.four,  :four)
+        connect(network.four,  network.local, :local)
 
         network
       end
@@ -76,15 +77,11 @@ module Network
       #
       # upper     - The higher-level chain component.
       # lower     - The lower-level chain component.
-      # conn_args - Optional arguments which will be used when creating the
-      #             Connection.
+      # conn_args - The name of the lower-layer being connected.
       #
       # Returns the Connection.
-      def connect(upper, lower, conn_args = {})
-        connection = Chain::Connection.new(
-          upward:   conn_args[:upward]   || Chain::Slot.upward,
-          downward: conn_args[:downward] || Chain::Slot.downward
-        )
+      def connect(upper, lower, layer_name)
+        connection = Chain::Connection.new(**Slots.build(layer_name, @assets))
 
         upper.connect_to(connection)
         connection.connect_to(lower)
