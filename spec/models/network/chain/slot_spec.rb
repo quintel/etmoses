@@ -13,8 +13,18 @@ module Network::Chain
     context 'with an efficiency of 0.8' do
       let(:slot) { Slot.upward(efficiency: 0.8) }
 
-      it 'reduces flow of 10.0 to 8.0' do
-        expect(slot.call(10.0)).to eql(8.0)
+      context 'with a flow of 10.0' do
+        it 'reduces flow to 8.0' do
+          expect(slot.call(10.0)).to eql(8.0)
+        end
+
+        it 'has 2.0 loss' do
+          expect(slot.loss(10.0)).to eq(2.0)
+        end
+
+        it 'has no energy constrained' do
+          expect(slot.constrained(10.0)).to be_zero
+        end
       end
 
       it 'reduces flow of 9 to 7.2' do
@@ -25,8 +35,18 @@ module Network::Chain
     context 'a downward slot, with an efficiency of 0.8' do
       let(:slot) { Slot.downward(efficiency: 0.8) }
 
-      it 'increases flow of 10.0 to 12.5' do
-        expect(slot.call(10.0)).to eql(12.5)
+      context 'with a flow of 10.0' do
+        it 'increases flow to 12.5' do
+          expect(slot.call(10.0)).to eql(12.5)
+        end
+
+        it 'has 2.5 loss' do
+          expect(slot.loss(10.0)).to eq(2.5)
+        end
+
+        it 'has no energy constrained' do
+          expect(slot.constrained(10.0)).to be_zero
+        end
       end
 
       it 'increases flow of 9 to 11.25' do
@@ -64,6 +84,14 @@ module Network::Chain
       it 'does not affect flow (defaults to Infinity)' do
         expect(slot.call(50.0)).to eql(50.0)
       end
+
+      it 'has no loss' do
+        expect(slot.loss(50.0)).to be_zero
+      end
+
+      it 'has no energy constrained' do
+        expect(slot.constrained(50.0)).to be_zero
+      end
     end # with a capacity of nil
 
     context 'with a capacity of -1.0' do
@@ -85,8 +113,18 @@ module Network::Chain
         expect(slot.call(2.0)).to eql(2.0)
       end
 
-      it 'reduces flow of 2.1 to 2.0' do
-        expect(slot.call(2.1)).to eql(2.0)
+      context 'with flow of 2.1' do
+        it 'reduces flow of 2.1 to 2.0' do
+          expect(slot.call(2.1)).to eql(2.0)
+        end
+
+        it 'has no loss' do
+          expect(slot.loss(2.1)).to be_zero
+        end
+
+        it 'has 0.1 energy constrained' do
+          expect(slot.constrained(2.1)).to eq(2.1 - 2.0)
+        end
       end
     end # with a capacity of 2.0
 
@@ -102,5 +140,54 @@ module Network::Chain
         expect(slot.call(2)).to eql(1.0)
       end
     end # with a capacity of 1
+
+    context 'with an upward efficiency of 0.8 and capacity of 5.0' do
+      let(:slot) { Slot.upward(efficiency: 0.8, capacity: 5.0) }
+
+      context 'with a flow of 10.0' do
+        it 'decreases flow to 5.0' do
+          expect(slot.call(10.0)).to eql(5.0)
+        end
+
+        it 'has 2.0 loss' do
+          # 10 * 0.8 = 8.0 flows on, 2.0 loss.
+          expect(slot.loss(10.0)).to eq(2.0)
+        end
+
+        it 'has 3.0 energy constrained' do
+          # 8.0 after loss, 5.0 constraint: 5.0 flows, 3.0 constrained.
+          expect(slot.constrained(10.0)).to eq((10.0 * 0.8) - 5.0)
+        end
+      end
+    end # with an upward efficiency of 0.8 and capacity of 5.0
+
+    context 'with a downward efficiency of 0.8 and capacity of 5.0' do
+      let(:slot) { Slot.downward(efficiency: 0.8, capacity: 5.0) }
+
+      # Output constraint means at most 5.0 of the output can come from the
+      # parent component.
+      #
+      # Therefore:
+      #
+      #   * There is a 5.0 deficit ("constrained")
+      #
+      #   * The demand on the parent is 6.25; (the output is 80% efficient)
+      #     therefore the parent must output 6.25 to supply 5.0 at the other
+      #     end of the connection.
+
+      context 'with a flow of 10.0' do
+        it 'decreases flow to 6.25' do
+          expect(slot.call(10.0)).to eql(6.25)
+        end
+
+        it 'has 1.25 loss' do
+          expect(slot.loss(10.0)).to eq(1.25)
+        end
+
+        it 'has 5.0 energy constrained' do
+          expect(slot.constrained(10.0)).to eq(5.0)
+        end
+      end
+    end # with a downward efficiency of 0.8 and capacity of 5.0
   end # Slot
 end
