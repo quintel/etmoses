@@ -41,12 +41,12 @@ module Network::Chain
         context 'and tech load of 1.5' do
           let(:load) { 1.5 }
 
-          it 'has a load of 1.0 on the top layer' do
-            expect(layer_one.call(0)).to eql(1.0)
+          it 'has a load of 1.25 on the top layer' do
+            expect(layer_one.call(0)).to eql(1.25)
           end
 
-          it 'has a load of 1.0 on the connection' do
-            expect(connection.call(0)).to eql(1.0)
+          it 'has a load of 1.25 on the connection' do
+            expect(connection.call(0)).to eql(1.25)
           end
 
           it 'has a load of 1.5 on the bottom layer' do
@@ -58,11 +58,11 @@ module Network::Chain
           let(:load) { 4.0 }
 
           it 'has a load of 1.0 on the top layer' do
-            expect(layer_one.call(0)).to eql(1.0)
+            expect(layer_one.call(0)).to eql(1.25)
           end
 
           it 'has a load of 1.0 on the connection' do
-            expect(connection.call(0)).to eql(1.0)
+            expect(connection.call(0)).to eql(1.25)
           end
 
           it 'has a load of 2.0 on the bottom layer' do

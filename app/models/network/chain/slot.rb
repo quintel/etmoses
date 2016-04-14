@@ -61,8 +61,7 @@ module Network
       #
       # Returns a numeric.
       def call(amount)
-        amount = apply_efficiency(amount)
-        @capacity > amount ? amount : @capacity
+        constrain(apply_efficiency(amount))
       end
 
       private
@@ -71,9 +70,17 @@ module Network
         amount * @efficiency
       end
 
+      def constrain(amount)
+        amount < @capacity ? amount : @capacity
+      end
+
       # Represents a Slot where energy is flowing from the top of the network
       # (high pressure) to the bottom (lower pressure).
       class Downward < self
+        def call(amount)
+          apply_efficiency(constrain(amount))
+        end
+
         private def apply_efficiency(amount)
           amount / @efficiency
         end
