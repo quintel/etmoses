@@ -64,6 +64,26 @@ module Network
         constrain(apply_efficiency(amount))
       end
 
+      # Public: Determines how much energy will be lost by passing `amount`
+      # through the slot.
+      #
+      # Returns a Float.
+      def loss(amount)
+        (amount - apply_efficiency(amount)).abs
+      end
+
+      # Public: Depending on the direction of the slot, constrained energy
+      # represents energy being discarded (upward slots) or a deficit (downward
+      # slots).
+      #
+      # amount - The total amount of energy being sent through the slot.
+      #
+      # Returns a Float.
+      def constrained(amount)
+        post_loss = apply_efficiency(amount)
+        post_loss - constrain(post_loss)
+      end
+
       private
 
       def apply_efficiency(amount)
@@ -79,6 +99,15 @@ module Network
       class Downward < self
         def call(amount)
           apply_efficiency(constrain(amount))
+        end
+
+        def loss(amount)
+          post_cons = constrain(amount)
+          (post_cons - apply_efficiency(post_cons)).abs
+        end
+
+        def constrained(amount)
+          amount - constrain(amount)
         end
 
         private def apply_efficiency(amount)
