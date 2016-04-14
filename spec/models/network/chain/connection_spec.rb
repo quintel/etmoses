@@ -20,7 +20,7 @@ module Network::Chain
         end
       end
 
-      context 'with an efficiencies of 0.8' do
+      context 'with a efficiencies of 0.8' do
         let(:upward)   { Slot.upward(efficiency: 0.8) }
         let(:downward) { Slot.downward(efficiency: 0.8) }
 
@@ -76,8 +76,8 @@ module Network::Chain
       context 'with a downward efficiency of 0.8 and capacity of 1.0' do
         let(:downward) { Slot.downward(efficiency: 0.8, capacity: 1.0) }
 
-        it 'decreases load to 1.0' do
-          expect(connection.call(0)).to eql(1.0)
+        it 'decreases load to 1.25' do
+          expect(connection.call(0)).to eql(1.25)
         end
       end
     end # with a child load of 2.0

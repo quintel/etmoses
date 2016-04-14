@@ -131,10 +131,10 @@ module Network
       end
     end # with a gas connection containing a head node; load of 4.0, 6.0
 
-    context 'with some assets' do
+    context 'with some assets and loads of 2, 8, 35' do
       let(:source) do
         graph = Graph.new(:gas)
-        graph.add(Node.new(:head, load: [4.0, 6.0]))
+        graph.add(Node.new(:head, load: [2.0, 8.0, 35.0]))
         graph
       end
 
@@ -144,19 +144,19 @@ module Network
             pressure_level_index: 1, # eight->four
             part: 'connectors',
             type: 'inefficient_connector',
-            amount: 6
+            amount: 10
           ),
           InstalledGasAsset.new(
             pressure_level_index: 2, # forty->eight
             part: 'connectors',
             type: 'inefficient_connector',
-            amount: 10
+            amount: 5
           )
         ]
       end
 
-      context 'the asset on :eight->:four' do
-        let(:connection) { chain.eight.children.first }
+      context 'the asset on :forty->:eight' do
+        let(:connection) { chain.forty.children.first }
 
         it 'sets the upward efficiency' do
           expect(connection.upward.efficiency).to eq(0.8)
@@ -167,16 +167,16 @@ module Network
         end
 
         it 'sets the upward capacity' do
-          expect(connection.upward.capacity).to eq(18.0)
+          expect(connection.upward.capacity).to eq(15.0)
         end
 
         it 'sets the downward capacity' do
-          expect(connection.downward.capacity).to eq(12.0)
+          expect(connection.downward.capacity).to eq(10.0)
         end
       end
 
-      context 'the asset on :forty->:eight' do
-        let(:connection) { chain.forty.children.first }
+      context 'the asset on :eight->:four' do
+        let(:connection) { chain.eight.children.first }
 
         it 'sets the upward efficiency' do
           expect(connection.upward.efficiency).to eq(0.8)
@@ -196,41 +196,61 @@ module Network
       end
 
       context 'in frame 0' do
-        it 'computes load of 16.0 on the 40-bar network' do
-          expect(chain.forty.call(0)).to eql(4.0 / 0.5 / 0.5)
+        it 'computes load of 8.0 on the 40-bar network' do
+          expect(chain.forty.call(0)).to eql(2.0 / 0.5 / 0.5)
         end
 
-        it 'computes load of 8.0 on the 8-bar network' do
-          expect(chain.eight.call(0)).to eql(4.0 / 0.5)
+        it 'computes load of 4.0 on the 8-bar network' do
+          expect(chain.eight.call(0)).to eql(2.0 / 0.5)
         end
 
-        it 'computes load of 4.0 on the 4-bar network' do
-          expect(chain.four.call(0)).to eql(4.0)
+        it 'computes load of 2.0 on the 4-bar network' do
+          expect(chain.four.call(0)).to eql(2.0)
         end
 
-        it 'computes load of 4.0 on the local network' do
-          expect(chain.local.call(0)).to eql(4.0)
+        it 'computes load of 2.0 on the local network' do
+          expect(chain.local.call(0)).to eql(2.0)
         end
       end
 
       context 'in frame 1' do
         it 'computes load of 20.0 on the 40-bar network' do
-          # capacity (20) is less than demand (24)
+          # capacity / efficiency (10 / 0.5 = 20) is limiting
           expect(chain.forty.call(1)).to eql(20.0)
         end
 
+        it 'computes load of 16.0 on the 8-bar network' do
+          expect(chain.eight.call(1)).to eql(8.0 / 0.5)
+        end
+
+        it 'computes load of 8.0 on the 4-bar network' do
+          expect(chain.four.call(1)).to eql(8.0)
+        end
+
+        it 'computes load of 8.0 on the local network' do
+          expect(chain.local.call(1)).to eql(8.0)
+        end
+      end
+
+      context 'in frame 2' do
+        it 'computes load of 20.0 on the 40-bar network' do
+          # capacity / efficiency (10 / 0.5 = 20) is limiting
+          expect(chain.forty.call(2)).to eql(20.0)
+        end
+
         it 'computes load of 12.0 on the 8-bar network' do
-          expect(chain.eight.call(1)).to eql(6.0 / 0.5)
+          # capacity / efficiency (20 / 0.5 = 40) is limiting
+          expect(chain.eight.call(2)).to eql(40.0)
         end
 
         it 'computes load of 4.0 on the 4-bar network' do
-          expect(chain.four.call(1)).to eql(6.0)
+          expect(chain.four.call(2)).to eql(35.0)
         end
 
         it 'computes load of 6.0 on the local network' do
-          expect(chain.local.call(1)).to eql(6.0)
+          expect(chain.local.call(2)).to eql(35.0)
         end
-      end
-    end # with some assets
+      end # in frame 2
+    end # with some assets and loads of 2, 8, 35
   end # describe Builders::GasChain
 end # Network
