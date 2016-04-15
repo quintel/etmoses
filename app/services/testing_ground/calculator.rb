@@ -37,7 +37,9 @@ class TestingGround::Calculator
   def tech_loads
     networks.each_with_object({}) do |network, data|
       data[network.carrier] = network.nodes.each_with_object({}) do |node, node_data|
-        node_data[node.key] = node.get(:tech_loads)
+        node_data[node.key] = Hash[(node.get(:tech_loads) || {}).map do |tech, loads|
+          [tech, TestingGround::TreeSampler.downsample(loads, resolution)]
+        end]
       end
     end
   end
