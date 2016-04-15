@@ -17,7 +17,7 @@ module NetworkCache
         ATTRS.each do |attr|
           LoadSetter.set(network, nodes, attr) do |node|
             if year = read(network.carrier, node.key, attr, 'year')
-              year[@range ? @range : 0..-1]
+              cut_year_range(year)
             elsif current_week = read(network.carrier, node.key, attr, 'current_week')
               current_week
             end
@@ -33,6 +33,18 @@ module NetworkCache
 
       if File.exists?(file)
         MessagePack.unpack(File.read(file))
+      end
+    end
+
+    private
+
+    def cut_year_range(year)
+      if year.is_a?(Array)
+        year[@range ? @range : 0..-1]
+      elsif year.is_a?(Hash)
+        Hash[year.map do |tech, values|
+          [tech, cut_year_range(values)]
+        end]
       end
     end
   end
