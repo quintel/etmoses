@@ -28,6 +28,10 @@ var StackTransformator = (function () {
                 }
             }
 
+            this.data.sort(function (a,b) {
+                return a.key > b.key;
+            });
+
             return stack(this.data);
         }
     };
