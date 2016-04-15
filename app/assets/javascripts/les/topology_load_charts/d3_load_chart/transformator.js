@@ -87,7 +87,9 @@ var Transformator = (function () {
 
     function setLoadsPerTech(values) {
         for (var tech in values.tech_loads) {
-            LoadChartsSettings[tech] = { visible: true };
+            if (!LoadChartsSettings[tech]) {
+                LoadChartsSettings[tech] = { visible: true };
+            }
 
             this.results.push({
                 key:     I18n.translations.en.inputs[tech],
@@ -95,7 +97,7 @@ var Transformator = (function () {
                 values:  setCoords(values.tech_loads[tech]),
                 area:    (this.shown.view_as === 'stacked'),
                 color:   ChartColors[tech],
-                visible: true
+                visible: LoadChartsSettings[tech].visible
             });
         }
     }
