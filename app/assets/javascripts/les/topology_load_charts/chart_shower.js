@@ -89,7 +89,7 @@ var ChartShower = (function () {
             $(".chart-view[type='checkbox']").bootstrapToggle('disable');
             viewAs.prop('disabled', showViewAs);
         } else {
-            toggleChartView('electricity', this.gas.total);
+            toggleChartView('electricity', this.gas && this.gas.total);
             toggleChartView('strategies', StrategyHelper.anyStrategies());
         }
     }

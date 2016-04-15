@@ -86,8 +86,6 @@ var Transformator = (function () {
     }
 
     function setLoadsPerTech(values) {
-        var colorScale = d3.scale.category20();
-
         for (var tech in values.tech_loads) {
             LoadChartsSettings[tech] = { visible: true };
 
@@ -96,7 +94,7 @@ var Transformator = (function () {
                 type:    tech,
                 values:  setCoords(values.tech_loads[tech]),
                 area:    (this.shown.view_as === 'stacked'),
-                color:   colorScale(this.results.length),
+                color:   ChartColors[tech],
                 visible: true
             });
         }
