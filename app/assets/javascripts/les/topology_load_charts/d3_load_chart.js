@@ -173,7 +173,11 @@ var D3LoadChart = (function () {
 
     function setArea(d, scope) {
         if (d.visible && d.area) {
-            return chartParts[scope].stackedArea(d.values);
+            if (!(shown.view_as === 'stacked')) {
+                return chartParts[scope].colorArea(d.values);
+            } else {
+                return chartParts[scope].stackedArea(d.values);
+            }
         } else {
             return null;
         }
