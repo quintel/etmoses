@@ -5,7 +5,7 @@ var D3StackedBarGraph = (function () {
 
     var chartKeys,
         margin = {top: 20, right: 160, bottom: 30, left: 40},
-        width  = 1000 - margin.left - margin.right,
+        width  = 700 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom,
 
         x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1),
@@ -61,7 +61,7 @@ var D3StackedBarGraph = (function () {
     }
 
     function drawD3Graph(data) {
-        var state, legend;
+        var state, legend, legendWrap;
 
         chartKeys = Object.keys(data[0].stacked);
 
@@ -117,26 +117,21 @@ var D3StackedBarGraph = (function () {
             .attr("height", function (d) { return y(0) - y(d.size); })
             .style("fill", function (d) { return color(d.index); });
 
-        legend = this.svg.selectAll(".legend")
+        legendWrap = d3.select(this.scope)
+            .append("div")
+            .attr("class", "legend-wrap");
+
+        legend = legendWrap.selectAll(".legend")
             .data(chartKeys)
-            .enter().append("g")
-            .attr("class", "legend")
-            .attr("transform", function (d, i) {
-                return "translate(20," + i * 20 + ")";
-            });
+            .enter().append("span")
+            .attr("class", "legend");
 
-        legend.append("rect")
-            .attr("x", width - 18)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", color);
+        legend.append("span")
+            .attr("class", "square")
+            .style("background-color", color);
 
-        legend.append("text")
-            .attr("x", width + 4)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "begin")
-            .text(function (d) {
+        legend.append("span")
+            .html(function (d) {
                 return d;
             });
     }
@@ -179,6 +174,8 @@ var D3StackedBarGraph = (function () {
         this.url   = data.url;
         this.poll  = data.poll != undefined;
         this.title = data.title;
+
+        width = data.width || width;
     }
 
     return D3StackedBarGraph;

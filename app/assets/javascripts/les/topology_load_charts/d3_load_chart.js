@@ -30,7 +30,7 @@ var D3LoadChart = (function () {
         dateSelect,
 
         currentWeek     = 1,
-        margin          = { top: 20, right: 200, bottom: 70, left: 75 },
+        margin          = { top: 20, right: 0, bottom: 70, left: 75 },
         height          = 500 - margin.top - margin.bottom,
         height2         = 50,
         weeksInYear     = (365 / 7.0),
@@ -585,7 +585,7 @@ var D3LoadChart = (function () {
         this.chartClass = chartClass;
         this.curveType  = curveType || 'default';
         staticSettings  = settings || {};
-        width           = (staticSettings.width || 750 - margin.left - margin.right);
+        width           = (staticSettings.width || 500);
     }
 
     return D3LoadChart;

@@ -30,7 +30,7 @@ module GasAssetLists
     end
 
     def fraction
-      amount_of_gas_technologies.to_f / total_amount_of_households
+      amount_of_gas_technologies.to_f / total_number_of_households
     end
 
     def amount_of_gas_technologies
@@ -65,11 +65,11 @@ module GasAssetLists
       network
     end
 
-    # Grabs the total amount of households from the parent scenario
+    # Grabs the total number of households from the parent scenario
     #
     # Returns a Float
-    def total_amount_of_households
-      @total_amount_of_households ||= begin
+    def total_number_of_households
+      @total_number_of_households ||= begin
         EtEngineConnector.new(gqueries: [GQUERY_KEY])
           .gquery(@testing_ground.parent_scenario_id)
           .fetch(GQUERY_KEY)

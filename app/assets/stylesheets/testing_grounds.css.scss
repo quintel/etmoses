@@ -676,6 +676,14 @@ table span.static{
   width: 130px;
 }
 
+.chart-holder{
+  float: left;
+}
+
+.chart-holder:not(:last-child){
+  margin-right: 44px;
+}
+
 .add-technology {
   .input-group{
     display: block;
