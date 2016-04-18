@@ -8,6 +8,15 @@ module GasAssetLists
       '8 bar ↔ 40 bar'        => :forty
     }
 
+    # The default summary attributes.
+    DEFAULTS = {
+      loss: 0.0,
+      feed_in: 0.0,
+      consumption: 0.0,
+      deficit: 0.0,
+      surplus: 0.0
+    }.freeze
+
     def initialize(network)
       @network = network
     end
@@ -41,7 +50,7 @@ module GasAssetLists
     #
     # Returns a hash.
     def summarize_level(level)
-      summary = { loss: 0.0, feed_in: 0.0, consumption: 0.0 }
+      summary = DEFAULTS.dup
 
       each_frame do |frame|
         if (flow = level.output_at(frame)) > 0
@@ -64,7 +73,13 @@ module GasAssetLists
       summary = summarize_level(connection)
 
       each_frame do |frame|
-        summary[:loss] += connection.loss_at(frame)
+        summary[:loss] -= connection.loss_at(frame)
+
+        if (constrained = connection.constrained_at(frame)) > 0
+          summary[:deficit] += constrained
+        else
+          summary[:surplus] -= constrained
+        end
       end
 
       summary
