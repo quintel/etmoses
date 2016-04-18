@@ -1,10 +1,18 @@
 .header
-  %h1 Gas
+  %h1 Gas load
   .clearfix
 
 = render 'side_menu', testing_ground: @testing_ground
 
 #gas-chart
+  %h2 Chart
+
+  - profile = LoadProfile.last
+  - load_profile_component = profile.load_profile_components.first
+
+  .profile-graph.line-chart{ class: "id-#{load_profile_component.id}", data: { url: load_profile_load_profile_component_path(profile, load_profile_component, format: :json), curve_type: load_profile_component.curve_type } }
+
   - if @testing_ground.gas_asset_list
+    %h2 Gas - Stacked
     .graph.stacked-pressure-load-chart{ data: { poll: true, url: load_summary_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
 
