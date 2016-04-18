@@ -160,6 +160,25 @@ module Network::Builders
           expect(result[:downward].efficiency).to eql((0.5 * 2 + 1.0) / 3.0)
         end
       end
-    end # with a single "connectors" assets in the pressure level
+    end # with a two "connectors" assets in the pressure level
+
+    context 'with assets of zero units' do
+      let(:assets) do
+        [InstalledGasAsset.new(
+          pressure_level_index: 1,
+          part: 'connectors',
+          type: 'inefficient_connector',
+          amount: 0
+        )]
+      end
+
+      it 'has a default upward slot' do
+        expect(result[:upward]).to eq(Network::Chain::Slot.upward)
+      end
+
+      it 'has a default downward slot' do
+        expect(result[:downward]).to eq(Network::Chain::Slot.downward)
+      end
+    end # with assets of zero units
   end # GasChain::Slots
 end # Network::Builders

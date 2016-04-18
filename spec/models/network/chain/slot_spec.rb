@@ -141,6 +141,14 @@ module Network::Chain
       end
     end # with a capacity of 1
 
+    context 'with a capacity of 0.0' do
+      let(:slot) { Slot.upward(capacity: 0.0) }
+
+      it 'raises an error' do
+        expect { slot }.to raise_error
+      end
+    end
+
     context 'with an upward efficiency of 0.8 and capacity of 5.0' do
       let(:slot) { Slot.upward(efficiency: 0.8, capacity: 5.0) }
 
