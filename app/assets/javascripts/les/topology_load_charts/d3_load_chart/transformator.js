@@ -75,10 +75,11 @@ var Transformator = (function () {
 
     function setTotalLoad(datum, values) {
         var settings = LoadChartsSettings[datum.type || this.d3Chart.curveType];
+
         return {
             key:     settings.name,
             type:    datum.type,
-            values:  setCoords(values.total),
+            values:  setCoords(values),
             area:    datum.area,
             color:   settings.color,
             visible: settings.visible
@@ -103,12 +104,11 @@ var Transformator = (function () {
     }
 
     function setLoad(datum) {
-        var settings,
-            values = this.data[datum.type];
+        var values = this.data[datum.type];
 
-        if (values.total && isShown.call(this.shown, datum.type)) {
+        if (isShown.call(this.shown, datum.type) && values.total) {
             if (this.shown.view_as === 'total') {
-                this.results.push(setTotalLoad.call(this, datum, values));
+                this.results.push(setTotalLoad.call(this, datum, values.total));
             } else {
                 setLoadsPerTech.call(this, values);
             }

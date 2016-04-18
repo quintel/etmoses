@@ -21,7 +21,7 @@ var LoadChartPreview = (function () {
             area: true
         };
 
-        data[data.type] = sliceLoad(profile.values, week);
+        data[data.type] = { total: sliceLoad(profile.values, week) };
 
         return data;
     }
@@ -45,7 +45,7 @@ var LoadChartPreview = (function () {
         this.loadChart = new D3LoadChart(this.renderClass, this.curveData.curveType, {
             load:         loadChartData.call(this, profile),
             dateCallback: renderHighResolutionPreview.bind(this),
-            width:        1140
+            width:        1080
         });
         this.loadChart.render(loadChartData.call(this, profile));
     }
