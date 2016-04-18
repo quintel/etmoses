@@ -199,6 +199,11 @@ module Network
       get(:units) || 1
     end
 
+    # Public: A string that returns the stakeholder
+    def stakeholder
+      get(:stakeholder)
+    end
+
     private
 
     # Internal: A memoized list of child nodes. Since the graph never changes

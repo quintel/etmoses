@@ -3,8 +3,8 @@ module TestingGroundsControllerTest
     {
       "testing_ground" => {
         "name"=>"A les",
-        "parent_scenario_id"=>"",
-        "scenario_id"=>"",
+        "parent_scenario_id"=>"2",
+        "scenario_id"=>"1",
         "market_model_id" => market_model_id,
         "topology_id" => topology_id,
         "technology_profile" => "[]"

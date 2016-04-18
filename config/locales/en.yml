@@ -144,3 +144,6 @@ en:
         tooltip: >
           Please select if this is a private or public load profile. A private
           load profile can only be edited, used and viewed by you.
+  gas_asset:
+    pipes: Pipe
+    connectors: Connector

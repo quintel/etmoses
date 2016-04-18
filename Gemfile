@@ -38,6 +38,9 @@ gem 'delayed_job_active_record'
 # Caching
 gem 'msgpack'
 
+# Active hash
+gem 'active_hash'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'
