@@ -12,7 +12,7 @@ var D3StackedBarGraph = (function () {
         y = d3.scale.linear().rangeRound([height, 0]),
 
         color = d3.scale.ordinal()
-            .range(["#e1d146", "#4cb44a", "#508ac7"]),
+            .range(["#eeeeee", "#ef7676", "#5cc7bc", "#9b5191", "#f5e0b4"]),
 
         xAxis = d3.svg.axis()
             .scale(x)
@@ -148,7 +148,23 @@ var D3StackedBarGraph = (function () {
         svg: null,
         line: null,
         draw: function () {
-            Ajax.json(this.url, {}, drawD3Graph.bind(this));
+            if (this.poll) {
+                var self = this;
+
+                new Poller({ url: this.url }).poll()
+                    .done(function(data) {
+                        drawD3Graph.call(self, data);
+                    })
+                    .fail(function() {
+                        $(self.scope).html(
+                            '<p class="chart-error">' +
+                            '    Sorry, the chart could not be loaded.' +
+                            '</p>'
+                        );
+                    });
+            } else {
+                Ajax.json(this.url, {}, drawD3Graph.bind(this));
+            }
 
             return this;
         },
@@ -161,6 +177,7 @@ var D3StackedBarGraph = (function () {
     function D3StackedBarGraph(scope, data) {
         this.scope = scope;
         this.url   = data.url;
+        this.poll  = data.poll != undefined;
         this.title = data.title;
     }
 

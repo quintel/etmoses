@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
       member do
         post 'calculate_net_present_value', 'calculate_cumulative_investment',
-             'reload_gas_asset_list', 'fake_stacked_bar'
+             'reload_gas_asset_list', 'load_summary'
       end
     end
 

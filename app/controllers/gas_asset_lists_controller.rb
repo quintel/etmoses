@@ -31,16 +31,17 @@ class GasAssetListsController < ResourceController
       .new(@gas_asset_list).calculate
   end
 
-  def fake_stacked_bar
+  def load_summary
     calculator = TestingGround::Calculator.new(@testing_ground)
 
     if calculator.ready?
-      gas_network = calculator.network(:electricity)
+      gas_network = calculator.network(:gas)
       assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
       levels      = Network::Builders::GasChain.build(gas_network, assets)
 
-      render json: GasAssetLists::NetworkSummary.new(levels).as_json
+      render json: localize_summary(GasAssetLists::NetworkSummary.new(levels))
     else
+      calculator.calculate
       render json: { pending: true }
     end
   end
@@ -56,5 +57,22 @@ class GasAssetListsController < ResourceController
     @testing_ground = @gas_asset_list.testing_ground
 
     authorize @gas_asset_list
+  end
+
+  # Internal: Receives a gas NetworkSummary and translates the load fields for
+  # each layer into a human-readable label.
+  #
+  # Returns an Array[Hash].
+  def localize_summary(summary)
+    summary.as_json.map do |row|
+      translated = row.dup
+
+      translated[:stacked] =
+        row[:stacked].each_with_object({}) do |(key, data), fields|
+          fields[I18n.t("gas_summary.#{key}")] = data
+        end
+
+      translated
+    end
   end
 end

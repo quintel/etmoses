@@ -6,5 +6,5 @@
 
 #gas-chart
   - if @testing_ground.gas_asset_list
-    .graph.stacked-pressure-load-chart{ data: { url: fake_stacked_bar_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
+    .graph.stacked-pressure-load-chart{ data: { poll: true, url: load_summary_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
 
