@@ -59,6 +59,25 @@ module Network
         amount < 0 ? -constrained : constrained
       end
 
+      # Public: Determines how much energy leaves the connection in the given
+      # frame. If flow is downward, the output is at the "bottom" of the
+      # connection; if flow is upward, the output is to the parent of the
+      # connection.
+      #
+      # Downward flows exclude deficits, returning only the energy which
+      # actually can flow from the parent.
+      #
+      # Returns a numeric.
+      def output_at(frame)
+        slot = active_slot(call(frame))
+
+        if slot.is_a?(Slot::Downward)
+          source_at(frame) - constrained_at(frame)
+        else
+          call(frame)
+        end
+      end
+
       private
 
       def source_at(frame)
