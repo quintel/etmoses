@@ -16,6 +16,8 @@ module Network
         @load[frame] ||= @children.sum(0.0) { |child| child.call(frame) }
       end
 
+      alias_method :output_at, :call
+
       # Public: A set containing lower-level components.
       #
       # Returns a Set[Component].

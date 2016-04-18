@@ -43,8 +43,14 @@ module Network::Builders
         capacity = total_capacity(direction)
 
         efficiency = @assets.sum do |asset|
-          asset.part_record.efficiency[direction] *
-            (capacity_of(asset, direction) / capacity)
+          asset_capacity = capacity_of(asset, direction)
+
+          if asset_capacity > 0
+            asset.part_record.efficiency[direction] *
+              (asset_capacity / capacity)
+          else
+            0.0
+          end
         end
 
         { capacity: capacity, efficiency: efficiency }
