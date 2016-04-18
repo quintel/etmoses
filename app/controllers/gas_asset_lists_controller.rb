@@ -32,11 +32,17 @@ class GasAssetListsController < ResourceController
   end
 
   def fake_stacked_bar
-    gas_network = @testing_ground.to_calculated_graphs.detect { |n| n.carrier == :gas }
-    assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
-    levels      = Network::Builders::GasChain.build(gas_network, assets)
+    calculator = TestingGround::Calculator.new(@testing_ground)
 
-    render json: GasAssetLists::NetworkSummary.new(levels).as_json
+    if calculator.ready?
+      gas_network = calculator.network(:electricity)
+      assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
+      levels      = Network::Builders::GasChain.build(gas_network, assets)
+
+      render json: GasAssetLists::NetworkSummary.new(levels).as_json
+    else
+      render json: { pending: true }
+    end
   end
 
   private
