@@ -19,7 +19,8 @@ module Network::Builders
 
         @assets = assets.select do |asset|
           asset.part == 'connectors'.freeze &&
-          asset.pressure_level_name == layer
+          asset.pressure_level_name == layer &&
+          asset.amount > 0
         end
       end
 
