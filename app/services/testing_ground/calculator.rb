@@ -2,25 +2,35 @@ class TestingGround::Calculator
   include Validator
   include BackgroundJob
 
-  def initialize(testing_ground, options)
+  def initialize(testing_ground, options = {})
     @testing_ground = testing_ground
     @options        = options || {}
   end
 
   def calculate
-    if ! Settings.cache.networks || cache.present?
+    if ready?
       destroy_background_job
-
       base.merge(networks: tree, tech_loads: tech_loads)
     else
       calculate_background_job
-
       strategies.merge(pending: existing_job.present?)
     end
   end
 
   def network(carrier)
     fetch_networks.detect { |net| net.carrier == carrier }
+  end
+
+  # Public: Returns if the testing ground is ready to return the computes
+  # networks.
+  #
+  # If caching is enabled, this means that a fully-computed network is cached
+  # and may be read. If caching is disabled, the calculator is always ready and
+  # will force a recalculation.
+  #
+  # Returns true or false.
+  def ready?
+    ! Settings.cache.networks || cache.present?
   end
 
   private

@@ -1,0 +1,79 @@
+---
+lv1:
+- :buffer:
+  :capacity: 10.0
+  :composite: true
+  :composite_value: buffer_space_heating_4
+  :congestion_reserve_percentage:
+  :demand:
+  :name: 'Buffer space heating #4'
+  :position_relative_to_buffer:
+  :profile: []
+  :type: buffer_space_heating
+  :units: 150
+  :volume: 2.9065
+  :composite_index:
+  :concurrency: max
+  :full_load_hours: 0
+  :includes:
+  - households_space_heater_heatpump_air_water_electricity
+  - households_space_heater_heatpump_ground_water_electricity
+  - households_space_heater_network_gas
+  - households_space_heater_combined_network_gas
+  - households_space_heater_hybrid_heatpump_air_water_electricity_electricity
+  - households_space_heater_hybrid_heatpump_air_water_electricity_gas
+  :initial_investment: 6178.9
+  :om_costs_for_ccs_per_full_load_hour:
+  :om_costs_per_full_load_hour: 0.0
+  :om_costs_per_year: 0.0
+  :performance_coefficient: 1.0
+  :technical_lifetime: 10
+  :associates: []
+  :behavior:
+  :node:
+  :profile_key:
+  :curve_behavior:
+- :buffer: buffer_space_heating_4
+  :capacity: 27.499999999999996
+  :composite: false
+  :composite_value:
+  :congestion_reserve_percentage:
+  :demand:
+  :name: Households space heater network gas
+  :position_relative_to_buffer: boosting
+  :profile:
+  :type: households_space_heater_network_gas
+  :units: 150
+  :volume:
+  :composite_index:
+  :concurrency: max
+  :full_load_hours:
+  :includes: []
+  :initial_investment: 1300.0
+  :om_costs_for_ccs_per_full_load_hour:
+  :om_costs_per_full_load_hour: 0.0
+  :om_costs_per_year:
+  :performance_coefficient: 1.0
+  :technical_lifetime: 15
+  :associates: []
+  :behavior:
+  :node:
+  :profile_key:
+- :demand: 1
+  :composite: false
+  :name: Base load
+  :type: base_load
+  :units: 1
+  :concurrency: max
+  :full_load_hours: 0
+  :includes: []
+  :initial_investment: 6178.9
+  :om_costs_for_ccs_per_full_load_hour:
+  :om_costs_per_full_load_hour: 0.0
+  :om_costs_per_year: 0.0
+  :performance_coefficient: 1.0
+  :technical_lifetime: 10
+  :associates: []
+  :behavior:
+  :node: lv1
+  :curve_behavior:

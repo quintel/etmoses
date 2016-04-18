@@ -1,6 +1,6 @@
 class TestingGroundsController < ResourceController
   RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as
-                        update_strategies)
+                        update_strategies gas_load)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -12,8 +12,10 @@ class TestingGroundsController < ResourceController
 
   before_filter :prepare_export, only: %i(export perform_export)
 
-  before_filter :load_technologies_and_profiles, only: [:perform_import, :update, :create,
-                                           :edit, :new, :calculate_concurrency]
+  before_filter :load_technologies_and_profiles, only: [
+    :perform_import, :update, :create, :edit, :new,
+    :calculate_concurrency
+  ]
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
   skip_before_filter :authenticate_user!, only: [:show, :data, :index]
@@ -62,6 +64,9 @@ class TestingGroundsController < ResourceController
     if @testing_ground.valid?
       BusinessCase.create!(testing_ground: @testing_ground)
       SelectedStrategy.create!(testing_ground: @testing_ground)
+      GasAssetList.create!(testing_ground: @testing_ground, asset_list:
+        GasAssetLists::AssetListGenerator.new(@testing_ground).generate
+      )
 
       Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
     end
@@ -71,6 +76,10 @@ class TestingGroundsController < ResourceController
 
   # GET /testing_grounds/:id
   def show
+  end
+
+  # GET /testing_grounds/:id/gas_load
+  def gas_load
   end
 
   # POST /testing_grounds/:id/data
@@ -167,7 +176,8 @@ class TestingGroundsController < ResourceController
     tg_params = params
       .require(:testing_ground)
       .permit([:name, :technology_profile, :public, :behavior_profile_id,
-               :technology_profile_csv, :scenario_id, :topology_id, :market_model_id])
+               :parent_scenario_id, :technology_profile_csv, :scenario_id,
+               :topology_id, :market_model_id])
 
     if tg_params[:technology_profile_csv]
       tg_params.delete(:technology_profile)

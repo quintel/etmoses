@@ -1,0 +1,14 @@
+capacity:
+  high_to_low: 2.0
+  low_to_high: 3.0
+efficiency:
+  high_to_low: 0.5
+  low_to_high: 0.8
+investment_cost: 1
+lifetime: 50
+pressure_levels:
+  - 0.1
+  - 4
+  - 8
+  - 40
+yearly_o_and_m_cost: 500

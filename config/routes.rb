@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get  'export', 'technology_profile'
+      get  'export', 'technology_profile', 'gas_load'
       post 'data', 'update_strategies'
       post 'export', to: :perform_export
       patch 'save_as'
@@ -18,6 +18,17 @@ Rails.application.routes.draw do
     resources :business_cases, only: [:update] do
       member do
         post 'compare_with', 'data', 'render_summary'
+      end
+    end
+
+    resources :gas_asset_lists, only: [:update] do
+      collection do
+        post 'get_types'
+      end
+
+      member do
+        post 'calculate_net_present_value', 'calculate_cumulative_investment',
+             'reload_gas_asset_list', 'load_summary'
       end
     end
 
