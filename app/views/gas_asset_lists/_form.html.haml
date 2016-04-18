@@ -1,0 +1,17 @@
+.table-holder
+  = render partial: "gas_asset_lists/table", locals: { testing_ground: testing_ground, gas_asset_list: gas_asset_list }
+
+- if gas_asset_list
+  .graph.npv-chart{ data: { url: calculate_net_present_value_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), title: "Net present value (€)" } }
+
+  .graph.cummulative-costs-chart{ data: { url: calculate_cumulative_investment_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), interpolate: 'step-after', title: "Cummalative costs (€)" } }
+
+  = form_for [testing_ground, gas_asset_list], html: { remote: true } do |f|
+    .hidden
+      = f.text_area :asset_list, value: JSON.dump(gas_asset_list.asset_list)
+
+    .btn-group
+      = f.submit "Update gas asset list", class: "btn btn-primary"
+      %button.btn.btn-success.reload-gas-asset-list{ data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), confirmation: "Are you sure?" } }
+        Reload gas asset list
+      %span.wait.hidden= image_tag "wait.gif"

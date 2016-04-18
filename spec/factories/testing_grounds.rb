@@ -9,6 +9,7 @@ FactoryGirl.define do
     selected_strategy
 
     scenario_id 1
+    parent_scenario_id 2
 
     user
 
