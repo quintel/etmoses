@@ -45,6 +45,8 @@
 
   .clearfix
 
+= render 'side_menu', testing_ground: @testing_ground
+
 #testing-ground
   .save_strategies.hidden
     - if @testing_ground.selected_strategy

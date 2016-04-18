@@ -46,6 +46,11 @@ RSpec.describe TestingGroundsController do
         .at_least(:once).and_return(true)
     }
 
+    let!(:stub_et_engine_number_of_households) {
+      expect_any_instance_of(GasAssetLists::AssetListGenerator).to(
+        receive(:total_amount_of_households).at_least(:once).and_return(1))
+    }
+
     it "creates a testing ground" do
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
@@ -74,6 +79,12 @@ RSpec.describe TestingGroundsController do
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(TestingGround.last.user).to eq(controller.current_user)
+    end
+
+    it "creates a gas asset list" do
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+
+      expect(GasAssetList.last.testing_ground).to eq(TestingGround.last)
     end
   end
 
@@ -422,6 +433,18 @@ RSpec.describe TestingGroundsController do
 
     it "fetches the correct performance coefficient" do
       expect(JSON.parse(response.body)["performance_coefficient"]).to eq(1.0)
+    end
+  end
+
+  describe "gas load" do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:sign_in_user) { sign_in(user) }
+    let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+
+    it "grabs gas load" do
+      get :gas_load, id: testing_ground.id
+
+      expect(response.status).to eq(200)
     end
   end
 end

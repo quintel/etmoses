@@ -1,21 +1,26 @@
-$(document).on("page:change", function(){
-  var profileCategoryId = $('#load_profile_load_profile_category_id');
+$(document).on("page:change", function () {
+    'use strict';
 
-  if(profileCategoryId.length > 0){
-    var curveTypes = JSON.parse($(".curve_types.hidden").text());
+    var selectedOption,
+        selectedCurveTypes,
+        curveTypes,
+        profileCategoryId = $('#load_profile_load_profile_category_id');
 
-    function categoryChangeListener(){
-      var selectedOption = $(this).find("option[value='" + $(this).val() + "']")
-      var selectedCurveTypes = curveTypes[selectedOption.data('curveType') || 'default'];
+    function categoryChangeListener() {
+        selectedOption = $(this).find("option[value='" + $(this).val() + "']");
+        selectedCurveTypes = curveTypes[selectedOption.data('curveType') || 'default'];
 
-      $(".profile-curve-file-field").hide().each(function(i){
-        $.each(selectedCurveTypes, function(i, curveType){
-          $(".profile-curve-file-field." + curveType).show();
+        $(".profile-curve-file-field").hide().each(function () {
+            $.each(selectedCurveTypes, function (i, curveType) {
+                $(".profile-curve-file-field." + curveType).show();
+            });
         });
-      });
-    };
+    }
 
-    categoryChangeListener.call(profileCategoryId);
-    profileCategoryId.on('change', categoryChangeListener);
-  };
+    if (profileCategoryId.length > 0) {
+        curveTypes = JSON.parse($(".curve_types.hidden").text());
+
+        categoryChangeListener.call(profileCategoryId);
+        profileCategoryId.on('change', categoryChangeListener);
+    }
 });
