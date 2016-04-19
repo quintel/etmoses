@@ -1,3 +1,6 @@
 ---
+# Path to static files loaded by AciveHash.
+static_data_path: 'spec/fixtures/static'
+
 cache:
   networks: false

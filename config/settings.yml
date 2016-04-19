@@ -3,6 +3,9 @@ host:          'beta.moses.et-model.com'
 etengine_host: 'beta.et-engine.com'
 etmodel_host:  'beta.pro.energytransitionmodel.com'
 
+# Path to static files loaded by AciveHash.
+static_data_path: 'db/static'
+
 cache:
   # Cache the results of network calculations.
   networks: true

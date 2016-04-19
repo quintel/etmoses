@@ -5,7 +5,7 @@ Rails.application.config.to_prepare do
   }.freeze
 
   DATA_SOURCES.each_pair do |folder, static|
-    static.data = Dir["#{ Rails.root }/db/static/#{ folder }/*.yml"].map do |path|
+    static.data = Dir["#{ Rails.root }/#{Settings.static_data_path}/#{ folder }/*.yml"].map do |path|
       file = File.open(path)
 
       YAML.load(file.read).update(type: File.basename(file, ".*"))
