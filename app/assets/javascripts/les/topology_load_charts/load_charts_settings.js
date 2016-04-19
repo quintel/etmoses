@@ -78,20 +78,20 @@ var LoadChartsSettings = {
         axisLabel: 'kW'
     },
     gas_high: {
-        name: "Gas",
+        name: "40 bar",
         color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
     },
     gas_medium: {
-        name: "Gas",
-        color: '#9B5191',
+        name: "8 bar",
+        color: '#9B5101',
         visible: true,
         axisLabel: 'kW'
     },
     gas_medium_low: {
-        name: "Gas",
-        color: '#9B5191',
+        name: "4 bar",
+        color: '#9B51F1',
         visible: true,
         axisLabel: 'kW'
     }
