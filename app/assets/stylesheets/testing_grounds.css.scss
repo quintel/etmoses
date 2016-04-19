@@ -176,6 +176,29 @@ ul.testing-grounds {
   }
 }
 
+.legend {
+  text-align: left;
+  margin: 10px;
+  .legend-item {
+    padding-right: 10px;
+    cursor: pointer;
+    display: inline-block;
+
+    &.side {
+      min-width: 265px;
+    }
+  }
+  .square {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: -2px;
+    vertical-align: middle;
+    opacity: 0.6;
+  }
+}
+
 .load-graph-wrapper{
   position: relative;
   width: 50%;
@@ -188,28 +211,6 @@ ul.testing-grounds {
 
   .load-graph {
     .chart {
-      .legend {
-        text-align: left;
-        margin: 10px;
-        .legend-item {
-          padding-right: 10px;
-          cursor: pointer;
-          display: inline-block;
-
-          &.side {
-            min-width: 265px;
-          }
-        }
-        .square {
-          width: 12px;
-          height: 12px;
-          display: inline-block;
-          margin-right: 5px;
-          margin-top: -2px;
-          vertical-align: middle;
-          opacity: 0.6;
-        }
-      }
       svg {
         height: 565px;
         shape-rendering: crispEdges;
@@ -678,10 +679,11 @@ table span.static{
 
 .chart-holder{
   float: left;
+  width: 560px;
 }
 
 .chart-holder:not(:last-child){
-  margin-right: 44px;
+  margin-right: 20px;
 }
 
 .add-technology {

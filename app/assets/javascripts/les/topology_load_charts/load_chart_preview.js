@@ -2,28 +2,13 @@
 var LoadChartPreview = (function () {
     "use strict";
 
-    function sliceLoad(loads, week) {
-        var chunkSize;
-
-        if (week && week !== 0) {
-            chunkSize = Math.floor(loads.length / 52);
-
-            loads = loads.slice((week - 1) * chunkSize, week * chunkSize);
-        }
-
-        return loads;
-    }
-
     function loadChartData(profile, week) {
-        var data = {
+        return[ {
             type: this.curveData.curveType || profile.curveType || 'default',
             name: profile.name || profile.key,
+            values: { total: LoadSlicer.slice(profile.values, week) },
             area: true
-        };
-
-        data[data.type] = { total: sliceLoad(profile.values, week) };
-
-        return data;
+        } ];
     }
 
     function resolution(week) {

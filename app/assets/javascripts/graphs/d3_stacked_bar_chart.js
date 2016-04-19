@@ -4,9 +4,9 @@ var D3StackedBarGraph = (function () {
     'use strict';
 
     var chartKeys,
-        margin = {top: 20, right: 160, bottom: 30, left: 40},
-        width  = 700 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom,
+        margin = { top: 20, right: 160, bottom: 30, left: 60 },
+        width  = 550,
+        height = 540 - margin.top - margin.bottom,
 
         x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1),
         y = d3.scale.linear().rangeRound([height, 0]),
@@ -66,7 +66,7 @@ var D3StackedBarGraph = (function () {
         chartKeys = Object.keys(data[0].stacked);
 
         this.svg = d3.select(this.scope).append("svg")
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", width)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -112,7 +112,8 @@ var D3StackedBarGraph = (function () {
         state.selectAll("rect")
             .data(function (d) { return d.stacked_transformed; })
             .enter().append("rect")
-            .attr("width", x.rangeBand())
+            .attr("width", x.rangeBand() / 2)
+            .attr("x", function(d) { return (x.rangeBand() / 4) })
             .attr("y", function (d) { return y(d.y0); })
             .attr("height", function (d) { return y(0) - y(d.size); })
             .style("fill", function (d) { return color(d.index); });
@@ -174,8 +175,6 @@ var D3StackedBarGraph = (function () {
         this.url   = data.url;
         this.poll  = data.poll != undefined;
         this.title = data.title;
-
-        width = data.width || width;
     }
 
     return D3StackedBarGraph;

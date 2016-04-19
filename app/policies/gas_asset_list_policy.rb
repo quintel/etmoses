@@ -13,4 +13,5 @@ class GasAssetListPolicy < ApplicationPolicy
   alias :calculate_net_present_value? :update?
   alias :reload_gas_asset_list? :update?
   alias :load_summary? :update?
+  alias :fake_gas_load? :update?
 end

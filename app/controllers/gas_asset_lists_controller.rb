@@ -16,6 +16,17 @@ class GasAssetListsController < ResourceController
     end)
   end
 
+  def fake_gas_load
+    render json: {
+      name: 'Gas load chart',
+      values: [
+        { name: '40 bar', type: 'gas_high', load: 365.times.map{|_| rand } },
+        { name: '8 bar',  type: 'gas_medium', load: 365.times.map{|_| rand } },
+        { name: '4 bar',  type: 'gas_medium_low', load: 365.times.map{|_| rand } }
+      ]
+    }
+  end
+
   def reload_gas_asset_list
     render json: GasAssetLists::AssetListGenerator
       .new(@gas_asset_list.testing_ground).generate

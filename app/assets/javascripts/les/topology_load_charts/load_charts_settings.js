@@ -76,5 +76,23 @@ var LoadChartsSettings = {
         color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
+    },
+    gas_high: {
+        name: "Gas",
+        color: '#9B5191',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    gas_medium: {
+        name: "Gas",
+        color: '#9B5191',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    gas_medium_low: {
+        name: "Gas",
+        color: '#9B5191',
+        visible: true,
+        axisLabel: 'kW'
     }
 };

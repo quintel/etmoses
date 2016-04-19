@@ -9,7 +9,8 @@ $(document).on('page:change', function () {
         },
         graphs = {
             line: D3LineGraph,
-            stacked_bar: D3StackedBarGraph
+            stacked_bar: D3StackedBarGraph,
+            gas_load_chart: GasLoadChart
         };
 
     window.graphs = [];

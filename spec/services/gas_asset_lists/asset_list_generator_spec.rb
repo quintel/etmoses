@@ -9,7 +9,7 @@ RSpec.describe GasAssetLists::AssetListGenerator do
   it "generates a list of gas asset" do
     asset_list = GasAssetLists::AssetListGenerator.new(testing_ground)
 
-    expect(asset_list).to receive(:total_amount_of_households)
+    expect(asset_list).to receive(:total_number_of_households)
                             .at_least(:once).and_return(2)
 
     expect(asset_list.generate).to_not be_blank

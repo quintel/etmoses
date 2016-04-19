@@ -8,12 +8,7 @@
 
   .chart-holder
     %h2 Chart
-
-    -# will be removed once there's actual data
-    - profile = LoadProfile.last
-    - load_profile_component = profile.load_profile_components.first
-
-    .profile-graph.line-chart{ class: "id-#{load_profile_component.id}", data: { url: load_profile_load_profile_component_path(profile, load_profile_component, format: :json), curve_type: load_profile_component.curve_type, width: 500 } }
+    .graph.line-chart{ data: { type: 'gas_load_chart', url: fake_gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', width: 475 } }
 
   - if @testing_ground.gas_asset_list
     .chart-holder

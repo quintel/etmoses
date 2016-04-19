@@ -29,7 +29,7 @@ var Transformator = (function () {
 
     function fetchLoad() {
         if (this.load) {
-            return [this.load];
+            return this.load;
         } else if (StrategyHelper.anyStrategies()) {
             return [{ area: true,  type: 'load_strategies' },
                     { area: false, type: 'load' },
@@ -104,7 +104,7 @@ var Transformator = (function () {
     }
 
     function setLoad(datum) {
-        var values = this.data[datum.type];
+        var values = this.data[datum.type] || datum.values;
 
         if (isShown.call(this.shown, datum.type) && values.total) {
             if (this.shown.view_as === 'total') {

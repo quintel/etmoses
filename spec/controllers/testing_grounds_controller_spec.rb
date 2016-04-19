@@ -48,7 +48,7 @@ RSpec.describe TestingGroundsController do
 
     let!(:stub_et_engine_number_of_households) {
       expect_any_instance_of(GasAssetLists::AssetListGenerator).to(
-        receive(:total_amount_of_households).at_least(:once).and_return(1))
+        receive(:total_number_of_households).at_least(:once).and_return(1))
     }
 
     it "creates a testing ground" do
