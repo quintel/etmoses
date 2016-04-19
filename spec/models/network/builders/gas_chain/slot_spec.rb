@@ -21,7 +21,7 @@ module Network::Builders
         [InstalledGasAsset.new(
           pressure_level_index: 1,
           part: 'pipes',
-          type: 'ye_olde_magic_pipe'
+          type: 'big_pipe'
         )]
       end
 
@@ -124,7 +124,7 @@ module Network::Builders
           InstalledGasAsset.new(
             pressure_level_index: 1,
             part: 'connectors',
-            type: 'magic_connector'
+            type: 'big_connector'
           )
         ]
       end
@@ -138,7 +138,7 @@ module Network::Builders
           # eff * cap
           # ---   ---
           # 0.8 * 3.0 (inefficient connector)
-          # 1.0 * 1.0 (magic connector)
+          # 1.0 * 1.0 (big connector)
           #       / 4 (total capacity)
           #    = 0.85
           expect(result[:upward].efficiency).to eql((0.8 * 3 + 1.0) / 4.0)
@@ -154,7 +154,7 @@ module Network::Builders
           # eff * cap
           # ---   ---
           # 0.5 * 2.0 (inefficient connector)
-          # 1.0 * 1.0 (magic connector)
+          # 1.0 * 1.0 (big connector)
           #       / 3 (total capacity)
           #    = 0.66
           expect(result[:downward].efficiency).to eql((0.5 * 2 + 1.0) / 3.0)

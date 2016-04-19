@@ -1,16 +1,16 @@
 1960:
-  magic_pipe:
+  big_pipe:
     '0.1': 100000
     '4':   50000
 
-  ye_olde_pipe:
+  small_pipe:
     '0.1': 100000
     '4':   50000
 
-  magic_connector:
+  big_connector:
     '4':   50000
 
-  ye_olde_connector:
+  small_connector:
     '0.1': 100000
 
   inefficient_connector:
