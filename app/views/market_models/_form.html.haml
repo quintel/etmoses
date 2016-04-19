@@ -27,6 +27,6 @@
     = form.submit 'Save', class: "btn btn-primary"
 
     - if remote
-      = save_all_button(@testing_ground)
+      = save_all_button(testing_ground_path(@testing_ground))
       %span.wait.hidden= image_tag 'wait.gif'
 

@@ -47,8 +47,8 @@ var SaveAll = (function () {
         }
     };
 
-    function SaveAll() {
-        this.saveAllButton = $("a.btn.save-all");
+    function SaveAll(button) {
+        this.saveAllButton = $(button);
         this.completeCount = 0;
     }
 
@@ -72,7 +72,8 @@ $(document).on("page:change", function () {
             $(this).addClass("editing");
         });
 
-        window.saveAll = new SaveAll();
-        window.saveAll.append();
+        $("a.save-all").each(function() {
+            new SaveAll(this).append();
+        });
     }
 });
