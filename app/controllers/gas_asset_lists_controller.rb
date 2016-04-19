@@ -32,18 +32,11 @@ class GasAssetListsController < ResourceController
   end
 
   def load_summary
-    calculator = TestingGround::Calculator.new(@testing_ground)
+    gas_network = calculated_gas_network
+    assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
+    levels      = Network::Builders::GasChain.build(gas_network, assets)
 
-    if calculator.ready?
-      gas_network = calculator.network(:gas)
-      assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
-      levels      = Network::Builders::GasChain.build(gas_network, assets)
-
-      render json: localize_summary(GasAssetLists::NetworkSummary.new(levels))
-    else
-      calculator.calculate
-      render json: { pending: true }
-    end
+    render json: localize_summary(GasAssetLists::NetworkSummary.new(levels))
   end
 
   private
@@ -74,5 +67,12 @@ class GasAssetListsController < ResourceController
 
       translated
     end
+  end
+
+  def calculated_gas_network
+    @testing_ground.to_calculated_graphs(
+      range: 0...36040,
+      strategies: @testing_ground.selected_strategy.attributes
+    ).detect { |net| net.carrier == :gas }
   end
 end
