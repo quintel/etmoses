@@ -8,13 +8,13 @@ RSpec.describe GasAssetListsController do
     [
       { "pressure_level_index"=>"0",
         "part"=>"connectors",
-        "type"=>"ye_olde_connector",
+        "type"=>"big_connector",
         "amount"=>"1",
         "stakeholder"=>"cooperation",
         "building_year"=>"1980" },
       { "pressure_level_index"=>"0",
         "part"=>"pipes",
-        "type"=>"magic_pipe",
+        "type"=>"big_pipe",
         "amount"=>"1",
         "stakeholder"=>"cooperation",
         "building_year"=>"1960" }

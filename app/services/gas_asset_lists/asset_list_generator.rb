@@ -24,7 +24,7 @@ module GasAssetLists
 
       GasAssetList::DEFAULT.merge(part.attributes).merge(
         part: part.part_type.pluralize,
-        amount: amount_for_asset * fraction,
+        amount: (amount_for_asset || 0) * fraction,
         pressure_level_index: pressure_level_index
       )
     end
