@@ -77,21 +77,21 @@ var LoadChartsSettings = {
         visible: true,
         axisLabel: 'kW'
     },
-    gas_high: {
+    gas_forty: {
         name: "40 bar",
-        color: '#9B5191',
+        color: '#C8C758',
         visible: true,
         axisLabel: 'kW'
     },
-    gas_medium: {
+    gas_eight: {
         name: "8 bar",
-        color: '#9B5101',
+        color: '#1F77B4',
         visible: true,
         axisLabel: 'kW'
     },
-    gas_medium_low: {
+    gas_four: {
         name: "4 bar",
-        color: '#9B51F1',
+        color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
     }

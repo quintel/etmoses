@@ -8,7 +8,7 @@
 
   .chart-holder
     %h2 Chart
-    .graph.line-chart{ data: { type: 'gas_load_chart', url: fake_gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', width: 475 } }
+    .graph.line-chart{ data: { type: 'gas_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', width: 475 } }
 
   - if @testing_ground.gas_asset_list
     .chart-holder

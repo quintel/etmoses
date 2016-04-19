@@ -16,15 +16,12 @@ class GasAssetListsController < ResourceController
     end)
   end
 
-  def fake_gas_load
-    render json: {
-      name: 'Gas load chart',
-      values: [
-        { name: '40 bar', type: 'gas_high', load: 365.times.map{|_| rand } },
-        { name: '8 bar',  type: 'gas_medium', load: 365.times.map{|_| rand } },
-        { name: '4 bar',  type: 'gas_medium_low', load: 365.times.map{|_| rand } }
-      ]
-    }
+  def gas_load
+    gas_network = calculated_gas_network
+    assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
+    levels      = Network::Builders::GasChain.build(gas_network, assets)
+
+    render json: GasAssetLists::LoadSummary.new(levels).as_json
   end
 
   def reload_gas_asset_list
