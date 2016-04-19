@@ -41,6 +41,6 @@
 
   .btn-group
     = f.submit "Update freeform", class: "btn btn-primary"
-    = save_all_button(testing_ground)
+    = save_all_button(testing_ground_path(testing_ground))
     %span.wait.hidden= image_tag "wait.gif"
 

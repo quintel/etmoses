@@ -7,7 +7,7 @@
 
   .btn-group
     = f.submit "Apply", class: "btn btn-primary"
-    = save_all_button(testing_ground, "Save all and view gas-load")
+    = save_all_button(gas_load_testing_ground_path(testing_ground), "Save all and view gas-load")
 
   .btn-group.pull-right
     %button.btn.btn-danger.reload-gas-asset-list{ data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), confirmation: "Are you sure?" } }

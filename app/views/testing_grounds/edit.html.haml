@@ -45,7 +45,7 @@
         .btn-group
           = form.submit "Save", class: 'btn btn-primary'
           = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
-          = save_all_button(@testing_ground)
+          = save_all_button(testing_ground_path(@testing_ground))
         %span.wait.hidden= image_tag 'wait.gif'
 
   .tab-pane.remote.edit.active#technologies{role: "tabpanel"}
@@ -56,7 +56,7 @@
       .form-group
         .btn-group
           = form.submit "Save", class: 'btn btn-primary'
-          = save_all_button(@testing_ground)
+          = save_all_button(testing_ground_path(@testing_ground))
         %span.wait.hidden= image_tag 'wait.gif'
 
   - if @testing_ground.topology
