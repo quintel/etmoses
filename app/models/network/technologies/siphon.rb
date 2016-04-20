@@ -6,6 +6,8 @@ module Network
     class Siphon < Generic
       extend Disableable
 
+      attr_accessor :output_path
+
       def self.disabled?(options)
         !options[:solar_power_to_gas]
       end
@@ -24,6 +26,20 @@ module Network
 
       def excess_constrained?
         true
+      end
+
+      def store(frame, amount)
+        # Energy consumed by the Siphon is converted into production on the
+        # assigned output path.
+        if output_path && amount > 0
+          output_path.consume(frame, -amount)
+        end
+      end
+
+      # Internal: A Siphon-only feature. Consumption will be converted to
+      # production on the named network.
+      def output_carrier
+        :gas
       end
     end # Siphon
   end

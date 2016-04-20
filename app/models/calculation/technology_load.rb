@@ -20,6 +20,17 @@ module Calculation
       @context.technology_nodes.each do |node|
         node.set(:comps, comps_for(node))
         node.set(:techs, techs_for(node))
+
+        # Siphons need to convert their consumption into production on the gas
+        # network. Hard-coding this is ugly, but necessary given present poor
+        # support for multiple carriers.
+        node.get(:techs).each do |tech|
+          next unless tech.try(:output_carrier)
+
+          tech.output_path = Network::Path.find(
+            @context.graph(tech.output_carrier).node(node.key)
+          )
+        end
       end
 
       @context
