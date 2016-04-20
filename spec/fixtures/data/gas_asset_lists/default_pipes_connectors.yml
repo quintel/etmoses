@@ -1,37 +1,37 @@
 ---
 - pressure_level_index: '0'
   part: pipes
-  type: ye_olde_pipe
+  type: big_pipe
   amount: '7'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '0'
   part: connectors
-  type: ye_olde_connector
+  type: big_connector
   amount: '7'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '0'
   part: pipes
-  type: magic_pipe
+  type: small_pipe
   amount: '7'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '1'
   part: pipes
-  type: ye_olde_pipe
+  type: big_pipe
   amount: '3'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '1'
   part: connectors
-  type: magic_connector
+  type: small_connector
   amount: '3'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '1'
   part: pipes
-  type: magic_pipe
+  type: small_pipe
   amount: '3'
   stakeholder: customer
   building_year: '1970'
