@@ -79,7 +79,7 @@ class GasAssetListsController < ResourceController
 
   def calculated_gas_network
     @testing_ground.to_calculated_graphs(
-      range: 0...36040,
+      range: 0...35040,
       strategies: @testing_ground.selected_strategy.attributes
     ).detect { |net| net.carrier == :gas }
   end
