@@ -680,6 +680,12 @@ table span.static{
 .chart-holder{
   float: left;
   width: 560px;
+
+  .loading-spinner{
+    position: relative;
+    left: 0;
+    margin: 0;
+  }
 }
 
 .add-technology {

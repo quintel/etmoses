@@ -136,6 +136,8 @@ var D3StackedBarGraph = (function () {
             .html(function (d) {
                 return d;
             });
+
+        spinner.hide();
     }
 
     function reloadD3Graph() {
@@ -145,6 +147,11 @@ var D3StackedBarGraph = (function () {
         svg: null,
         line: null,
         draw: function () {
+            spinner = $(this.scope).parents('.chart-holder')
+                          .find('.loading-spinner');
+
+            spinner.show();
+
             if (this.poll) {
                 var self = this;
 
