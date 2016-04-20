@@ -13,7 +13,7 @@ var D3StackedBarGraph = (function () {
         y = d3.scale.linear().rangeRound([height, 0]),
 
         color = d3.scale.ordinal()
-            .range(["#eeeeee", "#ef7676", "#5cc7bc", "#9b5191", "#f5e0b4"]),
+            .range(["#cde5f5", "#ef7676", "#5cc7bc", "#9b5191", "#f5e0b4"]),
 
         xAxis = d3.svg.axis()
             .scale(x)
