@@ -196,7 +196,6 @@ ul.testing-grounds {
     margin-right: 5px;
     margin-top: -2px;
     vertical-align: middle;
-    opacity: 0.6;
   }
 }
 
@@ -227,6 +226,9 @@ ul.testing-grounds {
     .toggle {
       float: left;
       margin-right: 10px;
+    }
+    .legend .square {
+      opacity: 0.6;
     }
   }
 }
