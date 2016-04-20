@@ -71,13 +71,25 @@ module Market
       from = stakeholder(relation[:from])
       to   = stakeholder(relation[:to])
 
+      rule = Market::PaymentRule.new(
+        measure_from(relation),
+        tariff_from(relation[:tariff])
+      )
+
       from.connect_to(
         to,
-        (relation[:name] || relation[:measure]),
+
+        # Assign a random edge label.
+        #
+        # The use of Turbine no longer makes much sense for the market model,
+        # and will eventually be replaced. In the meantime, using a random label
+        # fixes #449.
+        SecureRandom.uuid,
+
+        measure:     relation[:measure],
         measurables: measurables_for(relation),
         variants:    @data[:variants],
-        rule:        Market::PaymentRule.new(measure_from(relation),
-                                             tariff_from(relation[:tariff]))
+        rule:        rule
       )
     end
 
