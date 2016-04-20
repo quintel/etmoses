@@ -56,7 +56,7 @@ module GasAssetLists
         if (flow = level.output_at(frame)) > 0
           summary[:consumption] += flow
         else
-          summary[:feed_in] += flow.abs
+          summary[:feed_in] -= flow.abs
         end
 
         yield(frame, summary) if block_given?
