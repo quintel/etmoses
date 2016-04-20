@@ -96,7 +96,6 @@ var D3StackedBarGraph = (function () {
 
         this.svg.append("line")
             .attr("class", "zero-line")
-            .style("stroke", "#AAA")
             .attr("x1", 0)
             .attr("x2", width)
             .attr("y1", y(0))

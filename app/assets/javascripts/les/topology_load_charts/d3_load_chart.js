@@ -195,6 +195,10 @@ var D3LoadChart = (function () {
             .attr("d", function (d) {
                 return setArea(d, 'issue');
             });
+
+        svg.select("line.zero-line")
+            .attr("y1", yScale(0))
+            .attr("y2", yScale(0))
     }
 
     //for brusher of the slider bar at the bottom
@@ -356,6 +360,15 @@ var D3LoadChart = (function () {
             context.select(".x-axis1").call(xAxis2);
 
             svg.selectAll("path").remove();
+
+            // Zero line ------------------------------------------------------
+
+            svg.append("line")
+                .attr("class", "zero-line")
+                .attr("x1", 0)
+                .attr("x2", width)
+                .attr("y1", yScale(0))
+                .attr("y2", yScale(0))
 
             //for slider part--------------------------------------------------
 
