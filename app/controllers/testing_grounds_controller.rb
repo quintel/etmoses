@@ -154,19 +154,9 @@ class TestingGroundsController < ResourceController
   end
 
   def save_as
-    testing_ground = @testing_ground.dup
-    testing_ground.selected_strategy = @testing_ground.selected_strategy.dup
-    testing_ground.update_attributes(testing_ground_params)
-    testing_ground.update_attribute(:user, current_user)
-    testing_ground.save
-
-    if @testing_ground.business_case
-      business_case = @testing_ground.business_case.dup
-      business_case.update_attribute(:testing_ground, testing_ground)
-      business_case.save
-    end
-
-    @testing_ground = testing_ground
+    @testing_ground = TestingGround::SaveAs.run(
+      @testing_ground, testing_ground_params[:name], current_user
+    )
   end
 
   private
