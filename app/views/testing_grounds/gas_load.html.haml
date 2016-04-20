@@ -5,13 +5,18 @@
 = render 'side_menu', testing_ground: @testing_ground
 
 #gas-chart
-
   .chart-holder
-    %h2 Chart
+    %h2
+      Load on the gas network
+      %span.loading-spinner
+        = image_tag 'wait.gif'
     .graph.line-chart{ data: { type: 'gas_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', width: 475 } }
 
   - if @testing_ground.gas_asset_list
     .chart-holder
-      %h2 Gas - Stacked
+      %h2
+        Yearly gas flow
+        %span.loading-spinner
+          = image_tag 'wait.gif'
       .graph.stacked-pressure-load-chart{ data: { poll: true, url: load_summary_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
 

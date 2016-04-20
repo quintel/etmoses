@@ -678,12 +678,15 @@ table span.static{
 }
 
 .chart-holder{
+  position: relative;
   float: left;
   width: 560px;
-}
 
-.chart-holder:not(:last-child){
-  margin-right: 20px;
+  .loading-spinner{
+    position: relative;
+    left: 0;
+    margin: 0;
+  }
 }
 
 .add-technology {

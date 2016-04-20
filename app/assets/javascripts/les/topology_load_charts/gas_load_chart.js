@@ -1,6 +1,8 @@
 var GasLoadChart = (function () {
     "use strict";
 
+    var spinner;
+
     function loadChartData(profile, week) {
         var totals = [];
 
@@ -26,16 +28,23 @@ var GasLoadChart = (function () {
             dateCallback: null, //renderHighResolutionPreview.bind(this),
             width: 450
         });
+        this.loadChart.lesOptions.resolution = 'low';
         this.loadChart.render(data);
 
         // Please remove this
-        $(this.scope).find("svg").attr("height", 600)
+        $(this.scope).find("svg").attr("height", 600);
+
+        spinner.hide();
     }
 
     GasLoadChart.prototype = {
         draw: function () {
-            Ajax.json(this.data.url,
-                { resolution: this.resolution }, render.bind(this));
+            spinner = $(this.scope).parents('.chart-holder')
+                          .find('.loading-spinner');
+
+            spinner.show();
+
+            Ajax.json(this.data.url, { }, render.bind(this));
         }
     };
 

@@ -1,4 +1,5 @@
 /*globals D3LoadChart */
+
 var LoadChartPreview = (function () {
     "use strict";
 

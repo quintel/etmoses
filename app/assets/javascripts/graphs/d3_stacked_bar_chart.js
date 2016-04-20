@@ -4,8 +4,9 @@ var D3StackedBarGraph = (function () {
     'use strict';
 
     var chartKeys,
-        margin = { top: 20, right: 160, bottom: 30, left: 60 },
-        width  = 550,
+        spinner,
+        margin = { top: 20, right: 160, bottom: 30, left: 80 },
+        width  = 520,
         height = 540 - margin.top - margin.bottom,
 
         x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1),
@@ -66,7 +67,7 @@ var D3StackedBarGraph = (function () {
         chartKeys = Object.keys(data[0].stacked);
 
         this.svg = d3.select(this.scope).append("svg")
-            .attr("width", width)
+            .attr("width", width + margin.left)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -135,6 +136,8 @@ var D3StackedBarGraph = (function () {
             .html(function (d) {
                 return d;
             });
+
+        spinner.hide();
     }
 
     function reloadD3Graph() {
@@ -144,6 +147,11 @@ var D3StackedBarGraph = (function () {
         svg: null,
         line: null,
         draw: function () {
+            spinner = $(this.scope).parents('.chart-holder')
+                          .find('.loading-spinner');
+
+            spinner.show();
+
             if (this.poll) {
                 var self = this;
 
