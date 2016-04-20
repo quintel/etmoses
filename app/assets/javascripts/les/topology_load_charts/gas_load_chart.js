@@ -28,6 +28,7 @@ var GasLoadChart = (function () {
             dateCallback: null, //renderHighResolutionPreview.bind(this),
             width: 450
         });
+        this.loadChart.lesOptions.resolution = 'low';
         this.loadChart.render(data);
 
         // Please remove this
@@ -43,8 +44,7 @@ var GasLoadChart = (function () {
 
             spinner.show();
 
-            Ajax.json(this.data.url,
-                { resolution: this.resolution }, render.bind(this));
+            Ajax.json(this.data.url, { }, render.bind(this));
         }
     };
 

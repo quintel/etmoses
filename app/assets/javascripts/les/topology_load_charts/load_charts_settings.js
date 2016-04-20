@@ -94,11 +94,5 @@ var LoadChartsSettings = {
         color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
-    },
-    gas_low: {
-        name: "1.125 bar",
-        color: '#9BF1F1',
-        visible: true,
-        axisLabel: 'kW'
     }
 };
