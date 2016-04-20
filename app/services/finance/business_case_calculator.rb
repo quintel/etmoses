@@ -1,19 +1,17 @@
 module Finance
   class BusinessCaseCalculator
+    include StakeholderFetcher
+
     def initialize(testing_ground, strategies = nil)
       @testing_ground = testing_ground
-      @strategies = strategies
+      @strategies     = strategies
+      @stakeholders   = fetch_stakeholders
     end
 
     def rows
-      stakeholders.map do |column_header|
+      @stakeholders.map do |column_header|
         Hash[ column_header, cells(column_header) ]
       end
-    end
-
-    def stakeholders
-      @stakeholders ||= (topology_stakeholders.compact +
-                         market_model_stakeholders.flatten).uniq.sort
     end
 
     private
@@ -22,18 +20,8 @@ module Finance
       @strategies.presence || @testing_ground.selected_strategy.attributes
     end
 
-    def topology_stakeholders
-      networks[:electricity].nodes.map{ |n| n.get(:stakeholder) }
-    end
-
-    def market_model_stakeholders
-      @testing_ground.market_model.interactions.map do |interaction|
-        [interaction["stakeholder_from"], interaction["stakeholder_to"]]
-      end
-    end
-
     def cells(column_header)
-      stakeholders.map do |stakeholder|
+      @stakeholders.map do |stakeholder|
         if stakeholder == column_header
           (row(column_header, stakeholder) || 0) +
           (initial_business_case_costs[stakeholder] || 0)
@@ -72,8 +60,9 @@ module Finance
     end
 
     def initial_business_case_costs
-      @initial_costs ||=
-        Market::InitialCosts.new(networks[:electricity]).calculate
+      @initial_costs ||= Market::InitialCosts.new(
+        networks[:electricity], @testing_ground.gas_asset_list
+      ).calculate
     end
 
     # A variant of the network with all storage, flexibility, and other special

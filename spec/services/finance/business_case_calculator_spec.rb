@@ -20,7 +20,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
       let(:market_model_interactions){ MarketModels::Default.interactions }
 
       it "determines the correct headers" do
-        expect(business_case.stakeholders).to eq(["customer", "system operator"])
+        expect(business_case.instance_variable_get("@stakeholders")).to eq(["customer", "system operator"])
       end
 
       it "determines the value of the business case" do
@@ -33,11 +33,10 @@ RSpec.describe Finance::BusinessCaseCalculator do
       end
 
       it "determines the rows of the business case" do
-        expect(business_case).to receive(:stakeholders).twice.and_return(["customer"])
-
-        expect(business_case.rows).to eq([{
-          "customer" => [8760.0 * 0.5 * (0.9 + 3.3)]
-        }])
+        expect(business_case.rows).to eq([
+          { "customer" => [8760.0 * 0.5 * (0.9 + 3.3), nil] },
+          { "system operator"=>[nil, 0.0] }
+        ])
       end
     end
 
@@ -45,7 +44,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
       let(:market_model_interactions){ MarketModels::Default.advanced }
 
       it "determines the correct headers" do
-        expect(business_case.stakeholders).to eq(["customer", "government",
+        expect(business_case.fetch_stakeholders).to eq(["customer", "government",
                                                   "supplier", "system operator"])
       end
 
@@ -73,64 +72,34 @@ RSpec.describe Finance::BusinessCaseCalculator do
       FactoryGirl.create(:market_model, interactions: market_model_interactions)
     }
 
+    let(:gas_asset_list_json) {
+      YAML.load(File.read("#{Rails.root}/spec/fixtures/data/gas_asset_lists/default_pipes_connectors.yml"))
+    }
+
     let(:topology){
       FactoryGirl.create(:topology_with_financial_information)
     }
 
     let(:technology_profile){
-      { "hh1" => [{ "name"                                => "Residential PV panel",
-                    "type"                                => "households_solar_pv_solar_radiation",
-                    "profile"                             => nil,
-                    "profile_key"                         => nil,
-                    "capacity"                            => -1.5,
-                    "units"                               => 1,
-                    "initial_investment"                  => 10,
-                    "technical_lifetime"                  => 1,
-                    "performance_coefficient"             => 1.0,
-                    "concurrency"                         => "max" },
-                  { "name"                                => "Electric vehicle",
-                    "type"                                => "households_solar_pv_solar_radiation",
-                    "profile"                             => nil,
-                    "profile_key"                         => nil,
-                    "capacity"                            => -1.5,
-                    "units"                               => 1,
-                    "initial_investment"                  => nil,
-                    "technical_lifetime"                  => nil,
-                    "full_load_hours"                     => nil,
-                    "om_costs_per_year"                   => 5.5,
-                    "om_costs_per_full_load_hour"         => nil,
-                    "om_costs_for_ccs_per_full_load_hour" => nil,
-                    "performance_coefficient"             => 1.0,
-                    "concurrency"                         => "max" },
-                  { "name"                                => "Electric vehicle",
-                    "type"                                => "households_solar_pv_solar_radiation",
-                    "profile"                             => nil,
-                    "profile_key"                         => nil,
-                    "capacity"                            => -1.5,
-                    "units"                               => 2,
-                    "initial_investment"                  => nil,
-                    "technical_lifetime"                  => nil,
-                    "full_load_hours"                     => 0,
-                    "om_costs_per_year"                   => 5.5,
-                    "om_costs_per_full_load_hour"         => 25.0,
-                    "om_costs_for_ccs_per_full_load_hour" => nil,
-                    "performance_coefficient"             => 1.0,
-                    "concurrency"                         => "max" }
-        ]
-      }
+      YAML.load(File.read("#{Rails.root}/spec/fixtures/data/technology_profiles/solar_panels.yml"))
     }
 
     let(:testing_ground){
       FactoryGirl.create(:testing_ground,
         technology_profile: technology_profile,
-        market_model: market_model, topology: topology)
+        market_model:       market_model,
+        topology:           topology)
+    }
+
+    let!(:gas_asset_list) {
+      FactoryGirl.create(:gas_asset_list, testing_ground: testing_ground, asset_list: gas_asset_list_json)
     }
 
     let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
 
     it "determines the initial investments for the stakeholders" do
       expect(business_case.rows.last['system operator'].last).to eq(11000.0)
-      expect(business_case.rows[1]['customer'][1]).to eq(26.5)
+      expect(business_case.rows[1]['customer'][1]).to eq(10729.5)
     end
   end
 end
