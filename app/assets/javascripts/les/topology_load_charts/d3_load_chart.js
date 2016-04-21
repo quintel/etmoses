@@ -360,6 +360,7 @@ var D3LoadChart = (function () {
             context.select(".x-axis1").call(xAxis2);
 
             svg.selectAll("path").remove();
+            svg.selectAll("line.zero-line").remove();
 
             // Zero line ------------------------------------------------------
 
