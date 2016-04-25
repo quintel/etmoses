@@ -53,7 +53,15 @@ module Network
       type = @full_path.technology.installed.type
 
       @path.each do |node|
-        node.tech_loads[type][frame] ||= 0.0
+        node.tech_loads[type][frame] ||=
+          if length == 1
+            # Avoid consumption anomalies for techs which emit their stored
+            # energy (for optional use by other technologies) before claiming it
+            # back.
+            -@full_path.technology.production_at(frame)
+          else
+            0.0
+          end
         node.tech_loads[type][frame] += amount
       end
     end
