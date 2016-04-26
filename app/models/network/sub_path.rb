@@ -81,7 +81,7 @@ module Network
     #
     # Returns an integer.
     def negative_storage_tech_load?
-      length == 1 && @full_path.technology.is_a?(Technologies::Storage)
+      length == 1 && @full_path.technology.try(:emit_retain?)
     end
 
     def distance

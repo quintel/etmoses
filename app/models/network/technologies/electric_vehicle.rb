@@ -66,6 +66,10 @@ module Network
         @excess_constrained
       end
 
+      def emit_retain?
+        true
+      end
+
       private
 
       def disconnected?(frame)

@@ -10,6 +10,10 @@ module Network
       def self.disabled?(options)
         ! options[:battery_storage]
       end
+
+      def emit_retain?
+        true
+      end
     end # Battery
   end
 end

@@ -59,6 +59,10 @@ module Network
         false
       end
 
+      def emit_retain?
+        true
+      end
+
       class Path < TechnologyPath
         # Public: Returns the sub-paths to the head node.
         def sub_paths
@@ -109,7 +113,7 @@ module Network
         end
 
         def negative_storage_tech_load?
-          length == 2 && @full_path.technology.is_a?(Technologies::Storage)
+          length == 2 && @full_path.technology.try(:emit_retain?)
         end
       end # CongestionSubPath
     end # CongestionBattery
