@@ -67,7 +67,8 @@ class Import
   end
 
   def technology_distribution
-    @technology_distribution ||= TestingGround::TechnologyDistributor.new(technologies, topology.graph).build
+    @technology_distribution ||= TestingGround::TechnologyDistributor.new(
+                                   technologies, topology.graph).build
   end
 
   private

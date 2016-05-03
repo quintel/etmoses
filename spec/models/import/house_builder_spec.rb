@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Import::HouseBuilder do
   before do
     stub_et_gquery({
-      "final_demand_of_electricity_in_households"=>{
+      "etmoses_electricity_base_load_demand"=>{
         "present"=>90.11341999999999,
         "future"=>99.05439142786325,
         "unit"=>"PJ"
