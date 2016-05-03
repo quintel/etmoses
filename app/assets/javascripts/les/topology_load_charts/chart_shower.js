@@ -134,8 +134,8 @@ var ChartShower = (function () {
     function isValidNodeData() {
         var d = this.nodeData;
 
-        return (d.load && d.load.total.length > 0) ||
-               (d.gas && d.gas.total.length > 0);
+        return (d.load && d.load.total && d.load.total.length) ||
+               (d.gas && d.gas.total && d.gas.total.length);
     }
 
     ChartShower.prototype = {
