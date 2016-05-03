@@ -4,7 +4,7 @@ class Technology < ActiveRecord::Base
     buffer deferrable conserving optional base_load base_load_buildings
   ).freeze
 
-  has_many :importable_attributes, dependent: :delete_all
+  has_many :importable_attributes, foreign_key: 'technology_key', primary_key: 'key', dependent: :delete_all
   has_many :technology_profiles, foreign_key: "technology", primary_key: "key", dependent: :delete_all
   has_many :load_profiles, through: :technology_profiles
   has_many :component_behaviors, class_name: 'TechnologyComponentBehavior', dependent: :delete_all

@@ -17,7 +17,7 @@ class Import
   # Returns a hash.
   def self.import_targets
     Technology.joins(:importable_attributes)
-      .group('importable_attributes.technology_id')
+      .group('importable_attributes.technology_key')
   end
 
   # Public: Creates a new Import with the given provider and scenario.
