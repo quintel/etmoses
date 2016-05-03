@@ -25,7 +25,7 @@ class Import
       @average_demand ||= Import::DemandCalculator.new(
         @scenario_id,
         scaling_value,
-        ["final_demand_of_electricity_in_households"]
+        ["etmoses_electricity_base_load_demand"]
       ).calculate
     end
   end
