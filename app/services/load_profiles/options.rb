@@ -3,36 +3,21 @@ module LoadProfiles
     #
     # Class to generate options for load profiles
     #
-    def initialize(load_profiles, technology_profile, technology)
-      @load_profiles  = selected_load_profiles(load_profiles, technology)
-      @technology_profile = technology_profile
+    def initialize(load_profiles, technology)
+      @load_profiles = selected_load_profiles(load_profiles, technology)
     end
 
     def generate_options
-      if selected_profiles.any?(&:deprecated?)
-        @load_profiles
-      else
-        @load_profiles.reject(&:deprecated?)
-      end
+      @load_profiles.reject(&:deprecated?)
     end
 
     private
 
     def selected_load_profiles(load_profiles, technology)
-      if technology
-        load_profiles[technology.key.to_s] || []
-      else
+      if technology.key == 'generic'
         LoadProfile.order(:key)
-      end
-    end
-
-    def profile_ids
-      @profile_ids ||= @technology_profile.each_tech.map(&:profile).uniq
-    end
-
-    def selected_profiles
-      @load_profiles.select do |profile|
-        profile_ids.include?(profile.id)
+      else
+        load_profiles[technology.key.to_s] || []
       end
     end
   end

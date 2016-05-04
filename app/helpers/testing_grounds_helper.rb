@@ -109,9 +109,17 @@ module TestingGroundsHelper
 
   def technology_class(technology)
     technology_class = technology.type
-    technology_class += " buffer-child" if technology.buffer.present?
+    technology_class += " buffer-child" if technology.sticks_to_composite?
     technology_class += " alert-danger" unless technology.valid?
     technology_class
+  end
+
+  def technology_data(technology, node)
+    stringify_values(
+      technology.attributes
+        .slice(*InstalledTechnology::EDITABLES)
+        .merge(node: node)
+    )
   end
 
   def testing_ground_view_options(testing_ground)

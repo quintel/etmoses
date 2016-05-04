@@ -57,6 +57,16 @@ class InstalledTechnology
     end ]
   end
 
+  def whitelisted_editables
+    attribute_set.select do |attr|
+      technology.whitelisted_attributes.map(&:to_sym).include?(attr.name)
+    end
+  end
+
+  def whitelisted?(attr)
+    technology.whitelisted_attributes.map(&:to_sym).include?(attr.to_sym)
+  end
+
   def inspect
     "#<#{ self.class.name } #{ to_s }>"
   end
@@ -259,16 +269,16 @@ class InstalledTechnology
     if name =~ /\#[0-9]+/
       name.sub(/[0-9]+/, composite_index.to_s)
     else
-      "#{name} ##{composite_index}"
+      "#{ name } ##{ composite_index }"
     end
   end
 
   def get_buffer(buffer)
-    "#{buffer}_#{composite_index}"
+    "#{ buffer }_#{ composite_index }"
   end
 
   def position_relative_to_buffer_name
-    "position_relative_to_buffer_#{type}__"
+    "position_relative_to_buffer_#{ type }_#{ composite_index }"
   end
 
   def valid?
@@ -281,6 +291,10 @@ class InstalledTechnology
     else
       profile.present? && load_profile.present?
     end
+  end
+
+  def sticks_to_composite?
+    position_relative_to_buffer.present?
   end
 
   private

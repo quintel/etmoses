@@ -1,42 +1,50 @@
-.technology{class: technology_class(technology), data: stringify_values(technology.attributes.slice(*InstalledTechnology::EDITABLES).merge(node: node)) }
+.technology{id: "T#{technology.object_id}", class: technology_class(technology), data: technology_data(technology, node) }
   .advanced-actions.pull-right.btn-group
     = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
 
     = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
       %span.glyphicon.glyphicon-trash
 
-  .indent.arrow{class: ('hidden' unless technology.buffer.present?) }
+  - if technology.sticks_to_composite?
+    .indent.arrow
 
   .wrapper-tech
     %strong= technology.name
-    .editable.profile.select{class: ('hidden' if technology.buffer.present?) }
-      %span Profile
-      %select.profile.form-control{autocomplete: 'off', data: { type: 'profile' }}
 
-    .editable.buffer.select{class: ('hidden' unless technology.buffer.present?) }
-      %span Buffer
-      %select.buffer.form-control{autocomplete: 'off', data: { type: 'buffer' }}
+    - if technology.whitelisted?('profile')
+      .editable.profile.select
+        %span Profile
+        %select.profile.form-control{autocomplete: 'off', data: { type: 'profile' }}
+          = options_for_load_profiles(technology.technology)
 
-    .editable.position_relative_to_buffer{class: ('hidden' unless technology.position_relative_to_buffer.present?)}
-      %span Position technology
-      - %w(boosting buffering).each do |position|
-        %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
-          %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
-          = position.humanize
+    - if technology.whitelisted?('buffer')
+      .editable.buffer.select
+        %span Buffer
+        %select.buffer.form-control{autocomplete: 'off', data: { type: 'buffer' }}
 
-      = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))
+    - if technology.whitelisted?('position_relative_to_buffer')
+      .editable.position_relative_to_buffer
+        %span Position technology
 
-      .clearfix
+        - %w(boosting buffering).each do |position|
+          %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
+            %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
+            = position.humanize
 
-    .editable.battery-slider{class: ('hidden' if technology.technology.profile_required?) }
-      %span Congestion reserve
-      %span.tick.min 0%
-      %input.slider{data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => technology.congestion_reserve_percentage, 'type' => 'congestion_reserve_percentage'}}
-      %span.tick.max 100%
-      %span.tick.value
-        = "#{ technology.congestion_reserve_percentage.to_i }%"
-      = tooltip_tag(t(:'testing_grounds.form.congestion_reserve_percentage.tooltip'))
-      .clearfix
+        = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))
+
+        .clearfix
+
+    - if technology.whitelisted?('congestion_reserve_percentage')
+      .editable.battery-slider
+        %span Congestion reserve
+        %span.tick.min 0%
+        %input.slider{data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => technology.congestion_reserve_percentage, 'type' => 'congestion_reserve_percentage'}}
+        %span.tick.max 100%
+        %span.tick.value
+          = "#{ technology.congestion_reserve_percentage.to_i }%"
+        = tooltip_tag(t(:'testing_grounds.form.congestion_reserve_percentage.tooltip'))
+        .clearfix
 
     .editable.text{class: 'capacity'}
       %span Output capacity [kW]
@@ -48,13 +56,14 @@
       %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: { type: 'demand'} }
       .clearfix
 
-    .editable.text{class: 'carrier_capacity'}
-      %span
-        %span.tick> Input capacity (
-        %span.tick.carrier>= technology.carrier
-        %span.tick ) [kW]
-      %input.form-control{type: 'text', value: technology.carrier_capacity.try(:round, 4), disabled: "disabled", data: { type: 'carrier_capacity' } }
-      .clearfix
+    - if technology.whitelisted?('input_capacity')
+      .editable.text{class: 'carrier_capacity'}
+        %span
+          %span.tick> Input capacity (
+          %span.tick.carrier>= technology.carrier
+          %span.tick ) [kW]
+        %input.form-control{type: 'text', value: technology.carrier_capacity.try(:round, 4), disabled: "disabled", data: { type: 'carrier_capacity' } }
+        .clearfix
 
     .editable.text{class: 'volume'}
       %span Volume [kWh]

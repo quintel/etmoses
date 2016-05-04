@@ -417,24 +417,20 @@ RSpec.describe TestingGroundsController do
     end
   end
 
-  describe "fetch etm values" do
+  describe "render template" do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:sign_in_user){ sign_in(user) }
     let!(:stub_et_engine) {
       stub_et_engine_request(keys = ['households_solar_pv_solar_radiation'])
     }
 
-    let!(:fetch_values) {
-      post :fetch_etm_values, scenario_id: 1,
-            key: "households_solar_pv_solar_radiation", format: :json
+    let!(:render_template) {
+      post :render_template, scenario_id: 1,
+            key: "households_solar_pv_solar_radiation", format: :js
     }
 
-    it "fetches the correct type" do
-      expect(JSON.parse(response.body)["type"]).to eq("households_solar_pv_solar_radiation")
-    end
-
-    it "fetches the correct performance coefficient" do
-      expect(JSON.parse(response.body)["performance_coefficient"]).to eq(1.0)
+    it "resonse is succesful" do
+      expect(response).to be_success
     end
   end
 

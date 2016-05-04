@@ -16,7 +16,7 @@ var EdsnSwitch = (function () {
 
         select.html(options);
 
-        if(type === actual) {
+        if (type === actual) {
             select.val(profile);
         } else {
             select.trigger('change');
@@ -30,7 +30,7 @@ var EdsnSwitch = (function () {
 
     EdsnSwitch.prototype = {
         isEdsn: function () {
-            return validBaseLoads.test($(this).data('type'));
+            return validBaseLoads.test($(this.target).data('type'));
         },
 
         cloneAndAppendProfileSelect: function () {
@@ -38,8 +38,8 @@ var EdsnSwitch = (function () {
         }
     };
 
-    function EdsnSwitch() {
-        return;
+    function EdsnSwitch(target) {
+        this.target = target;
     }
 
     return EdsnSwitch;

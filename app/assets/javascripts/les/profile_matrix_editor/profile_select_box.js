@@ -9,10 +9,6 @@ var ProfileSelectBox = (function () {
             defaultVolume: null
         };
 
-    function updateSelectBox() {
-        $(this).parent().next().find("select").val($(this).data('type'));
-    }
-
     function getDefaults(value) {
         return $(this).selectedOption(value).data() || defaultValues;
     }
@@ -87,10 +83,6 @@ var ProfileSelectBox = (function () {
 
             cloneAndAppendProfileSelect.call(this);
             addChangeListenerToProfileBox.call(this);
-        },
-
-        update: function () {
-            updateSelectBox();
         }
     };
 

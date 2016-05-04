@@ -16,14 +16,16 @@ RSpec.describe Import::HybridExpander do
           "name"=>"Hybrid heat pump hot water (electricity)",
           "units"=>1,
           "carrier"=>"electricity",
-          "position_relative_to_buffer"=>"buffering"
+          "position_relative_to_buffer"=>"buffering",
+          "composite" => false
         },
         {
           "type"=>"households_water_heater_hybrid_heatpump_air_water_electricity_gas",
           "name"=>"Hybrid heat pump hot water (gas)",
           "units"=>1,
           "carrier"=>"gas",
-          "position_relative_to_buffer"=>"boosting"
+          "position_relative_to_buffer"=>"boosting",
+          "composite" => false
         }
       ])
     end

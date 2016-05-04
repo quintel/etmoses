@@ -50,9 +50,9 @@ var BatteryTemplateUpdater = (function () {
         }
     };
 
-    function BatteryTemplateUpdater(context) {
-        this.data     = context.data;
-        this.template = context.template;
+    function BatteryTemplateUpdater(template) {
+        this.template = $(template);
+        this.data     = this.template.data();
     }
 
     return BatteryTemplateUpdater;

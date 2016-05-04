@@ -16,8 +16,12 @@ class Technology < ActiveHash::Base
   validates :export_to,
     length: { maximum: 100 }
 
+  def self.defaults
+    { profile_required: true }
+  end
+
   def self.importable
-    all - where(importable_attributes: [])
+    all - where(importable_attributes: nil)
   end
 
   def self.visible
@@ -48,6 +52,10 @@ class Technology < ActiveHash::Base
     key == 'generic' ? generic : where(key: key).first
   end
 
+  def self.base_loads
+    [ by_key('base_load'), by_key('base_load_edsn') ]
+  end
+
   def self.exists?(key)
     where(key: key).size > 0
   end
@@ -57,7 +65,11 @@ class Technology < ActiveHash::Base
   end
 
   def profile_required?
-    true || profile_required
+    attributes[:profile_required]
+  end
+
+  def importable_attributes
+    attributes[:importable_attributes] || []
   end
 
   def technologies
