@@ -12,6 +12,9 @@ en:
     buffer_water_heating:
       singular: Buffer water heating
       plural: Buffer water heating
+    congestion_battery:
+      singular: Congestion battery
+      plural: Congestion batteries
     energy_flexibility_p2g_electricity:
       singular: "Power-To-Gas"
       plural: "Power-To-Gas"

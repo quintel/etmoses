@@ -29,7 +29,11 @@ class Technology < ActiveHash::Base
   end
 
   def self.for_concurrency
-    where(expandable: true, visible: true)
+    where(
+      expandable: true,
+      visible: true,
+      default_position_relative_to_buffer: nil
+    )
   end
 
   # Public: Returns a "generic" technology, which represents an installed

@@ -20,4 +20,8 @@ Rails.application.config.to_prepare do
       YAML.load_file(path).update(type: File.basename(path, '.*'))
     end
   end
+
+  Technology.data = Dir["#{ Rails.root }/db/static/technologies/*.yml"].map do |path|
+    YAML.load_file(path).merge(key: File.basename(path, '.yml'))
+  end
 end

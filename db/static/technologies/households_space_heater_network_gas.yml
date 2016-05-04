@@ -1,0 +1,34 @@
+---
+name: Households space heater network gas
+export_to:
+carrier: gas
+behavior:
+visible: true
+composite: false
+default_capacity: 27.5
+default_volume:
+default_demand:
+default_position_relative_to_buffer: boosting
+expandable: true
+importable_attributes:
+  - initial_investment
+  - input_capacity
+  - storage.volume
+  - technical_lifetime
+  - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
+  - variable_operation_and_maintenance_costs_per_full_load_hour
+
+whitelisted_attributes:
+  - buffer
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - position_relative_to_buffer
+  - technical_lifetime
+  - units
+  - volume

@@ -1,6 +1,6 @@
 ---
-name: Heat pump for hot water (ground)
-export_to: households_water_heater_heatpump_ground_water_electricity_share
+name: Heat pump for hot water (air)
+export_to: households_water_heater_heatpump_air_water_electricity_share
 carrier: electricity
 behavior: buffer
 visible: true
@@ -19,3 +19,16 @@ importable_attributes:
 - technical_lifetime
 - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
 - variable_operation_and_maintenance_costs_per_full_load_hour
+whitelisted_attributes:
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - profile
+  - technical_lifetime
+  - units
+  - volume

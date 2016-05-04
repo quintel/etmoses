@@ -1,0 +1,26 @@
+---
+name: Households water heater micro chp network gas
+export_to: 
+carrier: gas
+behavior: 
+visible: false
+composite: false
+default_capacity: 
+default_volume: 
+default_demand: 
+default_position_relative_to_buffer: 
+expandable: true
+importable_attributes: []
+whitelisted_attributes:
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - profile
+  - technical_lifetime
+  - units
+  - volume
