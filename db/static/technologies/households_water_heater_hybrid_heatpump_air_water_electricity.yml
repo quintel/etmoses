@@ -1,24 +1,26 @@
 ---
 name: Hybrid heat pump hot water
-export_to: 
+export_to:
 carrier: hybrid
 behavior: 'null'
 visible: false
 composite: false
-default_capacity: 
-default_volume: 
-default_demand: 
-default_position_relative_to_buffer: 
+default_capacity:
+default_volume:
+default_demand:
+default_position_relative_to_buffer:
 expandable: true
 importable_attributes:
-- coefficient_of_performance
-- fixed_operation_and_maintenance_costs_per_year
-- full_load_hours
-- initial_investment
-- technical_lifetime
-- variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
-- variable_operation_and_maintenance_costs_per_full_load_hour
+  - coefficient_of_performance
+  - fixed_operation_and_maintenance_costs_per_year
+  - full_load_hours
+  - initial_investment
+  - technical_lifetime
+  - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
+  - variable_operation_and_maintenance_costs_per_full_load_hour
+
 whitelisted_attributes:
+  - buffer
   - demand
   - initial_investment
   - input_capacity
@@ -27,7 +29,7 @@ whitelisted_attributes:
   - om_costs_per_year
   - output_capacity
   - performance_coefficient
-  - profile
+  - position_relative_to_buffer
   - technical_lifetime
   - units
   - volume

@@ -1,17 +1,13 @@
 ---
 name: Households space heater micro chp network gas
-export_to: 
+export_to:
 carrier: gas
-behavior: 
+behavior:
 visible: false
 composite: false
-default_capacity: 
-default_volume: 
-default_demand: 
-default_position_relative_to_buffer: 
 expandable: true
-importable_attributes: []
 whitelisted_attributes:
+  - buffer
   - demand
   - initial_investment
   - input_capacity
@@ -20,7 +16,7 @@ whitelisted_attributes:
   - om_costs_per_year
   - output_capacity
   - performance_coefficient
-  - profile
+  - position_relative_to_buffer
   - technical_lifetime
   - units
   - volume

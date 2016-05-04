@@ -9,6 +9,7 @@ default_capacity: 35.8209
 default_position_relative_to_buffer: boosting
 expandable: true
 whitelisted_attributes:
+  - buffer
   - demand
   - initial_investment
   - input_capacity
@@ -17,7 +18,7 @@ whitelisted_attributes:
   - om_costs_per_year
   - output_capacity
   - performance_coefficient
-  - profile
+  - position_relative_to_buffer
   - technical_lifetime
   - units
   - volume

@@ -1,17 +1,15 @@
 ---
 name: Hybrid heat pump space heating (gas)
-export_to: 
+export_to:
 carrier: gas
 behavior: hhp_gas
 visible: true
 composite: false
 default_capacity: 20.6186
-default_volume: 
-default_demand: 
 default_position_relative_to_buffer: boosting
 expandable: true
-importable_attributes: []
 whitelisted_attributes:
+  - buffer
   - demand
   - initial_investment
   - input_capacity
@@ -20,7 +18,7 @@ whitelisted_attributes:
   - om_costs_per_year
   - output_capacity
   - performance_coefficient
-  - profile
+  - position_relative_to_buffer
   - technical_lifetime
   - units
   - volume
