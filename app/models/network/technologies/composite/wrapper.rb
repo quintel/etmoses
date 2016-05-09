@@ -39,6 +39,16 @@ module Network
           false
         end
 
+        # Public: Determines if the wrapper, or contained object, is an instance
+        # of the given class.
+        #
+        # See Context#path_order.
+        #
+        # Returns true or false.
+        def is_a?(klass)
+          @object.is_a?(klass) || super
+        end
+
         def inspect
           "#<#{ self.class.name } #{ __getobj__.inspect }>"
         end
