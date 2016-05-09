@@ -29,6 +29,18 @@ RSpec.describe BusinessCasesController do
     end
   end
 
+  describe "#show" do
+    let(:business_case){
+      FactoryGirl.create(:business_case, testing_ground: testing_ground)
+    }
+
+    it "goes to the show page of a business case" do
+      get :show, testing_ground_id: testing_ground.id, id: business_case.id
+
+      expect(response).to be_success
+    end
+  end
+
   describe "illegal update" do
     let(:business_case){
       FactoryGirl.create(:business_case)

@@ -1,5 +1,5 @@
 class BusinessCasesController < ResourceController
-  RESOURCE_ACTIONS = %i(update compare compare_with data render_summary)
+  RESOURCE_ACTIONS = %i(update compare compare_with data render_summary show)
 
   respond_to :js, only: [:compare_with, :data, :create, :update, :render_summary,
                          :validate]
@@ -30,6 +30,9 @@ class BusinessCasesController < ResourceController
 
   def update
     @business_case.update_attributes(business_case_params)
+  end
+
+  def show
   end
 
   def compare_with
