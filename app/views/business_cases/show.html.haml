@@ -6,7 +6,7 @@
 
   .clearfix
 
-= render 'testing_grounds/side_menu', testing_ground: @testing_ground
+= render 'testing_grounds/side_menu', testing_ground: @testing_ground, strategies: false
 
 .dashboard#business_case_target_area
   - if @testing_ground.business_case

@@ -39,8 +39,6 @@ var GasLoadChart = (function () {
 
     GasLoadChart.prototype = {
         draw: function () {
-            $("ul.nav.nav-tabs li.gas_load").addClass("active");
-
             spinner = $(this.scope).parents('.chart-holder')
                           .find('.loading-spinner');
 

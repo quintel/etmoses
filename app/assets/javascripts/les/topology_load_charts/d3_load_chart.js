@@ -119,13 +119,8 @@ var D3LoadChart = (function () {
 
         if (staticSettings.dateCallback) {
             staticSettings.dateCallback(value);
-        } else if (currentWeek !== 0) {
-            setLesOptions.call(this);
-            window.currentTree.businessCase.setNoCaseMessage();
-            window.currentTree.update();
         } else {
             setLesOptions.call(this);
-            window.currentTree.businessCase.reload();
             window.currentTree.update();
         }
     }

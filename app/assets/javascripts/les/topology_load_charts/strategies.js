@@ -1,4 +1,5 @@
 /*global Ajax,StrategyHelper,Poller*/
+
 var Strategies = (function () {
     'use strict';
 
@@ -59,10 +60,8 @@ var Strategies = (function () {
         if (changedStrategy && !StrategyHelper.anyStrategies()) {
             saveSelectedStrategies.call(this, appliedStrategies);
             window.currentTree.treeGraph.clearStrategies().reload();
-            window.currentTree.businessCase.reload();
         } else if (changedStrategy) {
             window.currentTree.updateStrategies();
-            window.currentTree.businessCase.reload();
         } else {
             window.currentTree.toggleLoading();
         }
