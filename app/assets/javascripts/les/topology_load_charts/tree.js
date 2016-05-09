@@ -6,6 +6,7 @@ var Tree = (function () {
     function updateDomElements() {
         new StatusUpdater("Creating tree", 1).append();
 
+        $("ul.nav.nav-tabs li.load").addClass("active");
         $("a.dropdown-toggle").first().addClass("disabled");
         $("#collapse-stakeholders select").prop('disabled', true);
     }
