@@ -9,43 +9,9 @@
     %span.arrow.hidden &rarr;
     %span.current-chart.hidden
 
-  .pull-right.les-controls
-    .btn-group
-      %button{type: "button", class: "btn btn-default dropdown-toggle", data: { toggle: "dropdown" } }
-        Options
-        %span.caret
-      %ul.dropdown-menu
-        %li.disabled= link_to "Download curve", "#", class: "download-curve"
-        %li.divider{role: "separator"}
-        %li.disabled= link_to 'Download technologies CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: "technologies-button"
-        %li.disabled= link_to 'Electricity storage curves', testing_ground_electricity_storage_path(@testing_ground, format: :csv), class: "technologies-button"
-        %li= link_to 'Download merit order price curve', testing_ground_price_curves_path(@testing_ground, format: :csv), class: "merit-button"
-        %li= link_to 'Download merit order load curves', testing_ground_load_curves_path(@testing_ground, format: :csv), class: "merit-button"
-
-        - if can_export?(@testing_ground)
-          %li.divider{role: "separator"}
-          %li= link_to 'Create national scenario', export_testing_ground_path(@testing_ground)
-
-    .load-strategies.btn-group(role="group")
-      %select.strategies.multi-select.form-control{multiple: "multiple"}
-        = options_for_strategies
-
-      .slider-wrapper.hidden
-        %input#solar_pv_capping{type: 'text', data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => 100}}
-        .clearfix
-        %p.note Specify which percentage of solar production can be capped
-
-      %button.btn.btn-primary.apply_strategies Apply
-
-    - if policy(@testing_ground).edit?
-      .main-buttons
-        = link_to edit_testing_ground_path(@testing_ground), class: "btn btn-default" do
-          .glyphicon.glyphicon-pencil
-          Edit LES
-
   .clearfix
 
-= render 'side_menu', testing_ground: @testing_ground
+= render 'side_menu', testing_ground: @testing_ground, strategies: true
 
 #testing-ground
   .save_strategies.hidden
@@ -128,24 +94,6 @@
     = select_tag("stakeholders", options_for_stakeholders, {include_blank: 'Select stakeholder', class: "form-control", disabled: 'disabled'})
 
 .clearfix
-
-.dashboard#business_case_target_area
-  %h2
-    Business case
-    %span.loading
-      = image_tag 'wait.gif'
-
-  - if @testing_ground.business_case
-    #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case), finish_url: render_summary_testing_ground_business_case_path(@testing_ground, @testing_ground.business_case) } }
-      .placeholder
-        Loading...
-    .no-business-case-message.hidden
-      .well
-        %p A business case will only be calculated when selecting the full year from the date select.
-  - else
-    %p No business case available yet
-
-  .clearfix
 
 .bottom
   %em.note

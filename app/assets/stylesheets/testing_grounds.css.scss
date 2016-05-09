@@ -566,19 +566,15 @@ select#stakeholders[disabled]{
     h1{
       float: left;
     }
+  }
+  .les-controls {
+    .main-buttons {
+      float: right;
+      padding: 0 0 0 8px;
 
-    .les-controls {
-      margin-top: 20px;
-      margin-right: 30px;
-
-      .main-buttons {
-        float: right;
-        padding: 0 0 0 8px;
-
-        .glyphicon-pencil {
-          margin: 0px 2px 0 0;
-          vertical-align: text-top;
-        }
+      .glyphicon-pencil {
+        margin: 0px 2px 0 0;
+        vertical-align: text-top;
       }
     }
   }
@@ -658,12 +654,6 @@ ul.nav-tabs > li.active > a.error {
   .load-strategies.btn-group{
     padding: 0 0 0 5px;
   }
-}
-
-#business_case_target_area{
-  border-top: 1px solid #ddd;
-  margin: 30px 0 0;
-  padding-top: 10px;
 }
 
 .business-case-warning{

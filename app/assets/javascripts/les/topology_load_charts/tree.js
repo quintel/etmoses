@@ -50,9 +50,6 @@ var Tree = (function () {
             this.d3Chart      = new D3LoadChart(".load-graph .chart", "load");
             this.strategies   = new Strategies();
             this.lesses       = [ new Les(), new Les(this.strategies) ];
-            this.businessCase = new BusinessCaseTable("#business_case_table");
-
-            this.businessCase.setNoCaseMessage();
 
             getTopology.call(this, function (data) {
                 $("#collapse-stakeholders select").prop('disabled', false);

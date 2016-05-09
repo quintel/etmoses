@@ -29,7 +29,7 @@ var BusinessCaseTable = (function () {
 
     BusinessCaseTable.prototype = {
         reload: function () {
-            if (this.table.length < 1 || window.currentTree.d3Chart.lesOptions.resolution === "high") {
+            if (this.table.length < 1) {
                 return false;
             }
 
