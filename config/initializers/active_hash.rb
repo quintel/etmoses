@@ -16,8 +16,15 @@ Rails.application.config.to_prepare do
   end
 
   DATA_SOURCES.each_pair do |folder, static|
-    static.data = Dir[data_path.join("#{ folder }/*.yml")].map do |path|
-      YAML.load_file(path).update(type: File.basename(path, '.*'))
+    static.data = Dir[data_path.join("#{ folder }/**/*.yml")].map do |path|
+      pressure_levels = GasAssets::Base::PRESSURE_LEVELS
+      pressure_level  = path.scan(
+        Regexp.new(pressure_levels.keys.join("|"))).first
+
+      YAML.load_file(path).update(
+        pressure_level: pressure_levels[pressure_level],
+        type: File.basename(path, '.*')
+      )
     end
   end
 

@@ -1,0 +1,10 @@
+# PER METER
+capacity: 5
+diameter: 0.1
+digging_costs_per_density:
+  low: 1
+  medium: 2
+  high: 3
+investment_cost: 500
+lifetime: 50
+yearly_o_and_m_cost: 100

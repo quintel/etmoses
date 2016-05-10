@@ -8,19 +8,16 @@ module GasAssetLists
     end
 
     def generate
-      (GasAssets::Pipe.all + GasAssets::Connector.all).inject([]) do |result, part|
-        result + part.pressure_levels.map do |pressure_level|
-          InstalledGasAsset.new(
-            create_gas_asset(part, pressure_level)).attributes
-        end
+      (GasAssets::Pipe.all + GasAssets::Connector.all).map do |part|
+        InstalledGasAsset.new(create_gas_asset(part))
       end
     end
 
     private
 
-    def create_gas_asset(part, pressure_level)
-      pressure_level_index = GasAssetList::PRESSURE_LEVELS.index(pressure_level)
-      amount_for_asset = default_amounts[part.type][pressure_level.to_s]
+    def create_gas_asset(part)
+      pressure_level_index = GasAssetList::PRESSURE_LEVELS.index(part.pressure_level)
+      amount_for_asset = default_amounts[part.type][part.pressure_level.to_s]
 
       GasAssetList::DEFAULT.merge(part.attributes).merge(
         part: part.part_type.pluralize,
