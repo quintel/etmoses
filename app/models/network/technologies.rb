@@ -17,7 +17,7 @@ module Network
       @behaviors ||=
         Hash.new { Generic }.tap do |behaviors|
           behaviors['storage']            = Battery
-          behaviors['congestion_battery'] = CongestionBattery
+          behaviors['congestion_battery'] = CongestionBattery::Battery
           behaviors['electric_vehicle']   = ElectricVehicle
           behaviors['optional_buffer']    = OptionalBuffer
           behaviors['siphon']             = Siphon
