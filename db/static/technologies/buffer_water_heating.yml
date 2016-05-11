@@ -2,11 +2,9 @@
 name: Buffer water heating
 export_to:
 carrier: electricity
-visible: true
 composite: true
 default_capacity: 10.0
 default_volume: 4.0691
-expandable: true
 technologies:
   - households_water_heater_heatpump_air_water_electricity
   - households_water_heater_heatpump_ground_water_electricity

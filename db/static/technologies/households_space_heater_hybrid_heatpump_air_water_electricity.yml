@@ -3,8 +3,6 @@ name: Hybrid heat pump space heating
 carrier: hybrid
 behavior: 'null'
 visible: false
-composite: false
-expandable: true
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year

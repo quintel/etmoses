@@ -3,10 +3,7 @@ name: Battery
 export_to: households_flexibility_p2p_electricity_market_penetration
 carrier: electricity
 behavior: storage
-visible: true
-composite: false
 default_capacity: 4.4
-expandable: true
 profile_required: false
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year

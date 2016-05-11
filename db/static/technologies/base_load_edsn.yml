@@ -3,8 +3,6 @@ name: Household aggregated
 carrier: electricity
 behavior: optional
 visible: false
-composite: false
-expandable: true
 whitelisted_attributes:
   - demand
   - initial_investment

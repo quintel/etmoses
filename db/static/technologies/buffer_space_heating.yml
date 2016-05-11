@@ -1,11 +1,9 @@
 ---
 name: Buffer space heating
 carrier: electricity
-visible: true
 composite: true
 default_capacity: 10.0
 default_volume: 2.9065
-expandable: true
 whitelisted_attributes:
   - demand
   - initial_investment

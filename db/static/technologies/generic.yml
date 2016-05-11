@@ -1,8 +1,6 @@
 ---
 name: Other
 carrier: electricity
-visible: true
-composite: false
 expandable: false
 whitelisted_attributes:
   - demand

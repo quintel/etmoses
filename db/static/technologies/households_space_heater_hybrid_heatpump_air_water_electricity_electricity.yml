@@ -2,11 +2,8 @@
 name: Hybrid heat pump space heating (electricity)
 carrier: electricity
 behavior: hhp_electricity
-visible: true
-composite: false
 default_capacity: 1.08889
 default_position_relative_to_buffer: buffering
-expandable: true
 whitelisted_attributes:
   - buffer
   - demand

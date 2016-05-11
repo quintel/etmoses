@@ -3,10 +3,7 @@ name: Power-To-Gas
 export_to: number_of_energy_flexibility_p2g_electricity
 carrier: electricity
 behavior: siphon
-visible: true
-composite: false
 default_capacity: 739.583
-expandable: true
 profile_required: false
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year

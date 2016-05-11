@@ -2,9 +2,6 @@
 name: Household
 carrier: electricity
 behavior: base_load
-visible: true
-composite: false
-expandable: true
 whitelisted_attributes:
   - demand
   - initial_investment

@@ -3,10 +3,7 @@ name: Residential PV panel
 export_to: households_solar_pv_solar_radiation_market_penetration
 carrier: electricity
 behavior: conserving
-visible: true
-composite: false
 default_capacity: -1.6
-expandable: true
 importable_attributes:
   - electricity_output_capacity
   - fixed_operation_and_maintenance_costs_per_year

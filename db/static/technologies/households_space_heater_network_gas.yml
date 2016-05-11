@@ -1,11 +1,8 @@
 ---
 name: Households space heater network gas
 carrier: gas
-visible: true
-composite: false
 default_capacity: 27.5
 default_position_relative_to_buffer: boosting
-expandable: true
 importable_attributes:
   - initial_investment
   - input_capacity

@@ -1,8 +1,6 @@
 class Technology < ActiveHash::Base
   include ActiveModel::Validations
 
-  FILE_ROOT = "#{ Rails.root }/config/technologies"
-
   BEHAVIORS = %w(
     generic storage electric_vehicle siphon optional_buffer congestion_battery
     buffer deferrable conserving optional base_load base_load_buildings
@@ -17,7 +15,13 @@ class Technology < ActiveHash::Base
     length: { maximum: 100 }
 
   def self.defaults
-    { profile_required: true }
+    {
+      profile_required: true,
+      visible: true,
+      expandable: true,
+      composite: false,
+      default_demand: nil
+    }
   end
 
   def self.importable
