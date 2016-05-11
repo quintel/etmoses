@@ -1,14 +1,9 @@
 ---
 name: Hybrid heat pump space heating
-export_to:
 carrier: hybrid
 behavior: 'null'
 visible: false
 composite: false
-default_capacity:
-default_volume:
-default_demand:
-default_position_relative_to_buffer:
 expandable: true
 importable_attributes:
   - coefficient_of_performance

@@ -1,6 +1,5 @@
 ---
 name: Household aggregated
-export_to:
 carrier: electricity
 behavior: optional
 visible: false

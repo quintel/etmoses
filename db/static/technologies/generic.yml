@@ -1,8 +1,6 @@
 ---
 name: Other
-export_to:
 carrier: electricity
-behavior:
 visible: true
 composite: false
 expandable: false

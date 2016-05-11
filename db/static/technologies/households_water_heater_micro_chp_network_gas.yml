@@ -1,11 +1,8 @@
 ---
 name: Households water heater micro chp network gas
-export_to:
 carrier: gas
-behavior:
 visible: false
 composite: false
-default_position_relative_to_buffer:
 expandable: true
 
 whitelisted_attributes:

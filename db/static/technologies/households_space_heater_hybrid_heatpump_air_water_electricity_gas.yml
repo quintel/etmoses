@@ -1,6 +1,5 @@
 ---
 name: Hybrid heat pump space heating (gas)
-export_to:
 carrier: gas
 behavior: hhp_gas
 visible: true

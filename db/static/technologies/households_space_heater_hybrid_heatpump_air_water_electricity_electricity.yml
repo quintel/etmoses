@@ -1,6 +1,5 @@
 ---
 name: Hybrid heat pump space heating (electricity)
-export_to:
 carrier: electricity
 behavior: hhp_electricity
 visible: true

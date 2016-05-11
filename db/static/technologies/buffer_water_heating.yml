@@ -2,7 +2,6 @@
 name: Buffer water heating
 export_to:
 carrier: electricity
-behavior:
 visible: true
 composite: true
 default_capacity: 10.0

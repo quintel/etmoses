@@ -1,8 +1,6 @@
 ---
 name: Households space heater micro chp network gas
-export_to:
 carrier: gas
-behavior:
 visible: false
 composite: false
 expandable: true
