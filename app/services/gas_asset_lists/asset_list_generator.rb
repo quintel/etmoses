@@ -56,17 +56,5 @@ module GasAssetLists
 
       network
     end
-
-    # Grabs the total number of households from the parent scenario
-    #
-    # Returns a Float
-    def total_number_of_households
-      @total_number_of_households ||= begin
-        EtEngineConnector.new(gqueries: [GQUERY_KEY])
-          .gquery(@testing_ground.parent_scenario_id)
-          .fetch(GQUERY_KEY)
-          .fetch('present')
-      end
-    end
   end
 end

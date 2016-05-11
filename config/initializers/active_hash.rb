@@ -1,10 +1,8 @@
 Rails.application.config.to_prepare do
-  unless defined?(DATA_SOURCES)
-    DATA_SOURCES = {
-      "connectors" => GasAssets::Connector,
-      "pipes"      => GasAssets::Pipe,
-    }.freeze
-  end
+  DATA_SOURCES ||= {
+    "connectors" => GasAssets::Connector,
+    "pipes"      => GasAssets::Pipe
+  }.freeze
 
   data_path = Rails.root.join(Settings.static_data_path.to_s)
 

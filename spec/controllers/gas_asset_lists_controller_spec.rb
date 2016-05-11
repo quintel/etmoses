@@ -92,11 +92,6 @@ RSpec.describe GasAssetListsController do
         asset_list: asset_list)
     }
 
-    let!(:stub_total_number_of_households) {
-      expect_any_instance_of(GasAssetLists::AssetListGenerator).to(
-        receive(:total_number_of_households).at_least(:once).and_return(1))
-    }
-
     it "reloads existing gas asset list" do
       post :reload_gas_asset_list,
         testing_ground_id: testing_ground.id,
