@@ -14,7 +14,6 @@ var GasAssetListTable = (function () {
         var options = [],
             row = $(this).parents("tr");
 
-        console.log(data);
         data.forEach(function (option) {
             options.push(
                 $("<option/>").attr("value", option.type).html(option.type)

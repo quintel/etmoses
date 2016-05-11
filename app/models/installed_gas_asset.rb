@@ -4,7 +4,7 @@ class InstalledGasAsset
   attribute :pressure_level_index, Integer
   attribute :part, String
   attribute :type, String
-  attribute :amount, Integer, default: 1
+  attribute :amount, Float, default: 1
   attribute :stakeholder, String
   attribute :building_year, Integer
   attribute :lifetime, Integer

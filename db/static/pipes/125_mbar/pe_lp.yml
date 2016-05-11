@@ -1,0 +1,9 @@
+capacity: 1
+default_length_per_connection: 1.763552756
+digging_costs_per_density:
+  low: 1
+  medium: 1
+  high: 1
+investment_cost: 130
+lifetime: 45
+yearly_o_and_m_cost: 1
