@@ -109,7 +109,9 @@ var GasAssetListTable = (function () {
         updateTable: function () {
             setEventListeners();
 
-            $("#gas_asset_list_asset_list").text(JSON.stringify(editableTable.getData()));
+            $("#gas_asset_list_asset_list")
+                .text(JSON.stringify(editableTable.getData()))
+                .trigger('change');
         }
     };
 

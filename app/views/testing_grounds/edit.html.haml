@@ -35,7 +35,7 @@
     %li{role: "presentation"}
       = link_to "Gas asset list", "#gas-asset-list", "aria-controls" => "gas-asset-list", "role" => "tab", data: { toggle: "tab" }
 
-.tab-content
+.tab-content.autosave
   .tab-pane.remote.edit#general{role: "tabpanel"}
     = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), html: { remote: true } do |form|
       = render partial: 'general_form', locals: { form: form, testing_ground: @testing_ground }
@@ -43,9 +43,7 @@
         = form.text_field "form_type", value: "general"
       .form-group
         .btn-group
-          = form.submit "Save", class: 'btn btn-primary'
           = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
-          = save_all_button(testing_ground_path(@testing_ground))
         %span.wait.hidden= image_tag 'wait.gif'
 
   .tab-pane.remote.edit.active#technologies{role: "tabpanel"}
@@ -54,9 +52,6 @@
       .hidden
         = form.text_field "form_type", value: "technologies"
       .form-group
-        .btn-group
-          = form.submit "Save", class: 'btn btn-primary'
-          = save_all_button(testing_ground_path(@testing_ground))
         %span.wait.hidden= image_tag 'wait.gif'
 
   - if @testing_ground.topology
