@@ -2,8 +2,9 @@
 # See lib/initializers/active_hash.rb
 module StaticData
   DATA_SOURCES ||= {
-    "connectors" => GasAssets::Connector,
-    "pipes"      => GasAssets::Pipe
+    "connectors"  => GasAssets::Connector,
+    "compressors" => GasAssets::Compressor,
+    "pipes"       => GasAssets::Pipe
   }.freeze
 
   module_function

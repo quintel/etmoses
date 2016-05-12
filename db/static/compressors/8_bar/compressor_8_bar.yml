@@ -1,0 +1,8 @@
+capacity:
+  low_to_high: 1.0
+default_units_per_connection: 0
+efficiency:
+  low_to_high: 1.0
+investment_cost: 1
+lifetime: 1
+yearly_o_and_m_cost: 1
