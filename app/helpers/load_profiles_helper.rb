@@ -12,7 +12,7 @@ module LoadProfilesHelper
   def technologies_select_options(selected = nil)
     bufferables = @technologies.map(&:technologies).flatten
 
-    options_for_select((@technologies.visible - bufferables).map do |technology|
+    options_for_select((Technology.visible - bufferables).map do |technology|
       [technology.name, technology.key]
     end, selected)
   end

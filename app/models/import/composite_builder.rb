@@ -23,19 +23,23 @@ class Import
       end
     end
 
+    def composite_attributes(technology)
+      { "units"     => scaling_value,
+        "type"      => technology.key,
+        "name"      => technology.name,
+        "composite" => true,
+        "includes"  => technology.technologies,
+        "demand"    => demand_for(technology),
+        "volume"    => technology.default_volume
+      }
+    end
+
     private
 
     def transform(attributes)
       Hash[attributes.map do |key, value|
         [ translations[key] || key, value ]
       end]
-    end
-
-    def composite_attributes(technology)
-      { "units"     => scaling_value,
-        "composite" => true,
-        "includes"  => technology.technologies.map(&:key),
-        "demand"    => demand_for(technology) }
     end
 
     def translations

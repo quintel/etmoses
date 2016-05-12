@@ -1,0 +1,26 @@
+---
+name: Buffer space heating
+carrier: electricity
+composite: true
+default_capacity: 10.0
+default_volume: 2.9065
+whitelisted_attributes:
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - profile
+  - technical_lifetime
+  - units
+  - volume
+technologies:
+  - households_space_heater_heatpump_air_water_electricity
+  - households_space_heater_heatpump_ground_water_electricity
+  - households_space_heater_network_gas
+  - households_space_heater_combined_network_gas
+  - households_space_heater_hybrid_heatpump_air_water_electricity_gas
+  - households_space_heater_hybrid_heatpump_air_water_electricity_electricity

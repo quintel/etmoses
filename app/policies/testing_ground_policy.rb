@@ -30,6 +30,7 @@ class TestingGroundPolicy < ApplicationPolicy
   alias_method :save_as?, :edit?
   alias_method :update_strategies?, :edit?
   alias_method :fetch_etm_values?, :create?
+  alias_method :render_template?, :create?
   alias_method :price_curve?, :show?
   alias_method :load_curves?, :show?
   alias_method :electricity_storage?, :show?

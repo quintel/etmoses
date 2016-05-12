@@ -2,7 +2,7 @@ Rails.application.config.to_prepare do
   unless defined?(DATA_SOURCES)
     DATA_SOURCES = {
       "connectors" => GasAssets::Connector,
-      "pipes"      => GasAssets::Pipe
+      "pipes"      => GasAssets::Pipe,
     }.freeze
   end
 
@@ -19,5 +19,12 @@ Rails.application.config.to_prepare do
     static.data = Dir[data_path.join("#{ folder }/*.yml")].map do |path|
       YAML.load_file(path).update(type: File.basename(path, '.*'))
     end
+  end
+
+  # Technology data
+  Technology.data = Dir[data_path.join("technologies/*.yml")].map do |path|
+    Technology.defaults
+      .merge(YAML.load_file(path))
+      .merge(key: File.basename(path, '.yml'))
   end
 end

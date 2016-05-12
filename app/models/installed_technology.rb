@@ -57,6 +57,16 @@ class InstalledTechnology
     end ]
   end
 
+  def whitelisted_editables
+    attribute_set.select do |attr|
+      technology.whitelisted_attributes.map(&:to_sym).include?(attr.name)
+    end
+  end
+
+  def whitelisted?(attr)
+    technology.whitelisted_attributes.map(&:to_sym).include?(attr.to_sym)
+  end
+
   def inspect
     "#<#{ self.class.name } #{ to_s }>"
   end
@@ -114,7 +124,7 @@ class InstalledTechnology
   #
   # Returns true or false.
   def exists?
-    type.blank? || Technology.exists?(key: type)
+    type.blank? || Technology.exists?(type)
   end
 
   # Public: Returns the associated technology (as defined in data/technologies).
@@ -199,12 +209,9 @@ class InstalledTechnology
   end
 
   def technology_component_behaviors
-    @@behaviors ||= Hash[TechnologyComponentBehavior.all
-      .group_by(&:technology_id).map do |tech_id, components|
-        [tech_id, Hash[components.map do |component|
-          [component.curve_type.to_sym, component.behavior]
-        end]]
-      end]
+    @@behaviors ||= Hash[Technology.all.map do |tech|
+      [tech.id, tech.technology_component_behavior]
+    end]
   end
 
   # Public: Determines the network behavior of this technology with a particular
@@ -218,7 +225,17 @@ class InstalledTechnology
     return behavior if curve_type.nil? || curve_type == 'default'.freeze
 
     component_behavior = technology_component_behaviors[technology.id]
-    component_behavior ? component_behavior[curve_type.to_sym] : behavior
+    component_behavior ? component_behavior[curve_type.to_s] : behavior
+  end
+
+  def each_profile_curve
+    if has_heat_pump_profiles?
+      yield(profile_curve.keys.sort.join('_'), *profile_curve.values)
+    else
+      profile_curve.each_pair.map do |curve_type, curve|
+        yield(curve_type, curve)
+      end
+    end
   end
 
   def as_json(*)
@@ -252,16 +269,16 @@ class InstalledTechnology
     if name =~ /\#[0-9]+/
       name.sub(/[0-9]+/, composite_index.to_s)
     else
-      "#{name} ##{composite_index}"
+      "#{ name } ##{ composite_index }"
     end
   end
 
   def get_buffer(buffer)
-    "#{buffer}_#{composite_index}"
+    "#{ buffer }_#{ composite_index }"
   end
 
   def position_relative_to_buffer_name
-    "position_relative_to_buffer_#{type}__"
+    "position_relative_to_buffer_#{ type }_#{ composite_index }"
   end
 
   def valid?
@@ -274,6 +291,10 @@ class InstalledTechnology
     else
       profile.present? && load_profile.present?
     end
+  end
+
+  def sticks_to_composite?
+    position_relative_to_buffer.present?
   end
 
   private

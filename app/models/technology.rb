@@ -1,20 +1,10 @@
-class Technology < ActiveRecord::Base
+class Technology < ActiveHash::Base
+  include ActiveModel::Validations
+
   BEHAVIORS = %w(
     generic storage electric_vehicle siphon optional_buffer congestion_battery
     buffer deferrable conserving optional base_load base_load_buildings
   ).freeze
-
-  has_many :importable_attributes, dependent: :delete_all
-  has_many :technology_profiles, foreign_key: "technology", primary_key: "key", dependent: :delete_all
-  has_many :load_profiles, through: :technology_profiles
-  has_many :component_behaviors, class_name: 'TechnologyComponentBehavior', dependent: :delete_all
-  has_many :composites, foreign_key: 'composite_id', dependent: :delete_all
-  has_many :technologies, through: :composites
-
-  validates :key,
-    presence: true,
-    length: { maximum: 100 },
-    uniqueness: true
 
   validates :name,
     length: { maximum: 100 }
@@ -24,6 +14,20 @@ class Technology < ActiveRecord::Base
   validates :export_to,
     length: { maximum: 100 }
 
+  def self.defaults
+    {
+      profile_required: true,
+      visible: true,
+      expandable: true,
+      composite: false,
+      default_demand: nil
+    }
+  end
+
+  def self.importable
+    all - where(importable_attributes: nil)
+  end
+
   def self.visible
     where(visible: true)
   end
@@ -32,8 +36,12 @@ class Technology < ActiveRecord::Base
     where(expandable: true)
   end
 
-  def self.with_load_profiles
-    joins(:load_profiles).uniq + where(key: 'generic')
+  def self.for_concurrency
+    where(
+      expandable: true,
+      visible: true,
+      default_position_relative_to_buffer: nil
+    )
   end
 
   # Public: Returns a "generic" technology, which represents an installed
@@ -45,11 +53,30 @@ class Technology < ActiveRecord::Base
   # Public: Retrieves the record with the matching +key+ or raises
   # ActiveRecord::RecordNotFound if no such record exists.
   def self.by_key(key)
-    key == 'generic' ? generic : where(key: key).first!
+    key == 'generic' ? generic : where(key: key).first
   end
 
-  # Public: A nice, readable name for the technology.
+  def self.base_loads
+    [ by_key('base_load'), by_key('base_load_edsn') ]
+  end
+
+  def self.exists?(key)
+    where(key: key).size > 0
+  end
+
   def name
-    super || key.to_s.humanize
+    attributes[:name] || key.humanize.to_s
+  end
+
+  def profile_required?
+    attributes[:profile_required]
+  end
+
+  def importable_attributes
+    attributes[:importable_attributes] || []
+  end
+
+  def technologies
+    attributes[:technologies] || []
   end
 end

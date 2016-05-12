@@ -1,0 +1,24 @@
+---
+name: Neighbourhood battery
+export_to:
+carrier: electricity
+behavior: congestion_battery
+visible: true
+composite: false
+default_capacity: 10.0
+default_volume: 100.0
+expandable: true
+profile_required: false
+whitelisted_attributes:
+  - congestion_reserve_percentage
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - technical_lifetime
+  - units
+  - volume

@@ -41,7 +41,7 @@ var BufferSelectBox = (function () {
      * And replace it with the one in his template
      */
     function cloneAndAppendBufferSelect() {
-        if (!!this.techData.buffer) {
+        if (!!this.techData.positionRelativeToBuffer) {
             var compositeSelector = this.techData.buffer.replace(/_\d+/, ''),
                 template = $(".buffer_template select." + compositeSelector).clone(true, true),
                 target = $(this.target).find(".editable.buffer select");
@@ -53,20 +53,18 @@ var BufferSelectBox = (function () {
         }
     }
 
-    function addChangeListenerToBufferSelectBox() {
-        $(".editable.buffer select").off().on("change", reattachBufferingTechnology);
-    }
-
     BufferSelectBox.prototype = {
         add: function () {
             cloneAndAppendBufferSelect.call(this);
             addOptionToBufferTemplate.call(this);
-            addChangeListenerToBufferSelectBox();
+
+            $(".editable.buffer select").off()
+                .on("change", reattachBufferingTechnology);
         }
     };
 
     function BufferSelectBox(target) {
-        this.target = target;
+        this.target   = target;
         this.techData = $(this.target).data();
     }
 

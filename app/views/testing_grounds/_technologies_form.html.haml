@@ -16,7 +16,7 @@
       %li Edit the properties of the technologies
       %li Attach profiles to technologies
 
-#profiles-table{ data: { fetch_url: fetch_etm_values_testing_grounds_path(scenario_id: @testing_ground.scenario_id) } }
+#profiles-table{ data: { render_template_url: render_template_testing_grounds_path(scenario_id: @testing_ground.scenario_id, format: :js) } }
   = render partial: "testing_grounds/profile_table", locals: {topology: @testing_ground.topology, testing_ground_profile: @testing_ground.technology_profile}
 
 - unless testing_ground.new_record?
@@ -43,6 +43,11 @@
   = form.label :technology_profile_csv, "Technology profile CSV"
   = tooltip_tag(t(:'testing_grounds.form.technology_profile_csv.tooltip'))
   = form.file_field :technology_profile_csv, accept: 'text/csv'
+
+.hidden.profile
+  - Technology.base_loads.each do |tech|
+    %select.form-control{class: tech.key, data: {type: 'profile'}}
+      = options_for_load_profiles(tech)
 
 .hidden
   = form.text_area :technology_profile, value: @testing_ground.technology_profile.to_json

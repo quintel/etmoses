@@ -57,7 +57,7 @@ class LoadProfilesController < ResourceController
   end
 
   def fetch_technologies
-    @technologies = Technology.includes(:technologies)
+    @technologies = Technology.all
   end
 
   def profile_params

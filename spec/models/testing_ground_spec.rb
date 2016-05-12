@@ -62,7 +62,7 @@ RSpec.describe TestingGround do
     context 'with a defined technology type' do
       let(:tg) do
         build(:testing_ground, technology_profile: {
-          'lv1' => [{ 'name' => 'No Type', 'type' => 'tech_one' }]
+          'lv1' => [{ 'name' => 'No Type', 'type' => 'base_load' }]
         })
       end
 
@@ -90,7 +90,7 @@ RSpec.describe TestingGround do
     context 'with no load profile set' do
       let(:tg) do
         build(:testing_ground, technology_profile: {
-          'lv1' => [{ 'name' => 'No Type', 'type' => 'tech_one' }]
+          'lv1' => [{ 'name' => 'No Type', 'type' => 'base_load' }]
         })
       end
 
@@ -110,7 +110,7 @@ RSpec.describe TestingGround do
 
         build(:testing_ground, technology_profile: {
           'lv1' => [{
-            'name' => 'No Type', 'type' => 'tech_one', 'profile' => 'one'
+            'name' => 'No Type', 'type' => 'base_load', 'profile' => 'one'
           }]
         })
       end
@@ -129,7 +129,7 @@ RSpec.describe TestingGround do
       let(:tg) do
         build(:testing_ground, technology_profile: {
           'lv1' => [{
-            'name' => 'No Type', 'type' => 'tech_one',
+            'name' => 'No Type', 'type' => 'base_load',
             'profile' => 'buildings_chp'
           }]
         })
@@ -145,7 +145,7 @@ RSpec.describe TestingGround do
       let(:tg) do
         build(:testing_ground, technology_profile: {
           'lv1' => [{
-            'name' => 'No Type', 'type' => 'tech_one', 'profile' => profile
+            'name' => 'No Type', 'type' => 'base_load', 'profile' => profile
           }]
         })
       end

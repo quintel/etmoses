@@ -1,0 +1,20 @@
+---
+name: Hybrid heat pump hot water (electricity)
+carrier: electricity
+behavior: hhp_electricity
+default_capacity: 1.63333
+default_position_relative_to_buffer: buffering
+whitelisted_attributes:
+  - buffer
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - position_relative_to_buffer
+  - technical_lifetime
+  - units
+  - volume

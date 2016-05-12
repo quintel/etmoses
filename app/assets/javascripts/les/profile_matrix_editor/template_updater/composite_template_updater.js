@@ -1,29 +1,48 @@
 var CompositeTemplateUpdater = (function () {
     'use strict';
 
-    var toggles = ".editable.buffer, .editable.position_relative_to_buffer, .indent.arrow",
-        bufferToggles = ".editable.profile";
+    function compositeFilter(d, e) {
+        var techData = $(e).data(),
+            key = $(this.technologySelectBox).val();
 
-    function showBuffer() {
-        var includes = $(this.data.append).data('includes');
+        return techData.composite && techData.type === key;
+    }
 
-        return !!includes && includes.indexOf(this.data.type) > -1;
+    function getNewIndex() {
+        return $(".technologies .technology")
+            .filter(compositeFilter.bind(this)).length;
+    }
+
+    function setName(index) {
+        var nameBox = this.template.find("strong"),
+            currentName = nameBox.text(),
+            newName = currentName + " #" + index;
+
+        this.template.set('name', newName);
+
+        nameBox.text(newName);
     }
 
     CompositeTemplateUpdater.prototype = {
         update: function () {
-            var isBuffer = showBuffer.call(this.context);
+            if (this.data.composite && !this.data.compositeIndex) {
 
-            this.context.template.find(toggles).toggleClass("hidden", !isBuffer);
-            this.context.template.find(bufferToggles).toggleClass("hidden", isBuffer);
-            this.context.template.toggleClass("buffer-child", isBuffer);
+                var index = getNewIndex.call(this);
 
-            return this.context.template;
+                this.template.set('composite_index', index);
+                this.template.set('composite_value', this.data.type + "_" + index);
+
+                setName.call(this, index);
+            }
+
+            return this.template;
         }
     };
 
-    function CompositeTemplateUpdater(context) {
-        this.context = context;
+    function CompositeTemplateUpdater(template) {
+        this.template            = $(template);
+        this.data                = $(template).data();
+        this.technologySelectBox = window.currentTechnologiesForm.currentSelectBox;
     }
 
     return CompositeTemplateUpdater;

@@ -31,11 +31,11 @@ module TestingGroundsHelper
   end
 
   def profile_table_options_for_name
-    technologies = @technologies.visible.order(:name).map do |technology|
+    technologies = @technologies.sort_by(&:name).map do |technology|
       [technology.name, technology.key, data: default_values(technology).merge(
         position_relative_to_buffer: technology.default_position_relative_to_buffer,
                           composite: technology.composite,
-                           includes: technology.technologies.map(&:key),
+                           includes: technology.technologies,
                             carrier: technology.carrier)
       ]
     end
@@ -83,10 +83,6 @@ module TestingGroundsHelper
     link_to(text, "#", data: { url: url }, class: "btn btn-success save-all")
   end
 
-  def concurrency_options
-    @technologies.visible.expandable.with_load_profiles
-  end
-
   def composites_data
     composites = @technologies.map do |technology|
       if technology.technologies.any?
@@ -98,13 +94,13 @@ module TestingGroundsHelper
   end
 
   def concurrency_options
-    @technologies.visible.expandable.with_load_profiles
+    Technology.for_concurrency
   end
 
   def composites_data
     composites = @technologies.map do |technology|
       if technology.technologies.any?
-        [ technology.key, technology.technologies.map(&:key) ]
+        [ technology.key, technology.technologies ]
       end
     end
 
@@ -113,9 +109,17 @@ module TestingGroundsHelper
 
   def technology_class(technology)
     technology_class = technology.type
-    technology_class += " buffer-child" if technology.buffer.present?
+    technology_class += " buffer-child" if technology.sticks_to_composite?
     technology_class += " alert-danger" unless technology.valid?
     technology_class
+  end
+
+  def technology_data(technology, node)
+    stringify_values(
+      technology.attributes
+        .slice(*InstalledTechnology::EDITABLES)
+        .merge(node: node)
+    )
   end
 
   def testing_ground_view_options(testing_ground)

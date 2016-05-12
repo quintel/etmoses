@@ -32,15 +32,6 @@
       %select.buffer.form-control{class: composite.key, autcomplete: 'off', data: {type: 'buffer' }}
         = options_for_composites(testing_ground_profile, composite)
 
-  .hidden.profile
-    - @technologies.each do |technology|
-      %select.form-control{class: technology.key, data: {type: 'profile'}}
-        - case technology.key
-        - when 'generic'
-          = options_for_load_profiles(testing_ground_profile)
-        - else
-          = options_for_load_profiles(testing_ground_profile, technology)
-
   .hidden.technology_template
     = render partial: "technology_template", locals: { technology: InstalledTechnology.new, node: nil, index: '_' }
 

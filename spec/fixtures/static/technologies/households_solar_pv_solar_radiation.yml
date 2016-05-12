@@ -1,0 +1,32 @@
+---
+name: Residential PV panel
+export_to: households_solar_pv_solar_radiation_market_penetration
+carrier: electricity
+behavior: conserving
+visible: true
+composite: false
+default_capacity: -1.6
+default_volume:
+default_demand:
+default_position_relative_to_buffer:
+expandable: true
+importable_attributes:
+  - electricity_output_capacity
+  - fixed_operation_and_maintenance_costs_per_year
+  - full_load_hours
+  - initial_investment
+  - technical_lifetime
+  - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
+  - variable_operation_and_maintenance_costs_per_full_load_hour
+whitelisted_attributes:
+  - demand
+  - initial_investment
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - profile
+  - technical_lifetime
+  - units
+  - volume

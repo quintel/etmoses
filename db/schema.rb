@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160408084137) do
+ActiveRecord::Schema.define(version: 20160503140918) do
 
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
@@ -20,11 +20,6 @@ ActiveRecord::Schema.define(version: 20160408084137) do
     t.datetime "job_finished_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "composites", force: true do |t|
-    t.integer "technology_id"
-    t.integer "composite_id"
   end
 
   create_table "delayed_jobs", force: true do |t|
@@ -49,13 +44,6 @@ ActiveRecord::Schema.define(version: 20160408084137) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "importable_attributes", force: true do |t|
-    t.integer "technology_id"
-    t.string  "name",          limit: 100
-  end
-
-  add_index "importable_attributes", ["technology_id", "name"], name: "index_importable_attributes_on_technology_id_and_name", unique: true, using: :btree
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
@@ -137,32 +125,6 @@ ActiveRecord::Schema.define(version: 20160408084137) do
     t.string  "name"
     t.integer "parent_id"
   end
-
-  create_table "technologies", force: true do |t|
-    t.string  "key",                                 limit: 100,                 null: false
-    t.string  "name",                                limit: 100
-    t.string  "export_to",                           limit: 100
-    t.string  "carrier",                             limit: 32,                  null: false
-    t.string  "behavior",                            limit: 50
-    t.boolean "visible",                                         default: true
-    t.boolean "profile_required",                                default: true
-    t.boolean "composite",                                       default: false
-    t.float   "default_capacity",                    limit: 24
-    t.float   "default_volume",                      limit: 24
-    t.float   "default_demand",                      limit: 24
-    t.string  "default_position_relative_to_buffer"
-    t.boolean "expandable",                                      default: true
-  end
-
-  add_index "technologies", ["key"], name: "index_technologies_on_key", unique: true, using: :btree
-
-  create_table "technology_component_behaviors", force: true do |t|
-    t.integer "technology_id",            null: false
-    t.string  "curve_type",    limit: 50, null: false
-    t.string  "behavior",      limit: 50, null: false
-  end
-
-  add_index "technology_component_behaviors", ["technology_id", "curve_type"], name: "index_technology_curve_type", unique: true, using: :btree
 
   create_table "technology_profiles", force: true do |t|
     t.integer "load_profile_id",              null: false

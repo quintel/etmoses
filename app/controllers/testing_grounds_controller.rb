@@ -4,8 +4,7 @@ class TestingGroundsController < ResourceController
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:calculate_concurrency, :update, :save_as]
-  respond_to :json, only: :fetch_etm_values
+  respond_to :js, only: [:calculate_concurrency, :update, :save_as, :render_template]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -14,7 +13,7 @@ class TestingGroundsController < ResourceController
 
   before_filter :load_technologies_and_profiles, only: [
     :perform_import, :update, :create, :edit, :new,
-    :calculate_concurrency
+    :calculate_concurrency, :render_template
   ]
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
@@ -142,10 +141,13 @@ class TestingGroundsController < ResourceController
     @testing_ground_profile = TechnologyList.from_hash(concurrency)
   end
 
-  # POST /testing_grounds/fetch_etm_values
-  def fetch_etm_values
-    render json: TestingGround::TechnologyBuilder.new(
-      *params.slice(:key, :scenario_id).values).build
+  def render_template
+    @scope      = params[:scope]
+    @technology = TestingGround::TechnologyBuilder.new(
+      params.slice(:key, :scenario_id, :composite_index, :units, :demand).merge(
+        load_profiles: @load_profiles[params[:key]]
+      )
+    ).build
   end
 
   # GET /testing_grounds/:id/technology_profile.csv
@@ -226,7 +228,7 @@ class TestingGroundsController < ResourceController
   end
 
   def load_technologies_and_profiles
-    @technologies = Technology.includes(:technologies)
+    @technologies = Technology.all
     @stakeholders = Stakeholder.all
     @load_profiles = LoadProfile.joins("LEFT JOIN `technology_profiles` ON `load_profiles`.`id` = `technology_profiles`.`load_profile_id`")
                                 .select("`technology_profiles`.`technology`, `load_profiles`.*")
