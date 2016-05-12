@@ -147,6 +147,7 @@ en:
   gas_asset:
     pipes: Pipe
     connectors: Connector
+    compressors: Compressor
 
   gas_summary:
     loss: 'Loss'
