@@ -1,7 +1,7 @@
 module GasAssets
   class Compressor < Base
     def part_type
-      'compressor'
+      'compressors'
     end
 
     def default_amount
