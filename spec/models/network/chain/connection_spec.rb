@@ -20,7 +20,7 @@ module Network::Chain
         end
       end
 
-      context 'with a efficiencies of 0.8' do
+      context 'with efficiencies of 0.8' do
         let(:upward)   { Slot.upward(efficiency: 0.8) }
         let(:downward) { Slot.downward(efficiency: 0.8) }
 
@@ -37,7 +37,7 @@ module Network::Chain
         end
       end
 
-      context 'with a capacities of 1.0' do
+      context 'with capacities of 1.0' do
         let(:upward)   { Slot.upward(capacity: 1.0) }
         let(:downward) { Slot.downward(capacity: 1.0) }
 
@@ -54,7 +54,7 @@ module Network::Chain
         end
       end
 
-      context 'with a efficiencies of 0.8 and capacities of 1.0' do
+      context 'with efficiencies of 0.8 and capacities of 1.0' do
         let(:upward)   { Slot.upward(efficiency: 0.8, capacity: 1.0) }
         let(:downward) { Slot.downward(efficiency: 0.8, capacity: 1.0) }
 

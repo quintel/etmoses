@@ -3,6 +3,11 @@ module Network::Builders
     # Given a gas asset list defined by a user, constructs the upward and
     # downward slots which will be used by a connection between layers.
     class Slots
+      GAS_FLOW = {
+        'high_to_low' => 'connectors',
+        'low_to_high' => 'compressors'
+      }.freeze
+
       def self.build(layer, assets)
         new(layer, assets).build
       end
@@ -17,10 +22,8 @@ module Network::Builders
       def initialize(layer, assets)
         @layer = layer
 
-        @assets = assets.select do |asset|
-          asset.part == 'connectors'.freeze &&
-          asset.pressure_level_name == layer &&
-          asset.amount > 0
+        @assets = assets.select(&method(:asset_predicate)).group_by do |asset|
+          GAS_FLOW.key(asset.part)
         end
       end
 
@@ -43,7 +46,7 @@ module Network::Builders
       def attributes(direction)
         capacity = total_capacity(direction)
 
-        efficiency = @assets.sum do |asset|
+        efficiency = (@assets[direction] || []).sum do |asset|
           asset_capacity = capacity_of(asset, direction)
 
           if asset_capacity > 0
@@ -62,7 +65,9 @@ module Network::Builders
       #
       # Returns a numeric.
       def total_capacity(direction)
-        @assets.sum { |asset| capacity_of(asset, direction) }
+        return unless @assets[direction]
+
+        @assets[direction].sum { |asset| capacity_of(asset, direction) }
       end
 
       # Internal: Given a connector and direction, returns the capacity of the
@@ -80,6 +85,12 @@ module Network::Builders
       def default_slots
         { upward:   Network::Chain::Slot.upward,
           downward: Network::Chain::Slot.downward }
+      end
+
+      def asset_predicate(asset)
+        GAS_FLOW.values.include?(asset.part) &&
+        asset.pressure_level_name == @layer &&
+        asset.amount > 0
       end
     end
   end # Builders

@@ -151,6 +151,12 @@ module Network
             part: 'connectors',
             type: 'inefficient_connector',
             amount: 5
+          ),
+          InstalledGasAsset.new(
+            pressure_level_index: 1, # forty->eight
+            part: 'compressors',
+            type: 'compressor_8_bar',
+            amount: 5
           )
         ]
       end
@@ -159,7 +165,7 @@ module Network
         let(:connection) { chain.forty.children.first }
 
         it 'sets the upward efficiency' do
-          expect(connection.upward.efficiency).to eq(0.8)
+          expect(connection.upward.efficiency).to eq(0.0)
         end
 
         it 'sets the downward efficiency' do
@@ -167,7 +173,7 @@ module Network
         end
 
         it 'sets the upward capacity' do
-          expect(connection.upward.capacity).to eq(15.0)
+          expect(connection.upward.capacity).to eq(Float::INFINITY)
         end
 
         it 'sets the downward capacity' do
@@ -187,7 +193,7 @@ module Network
         end
 
         it 'sets the upward capacity' do
-          expect(connection.upward.capacity).to eq(30.0)
+          expect(connection.upward.capacity).to eq(15.0)
         end
 
         it 'sets the downward capacity' do
