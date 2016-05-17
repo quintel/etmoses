@@ -1,0 +1,347 @@
+---
+nodes:
+  energy_flexibility_p2g_electricity:
+    demand:
+      present: 0.0
+      future: 0.0
+    electricity_output_capacity:
+      present: 0.0
+      future: 0.0
+    input_capacity:
+      present: 0.739583333333333
+      future: 0.739583333333333
+    number_of_units:
+      present: 0
+      future: 0
+    storage:
+      present:
+      future:
+    initial_investment:
+      present: 493466.435161111
+      future: 493466.435161111
+    technical_lifetime:
+      present: 25.5
+      future: 25.5
+    coefficient_of_performance:
+      present: 1.0
+      future: 1.0
+    full_load_hours:
+      present: 0.0
+      future: 0.0
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_flexibility_p2h_electricity:
+    demand:
+      present: 0.0
+      future: 0.0
+    electricity_output_capacity:
+      present: 0.0
+      future: 0.0
+    input_capacity:
+      present: 0.002
+      future: 0.002
+    number_of_units:
+      present: 0
+      future: 0
+    storage:
+      present:
+        volume: 0.0072
+        decay: 5.0e-05
+      future:
+        volume: 0.0072
+        decay: 5.0e-05
+    initial_investment:
+      present: 249.1
+      future: 249.1
+    technical_lifetime:
+      present: 15.0
+      future: 15.0
+    coefficient_of_performance:
+      present: 1.0
+      future: 1.0
+    full_load_hours:
+      present: 0.0
+      future: 0.0
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_flexibility_p2p_electricity:
+    demand:
+      present: 0.0
+      future: 0.0
+    electricity_output_capacity:
+      present: 0.0044
+      future: 0.0044
+    input_capacity:
+      present: 0.0051764705882352945
+      future: 0.0051764705882352945
+    number_of_units:
+      present: 0
+      future: 0
+    storage:
+      present:
+        volume: 0.0096
+        decay: 4.9e-08
+      future:
+        volume: 0.0096
+        decay: 4.9e-08
+    initial_investment:
+      present: 6178.9
+      future: 6178.9
+    technical_lifetime:
+      present: 10.0
+      future: 10.0
+    coefficient_of_performance:
+      present: 1.0
+      future: 1.0
+    full_load_hours:
+      present: 0.0
+      future: 0.0
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_solar_pv_solar_radiation:
+    demand:
+      present: 551294.9355827213
+      future: 551294.9355827213
+    electricity_output_capacity:
+      present: 0.0016
+      future: 0.0016
+    input_capacity:
+      present: 0.01
+      future: 0.01
+    number_of_units:
+      present: 17.66291604455726
+      future: 17.66291604455726
+    storage:
+      present:
+      future:
+    initial_investment:
+      present: 1616.0
+      future: 1616.0
+    technical_lifetime:
+      present: 25.0
+      future: 25.0
+    coefficient_of_performance:
+      present: 1.0
+      future: 1.0
+    full_load_hours:
+      present: 867.0
+      future: 867.0
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 27.2
+      future: 27.2
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_space_heater_heatpump_air_water_electricity:
+    demand:
+      present: 724048.6910597077
+      future: 724048.6910597077
+    electricity_output_capacity:
+      present: 0.0
+      future: 0.0
+    input_capacity:
+      present: 0.01
+      future: 0.01
+    number_of_units:
+      present: 17.223548349842464
+      future: 17.223548349842464
+    storage:
+      present:
+      future:
+    initial_investment:
+      present: 9500.0
+      future: 9500.0
+    technical_lifetime:
+      present: 15.0
+      future: 15.0
+    coefficient_of_performance:
+      present: 4.500000000000004
+      future: 4.500000000000004
+    full_load_hours:
+      present: 1167.7305530791741
+      future: 1167.7305530791741
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 100.0
+      future: 100.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_space_heater_network_gas:
+    demand:
+      present: 871097.8176204474
+      future: 871097.8176204474
+    electricity_output_capacity:
+      present: 0.0
+      future: 0.0
+    input_capacity:
+      present: 0.027499999999999997
+      future: 0.027499999999999997
+    number_of_units:
+      present: 16.577222570232692
+      future: 16.577222570232692
+    storage:
+      present:
+      future:
+    initial_investment:
+      present: 1300.0
+      future: 1300.0
+    technical_lifetime:
+      present: 15.0
+      future: 15.0
+    coefficient_of_performance:
+      present: 1.0
+      future: 1.0
+    full_load_hours:
+      present: 530.7866150359882
+      future: 530.7866150359882
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 85.0
+      future: 85.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_water_heater_heatpump_air_water_electricity:
+    demand:
+      present: 120674.78184328512
+      future: 120674.78184328512
+    electricity_output_capacity:
+      present: 0.0
+      future: 0.0
+    input_capacity:
+      present: 0.01
+      future: 0.01
+    number_of_units:
+      present: 13.658613167360699
+      future: 13.658613167360699
+    storage:
+      present:
+      future:
+    initial_investment:
+      present: 9500.0
+      future: 9500.0
+    technical_lifetime:
+      present: 15.0
+      future: 15.0
+    coefficient_of_performance:
+      present: 3.0000000000000027
+      future: 3.0000000000000027
+    full_load_hours:
+      present: 245.41856719647626
+      future: 245.41856719647626
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 100.0
+      future: 100.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  households_water_heater_hybrid_heatpump_air_water_electricity:
+    demand:
+      present: 0.0
+      future: 0.0
+    electricity_output_capacity:
+      present: 0.0
+      future: 0.0
+    input_capacity:
+      present: 0.005068965517241378
+      future: 0.005068965517241378
+    number_of_units:
+      present: 0.0
+      future: 0.0
+    storage:
+      present:
+      future:
+    initial_investment:
+      present: 4135.0
+      future: 4135.0
+    technical_lifetime:
+      present: 15.0
+      future: 15.0
+    coefficient_of_performance:
+      present: 1.8000000000000018
+      future: 1.8000000000000018
+    full_load_hours:
+      present: 0.0
+      future: 0.0
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 252.892561983471
+      future: 252.892561983471
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+  transport_car_using_electricity:
+    demand:
+      present: 7378.096312474995
+      future: 7378.096312474995
+    electricity_output_capacity:
+      present:
+      future:
+    input_capacity:
+      present: 0.0037
+      future: 0.0037
+    number_of_units:
+      present: 0.7528369253631885
+      future: 0.7528369253631885
+    storage:
+      present:
+        volume: 0.025
+        decay: 4.4e-05
+      future:
+        volume: 0.025
+        decay: 4.4e-05
+    initial_investment:
+      present: 0.0
+      future: 0.0
+    technical_lifetime:
+      present: 13.0
+      future: 13.0
+    coefficient_of_performance:
+      present: 1.0
+      future: 1.0
+    full_load_hours:
+      present: 0.0
+      future: 0.0
+    fixed_operation_and_maintenance_costs_per_year:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_per_full_load_hour:
+      present: 0.0
+      future: 0.0
+    variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour:
+      present: 0.0
+      future: 0.0

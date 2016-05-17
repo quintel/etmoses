@@ -1,23 +1,18 @@
 ---
-name: Electric car
-export_to: transport_car_using_electricity_share
+name: Power-To-Heat
+export_to: households_flexibility_p2h_electricity_market_penetration
 carrier: electricity
-behavior: electric_vehicle
-default_capacity: 3.7
-default_volume: 25.0
+behavior: optional_buffer
+default_capacity: 2.0
+default_position_relative_to_buffer: buffering
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
   - initial_investment
   - input_capacity
-  - storage.volume
   - technical_lifetime
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
-
-importable_gqueries:
-  initial_investment: electric_cars_additional_costs
-
 whitelisted_attributes:
   - demand
   - initial_investment

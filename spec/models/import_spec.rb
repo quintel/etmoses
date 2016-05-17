@@ -2,15 +2,20 @@ require 'rails_helper'
 
 RSpec.describe Import do
   let(:import) do
+    allow_any_instance_of(Import::Technologies::Fetcher)
+      .to receive(:response).and_return(response)
+
+    allow_any_instance_of(Import::Technologies::Fetcher)
+      .to receive(:gqueries).and_return({})
+
     Import.new(topology_id: topology.id, scenario_id: 1337).tap do |import|
-      allow(import).to receive(:response).and_return(response)
       allow(import).to receive(:parent_scenario_id).and_return(nil)
-      allow(import).to receive(:buildings).and_return([])
     end
   end
 
   let(:topology)       { create(:topology) }
   let(:testing_ground) { import.testing_ground }
+  let!(:etm_scenario)  { stub_scenario_request(1337) }
 
   before do
     %w(tech_one tech_two).each do |key|
@@ -22,8 +27,6 @@ RSpec.describe Import do
         ]
       )
     end
-
-    stub_scenario_request(1337)
   end
 
   def build_response(techs)

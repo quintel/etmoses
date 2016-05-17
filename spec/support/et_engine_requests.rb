@@ -67,7 +67,7 @@ def stub_scenario_request(id = 1)
        with(headers: {'Accept'=>'application/json',
                       'Accept-Encoding'=>'gzip, deflate'}).
        to_return(status: 200,
-                 body: JSON.dump({template: 2, scaling: {value: 1}}))
+                 body: JSON.dump({id: id, template: 2, scaling: {value: 1}}))
 end
 
 

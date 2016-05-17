@@ -19,6 +19,11 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
+
 technology_component_behavior:
   flex: optional
   inflex: generic
+
+importable_gqueries:
+  demand: present_demand_in_source_of_electricity_in_buildings
+  units: number_of_buildings

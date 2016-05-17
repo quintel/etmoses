@@ -1,5 +1,5 @@
 class Import
-  class CompositeBuilder
+  class CompositeBuilder < Builder
     include Scaling
 
     COMPOSITE_ATTRS = %w(name key default_demand)
@@ -9,12 +9,7 @@ class Import
       'buffer_water_heating' => 'etmoses_hot_water_buffer_demand'
     }.freeze
 
-    def initialize(scenario_id, scaling)
-      @scenario_id = scenario_id
-      @scaling = scaling
-    end
-
-    def build
+    def build(_response)
       return [] unless valid_scaling?
 
       Technology.where(composite: true).map do |technology|
@@ -24,13 +19,13 @@ class Import
     end
 
     def composite_attributes(technology)
-      { "units"     => scaling_value,
-        "type"      => technology.key,
-        "name"      => technology.name,
-        "composite" => true,
-        "includes"  => technology.technologies,
-        "demand"    => demand_for(technology),
-        "volume"    => technology.default_volume
+      { 'units'     => scaling_value,
+        'type'      => technology.key,
+        'name'      => technology.name,
+        'composite' => true,
+        'includes'  => technology.technologies,
+        'demand'    => demand_for(technology),
+        'volume'    => technology.default_volume
       }
     end
 
@@ -38,7 +33,7 @@ class Import
 
     def transform(attributes)
       Hash[attributes.map do |key, value|
-        [ translations[key] || key, value ]
+        [translations[key] || key, value]
       end]
     end
 
@@ -48,7 +43,8 @@ class Import
 
     def demand_for(technology)
       Import::DemandCalculator.new(
-        @scenario_id, scaling_value, [DEMAND_MAPPING[technology.key.to_s]]
+        @scenario_id, scaling_value,
+        @gqueries.slice(DEMAND_MAPPING[technology.key.to_s])
       ).calculate
     end
   end
