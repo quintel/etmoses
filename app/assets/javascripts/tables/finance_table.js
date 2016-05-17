@@ -6,7 +6,7 @@ var FinanceTable = (function () {
 
     function updateCurrentFinances() {
         currentFinances[rowHeight] = freeformRow;
-        financeArea.text(JSON.stringify(currentFinances)).trigger('change');
+        financeArea.text(JSON.stringify(currentFinances));
     }
 
     function setTotalAndFormat(total) {

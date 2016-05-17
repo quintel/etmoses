@@ -93,9 +93,7 @@ var TechnologiesForm = (function () {
                 groupedByNode = ETHelper.groupBy(tableProfile, 'node');
 
             $("#technology_distribution").text(JSON.stringify(tableProfile));
-            $("#testing_ground_technology_profile")
-                .text(JSON.stringify(groupedByNode))
-                .trigger('change');
+            $("#testing_ground_technology_profile").text(JSON.stringify(groupedByNode));
         },
 
         updateCounter: function (add) {
