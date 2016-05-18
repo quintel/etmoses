@@ -22,7 +22,18 @@ class Import
       end
 
       def keys
-        Technology.importable.map(&:key)
+        #Hash[technologies.map do |technology|
+        #  [technology.key, technology.importable_attributes]
+        #end]
+        technologies.map(&:key)
+      end
+
+      def technologies
+        technologies_for_gqueries.select(&:importable?)
+      end
+
+      def technologies_for_gqueries
+        Technology.for_carrier('gas') + Technology.for_carrier('electricity')
       end
 
       # Internal: Given a response, splits out the nodes into discrete
@@ -36,8 +47,9 @@ class Import
       end
 
       def gqueries
-        @gqueries ||= Import::GqueryRequester.new(Technology.gquery.map(&:key))
-                      .request(@etm_scenario)
+        @gqueries ||= Import::GqueryRequester.new(
+          technologies_for_gqueries.map(&:key)
+        ).request(@etm_scenario)
       end
 
       def builders

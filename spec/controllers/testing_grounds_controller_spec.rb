@@ -22,7 +22,8 @@ RSpec.describe TestingGroundsController do
       stub_et_engine_request
       stub_scenario_request
 
-      expect(Technology).to receive(:importable).and_return([technology])
+      allow_any_instance_of(Import::Technologies::Fetcher)
+        .to receive(:technologies).and_return([technology])
 
       allow_any_instance_of(Import::Technologies::Fetcher)
         .to receive(:gqueries).and_return({})
@@ -46,6 +47,10 @@ RSpec.describe TestingGroundsController do
     let!(:valid_testing_ground){
       expect_any_instance_of(TestingGround).to receive(:valid?)
         .at_least(:once).and_return(true)
+    }
+
+    let!(:stub_heat_sources) {
+      expect_any_instance_of(HeatSourceList::SourceListFetcher).to receive(:fetch).and_return([])
     }
 
     it "creates a testing ground" do
@@ -82,6 +87,12 @@ RSpec.describe TestingGroundsController do
       post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
 
       expect(GasAssetList.last.testing_ground).to eq(TestingGround.last)
+    end
+
+    it "creates a heat source list" do
+      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+
+      expect(HeatSourceList.last.testing_ground).to eq(TestingGround.last)
     end
   end
 

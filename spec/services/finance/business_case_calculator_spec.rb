@@ -20,7 +20,9 @@ RSpec.describe Finance::BusinessCaseCalculator do
       let(:market_model_interactions){ MarketModels::Default.interactions }
 
       it "determines the correct headers" do
-        expect(business_case.instance_variable_get("@stakeholders")).to eq(["customer", "system operator"])
+        expect(business_case.instance_variable_get("@stakeholders")).to eq([
+          "customer", "system operator"
+        ])
       end
 
       it "determines the value of the business case" do
@@ -44,8 +46,9 @@ RSpec.describe Finance::BusinessCaseCalculator do
       let(:market_model_interactions){ MarketModels::Default.advanced }
 
       it "determines the correct headers" do
-        expect(business_case.fetch_stakeholders).to eq(["customer", "government",
-                                                  "supplier", "system operator"])
+        expect(business_case.fetch_stakeholders).to eq([
+          "customer", "government", "supplier", "system operator"
+        ])
       end
 
       it "financials" do
@@ -60,7 +63,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
   end
 
   describe "with the default initial investments" do
-    let(:market_model_interactions){
+    let(:market_model_interactions) {
       [{ 'stakeholder_from'    => 'customer',
          'stakeholder_to'      => 'system operator',
          'foundation'          => 'kwh_consumed',
@@ -68,37 +71,42 @@ RSpec.describe Finance::BusinessCaseCalculator do
          'applied_stakeholder' => 'system operator' }]
     }
 
-    let(:market_model){
-      FactoryGirl.create(:market_model, interactions: market_model_interactions)
+    let(:technology_profile) {
+      YAML.load(File.read(
+        "#{Rails.root}/spec/fixtures/data/technology_profiles/solar_panels.yml"
+      ))
     }
 
-    let(:gas_asset_list_json) {
-      YAML.load(File.read("#{Rails.root}/spec/fixtures/data/gas_asset_lists/default_pipes_connectors.yml"))
-    }
-
-    let(:topology){
-      FactoryGirl.create(:topology_with_financial_information)
-    }
-
-    let(:technology_profile){
-      YAML.load(File.read("#{Rails.root}/spec/fixtures/data/technology_profiles/solar_panels.yml"))
-    }
-
-    let(:testing_ground){
+    let(:testing_ground) {
       FactoryGirl.create(:testing_ground,
         technology_profile: technology_profile,
-        market_model:       market_model,
-        topology:           topology)
+        market_model: FactoryGirl.create(:market_model, interactions: market_model_interactions),
+        topology: FactoryGirl.create(:topology_with_financial_information)
+      )
     }
 
-    let!(:gas_asset_list) {
-      FactoryGirl.create(:gas_asset_list, testing_ground: testing_ground, asset_list: gas_asset_list_json)
+    let!(:create_gas_asset_list) {
+      FactoryGirl.create(:gas_asset_list,
+        testing_ground: testing_ground,
+        asset_list: YAML.load(File.read(
+          "#{Rails.root}/spec/fixtures/data/gas_asset_lists/default_pipes_connectors.yml"
+        ))
+      )
     }
 
-    let(:business_case){ Finance::BusinessCaseCalculator.new(testing_ground) }
+    let!(:create_heat_source_list) {
+      FactoryGirl.create(:heat_source_list,
+        testing_ground: testing_ground,
+        source_list: YAML.load(File.read(
+          "#{Rails.root}/spec/fixtures/data/heat_source_lists/default.yml"
+        ))
+      )
+    }
+
+    let(:business_case) { Finance::BusinessCaseCalculator.new(testing_ground) }
 
     it "determines the initial investments for the stakeholders" do
-      expect(business_case.rows.last['system operator'].last).to eq(11000.0)
+      expect(business_case.rows.last['system operator'].last).to eq(22100.0)
       expect(business_case.rows[1]['customer'][1]).to eq(10729.5)
     end
   end

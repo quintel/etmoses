@@ -131,9 +131,9 @@ var Transformator = (function () {
         }
     };
 
-    function Transformator(d3Chart, load, thisCurrentWeek) {
+    function Transformator(d3Chart, thisCurrentWeek) {
         this.d3Chart = d3Chart;
-        this.load    = load;
+        this.load    = this.d3Chart.staticSettings.load;
         this.data    = this.d3Chart.lastRequestedData;
 
         currentWeek  = thisCurrentWeek;

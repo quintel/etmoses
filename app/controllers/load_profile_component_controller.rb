@@ -8,12 +8,7 @@ class LoadProfileComponentController < ApplicationController
   def show
     @load_profile_component = @load_profile_component.as_json
 
-    respond_with(@load_profile_component.update("values" =>
-      TestingGround::TreeSampler.downsample(
-        @load_profile_component.fetch("values"),
-        params.fetch(:resolution, :low)
-      )
-    ))
+    respond_with(@load_profile_component)
   end
 
   def download

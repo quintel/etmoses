@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Import::TechnologyBuilder do
-  let(:techs)    { Import::TechnologyBuilder.build('tech', data) }
+  let(:techs) { Import::TechnologyBuilder.build('tech', data) }
 
   before do
     allow(Technology).to receive(:by_key).and_return(build_stubbed(

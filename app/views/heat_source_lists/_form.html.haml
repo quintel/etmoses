@@ -1,0 +1,19 @@
+.table-holder
+  = render partial: "heat_source_lists/must_run_table", locals: { testing_ground: testing_ground, heat_source_list: heat_source_list }
+  = render partial: "heat_source_lists/dispatchable_table", locals: { testing_ground: testing_ground, heat_source_list: heat_source_list }
+
+.heat_source_profiles.hidden.profile
+  - heat_source_technologies.each do |technology|
+    = select_tag "profile", options_for_load_profiles(technology), include_blank: "---", class: "#{ technology.key } form-control profile heat"
+
+= form_for [testing_ground, testing_ground.heat_source_list], html: { remote: true } do |f|
+  .hidden
+    = f.text_area :source_list, value: JSON.dump(testing_ground.heat_source_list.source_list)
+
+  .btn-group
+    = f.submit "Save", class: "btn btn-primary"
+    = save_all_button(heat_load_testing_ground_path(testing_ground), "Save all and view gas-load")
+
+  .btn-group.pull-right
+    %span.wait.hidden= image_tag "wait.gif"
+

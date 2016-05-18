@@ -23,7 +23,6 @@ var D3LoadChart = (function () {
         legendItem,
         brush,
         chartData,
-        staticSettings,
         width,
         hoverLineGroup,
         hoverLine,
@@ -117,8 +116,8 @@ var D3LoadChart = (function () {
 
         dateSelect.prop("disabled", true);
 
-        if (staticSettings.dateCallback) {
-            staticSettings.dateCallback(value);
+        if (this.staticSettings.dateCallback) {
+            this.staticSettings.dateCallback(value);
         } else {
             setLesOptions.call(this);
             window.currentTree.update();
@@ -312,8 +311,7 @@ var D3LoadChart = (function () {
     }
 
     function transformData() {
-        var data = new Transformator(this, staticSettings.load, currentWeek)
-            .transform(shown);
+        var data = new Transformator(this, currentWeek).transform(shown);
 
         if (shown.view_as === 'stacked') {
             data = new StackTransformator(data).transform();
@@ -595,8 +593,8 @@ var D3LoadChart = (function () {
             range_end:   weekResolution
         };
 
-        staticSettings  = settings || {};
-        width           = (staticSettings.width || 500);
+        this.staticSettings = settings || {};
+        width               = (this.staticSettings.width || 500);
     }
 
     return D3LoadChart;

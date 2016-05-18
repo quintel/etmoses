@@ -14,8 +14,9 @@ class TestingGround < ActiveRecord::Base
   belongs_to :behavior_profile
 
   has_one :selected_strategy, dependent: :destroy
-  has_one :business_case, dependent: :destroy
-  has_one :gas_asset_list, dependent: :destroy
+  has_one :business_case,     dependent: :destroy
+  has_one :gas_asset_list,    dependent: :destroy
+  has_one :heat_source_list,  dependent: :destroy
 
   has_many :testing_ground_delayed_jobs
 

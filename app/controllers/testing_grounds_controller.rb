@@ -49,7 +49,7 @@ class TestingGroundsController < ResourceController
 
   # POST /testing_grounds/:id/export
   def perform_export
-    redirect_to("http://#{ Settings.etmodel_host }/scenarios/" +
+    redirect_to("#{ Settings.etmodel_host }/scenarios/" +
                 "#{ @export.export['id'] }")
   end
 
@@ -62,17 +62,7 @@ class TestingGroundsController < ResourceController
   def create
     @testing_ground = current_user.testing_grounds.create(testing_ground_params)
 
-    if @testing_ground.valid?
-      BusinessCase.create!(testing_ground: @testing_ground)
-      SelectedStrategy.create!(testing_ground: @testing_ground)
-      GasAssetList.create!(testing_ground: @testing_ground, asset_list:
-        GasAssetLists::AssetListGenerator.new(@testing_ground).generate
-      )
-
-      Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
-    end
-
-    respond_with(@testing_ground)
+    respond_with(TestingGround::Creator.new(@testing_ground).create)
   end
 
   # GET /testing_grounds/:id
@@ -123,6 +113,11 @@ class TestingGroundsController < ResourceController
   def edit
     @technology_distribution = @testing_ground.technology_profile
                                .each_tech.map(&:attributes)
+
+    if @testing_ground.heat_source_list
+      @heat_source_list = HeatSourceListDecorator.new(
+        @testing_ground.heat_source_list).decorate
+    end
   end
 
   # PATCH /testing_grounds/:id

@@ -45,6 +45,13 @@ ActiveRecord::Schema.define(version: 20160530113258) do
     t.datetime "updated_at"
   end
 
+  create_table "heat_source_lists", force: true do |t|
+    t.integer  "testing_ground_id"
+    t.text     "source_list"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"
     t.string   "key"

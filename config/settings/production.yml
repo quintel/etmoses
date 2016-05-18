@@ -1,4 +1,4 @@
 ---
-host:          'moses.et-model.com'
-etengine_host: 'et-engine.com'
-etmodel_host:  'pro.et-model.com'
+host:          'https://moses.et-model.com'
+etengine_host: 'https://et-engine.com'
+etmodel_host:  'https://pro.et-model.com'
