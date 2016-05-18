@@ -1,0 +1,12 @@
+carrier: heat
+dispatchable: false
+importable_gqueries:
+  heat_production: etmoses_must_run_heat_for_households_from_central_heat_network
+
+defaults:
+  total_initial_investment: 800.0  # EUR/MWh
+  om_costs_per_year:        25.0   # EUR/MWh
+  technical_lifetime:       30.0   # Year
+  marginal_costs:           0.0
+  distance:                 1
+  units:                    1

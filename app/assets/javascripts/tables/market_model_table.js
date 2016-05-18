@@ -11,7 +11,9 @@ var MarketModelTable = (function () {
         },
 
         updateTable: function () {
-            $("#market_model_interactions").text(JSON.stringify(editableTable.getData()));
+            $("#market_model_interactions").text(
+                JSON.stringify(editableTable.getData())
+            );
         }
     };
 

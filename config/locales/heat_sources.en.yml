@@ -1,0 +1,10 @@
+---
+en:
+  heat_sources:
+    households_collective_chp_biogas: Biogas CHP households
+    households_collective_chp_network_gas: Gas CHP households
+    households_collective_chp_wood_pellets: Biomass CHP households
+    households_collective_geothermal: Geothermal
+    central_heat_network_dispatchable: Central heat network dispatchable
+    central_heat_network_must_run: Central heat network must run
+    generic: Generic

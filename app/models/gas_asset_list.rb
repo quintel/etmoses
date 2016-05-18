@@ -1,12 +1,12 @@
 class GasAssetList < ActiveRecord::Base
   PRESSURE_LEVELS = [0.125, 4, 8, 40]
   DEFAULT = {
-    "pressure_level_index" => 0,
-    "part"                 => "connectors",
-    "type"                 => "blank",
-    "amount"               => "1",
-    "stakeholder"          => "cooperation",
-    "building_year"        => "1960"
+    'pressure_level_index' => 0,
+    'part'                 => 'connectors',
+    'type'                 => 'blank',
+    'amount'               => '1',
+    'stakeholder'          => 'cooperation',
+    'building_year'        => '1960'
   }
 
   belongs_to :testing_ground

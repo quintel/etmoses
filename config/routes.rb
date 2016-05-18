@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
 
     member do
-      get  'export', 'technology_profile', 'gas_load'
+      get  'export', 'technology_profile', 'gas_load', 'heat_load'
       post 'data', 'update_strategies'
       post 'export', to: :perform_export
       patch 'save_as'
@@ -31,6 +31,8 @@ Rails.application.routes.draw do
              'reload_gas_asset_list', 'load_summary', 'gas_load'
       end
     end
+
+    resources :heat_source_lists, only: [:update]
 
     get 'data/price_curve'         => 'data#price_curve',         as: :price_curves
     get 'data/load_curves'         => 'data#load_curves',         as: :load_curves

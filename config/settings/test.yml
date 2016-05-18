@@ -1,5 +1,5 @@
 ---
-# Path to static files loaded by AciveHash.
+# Path to static files loaded by ActiveHash.
 static_data_path: 'spec/fixtures/static'
 
 cache:

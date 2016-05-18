@@ -1,94 +1,35 @@
-/*global EdsnSwitch,ETHelper*/
+/*global ETHelper*/
 var ProfileSelectBox = (function () {
     'use strict';
 
-    var edsnSwitch,
-        defaultValues = {
-            defaultCapacity: null,
-            defaultDemand: null,
-            defaultVolume: null
-        };
-
-    function getDefaults(value) {
-        return $(this).selectedOption(value).data() || defaultValues;
-    }
-
-    function setCellDefault() {
-        var inputField = $(this.techBox).find('.' + this.key + " input"),
-            userInput  = parseFloat(inputField.val()),
-            def        = (this.profileDefault || this.techDefault || '');
-
-        $(this.techBox).set(this.key, userInput || def);
-        inputField.val(userInput || def);
-    }
-
-    function updateTextCells(profileSelectBox) {
-        var key,
-            defaultValue,
-            technologyDefaults = getDefaults.call($(".add-technology select"), $(this).data('type')),
-            profileDefaults    = getDefaults.call(profileSelectBox, $(profileSelectBox).val());
-
-        for (defaultValue in defaultValues) {
-            key = defaultValue.replace(/default/, '').toLowerCase();
-
-            setCellDefault.call({
-                techBox: this,
-                key: key,
-                techDefault: technologyDefaults[defaultValue],
-                profileDefault: profileDefaults[defaultValue]
-            });
-        }
-    }
-
     function defaultCloneAndAppend() {
-        var technology       = $(this.target).data("type"),
-            profile          = $(this.target).data('profile'),
+        var technology       = $(this.target).find("select.key").val(),
+            profile          = $(this.target).find("select.profile").val(),
             profileSelectBox = $(".hidden.profile select." + technology).clone(true, true);
 
         if (profile) {
             profileSelectBox.val(profile);
         }
 
-        $(this.target).find(".editable.profile select").replaceWith(profileSelectBox);
+        profileSelectBox.off('change').on('change', this.callback);
 
-        updateTextCells.call(this.target, profileSelectBox);
-    }
-
-    function cloneAndAppendProfileSelect() {
-        if (edsnSwitch.isEdsn.call($(this.target))) {
-            updateTextCells.call(this.target,
-                edsnSwitch.cloneAndAppendProfileSelect.call(this));
-        } else {
-            defaultCloneAndAppend.call(this);
-        }
-    }
-
-    function addChangeListenerToProfileBox() {
-        var self = this;
-
-        $(this.target).find(".editable.profile select").off().on("change", function () {
-            var technology = $(this).parents(".technology");
-
-            technology.set('profile', $(this).val());
-            technology.set('profile-key', $(this).selectedOption().text());
-
-            updateTextCells.call(technology, this);
-            self.callback.call(this);
-        });
+        $(this.target).find(".editable.profile select")
+            .replaceWith(profileSelectBox)
+            .trigger('change');
     }
 
     ProfileSelectBox.prototype = {
         add: function (callback) {
-            this.callback = (callback || function () { return; });
+            $(this.target).find("select.key").off()
+                .on('change', defaultCloneAndAppend.bind(this));
 
-            cloneAndAppendProfileSelect.call(this);
-            addChangeListenerToProfileBox.call(this);
+            defaultCloneAndAppend.call(this);
         }
     };
 
-    function ProfileSelectBox(target) {
+    function ProfileSelectBox(target, callback) {
         this.target = target;
-        edsnSwitch  = new EdsnSwitch();
+        this.callback = callback || function () { return; };
     }
 
     return ProfileSelectBox;

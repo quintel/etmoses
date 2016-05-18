@@ -1,5 +1,5 @@
 ---
-host: 'etmoses.dev'
+host: 'http://etmoses.dev'
 
 cache:
   networks: false

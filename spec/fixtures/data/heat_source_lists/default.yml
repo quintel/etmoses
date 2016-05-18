@@ -1,0 +1,25 @@
+---
+- distance: 1
+  key: households_collective_chp_biogas
+  name: Biogas CHP households
+  units: 0.4121683818119746
+  installed_heat_capacity: 1.11
+  heat_production: 457.9648686799714
+  total_initial_investment: 2700.0
+  technical_lifetime: 20.0
+  om_costs_per_year: 0.0
+  marginal_costs: 143.98133769164744
+- total_initial_investment: 100000.0
+  om_costs_per_year: 1000.0
+  technical_lifetime: 30.0
+  distance: 1
+  units: 1
+  key: central_heat_network_dispatchable
+  installed_heat_capacity: 1.78
+- total_initial_investment: 800.0
+  om_costs_per_year: 25.0
+  technical_lifetime: 30.0
+  distance: 1
+  units: 1
+  key: central_heat_network_must_run
+  heat_production: 0.0
