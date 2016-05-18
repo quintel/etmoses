@@ -64,6 +64,12 @@ class Technology < ActiveHash::Base
     where(key: key).size > 0
   end
 
+  def self.gquery
+    all.select do |technology|
+      technology.importable_gqueries.present?
+    end
+  end
+
   def name
     attributes[:name] || key.humanize.to_s
   end

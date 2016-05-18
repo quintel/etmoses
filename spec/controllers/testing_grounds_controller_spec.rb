@@ -24,8 +24,8 @@ RSpec.describe TestingGroundsController do
 
       expect(Technology).to receive(:importable).and_return([technology])
 
-      expect_any_instance_of(Import).to receive(:buildings)
-        .at_least(1).times.and_return([])
+      allow_any_instance_of(Import::Technologies::Fetcher)
+        .to receive(:gqueries).and_return({})
 
       post :perform_import, import: { scenario_id: 1, market_model_id: 5 }
     end

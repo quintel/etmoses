@@ -1,28 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe Import::CompositeBuilder do
-  before do
-    stub_et_gquery({
+  let(:gqueries) {
+    {
       'etmoses_space_heating_buffer_demand' => {
         'present' => 100.0,
         'future'  => 10.0,
         'unit'    => 'PJ'
-      }
-    })
-
-    stub_et_gquery({
+      },
       'etmoses_hot_water_buffer_demand' => {
         'present' => 200.0,
         'future'  => 20.0,
         'unit'    => 'PJ'
       }
-    })
-  end
+    }
+  }
 
   let(:composites) do
-    Import::CompositeBuilder.new(1, {
-      'value' => '1.0', 'area_attribute' => 'number_of_residences'
-    }).build
+    Import::CompositeBuilder.new(gqueries, {
+      id: 1,
+      scaling: {
+        'value' => '1.0', 'area_attribute' => 'number_of_residences'
+      }
+    }).build(nil)
   end
 
   context 'hot water buffers' do

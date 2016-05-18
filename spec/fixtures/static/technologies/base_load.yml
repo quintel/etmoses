@@ -22,3 +22,5 @@ whitelisted_attributes:
 technology_component_behavior:
   flex: deferrable
   inflex: generic
+importable_gqueries:
+  demand: etmoses_electricity_base_load_demand

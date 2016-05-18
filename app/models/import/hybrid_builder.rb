@@ -1,5 +1,6 @@
 class Import
-  class HybridExpander
+  class HybridBuilder < Builder
+    include Filters
     # The hybrid expanders is a class that expands hybrid technologies.
     # It assumes the following:
     # - A hybrid consists out of a gas and electricity part
@@ -8,12 +9,8 @@ class Import
 
     ELEMENTS = %w(electricity gas)
 
-    def initialize(hybrids)
-      @hybrids = hybrids
-    end
-
-    def expand
-      @hybrids.inject([]) do |result, hybrid|
+    def build(response)
+      response.select(&method(:hybrid?)).inject([]) do |result, hybrid|
         result += hybrid_elements(hybrid)
       end
     end

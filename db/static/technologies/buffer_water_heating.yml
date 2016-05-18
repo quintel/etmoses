@@ -26,3 +26,5 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
+importable_gqueries:
+  demand: etmoses_hot_water_buffer_demand

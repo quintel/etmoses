@@ -1,5 +1,5 @@
 class Import
-  class BuildingsBuilder
+  class BuildingsBuilder < Builder
     #
     # Given a scenario, returns the amount of buildings for the current scenario
     # Also calculates the average demand of a single building
@@ -7,19 +7,15 @@ class Import
 
     NUMBER_OF_BUILDINGS = 'number_of_buildings'
 
-    def initialize(scenario_id)
-      @scenario_id = scenario_id
-    end
-
-    def build
+    def build(_response)
       return [] if no_buildings?
 
-      [{ "name"     => "Buildings",
-         "type"     => "base_load_buildings",
-         "profile"  => nil,
-         "capacity" => nil,
-         "demand"   => demand,
-         "units"    => number_of_buildings }]
+      [{ 'name'     => 'Buildings',
+         'type'     => 'base_load_buildings',
+         'profile'  => nil,
+         'capacity' => nil,
+         'demand'   => demand,
+         'units'    => number_of_buildings }]
     end
 
     private
@@ -28,22 +24,16 @@ class Import
       Import::DemandCalculator.new(
         @scenario_id,
         number_of_buildings,
-        ["present_demand_in_source_of_electricity_in_buildings"]
+        @gqueries.slice('present_demand_in_source_of_electricity_in_buildings')
       ).calculate
     end
 
     def number_of_buildings
-      buildings_gquery[NUMBER_OF_BUILDINGS]['present'].to_i
+      @gqueries.fetch(NUMBER_OF_BUILDINGS).fetch('present').to_i
     end
 
     def no_buildings?
-      buildings_gquery.blank?
-    end
-
-    def buildings_gquery
-      @buildings_gquery ||= EtEngineConnector.new({
-        gqueries: [NUMBER_OF_BUILDINGS]
-      }).gquery(@scenario_id)
+      @gqueries[NUMBER_OF_BUILDINGS].blank?
     end
   end
 end
