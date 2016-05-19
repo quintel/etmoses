@@ -7,7 +7,10 @@ module GasAssetLists
     private
 
     def time_range
-      min_year..max_year
+      min = min_year || 0
+      max = max_year || min
+
+      min..max
     end
 
     def min_year
