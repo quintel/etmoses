@@ -9,7 +9,7 @@
             %span.caret
           %ul.dropdown-menu{:role => "menu"}
             %li
-              = link_to 'How to', page_path('how_to')
+              = link_to 'More information', 'https://github.com/quintel/etmoses/wiki/Local-Energy-Solutions', target: '_blank'
             %li.divider
             %li
               = link_to 'Import from ETM', import_testing_grounds_path
@@ -31,6 +31,9 @@
             %span.caret
           %ul.dropdown-menu{:role => "menu"}
             %li
+              = link_to 'More information', 'https://github.com/quintel/etmoses/wiki/Profiles', target: '_blank'
+            %li.divider
+            %li
               = link_to 'Create new load profile', new_load_profile_path
               = link_to 'Create new financial profile', new_price_curve_path
               = link_to 'Create new behavior profile', new_behavior_profile_path
@@ -44,6 +47,9 @@
             %span.caret
           %ul.dropdown-menu{:role => "menu"}
             %li
+              = link_to 'More information', 'https://github.com/quintel/etmoses/wiki/Topologies', target: '_blank'
+            %li.divider
+            %li
               = link_to 'Create new', new_topology_path
             %li.divider
             %li
@@ -54,6 +60,9 @@
             Market Models
             %span.caret
           %ul.dropdown-menu{:role => "menu"}
+            %li
+              = link_to 'More information', 'https://github.com/quintel/etmoses/wiki/Market-models', target: '_blank'
+            %li.divider
             %li
               = link_to 'Create new', new_market_model_path
             %li.divider
@@ -66,13 +75,13 @@
             %span.caret
           %ul.dropdown-menu{:role => "menu"}
             %li
-              = link_to 'How to use', "#", target: '_blank'
+              = link_to 'How to use', 'https://github.com/quintel/etmoses/wiki/Quick-start-guide', target: '_blank'
             %li.divider
             %li
-              = link_to 'Documentation', "#", target: '_blank'
+              = link_to 'Documentation', 'https://github.com/quintel/etmoses/wiki', target: '_blank'
             %li.divider
             %li
-              = link_to 'About Quintel', 'https://quintel.com', target: '_blank'
+              = link_to 'About Quintel', 'http://quintel.com', target: '_blank'
 
     .pull-right.btn-group.user-actions
       - if current_user
