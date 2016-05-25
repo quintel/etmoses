@@ -41,6 +41,8 @@ gem 'msgpack'
 # Active hash
 gem 'active_hash'
 
+gem 'letter_opener'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.1'
   gem 'pry-rails'
