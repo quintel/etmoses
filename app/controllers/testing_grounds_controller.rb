@@ -117,6 +117,8 @@ class TestingGroundsController < ResourceController
 
   # GET /testing_grounds/:id/edit
   def edit
+    @technology_distribution = @testing_ground.technology_profile
+                               .each_tech.map(&:attributes)
   end
 
   # PATCH /testing_grounds/:id
