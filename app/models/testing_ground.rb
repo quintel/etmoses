@@ -28,8 +28,6 @@ class TestingGround < ActiveRecord::Base
   validate  :validate_inline_technology_profiles
   validate  :validate_load_profiles
 
-  attr_accessor :technology_distribution
-
   after_save :set_cache_updated_at
 
   def self.latest_first

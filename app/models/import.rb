@@ -26,7 +26,6 @@ class Import
   def testing_ground
     TestingGround.new(
       topology:                topology,
-      technology_distribution: technology_distribution,
       technology_profile:      technology_profile,
       scenario_id:             @scenario_id,
       parent_scenario_id:      parent_scenario_id,

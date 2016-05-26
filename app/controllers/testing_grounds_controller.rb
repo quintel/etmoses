@@ -35,6 +35,8 @@ class TestingGroundsController < ResourceController
 
     if @import.valid?
       @testing_ground = @import.testing_ground
+      @technology_distribution = @testing_ground.technology_profile
+                                 .each_tech.map(&:attributes)
       render :new
     else
       render :import
