@@ -42,4 +42,17 @@ RSpec.describe TestingGround::TreeSampler do
       expect(sampled[:electricity][:children][0][:load].length).to eq(35040)
     end
   end
+
+  describe 'with a load array containing nils' do
+    let(:input) { [1.0, 2.0, nil, nil] * 8760 }
+    let(:sampled) { TestingGround::TreeSampler.downsample(input, :low) }
+
+    it 'downsamples to one-point-per-day' do
+      expect(sampled.length).to eq(365)
+    end
+
+    it 'determines the peak load' do
+      expect(sampled.first).to eq(2.0)
+    end
+  end
 end

@@ -1,6 +1,7 @@
 class TestingGround
   module TreeSampler
-    RESOLUTION_LENGTH_LOW = 365
+    # The number of samples per day in a high-resolution curve.
+    DAY_CHUNK_SIZE = 96
 
     module_function
 
@@ -14,13 +15,14 @@ class TestingGround
       end]
     end
 
-    def downsample(node_load, resolution)
-      size = (node_load.length / RESOLUTION_LENGTH_LOW).floor
+    def downsample(loads, resolution)
+      return loads if resolution != :low || loads.length.zero?
 
-      if resolution.to_sym == :low && size > 0
-        node_load.each_slice(size).map { |loads| loads.max_by(&:abs) }
-      else
-        node_load
+      loads.each_slice(DAY_CHUNK_SIZE).map do |chunk|
+        # Tech loads may be nil when the technology load had no frame.
+        # Therefore, the nils are removed from the chunk before determining the
+        # peak load.
+        chunk.compact.max_by(&:abs)
       end
     end
   end
