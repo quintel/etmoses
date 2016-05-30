@@ -135,7 +135,7 @@ var TreeGraph = (function () {
             capacity = d.capacity + 1e-5;
 
         return load && (d.capacity &&
-            (d3.max(load) > capacity || d3.min(load) < -capacity));
+            (d3.max(load.total) > capacity || d3.min(load.total) < -capacity));
     }
 
     function setNodeClass(data) {
