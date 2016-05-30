@@ -1,5 +1,5 @@
 class GasAssetList < ActiveRecord::Base
-  PRESSURE_LEVELS = [0.1, 4, 8, 40]
+  PRESSURE_LEVELS = [0.125, 4, 8, 40]
   DEFAULT = {
     "pressure_level_index" => 0,
     "part"                 => "connectors",
