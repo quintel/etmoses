@@ -417,9 +417,10 @@ var D3LoadChart = (function () {
 
                     redrawPaths();
 
-                    issue.select("rect")
+                    d3.select(this)
+                        .select(".square")
                         .transition()
-                        .attr("fill", function (d) {
+                        .style("background-color", function (d) {
                             return d.visible ? d.color : "#F1F1F2";
                         });
                 })

@@ -36,13 +36,13 @@ var LoadChartsSettings = {
         axisLabel: 'kW'
     },
     load_strategies: {
-        name: "Load (with strategies)",
+        name: "Electricity (with strategies)",
         color: '#95BB95',
         visible: true,
         axisLabel: 'kW'
     },
     load: {
-        name: "Load",
+        name: "Electricity",
         color: '#1F77B4',
         visible: true,
         axisLabel: 'kW'
