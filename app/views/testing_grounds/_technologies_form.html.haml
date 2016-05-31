@@ -4,9 +4,6 @@
 = form.hidden_field :topology_id, value: testing_ground.topology_id
 = form.hidden_field :market_model_id, value: testing_ground.market_model_id
 
-.hidden
-  = text_area_tag :technology_distribution, @testing_ground.technology_distribution.to_json
-
 = form.label :technology_profile, "Technology profile"
 .help-block
   %p
@@ -31,7 +28,7 @@
     - concurrency_options.each do |technology|
       %span.check_box
         - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
-        = check_box_tag technology.key, "max", max, {data: {toggle: "toggle", on: "Max", off: "Min"}}
+        = check_box_tag technology.key, "max", max, { data: { toggle: "toggle", on: "Max", off: "Min" } }
         %span= t("technologies.#{ technology.key }.plural")
 
     .buttons
@@ -46,9 +43,9 @@
 
 .hidden.profile
   - Technology.base_loads.each do |tech|
-    %select.form-control{class: tech.key, data: {type: 'profile'}}
+    %select.form-control{ class: tech.key, data: { type: 'profile' } }
       = options_for_load_profiles(tech)
 
 .hidden
   = form.text_area :technology_profile, value: @testing_ground.technology_profile.to_json
-
+  = text_area_tag :technology_distribution, @technology_distribution.to_json
