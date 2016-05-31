@@ -32,9 +32,7 @@ class InstalledTechnology
     private
 
     def slice_curve(curve)
-      curve_range = (range ? range : 0...(curve.size / 52))
-
-      curve[curve_range]
+      range ? curve[range] : curve
     end
   end
 end
