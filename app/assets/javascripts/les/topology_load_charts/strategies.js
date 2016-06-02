@@ -3,8 +3,7 @@
 var Strategies = (function () {
     'use strict';
 
-    var applyStrategyButton, savedStrategies,
-        changedStrategy,
+    var savedStrategies, changedStrategy,
         sliderSettings = {
             focus: true,
             formatter: function (value) {
@@ -65,9 +64,6 @@ var Strategies = (function () {
         } else if (changedStrategy) {
             saveSelectedStrategies.call(this, appliedStrategies);
             window.currentTree.updateStrategies();
-        // When nothing changed
-        } else {
-            window.currentTree.toggleLoading();
         }
     }
 
@@ -112,16 +108,10 @@ var Strategies = (function () {
             .slider('setValue', (savedStrategies.capping_fraction || 1) * 100);
     }
 
-    function addOnChangeListener() {
-        applyStrategyButton.prop('disabled', false);
-        applyStrategyButton.on("click", setChangedStrategy.bind(this));
-    }
-
     function Strategies() {
-        applyStrategyButton = $("button.apply_strategies");
+        $("button.apply_strategies").on("click", setChangedStrategy.bind(this));
 
         setStrategies.call(this);
-        addOnChangeListener.call(this);
 
         return StrategyHelper.getStrategies();
     }

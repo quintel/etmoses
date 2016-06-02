@@ -73,12 +73,10 @@ var Tree = (function () {
         },
 
         toggleLoading: function () {
-            var loadingSpinner = $(".load-graph-wrapper .loading-spinner");
-            loadingSpinner.toggleClass("on");
-
             this.loading = !this.loading;
 
-            $("button.apply_strategies").prop("disabled", loadingSpinner.hasClass("on"));
+            $(".load-graph-wrapper .loading-spinner").toggleClass("on");
+            $("button.apply_strategies").prop("disabled", this.loading);
         },
 
         addNode: function (name) {
