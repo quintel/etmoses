@@ -144,7 +144,13 @@ var ChartShower = (function () {
                 return false;
             }
 
-            window.currentTree.addNode(this.nodeData.name);
+            // This is currently not desired due to the fact that
+            // congestion is not showing up correctly.
+            //
+            // See: https://github.com/quintel/etmoses/issues/1026
+            //
+            // window.currentTree.addNode(this.nodeData.name);
+            //
             renderLoadChart.call(this, this.nodeData);
             toggleDomParts.call(this.nodeData);
             updateChartViewInputs.call(this.nodeData);
