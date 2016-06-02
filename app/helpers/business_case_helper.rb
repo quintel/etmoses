@@ -22,4 +22,8 @@ module BusinessCaseHelper
   def valid_financial_statement?(setting)
     setting[:incoming] || setting[:outgoing]
   end
+
+  def clear_business_case?(testing_ground)
+    testing_ground.cache_updated_at > testing_ground.business_case.updated_at
+  end
 end
