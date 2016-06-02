@@ -8,7 +8,7 @@ module GasAssetLists
     end
 
     def generate
-      (GasAssets::Pipe.all + GasAssets::Connector.all).map do |part|
+      StaticData::DATA_SOURCES.values.map(&:all).flatten.map do |part|
         InstalledGasAsset.new(create_gas_asset(part)).attributes
       end
     end

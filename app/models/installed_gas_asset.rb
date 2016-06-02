@@ -51,8 +51,9 @@ class InstalledGasAsset
   # Returns a GasAssets::Base or subclass.
   def part_record
     klass = case part
-      when 'pipes'.freeze      then GasAssets::Pipe
-      when 'connectors'.freeze then GasAssets::Connector
+      when 'pipes'.freeze       then GasAssets::Pipe
+      when 'connectors'.freeze  then GasAssets::Connector
+      when 'compressors'.freeze then GasAssets::Compressor
       else fail "Unknown part type #{part}"
     end
 

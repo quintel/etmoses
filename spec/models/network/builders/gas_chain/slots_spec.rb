@@ -52,12 +52,12 @@ module Network::Builders
       end
     end # with only "connectors" assets in other pressure levels
 
-    context 'with a single "connectors" asset in the pressure level' do
+    context 'with a single "compressor" asset in the pressure level' do
       let(:assets) do
         [InstalledGasAsset.new(
           pressure_level_index: 1,
-          part: 'connectors',
-          type: 'inefficient_connector'
+          part: 'compressors',
+          type: 'compressor_8_bar'
         )]
       end
 
@@ -69,6 +69,17 @@ module Network::Builders
         it 'it takes efficiency from the asset' do
           expect(result[:upward].efficiency).to eql(0.8)
         end
+      end
+    end
+
+    # with a single "connectors" asset in the pressure level
+    context 'with a single "connectors" asset in the pressure level' do
+      let(:assets) do
+        [InstalledGasAsset.new(
+          pressure_level_index: 1,
+          part: 'connectors',
+          type: 'inefficient_connector'
+        )]
       end
 
       context 'the downward slot' do
@@ -82,13 +93,13 @@ module Network::Builders
       end
     end # with a single "connectors" asset in the pressure level
 
-    context 'with a 2 units of a single "connectors" asset' do
+    context 'with a 2 units of a single "compressor" asset' do
       let(:assets) do
         [InstalledGasAsset.new(
           pressure_level_index: 1,
-          part: 'connectors',
-          amount: 2,
-          type: 'inefficient_connector'
+          part: 'compressors',
+          type: 'compressor_8_bar',
+          amount: 2
         )]
       end
 
@@ -100,6 +111,17 @@ module Network::Builders
         it 'it takes efficiency from the asset' do
           expect(result[:upward].efficiency).to eql(0.8)
         end
+      end
+    end # with a 2 units of a single "connectors" asset
+
+    context 'with a 2 units of a single "connectors" asset' do
+      let(:assets) do
+        [InstalledGasAsset.new(
+          pressure_level_index: 1,
+          part: 'connectors',
+          amount: 2,
+          type: 'inefficient_connector'
+        )]
       end
 
       context 'the downward slot' do
@@ -113,18 +135,18 @@ module Network::Builders
       end
     end # with a 2 units of a single "connectors" asset
 
-    context 'with a two "connectors" assets in the pressure level' do
+    context 'with a two "compressors" assets in the pressure level' do
       let(:assets) do
         [
           InstalledGasAsset.new(
             pressure_level_index: 1,
-            part: 'connectors',
-            type: 'inefficient_connector'
+            part: 'compressors',
+            type: 'compressor_8_bar'
           ),
           InstalledGasAsset.new(
             pressure_level_index: 1,
-            part: 'connectors',
-            type: 'big_connector'
+            part: 'compressors',
+            type: 'big_compressor'
           )
         ]
       end
@@ -143,6 +165,23 @@ module Network::Builders
           #    = 0.85
           expect(result[:upward].efficiency).to eql((0.8 * 3 + 1.0) / 4.0)
         end
+      end
+    end
+
+    context 'with a two "connectors" assets in the pressure level' do
+      let(:assets) do
+        [
+          InstalledGasAsset.new(
+            pressure_level_index: 1,
+            part: 'connectors',
+            type: 'inefficient_connector'
+          ),
+          InstalledGasAsset.new(
+            pressure_level_index: 1,
+            part: 'connectors',
+            type: 'big_connector'
+          )
+        ]
       end
 
       context 'the downward slot' do
