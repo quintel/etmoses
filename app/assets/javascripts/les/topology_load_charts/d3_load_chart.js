@@ -324,11 +324,6 @@ var D3LoadChart = (function () {
 
     D3LoadChart.prototype = {
         lastRequestedData: null,
-        lesOptions: {
-            resolution:  'high',
-            range_start: 0,
-            range_end:   weekResolution
-        },
         view: function (attr, newAttr) {
             shown[attr] = newAttr;
 
@@ -594,6 +589,12 @@ var D3LoadChart = (function () {
     function D3LoadChart(chartClass, curveType, settings) {
         this.chartClass = chartClass;
         this.curveType  = curveType || 'default';
+        this.lesOptions = {
+            resolution:  'high',
+            range_start: 0,
+            range_end:   weekResolution
+        };
+
         staticSettings  = settings || {};
         width           = (staticSettings.width || 500);
     }
