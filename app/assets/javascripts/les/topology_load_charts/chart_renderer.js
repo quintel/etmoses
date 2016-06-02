@@ -1,5 +1,6 @@
 /*globals CSV,D3LoadChart*/
-var ChartShower = (function () {
+
+var ChartRenderer = (function () {
     'use strict';
 
     function toggleSelectedNode() {
@@ -138,23 +139,29 @@ var ChartShower = (function () {
                (d.gas && d.gas.total && d.gas.total.length);
     }
 
-    ChartShower.prototype = {
+    ChartRenderer.prototype = {
         show: function () {
             if (this.nodeData === undefined) {
                 return false;
             }
 
-            window.currentTree.addNode(this.nodeData.name);
+            // This is currently not desired due to the fact that
+            // congestion is not showing up correctly.
+            //
+            // See: https://github.com/quintel/etmoses/issues/1026
+            //
+            // window.currentTree.addNode(this.nodeData.name);
+            //
             renderLoadChart.call(this, this.nodeData);
             toggleDomParts.call(this.nodeData);
             updateChartViewInputs.call(this.nodeData);
         }
     };
 
-    function ChartShower(treeChart, nodeData) {
+    function ChartRenderer(treeChart, nodeData) {
         this.treeChart = treeChart;
         this.nodeData  = nodeData;
     }
 
-    return ChartShower;
+    return ChartRenderer;
 }());
