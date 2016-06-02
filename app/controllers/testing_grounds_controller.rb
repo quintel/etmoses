@@ -113,6 +113,8 @@ class TestingGroundsController < ResourceController
   # POST /testing_grounds/:id/update_strategies
   def update_strategies
     if TestingGround::StrategyUpdater.new(@testing_ground, params).update
+      @testing_ground.business_case.clear_job!
+
       render json: { status: 'ok' }
     end
   end

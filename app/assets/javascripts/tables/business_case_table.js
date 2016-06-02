@@ -4,7 +4,7 @@ var BusinessCaseTable = (function () {
     'use strict';
 
     function finish() {
-        $.ajax({ type: "POST", url: this.urls.finishUrl });
+        $.ajax({ type: "POST", url: this.data.finishUrl });
 
         $("#business_case_table .loading-spinner").removeClass("on");
         $("select#compare").prop('disabled', false);
@@ -17,12 +17,12 @@ var BusinessCaseTable = (function () {
 
     function getOptions() {
         return {
-            url: this.urls.url,
+            url: this.data.url,
             data: {
                 strategies: StrategyHelper.getStrategies()
             },
             first_data: {
-                clear: true
+                clear: this.data.clear
             }
         };
     }
@@ -49,7 +49,7 @@ var BusinessCaseTable = (function () {
 
     function BusinessCaseTable(table) {
         this.table = $(table);
-        this.urls  = this.table.data();
+        this.data  = this.table.data();
     }
 
     return BusinessCaseTable;

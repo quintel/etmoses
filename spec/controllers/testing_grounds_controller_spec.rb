@@ -113,14 +113,33 @@ RSpec.describe TestingGroundsController do
     end
 
     describe "signed in" do
-      it "updates strategies of les" do
-        sign_in(user)
+      let!(:sign_in_user) { sign_in(user) }
 
-        testing_ground = FactoryGirl.create(:testing_ground, user: user, technology_profile: {})
+      let(:testing_ground) {
+        FactoryGirl.create(:testing_ground, user: user, technology_profile: {})
+      }
 
+      let!(:business_case) {
+        FactoryGirl.create(:business_case,
+                           testing_ground: testing_ground,
+                           job_id: -1,
+                           job_finished_at: DateTime.now)
+      }
+
+      let!(:update_strategies) {
         post :update_strategies, strategies: strategies, format: :json, id: testing_ground.id
+      }
 
+      it "updates strategies of les" do
         expect(SelectedStrategy.last.ev_storage).to eq(true)
+      end
+
+      it "clears the business case job" do
+        expect(business_case.reload.job_id).to eq(nil)
+      end
+
+      it "clears the business case job finished at" do
+        expect(business_case.reload.job_finished_at).to eq(nil)
       end
     end
   end

@@ -57,11 +57,15 @@ var Strategies = (function () {
     }
 
     function toggleStrategies(appliedStrategies) {
+        // When somebody blanks the strategies
         if (changedStrategy && !StrategyHelper.anyStrategies()) {
             saveSelectedStrategies.call(this, appliedStrategies);
             window.currentTree.treeGraph.clearStrategies().reload();
+        // When somebody changes the strategies but not blank
         } else if (changedStrategy) {
+            saveSelectedStrategies.call(this, appliedStrategies);
             window.currentTree.updateStrategies();
+        // When nothing changed
         } else {
             window.currentTree.toggleLoading();
         }
