@@ -18,5 +18,8 @@ module GasAssets
         GasAssetList::PRESSURE_LEVELS.index(pressure_level)
       end
     end
+
+    def direction
+    end
   end
 end

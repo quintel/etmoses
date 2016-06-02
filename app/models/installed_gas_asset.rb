@@ -45,6 +45,13 @@ class InstalledGasAsset
     end
   end
 
+  # Public: The direction in which the asset works.
+  #
+  # Returns a Symbol.
+  def direction
+    part_record.direction
+  end
+
   # Public: The GasAsset record which contains the static data about this type
   # of asset.
   #

@@ -3,11 +3,6 @@ module Network::Builders
     # Given a gas asset list defined by a user, constructs the upward and
     # downward slots which will be used by a connection between layers.
     class Slots
-      GAS_FLOW = {
-        'high_to_low' => 'connectors',
-        'low_to_high' => 'compressors'
-      }.freeze
-
       def self.build(layer, assets)
         new(layer, assets).build
       end
@@ -20,11 +15,8 @@ module Network::Builders
       #
       # Returns a Slots builder.
       def initialize(layer, assets)
-        @layer = layer
-
-        @assets = assets.select(&method(:asset_predicate)).group_by do |asset|
-          GAS_FLOW.key(asset.part)
-        end
+        @layer  = layer
+        @assets = assets.select(&method(:asset_predicate)).group_by(&:direction)
       end
 
       # Public: Constructs the slots to be used by the Connection.
@@ -33,8 +25,8 @@ module Network::Builders
       def build
         return default_slots if @assets.empty?
 
-        { upward:   Network::Chain::Slot.upward(**attributes('low_to_high')),
-          downward: Network::Chain::Slot.downward(**attributes('high_to_low')) }
+        { upward:   Network::Chain::Slot.upward(**attributes(:upward)),
+          downward: Network::Chain::Slot.downward(**attributes(:downward)) }
       end
 
       private
@@ -44,16 +36,23 @@ module Network::Builders
       #
       # Returns a hash with :capacity and :efficiency.
       def attributes(direction)
-        capacity = total_capacity(direction)
+        capacity   = total_capacity(direction)
+        efficiency = 0.0
 
-        efficiency = (@assets[direction] || []).sum do |asset|
-          asset_capacity = capacity_of(asset, direction)
+        # No assets installed?
+        return { capacity: Float::INFINITY, efficiency: 1.0 } if capacity.nil?
 
-          if asset_capacity > 0
-            asset.part_record.efficiency[direction] *
-              (asset_capacity / capacity)
-          else
-            0.0
+        (@assets[direction] || []).each do |asset|
+          asset_capacity   = capacity_of(asset)
+          asset_efficiency = asset.part_record.efficiency || 1.0
+
+          if asset_capacity == Float::INFINITY
+            # This asset dominates the slot so we set efficiency equal to this
+            # component and call it a day.
+            efficiency = asset_efficiency
+            break
+          elsif asset_capacity > 0
+            efficiency += asset_efficiency * (asset_capacity / capacity)
           end
         end
 
@@ -67,15 +66,16 @@ module Network::Builders
       def total_capacity(direction)
         return unless @assets[direction]
 
-        @assets[direction].sum { |asset| capacity_of(asset, direction) }
+        @assets[direction].sum { |asset| capacity_of(asset) }
       end
 
       # Internal: Given a connector and direction, returns the capacity of the
       # part.
       #
       # Returns a numeric.
-      def capacity_of(asset, direction)
-        asset.part_record.capacity[direction] * asset.amount
+      def capacity_of(asset)
+        part = asset.part_record
+        part.capacity ? part.capacity * asset.amount : Float::INFINITY
       end
 
       # Internal: If the user did not define any connections between the layers,
@@ -88,9 +88,9 @@ module Network::Builders
       end
 
       def asset_predicate(asset)
-        GAS_FLOW.values.include?(asset.part) &&
-        asset.pressure_level_name == @layer &&
-        asset.amount > 0
+        (asset.direction == :upward || asset.direction == :downward) &&
+          asset.pressure_level_name == @layer &&
+          asset.amount > 0
       end
     end
   end # Builders

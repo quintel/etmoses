@@ -165,7 +165,7 @@ module Network
         let(:connection) { chain.forty.children.first }
 
         it 'sets the upward efficiency' do
-          expect(connection.upward.efficiency).to eq(0.0)
+          expect(connection.upward.efficiency).to eq(1.0)
         end
 
         it 'sets the downward efficiency' do

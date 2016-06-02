@@ -1,7 +1,5 @@
-capacity:
-  high_to_low: 2.0
-efficiency:
-  high_to_low: 0.5
+capacity: 2.0
+efficiency: 0.5
 investment_cost: 1
 lifetime: 50
 pressure_levels:

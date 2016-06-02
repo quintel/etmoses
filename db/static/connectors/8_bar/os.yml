@@ -1,10 +1,6 @@
-capacity:
-  high_to_low: 1.0
-  low_to_high: 1.0
+capacity: .inf
 default_units_per_connection: 8.56086804978423E-05
-efficiency:
-  high_to_low: 1.0
-  low_to_high: 1.0
+efficiency: 1.0
 investment_cost: 3500
 lifetime: 30
 yearly_o_and_m_cost: 730

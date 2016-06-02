@@ -1,10 +1,6 @@
-capacity:
-  high_to_low: 1.0
-  low_to_high: 1.0
+capacity: 1.0
 default_units_per_connector: 1.2E-05
-efficiency:
-  high_to_low: 1.0
-  low_to_high: 1.0
+efficiency: 1.0
 investment_cost: 100
 lifetime: 50
 yearly_o_and_m_cost: 500

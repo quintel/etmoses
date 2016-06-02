@@ -93,6 +93,46 @@ module Network::Builders
       end
     end # with a single "connectors" asset in the pressure level
 
+    context 'with a single "connectors" asset with no capacity' do
+      let(:assets) do
+        [InstalledGasAsset.new(
+          pressure_level_index: 1,
+          part: 'connectors',
+          type: 'infinite_connector'
+        )]
+      end
+
+      context 'the downward slot' do
+        it 'it has infinite capacity' do
+          expect(result[:downward].capacity).to eql(Float::INFINITY)
+        end
+
+        it 'it takes efficiency from the asset' do
+          expect(result[:downward].efficiency).to eql(0.5)
+        end
+      end
+    end # with a single "connectors" asset with no capacity
+
+    context 'with a single "connectors" asset with no high_to_low' do
+      let(:assets) do
+        [InstalledGasAsset.new(
+          pressure_level_index: 1,
+          part: 'connectors',
+          type: 'missing_capacity_connector'
+        )]
+      end
+
+      context 'the downward slot' do
+        it 'it has infinite capacity' do
+          expect(result[:downward].capacity).to eql(Float::INFINITY)
+        end
+
+        it 'it takes efficiency from the asset' do
+          expect(result[:downward].efficiency).to eql(0.5)
+        end
+      end
+    end # with a single "connectors" asset with no capacity
+
     context 'with a 2 units of a single "compressor" asset' do
       let(:assets) do
         [InstalledGasAsset.new(

@@ -4,6 +4,10 @@ module GasAssets
       'compressors'
     end
 
+    def direction
+      :upward
+    end
+
     def default_amount
       attributes[:default_units_per_connection] || 0
     end
