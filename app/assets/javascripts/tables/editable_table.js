@@ -53,8 +53,18 @@ var EditableTable = (function () {
         $(this.selector).find("a.add-row").on("click", function (e) {
             e.preventDefault();
 
-            var row       = $(e.currentTarget).parents("tr"),
-                clonedRow = row.clone(true, true).removeClass("blank");
+            var row             = $(e.currentTarget).parents("tr"),
+                clonedRow       = row.clone(true, true).removeClass("blank"),
+                originalSelects = row.find('select'),
+                clonedSelects;
+
+            if (originalSelects.length) {
+                clonedSelects = clonedRow.find('select');
+
+                originalSelects.each(function(index, element) {
+                    $(clonedSelects[index]).val($(element).val());
+                });
+            }
 
             clonedRow.insertAfter(row);
             this.changeListener();
