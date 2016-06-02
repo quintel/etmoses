@@ -1,5 +1,6 @@
 /*globals CSV,D3LoadChart*/
-var ChartShower = (function () {
+
+var ChartRenderer = (function () {
     'use strict';
 
     function toggleSelectedNode() {
@@ -138,7 +139,7 @@ var ChartShower = (function () {
                (d.gas && d.gas.total && d.gas.total.length);
     }
 
-    ChartShower.prototype = {
+    ChartRenderer.prototype = {
         show: function () {
             if (this.nodeData === undefined) {
                 return false;
@@ -157,10 +158,10 @@ var ChartShower = (function () {
         }
     };
 
-    function ChartShower(treeChart, nodeData) {
+    function ChartRenderer(treeChart, nodeData) {
         this.treeChart = treeChart;
         this.nodeData  = nodeData;
     }
 
-    return ChartShower;
+    return ChartRenderer;
 }());

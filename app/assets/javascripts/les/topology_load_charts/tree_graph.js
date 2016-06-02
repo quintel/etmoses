@@ -1,4 +1,4 @@
-/*globals ChartShower,CSV,ETHelper,LocalSettings*/
+/*globals ChartRenderer,CSV,ETHelper,LocalSettings*/
 var TreeGraph = (function () {
     'use strict';
 
@@ -292,7 +292,7 @@ var TreeGraph = (function () {
         },
 
         showChart: function (d) {
-            new ChartShower(this, d).show();
+            new ChartRenderer(this, d).show();
         },
 
         update: function (source) {
