@@ -6,6 +6,7 @@ class TestingGroundCalculatorJob
   end
 
   def perform
+    cache.destroy
     cache.write(network_calculation)
   end
 
