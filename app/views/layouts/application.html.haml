@@ -7,6 +7,11 @@
     = csrf_meta_tags
   %body
     = render partial: 'layouts/nav'
+    .maintenance
+      .inner
+        ETMoses is currenty undergoing maintenance and may not be completely
+        reliable during this process. We hope to have the application restored
+        to full service soon.
     .container
       = yield
     = render partial: 'layouts/footer'
