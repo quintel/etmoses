@@ -15,6 +15,10 @@ module NetworkCache
       Fetcher.from(@testing_ground, **@opts).fetch(nodes)
     end
 
+    def destroy
+      Destroyer.from(@testing_ground, **@opts).destroy
+    end
+
     def present?
       Validator.from(@testing_ground, **@opts).valid?
     end
