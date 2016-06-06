@@ -50,34 +50,40 @@ var EditableTable = (function () {
     }
 
     function addClickListenersToAddRow() {
-        $(this.selector).find("a.add-row").on("click", function (e) {
-            e.preventDefault();
+        $(this.selector)
+            .find("a.add-row")
+            .off('click')
+            .on('click', function (e) {
+                e.preventDefault();
 
-            var row             = $(e.currentTarget).parents("tr"),
-                clonedRow       = row.clone(true, true).removeClass("blank"),
-                originalSelects = row.find('select'),
-                clonedSelects;
+                var row             = $(e.currentTarget).parents("tr"),
+                    clonedRow       = row.clone(true, true).removeClass("blank"),
+                    originalSelects = row.find('select'),
+                    clonedSelects;
 
-            if (originalSelects.length) {
-                clonedSelects = clonedRow.find('select');
+                if (originalSelects.length) {
+                    clonedSelects = clonedRow.find('select');
 
-                originalSelects.each(function(index, element) {
-                    $(clonedSelects[index]).val($(element).val());
-                });
-            }
+                    originalSelects.each(function(index, element) {
+                        $(clonedSelects[index]).val($(element).val());
+                    });
+                }
 
-            clonedRow.insertAfter(row);
-            this.changeListener();
-        }.bind(this));
+                clonedRow.insertAfter(row);
+                this.changeListener();
+            }.bind(this));
     }
 
     function addClickListenersToDeleteRow() {
-        $(this.selector).find("a.remove-row").on("click", function (e) {
-            e.preventDefault();
+        $(this.selector)
+            .find("a.remove-row")
+            .off('click')
+            .on('click', function (e) {
+                e.preventDefault();
 
-            $(e.currentTarget).parents("tr").remove();
-            this.changeListener();
-        }.bind(this));
+                $(e.currentTarget).parents("tr").remove();
+                this.changeListener();
+            }.bind(this));
     }
 
     EditableTable.prototype = {
@@ -85,7 +91,9 @@ var EditableTable = (function () {
             this.changeListener = (changeListener || function () { return; });
             this.changeData = (changeData || function () { return; });
 
-            $(this.selector).on('change', this.changeListener.bind(this));
+            $(this.selector)
+                .off('change')
+                .on('change', this.changeListener.bind(this));
 
             addClickListenersToAddRow.call(this);
             addClickListenersToDeleteRow.call(this);
@@ -104,22 +112,3 @@ var EditableTable = (function () {
 
     return EditableTable;
 }());
-
-$(document).on("page:change", function () {
-    'use strict';
-
-    var tableType, tableClass, variableTable,
-        tables = {
-            market_model_table:   MarketModelTable,
-            gas_asset_list_table: GasAssetListTable
-        };
-
-    $("table.table.interactions").each(function () {
-        tableType     = $(this).data('type');
-        tableClass    = $(this).attr('class').replace(/\s/g, '.');
-        variableTable = ("current_"  + tableType).camelize();
-
-        window[variableTable] = new tables[tableType](tableClass);
-        window[variableTable].append();
-    });
-});

@@ -1,0 +1,4 @@
+---
+carrier: heat
+importable_attributes:
+- heat_output_capacity

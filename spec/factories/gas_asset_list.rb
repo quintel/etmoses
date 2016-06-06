@@ -4,4 +4,3 @@ FactoryGirl.define do
     asset_list JSON.dump([])
   end
 end
-

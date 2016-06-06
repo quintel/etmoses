@@ -17,15 +17,25 @@ class Technology < ActiveHash::Base
   def self.defaults
     {
       profile_required: true,
-      visible: true,
-      expandable: true,
-      composite: false,
-      default_demand: nil
+      visible:          true,
+      expandable:       true,
+      composite:        false,
+      dispatchable:     true,
+      default_demand:   nil,
+      defaults:         {}
     }
   end
 
   def self.importable
     all - where(importable_attributes: nil)
+  end
+
+  def self.for(carrier)
+    importable.select { |t| t.carrier == carrier }
+  end
+
+  def self.for_carrier(carrier)
+    where(carrier: carrier)
   end
 
   def self.visible
@@ -40,8 +50,10 @@ class Technology < ActiveHash::Base
     where(
       expandable: true,
       visible: true,
-      default_position_relative_to_buffer: nil
-    )
+      default_position_relative_to_buffer: nil,
+    ).select do |tech|
+      %w(electricity gas).include?(tech.carrier)
+    end
   end
 
   # Public: Returns a "generic" technology, which represents an installed
@@ -64,14 +76,12 @@ class Technology < ActiveHash::Base
     where(key: key).size > 0
   end
 
-  def self.gquery
-    all.select do |technology|
-      technology.importable_gqueries.present?
-    end
-  end
-
   def name
     attributes[:name] || key.humanize.to_s
+  end
+
+  def importable?
+    importable_attributes.any?
   end
 
   def profile_required?

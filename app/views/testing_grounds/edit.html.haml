@@ -27,13 +27,17 @@
     %li{role: "presentation"}
       = link_to "Market model", "#market-model", "aria-controls" => "market-model", "role" => "tab", data: { toggle: "tab" }
 
-  - if @testing_ground.business_case
+  - if @testing_ground.business_case && @testing_ground.business_case.financials
     %li{role: "presentation"}
       = link_to "Business case", "#business-case", "aria-controls" => "business-case", "role" => "tab", data: { toggle: "tab" }
 
   - if @testing_ground.gas_asset_list
     %li{role: "presentation"}
       = link_to "Gas asset list", "#gas-asset-list", "aria-controls" => "gas-asset-list", "role" => "tab", data: { toggle: "tab" }
+
+  - if @testing_ground.heat_source_list
+    %li{role: "presentation"}
+      = link_to "Heat source list", "#heat-source-list", "aria-controls" => "heat-source-list", "role" => "tab", data: { toggle: "tab" }
 
 .tab-content
   .tab-pane.remote.edit#general{role: "tabpanel"}
@@ -74,6 +78,10 @@
   - if @testing_ground.gas_asset_list
     .tab-pane.remote.edit#gas-asset-list{role: "tabpanel"}
       = render partial: 'gas_asset_lists/form', locals: { testing_ground: @testing_ground, gas_asset_list: @testing_ground.gas_asset_list }
+
+  - if @testing_ground.heat_source_list
+    .tab-pane.remote.edit#heat-source-list{role: "tabpanel"}
+      = render partial: 'heat_source_lists/form', locals: { testing_ground: @testing_ground, heat_source_list: @heat_source_list }
 
 .last-btns
   %span.save-all.wait.hidden= image_tag 'wait.gif'
