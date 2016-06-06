@@ -4,6 +4,7 @@ carrier: gas
 behavior: hhp_gas
 default_capacity: 20.6186
 default_position_relative_to_buffer: boosting
+exists_as_technology_in_etengine: false
 whitelisted_attributes:
   - buffer
   - demand

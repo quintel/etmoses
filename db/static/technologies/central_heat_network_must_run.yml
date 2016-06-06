@@ -10,3 +10,5 @@ defaults:
   marginal_costs:           0.0
   distance:                 1
   units:                    1
+
+exists_as_technology_in_etengine: false

@@ -17,6 +17,7 @@ RSpec.describe Import::HybridBuilder do
           "name"=>"Hybrid heat pump hot water (electricity)",
           "units"=>1,
           "carrier"=>"electricity",
+          "capacity" => 1.63333,
           "position_relative_to_buffer"=>"buffering",
           "composite" => false
         },
@@ -25,6 +26,7 @@ RSpec.describe Import::HybridBuilder do
           "name"=>"Hybrid heat pump hot water (gas)",
           "units"=>1,
           "carrier"=>"gas",
+          "capacity" => 24.4444,
           "position_relative_to_buffer"=>"boosting",
           "composite" => false
         }

@@ -3,6 +3,7 @@ class TestingGround
     def initialize(options)
       @options       = options
       @key           = options.fetch(:key)
+      @buffer        = options.fetch(:buffer)
       @scenario_id   = options.fetch(:scenario_id)
       @load_profiles = options.fetch(:load_profiles)
     end
@@ -34,6 +35,7 @@ class TestingGround
         name: name,
         profile: profile,
         includes: technology.technologies,
+        buffer: @buffer,
         units: 1
       }
     end

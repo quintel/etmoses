@@ -7,6 +7,7 @@ visible: true
 composite: true
 default_capacity: 10.0
 default_volume: 2.9065
+exists_as_technology_in_etengine: false
 expandable: true
 whitelisted_attributes:
   - demand

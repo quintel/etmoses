@@ -41,6 +41,7 @@ class Import
         'units'                       => units,
         'carrier'                     => tech.carrier,
         'composite'                   => tech.composite,
+        'capacity'                    => tech.default_capacity,
         'position_relative_to_buffer' => tech.default_position_relative_to_buffer
       }
 

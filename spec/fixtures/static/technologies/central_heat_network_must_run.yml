@@ -7,3 +7,5 @@ defaults:
   total_initial_investment: 800.0  # EUR/MWh
   om_costs_per_year:        25.0   # EUR/MWh
   technical_lifetime:       30.0   # Year
+
+exists_as_technology_in_etengine: false

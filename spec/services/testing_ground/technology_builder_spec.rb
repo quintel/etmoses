@@ -5,7 +5,8 @@ RSpec.describe TestingGround::TechnologyBuilder do
     technology = TestingGround::TechnologyBuilder.new({
       key: "base_load",
       scenario_id: 1,
-      load_profiles: nil
+      load_profiles: nil,
+      buffer: nil
     })
 
     expect(technology.build).to be_an_instance_of(InstalledTechnology)
@@ -17,7 +18,8 @@ RSpec.describe TestingGround::TechnologyBuilder do
         key: "buffer_space_heating",
         composite_index: 5,
         scenario_id: 1,
-        load_profiles: nil
+        load_profiles: nil,
+        buffer: nil
       }).build
     }
 

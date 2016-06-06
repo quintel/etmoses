@@ -1,10 +1,12 @@
 ---
-name: Hybrid heat pump space heating
-carrier: hybrid
-behavior: 'null'
-exists_as_technology_in_etengine: false
+name: Households space heater district heating
+behavior: null
+carrier: heat
+default_capacity: 10.0
+default_position_relative_to_buffer: boosting
+expandable: false
+is_district_heating: true
 importable_attributes:
-  - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
   - initial_investment
@@ -12,12 +14,9 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
-visible: false
 whitelisted_attributes:
   - buffer
-  - demand
   - initial_investment
-  - input_capacity
   - om_costs_for_ccs_per_full_load_hour
   - om_costs_per_full_load_hour
   - om_costs_per_year

@@ -42,7 +42,7 @@ class HeatSourceList::SourceListFetcher
   end
 
   def heat_source_keys
-    Technology.for('heat').map do |heat_source|
+    Technology.heat_sources.map do |heat_source|
       Hash[heat_source.key, heat_source.importable_attributes]
     end
   end

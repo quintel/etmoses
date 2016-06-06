@@ -16,22 +16,30 @@ class Technology < ActiveHash::Base
 
   def self.defaults
     {
-      profile_required: true,
-      visible:          true,
-      expandable:       true,
-      composite:        false,
-      dispatchable:     true,
-      default_demand:   nil,
-      defaults:         {}
+      profile_required:                 true,
+      visible:                          true,
+      expandable:                       true,
+      composite:                        false,
+      exists_as_technology_in_etengine: true,
+      is_district_heating:              false,
+      dispatchable:                     true,
+      default_demand:                   nil,
+      defaults:                         {}
     }
   end
 
   def self.importable
-    all - where(importable_attributes: nil)
+    where(exists_as_technology_in_etengine: true, visible: true) -
+      where(carrier: 'heat') +
+      where(is_district_heating: true)
   end
 
-  def self.for(carrier)
-    importable.select { |t| t.carrier == carrier }
+  def self.heat_sources
+    where(
+      exists_as_technology_in_etengine: true,
+      carrier: 'heat',
+      is_district_heating: false
+    )
   end
 
   def self.for_carrier(carrier)
