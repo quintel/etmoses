@@ -25,7 +25,7 @@ class InstalledTechnology
 
     def cut_curves
       Hash[curves.map do |curve_type, curve|
-        [curve_type, curve ? slice_curve(curve) : nil]
+        [curve_type.to_s, curve ? slice_curve(curve) : nil]
       end]
     end
 
