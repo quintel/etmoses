@@ -3,7 +3,7 @@ class InstalledHeatSource
 
   attribute :key, String
   attribute :name, String
-  attribute :units, Float
+  attribute :units, Float, default: 1.0
   attribute :heat_production, Float, default: 0.0
   attribute :heat_capacity, Float, default: 0.0
   attribute :total_initial_investment, Float, default: 0.0
