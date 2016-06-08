@@ -70,27 +70,30 @@ var ChartRenderer = (function () {
     }
 
     function changeViewOfD3(e) {
-        var d3Chart = window.currentTree.d3Chart,
-            attrName = $(e.target).attr('name');
+        var input      = $(e.target),
+            d3Chart    = window.currentTree.d3Chart,
+            attrName   = input.attr('name'),
+            isCheckbox = (input.attr('type') === 'checkbox'),
+            value      = isCheckbox ? input.prop('checked') : input.val();
 
-        if (attrName === 'view_as') {
-            d3Chart.view('view_as', $(e.target).val()).update();
-        } else {
-            d3Chart.view(attrName, $(e.target).prop('checked')).update();
-        }
+        d3Chart.view(attrName, value).update();
+
         updateChartViewInputs.call(this);
     }
 
     function updateChartViewInputs() {
-        var viewAs = $("select.chart-view"),
-            showViewAs = !((this.load && this.load.tech_loads) ||
-                           (this.gas  && this.gas.tech_loads));
+        var viewAs      = $("select.chart-view[name='view_as']"),
+            viewCarrier = $("select.chart-view[name='view_carrier']"),
+            isTotal     = (viewAs.val() === 'total'),
+            showViewAs  = !((this.load && this.load.tech_loads) ||
+                            (this.gas  && this.gas.tech_loads));
 
-        if (viewAs.val() === 'total') {
+        viewCarrier.prop('disabled', isTotal);
+
+        if (isTotal) {
             $(".chart-view[type='checkbox']").bootstrapToggle('disable');
             viewAs.prop('disabled', showViewAs);
         } else {
-            toggleChartView('electricity', this.gas && this.gas.total);
             toggleChartView('strategies', StrategyHelper.anyStrategies());
         }
     }
@@ -136,7 +139,7 @@ var ChartRenderer = (function () {
         var d = this.nodeData;
 
         return (d.load && d.load.total && d.load.total.length) ||
-               (d.gas && d.gas.total && d.gas.total.length);
+               (d.gas  && d.gas.total  && d.gas.total.length);
     }
 
     ChartRenderer.prototype = {

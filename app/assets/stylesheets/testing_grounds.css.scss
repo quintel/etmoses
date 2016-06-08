@@ -220,6 +220,9 @@ ul.testing-grounds {
       }
     }
     select[name='view_as'] {
+      max-width: 103px;
+    }
+    select[name='view_carrier'] {
       max-width: 105px;
     }
     select,

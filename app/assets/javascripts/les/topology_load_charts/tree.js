@@ -1,5 +1,6 @@
 /*globals BusinessCaseTable,D3LoadChart,ErrorDisplayer,Les,StatusUpdater,
 Strategies,TreeFetcher,TreeGraph*/
+
 var Tree = (function () {
     'use strict';
 

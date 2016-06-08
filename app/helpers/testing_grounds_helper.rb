@@ -150,4 +150,12 @@ module TestingGroundsHelper
       ['Individual', 'individual']
     ])
   end
+
+  def view_carrier_options
+    options_for_select([
+      ['Electricity', 'load'],
+      ['Gas',         'gas'],
+      ['Heat',        'heat']
+    ])
+  end
 end

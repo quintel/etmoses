@@ -46,7 +46,9 @@
             %select.chart-view.form-control{ name: 'view_as' }
               = view_as_options
 
-            %input.chart-view{type: 'checkbox', name: 'electricity', checked: 'checked', data: { toggle: 'toggle', on: 'Electricity', off: 'Gas' } }
+            %select.chart-view.form-control{ name: 'view_carrier' }
+              = view_carrier_options
+
             %input.chart-view{type: 'checkbox', name: 'strategies', data: { toggle: 'toggle', on: 'Strategies', off: 'Basic' } }
             .clearfix
 

@@ -64,7 +64,7 @@ var Transformator = (function () {
     }
 
     function isShown(chartType) {
-        var type = (this.electricity ? 'load' : 'gas');
+        var type = this.view_carrier;
 
         if (this.strategies && StrategyHelper.anyStrategies()) {
             type += "_strategies";
@@ -116,9 +116,9 @@ var Transformator = (function () {
     }
 
     Transformator.prototype = {
-        transform: function (shown) {
+        transform: function () {
             this.results = [];
-            this.shown   = shown;
+            this.shown   = this.d3Chart.shown;
 
             fetchLoad.call(this).forEach(setLoad.bind(this));
 
