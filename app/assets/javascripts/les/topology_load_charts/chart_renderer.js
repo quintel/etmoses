@@ -31,7 +31,9 @@ var ChartRenderer = (function () {
 
     function downloadLoad() {
         var loads      = [],
-            chartTypes = ['load', 'load_strategies', 'gas', 'gas_strategies'];
+            chartTypes = ['load', 'load_strategies',
+                          'gas', 'gas_strategies',
+                          'heat', 'heat_strategies'];
 
         chartTypes.forEach(function (chartType) {
             if (this[chartType]) {
@@ -86,7 +88,8 @@ var ChartRenderer = (function () {
             viewCarrier = $("select.chart-view[name='view_carrier']"),
             isTotal     = (viewAs.val() === 'total'),
             showViewAs  = !((this.load && this.load.tech_loads) ||
-                            (this.gas  && this.gas.tech_loads));
+                            (this.gas  && this.gas.tech_loads) ||
+                            (this.heat && this.heat.tech_loads));
 
         viewCarrier.prop('disabled', isTotal);
 
@@ -139,7 +142,8 @@ var ChartRenderer = (function () {
         var d = this.nodeData;
 
         return (d.load && d.load.total && d.load.total.length) ||
-               (d.gas  && d.gas.total  && d.gas.total.length);
+               (d.gas  && d.gas.total  && d.gas.total.length) ||
+               (d.heat && d.heat.total && d.heat.total.length);
     }
 
     ChartRenderer.prototype = {

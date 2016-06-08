@@ -34,10 +34,13 @@ var Transformator = (function () {
             return [{ area: true,  type: 'load_strategies' },
                     { area: false, type: 'load' },
                     { area: true,  type: 'gas_strategies' },
-                    { area: false, type: 'gas' }];
+                    { area: false, type: 'gas' },
+                    { area: true,  type: 'heat_strategies' },
+                    { area: false, type: 'heat' }];
         } else {
             return [{ area: true, type: 'load' },
-                    { area: true, type: 'gas' }];
+                    { area: true, type: 'gas' },
+                    { area: true, type: 'heat' }];
         }
     }
 

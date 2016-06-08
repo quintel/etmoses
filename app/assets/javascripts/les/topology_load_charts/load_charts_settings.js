@@ -77,6 +77,18 @@ var LoadChartsSettings = {
         visible: true,
         axisLabel: 'kW'
     },
+    heat_strategies: {
+        name: "Heat (with strategies)",
+        color: '#D8B53D',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    heat: {
+        name: "Heat",
+        color: '#D88A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
     gas_forty: {
         name: "40 bar",
         color: '#C8C758',

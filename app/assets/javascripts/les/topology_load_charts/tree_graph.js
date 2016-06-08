@@ -11,8 +11,8 @@ var TreeGraph = (function () {
         nodeSize        = 50,
         ease            = 'cubic-out',
         levelWidth      = [1],
-        attributes      = { basic:    { electricity: 'load', gas: 'gas' },
-                            features: { electricity: 'load_strategies', gas: 'gas_strategies' }
+        attributes      = { basic:    { electricity: 'load', gas: 'gas', heat: 'heat' },
+                            features: { electricity: 'load_strategies', gas: 'gas_strategies', heat: 'heat_strategies' }
                           };
 
     function createBaseSvg() {
@@ -263,6 +263,7 @@ var TreeGraph = (function () {
             ETHelper.eachNode([this.root], function (node) {
                 delete node.load_strategies;
                 delete node.gas_strategies;
+                delete node.heat_strategies;
             });
 
             return this;
