@@ -72,7 +72,7 @@ class InstalledTechnology
   end
 
   def to_s
-    "#{ name } ( #{ [type, buffer, composite_value].compact.join(", ") })"
+    "#{ name } (#{ [type, buffer, composite_value].compact.join(", ") })"
   end
 
   # Public: Set the profile to be used to describe the technology load over
