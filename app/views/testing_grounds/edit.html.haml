@@ -39,6 +39,10 @@
     %li{role: "presentation"}
       = link_to "Heat source list", "#heat-source-list", "aria-controls" => "heat-source-list", "role" => "tab", data: { toggle: "tab" }
 
+  - if @testing_ground.heat_asset_list
+    %li{role: "presentation"}
+      = link_to "Heat asset list", "#heat-asset-list", "aria-controls" => "heat-asset-list", "role" => "tab", data: { toggle: "tab" }
+
 .tab-content
   .tab-pane.remote.edit#general{role: "tabpanel"}
     = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), html: { remote: true } do |form|
@@ -77,11 +81,15 @@
 
   - if @testing_ground.gas_asset_list
     .tab-pane.remote.edit#gas-asset-list{role: "tabpanel"}
-      = render partial: 'gas_asset_lists/form', locals: { testing_ground: @testing_ground, gas_asset_list: @testing_ground.gas_asset_list }
+      = render partial: 'gas_asset_lists/form', locals: { testing_ground: @testing_ground, gas_asset_list: @gas_asset_list }
 
   - if @testing_ground.heat_source_list
     .tab-pane.remote.edit#heat-source-list{role: "tabpanel"}
       = render partial: 'heat_source_lists/form', locals: { testing_ground: @testing_ground, heat_source_list: @heat_source_list }
+
+  - if @testing_ground.heat_asset_list
+    .tab-pane.remote.edit#heat-asset-list{role: "tabpanel"}
+      = render partial: 'heat_asset_lists/form', locals: { testing_ground: @testing_ground, heat_asset_list: @heat_asset_list }
 
 .last-btns
   %span.save-all.wait.hidden= image_tag 'wait.gif'

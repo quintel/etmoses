@@ -2,9 +2,12 @@
 # See lib/initializers/active_hash.rb
 module StaticData
   DATA_SOURCES ||= {
-    "connectors"  => GasAssets::Connector,
-    "compressors" => GasAssets::Compressor,
-    "pipes"       => GasAssets::Pipe
+    "gas_assets/connectors"  => GasAssets::Connector,
+    "gas_assets/compressors" => GasAssets::Compressor,
+    "gas_assets/pipes"       => GasAssets::Pipe,
+    "heat_assets/primary"    => HeatAssets::Pipe,
+    "heat_assets/secondary"  => HeatAssets::Location,
+    "technologies"           => Technology
   }.freeze
 
   module_function
@@ -17,28 +20,33 @@ module StaticData
            "directory does not exist: #{ Settings.static_data_path.inspect }"
     end
 
-    DATA_SOURCES.each_pair do |folder, static|
-      static.data = Dir[path.join("#{ folder }/**/*.yml")].map do |path|
-        pressure_levels = GasAssets::Base::PRESSURE_LEVELS
-        pressure_level  = path.scan(
-          Regexp.new(pressure_levels.keys.join("|"))).first
-
-        YAML.load_file(path).update(
-          pressure_level: pressure_levels[pressure_level],
-          type: File.basename(path, '.*')
-        )
+    grouped_assets.each do |subgroup, files|
+      DATA_SOURCES[subgroup].data = files.map do |path|
+        fetch_data(subgroup, path)
       end
     end
+  end
 
-    # Technology data
-    Technology.data = Dir[path.join("technologies/*.yml")].map do |path|
+  def fetch_data(subgroup, path)
+    case subgroup
+    when 'technologies'
       Technology.defaults
         .merge(YAML.load_file(path))
         .merge(key: File.basename(path, '.yml'))
+    else
+      YAML.load_file(path).update(type: File.basename(path, '.yml'))
     end
   end
 
   def path
     Rails.root.join(Settings.static_data_path.to_s)
+  end
+
+  def grouped_assets
+    Dir[path.join("**/*.yml")].group_by do |file|
+      keys = DATA_SOURCES.keys.join("|")
+
+      file.sub(Regexp.new("#{ path.to_s }\/(#{ keys }).+\.yml"), '\1')
+    end
   end
 end

@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     end
 
     resources :heat_source_lists, only: [:update]
+    resources :heat_asset_lists, only: [:update]
 
     get 'data/price_curve'         => 'data#price_curve',         as: :price_curves
     get 'data/load_curves'         => 'data#load_curves',         as: :load_curves

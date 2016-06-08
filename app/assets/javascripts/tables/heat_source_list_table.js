@@ -1,28 +1,24 @@
-/*globals EditableTable*/
-
 var HeatSourceListTable = (function () {
     'use strict';
 
-    var editableTable;
+    function resetProfiles() {
+        this.tables.forEach(function (table) {
+            table.setProfiles();
+        });
+    }
 
     HeatSourceListTable.prototype = {
-        append: function () {
-            this.setProfiles();
+        add: function(table) {
+            this.multiTable.add(table);
 
-            this.editableTable.append(this.updateTable);
-        },
-
-        setProfiles: function () {
-            $(this.editableTable.selector).find("tr:not(.blank)").each(function() {
-                new ProfileSelectBox(this).add();
-            });
+            table.setProfiles();
         }
-    };
+    }
 
-    function HeatSourceListTable(selector) {
-        this.editableTable = new EditableTable(selector);
+    function HeatSourceListTable() {
+        this.multiTable = new MultiTable(
+            "#heat_source_list_asset_list", resetProfiles);
     }
 
     return HeatSourceListTable;
 }());
-

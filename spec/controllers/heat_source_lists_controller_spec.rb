@@ -14,10 +14,10 @@ RSpec.describe HeatSourceListsController do
     it "update heat source list" do
       put :update, id: heat_source_list.id,
                    testing_ground_id: testing_ground.id,
-                   heat_source_list: { asset_list: '' },
+                   heat_source_list: { asset_list: '[]' },
                    format: :js
 
-      expect(heat_source_list.source_list).to eq([])
+      expect(heat_source_list.asset_list).to eq([])
     end
   end
 end

@@ -17,8 +17,8 @@ RSpec.describe GasAssetList do
     ])
 
     expect(gas_asset_list.asset_list).to eq([{
-      "part"=>"tube", "type"=>"test_type", "amount"=>5,
-      "stakeholder"=>"system_operator", "building_year"=>"1970"
+      part: "tube", type: "test_type", amount: 5,
+      stakeholder: "system_operator", building_year: "1970"
     }])
   end
 

@@ -10,7 +10,7 @@ class GasAssetListsController < ResourceController
 
   def get_types
     render json: (params.fetch(:gas_parts).map do |part|
-      StaticData::DATA_SOURCES[part[:part]]
+      GasAssets::Base.type_for(part[:part])
         .where_pressure(part[:pressure_level_index])
         .map(&:attributes)
     end)

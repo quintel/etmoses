@@ -13,6 +13,21 @@ module GasAssets
       end
     end
 
+    def self.type_for(part)
+      case part
+      when 'pipes'
+        Pipe
+      when 'connectors'
+        Connector
+      when 'compressors'
+        Compressor
+      end
+    end
+
+    def self.all_assets
+      Pipe.all + Connector.all + Compressor.all
+    end
+
     def pressure_level_indexes
       pressure_levels.map do |pressure_level|
         GasAssetList::PRESSURE_LEVELS.index(pressure_level)

@@ -13,6 +13,14 @@
 
 ActiveRecord::Schema.define(version: 20160609135022) do
 
+  create_table "asset_lists", force: true do |t|
+    t.integer  "testing_ground_id"
+    t.text     "type"
+    t.text     "asset_list"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "business_cases", force: true do |t|
     t.integer  "testing_ground_id"
     t.text     "financials"
@@ -37,20 +45,6 @@ ActiveRecord::Schema.define(version: 20160609135022) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
-
-  create_table "gas_asset_lists", force: true do |t|
-    t.integer  "testing_ground_id"
-    t.text     "asset_list"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "heat_source_lists", force: true do |t|
-    t.integer  "testing_ground_id"
-    t.text     "source_list"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "load_profile_categories", force: true do |t|
     t.string   "name"

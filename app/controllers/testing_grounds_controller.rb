@@ -118,6 +118,16 @@ class TestingGroundsController < ResourceController
       @heat_source_list = HeatSourceListDecorator.new(
         @testing_ground.heat_source_list).decorate
     end
+
+    if @testing_ground.heat_asset_list
+      @heat_asset_list = HeatAssetListDecorator.new(
+        @testing_ground.heat_asset_list).decorate
+    end
+
+    if @testing_ground.gas_asset_list
+      @gas_asset_list = GasAssetListDecorator.new(
+        @testing_ground.gas_asset_list).decorate
+    end
   end
 
   # PATCH /testing_grounds/:id

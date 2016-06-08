@@ -23,7 +23,7 @@ module Finance
         return [] unless @testing_ground.gas_asset_list
 
         @testing_ground.gas_asset_list.asset_list.map do |asset|
-          asset["stakeholder"]
+          asset[:stakeholder]
         end
       end
     end

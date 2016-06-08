@@ -9,6 +9,7 @@ class TestingGround::Creator
       SelectedStrategy.create!(testing_ground: @testing_ground)
 
       create_heat_source_list!
+      create_heat_asset_list!
       create_gas_asset_list!
 
       Delayed::Job.enqueue BusinessCaseCalculatorJob.new(@testing_ground)
@@ -20,8 +21,14 @@ class TestingGround::Creator
   private
 
   def create_heat_source_list!
-    HeatSourceList.create!(testing_ground: @testing_ground, source_list:
+    HeatSourceList.create!(testing_ground: @testing_ground, asset_list:
       HeatSourceList::SourceListFetcher.new(@testing_ground).fetch
+    )
+  end
+
+  def create_heat_asset_list!
+    HeatAssetList.create!(testing_ground: @testing_ground, asset_list:
+      HeatAssetLists::AssetListGenerator.new(@testing_ground).generate
     )
   end
 

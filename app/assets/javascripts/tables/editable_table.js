@@ -49,29 +49,33 @@ var EditableTable = (function () {
         });
     }
 
+    function addRow(e) {
+        e.preventDefault();
+
+        var row             = $(e.currentTarget).parents("tr"),
+            clonedRow       = row.clone(true, true).removeClass("blank"),
+            originalSelects = row.find('select'),
+            clonedSelects;
+
+        if (originalSelects.length) {
+            clonedSelects = clonedRow.find('select');
+
+            originalSelects.each(function(index, element) {
+                $(clonedSelects[index]).val($(element).val());
+            });
+        }
+
+        clonedRow.insertAfter(row);
+        this.changeListener();
+
+        hideLastRow.call(this);
+    }
+
     function addClickListenersToAddRow() {
         $(this.selector)
             .find("a.add-row")
             .off('click')
-            .on('click', function (e) {
-                e.preventDefault();
-
-                var row             = $(e.currentTarget).parents("tr"),
-                    clonedRow       = row.clone(true, true).removeClass("blank"),
-                    originalSelects = row.find('select'),
-                    clonedSelects;
-
-                if (originalSelects.length) {
-                    clonedSelects = clonedRow.find('select');
-
-                    originalSelects.each(function(index, element) {
-                        $(clonedSelects[index]).val($(element).val());
-                    });
-                }
-
-                clonedRow.insertAfter(row);
-                this.changeListener();
-            }.bind(this));
+            .on('click', addRow.bind(this));
     }
 
     function addClickListenersToDeleteRow() {
@@ -86,6 +90,16 @@ var EditableTable = (function () {
             }.bind(this));
     }
 
+    function hideLastRow() {
+        /* Remove the last remove-row button because a user should
+         * not be able to remove the last row of a table. */
+        $(this.selector).find("a.remove-row").show();
+
+        $(this.selector)
+            .find("tr:last-child")
+            .find("a.remove-row").hide();
+    }
+
     EditableTable.prototype = {
         append: function (changeListener, changeData) {
             this.changeListener = (changeListener || function () { return; });
@@ -97,6 +111,7 @@ var EditableTable = (function () {
 
             addClickListenersToAddRow.call(this);
             addClickListenersToDeleteRow.call(this);
+            hideLastRow.call(this);
         },
 
         getData: function () {

@@ -97,7 +97,7 @@ RSpec.describe Finance::BusinessCaseCalculator do
     let!(:create_heat_source_list) {
       FactoryGirl.create(:heat_source_list,
         testing_ground: testing_ground,
-        source_list: YAML.load(File.read(
+        asset_list: YAML.load(File.read(
           "#{Rails.root}/spec/fixtures/data/heat_source_lists/default.yml"
         ))
       )
