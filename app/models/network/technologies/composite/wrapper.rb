@@ -52,7 +52,7 @@ module Network
         end
 
         def inspect
-          "#<#{ self.class.name } #{ __getobj__.inspect }>"
+          "#<#{ self.class.name } #{ @object.inspect }>"
         end
       end # Wrapper
     end # Composite
