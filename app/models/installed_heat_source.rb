@@ -20,6 +20,23 @@ class InstalledHeatSource
     (initial_investment / technical_lifetime) + om_costs
   end
 
+  # Public: Returns the Network::Curve which containing each of the load profile
+  # values.
+  def network_curve(scaling = :original)
+    return unless profile
+
+    LoadProfile.find(profile).
+      load_profile_components.first.
+      network_curve(scaling)
+  end
+
+  # Public: Creates a ProfileCurve representing the LoadProfile used by this
+  # heat source.
+  def profile_curve(range = nil)
+    @profile_curve ||=
+      InstalledTechnology::ProfileCurve.new(curves: get_profile, range: range)
+  end
+
   private
 
   def initial_investment
@@ -32,5 +49,14 @@ class InstalledHeatSource
 
   def costs_multiplier
     (dispatchable ? heat_capacity * units : heat_production)
+  end
+
+  def get_profile
+    if profile && !dispatchable &&
+        heat_production && (curve = network_curve(:demand_scaled))
+      { 'default' => curve * (units * heat_production * curve.frames_per_hour) }
+    else
+      { 'default' => nil }
+    end
   end
 end
