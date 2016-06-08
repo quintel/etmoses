@@ -55,7 +55,7 @@ class TestingGround::Calculator
   end
 
   def networks
-    [ network(:electricity), network(:gas) ]
+    [network(:electricity), network(:gas), network(:heat)]
   end
 
   def fetch_networks

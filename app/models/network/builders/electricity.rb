@@ -12,7 +12,7 @@ module Network
       #         is an array of technologies connected to the node. Optional.
       #
       # Returns a Network::Graph.
-      def self.build(tree, techs = TechnologyList.new)
+      def self.build(tree, techs = TechnologyList.new, *)
         new(tree, techs).to_graph
       end
 

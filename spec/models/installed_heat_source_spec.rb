@@ -41,8 +41,13 @@ RSpec.describe InstalledHeatSource do
           before      { source.profile = load_profile.id }
           let(:curve) { source.profile_curve.curves['default'] }
 
-          it 'has no profile curve' do
-            expect(curve).to be_nil
+          it 'has a profile curve' do
+            expect(curve).to be_a(Network::Curve)
+          end
+
+          it 'it sets each curve value to zero' do
+            expect(curve.at(0)).to eq(0.0)
+            expect(curve.at(1)).to eq(0.0)
           end
         end
 

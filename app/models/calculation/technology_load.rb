@@ -88,13 +88,19 @@ module Calculation
       @context.graph(:electricity).node(node.key).get(:comps).fetch(name)
     end
 
+    # Internal: When a heat network is present, returns the heat ProductionPark.
+    def heat_park
+      @context.graph(:heat).node('Heat Network').get(:park)
+    end
+
     # Internal: Given a node, returns an array of technologies which may be used
     # to determine the load on the node to which they belong.
     #
     # Returns an array of InstalledTechnology instances.
     def suitable_technologies(node)
       node.get(:installed_techs).select do |technology|
-        technology.profile || technology.capacity || technology.volume
+        technology.profile || technology.capacity || technology.volume ||
+          technology.type == 'heat_consumer'.freeze
       end
     end
 

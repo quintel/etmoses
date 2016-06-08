@@ -82,7 +82,7 @@ class TestingGround < ActiveRecord::Base
   # Returns a Calculation::Context.
   def to_calculation_context(options = {})
     Calculation::Context.new(
-      [network(:electricity), network(:gas)], options.merge(
+      [network(:electricity), network(:gas), network(:heat)], options.merge(
         behavior_profile: behavior_profile.try(:network_curve)
       )
     )
@@ -95,7 +95,11 @@ class TestingGround < ActiveRecord::Base
   #
   # Returns a Network::Graph.
   def network(carrier)
-    Network::Builders.for(carrier).build(topology.graph, technology_profile)
+    Network::Builders.for(carrier).build(
+      topology.graph,
+      technology_profile,
+      heat_source_list
+    )
   end
 
   # Public: Given a calculated graph, returns the technologies JSON, injecting

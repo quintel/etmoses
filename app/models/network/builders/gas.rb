@@ -6,7 +6,7 @@ module Network
     # constructs a gas network consisting of endpoints which have one or more
     # gas technologies, attached a shared, parent node "Gas Network".
     class Gas
-      def self.build(tree, techs = TechnologyList.new)
+      def self.build(tree, techs = TechnologyList.new, *)
         new(tree, techs).to_graph
       end
 

@@ -35,7 +35,8 @@ RSpec.describe TestingGround::Calculator do
             ]
           }]
         }),
-        Network::Builders.for(:gas).build({})
+        Network::Builders.for(:gas).build({}),
+        Network::Builders.for(:heat).build({})
       ])
     end
 

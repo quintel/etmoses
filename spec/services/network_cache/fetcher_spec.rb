@@ -24,8 +24,8 @@ RSpec.describe NetworkCache::Fetcher do
     describe "full cache" do
       let(:cache) { NetworkCache::Fetcher.from(testing_ground).fetch }
 
-      it "fetches two graphs from cache" do
-        expect(cache.length).to eq(2)
+      it "fetches three graphs from cache" do
+        expect(cache.length).to eq(3)
       end
 
       it "fetches cache" do

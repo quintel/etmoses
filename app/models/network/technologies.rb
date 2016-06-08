@@ -27,6 +27,8 @@ module Network
           behaviors['optional']           = OptionalConsumer
           behaviors['hhp_electricity']    = HHP::Electricity
           behaviors['hhp_gas']            = HHP::Gas
+          behaviors['heat_consumer']      = Network::Heat::Consumer
+          behaviors['heat_buffer']        = Network::Heat::Buffer
           behaviors['null']               = Null
         end.freeze
     end

@@ -110,10 +110,16 @@ module Calculation
     private
 
     def path_order
-      # HHP techs come first since their mandatory consumption is instead
-      # treated as conditional. They appear first so that they are processed
-      # immediately after the final mandatory consumption load is assigned.
-      [ Network::Technologies::HHP::Electricity,
+      # Central heat producers come first since it is assumed that a heat
+      # network -- if present -- will be used to satisfy heat demand before any
+      # locally-installed technologies.
+      #
+      # HHP techs come next, since their mandatory consumption is instead
+      # treated as conditional. This is so they are processed immediately after
+      # the final mandatory consumption load is assigned.
+      [ Network::Heat::Consumer,
+        Network::Heat::Buffer,
+        Network::Technologies::HHP::Electricity,
         Network::Technologies::HHP::Gas,
         Network::Technologies::OptionalConsumer,
         Network::Technologies::ConservingProducer,

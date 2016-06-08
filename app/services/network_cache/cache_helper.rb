@@ -1,7 +1,7 @@
 module NetworkCache
   module CacheHelper
     ATTRS    = [:load, :tech_loads]
-    CARRIERS = [:electricity, :gas]
+    CARRIERS = [:electricity, :gas, :heat]
     FOLDERS  = {
       low:  'year',
       high: 'current_week'
