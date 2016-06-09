@@ -109,4 +109,11 @@ FactoryGirl.define do
       )
     end
   end
+
+  factory :installed_buffer_space_heating, class: InstalledTechnology do
+    name 'Space heating buffer'
+    units 1
+    capacity Float::INFINITY
+    composite true
+  end
 end

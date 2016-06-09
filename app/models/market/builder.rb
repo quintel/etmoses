@@ -28,6 +28,7 @@ module Market
       gas_connections:  Measures::NumberOfGasConnections,
       gas_kwh_consumed: Measures::GasKwh.new(:consumed),
       gas_kwh_produced: Measures::GasKwh.new(:produced),
+      heat_connections: Measures::NumberOfHeatConnections,
       load:             Measures::InstantaneousLoad,
       kw_contracted:    Measures::KwMax.new(1),
       kw_max:           Measures::KwMax.new,

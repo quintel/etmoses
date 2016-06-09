@@ -30,6 +30,7 @@ en:
       flex_realised: Flexibility realised
       flex_potential: Flexibility potential
       gas_connections: Number of gas connections
+      heat_connections: Number of heat connections
       load: Instantaneous load
       kwh: kWh
       kwh_consumed: kWh of electricity consumed
