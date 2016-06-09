@@ -36,9 +36,11 @@ module Network
         @graph = Graph.new(:heat)
 
         # TODO The global buffer technology needs to be added.
-        @head = @graph.add(
-          Node.new('Heat Network', park: @park, installed_techs: [])
-        )
+        @head = @graph.add(Node.new('Heat Network', {
+          park: @park,
+          stakeholder: 'heat producer',
+          installed_techs: []
+        }))
 
         build_node(@tree, nil)
 
