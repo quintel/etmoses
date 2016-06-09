@@ -12,7 +12,7 @@ module MarketModelsHelper
   def foundation_options(options = {})
     values = MarketModel::FOUNDATIONS.map do |key|
       [t("tariff.measure.#{ key.downcase }"), key]
-    end.sort_by(&:first)
+    end.sort_by { |name, _key| name.downcase }
 
     options_for_select(values, options)
   end
