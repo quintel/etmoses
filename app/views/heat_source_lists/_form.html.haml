@@ -4,7 +4,7 @@
 
 .heat_source_profiles.hidden.profile
   - heat_source_technologies.each do |technology|
-    = select_tag "profile", options_for_load_profiles(technology), include_blank: "---", class: "#{ technology.key } form-control profile heat"
+    = select_tag "profile", options_for_load_profiles(technology), class: "#{ technology.key } form-control profile heat"
 
 = form_for [testing_ground, testing_ground.heat_source_list], html: { remote: true } do |f|
   .hidden
