@@ -33,6 +33,7 @@ en:
       gas_kwh_consumed: kWh of gas consumed
       gas_kwh_produced: kWh of gas produced
       heat_connections: Number of heat connections
+      heat_kwh_consumed: kWh of heat consumed
       load: Instantaneous load
       kwh: kWh
       kwh_consumed: kWh of electricity consumed

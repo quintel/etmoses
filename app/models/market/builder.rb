@@ -22,18 +22,19 @@ module Market
   #   }
   class Builder
     MEASURES = {
-      connections:      Measures::NumberOfConnections,
-      flex_potential:   Measures::FlexibilityPotential,
-      flex_realised:    Measures::FlexibilityRealised,
-      gas_connections:  Measures::NumberOfGasConnections,
-      gas_kwh_consumed: Measures::GasKwh.new(:consumed),
-      gas_kwh_produced: Measures::GasKwh.new(:produced),
-      heat_connections: Measures::NumberOfHeatConnections,
-      load:             Measures::InstantaneousLoad,
-      kw_contracted:    Measures::KwMax.new(1),
-      kw_max:           Measures::KwMax.new,
-      kwh_consumed:     Measures::KwhConsumed,
-      kwh_produced:     Measures::KwhProduced
+      connections:       Measures::NumberOfConnections,
+      flex_potential:    Measures::FlexibilityPotential,
+      flex_realised:     Measures::FlexibilityRealised,
+      gas_connections:   Measures::NumberOfGasConnections,
+      gas_kwh_consumed:  Measures::VariantKwh.new(:gas, :consumed),
+      gas_kwh_produced:  Measures::VariantKwh.new(:gas, :produced),
+      heat_kwh_consumed: Measures::VariantKwh.new(:heat, :consumed),
+      heat_connections:  Measures::NumberOfHeatConnections,
+      load:              Measures::InstantaneousLoad,
+      kw_contracted:     Measures::KwMax.new(1),
+      kw_max:            Measures::KwMax.new,
+      kwh_consumed:      Measures::KwhConsumed,
+      kwh_produced:      Measures::KwhProduced
     }.freeze
 
     # Public: Creates a builder, which converts a "set-up hash" into a market
