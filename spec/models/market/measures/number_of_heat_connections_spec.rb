@@ -9,7 +9,7 @@ module Market::Measures
     # --------------------------------------------------------------------------
 
     def build_installed_double(type, units = 1)
-      installed = instance_double('Network::Technologies::Composite::Manager')
+      installed = instance_double('Network::Technologies::Composite::Wrapper')
 
       allow(installed).to receive(:installed).and_return(
         build(:installed_buffer_space_heating, type: type, units: units))
