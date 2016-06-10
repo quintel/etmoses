@@ -13,7 +13,7 @@ module Network
       #
       # Returns a ProductionPark.
       def park
-        @full_path.path.head.get(:park)
+        @park ||= @full_path.path.head.get(:park)
       end
     end # SubPath
   end # Heat
