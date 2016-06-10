@@ -3,18 +3,14 @@ class InstalledHeatAsset
 
   attribute :type, String
   attribute :scope, String
-  attribute :distance, Float
-  attribute :total_initial_investment, Float
-  attribute :om_costs_per_year, Float
-  attribute :technical_lifetime, Float
-  attribute :costs_per_year, Float
   attribute :stakeholder, String
+  attribute :technical_lifetime, Float
 
   def primary?
-    scope == "primary"
+    is_a?(InstalledHeatAssetPipe)
   end
 
   def secondary?
-    scope == "secondary"
+    is_a?(InstalledHeatAssetLocation)
   end
 end

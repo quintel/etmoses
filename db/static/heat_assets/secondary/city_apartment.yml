@@ -1,3 +1,5 @@
 ---
-investment_costs: 100
+investment_costs: 7000
+om_costs_per_year: 10
 scope: secondary
+technical_lifetime: 40

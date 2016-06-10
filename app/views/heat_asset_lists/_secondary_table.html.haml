@@ -3,11 +3,11 @@
   %thead
     %tr
       %th.col-sm-3{ data: { header: 'type' } } Type
-      %th{ data: { header: 'total_initial_investment' } } Investment [kEUR/km]
-      %th{ data: { header: 'om_costs_per_year' } } O&M costs [kEUR/km]
+      %th{ data: { header: 'investment_costs' } } Investment [kEUR]
+      %th{ data: { header: 'om_costs_per_year' } } O&M costs [EUR]
       %th{ data: { header: 'technical_lifetime' } } Technical lifetime [Y]
       %th{ data: { header: 'stakeholder' } } Stakeholder
-      %th{ data: { header: 'distance' } } Number of connections
+      %th{ data: { header: 'connection_distribution' } } Percentage of heat connections [%]
       %th.hidden{ data: { header: 'scope' } }
       %th
       %th
@@ -21,7 +21,7 @@
             = options_for_secondary_heat_assets(list_item.type)
 
         %td.editable
-          %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}
+          %input.form-control{name: 'investment_costs', value: list_item.investment_costs}
 
         %td.editable
           %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
@@ -33,14 +33,11 @@
           %select.form-control.stakeholder
             = options_for_stakeholders(list_item.stakeholder)
 
+        %td.editable
+          %input.form-control{name: 'connection_distribution', value: list_item.connection_distribution}
+
         %td.editable.hidden
           %input.form-control{name: 'scope', value: 'secondary'}
-
-        %td.editable
-          %input.form-control{name: 'distance', value: list_item.distance}
-
-        %td
-          SLIDER
 
         %td
           = link_to '#', class: 'add-row text-success' do

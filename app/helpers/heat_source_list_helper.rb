@@ -1,6 +1,6 @@
 module HeatSourceListHelper
   def heat_source_technologies
-    Technology.for_carrier('heat') + [ Technology.generic ]
+    Technology.heat_sources_for_table + [ Technology.generic ]
   end
 
   def options_for_heat_source_plant_types(key)
