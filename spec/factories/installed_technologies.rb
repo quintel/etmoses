@@ -110,10 +110,30 @@ FactoryGirl.define do
     end
   end
 
-  factory :installed_buffer_space_heating, class: InstalledTechnology do
-    name 'Space heating buffer'
+  factory :installed_space_heater_heat_exchanger, class: InstalledTechnology do
+    name 'Space heater heat exchanger'
+    type 'households_space_heater_district_heating_steam_hot_water'
     units 1
     capacity Float::INFINITY
-    composite true
+
+    after(:build) do |tech|
+      allow(tech).to receive(:technology).and_return(
+        build(:technology, behavior: 'heat_consumer')
+      )
+    end
   end
+
+  factory :installed_water_heater_heat_exchanger, class: InstalledTechnology do
+    name 'Water heater heat exchanger'
+    type 'households_water_heater_district_heating_steam_hot_water'
+    units 1
+    capacity Float::INFINITY
+
+    after(:build) do |tech|
+      allow(tech).to receive(:technology).and_return(
+        build(:technology, behavior: 'heat_consumer')
+      )
+    end
+  end
+
 end
