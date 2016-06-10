@@ -16,7 +16,7 @@ class InstalledHeatSource
   attribute :dispatchable, Boolean
   attribute :priority, Integer
 
-  def total_investment_costs
+  def depreciation_costs
     (initial_investment / technical_lifetime) + om_costs
   end
 

@@ -5,6 +5,8 @@ class HeatSourceListsController < ApplicationController
 
   def update
     @heat_source_list.update_attributes(heat_source_list_attributes)
+
+    @heat_asset_list = HeatAssetLists::AssetListUpdater.new(@testing_ground).update!
   end
 
   private

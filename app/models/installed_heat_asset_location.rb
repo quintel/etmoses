@@ -1,10 +1,11 @@
 class InstalledHeatAssetLocation < InstalledHeatAsset
-  attribute :distance, Float
   attribute :investment_costs, Float
-  attribute :source, String
   attribute :om_costs_per_year, Float
+  attribute :connection_distribution, Float
+  attribute :number_of_units, Float # connection_distribution * total heat connections
 
-  def total_investment_costs
-    0
+  def depreciation_costs
+    ((investment_costs * number_of_units) / technical_lifetime) +
+    (om_costs_per_year * number_of_units)
   end
 end

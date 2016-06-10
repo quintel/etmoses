@@ -35,7 +35,7 @@ class Import
 
     # TODO: needs to be cleaned up
     def technology_defaults(technology)
-      defaults = technology.defaults
+      defaults = technology.defaults.dup
       defaults.update('total_initial_investment' =>
                       (defaults['total_initial_investment'] / 1000))
     end

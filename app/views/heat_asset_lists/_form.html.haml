@@ -1,6 +1,8 @@
 .table-holder
-  = render partial: "heat_asset_lists/primary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list }
-  = render partial: "heat_asset_lists/secondary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list }
+  .primary-table
+    = render partial: "heat_asset_lists/primary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list }
+  .secondary-table
+    = render partial: "heat_asset_lists/secondary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list }
 
 = form_for [testing_ground, testing_ground.heat_asset_list], html: { remote: true } do |f|
   .hidden

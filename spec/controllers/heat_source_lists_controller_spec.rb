@@ -11,6 +11,10 @@ RSpec.describe HeatSourceListsController do
       FactoryGirl.create(:heat_source_list, testing_ground: testing_ground)
     }
 
+    let!(:heat_asset_list) {
+      FactoryGirl.create(:heat_asset_list, testing_ground: testing_ground)
+    }
+
     it "update heat source list" do
       put :update, id: heat_source_list.id,
                    testing_ground_id: testing_ground.id,

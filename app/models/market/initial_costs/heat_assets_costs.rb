@@ -8,7 +8,7 @@ module Market
         return {} if heat_asset_list.nil?
 
         group_sum(HeatAssetListDecorator.new(heat_asset_list).decorate) do |asset|
-          asset.total_investment_costs
+          asset.depreciation_costs
         end
       end
 

@@ -1,5 +1,5 @@
 %h2 Primary network
-%table.table.interactions.heat_asset_list.multi_table{ data: { type: 'heat_asset_list_table'  } }
+%table.table.interactions.heat_asset_list.multi_table.primary{ data: { type: 'heat_asset_list_table' } }
   %thead
     %tr
       %th.col-sm-3{ data: { header: 'type' } } Type of pipe
@@ -10,8 +10,6 @@
       %th{ data: { header: 'technical_lifetime' } } Technical lifetime [Y]
       %th{ data: { header: 'stakeholder' } } Stakeholder
       %th.hidden{ data: { header: 'scope' } }
-      %th
-      %th
 
   %tbody
     - heat_asset_list.select(&:primary?).each do |list_item|
@@ -21,10 +19,10 @@
             = options_for_primary_heat_assets(list_item.type)
 
         %td.editable
-          %input.form-control{name: 'distance', value: list_item.distance}
+          %input.form-control{name: 'distance', value: list_item.distance, disabled: 'disabled'}
 
         %td.editable
-          %select.form-control.type
+          %select.form-control.type{disabled: 'disabled'}
             = options_for_heat_source_plant_types(list_item.heat_source)
 
         %td.editable
@@ -42,12 +40,3 @@
 
         %td.editable.hidden
           %input.form-control{name: 'scope', value: 'primary'}
-
-        %td
-          = link_to '#', class: 'add-row text-success' do
-            %span.glyphicon.glyphicon-plus
-
-        %td
-          = link_to '#', class: 'remove-row text-danger' do
-            %span.glyphicon.glyphicon-remove
-
