@@ -28,9 +28,11 @@ module Network
           sources_to_producers(@heat_sources).partition(&:dispatchable?)
 
         @park = Network::Heat::ProductionPark.new(
-          must_run:     must_run,
-          dispatchable: dispatchable,
-          volume:       1.0 # TODO ???
+          must_run:         must_run,
+          dispatchable:     dispatchable,
+          # https://github.com/quintel/etmoses/issues/971
+          volume:           number_of_connections * 10.0,
+          amplified_volume: number_of_connections * 17.78
         )
 
         @graph = Graph.new(:heat)
@@ -39,6 +41,7 @@ module Network
         @head = @graph.add(Node.new('Heat Network', {
           park: @park,
           stakeholder: 'heat producer',
+          techs: [@park.buffer_tech],
           installed_techs: []
         }))
 
@@ -90,6 +93,16 @@ module Network
             source, source.dispatchable? ? nil : source.network_curve, {}
           )
         end
+      end
+
+      # Internal: Determines the total number of heat connections on the
+      # endpoints.
+      def number_of_connections
+        @connections ||=
+          @techs.sum do |_endpoint_name, endpoint_techs|
+            Market::Measures::NumberOfHeatConnections
+              .count_with_technologies_list(endpoint_techs)
+          end
       end
     end # Heat
   end # Builders

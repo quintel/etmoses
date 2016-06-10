@@ -2,9 +2,12 @@ module Network
   module Heat
     # Triggers buffering of excess production park energy.
     class Buffer < Technologies::Generic
+      Installed = Struct.new(:type)
+
       def initialize(park)
-        @park = park
-        @load = []
+        @park      = park
+        @load      = []
+        @installed = Installed.new(:heat_buffer)
       end
 
       def production_at(frame)
@@ -23,8 +26,8 @@ module Network
         @load[frame] || 0.0
       end
 
-      def store(frame, _amount)
-        @load[frame] ||= @park.reserve_excess!(frame)
+      def receive_mandatory(frame, _amount)
+        @load[frame] ||= @park.reserve_excess_at!(frame)
       end
     end # Buffer
   end # Heat

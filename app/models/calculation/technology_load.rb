@@ -19,7 +19,7 @@ module Calculation
 
       @context.technology_nodes.each do |node|
         node.set(:comps, comps_for(node))
-        node.set(:techs, techs_for(node))
+        node.set(:techs, Array(node.get(:techs)) + techs_for(node))
 
         # Siphons need to convert their consumption into production on the gas
         # network. Hard-coding this is ugly, but necessary given present poor
@@ -74,7 +74,7 @@ module Calculation
     end
 
     def comps_for(node)
-      node.get(:installed_comps).each_with_object({}) do |comp, hash|
+      (node.get(:installed_comps) || []).each_with_object({}) do |comp, hash|
         hash[comp.composite_value] =
           Network::Technologies::Composite::Manager.new(
             (comp.capacity || Float::INFINITY) * comp.units,

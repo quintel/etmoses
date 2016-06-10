@@ -29,8 +29,8 @@ module Calculation
     def technology_nodes
       @technology_nodes ||= graphs.flat_map do |graph|
         graph.nodes.select do |node|
-          node.get(:installed_techs).any? ||
-            node.get(:installed_comps) && node.get(:installed_comps).any?
+          node.get(:installed_techs).any? || node.techs.any? ||
+            (node.get(:installed_comps) && node.get(:installed_comps).any?)
         end
       end
     end
@@ -88,7 +88,8 @@ module Calculation
     def length
       @length ||= begin
         techs = technology_nodes.flat_map do |node|
-          node.get(:installed_techs) + node.get(:installed_comps)
+          (node.get(:installed_techs) || []) +
+          (node.get(:installed_comps) || [])
         end
 
         techs.map { |t| t.profile_curve(@options[:range]) }.map(&:length).max || 1
