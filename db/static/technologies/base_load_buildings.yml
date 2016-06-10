@@ -18,6 +18,7 @@ whitelisted_attributes:
 technology_component_behavior:
   flex: optional
   inflex: generic
+exists_as_technology_in_etengine: false
 importable_gqueries:
   demand: present_demand_in_source_of_electricity_in_buildings
   units: number_of_buildings

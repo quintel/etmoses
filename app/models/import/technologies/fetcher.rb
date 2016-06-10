@@ -1,6 +1,16 @@
 class Import
   module Technologies
     class Fetcher
+      # Move to db/static/technologies/
+      #
+      TECHNOLOGIES_FOR_GQUERIES = %w(
+        base_load
+        base_load_buildings
+        buffer_space_heating
+        buffer_water_heating
+        transport_car_using_electricity
+      )
+
       def initialize(etm_scenario)
         @etm_scenario = etm_scenario
         @scenario_id  = etm_scenario.fetch(:id)
@@ -25,15 +35,13 @@ class Import
         #Hash[technologies.map do |technology|
         #  [technology.key, technology.importable_attributes]
         #end]
-        technologies.map(&:key)
-      end
-
-      def technologies
-        technologies_for_gqueries.select(&:importable?)
+        Technology.importable.map(&:key)
       end
 
       def technologies_for_gqueries
-        Technology.for_carrier('gas') + Technology.for_carrier('electricity')
+        Technology.all.select do |tech|
+          TECHNOLOGIES_FOR_GQUERIES.include?(tech.key)
+        end
       end
 
       # Internal: Given a response, splits out the nodes into discrete

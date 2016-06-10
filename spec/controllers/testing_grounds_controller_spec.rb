@@ -22,8 +22,8 @@ RSpec.describe TestingGroundsController do
       stub_et_engine_request
       stub_scenario_request
 
-      allow_any_instance_of(Import::Technologies::Fetcher)
-        .to receive(:technologies).and_return([technology])
+      expect(Technology)
+        .to receive(:importable).and_return([technology])
 
       allow_any_instance_of(Import::Technologies::Fetcher)
         .to receive(:gqueries).and_return({})
@@ -451,7 +451,8 @@ RSpec.describe TestingGroundsController do
 
     let!(:render_template) {
       post :render_template, scenario_id: 1,
-            key: "households_solar_pv_solar_radiation", format: :js
+            key: "households_solar_pv_solar_radiation",
+            buffer: "", format: :js
     }
 
     it "resonse is succesful" do

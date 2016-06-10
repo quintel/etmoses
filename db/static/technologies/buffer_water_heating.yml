@@ -5,14 +5,21 @@ carrier: electricity
 composite: true
 default_capacity: 10.0
 default_volume: 4.0691
+exists_as_technology_in_etengine: false
+importable_gqueries:
+  demand: etmoses_hot_water_buffer_demand
+
 technologies:
+  - households_flexibility_p2h_electricity
+  - households_water_heater_combined_network_gas
+  - households_water_heater_district_heating_steam_hot_water
   - households_water_heater_heatpump_air_water_electricity
   - households_water_heater_heatpump_ground_water_electricity
-  - households_flexibility_p2h_electricity
-  - households_water_heater_network_gas
-  - households_water_heater_combined_network_gas
   - households_water_heater_hybrid_heatpump_air_water_electricity_electricity
   - households_water_heater_hybrid_heatpump_air_water_electricity_gas
+  - households_water_heater_network_gas
+  - households_water_heater_resistive_electricity
+
 whitelisted_attributes:
   - demand
   - initial_investment
@@ -26,5 +33,3 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
-importable_gqueries:
-  demand: etmoses_hot_water_buffer_demand

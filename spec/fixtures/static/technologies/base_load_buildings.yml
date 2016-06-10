@@ -5,6 +5,7 @@ carrier: electricity
 behavior: base_load_buildings
 visible: true
 composite: false
+exists_as_technology_in_etengine: false
 expandable: true
 whitelisted_attributes:
   - demand

@@ -145,7 +145,7 @@ class TestingGroundsController < ResourceController
   def render_template
     @scope      = params[:scope]
     @technology = TestingGround::TechnologyBuilder.new(
-      params.slice(:key, :scenario_id, :composite_index, :units, :demand).merge(
+      params.slice(:key, :scenario_id, :buffer).merge(
         load_profiles: @load_profiles[params[:key]]
       )
     ).build

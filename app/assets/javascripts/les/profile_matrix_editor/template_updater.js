@@ -10,11 +10,13 @@ var TemplateUpdater = (function () {
 
         this.scope.find(".add-technology button").addClass("disabled");
 
+        this.getAppendScope();
+
         $.ajax({
             url: url,
             type: "POST",
             dataType: 'script',
-            data: { key: key }
+            data: { key: key, buffer: this.template.data('buffer') }
         });
     }
 
