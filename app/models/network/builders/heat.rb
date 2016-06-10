@@ -60,10 +60,14 @@ module Network
         # a heat consumer in TechnologyLoad.
         if children && children.any?
           children.each { |child| build_node(child) }
-        elsif (composites = @techs[attrs[:name]].select(&:composite)).any?
+        else
+          techs = @techs[attrs[:name]].select { |t| t.carrier == :heat }
+
+          return if techs.empty?
+
           @head.connect_to(@graph.add(
             Node.new(attrs[:name], {
-              installed_techs: consumers_for(composites),
+              installed_techs: techs,
               installed_comps: []
             })
           ))
@@ -74,22 +78,6 @@ module Network
       # new node to the graph.
       def valid_node?(attrs)
         attrs.key?(:name) || attrs.key?('name'.freeze)
-      end
-
-      # Internal: Given a list of heat composites which exist on the endpoint,
-      # creates a new InstalledTechnology to represent an endpoint consumer
-      # technology which will attempt to satisfy demand using the heat
-      # production park.
-      #
-      # Returns an array.
-      def consumers_for(composites)
-        composites.map do |comp|
-          InstalledTechnology.new(
-            type:     'heat_consumer',
-            behavior: 'heat_consumer',
-            buffer:   comp.composite_value
-          )
-        end
       end
 
       # Internal: Given an array of InstalledHeatSources, creates the Producers

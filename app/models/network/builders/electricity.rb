@@ -48,7 +48,7 @@ module Network
         composites, techs = @techs[node.key].partition(&:composite)
 
         node.set(:installed_comps, composites)
-        node.set(:installed_techs, techs.select { |t| t.carrier != :gas })
+        node.set(:installed_techs, techs.select { |t| t.carrier == :electricity })
 
         if node.get(:capacity) && node.get(:units)
           node.set(:capacity, node.get(:capacity) * node.get(:units))

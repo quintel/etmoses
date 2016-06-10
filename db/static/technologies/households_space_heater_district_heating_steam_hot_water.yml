@@ -1,6 +1,6 @@
 ---
 name: Households space heater district heating
-behavior: null
+behavior: heat_consumer
 carrier: heat
 default_capacity: 10.0
 default_position_relative_to_buffer: boosting

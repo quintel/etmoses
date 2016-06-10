@@ -3,12 +3,17 @@ module Network
     class Consumer < Technologies::Generic
       attr_writer :park
 
+      def initialize(*)
+        super
+        @capacity = CapacityLimit.new(self)
+      end
+
       def production_at(_frame)
         0.0
       end
 
       def mandatory_consumption_at(frame)
-        @profile.at(frame)
+        @capacity.limit_mandatory(frame, @profile.at(frame))
       end
 
       def conditional_consumption_at(_frame)
@@ -25,10 +30,6 @@ module Network
 
       def excess_constrained?
         true
-      end
-
-      def capacity
-        (@installed.heat_capacity || 0.0) * @installed.units
       end
 
       def path_class
