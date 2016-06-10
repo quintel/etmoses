@@ -30,10 +30,18 @@ class TestingGround::Calculator
   #
   # Returns true or false.
   def ready?
-    ! Settings.cache.networks || cache.present?
+    ! Settings.cache.networks ||
+      cache.present? ||
+      # Temporary workaround for #1028, and the weekly cache's inability to deal
+      # with multiple simultaneous requests for different weeks.
+      weekly_calculation?
   end
 
   private
+
+  def weekly_calculation?
+    @options[:resolution] == 'high'.freeze
+  end
 
   def base
     { technologies: @testing_ground.technology_profile.as_json,
@@ -60,7 +68,7 @@ class TestingGround::Calculator
 
   def fetch_networks
     @networks ||=
-      if Settings.cache.networks
+      if Settings.cache.networks && ! weekly_calculation?
         cache.fetch(@options[:nodes])
       else
         @testing_ground.to_calculated_graphs(calculation_options)
