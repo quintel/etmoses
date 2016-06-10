@@ -4,7 +4,10 @@ module Market::Measures
   # This number is defined as the largest of the number of installed units of
   # space heating and hot water composites.
   module NumberOfHeatConnections
-    CONNECTION_TECHS = %w(buffer_space_heating buffer_water_heating).freeze
+    CONNECTION_TECHS = %w(
+      households_space_heater_district_heating_steam_hot_water
+      households_water_heater_district_heating_steam_hot_water
+    ).freeze
 
     module_function
 
