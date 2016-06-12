@@ -31,10 +31,10 @@ class TestingGround::Calculator
   # Returns true or false.
   def ready?
     ! Settings.cache.networks ||
-      cache.present? ||
       # Temporary workaround for #1028, and the weekly cache's inability to deal
       # with multiple simultaneous requests for different weeks.
-      weekly_calculation?
+      weekly_calculation? ||
+      cache.present?
   end
 
   private
