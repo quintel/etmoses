@@ -31,9 +31,16 @@ module NetworkCache
     end
 
     def fresh?
-      [ @testing_ground.cache_updated_at,
-        @testing_ground.topology.updated_at].all? do |timestamp|
-          Time.at(timestamp.to_time.to_i) <= Time.at(cache_time.to_i)
+      times = [
+        @testing_ground.cache_updated_at,
+        @testing_ground.topology.updated_at,
+        @testing_ground.heat_source_list.try(:updated_at)
+      ].compact
+
+      cache_written_at = Time.at(cache_time.to_i)
+
+      times.all? do |timestamp|
+        Time.at(timestamp.to_time.to_i) <= cache_written_at
       end
     end
 

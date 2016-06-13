@@ -7,7 +7,8 @@ RSpec.describe NetworkCache::Validator do
   }
 
   before do
-    expect(Settings.cache).to receive(:networks).and_return(true)
+    expect(Settings.cache).
+      to receive(:networks).at_least(:once).and_return(true)
   end
 
   it "marks the network cache as invalid" do
@@ -45,6 +46,16 @@ RSpec.describe NetworkCache::Validator do
     NetworkCache::Writer.from(testing_ground).write
 
     expect(NetworkCache::Validator.from(testing_ground).valid?).to eq(false)
+  end
+
+  it 'marks the network cache as invalid when heat assets are changed' do
+    heat_sources = testing_ground.create_heat_source_list!
+
+    NetworkCache::Writer.from(testing_ground).write
+
+    expect { heat_sources.update_attribute(:updated_at, 1.day.from_now) }.
+      to change { NetworkCache::Validator.from(testing_ground).valid? }
+      .from(true).to(false)
   end
 
   describe "caching parts of the load" do
