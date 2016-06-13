@@ -49,7 +49,7 @@ RSpec.describe NetworkCache::Validator do
   end
 
   it 'marks the network cache as invalid when heat assets are changed' do
-    heat_sources = testing_ground.create_heat_source_list!
+    heat_sources = testing_ground.create_heat_source_list!(asset_list: [])
 
     NetworkCache::Writer.from(testing_ground).write
 
