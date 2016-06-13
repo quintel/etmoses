@@ -100,7 +100,7 @@ var Transformator = (function () {
                 type:    tech,
                 values:  setCoords(values.tech_loads[tech]),
                 area:    (this.shown.view_as === 'stacked'),
-                color:   ChartColors[tech],
+                color:   $(".technologies.hidden span." + tech).data('color'),
                 visible: LoadChartsSettings[tech].visible
             });
         }
