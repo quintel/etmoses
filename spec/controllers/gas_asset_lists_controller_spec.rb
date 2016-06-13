@@ -3,6 +3,9 @@ require 'rails_helper'
 RSpec.describe GasAssetListsController do
   let(:user) { FactoryGirl.create(:user) }
   let(:testing_ground) { FactoryGirl.create(:testing_ground, user: user) }
+  let!(:business_case) {
+    FactoryGirl.create(:business_case, testing_ground: testing_ground)
+  }
   let!(:sign_in_user) { sign_in(user) }
   let(:asset_list) {
     [

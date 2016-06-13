@@ -5,6 +5,7 @@ class HeatAssetListsController < ApplicationController
 
   def update
     @heat_asset_list.update_attributes(heat_asset_list_attributes)
+    @testing_ground.business_case.clear_job!
   end
 
   private

@@ -6,6 +6,7 @@ class GasAssetListsController < ResourceController
 
   def update
     @gas_asset_list.update_attributes(gas_asset_list_attributes)
+    @testing_ground.business_case.clear_job!
   end
 
   def get_types
