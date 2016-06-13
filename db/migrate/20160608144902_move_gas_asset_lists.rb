@@ -1,9 +1,9 @@
 class MoveGasAssetLists < ActiveRecord::Migration
   def change
-    GasAssetList.all.map do |gas_asset_list|
-      asset_list = AssetList.new(gas_asset_list.attributes)
-      asset_list.type = "GasAssetList"
-      asset_list.save
+    ActiveRecord::Base.connection.select(
+      'SELECT * from gas_asset_lists'
+    ).each do |row|
+      GasAssetList.create!(row.except('id'))
     end
   end
 end
