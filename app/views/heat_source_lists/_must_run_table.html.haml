@@ -9,7 +9,7 @@
       %th{ data: { header: 'total_initial_investment' } } Investment [EUR/MWh]
       %th{ data: { header: 'technical_lifetime' } } Technical lifetime [Y]
       %th{ data: { header: 'om_costs_per_year' } } O&M Costs [EUR/MWh]
-      %th{ data: { header: 'marginal_costs' } } Marginal costs [EUR/MWh]
+      %th{ data: { header: 'marginal_heat_costs' } } Marginal costs [EUR/MWh]
       %th{ data: { header: 'distance' } } Distance [km]
       %th.hidden{ data: { header: 'dispatchable' } }
       %th
@@ -42,7 +42,7 @@
           %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
 
         %td.editable
-          %input.form-control{name: 'marginal_costs', value: list_item.marginal_costs}
+          %input.form-control{name: 'marginal_heat_costs', value: list_item.marginal_heat_costs}
 
         %td.editable
           %input.form-control{name: 'distance', value: list_item.distance}

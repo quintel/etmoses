@@ -15,7 +15,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
         'total_initial_investment_per_mw' => {
           'present' => 0.0, 'future' => 2000.0
         },
-        'marginal_costs' => {
+        'marginal_heat_costs' => {
           'present' => 1.0, 'future' => 2.0
         },
         'variable_costs_per_unit' => {
@@ -92,7 +92,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     end
 
     it 'sets the marginal costs' do
-      expect(source.fetch('marginal_costs')).to eq(2.0)
+      expect(source.fetch('marginal_heat_costs')).to eq(2.0)
     end
 
     it 'sets the technical lifetime' do
