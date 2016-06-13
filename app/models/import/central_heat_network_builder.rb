@@ -25,19 +25,12 @@ class Import
     private
 
     def build_technology(technology)
-      defaults = technology_defaults(technology).merge('key' => technology.key)
+      defaults = technology.defaults.merge('key' => technology.key)
 
       technology.importable_gqueries
         .each_with_object(defaults) do |(attr, query), hash|
           hash[attr] = ATTRIBUTES[query].call(gqueries)
         end
-    end
-
-    # TODO: needs to be cleaned up
-    def technology_defaults(technology)
-      defaults = technology.defaults.dup
-      defaults.update('total_initial_investment' =>
-                      (defaults['total_initial_investment'] / 1000))
     end
 
     def technologies
