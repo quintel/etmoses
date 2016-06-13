@@ -1,4 +1,8 @@
 %h2 Secondary network
+
+.hidden.heat_asset_list.connections
+  %input.heat_connections{name: 'heat_connections', value: 0.0}
+
 %table.table.interactions.heat_asset_list.multi_table{ data: { type: 'heat_asset_list_table'  } }
   %thead
     %tr
@@ -30,7 +34,7 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_stakeholders(list_item.stakeholder)
+            = options_for_all_stakeholders(list_item.stakeholder)
 
         %td.editable
           %input.form-control{name: 'connection_distribution', value: list_item.connection_distribution}

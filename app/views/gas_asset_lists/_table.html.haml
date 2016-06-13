@@ -34,7 +34,7 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_stakeholders(list_item['stakeholder'])
+            = options_for_all_stakeholders(list_item['stakeholder'])
 
         %td.editable
           %input.form-control{name: 'building_year', value: list_item['building_year']}

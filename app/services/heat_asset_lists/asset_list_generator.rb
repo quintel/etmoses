@@ -18,7 +18,8 @@ module HeatAssetLists
         .decorate.map do |heat_source_list|
           HeatAssets::Pipe.all.first.attributes.merge(
             distance:    heat_source_list.distance,
-            heat_source: heat_source_list.key
+            heat_source: heat_source_list.key,
+            stakeholder: default_stakeholder
           )
         end
     end
@@ -27,8 +28,13 @@ module HeatAssetLists
 
     def heat_locations
       [ HeatAssets::Location.by_type('city_apartment') ].map do |part|
-        part.attributes.merge(connection_distribution: 1.0)
+        part.attributes.merge(connection_distribution: 1.0,
+                              stakeholder: default_stakeholder)
       end
+    end
+
+    def default_stakeholder
+      @testing_ground.topology.each_node.map { |node| node[:stakeholder] }.first
     end
   end
 end

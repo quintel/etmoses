@@ -57,6 +57,13 @@ module TestingGroundsHelper
     options_for_select options.uniq, stakeholder
   end
 
+  def options_for_all_stakeholders(stakeholder = nil)
+    options = Stakeholder.all.map(&:name)
+
+    options_for_select options, stakeholder
+  end
+
+
   def options_for_testing_grounds(testing_ground)
     testing_grounds = policy_scope(TestingGround)
                         .where("`testing_grounds`.`id` != ?", testing_ground.id)

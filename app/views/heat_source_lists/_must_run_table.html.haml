@@ -30,7 +30,7 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_stakeholders(list_item.stakeholder)
+            = options_for_all_stakeholders(list_item.stakeholder)
 
         %td.editable
           %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}
