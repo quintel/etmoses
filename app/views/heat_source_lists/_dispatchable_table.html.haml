@@ -2,7 +2,7 @@
 %table.table.interactions.heat_source_list.multi_table{ data: { type: 'heat_source_list_table'  } }
   %thead
     %tr
-      %th.col-sm-3{ data: { header: 'key' } } Plant type
+      %th.col-sm-2{ data: { header: 'key' } } Plant type
       %th{ data: { header: 'heat_capacity' } } Heat capacity [MW]
       %th{ data: { header: 'units' } } Units
       %th{ data: { header: 'stakeholder' } } Stakeholder
@@ -17,7 +17,7 @@
 
   %tbody
     - heat_source_list.select(&:dispatchable).each do |list_item|
-      %tr{class: ('blank' if list_item.key == 'blank') }
+      %tr
         %td.editable
           %select.form-control.key
             = options_for_heat_source_plant_types(list_item.key)
@@ -30,7 +30,7 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_stakeholders(list_item.stakeholder)
+            = options_for_all_stakeholders(list_item.stakeholder)
 
         %td.editable
           %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}

@@ -5,12 +5,15 @@ class HeatSourceListsController < ApplicationController
 
   def update
     @heat_source_list.update_attributes(heat_source_list_attributes)
+
+    @heat_asset_list = HeatAssetLists::AssetListUpdater.new(@testing_ground).update!
+    @testing_ground.business_case.clear_job!
   end
 
   private
 
   def heat_source_list_attributes
-    params.require(:heat_source_list).permit(:source_list)
+    params.require(:heat_source_list).permit(:asset_list)
   end
 
   def find_heat_source_list

@@ -1,22 +1,22 @@
 .table-holder
   = render partial: "gas_asset_lists/table", locals: { testing_ground: testing_ground, gas_asset_list: gas_asset_list }
 
-= form_for [testing_ground, gas_asset_list], html: { remote: true } do |f|
+= form_for [testing_ground, testing_ground.gas_asset_list], html: { remote: true } do |f|
   .hidden
-    = f.text_area :asset_list, value: JSON.dump(gas_asset_list.asset_list)
+    = f.text_area :asset_list, value: JSON.dump(gas_asset_list)
 
   .btn-group
     = f.submit "Apply", class: "btn btn-primary"
     = save_all_button(gas_load_testing_ground_path(testing_ground), "Save all and view gas-load")
 
   .btn-group.pull-right
-    %button.btn.btn-danger.reload-gas-asset-list{ data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), confirmation: "Are you sure?" } }
+    %button.btn.btn-danger.reload-gas-asset-list{ data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, testing_ground.gas_asset_list), confirmation: "Are you sure?" } }
       Rescale assets to gas connections
     -# tooltip
     %span.wait.hidden= image_tag "wait.gif"
 
 - if gas_asset_list
-  .graph.npv-chart{ data: { url: calculate_net_present_value_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), title: "Equity value (€)" } }
+  .graph.npv-chart{ data: { url: calculate_net_present_value_testing_ground_gas_asset_list_path(testing_ground, testing_ground.gas_asset_list), title: "Equity value (€)" } }
 
-  .graph.cummulative-costs-chart{ data: { url: calculate_cumulative_investment_testing_ground_gas_asset_list_path(testing_ground, gas_asset_list), interpolate: 'step-after', title: "Cummalative investment (€)" } }
+  .graph.cummulative-costs-chart{ data: { url: calculate_cumulative_investment_testing_ground_gas_asset_list_path(testing_ground, testing_ground.gas_asset_list), interpolate: 'step-after', title: "Cummalative investment (€)" } }
 

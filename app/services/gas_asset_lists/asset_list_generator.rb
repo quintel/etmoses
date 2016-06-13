@@ -8,7 +8,7 @@ module GasAssetLists
     end
 
     def generate
-      StaticData::DATA_SOURCES.values.map(&:all).flatten.map do |part|
+      GasAssets::Base.all_assets.map do |part|
         InstalledGasAsset.new(create_gas_asset(part)).attributes
       end
     end
@@ -18,7 +18,7 @@ module GasAssetLists
     def create_gas_asset(part)
       pressure_level_index = GasAssetList::PRESSURE_LEVELS.index(part.pressure_level)
 
-      GasAssetList::DEFAULT.merge(part.attributes).merge(
+      GasAssetListDecorator::DEFAULT.merge(part.attributes).merge(
         part: part.part_type.pluralize,
         amount: (part.default_amount * amount_of_gas_connections).round(3),
         pressure_level_index: pressure_level_index

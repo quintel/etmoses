@@ -6,11 +6,12 @@ class GasAssetListsController < ResourceController
 
   def update
     @gas_asset_list.update_attributes(gas_asset_list_attributes)
+    @testing_ground.business_case.clear_job!
   end
 
   def get_types
     render json: (params.fetch(:gas_parts).map do |part|
-      StaticData::DATA_SOURCES[part[:part]]
+      GasAssets::Base.type_for(part[:part])
         .where_pressure(part[:pressure_level_index])
         .map(&:attributes)
     end)

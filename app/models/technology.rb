@@ -42,6 +42,13 @@ class Technology < ActiveHash::Base
     )
   end
 
+  def self.heat_sources_for_table
+    where(
+      carrier: 'heat',
+      is_district_heating: false
+    )
+  end
+
   def self.for_carrier(carrier)
     where(carrier: carrier)
   end

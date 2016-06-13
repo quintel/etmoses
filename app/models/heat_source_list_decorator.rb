@@ -4,8 +4,8 @@ class HeatSourceListDecorator
   end
 
   def decorate
-    sorted_source_list.map do |part|
-      entity = Technology.by_key(part.fetch('key'))
+    sorted_asset_list.map do |part|
+      entity = Technology.by_key(part.fetch(:key))
 
       InstalledHeatSource.new(part.merge(entity.attributes))
     end
@@ -13,9 +13,9 @@ class HeatSourceListDecorator
 
   private
 
-  def sorted_source_list
-    @heat_source_list.source_list.sort_by do |source|
-      source['priority'].to_i
+  def sorted_asset_list
+    @heat_source_list.asset_list.sort_by do |source|
+      source[:priority].to_i
     end
   end
 end

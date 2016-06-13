@@ -11,8 +11,8 @@
       %th
 
   %tbody
-    - gas_asset_list.sorted_asset_list.each do |list_item|
-      %tr{class: ("blank" if list_item['type'] == "blank") }
+    - gas_asset_list.each do |list_item|
+      %tr
         %td.editable
           %select.form-control.pressure_level
             = options_for_pressure_levels(list_item['pressure_level_index'])
@@ -34,7 +34,7 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_stakeholders(list_item['stakeholder'])
+            = options_for_all_stakeholders(list_item['stakeholder'])
 
         %td.editable
           %input.form-control{name: 'building_year', value: list_item['building_year']}

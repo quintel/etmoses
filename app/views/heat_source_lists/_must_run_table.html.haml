@@ -6,9 +6,9 @@
       %th.col-sm-1{ data: { header: 'heat_production' } } Heat production [MWh]
       %th.col-sm-2{ data: { header: 'profile' } } Profile
       %th{ data: { header: 'stakeholder' } } Stakeholder
-      %th{ data: { header: 'total_initial_investment' } } Investment [kEUR/MWh]
+      %th{ data: { header: 'total_initial_investment' } } Investment [EUR/MWh]
       %th{ data: { header: 'technical_lifetime' } } Technical lifetime [Y]
-      %th{ data: { header: 'om_costs_per_year' } } O&M Costs [kEUR/MWh]
+      %th{ data: { header: 'om_costs_per_year' } } O&M Costs [EUR/MWh]
       %th{ data: { header: 'marginal_costs' } } Marginal costs [EUR/MWh]
       %th{ data: { header: 'distance' } } Distance [km]
       %th.hidden{ data: { header: 'dispatchable' } }
@@ -17,7 +17,7 @@
 
   %tbody
     - heat_source_list.reject(&:dispatchable).each do |list_item|
-      %tr{class: ('blank' if list_item.key == 'blank') }
+      %tr
         %td.editable
           %select.form-control.key
             = options_for_heat_source_plant_types(list_item.key)
@@ -30,7 +30,7 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_stakeholders(list_item.stakeholder)
+            = options_for_all_stakeholders(list_item.stakeholder)
 
         %td.editable
           %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}

@@ -16,7 +16,7 @@ class Import
         'total_initial_investment' => TotalInitialInvestmentAttribute.call(data),
         'technical_lifetime'       => TechnicalLifetimeAttribute.call(data),
         'om_costs_per_year'        => FixedOmCostsPerYearPerMwAttribute.call(data),
-        'marginal_costs'           => MarginalCostsAttribute.call(data)
+        'marginal_costs'           => MarginalCostsAttribute.call(data).round(1)
       )
     end
   end

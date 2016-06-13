@@ -1,6 +1,6 @@
 module GasAssetListHelper
   def options_for_gas_parts(part)
-    options = StaticData::DATA_SOURCES.keys.map do |key|
+    options = ["compressors", "connectors", "pipes"].map do |key|
       [I18n.t("gas_asset.#{ key }"), key]
     end
 

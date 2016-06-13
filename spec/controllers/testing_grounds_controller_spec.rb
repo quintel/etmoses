@@ -50,7 +50,10 @@ RSpec.describe TestingGroundsController do
     }
 
     let!(:stub_heat_sources) {
-      expect_any_instance_of(HeatSourceList::SourceListFetcher).to receive(:fetch).and_return([])
+      expect_any_instance_of(HeatSourceList::SourceListFetcher)
+        .to receive(:fetch).and_return([])
+      expect_any_instance_of(HeatAssetLists::AssetListGenerator)
+        .to receive(:generate).and_return([])
     }
 
     it "creates a testing ground" do

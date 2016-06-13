@@ -65,7 +65,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     }
 
     it "sets the correct defaults" do
-      expect(source.fetch('total_initial_investment')).to eq(100000)
+      expect(source.fetch('total_initial_investment')).to eq(100)
     end
   end
 

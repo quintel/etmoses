@@ -8,7 +8,8 @@ module Market
   # will be billable to the stakeholder who owns the endpoint.
   class InitialCosts
     INITIAL_COSTS = [
-      TopologyCosts, TechnologyCosts, GasAssetsCosts, HeatSourcesCosts
+      TopologyCosts, TechnologyCosts, GasAssetsCosts, HeatSourcesCosts,
+      HeatAssetsCosts
     ].freeze
 
     def initialize(network, testing_ground)

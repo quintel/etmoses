@@ -8,7 +8,7 @@ RSpec.describe HeatSourceListDecorator do
   }
 
   let(:heat_source) {
-    FactoryGirl.create(:heat_source_list, source_list: heat_source_list)
+    FactoryGirl.create(:heat_source_list, asset_list: heat_source_list)
   }
 
   let(:decorated) {

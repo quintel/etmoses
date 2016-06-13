@@ -3,21 +3,24 @@ require 'rails_helper'
 RSpec.describe GasAssetListsController do
   let(:user) { FactoryGirl.create(:user) }
   let(:testing_ground) { FactoryGirl.create(:testing_ground, user: user) }
+  let!(:business_case) {
+    FactoryGirl.create(:business_case, testing_ground: testing_ground)
+  }
   let!(:sign_in_user) { sign_in(user) }
   let(:asset_list) {
     [
-      { "pressure_level_index"=>"0",
-        "part"=>"connectors",
-        "type"=>"big_connector",
-        "amount"=>"1",
-        "stakeholder"=>"cooperation",
-        "building_year"=>"1980" },
-      { "pressure_level_index"=>"0",
-        "part"=>"pipes",
-        "type"=>"big_pipe",
-        "amount"=>"1",
-        "stakeholder"=>"cooperation",
-        "building_year"=>"1960" }
+      { pressure_level_index: "0",
+        part: "connectors",
+        type: "big_connector",
+        amount: "1",
+        stakeholder: "cooperation",
+        building_year: "1980" },
+      { pressure_level_index: "0",
+        part: "pipes",
+        type: "big_pipe",
+        amount: "1",
+        stakeholder: "cooperation",
+        building_year: "1960" }
     ]
   }
 
@@ -66,8 +69,8 @@ RSpec.describe GasAssetListsController do
 
     it "calculates net present values" do
       post :calculate_net_present_value,
-        testing_ground_id: testing_ground.id,
-        id: gas_asset_list.id
+            testing_ground_id: testing_ground.id,
+            id: gas_asset_list.id
 
       expect(JSON.parse(response.body).slice("1960", "2010")).to eq({
         "1960" => 500.0, "2010" => 40.0

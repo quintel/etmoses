@@ -1,12 +1,6 @@
 var MultiTable = (function () {
     'use strict';
 
-    function resetProfiles() {
-        this.tables.forEach(function (table) {
-            table.setProfiles();
-        });
-    }
-
     function getData() {
         var result = [];
 
@@ -20,8 +14,9 @@ var MultiTable = (function () {
     function mergeAndUpdate() {
         var multiTableData = getData.call(this);
 
-        $("#heat_source_list_source_list").text(JSON.stringify(multiTableData));
-        resetProfiles.call(this);
+        $(this.scope).text(JSON.stringify(multiTableData));
+
+        this.mergeCallback();
     }
 
     MultiTable.prototype = {
@@ -29,12 +24,13 @@ var MultiTable = (function () {
             this.tables.push(table);
 
             table.editableTable.append(mergeAndUpdate.bind(this));
-            table.setProfiles();
         }
     }
 
-    function MultiTable() {
-        this.tables = [];
+    function MultiTable(scope, mergeCallback) {
+        this.scope         = scope;
+        this.tables        = [];
+        this.mergeCallback = mergeCallback || function () { return; };
     }
 
     return MultiTable;
