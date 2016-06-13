@@ -3,6 +3,6 @@ class Import
     'heat_capacity',
     'etmoses_dispatchable_capacity_for_households_from_central_heat_network'
   ) do |value, _|
-    value.round(2)
+    value.round(5)
   end
 end

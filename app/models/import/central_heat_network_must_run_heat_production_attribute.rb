@@ -3,6 +3,6 @@ class Import
     'heat_production',
     'etmoses_must_run_heat_for_households_from_central_heat_network'
   ) do |value, _|
-    value.round(2)
+    value.round(5)
   end
 end
