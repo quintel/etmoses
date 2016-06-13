@@ -16,7 +16,7 @@ class HeatSourceList::SourceListFetcher
 
   def technologies
     (default_heat_sources + central_heat_network).sort_by do |tech|
-      tech['marginal_costs'] || -1
+      tech['marginal_heat_costs'] || -1
     end
   end
 

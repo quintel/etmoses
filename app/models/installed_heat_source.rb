@@ -9,7 +9,7 @@ class InstalledHeatSource
   attribute :total_initial_investment, Float, default: 0.0
   attribute :technical_lifetime, Float, default: 1.0
   attribute :om_costs_per_year, Float, default: 0.0
-  attribute :marginal_costs, Float
+  attribute :marginal_heat_costs, Float
   attribute :profile, Integer
   attribute :stakeholder, String
   attribute :distance, Float
