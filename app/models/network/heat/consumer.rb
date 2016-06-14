@@ -20,7 +20,7 @@ module Network
         0.0
       end
 
-      def store(frame, amount)
+      def receive_mandatory(frame, amount)
         @park.consume(frame, amount)
       end
 
