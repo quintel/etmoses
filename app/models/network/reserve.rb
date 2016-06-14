@@ -2,10 +2,16 @@ module Network
   # Stores energy for later use. Has an optional volume which may not be
   # exceeded.
   class Reserve
+    include Enumerable
+
     def initialize(volume = Float::INFINITY, &decay)
       @volume = volume
       @decay  = decay
       @store  = []
+    end
+
+    def each(*args, &block)
+      @store.each(*args, &block)
     end
 
     # Public: Returns how much energy is stored in the reserve at the end of the
@@ -77,6 +83,14 @@ module Network
       decay = @decay.call(frame, start)
 
       decay < start ? decay : start
+    end
+
+    # Public: Describes the net load on the reserve. Accounts for energy put in
+    # to, or removed from, the reserve, excluding losses.
+    #
+    # Returns an Array.
+    def load
+      [first, *each_cons(2).map { |a, b| b - a } ]
     end
 
     # Public: A human readable version of the reserve for debugging.
