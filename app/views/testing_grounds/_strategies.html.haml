@@ -1,0 +1,5 @@
+.save_strategies.hidden
+  - if testing_ground.selected_strategy
+    = testing_ground.selected_strategy.to_json
+  - else
+    = default_strategies.to_json

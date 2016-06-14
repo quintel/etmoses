@@ -20,14 +20,13 @@ var D3LoadChart = (function () {
         popOver,
         brush,
         chartData,
-        width,
         hoverLineGroup,
         dateSelect,
 
         currentWeek     = 1,
         margin          = { top: 20, right: 0, bottom: 70, left: 75 },
-        height          = 500 - margin.top - margin.bottom,
         height2         = 50,
+        brushMargin     = 40,
         weeksInYear     = (365 / 7.0),
 
         // This is assuming every LES has a length of 35040. Shorter LES's will
@@ -57,19 +56,23 @@ var D3LoadChart = (function () {
         };
 
     function setLesOptions() {
+        var lesOptions;
+
         if (currentWeek !== 0) {
-            this.lesOptions = {
+            lesOptions = {
                 resolution:  'high',
                 range_start: weekResolution * (currentWeek - 1),
                 range_end:   weekResolution * currentWeek
             };
         } else {
-            this.lesOptions = {
+            lesOptions = {
                 resolution: 'low',
                 range_start: 0,
                 range_end:   weekResolution * weeksInYear
             };
         }
+
+        $.extend(this.settings, lesOptions);
     }
 
     function renderWeek(scope) {
@@ -103,7 +106,7 @@ var D3LoadChart = (function () {
         var extent = brush.extent();
 
         if (brush.empty() || (extent[0] <= d.x && extent[1] >= d.x)) {
-            if (this.shown.view_as === 'stacked') {
+            if (this.settings.view_as === 'stacked') {
                 return (d.y + d.offset) * scaleCorrection;
             } else {
                 return d.y * scaleCorrection;
@@ -112,7 +115,7 @@ var D3LoadChart = (function () {
     }
 
     function setLine(d, scope) {
-        if (d.visible && !(this.shown.view_as === 'stacked')) {
+        if (d.visible && !(this.settings.view_as === 'stacked')) {
             return chartParts[scope].line(d.values);
         } else {
             return null;
@@ -121,7 +124,7 @@ var D3LoadChart = (function () {
 
     function setArea(d, scope) {
         if (d.visible && d.area) {
-            if (!(this.shown.view_as === 'stacked')) {
+            if (!(this.settings.view_as === 'stacked')) {
                 return chartParts[scope].colorArea(d.values);
             } else {
                 return chartParts[scope].stackedArea(d.values);
@@ -143,7 +146,7 @@ var D3LoadChart = (function () {
     }
 
     function roundDate(date) {
-        var roundTo  = this.lesOptions.resolution === 'high' ? 15 : 60 * 24,
+        var roundTo  = this.settings.resolution === 'high' ? 15 : 60 * 24,
             rounding = 1000 * 60 * roundTo;
 
         return new Date(Math.floor(date.getTime() / rounding) * rounding);
@@ -243,7 +246,7 @@ var D3LoadChart = (function () {
     function transformData() {
         var data = new Transformator(this, currentWeek).transform();
 
-        if (this.shown.view_as === 'stacked') {
+        if (this.settings.view_as === 'stacked') {
             data = new StackTransformator(data).transform();
         }
 
@@ -269,7 +272,7 @@ var D3LoadChart = (function () {
     D3LoadChart.prototype = {
         lastRequestedData: null,
         view: function (attr, newAttr) {
-            this.shown[attr] = newAttr;
+            this.settings[attr] = newAttr;
 
             return this;
         },
@@ -304,7 +307,7 @@ var D3LoadChart = (function () {
             chartData = transformData.call(this);
 
             if (chartData.length < 1) {
-                throw "charts are empty";
+                throw "Charts are empty";
             }
 
             xScale.domain(d3.extent(chartData[0].values, function (d) {
@@ -325,7 +328,7 @@ var D3LoadChart = (function () {
             // Zero line ------------------------------------------------------
             svg.select("line.zero-line")
                 .attr("x1", 0)
-                .attr("x2", width)
+                .attr("x2", this.width)
                 .attr("y1", yScale(0))
                 .attr("y2", yScale(0));
 
@@ -362,9 +365,9 @@ var D3LoadChart = (function () {
         render: function (data) {
             var self = this;
 
-            xScale  = d3.time.scale.utc().range([0, width]);
-            xScale2 = d3.time.scale.utc().range([0, width]);
-            yScale  = d3.scale.linear().range([height, 0]);
+            xScale  = d3.time.scale.utc().range([0, this.width]);
+            xScale2 = d3.time.scale.utc().range([0, this.width]);
+            yScale  = d3.scale.linear().range([this.height, 0]);
             yScale2 = d3.scale.linear().range([height2, 0]);
 
             xAxis   = d3.svg.axis().scale(xScale).orient("bottom")
@@ -388,16 +391,16 @@ var D3LoadChart = (function () {
                 .attr("class", "legend");
 
             svg = d3.select(this.chartClass).append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height)
+                .attr("width", this.width + margin.left + margin.right)
+                .attr("height", this.height + margin.top + margin.bottom + height2)
                 .append("g")
                 .attr("transform", "translate(" + margin.left + ","
                                                 + margin.top  + ")");
 
             // Create invisible rect for mouse tracking
             svg.append("rect")
-                .attr("width", width)
-                .attr("height", height)
+                .attr("width", this.width)
+                .attr("height", this.height)
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("id", "mouse-tracker")
@@ -408,7 +411,7 @@ var D3LoadChart = (function () {
 
             ////for slider part------------------------------------------------
             context = svg.append("g") // Brushing context box container
-                .attr("transform", "translate(0, 440)")
+                .attr("transform", "translate(0, " + (this.height + brushMargin) + ")")
                 .attr("class", "context");
 
             context.append("g")
@@ -420,20 +423,20 @@ var D3LoadChart = (function () {
             defs.append("clipPath")
                   .attr("id", "clip-issue")
                 .append("rect")
-                  .attr("width", width)
-                  .attr("height", height);
+                  .attr("width", this.width)
+                  .attr("height", this.height);
 
             defs.append("clipPath")
                   .attr("id", "clip-preview_issue")
                 .append("rect")
-                  .attr("width", width)
+                  .attr("width", this.width)
                   .attr("height", height2);
             //end slider part--------------------------------------------------
 
             // draw line graph
             svg.append("g")
                 .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
+                .attr("transform", "translate(0," + this.height + ")")
                 .call(xAxis);
 
             svg.append("g")
@@ -455,7 +458,7 @@ var D3LoadChart = (function () {
                   .append("line")
                   .attr("id", "hover-line")
                   .attr("x1", 10).attr("x2", 10)
-                  .attr("y1", 0).attr("y2", height + 10)
+                  .attr("y1", 0).attr("y2", this.height + 10)
                   .style("pointer-events", "none")
                   .style("opacity", 1e-6);
 
@@ -491,19 +494,9 @@ var D3LoadChart = (function () {
     function D3LoadChart(chartClass, curveType, settings) {
         this.chartClass = chartClass;
         this.curveType  = curveType || 'default';
-        this.lesOptions = {
-            resolution:  'high',
-            range_start: 0,
-            range_end:   weekResolution
-        };
-        this.shown = {
-            view_as: 'total',
-            view_carrier: 'load',
-            strategies: false
-        };
-
-        this.staticSettings = settings || {};
-        width               = (this.staticSettings.width || 500);
+        this.settings   = $.extend(DefaultSettings, settings);
+        this.width      = 500;
+        this.height     = 410;
     }
 
     return D3LoadChart;

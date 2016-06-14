@@ -5,13 +5,15 @@
 = render 'side_menu', testing_ground: @testing_ground, strategies: false
 
 - if @testing_ground.heat_source_list && @testing_ground.heat_asset_list
+  = render 'strategies', testing_ground: @testing_ground
+
   #heat-chart
     .chart-holder
       %h2
         Load on the heat network
         %span.loading-spinner
           = image_tag 'wait.gif'
-      .graph.line-chart{ data: { type: 'heat_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'heat', width: 475 } }
+      .graph.line-chart{ data: { type: 'static_load_chart', url: heat_testing_ground_load_calculation_path(@testing_ground), curve_type: 'heat', view_as: 'stacked', resolution: 'high' } }
 
 - else
   .alert.alert-info

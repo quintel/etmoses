@@ -11,7 +11,7 @@
         Load on the gas network
         %span.loading-spinner
           = image_tag 'wait.gif'
-      .graph.line-chart{ data: { type: 'gas_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', width: 475 } }
+      .graph.line-chart{ data: { type: 'static_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', view_as: 'total', resolution: 'low' } }
 
     .chart-holder
       %h2

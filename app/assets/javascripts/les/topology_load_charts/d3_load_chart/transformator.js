@@ -67,17 +67,22 @@ var Transformator = (function () {
     }
 
     function isShown(chartType) {
-        var type = this.view_carrier;
+        var type = this.shown.view_carrier;
 
         if (this.strategies && StrategyHelper.anyStrategies()) {
             type += "_strategies";
         }
 
-        return this.view_as === 'total' || chartType === type;
+        return isStaticLoadOrTotal.call(this) || chartType === type;
     }
 
     function setTotalLoad(datum, values) {
-        var settings = LoadChartsSettings[datum.type || this.d3Chart.curveType];
+        var type     = (datum.type || this.d3Chart.curveType),
+            settings = LoadChartsSettings[type];
+
+        if (!settings) {
+            throw "No settings available for '" + type + "'";
+        }
 
         return {
             key:     settings.name,
@@ -106,11 +111,15 @@ var Transformator = (function () {
         }
     }
 
+    function isStaticLoadOrTotal() {
+        return (this.load || this.shown.view_as === 'total');
+    }
+
     function setLoad(datum) {
         var values = this.data[datum.type] || datum.values;
 
-        if (isShown.call(this.shown, datum.type) && values.total) {
-            if (this.shown.view_as === 'total') {
+        if (isShown.call(this, datum.type) && values.total) {
+            if (isStaticLoadOrTotal.call(this)) {
                 this.results.push(setTotalLoad.call(this, datum, values.total));
             } else {
                 setLoadsPerTech.call(this, values);
@@ -121,7 +130,7 @@ var Transformator = (function () {
     Transformator.prototype = {
         transform: function () {
             this.results = [];
-            this.shown   = this.d3Chart.shown;
+            this.shown   = this.d3Chart.settings;
 
             fetchLoad.call(this).forEach(setLoad.bind(this));
 
@@ -136,7 +145,7 @@ var Transformator = (function () {
 
     function Transformator(d3Chart, thisCurrentWeek) {
         this.d3Chart = d3Chart;
-        this.load    = this.d3Chart.staticSettings.load;
+        this.load    = this.d3Chart.settings.load;
         this.data    = this.d3Chart.lastRequestedData;
 
         currentWeek  = thisCurrentWeek;
