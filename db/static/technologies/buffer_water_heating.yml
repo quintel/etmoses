@@ -1,6 +1,6 @@
 ---
 carrier: electricity
-color: "#ed9bee"
+color: "#D25113"
 composite: true
 defaults:
   capacity: 10.0

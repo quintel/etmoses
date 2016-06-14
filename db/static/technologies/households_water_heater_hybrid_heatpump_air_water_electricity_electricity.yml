@@ -1,7 +1,7 @@
 ---
 behavior: hhp_electricity
 carrier: electricity
-color: "#c87d02"
+color: "#003904"
 defaults:
   capacity: 1.63333
   position_relative_to_buffer: buffering

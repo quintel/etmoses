@@ -1,7 +1,7 @@
 ---
 behavior: storage
 carrier: electricity
-color: "#62988e"
+color: "#8703AC"
 defaults:
   capacity: 4.4
 

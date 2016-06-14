@@ -1,7 +1,7 @@
 ---
 behavior: buffer
 carrier: electricity
-color: "#edd417"
+color: "#8645AA"
 defaults:
   capacity: 3.33333
   position_relative_to_buffer: buffering

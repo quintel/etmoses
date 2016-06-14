@@ -1,7 +1,7 @@
 ---
 behavior: null
 carrier: electricity
-color: "#87c66a"
+color: "#581515"
 defaults:
   capacity: 1.5
   position_relative_to_buffer: buffering

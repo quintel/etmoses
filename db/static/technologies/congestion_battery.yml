@@ -1,7 +1,7 @@
 ---
 behavior: congestion_battery
 carrier: electricity
-color: "#7bc2eb"
+color: "#51648F"
 defaults:
   capacity: 10.0
   volume: 100.0

@@ -1,7 +1,7 @@
 ---
 behavior: electric_vehicle
 carrier: electricity
-color: "#6e8c60"
+color: "#5488FF"
 defaults:
   capacity: 3.7
   volume: 25.0

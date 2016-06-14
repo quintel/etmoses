@@ -1,7 +1,7 @@
 ---
 behavior: 'null'
 carrier: hybrid
-color: "#aab0ee"
+color: "#1C6F18"
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year

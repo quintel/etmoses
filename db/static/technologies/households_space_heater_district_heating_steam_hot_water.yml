@@ -1,6 +1,6 @@
 ---
 behavior: heat_consumer
-color: "#61b4ca"
+color: "#EC0000"
 carrier: heat
 defaults:
   capacity: 10.0

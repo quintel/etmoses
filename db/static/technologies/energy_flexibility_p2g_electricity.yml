@@ -1,7 +1,7 @@
 ---
 behavior: siphon
 carrier: electricity
-color: "#819a47"
+color: "#358B30"
 defaults:
   capacity: 739.583
 

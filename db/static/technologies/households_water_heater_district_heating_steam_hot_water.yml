@@ -1,7 +1,7 @@
 ---
 behavior: heat_consumer
 carrier: heat
-color: "#cc7abe"
+color: "#AC3C3C"
 defaults:
   capacity: 10.0
   position_relative_to_buffer: boosting

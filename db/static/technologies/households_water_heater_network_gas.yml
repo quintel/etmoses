@@ -1,6 +1,6 @@
 ---
 carrier: gas
-color: "#80e7b0"
+color: "#3A1153"
 defaults:
   capacity: 35.8209
   position_relative_to_buffer: boosting

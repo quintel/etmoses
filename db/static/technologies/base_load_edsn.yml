@@ -1,7 +1,7 @@
 ---
 behavior: optional
 carrier: electricity
-color: "#64edde"
+color: "#009D9D"
 exists_as_technology_in_etengine: false
 technology_component_behavior:
   flex: optional
