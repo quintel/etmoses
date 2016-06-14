@@ -89,9 +89,14 @@ module Network
       # Returns an array.
       def sources_to_producers(sources)
         sources.map do |source|
-          Network::Heat::Producer.new(
-            source, source.dispatchable? ? nil : source.network_curve, {}
-          )
+          curve = unless source.dispatchable?
+            # TODO This is providing an uncut curve to the technology,
+            # which means weekly calculations are always using Jan 1 to
+            # Jan 7th.
+            source.profile_curve.curves['default']
+          end
+
+          Network::Heat::Producer.new(source, curve, {})
         end
       end
 
