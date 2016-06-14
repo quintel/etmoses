@@ -60,6 +60,8 @@ module Network
       #
       # Returns the amount of energy which was provided by the production park.
       def consume(frame, amount)
+        return 0.0 if amount.zero?
+
         original = amount
 
         @must_run.each do |tech|
