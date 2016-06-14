@@ -31,8 +31,8 @@ module Network
           must_run:         must_run,
           dispatchable:     dispatchable,
           # https://github.com/quintel/etmoses/issues/971
-          volume:           number_of_connections * 10.0,
-          amplified_volume: number_of_connections * 17.78
+          volume:           number_of_connections * 4 * 10.0,
+          amplified_volume: number_of_connections * 4 * 17.78
         )
 
         @graph = Graph.new(:heat)
