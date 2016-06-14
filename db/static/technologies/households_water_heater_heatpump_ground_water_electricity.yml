@@ -1,10 +1,10 @@
 ---
-name: Heat pump for hot water (ground)
-export_to: households_water_heater_heatpump_ground_water_electricity_share
-carrier: electricity
 behavior: buffer
+carrier: electricity
+color: "#977e21"
 default_capacity: 3.33333
 default_position_relative_to_buffer: buffering
+export_to: households_water_heater_heatpump_ground_water_electricity_share
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
@@ -15,6 +15,7 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
+name: Heat pump for hot water (ground)
 whitelisted_attributes:
   - buffer
   - demand

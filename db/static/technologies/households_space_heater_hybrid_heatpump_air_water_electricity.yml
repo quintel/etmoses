@@ -1,6 +1,6 @@
 ---
-name: Hybrid heat pump space heating
 carrier: hybrid
+color: "#55e4e8"
 behavior: 'null'
 exists_as_technology_in_etengine: false
 importable_attributes:
@@ -12,6 +12,7 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
+name: Hybrid heat pump space heating
 visible: false
 whitelisted_attributes:
   - buffer

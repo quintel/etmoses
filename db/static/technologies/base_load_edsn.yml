@@ -1,7 +1,12 @@
 ---
-name: Household aggregated
-carrier: electricity
 behavior: optional
+carrier: electricity
+color: "#64edde"
+exists_as_technology_in_etengine: false
+name: Household aggregated
+technology_component_behavior:
+  flex: optional
+  inflex: generic
 visible: false
 whitelisted_attributes:
   - demand
@@ -16,7 +21,3 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
-exists_as_technology_in_etengine: false
-technology_component_behavior:
-  flex: optional
-  inflex: generic

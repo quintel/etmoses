@@ -1,6 +1,6 @@
 ---
-name: Households space heater district heating
 behavior: heat_consumer
+color: "#61b4ca"
 carrier: heat
 default_capacity: 10.0
 default_position_relative_to_buffer: boosting
@@ -14,6 +14,7 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
+name: Households space heater district heating
 whitelisted_attributes:
   - buffer
   - initial_investment

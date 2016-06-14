@@ -1,10 +1,11 @@
 ---
-name: Neighbourhood battery
-carrier: electricity
 behavior: congestion_battery
+carrier: electricity
+color: "#7bc2eb"
 default_capacity: 10.0
 default_volume: 100.0
 exists_as_technology_in_etengine: false
+name: Neighbourhood battery
 profile_required: false
 whitelisted_attributes:
   - congestion_reserve_percentage

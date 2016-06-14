@@ -1,10 +1,11 @@
 ---
-name: Hybrid heat pump space heating (electricity)
-carrier: electricity
 behavior: hhp_electricity
+carrier: electricity
+color: "#6cbe8a"
 default_capacity: 1.08889
 default_position_relative_to_buffer: buffering
 exists_as_technology_in_etengine: false
+name: Hybrid heat pump space heating (electricity)
 whitelisted_attributes:
   - buffer
   - demand

@@ -1,4 +1,5 @@
 ---
+color: "#87c66a"
 name: Households water heater electricity
 behavior: null
 carrier: electricity
