@@ -165,4 +165,23 @@ module TestingGroundsHelper
       ['Heat',        'heat']
     ])
   end
+
+  def technology_colors
+    colors = [
+      "#8c5e5e", "#eaee4e", "#64edde", "#ee841a", "#ed9bee",
+      "#7bc2eb", "#819a47", "#ee526a", "#a7ed8e", "#62988e",
+      "#c59e04", "#a76426", "#a182b8", "#d25e92", "#55e4e8",
+      "#6cbe8a", "#b8524c", "#aec944", "#827041", "#e75c39",
+      "#748eaa", "#edd417", "#977e21", "#aab0ee", "#c87d02",
+      "#747669", "#56c8b8", "#80e7b0", "#6e8c60", "#87c66a",
+      "#a46384", "#cc7abe", "#61b4ca", "#ee79ca", "#cdee6d",
+      "#ee5a90", "#945d3e", "#88738b", "#cbc221", "#9ea02b",
+      "#cd9de4", "#cd6720", "#ce516c", "#bb5732", "#a95662",
+      "#8b9cd3", "#5aeeee", "#da4e4d", "#ee6e2e", "#64a381"
+    ]
+
+    Hash[Technology.all.each_with_index.map do |tech, index|
+      [tech.key, colors[index]]
+    end]
+  end
 end

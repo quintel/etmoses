@@ -120,3 +120,7 @@
 
 .hidden
   .testing_ground_id= @testing_ground.id
+
+.hidden.technologies
+  - technology_colors.each_pair do |tech_key, color|
+    %span{ class: tech_key, data: { color: color } }

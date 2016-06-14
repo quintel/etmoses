@@ -60,7 +60,7 @@ var Legend = (function () {
             legendItem.enter().append("span")
                 .attr("class", function (d) {
                     return [
-                        d.key.toLowerCase(),
+                        d.type,
                         legendItemClass,
                         sideClass
                     ].join(" ");
