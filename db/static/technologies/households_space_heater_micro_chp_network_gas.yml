@@ -1,7 +1,6 @@
 ---
 carrier: gas
 color: "#aec944"
-name: Households space heater micro chp network gas
 visible: false
 whitelisted_attributes:
   - buffer

@@ -10,26 +10,14 @@ RSpec.describe Import::HybridBuilder do
          'units' => 1 }]
     }
 
+    it "expands into 2 technologies" do
+      expect(expansion.size).to eq(2)
+    end
+
     it "expands into a 'gas' and 'electricity' type" do
-      expect(expansion).to eq([
-        {
-          "type"=>"households_water_heater_hybrid_heatpump_air_water_electricity_electricity",
-          "name"=>"Hybrid heat pump hot water (electricity)",
-          "units"=>1,
-          "carrier"=>"electricity",
-          "capacity" => 1.63333,
-          "position_relative_to_buffer"=>"buffering",
-          "composite" => false
-        },
-        {
-          "type"=>"households_water_heater_hybrid_heatpump_air_water_electricity_gas",
-          "name"=>"Hybrid heat pump hot water (gas)",
-          "units"=>1,
-          "carrier"=>"gas",
-          "capacity" => 24.4444,
-          "position_relative_to_buffer"=>"boosting",
-          "composite" => false
-        }
+      expect(expansion.map{|e| e['type'] }).to eq([
+        "households_water_heater_hybrid_heatpump_air_water_electricity_electricity",
+        "households_water_heater_hybrid_heatpump_air_water_electricity_gas"
       ])
     end
   end

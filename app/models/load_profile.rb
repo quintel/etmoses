@@ -42,6 +42,12 @@ class LoadProfile < ActiveRecord::Base
     CurveCollection.new(load_profile_components, range)
   end
 
+  def defaults
+    { 'capacity' => default_capacity,
+      'demand'   => default_demand,
+      'volume'   => default_volume }
+  end
+
   # Public: Given the unique key representing a load profile, returns the
   # profile or raises ActiveRecord::RecordNotFound.
   def self.by_key(key)

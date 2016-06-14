@@ -2,7 +2,9 @@
 behavior: siphon
 carrier: electricity
 color: "#819a47"
-default_capacity: 739.583
+defaults:
+  capacity: 739.583
+
 export_to: number_of_energy_flexibility_p2g_electricity
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
@@ -13,7 +15,6 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
-name: Power-To-Gas
 profile_required: false
 whitelisted_attributes:
   - demand

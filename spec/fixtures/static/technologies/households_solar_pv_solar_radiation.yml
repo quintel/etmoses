@@ -5,10 +5,8 @@ carrier: electricity
 behavior: conserving
 visible: true
 composite: false
-default_capacity: -1.6
-default_volume:
-default_demand:
-default_position_relative_to_buffer:
+defaults:
+  capacity: -1.6
 expandable: true
 importable_attributes:
   - electricity_output_capacity

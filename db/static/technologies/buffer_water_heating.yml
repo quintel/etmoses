@@ -2,10 +2,11 @@
 carrier: electricity
 color: "#ed9bee"
 composite: true
-default_capacity: 10.0
-default_volume: 4.0691
+defaults:
+  capacity: 10.0
+  volume: 4.0691
+
 exists_as_technology_in_etengine: false
-export_to:
 importable_gqueries:
   demand: etmoses_hot_water_buffer_demand
 

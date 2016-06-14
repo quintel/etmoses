@@ -1,7 +1,6 @@
 ---
 color: "#748eaa"
 carrier: gas
-name: Households water heater fuel cell chp network gas
 visible: false
 whitelisted_attributes:
   - buffer

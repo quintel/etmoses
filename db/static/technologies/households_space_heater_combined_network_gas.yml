@@ -1,8 +1,10 @@
 ---
 carrier: gas
 color: "#a76426"
-default_capacity: 20.6186
-default_position_relative_to_buffer: boosting
+defaults:
+  capacity: 20.6186
+  position_relative_to_buffer: boosting
+
 importable_attributes:
   - initial_investment
   - input_capacity
@@ -11,7 +13,6 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
-name: Households space heater combined network gas
 whitelisted_attributes:
   - buffer
   - demand

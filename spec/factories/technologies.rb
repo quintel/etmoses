@@ -11,5 +11,6 @@ FactoryGirl.define do
     name           { key.titleize }
     carrier        'electricity'
     importable_attributes ['electricity_output_capacity']
+    defaults       Hash.new(0)
   end
 end

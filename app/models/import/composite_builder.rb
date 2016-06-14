@@ -25,7 +25,7 @@ class Import
         'composite' => true,
         'includes'  => technology.technologies,
         'demand'    => demand_for(technology),
-        'volume'    => technology.default_volume
+        'volume'    => technology.defaults.fetch("volume")
       }
     end
 

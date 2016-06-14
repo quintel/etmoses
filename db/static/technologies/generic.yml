@@ -3,7 +3,6 @@ carrier: electricity
 color: "#ee526a"
 exists_as_technology_in_etengine: false
 expandable: false
-name: Other
 whitelisted_attributes:
   - demand
   - initial_investment

@@ -2,8 +2,10 @@
 behavior: electric_vehicle
 carrier: electricity
 color: "#6e8c60"
-default_capacity: 3.7
-default_volume: 25.0
+defaults:
+  capacity: 3.7
+  volume: 25.0
+
 export_to: transport_car_using_electricity_share
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
@@ -18,7 +20,6 @@ importable_attributes:
 importable_gqueries:
   initial_investment: electric_cars_additional_costs
 
-name: Electric car
 whitelisted_attributes:
   - demand
   - initial_investment

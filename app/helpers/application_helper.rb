@@ -6,8 +6,8 @@ module ApplicationHelper
   end
 
   def default_values(object)
-    Hash[%i(default_capacity default_volume default_demand).map do |default|
-      [default, object.send(default)]
+    Hash[%w(capacity volume demand).map do |default|
+      [default, object.defaults[default]]
     end]
   end
 

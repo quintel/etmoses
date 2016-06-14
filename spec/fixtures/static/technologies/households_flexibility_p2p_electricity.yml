@@ -5,10 +5,8 @@ carrier: electricity
 behavior: storage
 visible: true
 composite: false
-default_capacity: 4.4
-default_volume:
-default_demand:
-default_position_relative_to_buffer:
+defaults:
+  capacity: 4.4
 expandable: true
 profile_required: false
 importable_attributes:

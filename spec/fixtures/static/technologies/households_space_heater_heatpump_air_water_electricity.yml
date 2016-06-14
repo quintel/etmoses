@@ -5,8 +5,9 @@ carrier: electricity
 behavior: buffer
 visible: true
 composite: false
-default_capacity: 2.22222
-default_position_relative_to_buffer: buffering
+defaults:
+  capacity: 2.22222
+  position_relative_to_buffer: buffering
 expandable: true
 importable_attributes:
   - coefficient_of_performance

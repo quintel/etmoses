@@ -2,10 +2,11 @@
 behavior: hhp_gas
 carrier: gas
 color: "#b8524c"
-default_capacity: 20.6186
-default_position_relative_to_buffer: boosting
+default:
+  capacity: 20.6186
+  position_relative_to_buffer: boosting
+
 exists_as_technology_in_etengine: false
-name: Hybrid heat pump space heating (gas)
 whitelisted_attributes:
   - buffer
   - demand

@@ -1,9 +1,10 @@
 ---
 carrier: gas
 color: "#80e7b0"
-default_capacity: 35.8209
-default_position_relative_to_buffer: boosting
-name: Households water heater network gas
+defaults:
+  capacity: 35.8209
+  position_relative_to_buffer: boosting
+
 whitelisted_attributes:
   - buffer
   - demand

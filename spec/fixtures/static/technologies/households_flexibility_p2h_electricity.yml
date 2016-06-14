@@ -3,8 +3,9 @@ name: Power-To-Heat
 export_to: households_flexibility_p2h_electricity_market_penetration
 carrier: electricity
 behavior: optional_buffer
-default_capacity: 2.0
-default_position_relative_to_buffer: buffering
+defaults:
+  capacity: 2.0
+  position_relative_to_buffer: buffering
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours

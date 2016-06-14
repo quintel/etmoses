@@ -5,8 +5,9 @@ carrier: electricity
 behavior: hhp_electricity
 visible: true
 composite: false
-default_capacity: 1.63333
-default_position_relative_to_buffer: buffering
+defaults:
+  capacity: 1.63333
+  position_relative_to_buffer: buffering
 expandable: true
 whitelisted_attributes:
   - buffer
