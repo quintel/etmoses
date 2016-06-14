@@ -21,6 +21,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resource :load_calculation, only: [] do
+      post :heat
+    end
+
     resources :gas_asset_lists, only: [:update] do
       collection do
         post 'get_types'
@@ -28,7 +32,7 @@ Rails.application.routes.draw do
 
       member do
         post 'calculate_net_present_value', 'calculate_cumulative_investment',
-             'reload_gas_asset_list', 'load_summary', 'gas_load'
+             'reload_gas_asset_list', 'load_summary', 'gas_load', 'heat_load'
       end
     end
 

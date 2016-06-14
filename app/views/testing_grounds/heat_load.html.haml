@@ -1,0 +1,21 @@
+.header
+  %h1 Heat load
+  .clearfix
+
+= render 'side_menu', testing_ground: @testing_ground, strategies: false
+
+- if @testing_ground.heat_source_list && @testing_ground.heat_asset_list
+  #heat-chart
+    .chart-holder
+      %h2
+        Load on the heat network
+        %span.loading-spinner
+          = image_tag 'wait.gif'
+      .graph.line-chart{ data: { type: 'heat_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'heat', width: 475 } }
+
+- else
+  .alert.alert-info
+    %strong No heat source list or heat asset list:
+    This is an old LES and has no heat source list or heat assets installed.
+    Please create a new LES if you wish to compute a heat network.
+
