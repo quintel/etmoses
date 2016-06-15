@@ -24,7 +24,7 @@ class Import
       Import::DemandCalculator.new(
         @scenario_id,
         number_of_buildings,
-        @gqueries.slice('present_demand_in_source_of_electricity_in_buildings')
+        @gqueries.slice('etmoses_electricity_base_load_demand_for_buildings')
       ).calculate
     end
 

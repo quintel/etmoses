@@ -7,7 +7,7 @@ RSpec.describe Import::BuildingsBuilder do
     {
       'number_of_buildings' => {
         'present' => 2.123, 'future' => 2.1312 },
-      'present_demand_in_source_of_electricity_in_buildings' => {
+      'etmoses_electricity_base_load_demand_for_buildings' => {
         'present' => 0.0000123, 'future' => 0.0000123 }
     }
   }
