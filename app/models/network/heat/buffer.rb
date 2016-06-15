@@ -4,10 +4,17 @@ module Network
     class Buffer < Technologies::Generic
       Installed = Struct.new(:type)
 
-      def initialize(park)
+      attr_reader :reserves
+
+      def initialize(park, reserves)
         @park      = park
+        @reserves  = reserves
         @load      = []
         @installed = Installed.new(:heat_buffer)
+      end
+
+      def net_load
+        reserves.map { |reserve| Network::Curve.from(reserve.load) }.reduce(:+)
       end
 
       def production_at(frame)

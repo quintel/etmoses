@@ -176,6 +176,17 @@ class TestingGroundsController < ResourceController
     )
   end
 
+  def heat_load
+    calculator = TestingGround::Calculator.new(
+      @testing_ground, (params[:calculation] || {}).merge(
+        strategies:  @testing_ground.selected_strategy.attributes,
+        resolution:  :high
+      )
+    )
+
+    render json: TestingGround::HeatSummary.new(calculator)
+  end
+
   private
 
   # Internal: Returns the permitted parameters for creating a testing ground.

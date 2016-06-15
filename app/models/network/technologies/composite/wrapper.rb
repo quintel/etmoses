@@ -9,12 +9,13 @@ module Network
       # technology is added with public methods not defined by Buffer, the
       # delegation will not work correctly (raising a NoMethodError).
       class Wrapper < FastDelegator.create(Buffer)
-        attr_reader :object
+        attr_reader :object, :load
 
         def initialize(obj, composite)
           super(obj)
           @composite = composite
           @handle_decay = obj.respond_to?(:stored)
+          @load = DefaultArray.new { 0.0 }
         end
 
         def production_at(frame)
@@ -25,11 +26,13 @@ module Network
 
         def store(frame, amount)
           super
+          @load[frame] += amount
           profile.deplete(frame, amount)
         end
 
         def receive_mandatory(frame, amount)
           super
+          @load[frame] += amount
           profile.deplete(frame, amount)
         end
 

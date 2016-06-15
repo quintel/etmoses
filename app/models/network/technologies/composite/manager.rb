@@ -4,7 +4,7 @@ module Network
       # Stores and wraps technologies whose profile and storage reserve is shared
       # between them.
       class Manager
-        attr_reader :volume, :techs, :reserve
+        attr_reader :volume, :techs, :reserve, :demand
 
         def initialize(capacity, volume, profile)
           @techs    = []
