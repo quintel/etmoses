@@ -1,4 +1,4 @@
-/*globals Ajax*/
+/*globals Ajax,Poller*/
 
 var D3StackedBarGraph = (function () {
     'use strict';
@@ -24,9 +24,6 @@ var D3StackedBarGraph = (function () {
             .orient("left");
 
     function transformData(data) {
-        var key,
-            l = chartKeys.length;
-
         data.forEach(function (d) {
             var posBase = 0,
                 negBase = 0;
@@ -38,7 +35,7 @@ var D3StackedBarGraph = (function () {
 
                 if (d.stacked[s] > 0) {
                     posBase += v.size;
-                    v.y0 = posBase
+                    v.y0 = posBase;
                 } else {
                     v.y0 = negBase;
                     negBase -= v.size;
@@ -51,14 +48,14 @@ var D3StackedBarGraph = (function () {
         data.extent = d3.extent(
             d3.merge(
                 d3.merge(
-                    data.map(function(e) {
-                        return e.stacked_transformed.map(function(f) {
+                    data.map(function (e) {
+                        return e.stacked_transformed.map(function (f) {
                             return [f.y0, f.y0 - f.size];
-                        })
+                        });
                     })
                 )
             )
-        )
+        );
     }
 
     function drawD3Graph(data) {
@@ -99,7 +96,7 @@ var D3StackedBarGraph = (function () {
             .attr("x1", 0)
             .attr("x2", width)
             .attr("y1", y(0))
-            .attr("y2", y(0))
+            .attr("y2", y(0));
 
         state = this.svg.selectAll(".state")
             .data(data)
@@ -113,7 +110,7 @@ var D3StackedBarGraph = (function () {
             .data(function (d) { return d.stacked_transformed; })
             .enter().append("rect")
             .attr("width", x.rangeBand() / 2)
-            .attr("x", function(d) { return (x.rangeBand() / 4) })
+            .attr("x", function () { return (x.rangeBand() / 4); })
             .attr("y", function (d) { return y(d.y0); })
             .attr("height", function (d) { return y(0) - y(d.size); })
             .style("fill", function (d) { return color(d.index); });
@@ -140,6 +137,7 @@ var D3StackedBarGraph = (function () {
     }
 
     function reloadD3Graph() {
+        return;
     }
 
     D3StackedBarGraph.prototype = {
@@ -155,14 +153,14 @@ var D3StackedBarGraph = (function () {
                 var self = this;
 
                 new Poller({ url: this.url }).poll()
-                    .done(function(data) {
+                    .done(function (data) {
                         drawD3Graph.call(self, data);
                     })
-                    .fail(function() {
+                    .fail(function () {
                         $(self.scope).html(
                             '<p class="chart-error">' +
-                            '    Sorry, the chart could not be loaded.' +
-                            '</p>'
+                                '    Sorry, the chart could not be loaded.' +
+                                '</p>'
                         );
                     });
             } else {
@@ -180,10 +178,9 @@ var D3StackedBarGraph = (function () {
     function D3StackedBarGraph(scope, data) {
         this.scope = scope;
         this.url   = data.url;
-        this.poll  = data.poll != undefined;
+        this.poll  = data.poll !== undefined;
         this.title = data.title;
     }
 
     return D3StackedBarGraph;
 }());
-
