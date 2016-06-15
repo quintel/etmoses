@@ -1,6 +1,6 @@
 class TestingGroundsController < ResourceController
   RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as
-                        update_strategies gas_load)
+                        update_strategies gas_load heat_load)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -170,6 +170,17 @@ class TestingGroundsController < ResourceController
     @testing_ground = TestingGround::SaveAs.run(
       @testing_ground, testing_ground_params[:name], current_user
     )
+  end
+
+  def heat_load
+    calculator = TestingGround::Calculator.new(
+      @testing_ground, (params[:calculation] || {}).merge(
+        strategies:  @testing_ground.selected_strategy.attributes,
+        resolution:  :high
+      )
+    )
+
+    render json: TestingGround::HeatSummary.new(calculator)
   end
 
   private

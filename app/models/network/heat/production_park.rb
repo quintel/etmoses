@@ -37,6 +37,10 @@ module Network
         @amplified_reserve = Reserve.new(amplified_volume - volume)
       end
 
+      def producers
+        @must_run + @dispatchable
+      end
+
       def create_consumer(installed)
         Consumer.new(installed, installed.profile)
       end
@@ -47,7 +51,7 @@ module Network
       #
       # Returns a Heat::Buffer.
       def buffer_tech
-        @buffer_tech ||= Buffer.new(self)
+        @buffer_tech ||= Buffer.new(self, [@reserve, @amplified_reserve])
       end
 
       # Public: Informs the park that an `amount` of energy has been used by a

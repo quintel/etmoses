@@ -2,6 +2,8 @@ class TestingGround::Calculator
   include Validator
   include BackgroundJob
 
+  attr_reader :options
+
   def initialize(testing_ground, options = {})
     @testing_ground = testing_ground
     @options        = options || {}

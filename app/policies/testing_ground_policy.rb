@@ -34,5 +34,6 @@ class TestingGroundPolicy < ApplicationPolicy
   alias_method :price_curve?, :show?
   alias_method :load_curves?, :show?
   alias_method :electricity_storage?, :show?
+  alias_method :heat_load?, :show?
   alias_method :gas_load?, :show?
 end

@@ -8,6 +8,10 @@ module Network
         @assignments = DefaultArray.new { 0.0 }
       end
 
+      def load
+        @assignments
+      end
+
       def consumer?
         false
       end
