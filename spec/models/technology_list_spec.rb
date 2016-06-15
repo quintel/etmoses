@@ -4,23 +4,23 @@ RSpec.describe TechnologyList do
   let(:hash) { YAML.load(<<-YML.strip_heredoc) }
     ---
     lv1:
-    - name: One
+    - type: One
       capacity: 1.2
       profile_key: 'profile_1'
-    - name: Two
+    - type: Two
       capacity: -0.3
       profile_key: 'profile_1'
     lv2:
-    - name: Three
+    - type: Three
       capacity: 3.2
       profile_key: 'profile_1'
-    - name: Four
+    - type: Four
       capacity: 0.1
       profile_key: 'profile_1'
   YML
 
   let!(:mock_presentables){
-    stub_const("InstalledTechnology::PRESENTABLES", %i(name capacity profile_key))
+    stub_const("InstalledTechnology::PRESENTABLES", %i(type capacity profile_key))
   }
 
   describe '#to_csv' do
@@ -32,14 +32,14 @@ RSpec.describe TechnologyList do
     end
 
     it 'includes technologies' do
-      expect(parsed.detect { |row| row['name'] == 'One' }).to be
-      expect(parsed.detect { |row| row['name'] == 'Two' }).to be
-      expect(parsed.detect { |row| row['name'] == 'Three' }).to be
-      expect(parsed.detect { |row| row['name'] == 'Four' }).to be
+      expect(parsed.detect { |row| row['type'] == 'One' }).to be
+      expect(parsed.detect { |row| row['type'] == 'Two' }).to be
+      expect(parsed.detect { |row| row['type'] == 'Three' }).to be
+      expect(parsed.detect { |row| row['type'] == 'Four' }).to be
     end
 
     it 'includes technology attributes' do
-      tech = parsed.detect { |row| row['name'] == 'Two' }
+      tech = parsed.detect { |row| row['type'] == 'Two' }
 
       expect(tech['connection']).to eq('lv1')
       expect(tech['capacity']).to eq('-0.3')
@@ -62,10 +62,8 @@ RSpec.describe TechnologyList do
     it 'adds technologies to the first connection' do
       expect(list['lv1'].length).to eq(2)
 
-      expect(list['lv1'][0].name).to eq('One')
       expect(list['lv1'][0].capacity).to eq(1.2)
 
-      expect(list['lv1'][1].name).to eq('Two')
       expect(list['lv1'][1].capacity).to eq(-0.3)
       expect(list['lv1'][1].profile_key).to eq('profile_1')
       expect(list['lv1'][1].profile).to eq(load_profile.id)
@@ -74,10 +72,7 @@ RSpec.describe TechnologyList do
     it 'adds technologies to the second connection' do
       expect(list['lv2'].length).to eq(2)
 
-      expect(list['lv2'][0].name).to eq('Three')
       expect(list['lv2'][0].capacity).to eq(3.2)
-
-      expect(list['lv2'][1].name).to eq('Four')
       expect(list['lv2'][1].capacity).to eq(0.1)
     end
   end # .from_csv
@@ -112,11 +107,11 @@ RSpec.describe TechnologyList do
     end
 
     it 'includes the defined technologies' do
-      expect(list['lv1'][0].name).to eq('One')
-      expect(list['lv1'][1].name).to eq('Two')
+      expect(list['lv1'][0].type).to eq('One')
+      expect(list['lv1'][1].type).to eq('Two')
 
-      expect(list['lv2'][0].name).to eq('Three')
-      expect(list['lv2'][1].name).to eq('Four')
+      expect(list['lv2'][0].type).to eq('Three')
+      expect(list['lv2'][1].type).to eq('Four')
     end
   end # .from_hash
 

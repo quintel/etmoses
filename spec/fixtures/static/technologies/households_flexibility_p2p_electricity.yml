@@ -1,5 +1,4 @@
 ---
-name: Battery
 export_to: households_flexibility_p2p_electricity_market_penetration
 carrier: electricity
 behavior: storage

@@ -1,5 +1,4 @@
 ---
-name: Buffer space heating
 export_to:
 carrier: electricity
 behavior:

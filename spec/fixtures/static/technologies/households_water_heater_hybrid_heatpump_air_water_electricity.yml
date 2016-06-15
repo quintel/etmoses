@@ -1,5 +1,4 @@
 ---
-name: Hybrid heat pump hot water
 export_to:
 carrier: hybrid
 behavior: 'null'

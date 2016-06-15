@@ -111,4 +111,13 @@ class Technology < ActiveHash::Base
   def technologies
     attributes[:technologies] || []
   end
+
+  def options_for_names
+    {
+      position_relative_to_buffer: defaults['position_relative_to_buffer'],
+      composite: composite,
+      includes: technologies,
+      carrier: carrier
+    }
+  end
 end

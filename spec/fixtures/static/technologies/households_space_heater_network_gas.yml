@@ -1,5 +1,4 @@
 ---
-name: Households space heater network gas
 export_to:
 carrier: gas
 behavior:

@@ -1,5 +1,4 @@
 ---
-name: Residential PV panel
 export_to: households_solar_pv_solar_radiation_market_penetration
 carrier: electricity
 behavior: conserving

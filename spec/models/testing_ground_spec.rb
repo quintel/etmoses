@@ -24,7 +24,6 @@ RSpec.describe TestingGround do
 
       it 'sets the technology profile' do
         expect(techs['lv1']).to be_a(Array)
-        expect(techs['lv1'].first.name).to eq('Test')
       end
     end # when the user sets a string value
 
@@ -171,7 +170,7 @@ RSpec.describe TestingGround do
 
         it 'is not valid' do
           expect(tg.errors_on(:technology_profile)).to include(
-            'may not have an inline curve with non-numeric values (on No Type)')
+            'may not have an inline curve with non-numeric values (on Household)')
         end
       end # with an empty element
 
@@ -180,7 +179,7 @@ RSpec.describe TestingGround do
 
         it 'is not valid' do
           expect(tg.errors_on(:technology_profile)).to include(
-            'may not have an inline curve with non-numeric values (on No Type)')
+            'may not have an inline curve with non-numeric values (on Household)')
         end
       end # with a non-numeric element
     end # with an inline profile

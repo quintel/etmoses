@@ -1,5 +1,4 @@
 ---
-name: Buffer water heating
 export_to:
 carrier: electricity
 behavior:

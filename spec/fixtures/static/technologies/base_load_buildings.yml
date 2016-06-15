@@ -1,5 +1,4 @@
 ---
-name: Buildings
 export_to:
 carrier: electricity
 behavior: base_load_buildings

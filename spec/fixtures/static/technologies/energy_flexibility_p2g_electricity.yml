@@ -1,5 +1,4 @@
 ---
-name: Power-To-Gas
 export_to: number_of_energy_flexibility_p2g_electricity
 carrier: electricity
 behavior: siphon

@@ -31,16 +31,14 @@ module TestingGroundsHelper
   end
 
   def profile_table_options_for_name
-    technologies = @technologies.sort_by(&:name).map do |technology|
-      [technology.name, technology.key, data: default_values(technology).merge(
-        position_relative_to_buffer: technology.defaults['position_relative_to_buffer'],
-                          composite: technology.composite,
-                           includes: technology.technologies,
-                            carrier: technology.carrier)
-      ]
+    sorted_technologies = @technologies.sort_by do |tech|
+      I18n.t("inputs.#{ tech.key }")
     end
 
-    options_for_select(technologies)
+    options_for_select(sorted_technologies.map do |technology|
+      [ I18n.t("inputs.#{ technology.key }"), technology.key,
+        data: default_values(technology).merge(technology.options_for_names) ]
+    end)
   end
 
   def maximum_concurrency?(technology_key, profile)

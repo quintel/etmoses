@@ -1,5 +1,4 @@
 ---
-name: Hybrid heat pump hot water (electricity)
 export_to:
 carrier: electricity
 behavior: hhp_electricity

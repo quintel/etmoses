@@ -1,5 +1,4 @@
 ---
-name: Heat pump for space heating (air)
 export_to: households_space_heater_heatpump_air_water_electricity_share
 carrier: electricity
 behavior: buffer

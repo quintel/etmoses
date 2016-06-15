@@ -1,5 +1,4 @@
 ---
-name: Heat pump for hot water (air)
 export_to: households_water_heater_heatpump_air_water_electricity_share
 carrier: electricity
 behavior: buffer

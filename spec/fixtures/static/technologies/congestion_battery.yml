@@ -1,5 +1,4 @@
 ---
-name: Neighbourhood battery
 export_to:
 carrier: electricity
 behavior: congestion_battery

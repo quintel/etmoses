@@ -8,7 +8,6 @@ class InstalledTechnology
   attribute :composite_value,                     String
   attribute :congestion_reserve_percentage,       Float
   attribute :demand,                              Float
-  attribute :name,                                String
   attribute :position_relative_to_buffer,         String
   attribute :profile,                             Integer
   attribute :type,                                String, default: 'generic'
@@ -69,6 +68,16 @@ class InstalledTechnology
 
   def inspect
     "#<#{ self.class.name } #{ to_s }>"
+  end
+
+  def name
+    I18n.t("inputs.#{ type }")
+  end
+
+  def name_adjective
+    if composite_value
+      composite_value.sub(/\D+/, ' #')
+    end
   end
 
   def to_s

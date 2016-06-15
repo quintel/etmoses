@@ -1,5 +1,4 @@
 ---
-name: Electric car
 export_to: transport_car_using_electricity_share
 carrier: electricity
 behavior: electric_vehicle

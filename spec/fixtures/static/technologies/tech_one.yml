@@ -1,5 +1,4 @@
 ---
-name: Other
 export_to:
 carrier: electricity
 behavior:

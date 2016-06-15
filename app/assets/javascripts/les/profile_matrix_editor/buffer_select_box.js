@@ -18,19 +18,22 @@ var BufferSelectBox = (function () {
             var technology   = this.techData.type,
                 bufferSelect = $(".buffer_template select." + technology),
                 existing     = $(".editable select.buffer." + technology),
-                noOption     = bufferSelect.find("option[value='" + this.techData.compositeValue + "']").length < 1;
+                noOption     = bufferSelect.find("option[value='" +
+                                this.techData.compositeValue + "']").length < 1;
 
             FormHelper.increaseIndex(technology);
 
             if (noOption) {
-                bufferSelect.add(existing).append(createOption.call(this.techData));
+                bufferSelect.add(existing)
+                            .append(createOption.call(this.techData));
             }
         }
     }
 
     function reattachBufferingTechnology(e) {
-        var buffer = $(".technology[data-composite-value='" + $(e.target).val() + "']"),
-            tech = $(e.target).parents(".technology");
+        var value  = $(e.target).val(),
+            buffer = $(".technology[data-composite-value='" + value + "']"),
+            tech   = $(e.target).parents(".technology");
 
         buffer.after(tech);
     }
@@ -42,9 +45,10 @@ var BufferSelectBox = (function () {
      */
     function cloneAndAppendBufferSelect() {
         if (!!this.techData.positionRelativeToBuffer) {
-            var compositeSelector = this.techData.buffer.replace(/_\d+/, ''),
-                template = $(".buffer_template select." + compositeSelector).clone(true, true),
-                target = $(this.target).find(".editable.buffer select");
+            var compSelector = this.techData.buffer.replace(/_\d+/, ''),
+                target       = $(this.target).find(".editable.buffer select"),
+                template     = $(".buffer_template select." + compSelector)
+                                 .clone(true, true);
 
             template.val(this.techData.buffer);
             template.on("change", reattachBufferingTechnology);

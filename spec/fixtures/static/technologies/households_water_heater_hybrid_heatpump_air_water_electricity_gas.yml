@@ -1,5 +1,4 @@
 ---
-name: Hybrid heat pump hot water (gas)
 export_to:
 carrier: gas
 behavior: hhp_gas

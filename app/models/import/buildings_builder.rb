@@ -10,8 +10,7 @@ class Import
     def build(_response)
       return [] if no_buildings?
 
-      [{ 'name'     => 'Buildings',
-         'type'     => 'base_load_buildings',
+      [{ 'type'     => 'base_load_buildings',
          'profile'  => nil,
          'capacity' => nil,
          'demand'   => demand,

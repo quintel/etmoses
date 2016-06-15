@@ -1,5 +1,4 @@
 ---
-name: Power-To-Heat
 export_to: households_flexibility_p2h_electricity_market_penetration
 carrier: electricity
 behavior: optional_buffer

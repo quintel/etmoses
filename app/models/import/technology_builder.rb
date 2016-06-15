@@ -37,7 +37,6 @@ class Import
       tech  = Technology.by_key(key)
       attrs = tech.defaults.merge(
         'type'       => key,
-        'name'       => I18n.t("inputs.#{ key }"),
         'units'      => units,
         'carrier'    => tech.carrier,
         'composite'  => tech.composite

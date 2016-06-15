@@ -30,7 +30,6 @@ class TestingGround::TechnologyPartitioner
     technology.composite_index = ((technology.composite_index || 1).to_i - 1) * @size + (index + 1)
 
     if technology.composite
-      technology.name = technology.get_composite_name
       technology.composite_value = technology.get_composite_value
 
       technology.associates = technology.associates.map do |associate|

@@ -8,8 +8,7 @@ class Import
     def build(_response)
       return [] unless valid_scaling?
 
-      [{ 'name'     => 'Household',
-         'type'     => 'base_load',
+      [{ 'type'     => 'base_load',
          'profile'  => nil,
          'capacity' => nil,
          'demand'   => average_demand,

@@ -9,7 +9,6 @@ class Import
 
       tech.defaults.merge(
         'key'                      => key,
-        'name'                     => I18n.t("heat_sources.#{ key }"),
         'units'                    => NumberOfUnitsAttribute.call(data),
         'heat_capacity'            => HeatCapacityAttribute.call(data),
         'heat_production'          => HeatProductionAttribute.call(data),
