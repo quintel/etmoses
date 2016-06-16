@@ -244,10 +244,10 @@ var D3LoadChart = (function () {
     }
 
     function transformData() {
-        var data = new Transformator(this, currentWeek).transform();
+        var data = Transformator.transform(this, currentWeek);
 
         if (this.settings.view_as === 'stacked') {
-            data = new StackTransformator(data).transform();
+            data = StackTransformator.transform(data);
         }
 
         return data;

@@ -28,8 +28,8 @@ var Transformator = (function () {
     }
 
     function fetchLoad() {
-        if (this.load) {
-            return this.load;
+        if (this.settings.load) {
+            return this.settings.load;
         } else if (StrategyHelper.anyStrategies()) {
             return [{ area: true,  type: 'load_strategies' },
                     { area: false, type: 'load' },
@@ -67,7 +67,7 @@ var Transformator = (function () {
     }
 
     function isShown(chartType) {
-        var type = this.shown.view_carrier;
+        var type = this.settings.view_carrier;
 
         if (this.strategies && StrategyHelper.anyStrategies()) {
             type += "_strategies";
@@ -104,7 +104,7 @@ var Transformator = (function () {
                 key:     I18n.translations.en.inputs[tech],
                 type:    tech,
                 values:  setCoords(values.tech_loads[tech]),
-                area:    (this.shown.view_as === 'stacked'),
+                area:    (this.settings.view_as === 'stacked'),
                 color:   $(".technologies.hidden span." + tech).data('color'),
                 visible: LoadChartsSettings[tech].visible
             });
@@ -112,11 +112,11 @@ var Transformator = (function () {
     }
 
     function isStaticLoadOrTotal() {
-        return (this.load || this.shown.view_as === 'total');
+        return (this.settings.load || this.settings.view_as === 'total');
     }
 
     function setLoad(datum) {
-        var values = this.data[datum.type] || datum.values;
+        var values = datum.values || this.data[datum.type];
 
         if (isShown.call(this, datum.type) && values.total) {
             if (isStaticLoadOrTotal.call(this)) {
@@ -127,14 +127,17 @@ var Transformator = (function () {
         }
     }
 
-    Transformator.prototype = {
-        transform: function () {
-            this.results = [];
-            this.shown   = this.d3Chart.settings;
+    return {
+        transform: function (d3Chart, thisCurrentWeek) {
+            this.results  = [];
+            this.data     = d3Chart.lastRequestedData;
+            this.settings = d3Chart.settings;
+
+            currentWeek   = thisCurrentWeek;
 
             fetchLoad.call(this).forEach(setLoad.bind(this));
 
-            if (this.data.capacity && this.shown.view_as === 'total') {
+            if (this.data.capacity && this.settings.view_as === 'total') {
                 this.results.push(
                     generateCapacity(this.data.capacity, this.results));
             }
@@ -142,14 +145,4 @@ var Transformator = (function () {
             return this.results;
         }
     };
-
-    function Transformator(d3Chart, thisCurrentWeek) {
-        this.d3Chart = d3Chart;
-        this.load    = this.d3Chart.settings.load;
-        this.data    = this.d3Chart.lastRequestedData;
-
-        currentWeek  = thisCurrentWeek;
-    }
-
-    return Transformator;
 }());

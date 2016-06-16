@@ -108,16 +108,34 @@ var LoadChartsSettings = {
         axisLabel: 'kW'
     },
     // HEAT FAKE CHART
-    space_heating_demand: {
+    space_heating: {
         name: "Space heating demand",
         color: '#D88A3D',
         visible: true,
         axisLabel: 'kW'
     },
-    hot_water_demand: {
+    hot_water: {
         name: "Hot water demand",
         color: '#888A3D',
         visible: true,
         axisLabel: 'kW'
     },
+    must_run: {
+        name: "Must run",
+        color: '#111A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    dispatchable: {
+        name: "Dispatchable",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    buffer_load: {
+        name: "Buffer load",
+        color: '#ABCABC',
+        visible: true,
+        axisLabel: 'kW'
+    }
 };

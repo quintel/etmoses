@@ -12,7 +12,9 @@ var StaticLoadChart = (function () {
                 spinner.show();
 
                 Ajax.json(this.settings.url, { }, function (data) {
-                    this.settings.load = StaticTransformator.transform(data);
+                    this.settings.load = TransformatorInitializer
+                        .initialize(this.settings)
+                        .transform(data);
 
                     spinner.hide();
 
