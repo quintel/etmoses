@@ -84,26 +84,23 @@ var ChartRenderer = (function () {
     }
 
     function updateChartViewInputs() {
-        var viewAs      = $("select.chart-view[name='view_as']"),
-            viewCarrier = $("select.chart-view[name='view_carrier']"),
-            isTotal     = (viewAs.val() === 'total'),
-            showViewAs  = !((this.load && this.load.tech_loads) ||
-                            (this.gas  && this.gas.tech_loads) ||
-                            (this.heat && this.heat.tech_loads));
+        var viewAs         = $("select.chart-view[name='view_as']"),
+            viewCarrier    = $("select.chart-view[name='view_carrier']"),
+            viewStrategies = $(".chart-view[name='strategies']"),
+            isTotal        = (viewAs.val() === 'total'),
+            showViewAs     = !((this.load && this.load.tech_loads) ||
+                               (this.gas  && this.gas.tech_loads) ||
+                               (this.heat && this.heat.tech_loads));
 
-        viewCarrier.prop('disabled', isTotal);
+        viewAs.prop('disabled', showViewAs);
 
-        if (isTotal) {
-            $(".chart-view[type='checkbox']").bootstrapToggle('disable');
-            viewAs.prop('disabled', showViewAs);
-        } else {
-            toggleChartView('strategies', StrategyHelper.anyStrategies());
-        }
-    }
+        viewCarrier
+            .prop('disabled', isTotal)
+            .toggle(!isTotal);
 
-    function toggleChartView(name, predicate) {
-       $(".chart-view[name='" + name + "']")
-           .bootstrapToggle(predicate ? 'enable' : 'disable');
+        viewStrategies
+            .parent()
+            .toggle(!isTotal && StrategyHelper.anyStrategies());
     }
 
     function toggleDomParts() {
