@@ -1,9 +1,25 @@
 ---
-name: Buffer space heating
 carrier: electricity
+color: "#AC603C"
 composite: true
-default_capacity: 10.0
-default_volume: 2.9065
+defaults:
+  capacity: 10.0
+  volume: 2.9065
+
+exists_as_technology_in_etengine: false
+importable_gqueries:
+  demand: etmoses_space_heating_buffer_demand
+
+technologies:
+  - households_space_heater_district_heating_steam_hot_water
+  - households_space_heater_electricity
+  - households_space_heater_heatpump_air_water_electricity
+  - households_space_heater_heatpump_ground_water_electricity
+  - households_space_heater_network_gas
+  - households_space_heater_combined_network_gas
+  - households_space_heater_hybrid_heatpump_air_water_electricity_gas
+  - households_space_heater_hybrid_heatpump_air_water_electricity_electricity
+
 whitelisted_attributes:
   - demand
   - initial_investment
@@ -17,18 +33,3 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
-
-technologies:
-  - households_space_heater_district_heating_steam_hot_water
-  - households_space_heater_electricity
-  - households_space_heater_heatpump_air_water_electricity
-  - households_space_heater_heatpump_ground_water_electricity
-  - households_space_heater_network_gas
-  - households_space_heater_combined_network_gas
-  - households_space_heater_hybrid_heatpump_air_water_electricity_gas
-  - households_space_heater_hybrid_heatpump_air_water_electricity_electricity
-
-exists_as_technology_in_etengine: false
-
-importable_gqueries:
-  demand: etmoses_space_heating_buffer_demand

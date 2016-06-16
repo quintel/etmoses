@@ -74,10 +74,6 @@ RSpec.describe HeatSourceList::SourceListFetcher do
       source['key'] == 'households_collective_chp_biogas'
     end }
 
-    it 'sets the correct name' do
-      expect(source.fetch('name')).to eq('Biogas CHP households')
-    end
-
     it 'sets the correct units' do
       expect(source.fetch('units')).to eq(2)
     end

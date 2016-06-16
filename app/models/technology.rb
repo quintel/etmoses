@@ -23,8 +23,8 @@ class Technology < ActiveHash::Base
       exists_as_technology_in_etengine: true,
       is_district_heating:              false,
       dispatchable:                     true,
-      default_demand:                   nil,
-      defaults:                         {}
+      defaults:                         {},
+      whitelisted_attributes:           []
     }
   end
 
@@ -65,9 +65,10 @@ class Technology < ActiveHash::Base
     where(
       expandable: true,
       visible: true,
-      default_position_relative_to_buffer: nil,
-    ).select do |tech|
-      %w(electricity gas).include?(tech.carrier)
+      profile_required: true
+    ).reject do |tech|
+      tech.carrier == 'heat' ||
+      all.map(&:technologies).flatten.include?(tech.key)
     end
   end
 
@@ -109,5 +110,14 @@ class Technology < ActiveHash::Base
 
   def technologies
     attributes[:technologies] || []
+  end
+
+  def options_for_names
+    {
+      position_relative_to_buffer: defaults['position_relative_to_buffer'],
+      composite: composite,
+      includes: technologies,
+      carrier: carrier
+    }
   end
 end

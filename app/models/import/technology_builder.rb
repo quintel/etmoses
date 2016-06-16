@@ -35,15 +35,12 @@ class Import
     def self.build(key, data)
       units = NumberOfUnitsAttribute.call(data).round
       tech  = Technology.by_key(key)
-      attrs = {
-        'type'                        => key,
-        'name'                        => tech.name,
-        'units'                       => units,
-        'carrier'                     => tech.carrier,
-        'composite'                   => tech.composite,
-        'capacity'                    => tech.default_capacity,
-        'position_relative_to_buffer' => tech.default_position_relative_to_buffer
-      }
+      attrs = tech.defaults.merge(
+        'type'       => key,
+        'units'      => units,
+        'carrier'    => tech.carrier,
+        'composite'  => tech.composite
+      )
 
       tech.importable_attributes.map(&method(:attribute))
         .each { |attr| attrs[attr.local_name] = attr.call(data) }

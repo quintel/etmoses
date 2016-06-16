@@ -1,5 +1,4 @@
 ---
-name: Household
 export_to:
 carrier: electricity
 behavior: base_load

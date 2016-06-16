@@ -1,9 +1,11 @@
 ---
-name: Households water heater electricity
 behavior: null
 carrier: electricity
-default_capacity: 1.5
-default_position_relative_to_buffer: buffering
+color: "#581515"
+defaults:
+  capacity: 1.5
+  position_relative_to_buffer: buffering
+
 expandable: false
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year

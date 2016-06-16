@@ -1,8 +1,15 @@
 ---
-name: Household
-carrier: electricity
 behavior: base_load
+carrier: electricity
+color: "#A3FFFF"
 exists_as_technology_in_etengine: false
+importable_gqueries:
+  demand: etmoses_electricity_base_load_demand
+
+technology_component_behavior:
+  flex: deferrable
+  inflex: generic
+
 whitelisted_attributes:
   - demand
   - initial_investment
@@ -16,8 +23,3 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
-technology_component_behavior:
-  flex: deferrable
-  inflex: generic
-importable_gqueries:
-  demand: etmoses_electricity_base_load_demand

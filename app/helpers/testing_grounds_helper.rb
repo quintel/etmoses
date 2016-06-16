@@ -31,16 +31,14 @@ module TestingGroundsHelper
   end
 
   def profile_table_options_for_name
-    technologies = @technologies.sort_by(&:name).map do |technology|
-      [technology.name, technology.key, data: default_values(technology).merge(
-        position_relative_to_buffer: technology.default_position_relative_to_buffer,
-                          composite: technology.composite,
-                           includes: technology.technologies,
-                            carrier: technology.carrier)
-      ]
+    sorted_technologies = @technologies.sort_by do |tech|
+      I18n.t("inputs.#{ tech.key }")
     end
 
-    options_for_select(technologies)
+    options_for_select(sorted_technologies.map do |technology|
+      [ I18n.t("inputs.#{ technology.key }"), technology.key,
+        data: default_values(technology).merge(technology.options_for_names) ]
+    end)
   end
 
   def maximum_concurrency?(technology_key, profile)
@@ -167,21 +165,8 @@ module TestingGroundsHelper
   end
 
   def technology_colors
-    colors = [
-      "#8c5e5e", "#eaee4e", "#64edde", "#ee841a", "#ed9bee",
-      "#7bc2eb", "#819a47", "#ee526a", "#a7ed8e", "#62988e",
-      "#c59e04", "#a76426", "#a182b8", "#d25e92", "#55e4e8",
-      "#6cbe8a", "#b8524c", "#aec944", "#827041", "#e75c39",
-      "#748eaa", "#edd417", "#977e21", "#aab0ee", "#c87d02",
-      "#747669", "#56c8b8", "#80e7b0", "#6e8c60", "#87c66a",
-      "#a46384", "#cc7abe", "#61b4ca", "#ee79ca", "#cdee6d",
-      "#ee5a90", "#945d3e", "#88738b", "#cbc221", "#9ea02b",
-      "#cd9de4", "#cd6720", "#ce516c", "#bb5732", "#a95662",
-      "#8b9cd3", "#5aeeee", "#da4e4d", "#ee6e2e", "#64a381"
-    ]
-
     Hash[Technology.all.each_with_index.map do |tech, index|
-      [tech.key, colors[index]]
+      [tech.key, tech.color]
     end]
   end
 end

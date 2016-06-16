@@ -15,15 +15,7 @@ class TestingGround
     private
 
     def installed_attributes
-      default_attributes.merge(imported_attributes).merge(static_attributes)
-    end
-
-    def default_attributes
-      {
-        demand:   technology.default_demand,
-        volume:   technology.default_volume,
-        capacity: technology.default_capacity
-      }
+      technology.defaults.merge(imported_attributes).merge(static_attributes)
     end
 
     def imported_attributes
@@ -32,16 +24,12 @@ class TestingGround
 
     def static_attributes
       {
-        name: name,
+        name: I18n.t("inputs.#{ technology.key }"),
         profile: profile,
         includes: technology.technologies,
         buffer: @buffer,
         units: 1
       }
-    end
-
-    def name
-      technology.name
     end
 
     def profile

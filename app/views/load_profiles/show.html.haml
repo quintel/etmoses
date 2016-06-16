@@ -3,7 +3,7 @@
   %span Associated technologies:
   .profiles
     - @profile.technologies.each do |technology|
-      %span.label.label-primary= technology.name
+      %span.label.label-primary= I18n.t("inputs.#{ technology.key }")
 
 .charts
   - @profile.load_profile_components.each do |load_profile_component|

@@ -1,9 +1,11 @@
 ---
-name: Neighbourhood battery
-carrier: electricity
 behavior: congestion_battery
-default_capacity: 10.0
-default_volume: 100.0
+carrier: electricity
+color: "#51648F"
+defaults:
+  capacity: 10.0
+  volume: 100.0
+
 exists_as_technology_in_etengine: false
 profile_required: false
 whitelisted_attributes:

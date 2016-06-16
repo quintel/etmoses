@@ -1,7 +1,16 @@
 ---
-name: Buildings
-carrier: electricity
 behavior: base_load_buildings
+carrier: electricity
+color: "#0C7E7E"
+exists_as_technology_in_etengine: false
+importable_gqueries:
+  demand: etmoses_electricity_base_load_demand_for_buildings
+  units: number_of_buildings
+
+technology_component_behavior:
+  flex: optional
+  inflex: generic
+
 whitelisted_attributes:
   - demand
   - initial_investment
@@ -15,10 +24,3 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
-technology_component_behavior:
-  flex: optional
-  inflex: generic
-exists_as_technology_in_etengine: false
-importable_gqueries:
-  demand: etmoses_electricity_base_load_demand_for_buildings
-  units: number_of_buildings

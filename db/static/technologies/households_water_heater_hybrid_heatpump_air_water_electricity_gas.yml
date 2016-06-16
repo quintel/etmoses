@@ -1,9 +1,11 @@
 ---
-name: Hybrid heat pump hot water (gas)
-carrier: gas
 behavior: hhp_gas
-default_capacity: 24.4444
-default_position_relative_to_buffer: boosting
+carrier: gas
+color: "#085304"
+defaults:
+  capacity: 24.4444
+  position_relative_to_buffer: boosting
+
 exists_as_technology_in_etengine: false
 whitelisted_attributes:
   - buffer

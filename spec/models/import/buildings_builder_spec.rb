@@ -18,7 +18,6 @@ RSpec.describe Import::BuildingsBuilder do
       scaling: {})
 
     expect(buildings_builder.build(nil)).to eq([{
-      "name"     => "Buildings",
       "type"     => "base_load_buildings",
       "profile"  => nil,
       "capacity" => nil,

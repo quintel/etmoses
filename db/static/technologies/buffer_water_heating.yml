@@ -1,13 +1,16 @@
 ---
-name: Buffer water heating
-export_to:
 carrier: electricity
+color: "#D25113"
 composite: true
-default_capacity: 10.0
-default_volume: 4.0691
+defaults:
+  capacity: 10.0
+  volume: 4.0691
+
 exists_as_technology_in_etengine: false
 importable_gqueries:
   demand: etmoses_hot_water_buffer_demand
+
+name: Buffer water heating
 
 technologies:
   - households_flexibility_p2h_electricity

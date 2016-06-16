@@ -55,7 +55,6 @@ class TestingGround
 
       if dup_technology.composite
         dup_technology.composite_value = dup_technology.get_composite_value
-        dup_technology.name            = dup_technology.get_composite_name
       elsif buffer = associations[dup_technology.type]
         dup_technology.buffer = dup_technology.get_buffer(buffer)
       end

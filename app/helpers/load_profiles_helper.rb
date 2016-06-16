@@ -13,7 +13,7 @@ module LoadProfilesHelper
     bufferables = @technologies.map(&:technologies).flatten
 
     options_for_select((Technology.visible - bufferables).map do |technology|
-      [technology.name, technology.key]
+      [I18n.t("inputs.#{ technology.key }"), technology.key]
     end, selected)
   end
 end

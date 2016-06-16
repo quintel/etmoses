@@ -1,9 +1,11 @@
 ---
-name: Residential PV panel
-export_to: households_solar_pv_solar_radiation_market_penetration
-carrier: electricity
 behavior: conserving
-default_capacity: -1.6
+carrier: electricity
+color: "#D3B129"
+defaults:
+  capacity: -1.6
+
+export_to: households_solar_pv_solar_radiation_market_penetration
 importable_attributes:
   - electricity_output_capacity
   - fixed_operation_and_maintenance_costs_per_year
@@ -12,6 +14,7 @@ importable_attributes:
   - technical_lifetime
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
+
 whitelisted_attributes:
   - demand
   - initial_investment

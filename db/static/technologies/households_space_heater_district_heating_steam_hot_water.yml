@@ -1,9 +1,11 @@
 ---
-name: Households space heater district heating
 behavior: heat_consumer
+color: "#EC0000"
 carrier: heat
-default_capacity: 10.0
-default_position_relative_to_buffer: boosting
+defaults:
+  capacity: 10.0
+  position_relative_to_buffer: boosting
+
 expandable: false
 is_district_heating: true
 importable_attributes:

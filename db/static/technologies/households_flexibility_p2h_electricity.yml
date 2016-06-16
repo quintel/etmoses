@@ -1,10 +1,12 @@
 ---
-name: Power-To-Heat
-export_to: households_flexibility_p2h_electricity_market_penetration
-carrier: electricity
 behavior: optional_buffer
-default_capacity: 2.0
-default_position_relative_to_buffer: buffering
+carrier: electricity
+color: "#F43B00"
+defaults:
+  capacity: 2.0
+  position_relative_to_buffer: buffering
+
+export_to: households_flexibility_p2h_electricity_market_penetration
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
@@ -13,6 +15,7 @@ importable_attributes:
   - technical_lifetime
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
+
 whitelisted_attributes:
   - demand
   - initial_investment

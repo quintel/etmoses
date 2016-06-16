@@ -21,11 +21,10 @@ class Import
     def composite_attributes(technology)
       { 'units'     => scaling_value,
         'type'      => technology.key,
-        'name'      => technology.name,
         'composite' => true,
         'includes'  => technology.technologies,
         'demand'    => demand_for(technology),
-        'volume'    => technology.default_volume
+        'volume'    => technology.defaults.fetch("volume")
       }
     end
 

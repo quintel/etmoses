@@ -22,6 +22,7 @@ RSpec.describe Import do
       Technology.create!(
         key: key,
         carrier: 'electricity',
+        defaults: Hash.new(0),
         importable_attributes: [
           'electricity_output_capacity'
         ]

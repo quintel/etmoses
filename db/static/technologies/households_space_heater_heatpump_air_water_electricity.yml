@@ -1,10 +1,12 @@
 ---
-name: Heat pump for space heating (air)
-export_to: households_space_heater_heatpump_air_water_electricity_share
-carrier: electricity
 behavior: buffer
-default_capacity: 2.22222
-default_position_relative_to_buffer: buffering
+carrier: electricity
+color: "#CF79FF"
+defaults:
+  capacity: 2.22222
+  position_relative_to_buffer: buffering
+
+export_to: households_space_heater_heatpump_air_water_electricity_share
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year

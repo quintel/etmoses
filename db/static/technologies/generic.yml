@@ -1,6 +1,6 @@
 ---
-name: Other
 carrier: electricity
+color: "#622A72"
 exists_as_technology_in_etengine: false
 expandable: false
 whitelisted_attributes:

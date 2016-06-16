@@ -1,9 +1,11 @@
 ---
-name: Households district heater hot water
 behavior: heat_consumer
 carrier: heat
-default_capacity: 10.0
-default_position_relative_to_buffer: boosting
+color: "#AC3C3C"
+defaults:
+  capacity: 10.0
+  position_relative_to_buffer: boosting
+
 expandable: false
 is_district_heating: true
 importable_attributes:

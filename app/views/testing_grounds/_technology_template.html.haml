@@ -9,7 +9,9 @@
     .indent.arrow
 
   .wrapper-tech
-    %strong= technology.name
+    %strong
+      = I18n.t("inputs.#{ technology.type }")
+      = technology.name_adjective
 
     - if technology.whitelisted?('profile')
       .editable.profile.select

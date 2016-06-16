@@ -1,8 +1,10 @@
 ---
-name: Households space heater combined network gas
 carrier: gas
-default_capacity: 20.6186
-default_position_relative_to_buffer: boosting
+color: "#96B4FA"
+defaults:
+  capacity: 20.6186
+  position_relative_to_buffer: boosting
+
 importable_attributes:
   - initial_investment
   - input_capacity

@@ -1,9 +1,7 @@
 ---
-name: Hybrid heat pump hot water
-export_to:
-carrier: hybrid
 behavior: 'null'
-visible: false
+carrier: hybrid
+color: "#1C6F18"
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
@@ -13,6 +11,7 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
+visible: false
 whitelisted_attributes:
   - buffer
   - demand

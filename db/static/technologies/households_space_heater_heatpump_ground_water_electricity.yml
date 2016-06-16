@@ -1,10 +1,12 @@
 ---
-name: Heat pump for space heating (ground)
-export_to: households_space_heater_heatpump_ground_water_electricity_share
-carrier: electricity
 behavior: buffer
-default_capacity: 2.08333
-default_position_relative_to_buffer: buffering
+carrier: electricity
+color: "#FEA75F"
+defaults:
+  capacity: 2.08333
+  position_relative_to_buffer: buffering
+
+export_to: households_space_heater_heatpump_ground_water_electricity_share
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year

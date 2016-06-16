@@ -1,9 +1,12 @@
 ---
+color: "#FF7979"
 name: Households space heater electricity
 behavior: null
 carrier: electricity
-default_capacity: 6.0
-default_position_relative_to_buffer: buffering
+defaults:
+  capacity: 6.0
+  position_relative_to_buffer: buffering
+
 expandable: false
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year

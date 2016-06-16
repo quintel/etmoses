@@ -12,19 +12,16 @@ FactoryGirl.define do
   end
 
   factory :installed_pv, class: InstalledTechnology do
-    name 'PV Panel'
     units 1
     capacity(-2.0)
   end
 
   factory :installed_tv, class: InstalledTechnology do
-    name 'Television'
     units 1
     capacity 1.0
   end
 
   factory :installed_battery, class: InstalledTechnology do
-    name 'Battery'
     units 1
     volume 1.0
     capacity Float::INFINITY
@@ -37,7 +34,6 @@ FactoryGirl.define do
   end
 
   factory :installed_ev, class: InstalledTechnology do
-    name 'Electric Vehicle'
     units 1
     volume 1.0
     capacity Float::INFINITY
@@ -50,7 +46,6 @@ FactoryGirl.define do
   end
 
   factory :installed_p2h, class: InstalledTechnology do
-    name 'Power-to-heat'
     units 1
     volume 1.0
     capacity Float::INFINITY
@@ -63,7 +58,6 @@ FactoryGirl.define do
   end
 
   factory :installed_p2g, class: InstalledTechnology do
-    name 'Power-to-gas'
     units 1
     capacity Float::INFINITY
 
@@ -75,7 +69,6 @@ FactoryGirl.define do
   end
 
   factory :installed_heat_pump, class: InstalledTechnology do
-    name 'Heat pump'
     units 1
     capacity Float::INFINITY
 
@@ -87,7 +80,6 @@ FactoryGirl.define do
   end
 
   factory :installed_deferred, class: InstalledTechnology do
-    name 'Heat pump'
     units 1
     capacity Float::INFINITY
 
@@ -99,7 +91,6 @@ FactoryGirl.define do
   end
 
   factory :installed_optional, class: InstalledTechnology do
-    name 'Optional'
     units 1
     capacity Float::INFINITY
 
@@ -111,7 +102,6 @@ FactoryGirl.define do
   end
 
   factory :installed_space_heater_heat_exchanger, class: InstalledTechnology do
-    name 'Space heater heat exchanger'
     type 'households_space_heater_district_heating_steam_hot_water'
     units 1
     capacity Float::INFINITY
@@ -124,7 +114,6 @@ FactoryGirl.define do
   end
 
   factory :installed_water_heater_heat_exchanger, class: InstalledTechnology do
-    name 'Water heater heat exchanger'
     type 'households_water_heater_district_heating_steam_hot_water'
     units 1
     capacity Float::INFINITY

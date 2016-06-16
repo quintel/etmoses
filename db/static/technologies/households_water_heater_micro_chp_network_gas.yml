@@ -1,6 +1,6 @@
 ---
-name: Households water heater micro chp network gas
 carrier: gas
+color: "#56c8b8"
 visible: false
 
 whitelisted_attributes:

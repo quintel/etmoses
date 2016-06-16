@@ -1,10 +1,12 @@
 ---
-name: Electric car
-export_to: transport_car_using_electricity_share
-carrier: electricity
 behavior: electric_vehicle
-default_capacity: 3.7
-default_volume: 25.0
+carrier: electricity
+color: "#5488FF"
+defaults:
+  capacity: 3.7
+  volume: 25.0
+
+export_to: transport_car_using_electricity_share
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours

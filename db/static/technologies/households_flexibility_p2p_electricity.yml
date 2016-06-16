@@ -1,10 +1,11 @@
 ---
-name: Battery
-export_to: households_flexibility_p2p_electricity_market_penetration
-carrier: electricity
 behavior: storage
-default_capacity: 4.4
-profile_required: false
+carrier: electricity
+color: "#8703AC"
+defaults:
+  capacity: 4.4
+
+export_to: households_flexibility_p2p_electricity_market_penetration
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
@@ -14,6 +15,8 @@ importable_attributes:
   - technical_lifetime
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
+
+profile_required: false
 whitelisted_attributes:
   - demand
   - initial_investment

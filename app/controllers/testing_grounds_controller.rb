@@ -239,8 +239,8 @@ class TestingGroundsController < ResourceController
   end
 
   def load_technologies_and_profiles
-    @technologies = Technology.all
-    @stakeholders = Stakeholder.all
+    @technologies  = Technology.where(visible: true) - Technology.heat_sources_for_table
+    @stakeholders  = Stakeholder.all
     @load_profiles = LoadProfile.joins("LEFT JOIN `technology_profiles` ON `load_profiles`.`id` = `technology_profiles`.`load_profile_id`")
                                 .select("`technology_profiles`.`technology`, `load_profiles`.*")
                                 .group_by{|t| t.technology }
