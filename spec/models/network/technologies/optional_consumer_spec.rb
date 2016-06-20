@@ -2,12 +2,15 @@ require 'rails_helper'
 
 RSpec.describe Network::Technologies::OptionalConsumer do
   let(:installed) do
-    InstalledTechnology.new(capacity: profile.first, behavior: 'optional')
+    InstalledTechnology.new(capacity: profile.first)
   end
 
   let(:tech) do
-    Network::Technologies.from_installed(
-      installed, profile, strategies: { saving_base_load: true })
+    network_technology(
+      installed, profile,
+      behavior: 'optional',
+      strategies: { saving_base_load: true }
+    )
   end
 
   let(:profile) { [2.0] }

@@ -16,14 +16,27 @@ module Moses
         }
       }.freeze
 
-      # Public: Given an installed technology, creates a Network::Technology which
-      # may represent it in Network specs.
+      # Public: Given an installed technology, creates a Network::Technology
+      # which may represent it in Network specs.
       def network_technology(tech, profile_length = 8760, opts = {})
         opts[:additional_profile] &&=
           ::Network::Curve.from(opts[:additional_profile])
 
+        if behavior = opts.delete(:behavior)
+          allow(tech).to receive(:behavior).and_return(behavior)
+        end
+
+        if profile_length.is_a?(Array) || profile_length.is_a?(::Network::Curve)
+          # If we were given a curve, use it without modification.
+          profile = profile_length
+        else
+          # Otherwise we likely got an integer; create a static profile matching
+          # the length.
+          profile = network_curve(tech, profile_length)
+        end
+
         ::Network::Technologies.from_installed(
-          tech, network_curve(tech, profile_length), DEFAULT_OPTS.merge(opts))
+          tech, profile, DEFAULT_OPTS.merge(opts))
       end
 
       # Internal: Creates a Network::Curve from the given values.

@@ -35,10 +35,8 @@ class InstalledTechnology
 
   # Non editables
   attribute :associates,                          Array[InstalledTechnology], editable: false
-  attribute :behavior,                            String, editable: false
   attribute :node,                                String, editable: false
   attribute :profile_key,                         String, editable: false
-  attribute :curve_behavior,                      String, editable: false
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
@@ -223,14 +221,20 @@ class InstalledTechnology
     end]
   end
 
+  # Public: Describes the way in which the technology behaves in a network
+  # calculation. Uses the Technology behavior if none is assigned.
+  #
+  # Returns a String.
+  def behavior
+    technology.behavior
+  end
+
   # Public: Determines the network behavior of this technology with a particular
   # curve type. Base load technologies will behave differently depending on the
   # use of a flexible or inflexible curve.
   #
   # Returns a string.
   def behavior_with_curve(curve_type = nil)
-    behavior = self.behavior.presence || technology.behavior
-
     return behavior if curve_type.nil? || curve_type == 'default'.freeze
 
     component_behavior = technology_component_behaviors[technology.id]

@@ -23,7 +23,6 @@ RSpec.describe TestingGroundsController do
     { "CONGESTED_END_POINT_0" => [{
         "name"        => "Solar PV",
         "type"        => "households_solar_pv_solar_radiation",
-        "behavior"    => nil,
         "load"        => nil,
         "capacity"    => -1.5,
         "demand"      => nil,

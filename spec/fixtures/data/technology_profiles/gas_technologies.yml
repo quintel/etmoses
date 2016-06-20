@@ -29,10 +29,8 @@ lv1:
   :performance_coefficient: 1.0
   :technical_lifetime: 10
   :associates: []
-  :behavior:
   :node:
   :profile_key:
-  :curve_behavior:
 - :buffer: buffer_space_heating_4
   :capacity: 27.499999999999996
   :composite: false
@@ -56,7 +54,6 @@ lv1:
   :performance_coefficient: 1.0
   :technical_lifetime: 15
   :associates: []
-  :behavior:
   :node:
   :profile_key:
 - :demand: 1
@@ -74,6 +71,4 @@ lv1:
   :performance_coefficient: 1.0
   :technical_lifetime: 10
   :associates: []
-  :behavior:
   :node: lv1
-  :curve_behavior:

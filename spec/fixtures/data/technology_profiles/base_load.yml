@@ -15,5 +15,4 @@ lv1:
   :performance_coefficient: 1.0
   :technical_lifetime: 10
   :associates: []
-  :behavior:
   :node: lv1

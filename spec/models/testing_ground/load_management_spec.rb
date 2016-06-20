@@ -36,7 +36,6 @@ RSpec.describe TestingGround do
         "CONGESTED_END_POINT_1" => [{
           "name"        => "Solar PV",
           "type"        => "households_solar_pv_solar_radiation",
-          "behavior"    => nil,
           "profile"     => solar_load_profile,
           "load"        => nil,
           "capacity"    => -1.5,
@@ -50,7 +49,6 @@ RSpec.describe TestingGround do
           "type"            => "buffer_space_heating",
           "composite"       => true,
           "composite_value" => "buffer_space_heating_1",
-          "behavior"        => nil,
           "profile"         => heat_pump_load_profile,
           "volume"          => 0.5,
           "units"           => 1,
@@ -60,7 +58,6 @@ RSpec.describe TestingGround do
           "name"        => "Heat pump",
           "type"        => "households_space_heater_heatpump_air_water_electricity",
           "buffer"      => "buffer_space_heating_1",
-          "behavior"    => nil,
           "profile"     => nil,
           "load"        => nil,
           "capacity"    => 1.0,
@@ -204,7 +201,6 @@ RSpec.describe TestingGround do
         "CONGESTED_END_POINT_1"=> [{
           "name"        => "Buildings",
           "type"        => "base_load",
-          "behavior"    => nil,
           "profile"     => load_profile.id,
           "load"        => nil,
           "capacity"    => nil,
@@ -295,7 +291,6 @@ RSpec.describe TestingGround do
         "CONGESTED_END_POINT_1"=> [{
           "name"        => "Buildings",
           "type"        => "base_load_buildings",
-          "behavior"    => nil,
           "profile"     => load_profile.id,
           "load"        => nil,
           "capacity"    => nil,
