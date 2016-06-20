@@ -1,4 +1,7 @@
-var TableInitializer = (function() {
+/*globals GasAssetListTable,HeatAssetListTable,HeatAssetListTablePart,
+HeatSourceListTable,HeatSourceListTablePart,MarketModelTable*/
+
+var TableInitializer = (function () {
     'use strict';
 
     var tables = {
@@ -22,12 +25,14 @@ var TableInitializer = (function() {
     }
 
     return {
-        initialize: function(i) {
+        initialize: function (i) {
             $(this).attr("id", "table-" + i);
 
             var tableType     = $(this).data('type'),
                 multiTable    = $(this).hasClass("multi_table"),
                 variableTable = ("current_"  + tableType).camelize();
+
+            if (!tableType) { return false; }
 
             if (multiTable) {
                 createMultiTable(variableTable, tableType, "#table-" + i);

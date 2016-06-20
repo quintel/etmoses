@@ -3,6 +3,61 @@ require 'rails_helper'
 RSpec.describe MarketModel do
   it { expect(subject).to validate_presence_of(:name) }
 
+  context "when validating" do
+    let(:market) {
+      FactoryGirl.build(:market_model,
+        name: "Test",
+        interactions: [interaction])
+    }
+
+    let(:interaction) {
+      {
+        "stakeholder_from"    => "customer",
+        "stakeholder_to"      => "producer",
+        "tariff"              => 1.0,
+        "tariff_type"         => "fixed",
+        "applied_stakeholder" => "customer",
+        "foundation"          => "abc"
+      }
+    }
+
+    let(:messages) { market.valid? ; market.errors[:interactions] }
+
+    MarketModel::PRESENTABLES.each do |attribute|
+      context "an interaction with no '#{ attribute }'" do
+        let(:interaction) { super().update(Hash[attribute, ""]) }
+        let(:translated_attribute) {
+          I18n.t("market_model.table.headers.#{ attribute }").downcase
+        }
+
+        it 'is not valid' do
+          expect(market).to_not be_valid
+        end
+
+        it 'has an error on :interactions' do
+          expect(messages).to include(
+            "value for #{ translated_attribute } can't be blank")
+        end
+      end
+
+      context "an interaction with a missing '#{ attribute }'" do
+        let(:interaction) { super().except(attribute) }
+        let(:translated_attribute) {
+          I18n.t("market_model.table.headers.#{ attribute }").downcase
+        }
+
+        it 'is not valid' do
+          expect(market).to_not be_valid
+        end
+
+        it 'has an error on :interactions' do
+          expect(messages).to include(
+            "value for #{ translated_attribute } can't be blank")
+        end
+      end
+    end
+  end
+
   context 'with an irregular-length measure' do
     before do
       subject.interactions = [{
