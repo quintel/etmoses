@@ -1,4 +1,4 @@
-/*globals CSV,D3LoadChart*/
+/*globals CSV,D3LoadChart,StrategyHelper*/
 
 var ChartRenderer = (function () {
     'use strict';
@@ -18,14 +18,23 @@ var ChartRenderer = (function () {
     }
 
     function showTechnologies() {
-        var techTab = $('#technologies .row-fluid[data-node="' + this.name + '"]');
+        var techTab           = $('#technologies .row-fluid[data-node="' + this.name + '"]'),
+            technologyButtons = $(".technologies-button").parent(),
+            technologyNav     = $(".nav-tabs li a[href='#technologies']");
+
         if (techTab.length > 0) {
             techTab.show();
-            $(".technologies-button").parent().removeClass("disabled");
-            $(".nav-tabs li a[href='#technologies']").removeClass("disabled-tab");
+            technologyNav.removeClass("disabled-tab");
+            technologyButtons
+                .removeClass("disabled")
+                .off("click.disabled");
         } else {
-            $(".technologies-button").parent().addClass("disabled");
-            $(".nav-tabs li a[href='#technologies']").addClass("disabled-tab");
+            technologyNav.addClass("disabled-tab");
+            technologyButtons
+                .addClass("disabled")
+                .on("click.disabled", function (e) {
+                    e.preventDefault();
+                });
         }
     }
 
@@ -71,18 +80,6 @@ var ChartRenderer = (function () {
         enableCsvDownloadCurveButton.call(this);
     }
 
-    function changeViewOfD3(e) {
-        var input      = $(e.target),
-            d3Chart    = window.currentTree.d3Chart,
-            attrName   = input.attr('name'),
-            isCheckbox = (input.attr('type') === 'checkbox'),
-            value      = isCheckbox ? input.prop('checked') : input.val();
-
-        d3Chart.view(attrName, value).update();
-
-        updateChartViewInputs.call(this);
-    }
-
     function updateChartViewInputs() {
         var viewAs         = $("select.chart-view[name='view_as']"),
             viewCarrier    = $("select.chart-view[name='view_carrier']"),
@@ -101,6 +98,18 @@ var ChartRenderer = (function () {
         viewStrategies
             .parent()
             .toggle(!isTotal && StrategyHelper.anyStrategies());
+    }
+
+    function changeViewOfD3(e) {
+        var input      = $(e.target),
+            d3Chart    = window.currentTree.d3Chart,
+            attrName   = input.attr('name'),
+            isCheckbox = (input.attr('type') === 'checkbox'),
+            value      = isCheckbox ? input.prop('checked') : input.val();
+
+        d3Chart.view(attrName, value).update();
+
+        updateChartViewInputs.call(this);
     }
 
     function toggleDomParts() {
@@ -127,20 +136,20 @@ var ChartRenderer = (function () {
         }
     }
 
-    function renderLoadChart() {
-        if (isValidNodeData.call(this)) {
-            addNewLoadChartPlatform.call(this);
-        } else {
-            window.currentTree.update();
-        }
-    }
-
     function isValidNodeData() {
         var d = this.nodeData;
 
         return (d.load && d.load.total && d.load.total.length) ||
                (d.gas  && d.gas.total  && d.gas.total.length) ||
                (d.heat && d.heat.total && d.heat.total.length);
+    }
+
+    function renderLoadChart() {
+        if (isValidNodeData.call(this)) {
+            addNewLoadChartPlatform.call(this);
+        } else {
+            window.currentTree.update();
+        }
     }
 
     ChartRenderer.prototype = {

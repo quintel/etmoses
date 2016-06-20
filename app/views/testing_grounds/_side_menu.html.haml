@@ -10,21 +10,22 @@
 
     - if strategies
       %li.pull-right.les-controls
-        .btn-group
-          %button{type: "button", class: "btn btn-default dropdown-toggle", data: { toggle: "dropdown" } }
-            Options
-            %span.caret
-          %ul.dropdown-menu
-            %li.disabled= link_to "Download curve", "#", class: "download-curve"
-            %li.divider{role: "separator"}
-            %li.disabled= link_to 'Download technologies CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: "technologies-button"
-            %li.disabled= link_to 'Electricity storage curves', testing_ground_electricity_storage_path(@testing_ground, format: :csv), class: "technologies-button"
-            %li= link_to 'Download merit order price curve', testing_ground_price_curves_path(@testing_ground, format: :csv), class: "merit-button"
-            %li= link_to 'Download merit order load curves', testing_ground_load_curves_path(@testing_ground, format: :csv), class: "merit-button"
-
-            - if can_export?(@testing_ground)
+        - if current_user
+          .btn-group
+            %button{type: "button", class: "btn btn-default dropdown-toggle", data: { toggle: "dropdown" } }
+              Options
+              %span.caret
+            %ul.dropdown-menu
+              %li.disabled= link_to "Download curve", "#", class: "download-curve"
               %li.divider{role: "separator"}
-              %li= link_to 'Create national scenario', export_testing_ground_path(@testing_ground)
+              %li.disabled= link_to 'Download technologies CSV', technology_profile_testing_ground_url(@testing_ground, format: :csv), class: "technologies-button"
+              %li.disabled= link_to 'Electricity storage curves', testing_ground_electricity_storage_path(@testing_ground, format: :csv), class: "technologies-button"
+              %li= link_to 'Download merit order price curve', testing_ground_price_curves_path(@testing_ground, format: :csv), class: "merit-button"
+              %li= link_to 'Download merit order load curves', testing_ground_load_curves_path(@testing_ground, format: :csv), class: "merit-button"
+
+              - if can_export?(@testing_ground)
+                %li.divider{role: "separator"}
+                %li= link_to 'Create national scenario', export_testing_ground_path(@testing_ground)
 
         .load-strategies.btn-group(role="group")
           %select.strategies.multi-select.form-control{multiple: "multiple"}
