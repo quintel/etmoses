@@ -1,9 +1,9 @@
 #les-menu
   %ul.nav.nav-tabs
-    %li.load= link_to 'Load', testing_ground_path(testing_ground)
+    %li.load= link_to 'Network', testing_ground_path(testing_ground)
 
     - if testing_ground.gas_asset_list
-      %li.gas_load= link_to 'Gas load', gas_load_testing_ground_path(testing_ground)
+      %li.gas_load= link_to 'Gas infrastructure', gas_load_testing_ground_path(testing_ground)
 
     - if testing_ground.business_case
       %li.business_case= link_to 'Business case', testing_ground_business_case_path(testing_ground, testing_ground.business_case)
