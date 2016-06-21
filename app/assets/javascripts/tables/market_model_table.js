@@ -7,6 +7,8 @@ var MarketModelTable = (function () {
 
     MarketModelTable.prototype = {
         append: function () {
+            this.updateTable();
+
             editableTable.append(this.updateTable);
         },
 

@@ -1,13 +1,20 @@
 %table.table.interactions.market{data: { type: "market_model_table" } }
   %thead
-    %th{data: {header: 'stakeholder_from' }} Payer
-    %th{data: {header: 'stakeholder_to' }} Payee
-    %th{data: {header: 'foundation' }} Measure
-    %th{data: {header: 'applied_stakeholder' }} Measured at stakeholder
-    %th.tariff-type{data: {header: 'tariff_type' }} Tariff Type
-    %th.col-sm-2{data: {header: 'tariff' }} Tariff
+    %th{data: {header: 'stakeholder_from' }}
+      = I18n.t("market_model.table.headers.stakeholder_from")
+    %th{data: {header: 'stakeholder_to' }}
+      = I18n.t("market_model.table.headers.stakeholder_to")
+    %th{data: {header: 'foundation' }}
+      = I18n.t("market_model.table.headers.foundation")
+    %th{data: {header: 'applied_stakeholder' }}
+      = I18n.t("market_model.table.headers.applied_stakeholder")
+    %th.tariff-type{data: {header: 'tariff_type' }}
+      = I18n.t("market_model.table.headers.tariff_type")
+    %th.col-sm-2{data: {header: 'tariff' }}
+      = I18n.t("market_model.table.headers.tariff")
     %th
     %th
+
   %tbody
     - market_model.interactions.each do |interaction|
       %tr
