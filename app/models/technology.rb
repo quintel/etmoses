@@ -96,6 +96,10 @@ class Technology < ActiveHash::Base
     attributes[:name] || key.humanize.to_s
   end
 
+  def behavior
+    (attributes[:behavior] || :generic).to_sym
+  end
+
   def importable?
     importable_attributes.any?
   end
