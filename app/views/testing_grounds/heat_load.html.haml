@@ -13,7 +13,7 @@
         Load on the heat network
         %span.loading-spinner
           = image_tag 'wait.gif'
-      .graph.line-chart{ data: { type: 'static_load_chart', url: heat_testing_ground_load_calculation_path(@testing_ground), curve_type: 'heat', view_as: 'stacked', resolution: 'high' } }
+      .graph.line-chart{ data: { type: 'static_load_chart', url: heat_testing_ground_path(@testing_ground), curve_type: 'heat', view_as: 'stacked', resolution: 'high' } }
 
 - else
   .alert.alert-info

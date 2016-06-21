@@ -20,8 +20,7 @@ class TestingGround::HeatSummary
   #
   # Returns a hash.
   def as_json(*)
-    { calculation: { range: @range, resolution: @resolution },
-      buffer: buffer_load,
+    { buffer: buffer_load,
       demand: demand_load,
       supply: supply_load }
   end
@@ -76,7 +75,7 @@ class TestingGround::HeatSummary
     producers = @park.producers.map { |prod| TechnologySummary.new(prod) }
 
     producers.each_with_object({}) do |tech, data|
-      data[tech.key] = compact_zeros(tech.load)
+      data[tech.key] = supply_curve(tech.load)
     end
   end
 
@@ -85,7 +84,7 @@ class TestingGround::HeatSummary
   #
   # Returns an Array.
   def local_supply
-    compact_zeros(
+    supply_curve(
       heat_composites.values.flatten.flat_map do |composite|
         # "Non-local" techs (Heat::Consumers) take energy from the heat network
         # and are already accounted for in `supply_load`.
@@ -134,6 +133,13 @@ class TestingGround::HeatSummary
   # Returns an Array.
   def compact_zeros(array)
     array.nil? || array.all? { |v| v.zero? } ? [] : array
+  end
+
+  # Internal: Converts the given array so that it may represent supply.
+  #
+  # Returns an Array with all values negated.
+  def supply_curve(array)
+    compact_zeros(array).map { |v| -v }
   end
 
   # --

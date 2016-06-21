@@ -73,10 +73,6 @@ class TestingGroundsController < ResourceController
   def gas_load
   end
 
-  # GET /testing_grounds/:id/heat_load
-  def heat_load
-  end
-
   # POST /testing_grounds/:id/data
   def data
     begin
@@ -174,17 +170,6 @@ class TestingGroundsController < ResourceController
     @testing_ground = TestingGround::SaveAs.run(
       @testing_ground, testing_ground_params[:name], current_user
     )
-  end
-
-  def heat_load
-    calculator = TestingGround::Calculator.new(
-      @testing_ground, (params[:calculation] || {}).merge(
-        strategies:  @testing_ground.selected_strategy.attributes,
-        resolution:  :high
-      )
-    )
-
-    render json: TestingGround::HeatSummary.new(calculator)
   end
 
   private

@@ -114,25 +114,55 @@ var LoadChartsSettings = {
         visible: true,
         axisLabel: 'kW'
     },
-    hot_water: {
+    water_heating: {
         name: "Hot water demand",
         color: '#888A3D',
         visible: true,
         axisLabel: 'kW'
     },
-    must_run: {
-        name: "Must run",
-        color: '#111A3D',
-        visible: true,
-        axisLabel: 'kW'
-    },
-    dispatchable: {
-        name: "Dispatchable",
+    households_collective_chp_biogas: {
+        name: "Biogas CHP households",
         color: '#DD0000',
         visible: true,
         axisLabel: 'kW'
     },
-    buffer_load: {
+    households_collective_chp_network_gas: {
+        name: "Gas CHP households",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    households_collective_chp_wood_pellets: {
+        name: "Biomass CHP households",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    households_collective_geothermal: {
+        name: "Geothermal",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    central_heat_network_dispatchable: {
+        name: "Central heat network dispatchable",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    central_heat_network_must_run: {
+        name: "Central heat network must run",
+        color: '#111A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    local: {
+        name: "Locally-produced heat",
+        color: '#000000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    buffer: {
         name: "Buffer load",
         color: '#ABCABC',
         visible: true,

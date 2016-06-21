@@ -13,16 +13,16 @@ Rails.application.routes.draw do
       post 'data', 'update_strategies'
       post 'export', to: :perform_export
       patch 'save_as'
+
+      scope :calculation, controller: 'calculation' do
+        post 'heat'
+      end
     end
 
     resources :business_cases, only: [:update, :show] do
       member do
         post 'compare_with', 'data', 'render_summary'
       end
-    end
-
-    resource :load_calculation, only: [] do
-      post :heat
     end
 
     resources :gas_asset_lists, only: [:update] do
