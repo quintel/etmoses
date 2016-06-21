@@ -139,7 +139,7 @@ var D3LoadChart = (function () {
               .transition().duration(0)
               .call(xAxis);
 
-        this.setYscaleDomain();
+        this.setYscaleDomain(true);
     }
 
     function roundDate(date) {
@@ -273,14 +273,17 @@ var D3LoadChart = (function () {
 
             return this;
         },
-        setYscaleDomain: function () {
+        setYscaleDomain: function (mainOnly) {
             var ydomain = d3.extent(all.call(chartData), setExtent.bind(this));
 
             if (ydomain[0] > 0) { ydomain[0] = 0; }
             if (ydomain[1] < 0) { ydomain[1] = 0; }
 
             yScale.domain(ydomain).nice();
-            yScale2.domain(ydomain).nice();
+
+            if (! mainOnly) {
+                yScale2.domain(ydomain).nice();
+            }
 
             svg.select(".y.axis").transition().call(yAxis);
 
