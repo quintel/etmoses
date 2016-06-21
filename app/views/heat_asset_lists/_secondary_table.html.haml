@@ -19,24 +19,24 @@
   %tbody
     - heat_asset_list.select(&:secondary?).each do |list_item|
       %tr
-        %td.editable
+        %td.editable.key
           %select.form-control.key
             = options_for_secondary_heat_assets(list_item.type)
 
-        %td.editable
+        %td.editable.investment_costs
           %input.form-control{name: 'investment_costs', value: list_item.investment_costs}
 
-        %td.editable
+        %td.editable.om_costs_per_year
           %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
 
-        %td.editable
+        %td.editable.technical_lifetime
           %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
 
-        %td.editable
+        %td.editable.stakeholder
           %select.form-control.stakeholder
             = options_for_all_stakeholders(list_item.stakeholder)
 
-        %td.editable
+        %td.editable.connection_distribution
           %input.form-control{name: 'connection_distribution', value: list_item.connection_distribution}
 
         %td.editable.hidden

@@ -9,7 +9,7 @@ var HeatSourceListTablePart = (function () {
         append: function () {
             setProfiles.call(this);
 
-            this.editableTable.append(this.updateTable);
+            this.editableTable.append();
         },
 
         setProfiles: function() {

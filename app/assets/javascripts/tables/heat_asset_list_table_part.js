@@ -5,16 +5,34 @@ var HeatAssetListTablePart = (function () {
 
     var editableTable;
 
+    function updateRows(technology) {
+        var technology = $(this.target).find("select.key"),
+            techData   = $(technology)
+                            .find("option[value=" + technology.val() + "]")
+                            .data();
+
+        for (var key in techData) {
+            $(this.target)
+                .find(".editable." + key.underscorize())
+                .find("input, select")
+                .val(techData[key]);
+        }
+    }
+
     HeatAssetListTablePart.prototype = {
         append: function () {
-            setProfiles.call(this);
+            this.setProfiles();
 
-            this.editableTable.append(this.updateTable);
+            this.editableTable.append(this.updateTable.bind(this));
         },
 
-        setProfiles: function() {
+        updateTable: function () {
+            this.setProfiles();
+        },
+
+        setProfiles: function () {
             $(this.editableTable.selector).find("tr:not(.blank)").each(function() {
-                new ProfileSelectBox(this).add();
+                new ProfileSelectBox(this).add(updateRows);
             });
         }
     };
@@ -25,5 +43,3 @@ var HeatAssetListTablePart = (function () {
 
     return HeatAssetListTablePart;
 }());
-
-
