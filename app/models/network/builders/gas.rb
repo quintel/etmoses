@@ -45,7 +45,7 @@ module Network
           # Workaround for the lack of multi-carrier support in technologies;
           # P2P siphons electricity and emits it as production on the gas
           # network.
-          delegates = @techs[name].select { |t| t.behavior == :siphon }
+          delegates = @techs[name].select { |t| t.behavior == 'siphon'.freeze }
 
           return if techs.empty? && delegates.empty?
 

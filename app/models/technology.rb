@@ -97,7 +97,7 @@ class Technology < ActiveHash::Base
   end
 
   def behavior
-    (attributes[:behavior] || :generic).to_sym
+    (attributes[:behavior] || 'generic'.freeze).to_s
   end
 
   def importable?
