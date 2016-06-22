@@ -57,7 +57,7 @@
         %span.wait.hidden= image_tag 'wait.gif'
 
   .tab-pane.remote.edit.active#technologies{role: "tabpanel"}
-    = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), html: { remote: true } do |form|
+    = form_for @testing_ground, action: testing_ground_path(@testing_ground, format: :js), authenticity_token: true, html: { remote: true } do |form|
       = render partial: 'technologies_form', locals: { form: form, testing_ground: @testing_ground, submit_text: "Save" }
       .hidden
         = form.text_field "form_type", value: "technologies"
