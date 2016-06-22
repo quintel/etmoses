@@ -1,4 +1,4 @@
 ---
-host:          'https://moses.energytransitionmodel.com'
-etengine_host: 'https://engine.energytransitionmodel.com'
-etmodel_host:  'https://pro.energytransitionmodel.com'
+host:          'moses.energytransitionmodel.com'
+etengine_host: 'engine.energytransitionmodel.com'
+etmodel_host:  'pro.energytransitionmodel.com'
