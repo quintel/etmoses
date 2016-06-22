@@ -4,9 +4,9 @@ importable_gqueries:
 
 defaults:
   total_initial_investment: 100000.0 # EUR/MW
-  om_costs_per_year:        1000.0   # EUR/MW
+  om_costs_per_year:        2000.0   # EUR/MW
   technical_lifetime:       30.0     # Year
-  marginal_heat_costs:      30.0
+  marginal_heat_costs:      22.0
   distance:                 1
   units:                    1
 

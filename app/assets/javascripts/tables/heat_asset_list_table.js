@@ -4,6 +4,8 @@ var HeatAssetListTable = (function () {
     HeatAssetListTable.prototype = {
         add: function(table) {
             this.multiTable.add(table);
+
+            table.append();
         }
     }
 

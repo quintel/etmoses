@@ -13,6 +13,8 @@ var ProfileSelectBox = (function () {
 
         profileSelectBox.off('change').on('change', this.callback);
 
+        this.callback(this.target);
+
         $(this.target).find(".editable.profile select")
             .replaceWith(profileSelectBox)
             .trigger('change');
@@ -20,7 +22,9 @@ var ProfileSelectBox = (function () {
 
     ProfileSelectBox.prototype = {
         add: function (callback) {
-            $(this.target).find("select.key").off()
+            this.callback = callback || function () { return; };
+
+            $(this.target).find("select.key").off('change')
                 .on('change', defaultCloneAndAppend.bind(this));
 
             defaultCloneAndAppend.call(this);
