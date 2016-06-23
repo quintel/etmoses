@@ -72,6 +72,7 @@ var TechnologiesForm = (function () {
             $(".technologies .technology:not(.hidden)")
                 .each(this.updateExistingTechnology);
 
+            this.setProfiles();
             addListeners.call(this);
 
             this.parseHarmonicaToJSON();
