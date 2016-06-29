@@ -1,0 +1,6 @@
+---
+en:
+  carriers:
+    electricity: Electricity
+    gas: Gas
+    heat: Heat

@@ -10,10 +10,15 @@ module LoadProfilesHelper
   end
 
   def technologies_select_options(selected = nil)
-    bufferables = @technologies.map(&:technologies).flatten
+    profile_techs = Technology.all.select do |tech|
+      tech.whitelisted_attributes.include?('profile')
+    end
 
-    options_for_select((Technology.visible - bufferables).map do |technology|
-      [I18n.t("inputs.#{ technology.key }"), technology.key]
-    end, selected)
+    options = carrier_grouped_technologies(profile_techs) do |tech|
+      namespace = tech.carrier == 'heat' ? 'heat_sources' : 'inputs'
+      [I18n.t("#{ namespace }.#{ tech.key }"), tech.key]
+    end
+
+    grouped_options_for_select(options, selected)
   end
 end

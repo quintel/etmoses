@@ -20,4 +20,23 @@ module ApplicationHelper
   def recent_testing_grounds
     policy_scope(TestingGround).latest_first.select(:id, :name).limit(5)
   end
+
+
+  # Public: Sorts given technologies into a hash by the carrier for use in a
+  # grouped select. Yields each technology; the block should return an array
+  # with the name and key of the technology.
+  #
+  # For example
+  #
+  #   carrier_grouped_technologies(techs) do |tech|
+  #     [I18n.t("inputs.#{ tech.key }", tech.key]
+  #   end
+  #
+  # Returns a Hash{String => Array[Technology]}.
+  def carrier_grouped_technologies(techs)
+    techs.group_by(&:carrier).each_with_object({}) do |(key, techs), data|
+      data[I18n.t("carriers.#{ key }")] =
+        techs.map { |t| yield(t) }.sort_by(&:first)
+    end
+  end
 end

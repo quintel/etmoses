@@ -12,3 +12,13 @@ defaults:
   units:                    1
 
 exists_as_technology_in_etengine: false
+
+whitelisted_attributes:
+  - distance
+  - heat_production
+  - marginal_heat_costs
+  - om_costs_per_year
+  - profile
+  - stakeholder
+  - technical_lifetime
+  - total_initial_investment
