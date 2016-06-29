@@ -7,11 +7,15 @@
     = csrf_meta_tags
   %body
     = render partial: 'layouts/nav'
-    .maintenance
-      .inner
-        ETMoses is currenty undergoing maintenance and may not be completely
-        reliable during this process. We hope to have the application restored
-        to full service soon.
+    - if Rails.env.staging?
+      .maintenance
+        .inner
+          You are using the ETMoses &ldquo;beta&rdquo; application. This is
+          where new features may be tested prior to their full release, however
+          stability cannot be assured and old LESes may cease to work without
+          warning. You may prefer to use the
+          %a(href="https://moses.energytransitionmodel.com")< production version
+          instead.
     .container
       = yield
     = render partial: 'layouts/footer'
