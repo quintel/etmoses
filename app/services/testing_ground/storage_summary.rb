@@ -6,7 +6,7 @@ class TestingGround::StorageSummary
   # Technologies whose volumes should be included in the summary.
   TECHS = [
     Network::Technologies::Battery,
-    Network::Technologies::CongestionBattery,
+    Network::Technologies::CongestionBattery::Battery,
     Network::Technologies::ElectricVehicle
   ]
 
