@@ -2,7 +2,7 @@
 behavior: hhp_gas
 carrier: gas
 color: "#80C37D"
-default:
+defaults:
   capacity: 20.6186
   position_relative_to_buffer: boosting
 

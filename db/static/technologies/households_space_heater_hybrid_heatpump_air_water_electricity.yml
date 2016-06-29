@@ -2,7 +2,6 @@
 carrier: hybrid
 color: "#57A753"
 behavior: 'null'
-exists_as_technology_in_etengine: false
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
