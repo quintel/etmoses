@@ -29,7 +29,7 @@ class Technology < ActiveHash::Base
   end
 
   def self.importable
-    where(exists_as_technology_in_etengine: true, visible: true) -
+    where(exists_as_technology_in_etengine: true) -
       where(carrier: 'heat') +
       where(is_district_heating: true)
   end
