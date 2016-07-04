@@ -1,6 +1,6 @@
 class TestingGroundsController < ResourceController
   RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as
-                        update_strategies gas_load)
+                        update_strategies gas_load heat_load)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile

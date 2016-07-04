@@ -1,4 +1,5 @@
 /*global Poller,Ajax,ErrorDisplayer*/
+
 var TreeFetcher = (function () {
     'use strict';
 

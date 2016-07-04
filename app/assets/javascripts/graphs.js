@@ -1,4 +1,4 @@
-/*globals D3LineGraph,D3StackedBarGraph*/
+/*globals D3LineGraph,D3StackedBarGraph,StaticLoadChart*/
 
 $(document).on('page:change', function () {
     'use strict';
@@ -8,15 +8,15 @@ $(document).on('page:change', function () {
             interpolate: 'linear'
         },
         graphs = {
-            line: D3LineGraph,
-            stacked_bar: D3StackedBarGraph,
-            gas_load_chart: GasLoadChart
+            line:              D3LineGraph,
+            stacked_bar:       D3StackedBarGraph,
+            static_load_chart: StaticLoadChart
         };
 
     window.graphs = [];
 
     $(".graph").each(function () {
-        var data  = $(this).data(),
+        var data  = $(this).underscorizedData(),
             Graph = graphs[data.type || defaults.type];
 
         if (Graph) {

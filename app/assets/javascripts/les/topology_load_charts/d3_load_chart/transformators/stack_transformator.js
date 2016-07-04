@@ -4,16 +4,16 @@ var StackTransformator = (function () {
     var stack = d3.layout.stack()
         .values(function(d) { return d.values; });
 
-    StackTransformator.prototype = {
-        transform: function () {
-            if (this.data.length > 0) {
-                var size = this.data[0].values.length;
+    return {
+        transform: function (data) {
+            if (data.length > 0) {
+                var size = data[0].values.length;
 
                 while(size--) {
                     var posOffset = 0,
                         negOffset = 0;
 
-                    this.data.forEach(function(d) {
+                    data.forEach(function(d) {
                         d = d.values[size];
 
                         if (d.y < 0) {
@@ -28,17 +28,11 @@ var StackTransformator = (function () {
                 }
             }
 
-            this.data.sort(function (a,b) {
+            data.sort(function (a,b) {
                 return a.key > b.key;
             });
 
-            return stack(this.data);
+            return stack(data);
         }
     };
-
-    function StackTransformator(data) {
-        this.data = data;
-    }
-
-    return StackTransformator;
 }());

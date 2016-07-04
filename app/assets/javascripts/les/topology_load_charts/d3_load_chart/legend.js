@@ -4,7 +4,7 @@ var Legend = (function () {
     'use strict';
 
     function onLegendClick(d) {
-        if (this.d3Chart.shown.view_as === 'stacked') { return false; }
+        if (this.d3Chart.settings.view_as === 'stacked') { return false; }
 
         d.visible = !d.visible;
 

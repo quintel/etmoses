@@ -14,11 +14,7 @@
 = render 'side_menu', testing_ground: @testing_ground, strategies: true
 
 #testing-ground
-  .save_strategies.hidden
-    - if @testing_ground.selected_strategy
-      = @testing_ground.selected_strategy.to_json
-    - else
-      = default_strategies.to_json
+  = render 'strategies', testing_ground: @testing_ground
 
   .testing-ground-view{ data: testing_ground_view_options(@testing_ground) }
     %span.loading

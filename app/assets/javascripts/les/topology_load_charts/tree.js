@@ -68,7 +68,7 @@ var Tree = (function () {
 
             // Expand with node_start  and node_end
             new TreeFetcher(lesses || this.lesses)
-                .fetch(this.d3Chart.lesOptions)
+                .fetch(this.d3Chart.settings)
                 .done(updateTree.bind(this))
                 .fail(displayError);
         },

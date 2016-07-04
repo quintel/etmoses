@@ -3,8 +3,7 @@
 var D3LineGraph = (function () {
     'use strict';
 
-    var line,
-        margin = { top: 20, right: 20, bottom: 30, left: 70 },
+    var margin = { top: 20, right: 20, bottom: 30, left: 70 },
         width  = 530 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom,
         x      = d3.time.scale().range([0, width]),

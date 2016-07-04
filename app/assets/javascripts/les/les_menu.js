@@ -4,6 +4,7 @@ var LesMenu = (function () {
     var paths = {
         '/testing_grounds/:id': 'load',
         '/testing_grounds/:id/gas_load': 'gas_load',
+        '/testing_grounds/:id/heat_load': 'heat_load',
         '/testing_grounds/:id/business_cases/:id': 'business_case'
     };
 

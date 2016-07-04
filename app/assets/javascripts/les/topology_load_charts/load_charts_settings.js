@@ -106,5 +106,66 @@ var LoadChartsSettings = {
         color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
+    },
+    // HEAT FAKE CHART
+    space_heating: {
+        name: "Space heating demand",
+        color: '#D88A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    water_heating: {
+        name: "Hot water demand",
+        color: '#888A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    households_collective_chp_biogas: {
+        name: "Biogas CHP households",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    households_collective_chp_network_gas: {
+        name: "Gas CHP households",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    households_collective_chp_wood_pellets: {
+        name: "Biomass CHP households",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    households_collective_geothermal: {
+        name: "Geothermal",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    central_heat_network_dispatchable: {
+        name: "Central heat network dispatchable",
+        color: '#DD0000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    central_heat_network_must_run: {
+        name: "Central heat network must run",
+        color: '#111A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    local: {
+        name: "Locally-produced heat",
+        color: '#000000',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    buffer: {
+        name: "Buffer load",
+        color: '#ABCABC',
+        visible: true,
+        axisLabel: 'kW'
     }
 };
