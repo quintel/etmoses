@@ -14,7 +14,7 @@ module LoadProfiles
     private
 
     def selected_load_profiles(load_profiles, technology)
-      if technology.key == 'generic'
+      if technology.key =~ /^generic/
         LoadProfile.order(:key)
       else
         load_profiles[technology.key.to_s] || []
