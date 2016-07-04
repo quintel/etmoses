@@ -35,6 +35,7 @@ var BufferSelectBox = (function () {
             buffer = $(".technology[data-composite-value='" + value + "']"),
             tech   = $(e.target).parents(".technology");
 
+        tech.set('node', buffer.data('node'));
         buffer.after(tech);
     }
 
@@ -62,8 +63,9 @@ var BufferSelectBox = (function () {
             cloneAndAppendBufferSelect.call(this);
             addOptionToBufferTemplate.call(this);
 
-            $(".editable.buffer select").off()
-                .on("change", reattachBufferingTechnology);
+            $(".editable.buffer select")
+                .off("change.buffer")
+                .on("change.buffer", reattachBufferingTechnology);
         }
     };
 
