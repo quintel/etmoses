@@ -20,7 +20,7 @@
       %tr
         %td.editable
           %select.form-control.key
-            = options_for_heat_source_plant_types(list_item.key, :must_run)
+            = options_for_must_run_heat_source_plant_types(list_item.key)
 
         %td.editable
           %input.form-control{name: 'heat_production', value: list_item.heat_production}
