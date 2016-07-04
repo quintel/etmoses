@@ -3,21 +3,12 @@
   .clearfix
 
 = render 'side_menu', testing_ground: @testing_ground, strategies: false
+= render 'strategies', testing_ground: @testing_ground
 
-- if @testing_ground.heat_source_list && @testing_ground.heat_asset_list
-  = render 'strategies', testing_ground: @testing_ground
-
-  #heat-chart
-    .chart-holder
-      %h2
-        Load on the heat network
-        %span.loading-spinner
-          = image_tag 'wait.gif'
-      .graph.line-chart{ data: { type: 'static_load_chart', url: heat_testing_ground_path(@testing_ground), curve_type: 'heat', view_as: 'stacked', resolution: 'high' } }
-
-- else
-  .alert.alert-info
-    %strong No heat source list or heat asset list:
-    This is an old LES and has no heat source list or heat assets installed.
-    Please create a new LES if you wish to compute a heat network.
-
+#heat-chart
+  .chart-holder
+    %h2
+      Load on the heat network
+      %span.loading-spinner
+        = image_tag 'wait.gif'
+    .graph.line-chart{ data: { type: 'static_load_chart', url: heat_testing_ground_path(@testing_ground), curve_type: 'heat', view_as: 'stacked', resolution: 'high' } }
