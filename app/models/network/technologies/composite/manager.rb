@@ -40,11 +40,11 @@ module Network
           @techs.partition(&:buffering?).flatten
         end
 
-        # Public: Informs the composite that an amount of energy has been received
-        # which contributes to the consumption of the device.
+        # Public: Informs the composite that an amount of energy has been
+        # received which contributes to the consumption of the device.
         #
         # An input is energy delivered to to the composite using a buffering
-        # technology; boostinh techs are not onstrained by the capacity of the
+        # technology; boosting techs are not constrained by the capacity of the
         # composite, and therefore their consumption is not included.
         #
         # Returns the total input in the current frame.
