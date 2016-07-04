@@ -20,7 +20,7 @@
       %tr
         %td.editable
           %select.form-control.key
-            = options_for_heat_source_plant_types(list_item.key, :dispatchable)
+            = options_for_dispatchable_heat_source_plant_types(list_item.key)
 
         %td.editable
           %input.form-control{name: 'heat_capacity', value: list_item.heat_capacity}
