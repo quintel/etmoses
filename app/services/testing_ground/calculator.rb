@@ -42,7 +42,7 @@ class TestingGround::Calculator
   private
 
   def weekly_calculation?
-    @options[:resolution] == 'high'.freeze
+    resolution == :high && range
   end
 
   def base
