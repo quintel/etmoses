@@ -9,8 +9,9 @@ var Transformator = (function () {
             annual: 365
         };
 
-    function generateCapacity(capacity, data) {
-        var extent = d3.extent(data[0].values, function (d) { return d.x; });
+    function generateCapacity(data, results) {
+        var capacity = (data.capacity * (data.units || 1.0)),
+            extent   = d3.extent(results[0].values, function (d) { return d.x; });
 
         return {
             key:      "Capacity",
@@ -139,7 +140,7 @@ var Transformator = (function () {
 
             if (this.data.capacity && this.settings.view_as === 'total') {
                 this.results.push(
-                    generateCapacity(this.data.capacity, this.results));
+                    generateCapacity(this.data, this.results));
             }
 
             return this.results;
