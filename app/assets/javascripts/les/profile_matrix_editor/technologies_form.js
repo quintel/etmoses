@@ -131,6 +131,7 @@ var TechnologiesForm = (function () {
         },
 
         markAsEditing: function () {
+            $("form.edit_testing_ground").addClass("editing");
             $("ul.nav.nav-tabs li a[href=#technologies]").addClass("editing");
         },
 

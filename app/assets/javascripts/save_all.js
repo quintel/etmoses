@@ -1,4 +1,5 @@
 /*globals document*/
+
 var SaveAll = (function () {
     'use strict';
 
