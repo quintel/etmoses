@@ -156,6 +156,12 @@ var LoadChartsSettings = {
         visible: true,
         axisLabel: 'kW'
     },
+    generic_must_run: {
+        name: "Generic must run",
+        color: '#111A3D',
+        visible: true,
+        axisLabel: 'kW'
+    },
     local: {
         name: "Locally-produced heat",
         color: '#000000',
