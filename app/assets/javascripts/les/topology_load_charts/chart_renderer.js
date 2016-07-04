@@ -38,7 +38,7 @@ var ChartRenderer = (function () {
         }
     }
 
-    function downloadLoad() {
+    function downloadLoad(loadType) {
         var loads      = [],
             chartTypes = ['load', 'load_strategies',
                           'gas', 'gas_strategies',
@@ -46,7 +46,7 @@ var ChartRenderer = (function () {
 
         chartTypes.forEach(function (chartType) {
             if (this[chartType]) {
-                [chartType].concat(this[chartType]).forEach(function (value, i) {
+                [chartType].concat(this[chartType][loadType]).forEach(function (value, i) {
                     if (loads[i]) {
                         loads[i] += (','  + value);
                     } else {
@@ -69,7 +69,7 @@ var ChartRenderer = (function () {
         downloadBtn.off('click').on('click', function (event) {
             event.preventDefault();
 
-            downloadLoad.call(self);
+            downloadLoad.call(self, 'total');
         });
     }
 
