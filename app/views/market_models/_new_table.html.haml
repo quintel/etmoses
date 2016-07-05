@@ -32,7 +32,7 @@
 
         %td.editable.select
           %select.form-control.applied
-            = stakeholder_options(selected: interaction["applied_stakeholder"])
+            = options_for_stakeholders(selected: interaction["applied_stakeholder"])
 
         %td.editable.tariff-type
           %input{ name: "tariff_type", type: "hidden", value: interaction["tariff_type"].presence || 'fixed' }
