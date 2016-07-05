@@ -72,7 +72,6 @@ var GasAssetListTable = (function () {
 
         if (confirm(reloadButton.confirmation)) {
             Ajax.json(reloadButton.url, {}, function (data) {
-                //$(editableTable.selector).find("tr:not(.blank)").remove();
                 $("#gas_asset_list_asset_list").text(JSON.stringify(data));
                 $("form.edit_gas_asset_list").submit();
             });

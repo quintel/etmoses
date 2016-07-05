@@ -1,2 +1,6 @@
 $("#gas-asset-list span.wait").addClass("hidden");
 $("#gas-asset-list input[type=submit]").removeClass("disabled");
+
+$("#gas-asset-list .table-holder").html("<%= escape_javascript(render partial: 'gas_asset_lists/table', locals: { testing_ground: @testing_ground, gas_asset_list: @gas_assets }) %>");
+
+TableInitializer.initialize.call($("#gas-asset-list .table-holder .table.interactions"));

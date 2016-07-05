@@ -3,14 +3,14 @@
 
 = form_for [testing_ground, testing_ground.gas_asset_list], html: { remote: true } do |f|
   .hidden
-    = f.text_area :asset_list, value: JSON.dump(gas_asset_list)
+    = f.text_area :asset_list, value: JSON.dump(gas_asset_list.map(&:attributes))
 
   .btn-group
     = f.submit "Apply", class: "btn btn-primary"
     = save_all_button(gas_load_testing_ground_path(testing_ground), "Save all and view gas-load")
 
   .btn-group.pull-right
-    %button.btn.btn-danger.reload-gas-asset-list{ data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, testing_ground.gas_asset_list), confirmation: "Are you sure?" } }
+    %button.btn.btn-danger.reload-gas-asset-list{ type: "button", data: { url: reload_gas_asset_list_testing_ground_gas_asset_list_path(testing_ground, testing_ground.gas_asset_list), confirmation: "Are you sure?" } }
       Rescale assets to gas connections
     -# tooltip
     %span.wait.hidden= image_tag "wait.gif"

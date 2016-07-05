@@ -25,7 +25,9 @@ var TableInitializer = (function () {
     }
 
     return {
-        initialize: function (i) {
+        initialize: function () {
+            var i = new Date().getTime();
+
             $(this).attr("id", "table-" + i);
 
             var tableType     = $(this).data('type'),

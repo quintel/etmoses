@@ -15,17 +15,17 @@
       %tr
         %td.editable
           %select.form-control.pressure_level
-            = options_for_pressure_levels(list_item['pressure_level_index'])
+            = options_for_pressure_levels(list_item.pressure_level_index)
 
         %td.editable
           %select.form-control.part
-            = options_for_gas_parts(list_item['part'])
+            = options_for_gas_parts(list_item.part)
 
         %td.editable
-          %select.form-control.type{data: { type: list_item['type'] } }
+          %select.form-control.type{data: { type: list_item.type } }
 
         %td.editable
-          %input.form-control{name: 'amount', value: list_item['amount']}
+          %input.form-control{name: 'amount', value: list_item.amount }
           %span.unit
             %span.pipes
               m
@@ -36,10 +36,10 @@
 
         %td.editable
           %select.form-control.stakeholder
-            = options_for_all_stakeholders(list_item['stakeholder'])
+            = options_for_all_stakeholders(list_item.stakeholder)
 
         %td.editable
-          %input.form-control{name: 'building_year', value: list_item['building_year']}
+          %input.form-control{name: 'building_year', value: list_item.building_year}
 
         %td
           = link_to "#", class: "add-row text-success" do
