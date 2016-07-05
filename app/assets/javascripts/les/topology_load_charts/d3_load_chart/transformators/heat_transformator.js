@@ -7,17 +7,19 @@ var HeatTransformator = (function () {
             totals = (totals || []);
 
         for (chart in data) {
-            subChart = data[chart];
+            if (data.hasOwnProperty(chart)) {
+                subChart = data[chart];
 
-            if (subChart.length) {
-                totals.push({
-                    type: chart,
-                    name: I18n.t("charts." + chart),
-                    area: true,
-                    values: { total: LoadSlicer.slice(subChart, 0) }
-                });
-            } else {
-                fetchChart(subChart, totals);
+                if (subChart.length && subChart.length > 0) {
+                    totals.push({
+                        type: chart,
+                        name: I18n.t("charts." + chart),
+                        area: true,
+                        values: { total: LoadSlicer.slice(subChart, 0) }
+                    });
+                } else {
+                    fetchChart(subChart, totals);
+                }
             }
         };
 
