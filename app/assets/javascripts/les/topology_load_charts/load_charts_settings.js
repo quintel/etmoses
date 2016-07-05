@@ -110,43 +110,43 @@ var LoadChartsSettings = {
     // HEAT FAKE CHART
     space_heating: {
         name: "Space heating demand",
-        color: '#D88A3D',
+        color: '#ECC59E',
         visible: true,
         axisLabel: 'kW'
     },
     water_heating: {
         name: "Hot water demand",
-        color: '#888A3D',
+        color: '#C4C59E',
         visible: true,
         axisLabel: 'kW'
     },
     households_collective_chp_biogas: {
         name: "Biogas CHP households",
-        color: '#DD0000',
+        color: '#C68AE4',
         visible: true,
         axisLabel: 'kW'
     },
     households_collective_chp_network_gas: {
         name: "Gas CHP households",
-        color: '#DD0000',
+        color: '#BFD3E6',
         visible: true,
         axisLabel: 'kW'
     },
     households_collective_chp_wood_pellets: {
         name: "Biomass CHP households",
-        color: '#DD0000',
+        color: '#FD8D3C',
         visible: true,
         axisLabel: 'kW'
     },
     households_collective_geothermal: {
         name: "Geothermal",
-        color: '#DD0000',
+        color: '#D28989',
         visible: true,
         axisLabel: 'kW'
     },
     central_heat_network_dispatchable: {
         name: "Central heat network dispatchable",
-        color: '#DD0000',
+        color: '#0ED976',
         visible: true,
         axisLabel: 'kW'
     },
@@ -158,13 +158,19 @@ var LoadChartsSettings = {
     },
     generic_must_run: {
         name: "Generic must run",
-        color: '#111A3D',
+        color: '#4292C6',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    generic: {
+        name: "Generic",
+        color: '#4292C6',
         visible: true,
         axisLabel: 'kW'
     },
     local: {
         name: "Locally-produced heat",
-        color: '#000000',
+        color: '#888888',
         visible: true,
         axisLabel: 'kW'
     },

@@ -25,10 +25,11 @@ var StaticLoadChart = (function () {
     });
 
     function StaticLoadChart(chartClass, settings) {
-        this.chartClass = chartClass;
-        this.settings   = settings;
-        this.width      = 500;
-        this.height     = 500;
+        this.chartClass    = chartClass;
+        this.settings      = settings;
+        this.width         = 500;
+        this.height        = 500;
+        this.seriesOpacity = 1.0;
     }
 
     StaticLoadChart.prototype.constructor = StaticLoadChart;

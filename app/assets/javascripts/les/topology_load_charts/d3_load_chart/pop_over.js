@@ -19,7 +19,7 @@ var PopOver = (function () {
             if (isShown.call(this, type)) {
                 square = $("<span>").addClass("square").css({
                     "background-color": this.results[type].color,
-                    "opacity": 0.6
+                    "opacity": this.seriesOpacity
                 });
 
                 spanValue = $("<span>").text(setSpanText.bind(this, type));
@@ -43,8 +43,9 @@ var PopOver = (function () {
         }
     };
 
-    function PopOver(scope) {
-        this.scope = scope;
+    function PopOver(scope, opacity) {
+        this.scope         = scope;
+        this.seriesOpacity = opacity || 0.5;
     }
 
     return PopOver;

@@ -232,7 +232,7 @@ var D3LoadChart = (function () {
                 return d.color;
             })
             .attr("clip-path", "url(#clip-" + clipName + ")")
-            .attr("opacity", 0.5)
+            .attr("opacity", this.seriesOpacity || 0.5)
             .attr("class", "line-bg")
             .attr("d", function (d) {
                 return setArea.call(this, d, clipName);
@@ -466,7 +466,7 @@ var D3LoadChart = (function () {
 
             $(this.chartClass).append(popOverEl);
 
-            popOver   = new PopOver(popOverEl);
+            popOver   = new PopOver(popOverEl, this.seriesOpacity);
             legendObj = new Legend(this, legend);
 
             d3.select("#mouse-tracker")
