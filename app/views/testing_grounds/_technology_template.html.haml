@@ -30,7 +30,7 @@
 
         - %w(boosting buffering).each do |position|
           %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
-            %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
+            %input{type: 'radio', value: 'after', name: "position_relative_to_buffer_name_#{ technology.object_id }", checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
             = position.humanize
 
         = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))

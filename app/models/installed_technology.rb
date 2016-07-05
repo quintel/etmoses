@@ -290,10 +290,6 @@ class InstalledTechnology
     "#{ buffer }_#{ composite_index }"
   end
 
-  def position_relative_to_buffer_name
-    "position_relative_to_buffer_#{ type }_#{ composite_index }"
-  end
-
   def valid?
     buffer.present? || valid_profile? || !technology.profile_required?
   end
