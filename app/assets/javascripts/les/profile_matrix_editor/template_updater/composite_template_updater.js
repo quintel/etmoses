@@ -9,8 +9,13 @@ var CompositeTemplateUpdater = (function () {
     }
 
     function getNewIndex() {
-        return $(".technologies .technology")
-            .filter(compositeFilter.bind(this)).length;
+        var compositeIndex = $(".technologies .technology")
+            .filter(compositeFilter.bind(this))
+            .map(function () {
+                return $(this).data('compositeIndex') || 0;
+            });
+
+        return Math.max.apply(Math, compositeIndex) + 1;
     }
 
     function setName(index) {
