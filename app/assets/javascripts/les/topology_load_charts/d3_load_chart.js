@@ -315,7 +315,7 @@ var D3LoadChart = (function () {
             }));
 
             yScale.domain(d3.extent(all.call(chartData), function (d) {
-                return d.y;
+                return d.y + (d.offset || 0);
             }));
 
             xScale2.domain(xScale.domain());
