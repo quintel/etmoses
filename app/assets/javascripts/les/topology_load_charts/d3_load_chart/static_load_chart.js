@@ -12,9 +12,7 @@ var StaticLoadChart = (function () {
             }
         }
 
-        spinner = $(this.chartClass).parents('.chart-holder')
-            .find('.loading-spinner');
-
+        spinner = this.holder.find('.loading-spinner');
         spinner.addClass('on');
 
         Ajax.json(this.settings.url, params, function (data) {
@@ -41,11 +39,16 @@ var StaticLoadChart = (function () {
     });
 
     function StaticLoadChart(chartClass, settings) {
+        this.holder        = $(chartClass).parents('.chart-holder');
         this.chartClass    = chartClass;
         this.settings      = settings;
-        this.width         = 500;
-        this.height        = 500;
         this.seriesOpacity = 1.0;
+        this.height        = 400;
+        this.width         = 500;
+
+        if (settings.width == 'fill') {
+            this.width = this.holder.innerWidth();
+        }
 
         this.staticSettings = {
             dateCallback: fetchAndRenderWeek.bind(this)
