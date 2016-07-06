@@ -4,7 +4,7 @@ class GasAssetListDecorator
     part:                  'connectors',
     type:                  'blank',
     amount:                '1',
-    stakeholder:           'cooperation',
+    stakeholder:           'system operator',
     building_year:         '1960',
     lifetime:              0,
     investment_cost:       0
