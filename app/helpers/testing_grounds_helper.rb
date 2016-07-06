@@ -134,8 +134,6 @@ module TestingGroundsHelper
   end
 
   def load_date_options(include_year = true)
-    # weeks = [["Whole year", 0]]
-
     weeks =
       (Date.new(2013, 1, 1)...Date.new(2013, 12, 31))
         .map{|d| d.strftime("%d %B") }
