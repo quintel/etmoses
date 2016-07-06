@@ -22,62 +22,6 @@ RSpec.describe TestingGround::SaveAs do
     end
   end # with an LES, name, and user
 
-  context 'when the LES has a business case' do
-    let!(:original_business_case) do
-      FactoryGirl.create(:business_case, testing_ground: original)
-    end
-
-    let(:duplicate) do
-      TestingGround::SaveAs.run(original, 'Name', user).reload
-    end
-
-    it 'creates a business case' do
-      expect(duplicate.business_case).to be
-    end
-
-    it 'duplicates the business case' do
-      expect(duplicate.business_case.id).to_not eq(original.business_case.id)
-    end
-  end # when the LES has a business case
-
-  context 'when the LES has a selected strategy' do
-    let!(:original_strategy) do
-      FactoryGirl.create(:selected_strategy, testing_ground: original)
-    end
-
-    let(:duplicate) do
-      TestingGround::SaveAs.run(original, 'Name', user).reload
-    end
-
-    it 'creates a selected strategy' do
-      expect(duplicate.selected_strategy).to be
-    end
-
-    it 'duplicates the selected strategy' do
-      expect(duplicate.selected_strategy.id).
-        to_not eq(original.selected_strategy.id)
-    end
-  end # when the LES has a selected strategy
-
-  context 'when the LES has a gas asset list' do
-    let!(:original_assets) do
-      FactoryGirl.create(:gas_asset_list, testing_ground: original)
-    end
-
-    let(:duplicate) do
-      TestingGround::SaveAs.run(original, 'Name', user).reload
-    end
-
-    it 'creates a gas asset list' do
-      expect(duplicate.gas_asset_list).to be
-    end
-
-    it 'duplicates the gas asset list' do
-      expect(duplicate.gas_asset_list.id).
-        to_not eq(original.gas_asset_list.id)
-    end
-  end # when the LES has a gas asset list
-
   context 'with no name given' do
     let(:duplicate) do
       TestingGround::SaveAs.run(original, nil, user).reload
@@ -97,4 +41,28 @@ RSpec.describe TestingGround::SaveAs do
       expect(duplicate.user).to eq(original.user)
     end
   end # with no user given
+
+  relations = TestingGround.reflections.values
+    .select { |r| r.macro == :has_one }.map(&:name)
+
+  relations.each do |name|
+    context "when the LES has a #{ name.to_s.humanize }" do
+      let!(:"original_rel") do
+        FactoryGirl.create(name, testing_ground: original)
+      end
+
+      let(:duplicate) do
+        TestingGround::SaveAs.run(original, 'Name', user).reload
+      end
+
+      it "creates a #{ name.to_s.humanize }" do
+        expect(duplicate.public_send(name)).to be
+      end
+
+      it 'duplicates the business case' do
+        expect(duplicate.public_send(name).id)
+          .to_not eq(original.public_send(name).id)
+      end
+    end
+  end
 end

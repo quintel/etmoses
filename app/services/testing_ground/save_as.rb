@@ -1,8 +1,10 @@
 # Given a testing ground, creates a duplicate -- along with all associated
 # records -- with a new name.
 class TestingGround::SaveAs
-  # Assocations which must also be duplicated.
-  ASSOCIATIONS = %i( business_case gas_asset_list selected_strategy )
+  # Assocations which must also be duplicated; in this case all :has_one
+  # relations.
+  ASSOCIATIONS = TestingGround.reflections.values
+    .select { |rel| rel.macro == :has_one }.map(&:name).freeze
 
   def self.run(*args)
     new(*args).run
