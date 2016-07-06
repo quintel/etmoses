@@ -7,7 +7,11 @@ module Network
       # stored for later use.
       class BoostingWrapper < Wrapper
         def mandatory_consumption_at(frame)
-          @composite.boosting_enabled_at?(frame) ? super : 0.0
+          if @composite.boosting_enabled_at?(frame)
+            constrain_by_capacity(super)
+          else
+            0.0
+          end
         end
 
         def conditional_consumption_at(frame)

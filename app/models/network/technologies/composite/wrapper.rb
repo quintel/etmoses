@@ -57,6 +57,13 @@ module Network
         def inspect
           "#<#{ self.class.name } #{ @object.inspect }>"
         end
+
+        private
+
+        def constrain_by_capacity(amount)
+          capacity = @object.capacity
+          amount < capacity ? amount : capacity
+        end
       end # Wrapper
     end # Composite
   end

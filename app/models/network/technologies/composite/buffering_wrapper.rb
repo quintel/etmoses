@@ -30,11 +30,10 @@ module Network
         private
 
         def constrain(frame, amount)
-          margin     = @composite.consumption_margin_at(frame)
-          capacity   = @object.capacity
-          constraint = margin > capacity ? capacity : margin
+          amount = constrain_by_capacity(amount)
+          margin = @composite.consumption_margin_at(frame)
 
-          amount < constraint ? amount : constraint
+          amount < margin ? amount : margin
         end
       end # BufferingWrapper
     end # Composite
