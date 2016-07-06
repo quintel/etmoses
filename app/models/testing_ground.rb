@@ -13,6 +13,8 @@ class TestingGround < ActiveRecord::Base
   belongs_to :user
   belongs_to :behavior_profile
 
+  # All has_one relations are duplicated when a visitor creates a clone of an
+  # LES using TestingGround::SaveAs.
   has_one :selected_strategy, dependent: :destroy
   has_one :business_case,     dependent: :destroy
   has_one :gas_asset_list,    dependent: :destroy
