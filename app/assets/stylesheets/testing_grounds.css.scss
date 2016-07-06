@@ -688,6 +688,15 @@ table span.static{
     left: 0;
     margin: 0;
   }
+
+  h2 span.loading-spinner {
+    margin-top: -10px;
+    margin-bottom: -10px;
+
+    &.on {
+      display: inline-block;
+    }
+  }
 }
 
 .add-technology {

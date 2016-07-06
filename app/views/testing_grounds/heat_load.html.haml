@@ -11,4 +11,7 @@
       Load on the heat network
       %span.loading-spinner
         = image_tag 'wait.gif'
+    .controls
+      %select.load-date.form-control.hidden
+        = load_date_options(false)
     .graph.line-chart{ data: { type: 'static_load_chart', url: heat_testing_ground_path(@testing_ground), curve_type: 'heat', view_as: 'stacked', resolution: 'high' } }

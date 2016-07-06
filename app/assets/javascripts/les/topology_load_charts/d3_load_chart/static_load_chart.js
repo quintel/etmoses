@@ -3,23 +3,39 @@ var StaticLoadChart = (function () {
 
     var spinner;
 
+    function fetchAndRenderWeek(week, firstTime) {
+        var params = {
+            calculation: {
+                range_start: (week - 1) * 672,
+                range_end:   week * 672,
+                resolution:  'high'
+            }
+        }
+
+        spinner = $(this.chartClass).parents('.chart-holder')
+            .find('.loading-spinner');
+
+        spinner.addClass('on');
+
+        Ajax.json(this.settings.url, params, function (data) {
+            this.settings.load = TransformatorInitializer
+                .initialize(this.settings)
+                .transform(data);
+
+            spinner.removeClass('on');
+
+            if (firstTime) {
+                D3LoadChart.prototype.render.call(this, data);
+            } else {
+                D3LoadChart.prototype.update.call(this, data);
+            }
+        }.bind(this));
+    }
+
     StaticLoadChart.prototype = Object.create(D3LoadChart.prototype, {
         draw: {
             value: function () {
-                spinner = $(this.chartClass).parents('.chart-holder')
-                              .find('.loading-spinner');
-
-                spinner.show();
-
-                Ajax.json(this.settings.url, { }, function (data) {
-                    this.settings.load = TransformatorInitializer
-                        .initialize(this.settings)
-                        .transform(data);
-
-                    spinner.hide();
-
-                    D3LoadChart.prototype.render.call(this, data);
-                }.bind(this));
+                fetchAndRenderWeek.call(this, 1, true);
             }
         }
     });
@@ -30,6 +46,10 @@ var StaticLoadChart = (function () {
         this.width         = 500;
         this.height        = 500;
         this.seriesOpacity = 1.0;
+
+        this.staticSettings = {
+            dateCallback: fetchAndRenderWeek.bind(this)
+        };
     }
 
     StaticLoadChart.prototype.constructor = StaticLoadChart;

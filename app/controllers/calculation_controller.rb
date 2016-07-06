@@ -19,8 +19,6 @@ class CalculationController < ApplicationController
   end
 
   def calculation_options
-    return { range_start: 0, range_end: 672 }
-
     params.require(:calculation).permit([
       :range_start, :range_end,
       :resolution,
