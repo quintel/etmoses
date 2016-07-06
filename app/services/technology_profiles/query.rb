@@ -14,7 +14,7 @@ module TechnologyProfiles
     private
 
     def technology_keys
-      @distribution.map{|t| t['type']}.uniq
+      @distribution.map(&:type).uniq
     end
 
     def included_in_concurrency?(tech)

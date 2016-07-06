@@ -13,6 +13,8 @@ module LoadProfiles
     end
 
     def select_profile
+      return if @technology.position_relative_to_buffer.present?
+
       minimize_concurrency? ? for_tech.next : first
     end
 

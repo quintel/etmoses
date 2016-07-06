@@ -48,7 +48,17 @@ var TemplateUpdater = (function () {
 
     TemplateUpdater.prototype = {
         update: function () {
+            this.template.set('buffer', '');
+
             updateTechnologyTemplate.call(this);
+        },
+
+        bump: function () {
+            var randId = "T" + new Date().getTime().toString();
+
+            $(this.template).attr("id", randId);
+            $(this.template).find("[data-type=position_relative_to_buffer]")
+                .attr("name", "position_relative_to_buffer_name_" + randId);
         },
 
         getAppendScope: function () {

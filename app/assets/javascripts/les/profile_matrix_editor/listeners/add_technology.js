@@ -12,6 +12,7 @@ var AddTechnology = (function () {
                 template         = new TemplateUpdater(newTemplate, selectTechnology),
                 appendScope      = template.getAppendScope();
 
+            template.bump();
             newTemplate.set('node', $(appendScope).data('node'));
 
             $(this).parents(".panel").find(appendScope).after(newTemplate);

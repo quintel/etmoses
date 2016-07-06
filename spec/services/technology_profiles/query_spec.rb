@@ -8,8 +8,9 @@ RSpec.describe TechnologyProfiles::Query do
   }
 
   let(:query) {
-    TechnologyProfiles::Query.new(
-      [{'type' => 'households_solar_pv_solar_radiation'}]).query
+    TechnologyProfiles::Query.new([
+      InstalledTechnology.new('type' => 'households_solar_pv_solar_radiation')
+    ]).query
   }
 
   describe "with allowed technology profiles for concurrency" do

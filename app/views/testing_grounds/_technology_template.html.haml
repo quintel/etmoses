@@ -91,3 +91,7 @@
     .clearfix
 
   .clearfix
+
+- if technology.associates.any?
+  - technology.associates.each do |associate|
+    = render partial: "technology_template", locals: { technology: associate, node: node }

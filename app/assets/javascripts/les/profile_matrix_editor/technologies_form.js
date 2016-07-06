@@ -5,6 +5,10 @@ TemplateUpdater,Technology*/
 var TechnologiesForm = (function () {
     'use strict';
 
+    var ignoredAttributes = [
+        'includes'
+    ];
+
     // TODO: please remove
     function calculateInputCapacity() {
         $(this).find('.carrier_capacity input').val(
@@ -63,7 +67,16 @@ var TechnologiesForm = (function () {
     function addListeners() {
         $(".add-technology select").off().on("change", updateTemplate.bind(this));
         $(".add-technology button").off().on("click", AddTechnology.add);
-        $(".add-technology select").first().trigger('change');
+    }
+
+    function mapDataForTechnology(technology) {
+        var data = $(technology).underscorizedData();
+
+        ignoredAttributes.forEach(function (attribute) {
+            delete data[attribute];
+        });
+
+        return data;
     }
 
     TechnologiesForm.prototype = {
@@ -88,9 +101,7 @@ var TechnologiesForm = (function () {
         parseHarmonicaToJSON: function () {
             var tableProfile = $(".technologies .technology:not(.hidden)")
                 .toArray()
-                .map(function (target) {
-                    return $(target).underscorizedData();
-                }),
+                .map(mapDataForTechnology),
                 groupedByNode = ETHelper.groupBy(tableProfile, 'node');
 
             $("#technology_distribution").text(JSON.stringify(tableProfile));

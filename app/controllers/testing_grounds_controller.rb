@@ -144,12 +144,7 @@ class TestingGroundsController < ResourceController
   # POST /testing_grounds/calculate_concurrency
   def calculate_concurrency
     @topology = Topology.find(params[:topology_id])
-
-    distribution      = JSON.parse(params[:technology_distribution])
-    tech_distribution = TestingGround::TechnologyDistributor.new(distribution, @topology.graph).build
-    concurrency       = TestingGround::TechnologyProfileScheme.new(tech_distribution).build
-
-    @testing_ground_profile = TechnologyList.from_hash(concurrency)
+    @testing_ground_profile = TestingGround::Concurrency.new(params[:technology_distribution]).concurrensize
   end
 
   def render_template
