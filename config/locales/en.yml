@@ -40,7 +40,7 @@ en:
       kwh_consumed: kWh of electricity consumed
       kwh_produced: kWh of electricity produced
       kw_max: Monthly maximum kW load
-      kw_contracted: Annual maximum kW load ("contracted")
+      kw_contracted: Annual maximum kW load
 
   not_authorized: "You don't have permission to view that."
 
