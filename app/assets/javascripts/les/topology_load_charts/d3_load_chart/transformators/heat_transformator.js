@@ -26,9 +26,45 @@ var HeatTransformator = (function () {
         return totals;
     }
 
+    function withDeficit(data) {
+        var deficit = [],
+            length  = data.length,
+            newData, techIndex;
+
+        if (! length) {
+            return data;
+        }
+
+        deficit = data[0].values.total.map(function(val, index) {
+            var net = 0;
+
+            for(techIndex = 0; techIndex < length; techIndex++) {
+                net = net + data[techIndex].values.total[index];
+            }
+
+            return (net < 0 ? 0.0 : -net);
+        });
+
+        if (! deficit.some(function(v) { return v < 0 })) {
+            // No deficit; don't show the series.
+            return data;
+        }
+
+        newData = data.slice(0);
+
+        newData.push({
+            area: true,
+            name: I18n.t('charts.deficit'),
+            type: 'deficit',
+            values: { total: deficit }
+        });
+
+        return newData;
+    }
+
     return {
         transform: function (data, week) {
-            return fetchChart(data);
+            return withDeficit(fetchChart(data));
         }
     }
 }());
