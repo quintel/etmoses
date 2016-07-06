@@ -16,7 +16,8 @@ var LoadChartPreview = (function () {
         this.profile = $.extend(true, {}, this.profile);
 
         this.loadChartData = loadChartData.call(this, week);
-        this.loadChart.staticSettings.load = this.loadChartData;
+        this.loadChart.settings.load = this.loadChartData;
+
         this.loadChart.update(this.loadChartData);
     }
 

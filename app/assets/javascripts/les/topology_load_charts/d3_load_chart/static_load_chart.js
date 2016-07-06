@@ -41,18 +41,16 @@ var StaticLoadChart = (function () {
     function StaticLoadChart(chartClass, settings) {
         this.holder        = $(chartClass).parents('.chart-holder');
         this.chartClass    = chartClass;
-        this.settings      = settings;
+        this.settings      = settings || {};
         this.seriesOpacity = 1.0;
         this.height        = 400;
         this.width         = 500;
 
+        this.settings.dateCallback = fetchAndRenderWeek.bind(this)
+
         if (settings.width == 'fill') {
             this.width = this.holder.innerWidth();
         }
-
-        this.staticSettings = {
-            dateCallback: fetchAndRenderWeek.bind(this)
-        };
     }
 
     StaticLoadChart.prototype.constructor = StaticLoadChart;

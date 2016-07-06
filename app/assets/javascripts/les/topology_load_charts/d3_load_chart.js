@@ -84,8 +84,8 @@ var D3LoadChart = (function () {
 
         dateSelect.prop("disabled", true);
 
-        if (this.staticSettings.dateCallback) {
-            this.staticSettings.dateCallback(value);
+        if (this.settings.dateCallback) {
+            this.settings.dateCallback(value);
         } else {
             setLesOptions.call(this);
             window.currentTree.update();
