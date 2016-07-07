@@ -2,4 +2,3 @@ var template = "<%= @scope ? @scope : '.hidden.technology_template div' %>";
 
 $(".add-technology button").removeClass("disabled");
 $(template).replaceWith("<%= escape_javascript(render partial: 'testing_grounds/technology_template', locals: { technology: @technology, node: nil, index: '_' } ) %>");
-
