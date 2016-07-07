@@ -23,6 +23,16 @@ RSpec.describe MarketModel do
 
     let(:messages) { market.valid? ; market.errors[:interactions] }
 
+    context "an interaction using merit tariff type and with no tariff" do
+      let(:interaction) do
+        super().merge('tariff_type' => 'merit', 'tariff' => '')
+      end
+
+      it 'is valid' do
+        expect(market).to be_valid
+      end
+    end # an interaction using merit tariff type and with no tariff
+
     MarketModel::PRESENTABLES.each do |attribute|
       context "an interaction with no '#{ attribute }'" do
         let(:interaction) { super().update(Hash[attribute, ""]) }

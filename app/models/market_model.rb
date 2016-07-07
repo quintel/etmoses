@@ -33,6 +33,9 @@ class MarketModel < ActiveRecord::Base
     interactions.each do |interaction|
       PRESENTABLES.each do |attribute|
         if interaction[attribute].blank?
+          # Tariff may be blank when using a merit curve for pricing.
+          next if attribute == 'tariff' && interaction['tariff_type'] == 'merit'
+
           errors.add(
             :interactions, :blank,
             attribute: I18n.t("market_model.table.headers.#{ attribute }").downcase
