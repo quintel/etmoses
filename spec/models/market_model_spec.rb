@@ -36,9 +36,10 @@ RSpec.describe MarketModel do
     MarketModel::PRESENTABLES.each do |attribute|
       context "an interaction with no '#{ attribute }'" do
         let(:interaction) { super().update(Hash[attribute, ""]) }
-        let(:translated_attribute) {
+
+        let(:translated_attribute) do
           I18n.t("market_model.table.headers.#{ attribute }").downcase
-        }
+        end
 
         it 'is not valid' do
           expect(market).to_not be_valid
@@ -52,9 +53,10 @@ RSpec.describe MarketModel do
 
       context "an interaction with a missing '#{ attribute }'" do
         let(:interaction) { super().except(attribute) }
-        let(:translated_attribute) {
+
+        let(:translated_attribute) do
           I18n.t("market_model.table.headers.#{ attribute }").downcase
-        }
+        end
 
         it 'is not valid' do
           expect(market).to_not be_valid
