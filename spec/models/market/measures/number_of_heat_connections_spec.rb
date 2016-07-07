@@ -27,7 +27,7 @@ module Market::Measures
 
     context 'with a node containing one buffer_space_heating technology' do
       before do
-        node.set(:techs, [
+        variant.set(:techs, [
           network_technology(build(:installed_space_heater_heat_exchanger))
         ])
       end
@@ -39,7 +39,7 @@ module Market::Measures
 
     context 'with a node containing a units=3 buffer_space_heating technology' do
       before do
-        node.set(:techs, [network_technology(
+        variant.set(:techs, [network_technology(
           build(:installed_space_heater_heat_exchanger, units: 3)
         )])
       end
@@ -51,7 +51,7 @@ module Market::Measures
 
     context 'with a node containing units=3 and units=2 buffer_space_heating technologies' do
       before do
-        node.set(:techs, [
+        variant.set(:techs, [
           network_technology(
             build(:installed_space_heater_heat_exchanger, units: 3)
           ),
@@ -71,7 +71,7 @@ module Market::Measures
 
     context 'with a node containing one buffer_water_heating technology' do
       before do
-        node.set(:techs, [
+        variant.set(:techs, [
           network_technology(build(:installed_water_heater_heat_exchanger))
         ])
       end
@@ -83,7 +83,7 @@ module Market::Measures
 
     context 'with a node containing a units=3 buffer_water_heating technology' do
       before do
-        node.set(:techs, [network_technology(
+        variant.set(:techs, [network_technology(
           build(:installed_water_heater_heat_exchanger, units: 3)
         )])
       end
@@ -95,7 +95,7 @@ module Market::Measures
 
     context 'with a node containing units=3 and units=2 buffer_water_heating technologies' do
       before do
-        node.set(:techs, [
+        variant.set(:techs, [
           network_technology(
             build(:installed_water_heater_heat_exchanger, units: 3)
           ),
@@ -115,7 +115,7 @@ module Market::Measures
 
     context 'with a node containing units=3 space heater and units=2 water heater' do
       before do
-        node.set(:techs, [
+        variant.set(:techs, [
           network_technology(
             build(:installed_space_heater_heat_exchanger, units: 3)
           ),

@@ -12,9 +12,13 @@ module Market::Measures
     module_function
 
     def call(node, variants)
-      return 0 unless variants[:heat].call && node.get(:techs)
+      heat_node = variants[:heat].call
 
-      count_with_technologies_list(node.get(:techs).map(&:installed))
+      if heat_node && heat_node.get(:techs)
+        count_with_technologies_list(heat_node.get(:techs).map(&:installed))
+      else
+        0
+      end
     end
 
     # Public: Given a list of technologies attached to an endpoint, returns how

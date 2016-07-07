@@ -44,9 +44,11 @@ module Finance
         Market.from_market_model(
           @testing_ground,
           networks[:electricity],
-          gas:       Market::Variant.new { networks[:gas] },
-          basic:     featureless_networks[:electricity],
-          basic_gas: featureless_networks[:gas],
+          gas:        Market::Variant.new { networks[:gas] },
+          heat:       Market::Variant.new { networks[:heat] },
+          basic:      featureless_networks[:electricity],
+          basic_gas:  featureless_networks[:gas],
+          basic_heat: featureless_networks[:heat]
         )
       end
     end
@@ -75,15 +77,11 @@ module Finance
           @testing_ground.to_calculated_graphs
         end
 
-        electricity = Market::Variant.new do
-          featureless.object.detect { |net| net.carrier == :electricity }
+        networks.keys.each_with_object({}) do |carrier, data|
+          data[carrier] = Market::Variant.new do
+            featureless.object.detect { |net| net.carrier == carrier }
+          end
         end
-
-        gas = Market::Variant.new do
-          featureless.object.detect { |net| net.carrier == :gas }
-        end
-
-        { electricity: electricity, gas: gas }
       end
     end
   end
