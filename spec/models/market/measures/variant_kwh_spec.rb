@@ -14,12 +14,12 @@ module Market::Measures
       { gas: ->*{}, heat: ->*{ variant } }
     end
 
-    context 'with a :heat variant and loads [1.0, 2.0, -4.0, -0.5]' do
+    context 'with no :gas; a :heat variant with loads [1.0, 2.0, -4.0, -0.5]' do
       context 'measuring gas consumed' do
         let(:measure) { VariantKwh.new(:gas, :consumed) }
 
         it 'returns 0' do
-          expect(measure.call(node, variants)).to be_zero
+          expect(measure.call(node, variants)).to eq([])
         end
       end # measuring gas consumed
 
@@ -27,7 +27,7 @@ module Market::Measures
         let(:measure) { VariantKwh.new(:gas, :produced) }
 
         it 'returns 0' do
-          expect(measure.call(node, variants)).to be_zero
+          expect(measure.call(node, variants)).to eq([])
         end
       end # measuring gas produced
 

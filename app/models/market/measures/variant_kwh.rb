@@ -9,7 +9,7 @@ module Market::Measures
       if variant = variants[@variant_name].call
         (@direction == :consumed ? KwhConsumed : KwhProduced).call(variant)
       else
-        0.0
+        []
       end
     end
   end
