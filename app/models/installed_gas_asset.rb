@@ -5,7 +5,7 @@ class InstalledGasAsset
   attribute :part, String
   attribute :type, String
   attribute :amount, Float, default: 1
-  attribute :stakeholder, String
+  attribute :stakeholder, String, default: 'system operator'
   attribute :building_year, Integer
   attribute :lifetime, Integer
   attribute :investment_cost, Float

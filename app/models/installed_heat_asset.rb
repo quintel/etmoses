@@ -3,7 +3,7 @@ class InstalledHeatAsset
 
   attribute :type, String
   attribute :scope, String
-  attribute :stakeholder, String
+  attribute :stakeholder, String, default: 'system operator'
   attribute :technical_lifetime, Float
 
   def primary?

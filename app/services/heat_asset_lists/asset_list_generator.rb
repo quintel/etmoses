@@ -34,7 +34,7 @@ module HeatAssetLists
     end
 
     def default_stakeholder
-      @testing_ground.topology.each_node.map { |node| node[:stakeholder] }.first
+      InstalledHeatAsset.attribute_set[:stakeholder].default_value.call
     end
   end
 end
