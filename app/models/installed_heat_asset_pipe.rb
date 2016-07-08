@@ -4,7 +4,7 @@ class InstalledHeatAssetPipe < InstalledHeatAsset
   attribute :heat_source, String
   attribute :om_costs_per_year_per_km, Float
 
-  def depreciation_costs
+  def total_yearly_costs
     ((investment_costs_per_km * distance) / technical_lifetime) +
     (om_costs_per_year_per_km * distance)
   end

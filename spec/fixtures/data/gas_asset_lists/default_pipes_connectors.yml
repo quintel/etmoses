@@ -2,37 +2,37 @@
 - pressure_level_index: '0'
   part: pipes
   type: big_pipe
-  amount: '7'
+  units: '7'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '0'
   part: connectors
   type: big_connector
-  amount: '7'
+  units: '7'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '0'
   part: pipes
   type: small_pipe
-  amount: '7'
+  units: '7'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '1'
   part: pipes
   type: big_pipe
-  amount: '3'
+  units: '3'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '1'
   part: connectors
   type: small_connector
-  amount: '3'
+  units: '3'
   stakeholder: customer
   building_year: '1960'
 - pressure_level_index: '1'
   part: pipes
   type: small_pipe
-  amount: '3'
+  units: '3'
   stakeholder: customer
   building_year: '1970'
 

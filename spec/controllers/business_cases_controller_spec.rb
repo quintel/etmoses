@@ -1,18 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe BusinessCasesController do
-  let(:user){ FactoryGirl.create(:user) }
-  let!(:sign_in_user){ sign_in(:user, user) }
-  let(:market_model){ FactoryGirl.create(:market_model) }
-  let(:testing_ground){
+  let(:user) { FactoryGirl.create(:user) }
+  let!(:sign_in_user) { sign_in(:user, user) }
+  let(:market_model) { FactoryGirl.create(:market_model) }
+
+  let(:testing_ground) {
     FactoryGirl.create(:testing_ground, user: user, market_model: market_model)
   }
-  let(:testing_ground_without_mm){
+
+  let(:testing_ground_without_mm) {
     FactoryGirl.create(:testing_ground, user: user)
   }
 
   describe "#update" do
-    let(:business_case){
+    let(:business_case) {
       FactoryGirl.create(:business_case, testing_ground: testing_ground)
     }
 
@@ -30,7 +32,7 @@ RSpec.describe BusinessCasesController do
   end
 
   describe "#show" do
-    let(:business_case){
+    let(:business_case) {
       FactoryGirl.create(:business_case, testing_ground: testing_ground)
     }
 
@@ -42,7 +44,7 @@ RSpec.describe BusinessCasesController do
   end
 
   describe "illegal update" do
-    let(:business_case){
+    let(:business_case) {
       FactoryGirl.create(:business_case)
     }
 
@@ -57,15 +59,15 @@ RSpec.describe BusinessCasesController do
   end
 
   describe "#compare_with" do
-    let(:comparing_testing_ground){
+    let(:comparing_testing_ground) {
       FactoryGirl.create(:testing_ground)
     }
 
-    let(:business_case){
+    let(:business_case) {
       FactoryGirl.create(:business_case, testing_ground: testing_ground)
     }
 
-    let!(:other_business_case){
+    let!(:other_business_case) {
       FactoryGirl.create(:business_case, testing_ground: comparing_testing_ground)
     }
 

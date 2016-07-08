@@ -1,7 +1,7 @@
 capacity: 3.0
 default_units_per_connection: 0
 efficiency: 0.8
-investment_cost: 1
-lifetime: 1
+initial_investment: 1
+technical_lifetime: 1
 pressure_level: 8
 yearly_o_and_m_cost: 1

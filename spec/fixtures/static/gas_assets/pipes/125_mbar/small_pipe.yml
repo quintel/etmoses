@@ -5,7 +5,7 @@ digging_costs_per_density:
   low: 1
   medium: 2
   high: 3
-investment_cost: 500
-lifetime: 50
+initial_investment: 500
+technical_lifetime: 50
 pressure_level: 0.125
 yearly_o_and_m_cost: 100
