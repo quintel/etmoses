@@ -7,7 +7,7 @@ module Finance
           asset_list_stakeholders(:heat_asset_list) +
           market_model_stakeholders +
           topology_stakeholders
-        ).uniq.sort
+        ).compact.uniq.sort
       end
 
       private
