@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609135022) do
+ActiveRecord::Schema.define(version: 20160708104818) do
 
   create_table "asset_lists", force: true do |t|
     t.integer  "testing_ground_id"
-    t.text     "type"
+    t.string   "type",              limit: 40, null: false
     t.text     "asset_list"
     t.datetime "created_at"
     t.datetime "updated_at"
