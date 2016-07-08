@@ -19,6 +19,11 @@ var HeatAssetListTablePart = (function () {
         }
     }
 
+    function recalculatePercentageOfHeatConnections() {
+        $(this.editableTable.selector)
+            .find("tbody tr.new td.connection_distribution input").val(0.0);
+    }
+
     HeatAssetListTablePart.prototype = {
         append: function () {
             this.setProfiles();
@@ -28,6 +33,8 @@ var HeatAssetListTablePart = (function () {
 
         updateTable: function () {
             this.setProfiles();
+
+            recalculatePercentageOfHeatConnections.call(this);
         },
 
         setProfiles: function () {
