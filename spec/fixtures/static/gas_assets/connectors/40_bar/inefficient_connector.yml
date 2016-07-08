@@ -1,6 +1,6 @@
 capacity: 2.0
 efficiency: 0.5
-investment_cost: 1
-lifetime: 50
+initial_investment: 1
+technical_lifetime: 50
 pressure_level: 40
 yearly_o_and_m_cost: 500

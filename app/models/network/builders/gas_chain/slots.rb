@@ -75,7 +75,7 @@ module Network::Builders
       # Returns a numeric.
       def capacity_of(asset)
         part = asset.part_record
-        part.capacity ? part.capacity * asset.amount : Float::INFINITY
+        part.capacity ? part.capacity * asset.units : Float::INFINITY
       end
 
       # Internal: If the user did not define any connections between the layers,
@@ -90,7 +90,7 @@ module Network::Builders
       def asset_predicate(asset)
         (asset.direction == :upward || asset.direction == :downward) &&
           asset.pressure_level_name == @layer &&
-          asset.amount > 0
+          asset.units > 0
       end
     end
   end # Builders

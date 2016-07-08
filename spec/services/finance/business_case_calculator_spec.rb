@@ -106,8 +106,14 @@ RSpec.describe Finance::BusinessCaseCalculator do
     let(:business_case) { Finance::BusinessCaseCalculator.new(testing_ground) }
 
     it "determines the initial investments for the stakeholders" do
+      # Topology costs (system operator)      | 11.000
+      # Heat sources costs (system operator)  | 11.100
+
       expect(business_case.rows.last['system operator'].last).to eq(22100.0)
-      expect(business_case.rows[1]['customer'][1]).to eq(10729.5)
+
+      # Gas asset costs (customer)            | 7214.06
+      # Technology costs (customer)           | 26.5
+      expect(business_case.rows[1]['customer'][1]).to eq(7240.5599999999995)
     end
   end
 end

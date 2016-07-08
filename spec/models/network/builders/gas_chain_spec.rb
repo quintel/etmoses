@@ -144,19 +144,19 @@ module Network
             pressure_level_index: 1, # eight->four
             part: 'connectors',
             type: 'inefficient_connector',
-            amount: 10
+            units: 10
           ),
           InstalledGasAsset.new(
             pressure_level_index: 2, # forty->eight
             part: 'connectors',
             type: 'inefficient_connector',
-            amount: 5
+            units: 5
           ),
           InstalledGasAsset.new(
             pressure_level_index: 1, # forty->eight
             part: 'compressors',
             type: 'compressor_8_bar',
-            amount: 5
+            units: 5
           )
         ]
       end

@@ -1,6 +1,6 @@
 capacity: 1
 default_length_per_connection: 1.6534552602
-investment_cost: 210
-lifetime: 55
+initial_investment: 210
+technical_lifetime: 55
 pressure_level: 4
 yearly_o_and_m_cost: 1

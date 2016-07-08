@@ -11,13 +11,13 @@ RSpec.describe GasAssetList do
     gas_asset_list = GasAssetList.create!(asset_list: [
       { part: 'tube',
         type: 'test_type',
-        amount: 5,
+        units: 5,
         stakeholder: "system_operator",
         building_year: "1970" }
     ])
 
     expect(gas_asset_list.asset_list).to eq([{
-      part: "tube", type: "test_type", amount: 5,
+      part: "tube", type: "test_type", units: 5,
       stakeholder: "system_operator", building_year: "1970"
     }])
   end

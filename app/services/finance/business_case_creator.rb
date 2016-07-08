@@ -19,7 +19,9 @@ module Finance
 
     def existing_freeform
       if @business_case && @business_case.financials
-        @business_case.financials.detect{|row| row['freeform'] }
+        @business_case.financials.detect do |row|
+          row['freeform']
+        end
       end
     end
   end

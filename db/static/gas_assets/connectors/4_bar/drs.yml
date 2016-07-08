@@ -1,7 +1,7 @@
 capacity: .inf
 default_units_per_connection: 0.0015021822
 efficiency: 1.0
-investment_cost: 3500
-lifetime: 30
+initial_investment: 3500
+technical_lifetime: 30
 pressure_level: 4
 yearly_o_and_m_cost: 730
