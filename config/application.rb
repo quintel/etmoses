@@ -45,8 +45,7 @@ module Moses
     # Mail
     # ----
 
-    config.action_mailer.default_url_options =
-      { host: "http://#{ Settings.host }" }
+    config.action_mailer.default_url_options = { host: Settings.host }
 
     if (email_conf = Rails.root.join('config/email.yml')).file?
       config.action_mailer.smtp_settings =
