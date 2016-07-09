@@ -88,7 +88,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     end
 
     it 'sets the marginal costs' do
-      expect(source.fetch('marginal_heat_costs')).to eq(2.0)
+      expect(source.fetch('marginal_heat_costs')).to eq(0.002)
     end
 
     it 'sets the technical lifetime' do

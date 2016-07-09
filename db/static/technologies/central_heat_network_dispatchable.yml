@@ -6,7 +6,7 @@ defaults:
   total_initial_investment: 100.0 # EUR/kW
   om_costs_per_year:        0.2   # EUR/MW
   technical_lifetime:       30.0  # Year
-  marginal_heat_costs:      22.0
+  marginal_heat_costs:      0.022 # EUR/kWh
   distance:                 1
   units:                    1
 
