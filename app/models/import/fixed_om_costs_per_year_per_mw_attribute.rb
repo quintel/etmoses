@@ -6,4 +6,3 @@ class Import
         (value / 1000).round(2) # EUR/MW to EUR/kW
       end
 end
-
