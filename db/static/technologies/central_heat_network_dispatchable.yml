@@ -3,9 +3,9 @@ importable_gqueries:
   installed_heat_capacity: etmoses_dispatchable_capacity_for_households_from_central_heat_network
 
 defaults:
-  total_initial_investment: 100.0  # EUR/kW
-  om_costs_per_year:        2000.0 # EUR/MW
-  technical_lifetime:       30.0   # Year
+  total_initial_investment: 100.0 # EUR/kW
+  om_costs_per_year:        0.2   # EUR/MW
+  technical_lifetime:       30.0  # Year
   marginal_heat_costs:      22.0
   distance:                 1
   units:                    1
