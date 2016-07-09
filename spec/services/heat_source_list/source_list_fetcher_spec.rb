@@ -79,7 +79,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     end
 
     it 'sets the correct installed heat capacity' do
-      expect(source.fetch('heat_capacity')).to eq(2.0)
+      expect(source.fetch('heat_capacity')).to eq(2000.0)
     end
 
     it 'sets the heat production' do
