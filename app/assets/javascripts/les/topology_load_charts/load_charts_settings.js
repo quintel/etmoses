@@ -116,7 +116,7 @@ var LoadChartsSettings = {
     },
     water_heating: {
         name: "Hot water demand",
-        color: '#C4C59E',
+        color: '#9CC7F9',
         visible: true,
         axisLabel: 'kW'
     },
@@ -170,13 +170,13 @@ var LoadChartsSettings = {
     },
     local: {
         name: "Locally-produced heat",
-        color: '#888888',
+        color: '#CCCCCC',
         visible: true,
         axisLabel: 'kW'
     },
     buffer: {
         name: "Buffer load",
-        color: '#ABCABC',
+        color: '#8ED6B4',
         visible: true,
         axisLabel: 'kW'
     },
