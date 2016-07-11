@@ -1,11 +1,10 @@
 var FinanceTable = (function () {
     'use strict';
 
-    var financeTable, incomingTotal, currentFinances, financeArea,
-        freeformRow, rowHeight;
+    var financeTable, incomingTotal, currentFinances, financeArea, freeformRow,
+        rowHeight;
 
     function updateCurrentFinances() {
-        currentFinances[rowHeight] = freeformRow;
         financeArea.text(JSON.stringify(currentFinances));
     }
 
@@ -54,14 +53,17 @@ var FinanceTable = (function () {
     }
 
     function calculateOutgoingRowTotals(i) {
-        var outgoing = calculateOutgoing.call(this, i),
+        var stakeholder,
+            outgoing = calculateOutgoing.call(this, i),
             freeform = calculateFreeform.call(this, i),
-            total = outgoing + freeform;
+            total    = outgoing + freeform;
 
         setTotalAndFormat.call($(financeTable.find("td.total")[i]), total);
 
         if (!$(this).hasClass("freeform")) {
-            freeformRow.freeform[i] = freeform;
+            stakeholder = $(this).data('stakeholder');
+
+            freeformRow.freeform[stakeholder] = freeform;
         }
     }
 
@@ -72,14 +74,36 @@ var FinanceTable = (function () {
         updateCurrentFinances();
     }
 
+    function determineFreeformFor(stakeholder) {
+        if (currentFinances[rowHeight]) {
+            return currentFinances[rowHeight][stakeholder];
+        } else {
+            return 0;
+        }
+    }
+
+    function fetchCurrentFreeform() {
+        var stakeholder,
+            freeform  = {};
+
+        currentFinances.forEach(function(finance) {
+            stakeholder = Object.keys(finance)[0];
+
+            if (stakeholder !== 'freeform') {
+                freeform[stakeholder] = determineFreeformFor(stakeholder);
+            }
+        });
+
+        return { freeform: freeform };
+    }
+
     FinanceTable.prototype = {
         create: function () {
-            financeArea = $("form #business_case_financials");
-            rowHeight = financeTable.find("tbody tr.stakeholder").length;
+            financeArea     = $("form #business_case_financials");
+            rowHeight       = financeTable.find("tbody tr.stakeholder").length;
             currentFinances = JSON.parse(financeArea.text()) || {};
-            freeformRow = (currentFinances[rowHeight] || {
-                freeform: []
-            });
+            freeformRow     = fetchCurrentFreeform();
+            currentFinances[rowHeight] = freeformRow;
 
             calculateTotals();
 

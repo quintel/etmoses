@@ -27,6 +27,9 @@ class BusinessCase < ActiveRecord::Base
   private
 
   def empty_freeform
-    { 'freeform' => [nil] * financials.size }
+    { 'freeform' => Hash[financials.map do |t|
+        [t.keys.first, nil]
+      end]
+    }
   end
 end

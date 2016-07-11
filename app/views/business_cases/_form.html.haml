@@ -17,7 +17,7 @@
 
     %tbody
       - finance_table_rows(business_case).each_with_index do |row, row_index|
-        %tr.stakeholder
+        %tr.stakeholder{ data: { stakeholder: row.keys[0] } }
           - row.each_pair do |column_header, row_values|
             %td
               %strong= column_header.titleize
@@ -31,9 +31,9 @@
 
       %tr.freeform
         %td Freeform
-        - finance_table_freeform_row(business_case).each do |freeform|
+        - finance_table_rows(business_case).each do |row|
           %td.row_value
-            %input.free-form.form-control{value: freeform}
+            %input.free-form.form-control{value: freeform_value(business_case, row.keys[0])}
 
 = form_for [testing_ground, business_case], html: { remote: true } do |f|
   .hidden
