@@ -5,6 +5,11 @@ var HeatAssetListTablePart = (function () {
 
     var editableTable;
 
+    /* Callback for profile selector
+     * Whenever somebody select's a different heat asset the data from that
+     * select option will be parsed over the table row and the values set
+     * in their respectable inputs and select boxes.
+     */
     function updateRows(technology) {
         var technology = $(this.target).find("select.key"),
             techData   = $(technology)
@@ -21,12 +26,6 @@ var HeatAssetListTablePart = (function () {
 
     HeatAssetListTablePart.prototype = {
         append: function () {
-            this.setProfiles();
-
-            this.editableTable.append(this.updateTable.bind(this));
-        },
-
-        updateTable: function () {
             this.setProfiles();
         },
 

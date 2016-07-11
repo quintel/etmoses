@@ -100,14 +100,27 @@ var EditableTable = (function () {
             .find("a.remove-row").hide();
     }
 
+    function markAsEditable() {
+        var pane = $(this.selector).parents(".tab-pane"),
+            form = pane.find("form");
+
+        $("ul.nav li a[href=#" + pane.attr("id") + "]")
+            .add(form)
+            .addClass("editing");
+    }
+
     EditableTable.prototype = {
         append: function (changeListener, changeData) {
             this.changeListener = (changeListener || function () { return; });
             this.changeData = (changeData || function () { return; });
 
             $(this.selector)
-                .off('change')
-                .on('change', this.changeListener.bind(this));
+                .off('change.table')
+                .on('change.table', this.changeListener.bind(this));
+
+            $(this.selector)
+                .off('change.editable')
+                .on('change.editable', markAsEditable.bind(this));
 
             addClickListenersToAddRow.call(this);
             addClickListenersToDeleteRow.call(this);
