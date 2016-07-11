@@ -47,7 +47,13 @@ class TestingGround::HeatSummary
   #
   # Returns an Array.
   def buffer_load
-    compact_zeros(@park.buffer_tech.net_load)
+    compact_zeros(
+      # Net load from endpoint reserves.
+      heat_composites.values.flatten.map(&:reserve_load).reduce(:+) +
+
+      # Net load from main heat network reserve.
+      @park.buffer_tech.net_load
+    )
   end
 
   # Internal: The total amount of heat supplied by all producers in the LES.
@@ -151,6 +157,10 @@ class TestingGround::HeatSummary
 
     def demand
       Network::Curve.from(@comp.demand)
+    end
+
+    def reserve_load
+      @comp.reserve.load
     end
 
     def techs

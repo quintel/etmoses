@@ -90,7 +90,7 @@ module Network
     #
     # Returns an Array.
     def load
-      [first, *each_cons(2).map { |a, b| b - a } ]
+      Network::Curve.from([first, *each_cons(2).map { |a, b| b - a } ])
     end
 
     # Public: A human readable version of the reserve for debugging.
