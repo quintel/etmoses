@@ -57,6 +57,8 @@ var EditableTable = (function () {
             originalSelects = row.find('select'),
             clonedSelects;
 
+        $(this.selector).find("tbody tr:not(.blank)").removeAttr("class");
+
         if (originalSelects.length) {
             clonedSelects = clonedRow.find('select');
 
@@ -65,6 +67,7 @@ var EditableTable = (function () {
             });
         }
 
+        clonedRow.addClass("new");
         clonedRow.insertAfter(row);
         this.changeListener();
 
