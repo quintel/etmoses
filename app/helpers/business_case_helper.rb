@@ -1,6 +1,6 @@
 module BusinessCaseHelper
-  def finance_table_freeform_row(business_case)
-    business_case.freeform.values.flatten
+  def freeform_value(business_case, stakeholder)
+    business_case.freeform['freeform'][stakeholder] || 0.0
   end
 
   def finance_table_rows(business_case)

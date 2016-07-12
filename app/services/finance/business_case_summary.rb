@@ -23,7 +23,11 @@ module Finance
     end
 
     def freeform_row
-      (financials.detect(&freeform_proc) || {}).values.flatten
+      if freeform = financials.detect(&freeform_proc)
+        freeform.fetch('freeform')
+      else
+        {}
+      end
     end
 
     def financials_without_freeform

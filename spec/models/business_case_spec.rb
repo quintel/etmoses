@@ -8,7 +8,9 @@ RSpec.describe BusinessCase do
       let(:financials){ JSON.dump([{"aggregator" =>[1]}]) }
 
       it "creates a new freeform row of a business case" do
-        expect(business_case.freeform).to eq({'freeform' => [nil]})
+        expect(business_case.freeform).to eq({
+          'freeform' => { 'aggregator' => nil }
+        })
       end
     end
 
