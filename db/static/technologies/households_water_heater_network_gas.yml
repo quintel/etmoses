@@ -5,6 +5,14 @@ defaults:
   capacity: 35.8209
   position_relative_to_buffer: boosting
 
+importable_attributes:
+  - initial_investment
+  - input_capacity
+  - storage.volume
+  - technical_lifetime
+  - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
+  - variable_operation_and_maintenance_costs_per_full_load_hour
+
 whitelisted_attributes:
   - buffer
   - demand
