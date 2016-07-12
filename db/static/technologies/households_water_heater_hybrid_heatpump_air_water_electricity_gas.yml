@@ -3,8 +3,12 @@ behavior: hhp_gas
 carrier: gas
 color: "#085304"
 defaults:
-  capacity: 24.4444
+  capacity: 22.0
+  initial_investment: 1500.0
+  om_costs_per_year: 156.2
+  performance_coefficient: 0.9
   position_relative_to_buffer: boosting
+  technical_lifetime: 15
 
 exists_as_technology_in_etengine: false
 whitelisted_attributes:
