@@ -54,7 +54,7 @@ module Network
     end
 
     def to_s
-      "#{ @technology.installed.technology.key.inspect } | " \
+      "#{ @technology.installed.type.inspect } | " \
         "{#{ @path.map(&:key).join(', ') }}"
     end
 
