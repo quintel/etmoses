@@ -15,6 +15,14 @@ module Network
       def park
         @park ||= @full_path.path.head.get(:park)
       end
+
+      # Public: Ensures that the central heat producers are always used to
+      # satisfy heat demand first.
+      #
+      # Returns infinity.
+      def distance
+        Float::INFINITY
+      end
     end # SubPath
   end # Heat
 end
