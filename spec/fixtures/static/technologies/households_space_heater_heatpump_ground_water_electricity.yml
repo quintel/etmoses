@@ -1,0 +1,33 @@
+---
+behavior: buffer
+carrier: electricity
+color: "#FEA75F"
+defaults:
+  capacity: 2.08333
+  position_relative_to_buffer: buffering
+
+export_to: households_space_heater_heatpump_ground_water_electricity_share
+importable_attributes:
+  - coefficient_of_performance
+  - fixed_operation_and_maintenance_costs_per_year
+  - full_load_hours
+  - initial_investment
+  - input_capacity
+  - technical_lifetime
+  - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
+  - variable_operation_and_maintenance_costs_per_full_load_hour
+
+whitelisted_attributes:
+  - buffer
+  - demand
+  - initial_investment
+  - input_capacity
+  - om_costs_for_ccs_per_full_load_hour
+  - om_costs_per_full_load_hour
+  - om_costs_per_year
+  - output_capacity
+  - performance_coefficient
+  - position_relative_to_buffer
+  - technical_lifetime
+  - units
+  - volume
