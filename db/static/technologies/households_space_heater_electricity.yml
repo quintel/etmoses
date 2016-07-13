@@ -8,6 +8,7 @@ defaults:
   position_relative_to_buffer: buffering
 
 expandable: false
+export_to: households_space_heater_electricity_share
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours

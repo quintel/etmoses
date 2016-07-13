@@ -11,11 +11,10 @@ class Export
   #
   # Returns a Hash.
   def inputs
-    Hash[technology_units.map do |tech_key, units|
-      value = (units / factor_for_tech(tech_key) / number_of_households) * 100
-      export_to = Technology.by_key(tech_key).export_to
+    Hash[technology_units.map do |technology, units|
+      value = (units / factor_for_tech(technology.key) / number_of_households) * 100
 
-      [export_to, limit_value(value, export_to)]
+      [technology, limit_value(value, technology.export_to)]
     end]
   end
 
@@ -35,16 +34,15 @@ class Export
   #
   # Returns a Hash.
   def technology_units
-    all_techs = @testing_ground.technology_profile.to_h.values.flatten
-    count     = Hash.new { |hash, key| hash[key] = 0 }
+    @testing_ground.technology_profile.to_h.values.flatten
+      .select(&method(:exportable)).each_with_object({}) do |tech, object|
+        object[tech.technology] = (object[tech.technology] || 0) + tech.units
+      end
+  end
 
-    all_techs.each do |technology|
-      count[technology.type] += technology.units
-    end
-
-    count.reject do |key, _|
-      (! Technology.exists?(key)) || Technology.by_key(key).export_to.blank?
-    end
+  def exportable(technology)
+    Technology.exists?(technology.type) &&
+      Technology.by_key(technology.type).export_to.present?
   end
 
   def factor_for_tech(tech_key)

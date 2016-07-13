@@ -5,7 +5,7 @@ class Export
     # request.
     def initialize(testing_ground, user_values)
       @testing_ground = testing_ground
-      @user_values = user_values
+      @user_values    = user_values
     end
 
     def create
@@ -31,12 +31,18 @@ class Export
       }
     end
 
+    def user_values
+      Hash[@user_values.map do |technology, units|
+        [technology.export_to, units]
+      end]
+    end
+
     def update_scenario_params
       { autobalance: true,
         force_balance: true,
         scenario: {
           title: @testing_ground.name,
-          user_values: @user_values
+          user_values: user_values
         }
       }
     end

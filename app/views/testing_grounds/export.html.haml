@@ -2,15 +2,17 @@
   = @testing_ground.name
   %span.subtitle Convert to national scenario
 
-.perform-export
-  = link_to('◄ Cancel', testing_ground_path(@testing_ground), class: 'btn btn-default')
-  = button_to('Create national scenario ►', export_testing_ground_path(@testing_ground), method: :post, class: 'btn btn-primary')
-
 A national-scale scenario will be created based on your local energy solution. These
 slider settings will be used:
 
 %ul.exported-technologies
-  - @export.inputs.each do |input_key, input_value|
-    %li
-      %span.input-name== #{ I18n.t("inputs.#{ input_key }") }:
+  - @export.inputs.each do |technology, input_value|
+    %li.exportable
+      %span.tech-name= I18n.t("inputs.#{ technology.key }")
+      %span.arrow &rarr;
+      %span.input-name{ title: technology.export_to }== #{ I18n.t("inputs.#{ technology.export_to }") }:
       %span.input-value== #{ input_value.round(2) }%
+
+.perform-export
+  = link_to('Cancel', testing_ground_path(@testing_ground), class: 'btn btn-default')
+  = button_to('Create national scenario', export_testing_ground_path(@testing_ground), method: :post, class: 'btn btn-primary')
