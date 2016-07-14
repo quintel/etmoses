@@ -1,6 +1,7 @@
 - node: lv1
   buffer: buffer_1
   name: Space heater 1
+  position_relative_to_buffer: buffering
   type: households_space_heater_heatpump_ground_water_electricity
   concurrency: max
   capacity: "-1.5"
@@ -9,6 +10,7 @@
 - node: lv1
   buffer: buffer_1
   name: Space heater 2
+  position_relative_to_buffer: buffering
   type: households_space_heater_heatpump_air_water_electricity
   concurrency: max
   capacity: "-1.5"
@@ -27,6 +29,7 @@
 - node: lv1
   buffer: buffer_2
   name: Space heater 3
+  position_relative_to_buffer: buffering
   type: households_space_heater_heatpump_ground_water_electricity
   concurrency: max
   capacity: "-1.5"
@@ -35,6 +38,7 @@
 - node: lv1
   buffer: buffer_2
   name: Space heater 4
+  position_relative_to_buffer: buffering
   type: households_space_heater_heatpump_air_water_electricity
   concurrency: max
   capacity: "-1.5"
@@ -50,4 +54,3 @@
   units: '2'
   composite: true
   buffer:
-

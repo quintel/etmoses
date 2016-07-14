@@ -1,0 +1,23 @@
+---
+- node: Households 1
+  buffer: ''
+  capacity: 3.7
+  composite_index: ''
+  composite_value: ''
+  composite: false
+  concurrency: min
+  congestion_reserve_percentage: ''
+  demand: ''
+  full_load_hours: 0
+  includes: []
+  initial_investment: '0.0'
+  om_costs_for_ccs_per_full_load_hour: ''
+  om_costs_per_full_load_hour: '0.0'
+  om_costs_per_year: '0.0'
+  performance_coefficient: '1.0'
+  position_relative_to_buffer: ''
+  profile: 267
+  technical_lifetime: 13
+  type: transport_car_using_electricity
+  units: '5'
+  volume: '25.0'

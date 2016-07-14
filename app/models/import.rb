@@ -50,7 +50,7 @@ class Import
   end
 
   def technology_profile
-    TestingGround::TechnologyProfileScheme.new(technology_distribution).build
+    TestingGround::TechnologyProfileScheme.new(technology_distribution).to_h
   end
 
   def technology_distribution

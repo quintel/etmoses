@@ -20,7 +20,6 @@ class InstalledTechnology
   attribute :composite_index,                     Integer, hidden: true
   attribute :concurrency,                         String,  default: 'max', hidden: true
   attribute :full_load_hours,                     Integer, hidden: true
-  attribute :includes,                            Array[String], hidden: true
 
   # Advanced features
   #
@@ -66,6 +65,10 @@ class InstalledTechnology
 
   def inspect
     "#<#{ self.class.name } #{ to_s }>"
+  end
+
+  def includes
+    technology.technologies
   end
 
   def name
@@ -290,10 +293,6 @@ class InstalledTechnology
     "#{ buffer }_#{ composite_index }"
   end
 
-  def position_relative_to_buffer_name
-    "position_relative_to_buffer_#{ type }_#{ composite_index }"
-  end
-
   def valid?
     buffer.present? || valid_profile? || !technology.profile_required?
   end
@@ -308,6 +307,10 @@ class InstalledTechnology
 
   def sticks_to_composite?
     position_relative_to_buffer.present?
+  end
+
+  def concurrency_group
+    [ node, type ].join
   end
 
   private
