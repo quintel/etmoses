@@ -99,9 +99,9 @@ var GasAssetListTable = (function () {
 
         addEventListenerToForm: function () {
             $('form.edit_gas_asset_list').on("ajax:success", function () {
-                window.graphs.forEach(function (graph) {
-                    graph.reload();
-                });
+                for (var graphId in window.graphs) {
+                    window.graphs[graphId].reload();
+                };
             });
         },
 

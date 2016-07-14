@@ -6,7 +6,7 @@ var D3StackedBarGraph = (function () {
     var chartKeys,
         spinner,
         margin = { top: 20, right: 160, bottom: 30, left: 80 },
-        width  = 520,
+        width  = 1135,
         height = 540 - margin.top - margin.bottom,
 
         x = d3.scale.ordinal().rangeRoundBands([0, width], 0.1),
@@ -62,6 +62,8 @@ var D3StackedBarGraph = (function () {
         var state, legend, legendWrap;
 
         chartKeys = Object.keys(data[0].stacked);
+
+        d3.select(this.scope).html('');
 
         this.svg = d3.select(this.scope).append("svg")
             .attr("width", width + margin.left)
@@ -140,6 +142,26 @@ var D3StackedBarGraph = (function () {
         return;
     }
 
+    function loadD3StackedGraph() {
+        if (this.poll) {
+            var self = this;
+
+            new Poller({ url: this.url }).poll()
+                .done(function (data) {
+                    drawD3Graph.call(self, data);
+                })
+                .fail(function () {
+                    $(self.scope).html(
+                        '<p class="chart-error">' +
+                            '    Sorry, the chart could not be loaded.' +
+                            '</p>'
+                    );
+                });
+        } else {
+            Ajax.json(this.url, {}, drawD3Graph.bind(this));
+        }
+    }
+
     D3StackedBarGraph.prototype = {
         svg: null,
         line: null,
@@ -148,24 +170,7 @@ var D3StackedBarGraph = (function () {
                           .find('.loading-spinner');
 
             spinner.show();
-
-            if (this.poll) {
-                var self = this;
-
-                new Poller({ url: this.url }).poll()
-                    .done(function (data) {
-                        drawD3Graph.call(self, data);
-                    })
-                    .fail(function () {
-                        $(self.scope).html(
-                            '<p class="chart-error">' +
-                                '    Sorry, the chart could not be loaded.' +
-                                '</p>'
-                        );
-                    });
-            } else {
-                Ajax.json(this.url, {}, drawD3Graph.bind(this));
-            }
+            loadD3StackedGraph.call(this);
 
             return this;
         },
@@ -176,10 +181,10 @@ var D3StackedBarGraph = (function () {
     };
 
     function D3StackedBarGraph(scope, data) {
-        this.scope = scope;
-        this.url   = data.url;
-        this.poll  = data.poll !== undefined;
-        this.title = data.title;
+        this.scope   = scope;
+        this.url     = data.url;
+        this.poll    = data.poll !== undefined;
+        this.title   = data.title;
     }
 
     return D3StackedBarGraph;

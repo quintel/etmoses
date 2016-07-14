@@ -9,7 +9,7 @@ var StaticTransformator = (function () {
                 totals.push({
                     type: item.type,
                     name: item.name,
-                    area: true,
+                    area: (data.key !== 'gas'),
                     values: { total: LoadSlicer.slice(item.load, week) }
                 });
             });

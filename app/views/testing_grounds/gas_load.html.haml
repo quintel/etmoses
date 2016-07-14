@@ -11,14 +11,22 @@
         Load on the gas network
         %span.loading-spinner
           = image_tag 'wait.gif'
-      .graph.line-chart{ data: { type: 'static_load_chart', url: gas_load_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), curve_type: 'gas', view_as: 'total', resolution: 'low' } }
+      .controls
+        %select.load-date.form-control.hidden
+          = load_date_options(false)
+      .graph.line-chart{ data: { type: 'static_load_chart', url: gas_testing_ground_path(@testing_ground), curve_type: 'gas', view_as: 'total', resolution: 'high', width: 'fill' } }
 
     .chart-holder
       %h2
         Yearly gas flow
         %span.loading-spinner
           = image_tag 'wait.gif'
-      .graph.stacked-pressure-load-chart{ data: { poll: true, url: load_summary_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
+      .graph.stacked-pressure-load-chart{ data: { poll: 'true', stalled: 'true', url: load_summary_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
+        .chart-area
+          %p.warning
+            This chart can take a long time to load.
+          %button.btn.btn-primary.render-area
+            Render chart
 
 - else
   .alert.alert-info

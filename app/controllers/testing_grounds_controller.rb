@@ -73,6 +73,10 @@ class TestingGroundsController < ResourceController
   def gas_load
   end
 
+  # GET /testing_grounds/:id/heat_load
+  def heat_load
+  end
+
   # POST /testing_grounds/:id/data
   def data
     begin

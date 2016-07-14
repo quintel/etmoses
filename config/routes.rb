@@ -15,7 +15,7 @@ Rails.application.routes.draw do
       patch 'save_as'
 
       scope :calculation, controller: 'calculation' do
-        post 'heat'
+        post 'heat', 'gas'
       end
     end
 
@@ -32,7 +32,7 @@ Rails.application.routes.draw do
 
       member do
         post 'calculate_net_present_value', 'calculate_cumulative_investment',
-             'reload_gas_asset_list', 'load_summary', 'gas_load', 'heat_load'
+             'reload_gas_asset_list', 'load_summary'
       end
     end
 

@@ -19,14 +19,6 @@ class GasAssetListsController < ResourceController
     end)
   end
 
-  def gas_load
-    gas_network = calculated_gas_network
-    assets      = GasAssetListDecorator.new(@gas_asset_list).decorate
-    levels      = Network::Builders::GasChain.build(gas_network, assets)
-
-    render json: GasAssetLists::LoadSummary.new(levels).as_json
-  end
-
   def reload_gas_asset_list
     render json: GasAssetLists::AssetListGenerator
       .new(@gas_asset_list.testing_ground).generate
