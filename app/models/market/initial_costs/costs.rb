@@ -10,6 +10,14 @@ module Market
         self.new(network, testing_ground).calculate
       end
 
+      def calculate
+        return {} if asset_list.nil?
+
+        group_sum(grouped_asset_list) do |asset|
+          asset.total_yearly_costs
+        end
+      end
+
       # Private: Sums specified nodes per unique stakeholder, with a specified
       # amount.
       #

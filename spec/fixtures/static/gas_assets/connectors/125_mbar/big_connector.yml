@@ -1,7 +1,7 @@
 capacity: 1.0
 default_units_per_connector: 1.2E-05
 efficiency: 1.0
-investment_cost: 100
-lifetime: 50
+initial_investment: 100
+technical_lifetime: 50
 pressure_level: 0.125
 yearly_o_and_m_cost: 500

@@ -1,7 +1,7 @@
 capacity: 8967.7
 default_units_per_connection: 0
 efficiency: 0.931
-investment_cost: 591985.4
-lifetime: 20
+initial_investment: 591985.4
+technical_lifetime: 20
 pressure_level: 4
 yearly_o_and_m_cost: 46721.3

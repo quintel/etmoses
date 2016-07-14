@@ -139,7 +139,7 @@ module Network::Builders
           pressure_level_index: 1,
           part: 'compressors',
           type: 'compressor_8_bar',
-          amount: 2
+          units: 2
         )]
       end
 
@@ -159,7 +159,7 @@ module Network::Builders
         [InstalledGasAsset.new(
           pressure_level_index: 1,
           part: 'connectors',
-          amount: 2,
+          units: 2,
           type: 'inefficient_connector'
         )]
       end
@@ -247,7 +247,7 @@ module Network::Builders
           pressure_level_index: 1,
           part: 'connectors',
           type: 'inefficient_connector',
-          amount: 0
+          units: 0
         )]
       end
 

@@ -5,7 +5,7 @@ class InstalledHeatAssetLocation < InstalledHeatAsset
   # Please remove the default; connection_distribution * total heat connections
   attribute :number_of_units, Float, default: 0.0
 
-  def depreciation_costs
+  def total_yearly_costs
     ((investment_costs * number_of_units) / technical_lifetime) +
     (om_costs_per_year * number_of_units)
   end

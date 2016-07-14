@@ -1,29 +1,34 @@
 class InstalledGasAsset
   include Virtus.model
+  include BusinessCaseCosts
 
   attribute :pressure_level_index, Integer
   attribute :part, String
   attribute :type, String
-  attribute :amount, Float, default: 1
+  attribute :units, Float, default: 1
   attribute :stakeholder, String, default: 'system operator'
   attribute :building_year, Integer
-  attribute :lifetime, Integer
-  attribute :investment_cost, Float
+  attribute :technical_lifetime, Integer
+  attribute :initial_investment, Float
 
   def decommissioning_year
-    building_year + lifetime
+    building_year + technical_lifetime
   end
 
   def net_present_value_at(year)
     if year.between?(building_year, decommissioning_year)
-      ((lifetime - (year.to_f - building_year.to_f)) / lifetime) * investment_cost
+      ((technical_lifetime - (year.to_f - building_year.to_f)) / technical_lifetime) * initial_investment
     else
       0
     end
   end
 
   def total_investment_costs
-    investment_cost * amount
+    initial_investment * units
+  end
+
+  def om_costs_per_year
+    part_record.yearly_o_and_m_cost
   end
 
   # Public: The pressure level (in bars) to which the asset is assigned.

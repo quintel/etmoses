@@ -1,21 +1,18 @@
 module Market
   class InitialCosts
     class TopologyCosts < Costs
-      TOPOLOGY_REQUIRED = %i(investment_cost stakeholder)
-
-      def calculate
-        group_sum(topology_nodes) do |node|
-          ( node.get(:investment_cost).to_f / node.lifetime +
-            node.get(:yearly_o_and_m_costs).to_f ) * node.units
+      def asset_list
+        @network.nodes.map(&method(:decorate_node)).select do |node|
+          node.valid?
         end
       end
 
+      alias_method :grouped_asset_list, :asset_list
+
       private
 
-      def topology_nodes
-        @network.nodes.select do |node|
-          TOPOLOGY_REQUIRED.all? { |attr| node.get(attr) } && node.lifetime
-        end
+      def decorate_node(node)
+        Market::NodeDecorator.new(node)
       end
     end
   end
