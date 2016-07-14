@@ -5,8 +5,10 @@ class TestingGround::StrategyUpdater
   end
 
   def update
-    @params[:strategies].empty? ||
-    @testing_ground.selected_strategy.update_attributes(strategy_params)
+    return true if @params[:strategies].empty?
+
+    @testing_ground.selected_strategy.update_attributes(strategy_params) &&
+      @testing_ground.touch(:cache_updated_at)
   end
 
   private

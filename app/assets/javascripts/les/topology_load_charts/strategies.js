@@ -52,18 +52,20 @@ var Strategies = (function () {
         Ajax.json(
             window.currentTree.strategiesUrl,
             { strategies: strategies }
-        );
+        ).success(function() {
+            if (StrategyHelper.anyStrategies()) {
+                // When somebody changes the strategies but not blank
+                window.currentTree.updateStrategies();
+            } else {
+                // When somebody blanks the strategies
+                window.currentTree.treeGraph.clearStrategies().reload();
+            }
+        });
     }
 
     function toggleStrategies(appliedStrategies) {
-        // When somebody blanks the strategies
-        if (changedStrategy && !StrategyHelper.anyStrategies()) {
+        if (changedStrategy) {
             saveSelectedStrategies.call(this, appliedStrategies);
-            window.currentTree.treeGraph.clearStrategies().reload();
-        // When somebody changes the strategies but not blank
-        } else if (changedStrategy) {
-            saveSelectedStrategies.call(this, appliedStrategies);
-            window.currentTree.updateStrategies();
         }
     }
 
