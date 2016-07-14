@@ -3,8 +3,12 @@ behavior: hhp_electricity
 carrier: electricity
 color: "#003904"
 defaults:
-  capacity: 1.63333
+  capacity: 4.9
+  initial_investment: 3235.0
+  om_costs_per_year: 96.7
+  performance_coefficient: 3.0
   position_relative_to_buffer: buffering
+  technical_lifetime: 15
 
 exists_as_technology_in_etengine: false
 whitelisted_attributes:

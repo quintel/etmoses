@@ -4,6 +4,9 @@ carrier: electricity
 color: "#51648F"
 defaults:
   capacity: 10.0
+  initial_investment: 24000.0
+  om_costs_per_year: 100.0
+  technical_lifetime: 10.0
   volume: 100.0
 
 exists_as_technology_in_etengine: false
