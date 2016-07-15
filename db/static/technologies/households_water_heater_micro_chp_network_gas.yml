@@ -5,6 +5,7 @@ visible: false
 
 # Temporary, to disable importing the CHP from ETEngine.
 exists_as_technology_in_etengine: false
+expandable: false
 
 whitelisted_attributes:
   - buffer

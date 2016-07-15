@@ -11,6 +11,7 @@ defaults:
   technical_lifetime: 15
 
 exists_as_technology_in_etengine: false
+expandable: false
 whitelisted_attributes:
   - buffer
   - initial_investment

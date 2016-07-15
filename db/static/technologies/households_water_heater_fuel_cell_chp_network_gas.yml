@@ -1,6 +1,7 @@
 ---
 color: "#748eaa"
 carrier: gas
+expandable: false
 visible: false
 whitelisted_attributes:
   - buffer
