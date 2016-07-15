@@ -1,9 +1,14 @@
 .technology{id: "T#{technology.object_id}", class: technology_class(technology), data: technology_data(technology, node) }
-  .advanced-actions.pull-right.btn-group
-    = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
+  .advanced-actions.pull-right
+    - if technology.technology.expandable?
+      = link_to "#!", class: "btn btn-default btn-sm split" do
+        Split
+        %span.glyphicon.glyphicon-resize-full
 
-    = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
-      %span.glyphicon.glyphicon-trash
+    .btn-group
+      = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
+      = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
+        %span.glyphicon.glyphicon-trash
 
   - if technology.sticks_to_composite?
     .indent.arrow
@@ -30,7 +35,7 @@
 
         - buffering_positions(technology).each do |position|
           %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
-            %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
+            %input{type: 'radio', value: 'after', name: "position_relative_to_buffer_name_#{ technology.object_id }", checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
             = position.humanize
 
         = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))
@@ -92,5 +97,8 @@
           .clearfix
 
     .clearfix
-
   .clearfix
+
+- if technology.associates.any?
+  - technology.associates.each do |associate|
+    = render partial: "technology_template", locals: { technology: associate, node: node }

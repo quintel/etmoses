@@ -7,7 +7,7 @@ defaults:
   position_relative_to_buffer: buffering
 
 expandable: false
-
+export_to: households_flexibility_p2h_electricity_market_penetration
 importable_gqueries:
   null: share_of_p2h_in_hot_water_produced_in_households
 
@@ -24,5 +24,6 @@ whitelisted_attributes:
   - om_costs_per_year
   - output_capacity
   - position_relative_to_buffer
+  - performance_coefficient
   - technical_lifetime
   - units

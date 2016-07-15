@@ -61,17 +61,6 @@ class Technology < ActiveHash::Base
     where(expandable: true)
   end
 
-  def self.for_concurrency
-    where(
-      expandable: true,
-      visible: true,
-      profile_required: true
-    ).reject do |tech|
-      tech.carrier == 'heat' ||
-      all.map(&:technologies).flatten.include?(tech.key)
-    end
-  end
-
   # Public: Returns a "generic" technology, which represents an installed
   # technology with no explicit type.
   def self.generic

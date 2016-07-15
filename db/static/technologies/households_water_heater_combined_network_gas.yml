@@ -7,7 +7,6 @@ defaults:
 
 expandable: false
 export_to: households_water_heater_combined_network_gas_share
-
 importable_attributes:
   - initial_investment
   - input_capacity

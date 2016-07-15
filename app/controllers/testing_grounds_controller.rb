@@ -4,7 +4,7 @@ class TestingGroundsController < ResourceController
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:calculate_concurrency, :update, :save_as, :render_template]
+  respond_to :js, only: [:update, :save_as, :render_template]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -13,7 +13,7 @@ class TestingGroundsController < ResourceController
 
   before_filter :load_technologies_and_profiles, only: [
     :perform_import, :update, :create, :edit, :new,
-    :calculate_concurrency, :render_template
+    :render_template
   ]
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
@@ -148,17 +148,6 @@ class TestingGroundsController < ResourceController
     end
 
     respond_with(@testing_ground)
-  end
-
-  # POST /testing_grounds/calculate_concurrency
-  def calculate_concurrency
-    @topology = Topology.find(params[:topology_id])
-
-    distribution      = JSON.parse(params[:technology_distribution])
-    tech_distribution = TestingGround::TechnologyDistributor.new(distribution, @topology.graph).build
-    concurrency       = TestingGround::TechnologyProfileScheme.new(tech_distribution).build
-
-    @testing_ground_profile = TechnologyList.from_hash(concurrency)
   end
 
   def render_template
