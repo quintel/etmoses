@@ -364,6 +364,8 @@ var D3LoadChart = (function () {
         render: function (data) {
             var self = this;
 
+            d3.select(this.chartClass).html('');
+
             xScale  = d3.time.scale.utc().range([0, this.width]);
             xScale2 = d3.time.scale.utc().range([0, this.width]);
             yScale  = d3.scale.linear().range([this.height, 0]);
