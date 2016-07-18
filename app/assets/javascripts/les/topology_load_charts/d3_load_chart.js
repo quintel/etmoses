@@ -21,7 +21,6 @@ var D3LoadChart = (function () {
         brush,
         chartData,
         hoverLineGroup,
-        dateSelect,
 
         currentWeek     = 1,
         margin          = { top: 20, right: 0, bottom: 70, left: 75 },
@@ -82,7 +81,7 @@ var D3LoadChart = (function () {
 
         scope.brush.clear();
 
-        dateSelect.prop("disabled", true);
+        this.dateSelect.prop("disabled", true);
 
         if (this.settings.dateCallback) {
             this.settings.dateCallback(value);
@@ -355,7 +354,7 @@ var D3LoadChart = (function () {
                 .attr("height", height2)
                 .attr("fill", "#060708");
 
-            dateSelect.prop("disabled", false);
+            this.dateSelect.prop("disabled", false);
 
             legendObj.draw(chartData);
 
@@ -364,6 +363,8 @@ var D3LoadChart = (function () {
 
         render: function (data) {
             var self = this;
+
+            d3.select(this.chartClass).html('');
 
             xScale  = d3.time.scale.utc().range([0, this.width]);
             xScale2 = d3.time.scale.utc().range([0, this.width]);
@@ -469,6 +470,7 @@ var D3LoadChart = (function () {
             popOver   = new PopOver(popOverEl, this.seriesOpacity);
             legendObj = new Legend(this, legend);
 
+            // Add mouseover events for hover line.
             d3.select("#mouse-tracker")
                 .on("mousemove", mousemove.bind(this))
                 .on("mouseout", function () {
@@ -478,9 +480,8 @@ var D3LoadChart = (function () {
                         .style("opacity", 1e-6);
                 });
 
-            // Add mouseover events for hover line.
-            dateSelect = $("select.load-date");
-            dateSelect.removeClass("hidden")
+            this.dateSelect = $("select.load-date");
+            this.dateSelect.removeClass("hidden")
                 .val(currentWeek.toString())
                 .off('change')
                 .on('change', function (e) {

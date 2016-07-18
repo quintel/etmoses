@@ -18,4 +18,17 @@ RSpec.describe CalculationController do
         .to raise_error('param is missing or the value is empty: calculation')
     end
   end
+
+  describe "#gas" do
+    let!(:gas_asset_list) {
+      FactoryGirl.create(:gas_asset_list, testing_ground: testing_ground)
+    }
+
+    it "succesfully visits the gas path" do
+      post :gas, id: testing_ground.id,
+        calculation: { range_start: 0, range_end: 672 }
+
+      expect(response).to be_success
+    end
+  end
 end

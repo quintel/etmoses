@@ -8,12 +8,14 @@ module GasAssetLists
     }
 
     def initialize(network)
-      @network = network
+      @network    = network
+      @range      = 0..672
     end
 
     def to_h
       {
         name: 'Gas load chart',
+        key: 'gas',
         values: LEVELS.map do |name, key|
           { name: name, type: "gas_#{key}", load: summarize_load(key) }
         end
@@ -26,18 +28,14 @@ module GasAssetLists
 
     def summarize_load(key)
       connection = @network.public_send(key).children.first
-      full_loads = each_frame.map { |frame| connection.output_at(frame) }
 
-      full_loads.each_slice(96).map { |loads| loads.max_by(&:abs) }
+      each_frame.map { |frame| connection.output_at(frame) }
     end
 
     def each_frame
       return enum_for(:each_frame) unless block_given?
 
-      # TODO This shouldn't be hard-coded, but presently the gas network does
-      # not return a length, and the total gas demand - which does have a
-      # length - is not exposed publicly.
-      (0...35040).each { |frame| yield(frame) }
+      @range.each { |frame| yield(frame) }
     end
   end # LoadSummary
 end
