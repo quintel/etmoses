@@ -224,19 +224,4 @@ RSpec.describe TestingGround do
       end
     end # with units=2.5
   end # technology profile
-
-  describe "destroying a les" do
-    it "when destroyed also destroy the selected strategy" do
-      selected_strategy = SelectedStrategy.create!
-      testing_ground = TestingGround.create!(
-        topology: Topology.create!(name: "Topology"),
-        name: "Destroy me",
-        selected_strategy: selected_strategy
-      )
-
-      testing_ground.destroy!
-
-      expect(SelectedStrategy.count).to eq(0)
-    end
-  end
 end # describe TestingGround
