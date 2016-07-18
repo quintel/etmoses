@@ -301,6 +301,10 @@ class InstalledTechnology
     position_relative_to_buffer.present?
   end
 
+  def concurrency_group
+    [ node, type ].join
+  end
+
   private
 
   # Internal: Retrieves the Network::Curve used by the technology, with
