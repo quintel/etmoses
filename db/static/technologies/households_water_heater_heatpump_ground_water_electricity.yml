@@ -19,7 +19,6 @@ importable_attributes:
 
 whitelisted_attributes:
   - buffer
-  - demand
   - initial_investment
   - input_capacity
   - om_costs_for_ccs_per_full_load_hour
@@ -30,4 +29,3 @@ whitelisted_attributes:
   - position_relative_to_buffer
   - technical_lifetime
   - units
-  - volume
