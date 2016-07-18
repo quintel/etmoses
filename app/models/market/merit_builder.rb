@@ -31,7 +31,7 @@ module Market
     def price_curve
       InterpolatedCurve.new(
         # The merit price is per-MWh; Moses wants per-kWh.
-        to_merit_order.price_curve.to_a.map { |v| v / 1000 },
+        to_merit_order.price_curve.to_a.map { |v| v.to_f / 1000 },
         @demand.length
       )
     end
