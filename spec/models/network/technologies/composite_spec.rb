@@ -40,6 +40,19 @@ RSpec.describe Network::Technologies::Composite do
     end
   end
 
+  context 'with performance coefficient of 2.0; receiving mandatory 0.2' do
+    before { installed_one.performance_coefficient = 2.0 }
+    before { component_one.receive_mandatory(0, 0.2) }
+
+    it 'subtracts the COP-adjusted amount from the component_one profile' do
+      expect(component_one.profile.at(0)).to eq(0.6)
+    end
+
+    it 'subtracts the COP-adjusted amount from the component_two profile' do
+      expect(component_two.profile.at(0)).to eq(0.6)
+    end
+  end
+
   describe 'component two, receiving 0.6 conditional' do
     before { component_one.store(0, 0.6) }
 
