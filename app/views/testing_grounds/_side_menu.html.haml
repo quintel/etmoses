@@ -31,7 +31,7 @@
             = options_for_strategies
 
           .slider-wrapper.hidden
-            %input#solar_pv_capping{type: 'text', data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => 100}}
+            %input#solar_pv_capping{type: 'text', name: 'capping_fraction', data: {'slider-min' => 0, 'slider-max' => 100, 'slider-step' => 1, 'slider-value' => 100}}
             .clearfix
             %p.note Specify which percentage of solar production can be capped
 

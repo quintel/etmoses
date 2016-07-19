@@ -3,7 +3,7 @@
 var Strategies = (function () {
     'use strict';
 
-    var savedStrategies, changedStrategy,
+    var savedStrategies,
         sliderSettings = {
             focus: true,
             formatter: function (value) {
@@ -63,34 +63,44 @@ var Strategies = (function () {
         });
     }
 
-    function toggleStrategies(appliedStrategies) {
-        if (changedStrategy) {
-            saveSelectedStrategies.call(this, appliedStrategies);
+    function updateStrategies() {
+        var original = StrategyHelper.getStrategies(),
+            updated  = strategiesFromForm();
+
+        if (isChanged(original, updated)) {
+            $(".save_strategies.hidden").text(JSON.stringify(updated));
+            saveSelectedStrategies.call(this, updated);
         }
     }
 
-    function updateStrategies(appliedStrategies) {
-        $(".load-strategies li:not(.disabled) input[type=checkbox]").each(function () {
-            appliedStrategies[$(this).val()] = $(this).is(":checked");
-        });
+    function isChanged(orig, updated) {
+        for (var key in orig) {
+            if (orig.hasOwnProperty(key) && updated[key] !== orig[key]) {
+                return true
+            }
+        }
 
-        $(".save_strategies.hidden").text(JSON.stringify(appliedStrategies));
-        toggleStrategies.call(this, appliedStrategies);
+        return false;
     }
 
-    function setChangedStrategy() {
-        var appliedStrategies = StrategyHelper.getStrategies();
+    function strategiesFromForm() {
+        var parentEl   = $('.load-strategies li:not(.disabled)'),
+            strategies = {};
 
-        changedStrategy = false;
-
-        $(".load-strategies li:not(.disabled) input[type=checkbox]").each(function () {
-            if (appliedStrategies[$(this).val()] !== $(this).is(":checked")) {
-                changedStrategy = true;
-                return false;
-            }
+        parentEl.find('input[type=checkbox]').each(function () {
+            strategies[$(this).val()] = $(this).is(":checked");
         });
 
-        updateStrategies.call(this, appliedStrategies);
+        parentEl.find('input[type=text]').each(function () {
+            strategies[$(this).attr('name')] = $(this).val();
+        });
+
+        if (strategies.capping_fraction) {
+            strategies.capping_fraction =
+                parseFloat(strategies.capping_fraction) / 100;
+        }
+
+        return strategies;
     }
 
     function setStrategies() {
@@ -111,7 +121,7 @@ var Strategies = (function () {
     }
 
     function Strategies() {
-        $("button.apply_strategies").on("click", setChangedStrategy.bind(this));
+        $("button.apply_strategies").on("click", updateStrategies.bind(this));
 
         setStrategies.call(this);
 
