@@ -50,6 +50,7 @@ module Network
         # Returns the total input in the current frame.
         def input(frame, amount)
           @inputs[frame] += amount
+          amount
         end
 
         # Public: Determines how much more buffering energy may be input to the

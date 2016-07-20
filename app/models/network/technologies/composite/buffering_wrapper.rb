@@ -6,13 +6,11 @@ module Network
       # where excesses are stored in Reserve for use in later frames.
       class BufferingWrapper < Wrapper
         def store(frame, amount)
-          super
-          @composite.input(frame, amount)
+          @composite.input(frame, super)
         end
 
         def receive_mandatory(frame, amount)
-          super
-          @composite.input(frame, amount)
+          @composite.input(frame, super)
         end
 
         def mandatory_consumption_at(frame)

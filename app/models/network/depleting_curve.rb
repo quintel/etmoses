@@ -30,7 +30,10 @@ module Network
     # Returns a numeric.
     def get(frame)
       amount = super - @receipts[frame]
-      amount > 0 ? amount : 0.0
+
+      # Ignore very small values which are likely the result of floating-point
+      # rounding errors.
+      amount > 1e-10 ? amount : 0.0
     end
 
     alias_method :at, :get

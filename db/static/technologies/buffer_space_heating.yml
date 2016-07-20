@@ -28,7 +28,6 @@ whitelisted_attributes:
   - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
-  - performance_coefficient
   - profile
   - technical_lifetime
   - units

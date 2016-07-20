@@ -26,14 +26,12 @@ module Network
 
         def store(frame, amount)
           super
-          @load[frame] += amount
-          profile.deplete(frame, amount)
+          receive_energy(frame, amount)
         end
 
         def receive_mandatory(frame, amount)
           super
-          @load[frame] += amount
-          profile.deplete(frame, amount)
+          receive_energy(frame, amount)
         end
 
         # Public: Returns if the technology is a buffering technology. If false,
@@ -63,6 +61,19 @@ module Network
         def constrain_by_capacity(amount)
           capacity = @object.capacity
           amount < capacity ? amount : capacity
+        end
+
+        # Internal: Takes care of assigning the energy received by the wrapper
+        # and subtracting it from the profile as needed.
+        def receive_energy(frame, amount)
+          # Save the input load, unmodified by the performance coefficient which
+          # is used to determine output.
+          @load[frame] += amount
+
+          output = amount * @object.installed.performance_coefficient
+          profile.deplete(frame, output)
+
+          output
         end
       end # Wrapper
     end # Composite
