@@ -1,5 +1,5 @@
 /*globals Legend,LoadChartHelper,LoadChartsSettings,PopOver,
-StackTransformator,StrategyHelper,Transformator*/
+StackTransformer,StrategyHelper,Transformer*/
 
 var D3LoadChart = (function () {
     'use strict';
@@ -243,10 +243,10 @@ var D3LoadChart = (function () {
     }
 
     function transformData() {
-        var data = Transformator.transform(this, currentWeek);
+        var data = Transformer.transform(this, currentWeek);
 
         if (this.settings.view_as === 'stacked') {
-            data = StackTransformator.transform(data);
+            data = StackTransformer.transform(data);
         }
 
         return data;
@@ -268,12 +268,19 @@ var D3LoadChart = (function () {
             }.bind(this));
     }
 
-    D3LoadChart.prototype = {
+    D3LoadChart.prototype = $.extend({}, D3BaseChart.prototype, {
         lastRequestedData: null,
         view: function (attr, newAttr) {
             this.settings[attr] = newAttr;
 
             return this;
+        },
+        axisLabel: function (data) {
+            if (this.scaling) {
+                return this.scaling.unit.name
+            } else {
+                return LoadChartsSettings[data.type || this.curveType].axisLabel;
+            }
         },
         setYscaleDomain: function (mainOnly) {
             var ydomain = d3.extent(all.call(chartData), setExtent.bind(this));
@@ -361,8 +368,26 @@ var D3LoadChart = (function () {
             brushed.call(this);
         },
 
+        maxYvalue: function (data) {
+            return d3.max(data.load.total);
+        },
+
+        getScaling: function (data) {
+            var scaling,
+                maxYvalue,
+                axisLabel = this.axisLabel(data);
+
+            if (/^[a-zA-Z]W$/.test(axisLabel)) {
+                scaling = new Quantity(this.maxYvalue(data), axisLabel).smartScale();
+            }
+
+            return scaling;
+        },
+
         render: function (data) {
             var self = this;
+
+            this.scaling = this.getScaling(data);
 
             d3.select(this.chartClass).html('');
 
@@ -449,7 +474,7 @@ var D3LoadChart = (function () {
                 .attr("x", -10)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text(LoadChartsSettings[data.type || this.curveType].axisLabel);
+                .text(this.axisLabel(data));
 
             // Hover line
             hoverLineGroup = svg.append("g")
@@ -490,10 +515,11 @@ var D3LoadChart = (function () {
 
             this.update(data);
         }
-    };
+    });
 
     function D3LoadChart(chartClass, curveType, settings) {
-        this.chartClass = chartClass;
+        D3BaseChart.call(this, chartClass);
+
         this.curveType  = curveType || 'default';
         this.settings   = $.extend(DefaultSettings, settings);
         this.width      = 500;

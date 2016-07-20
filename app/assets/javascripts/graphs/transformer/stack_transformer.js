@@ -1,26 +1,28 @@
-var StackTransformator = (function () {
+var StackTransformer = (function () {
     'use strict';
 
-    var stack = d3.layout.stack()
-        .values(function(d) { return d.values; });
+    var stack = d3.layout.stack().values(function (d) { return d.values; });
 
     return {
         transform: function (data) {
+            var size,
+                posOffset,
+                negOffset;
+
             if (data.length > 0) {
-                var size = data[0].values.length;
+                size = data[0].values.length;
 
-                while(size--) {
-                    var posOffset = 0,
-                        negOffset = 0;
+                while (size--) {
+                    posOffset = 0;
+                    negOffset = 0;
 
-                    data.forEach(function(d) {
+                    data.forEach(function (d) {
                         d = d.values[size];
 
                         if (d.y < 0) {
                             d.offset = negOffset;
                             negOffset += d.y;
-                        }
-                        else {
+                        } else {
                             d.offset = posOffset;
                             posOffset += d.y;
                         }
@@ -28,7 +30,7 @@ var StackTransformator = (function () {
                 }
             }
 
-            data.sort(function (a,b) {
+            data.sort(function (a, b) {
                 return a.key > b.key;
             });
 

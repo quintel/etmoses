@@ -10,10 +10,4 @@ $(document).on("page:change", function () {
     $("li.category").children().on("click", function (e) {
         e.stopPropagation();
     });
-
-    if ($('.profile-graph').length > 0) {
-        $(".profile-graph").each(function () {
-            new LoadChartPreview(this).preview();
-        });
-    }
 });

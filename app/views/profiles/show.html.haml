@@ -2,7 +2,8 @@
   %li== Key: #{ @profile.key }
   %li== Curve file name: #{ @profile.curve_file_name }
 
-.profile-graph.line-chart{ data: { url: profile_path(@profile, format: :json), curve_type: @profile.class.name.underscore } }
+.charts-holder
+  .graph.line-chart{ data: { url: profile_path(@profile, format: :json), curve_type: @profile.class.name.underscore, type: 'profile_chart' } }
 
 %select.load-date.form-control
   = load_date_options
