@@ -17,7 +17,6 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
 whitelisted_attributes:
-  - demand
   - initial_investment
   - input_capacity
   - om_costs_for_ccs_per_full_load_hour

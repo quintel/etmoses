@@ -442,6 +442,10 @@ table.table.scenarios{
         float: left;
       }
 
+      &.carrier_capacity {
+        clear: left;
+      }
+
       &.buffer select,
       &.profile select{
         width: 550px;

@@ -48,15 +48,17 @@
         = tooltip_tag(t(:'testing_grounds.form.congestion_reserve_percentage.tooltip'))
         .clearfix
 
-    .editable.text{class: 'capacity'}
-      %span Output capacity [kW]
-      %input.form-control{type: 'text', value: technology.capacity.try(:round, 4), data: { type: 'capacity' } }
-      .clearfix
+    - if technology.whitelisted?('output_capacity')
+      .editable.text{class: 'capacity'}
+        %span Output capacity [kW]
+        %input.form-control{type: 'text', value: technology.capacity.try(:round, 4), data: { type: 'capacity' } }
+        .clearfix
 
-    .editable.text{class: 'demand'}
-      %span Demand [kWh]
-      %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: { type: 'demand'} }
-      .clearfix
+    - if technology.whitelisted?('demand')
+      .editable.text{class: 'demand'}
+        %span Demand [kWh]
+        %input.form-control{type: 'text', value: technology.demand.try(:round, 2), data: { type: 'demand'} }
+        .clearfix
 
     - if technology.whitelisted?('input_capacity')
       .editable.text{class: 'carrier_capacity'}
@@ -67,10 +69,11 @@
         %input.form-control{type: 'text', value: technology.carrier_capacity.try(:round, 4), disabled: "disabled", data: { type: 'carrier_capacity' } }
         .clearfix
 
-    .editable.text{class: 'volume'}
-      %span Volume [kWh]
-      %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
-      .clearfix
+    - if technology.whitelisted?('volume')
+      .editable.text{class: 'volume'}
+        %span Volume [kWh]
+        %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
+        .clearfix
 
     .editable.text{class: 'units'}
       %span Units
@@ -78,11 +81,11 @@
       .clearfix
 
     - InstalledTechnology.attribute_set.each do |attribute|
-      - if attribute.options[:hidden]
+      - if attribute.options[:hidden] || ! technology.whitelisted?(attribute.name)
         .editable.hidden{class: attribute.name}
           %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name } }
 
-      - if attribute.options[:advanced]
+      - if attribute.options[:advanced] && technology.whitelisted?(attribute.name)
         .editable.advanced.hidden{class: attribute.name}
           %span= t(:"installed_technology_attributes.#{ attribute.name }")
           %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name } }

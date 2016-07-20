@@ -13,14 +13,12 @@ exists_as_technology_in_etengine: false
 profile_required: false
 whitelisted_attributes:
   - congestion_reserve_percentage
-  - demand
   - initial_investment
   - input_capacity
   - om_costs_for_ccs_per_full_load_hour
   - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
-  - performance_coefficient
   - technical_lifetime
   - units
   - volume

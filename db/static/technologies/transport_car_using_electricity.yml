@@ -21,14 +21,12 @@ importable_gqueries:
   initial_investment: electric_cars_additional_costs
 
 whitelisted_attributes:
-  - demand
   - initial_investment
   - input_capacity
   - om_costs_for_ccs_per_full_load_hour
   - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
-  - performance_coefficient
   - profile
   - technical_lifetime
   - units
