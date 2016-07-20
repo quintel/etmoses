@@ -474,4 +474,18 @@ RSpec.describe TestingGroundsController do
       expect(response.status).to eq(200)
     end
   end
+
+  describe "#clone" do
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:sign_in_user){ sign_in(user) }
+    let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+
+    describe "clone a LES" do
+      it 'can succesfully clone a LES' do
+        post :clone, id: testing_ground.id
+
+        expect(TestingGround.count).to eq(2)
+      end
+    end
+  end
 end

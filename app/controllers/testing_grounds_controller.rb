@@ -1,6 +1,6 @@
 class TestingGroundsController < ResourceController
   RESOURCE_ACTIONS = %i(edit update show technology_profile data destroy save_as
-                        update_strategies gas_load heat_load)
+                        update_strategies gas_load heat_load clone)
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
@@ -174,6 +174,16 @@ class TestingGroundsController < ResourceController
     @testing_ground = TestingGround::SaveAs.run(
       @testing_ground, testing_ground_params[:name], current_user
     )
+  end
+
+  # POST /testing_grounds/:id/clone
+  def clone
+    @cloned_les = TestingGround::SaveAs.run(
+      @testing_ground, @testing_ground.name, current_user)
+
+    flash[:notice] = "Succesfully cloned LES #{ @testing_ground.name }"
+
+    redirect_to testing_ground_path(@cloned_les)
   end
 
   private
