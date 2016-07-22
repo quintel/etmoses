@@ -2,10 +2,9 @@ var CompositeTemplateUpdater = (function () {
     'use strict';
 
     function compositeFilter(d, e) {
-        var techData = $(e).data(),
-            key = $(this.technologySelectBox).val();
+        var techData = $(e).data();
 
-        return techData.composite && techData.type === key;
+        return techData.composite && techData.type === this.data.type;
     }
 
     function getNewIndex() {
@@ -19,9 +18,9 @@ var CompositeTemplateUpdater = (function () {
     }
 
     function setName(index) {
-        var nameBox = this.template.find("strong"),
-            currentName = nameBox.text(),
-            newName = currentName + " #" + index;
+        var nameBox     = this.template.find("strong"),
+            currentName = $.trim(nameBox.text()).replace(/\s+\#[0-9]+$/, ''),
+            newName     = currentName + " #" + index;
 
         this.template.set('name', newName);
 
@@ -30,12 +29,16 @@ var CompositeTemplateUpdater = (function () {
 
     CompositeTemplateUpdater.prototype = {
         update: function () {
-            if (this.data.composite && !this.data.compositeIndex) {
-
-                var index = getNewIndex.call(this);
+            if (this.data.composite) {
+                var index          = getNewIndex.call(this),
+                    compositeValue = this.data.type + "_" + index,
+                    children       = this.template.nextUntil(":not(.buffer-child)");
 
                 this.template.set('composite_index', index);
-                this.template.set('composite_value', this.data.type + "_" + index);
+                this.template.set('composite_value', compositeValue);
+
+                children.set('buffer', compositeValue)
+                children.set('units',  this.data.units);
 
                 setName.call(this, index);
             }
@@ -45,9 +48,8 @@ var CompositeTemplateUpdater = (function () {
     };
 
     function CompositeTemplateUpdater(template) {
-        this.template            = $(template);
-        this.data                = $(template).data();
-        this.technologySelectBox = window.currentTechnologiesForm.currentSelectBox;
+        this.template = $(template);
+        this.data     = $(template).data();
     }
 
     return CompositeTemplateUpdater;

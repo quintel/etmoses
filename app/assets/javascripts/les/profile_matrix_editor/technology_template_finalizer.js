@@ -63,9 +63,7 @@ var TechnologyTemplateFinalizer = (function () {
     }
 
     return {
-        update: function () {
-            new CompositeTemplateUpdater(this).update();
-            new BatteryTemplateUpdater(this).update();
+        initialize: function () {
             new BufferSelectBox(this).add();
 
             addEdsnListener.call(this);
@@ -79,6 +77,13 @@ var TechnologyTemplateFinalizer = (function () {
 
             $(this).find(".show-advanced")
                 .off("click").on("click", toggleAdvancedFeatures);
+        },
+
+        update: function () {
+            new CompositeTemplateUpdater(this).update();
+            new BatteryTemplateUpdater(this).update();
+
+            TechnologyTemplateFinalizer.initialize.call(this);
         }
     };
 }());

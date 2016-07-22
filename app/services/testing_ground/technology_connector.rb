@@ -18,7 +18,7 @@ class TestingGround
 
     def associates
       @distribution.select(&:composite).map do |composite|
-        composite.associates = attach_technology(composite)
+        composite.associates = children_for(composite)
         composite
       end
     end
@@ -37,14 +37,15 @@ class TestingGround
     # that sticks to it has a buffer value. They should look for those if not
     # use the initial includes to determine a possible match.
     #
-    def attach_technology(technology)
-      @distribution.select do |tech|
-        if technology.composite_value.present?
-          technology.composite_value == tech.buffer
-        else
-          technology.includes.include?(tech.type)
-        end
-      end
+    def children_for(composite)
+      @distribution
+        .select { |tech| composite.includes.include?(tech.type) }
+        .map { |child| synchronize_units(composite, child) }
+    end
+
+    def synchronize_units(composite, child)
+      child.units = composite.units
+      child
     end
   end
 end

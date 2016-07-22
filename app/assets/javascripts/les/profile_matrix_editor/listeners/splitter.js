@@ -10,7 +10,9 @@ var Splitter = (function () {
         window.currentTechnologiesForm.markAsEditing();
         window.currentTechnologiesForm.updateCounter.call(this, true);
 
-        TechnologyTemplateFinalizer.update.call(this.originTemplate);
+        if (!this.composite) {
+            TechnologyTemplateFinalizer.update.call(this.originTemplate);
+        }
 
         this.templates.each(function () {
             TechnologyTemplateFinalizer.update.call(this);
@@ -29,25 +31,36 @@ var Splitter = (function () {
         this.templates.set('units', originUnits);
     }
 
+    function cloneTemplate(originTemplate) {
+        var i        = 0,
+            buffer   = originTemplate.data('compositeValue') || 'none',
+            children = $(".technology.buffer-child[data-buffer=" + buffer + "]"),
+            template;
+
+        for (i; i < this.clones; i += 1) {
+            template = originTemplate.clone(true, true);
+
+            if (children.length > 0) {
+                children.each(function (i, child) {
+                    cloneTemplate.call(this, $(child));
+                }.bind(this));
+            }
+
+            this.templates = this.templates.add(template);
+
+            Bump.call(template);
+        }
+    }
+
     Splitter.prototype = {
         split: function () {
             // If the amount of units to split up in is smaller than 2.
             // Stop the code progression.
-            var appendScope = this.originTemplate.attr('id'),
-                i = 0,
-                template;
+            if (this.units < 2) { return false; }
 
-            if (this.units < 2) {
-                return false;
-            }
+            var appendScope = this.originTemplate.attr('id');
 
-            for (i; i < this.clones; i += 1) {
-                template = this.originTemplate.clone(true, true);
-
-                this.templates = this.templates.add(template);
-
-                Bump.call(template);
-            }
+            cloneTemplate.call(this, this.originTemplate);
 
             $("#" + appendScope).after(this.templates);
             setUnits.call(this);
@@ -67,6 +80,7 @@ var Splitter = (function () {
         this.clones         = clones;
         this.templates      = $();
         this.units          = this.originTemplate.data('units');
+        this.composite      = this.originTemplate.data('composite');
     }
 
     return {

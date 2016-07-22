@@ -7,9 +7,7 @@ var TechnologiesForm = (function () {
     function updateTemplate(e) {
         var template = $(".technology_template .technology");
 
-        this.currentSelectBox = $(e.target);
-
-        new TemplateUpdater(template, this.currentSelectBox).update();
+        new TemplateUpdater(template).update();
     }
 
     function addListeners() {
@@ -23,10 +21,9 @@ var TechnologiesForm = (function () {
     }
 
     TechnologiesForm.prototype = {
-        currentSelectBox: undefined,
         append: function () {
             $(".technologies .technology:not(.hidden)")
-                .each(TechnologyTemplateFinalizer.update);
+                .each(TechnologyTemplateFinalizer.initialize);
 
             this.setProfiles();
             addListeners.call(this);

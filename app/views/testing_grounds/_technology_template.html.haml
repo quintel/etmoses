@@ -80,7 +80,7 @@
         %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
         .clearfix
 
-    .editable.text{class: 'units'}
+    .editable.text.units{class: ('hidden' unless technology.whitelisted?('units'))}
       %span Units
       %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
       .clearfix

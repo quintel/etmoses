@@ -7,7 +7,6 @@ defaults:
   volume: 4.0691
 
 exists_as_technology_in_etengine: false
-expandable: false
 importable_gqueries:
   demand: etmoses_hot_water_buffer_demand
 
