@@ -151,6 +151,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
           "name"     => "Heat pump for space heating (ground)",
           "type"     => "households_space_heater_heatpump_ground_water_electricity",
           "capacity" => "2.0",
+          "position_relative_to_buffer" => "boosting",
           "units"    => "10.0"
         }
       ]
@@ -200,11 +201,8 @@ RSpec.describe TestingGround::TechnologyDistributor do
       TestingGround::TechnologyDistributor.new(technologies, topology).build
     }
 
-    it "sets the composite values correctly" do
-      expect(new_profile.map(&:composite_value).compact).to eq([
-        'buffer_space_heating_1', 'buffer_space_heating_2',
-        'buffer_water_heating_1', 'buffer_water_heating_2'
-      ])
+    it "expects 24 buffers" do
+      expect(new_profile.map(&:composite_value).compact.size).to eq(24)
     end
 
     it "expects all technologies to be valid" do

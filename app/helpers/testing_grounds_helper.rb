@@ -118,7 +118,7 @@ module TestingGroundsHelper
     stringify_values(
       technology.attributes
         .slice(*InstalledTechnology::EDITABLES)
-        .merge(node: node)
+        .merge(node: node, includes: technology.includes)
     )
   end
 

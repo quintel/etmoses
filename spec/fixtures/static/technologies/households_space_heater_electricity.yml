@@ -1,19 +1,17 @@
 ---
-behavior: heat_pump
+color: "#FF7979"
+name: Households space heater electricity
+behavior: null
 carrier: electricity
-color: "#56351A"
 defaults:
-  capacity: 3.33333
+  capacity: 6.0
   position_relative_to_buffer: buffering
 
-export_to: households_water_heater_heatpump_ground_water_electricity_share
 expandable: false
 importable_attributes:
-  - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
   - initial_investment
-  - input_capacity
   - technical_lifetime
 
 whitelisted_attributes:
@@ -22,6 +20,5 @@ whitelisted_attributes:
   - input_capacity
   - om_costs_per_year
   - output_capacity
-  - performance_coefficient
   - position_relative_to_buffer
   - technical_lifetime

@@ -7,7 +7,6 @@ defaults:
   volume: 2.9065
 
 exists_as_technology_in_etengine: false
-expandable: false
 importable_gqueries:
   demand: etmoses_space_heating_buffer_demand
 

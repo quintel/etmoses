@@ -21,6 +21,8 @@ var TemplateUpdater = (function () {
                         buffer: $(appendScope).data('compositeValue') || ''
                     }
                 });
+            } else {
+                throw "No " + key + " for select box";
             }
         }
     };

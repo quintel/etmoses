@@ -21,7 +21,6 @@ class InstalledTechnology
   attribute :composite_index,                     Integer, hidden: true
   attribute :concurrency,                         String,  default: 'max', hidden: true
   attribute :full_load_hours,                     Integer, hidden: true
-  attribute :includes,                            Array[String], hidden: true
 
   # Advanced features
   #
@@ -144,6 +143,10 @@ class InstalledTechnology
     @technology ||= type.present? ? Technology.by_key(type) : Technology.generic
   end
 
+  def includes
+    technology ? technology.technologies : []
+  end
+
   # Public: Describes the electrical capacity of the technology.
   #
   # The "full" capacity of some technologies includes energy which comes from
@@ -263,10 +266,6 @@ class InstalledTechnology
 
   def parent_key
     buffer && !composite ? buffer : ''
-  end
-
-  def get_composite_value
-    "#{type}_#{composite_index}"
   end
 
   def get_composite_name

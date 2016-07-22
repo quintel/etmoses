@@ -1,9 +1,8 @@
 class TestingGround
   module ProfileSelector
-    ##
-    ## Profile selection part
-    ## Initiates a LoadProfiles::Selector object
-    ##
+    # Profile selection part
+    # Initiates a LoadProfiles::Selector object
+    #
     def profile_selector(technology)
       LoadProfiles::Selector.new(available_profiles, technology)
     end

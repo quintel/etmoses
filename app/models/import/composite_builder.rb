@@ -22,7 +22,6 @@ class Import
       { 'units'     => scaling_value,
         'type'      => technology.key,
         'composite' => true,
-        'includes'  => technology.technologies,
         'demand'    => demand_for(technology),
         'volume'    => technology.defaults.fetch("volume")
       }

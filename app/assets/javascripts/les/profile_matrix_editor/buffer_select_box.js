@@ -1,4 +1,5 @@
 /*globals FormHelper*/
+
 var BufferSelectBox = (function () {
     'use strict';
 

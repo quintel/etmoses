@@ -27,3 +27,4 @@ whitelisted_attributes:
   - performance_coefficient
   - technical_lifetime
   - units
+  - volume

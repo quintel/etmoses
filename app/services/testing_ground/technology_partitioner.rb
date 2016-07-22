@@ -35,7 +35,7 @@ class TestingGround::TechnologyPartitioner
 
   def couple_composite(technology, index)
     if technology.composite? || technology.buffer.present?
-      couple_composites(technology, index)
+      couple_composites(technology, index, @size)
     else
       technology
     end

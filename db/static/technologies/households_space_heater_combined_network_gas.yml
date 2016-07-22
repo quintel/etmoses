@@ -19,4 +19,3 @@ whitelisted_attributes:
   - output_capacity
   - position_relative_to_buffer
   - technical_lifetime
-  - units

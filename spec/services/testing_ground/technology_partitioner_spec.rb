@@ -56,35 +56,11 @@ RSpec.describe TestingGround::TechnologyPartitioner do
       end
 
       it 'sets the correct units for associates' do
-        expect(partitioner.map{|t| t.associates.map(&:units) }).to eq([[5,2], [5,2]])
+        expect(partitioner.map{|t| t.associates.map(&:units) }).to eq([[5,5], [5,5]])
       end
     end
 
     describe "uneven associates" do
-      describe "with two associates in sizes of 2, 7 units" do
-        before do
-          technology.associates = [
-            InstalledTechnology.new(units: 7, buffer: technology.composite_value, type: 'a'),
-            InstalledTechnology.new(units: 7, buffer: technology.composite_value, type: 'b')
-          ]
-        end
-
-        let(:size) { 2 }
-
-        it 'sets the correct units for associates' do
-          expect(partitioner.last.associates.map(&:units)).to eq([3, 4])
-        end
-
-        it "sets the correct composite value for the buffers" do
-          expect(partitioner.map(&:composite_value)).to eq(%w(generic_1 generic_2))
-        end
-
-        it "check if the units for tech type A are not lost" do
-          expect(partitioner.map(&:associates).flatten.select{|t| t.type == 'a'}
-                 .sum(&:units)).to eq(7)
-        end
-      end
-
       describe "with two associates in sizes of 3, 5 units" do
         before do
           technology.associates = [
@@ -100,10 +76,10 @@ RSpec.describe TestingGround::TechnologyPartitioner do
           expect(partitioner.map(&:units)).to eq([4, 3, 3])
         end
 
-        it 'makes sure associates are spread out nicely aswell' do
+        it 'associates have the same units as the attached buffer' do
           # Make sure the numbers are correct
           expect(partitioner.map{|t| t.associates.map(&:units) }).to eq(
-            [[2,2], [2,1], [1,2]])
+            [[4,4], [3,3], [3,3]])
         end
       end
     end
