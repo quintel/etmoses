@@ -176,6 +176,14 @@ class TestingGroundsController < ResourceController
     )
   end
 
+  # DELETE /testing_grounds/:id
+  def destroy
+    TestingGround::Destroyer.destroy(@testing_ground)
+
+    flash[:notice] = "You succesfully destroyed #{ @testing_ground.name }"
+    redirect_to root_path
+  end
+
   private
 
   # Internal: Returns the permitted parameters for creating a testing ground.

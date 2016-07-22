@@ -474,4 +474,104 @@ RSpec.describe TestingGroundsController do
       expect(response.status).to eq(200)
     end
   end
+
+  describe "#delete" do
+    let!(:sign_in_user) { sign_in(user) }
+
+    describe "with admin powers" do
+      let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+      let(:user) { FactoryGirl.create(:user, admin: true) }
+
+      it 'can destroy the LES' do
+        delete :destroy, id: testing_ground.id
+
+        expect(TestingGround.count).to eq(0)
+      end
+    end
+
+    describe "with no admin powers" do
+      let(:testing_ground) { FactoryGirl.create(:testing_ground) }
+      let(:user) { FactoryGirl.create(:user) }
+
+      it "can't destroy the LES" do
+        delete :destroy, id: testing_ground.id
+
+        expect(TestingGround.count).to eq(1)
+      end
+    end
+
+    describe "with a les that belongs to a regular user" do
+      let(:testing_ground) { FactoryGirl.create(:testing_ground, user: user) }
+      let(:user) { FactoryGirl.create(:user) }
+
+      before do
+        FactoryGirl.create(:heat_asset_list,   testing_ground: testing_ground)
+        FactoryGirl.create(:heat_source_list,  testing_ground: testing_ground)
+        FactoryGirl.create(:gas_asset_list,    testing_ground: testing_ground)
+      end
+
+      %w(TestingGround BusinessCase HeatAssetList HeatSourceList
+        GasAssetList SelectedStrategy).each do |item|
+          it "delete's a LES #{ item.humanize }" do
+            object = item.constantize
+            delete :destroy, id: testing_ground.id
+
+            expect(object.count).to eq(0)
+          end
+      end
+
+      describe "keeping the market model and topology" do
+        let!(:other_testing_ground) {
+          FactoryGirl.create(:testing_ground, user: user,
+            market_model: testing_ground.market_model,
+            topology: testing_ground.topology)
+        }
+
+        it "keeps the market model" do
+          delete :destroy, id: testing_ground.id
+
+          expect(MarketModel.count).to eq(1)
+        end
+
+        it "keeps the topology" do
+          delete :destroy, id: testing_ground.id
+
+          expect(Topology.count).to eq(1)
+        end
+      end
+
+      describe "removes the market model and topology if they don't belong to the user of the LES and if they are the last one's left" do
+        it "keeps the market model" do
+          delete :destroy, id: testing_ground.id
+
+          expect(MarketModel.count).to eq(0)
+        end
+
+        it "keeps the topology" do
+          delete :destroy, id: testing_ground.id
+
+          expect(Topology.count).to eq(0)
+        end
+      end
+
+      describe "removing the market model and topology if they belong to the user of the LES" do
+        before do
+          MarketModel.update_all(user_id: testing_ground.user_id)
+          Topology.update_all(user_id: testing_ground.user_id)
+        end
+
+        it "removes the market model" do
+          delete :destroy, id: testing_ground.id
+
+          expect(MarketModel.count).to eq(0)
+        end
+
+        it "removes the topology" do
+          delete :destroy, id: testing_ground.id
+
+          expect(Topology.count).to eq(0)
+        end
+      end
+    end
+  end
 end

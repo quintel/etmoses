@@ -49,11 +49,7 @@ class MarketModelsController < ResourceController
   end
 
   def destroy
-    if TestingGround.where(market_model: @market_model).count > 0
-      @market_model.update_attribute(:user, User.orphan)
-    else
-      @market_model.destroy
-    end
+    TestingGround::Destroyer.destroy_part(@market_model)
 
     redirect_to(market_models_path)
   end
