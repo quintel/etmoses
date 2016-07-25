@@ -180,7 +180,7 @@ class TestingGroundsController < ResourceController
   def destroy
     TestingGround::Destroyer.destroy(@testing_ground)
 
-    flash[:notice] = "You succesfully destroyed #{ @testing_ground.name }"
+    flash[:notice] = "You succesfully removed #{ @testing_ground.name }"
     redirect_to root_path
   end
 

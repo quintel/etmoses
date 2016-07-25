@@ -52,11 +52,11 @@
       .form-group
         .btn-group
           = form.submit "Save", class: 'btn btn-primary'
-          = link_to "Save As New Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
+          = link_to "Save as new Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-success save_as"
           = save_all_button(testing_ground_path(@testing_ground))
 
-          - if policy(@testing_ground).destroy?
-            = link_to "Destroy this LES", testing_ground_path(@testing_ground), method: :delete, data: { confirm: "Are you sure you want to delete this LES?" }, class: "btn btn-danger"
+        - if policy(@testing_ground).destroy?
+          = link_to "Remove this LES", testing_ground_path(@testing_ground), method: :delete, data: { confirm: "Are you sure you want to remove this LES?" }, class: "btn btn-danger"
 
         %span.wait.hidden= image_tag 'wait.gif'
 
