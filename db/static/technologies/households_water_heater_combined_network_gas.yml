@@ -5,6 +5,7 @@ defaults:
   capacity: 24.4444
   position_relative_to_buffer: boosting
 
+expandable: false
 importable_attributes:
   - initial_investment
   - input_capacity
@@ -23,4 +24,3 @@ whitelisted_attributes:
   - output_capacity
   - position_relative_to_buffer
   - technical_lifetime
-  - units

@@ -1,38 +1,51 @@
 class TestingGround
   class TechnologyConnector
+    def self.connect(distribution)
+      new(distribution).connect
+    end
+
     def initialize(distribution)
       @distribution = distribution
+        .group_by(&:concurrency_group)
+        .values.flatten
     end
 
     def connect
-      (associate_composites + non_composites).flatten
+      associates + non_associates
     end
 
     private
 
-    def associate_composites
-      composites.map do |composite|
-        composite.associates = (@distribution - [composite]).select do |technology|
-          technology.buffer == composite.composite_value
-        end
+    def associates
+      @distribution.select(&:composite).map do |composite|
+        composite.associates = children_for(composite)
         composite
       end
     end
 
-    def non_composites
-      (@distribution - composites - composites_children).map do |technology|
-        [technology, []]
+    def non_associates
+      @distribution.reject do |tech|
+        tech.composite? || tech.position_relative_to_buffer.present?
       end
     end
 
-    def composites
-      @distribution.select(&:composite)
+    # Since this class is used twice (once for the initial import and another
+    # time for the concurrency). There are two ways of connecting a technology
+    # to a buffer.
+    #
+    # If the composite value is set for a buffer and a technology
+    # that sticks to it has a buffer value. They should look for those if not
+    # use the initial includes to determine a possible match.
+    #
+    def children_for(composite)
+      @distribution
+        .select { |tech| composite.includes.include?(tech.type) }
+        .map { |child| synchronize_units(composite, child) }
     end
 
-    def composites_children
-      @distribution.select do |technology|
-        !technology.composite && technology.buffer.present?
-      end
+    def synchronize_units(composite, child)
+      child.units = composite.units
+      child
     end
   end
 end

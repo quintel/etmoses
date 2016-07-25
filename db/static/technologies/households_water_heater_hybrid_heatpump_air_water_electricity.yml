@@ -2,6 +2,7 @@
 behavior: 'null'
 carrier: hybrid
 color: "#1C6F18"
+expandable: false
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
@@ -23,4 +24,3 @@ whitelisted_attributes:
   - performance_coefficient
   - position_relative_to_buffer
   - technical_lifetime
-  - units

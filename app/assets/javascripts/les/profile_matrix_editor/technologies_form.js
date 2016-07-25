@@ -1,76 +1,29 @@
-/*global AddedTechnologiesValidator,AddTechnology,BatteryTemplateUpdater,
-BufferSelectBox,Calculations,CompositeTemplateUpdater,ETHelper,RemoveTechnology,
-TemplateUpdater,Technology*/
+/*global AddedTechnologiesValidator,AddTechnology,ETHelper,TemplateUpdater,
+Technology,TechnologyTemplateFinalizer*/
 
 var TechnologiesForm = (function () {
     'use strict';
 
-    // TODO: please remove
-    function calculateInputCapacity() {
-        $(this).find('.carrier_capacity input').val(
-            Calculations.calculateInputCapacity.call($(this).data())
-        );
-    }
-
-    function updateJSON() {
-        var type   = $(this).data('type'),
-            target = $(this).parents(".technology"),
-            value  = $(this).val().replace(/[\'\" ]/g, '');
-
-        $(this).val(value);
-        target.set(type, value);
-
-        if (type === 'capacity' || type === 'performance_coefficient') {
-            calculateInputCapacity.call(target);
-        }
-
-        if ($(this).hasClass("slider")) {
-            $(this).parents(".editable").find(".tick.value").text(value + "%");
-        }
-
-        window.currentTechnologiesForm.parseHarmonicaToJSON();
-        window.currentTechnologiesForm.markAsEditing();
-    }
-
     function updateTemplate(e) {
         var template = $(".technology_template .technology");
 
-        this.currentSelectBox = $(e.target);
-
-        new TemplateUpdater(template, this.currentSelectBox).update();
-    }
-
-    function addOnChangeListener() {
-        var eventName;
-
-        window.currentTechnologiesForm.parseHarmonicaToJSON();
-
-        $(this).find("input, select").each(function () {
-            eventName = $(this).hasClass("slider") ? 'slideStop' : 'change.json_update';
-
-            $(this).off(eventName).on(eventName, updateJSON);
-        });
-    }
-
-    function toggleAdvancedFeatures(e) {
-        e.preventDefault();
-
-        $(this).parents(".technology")
-               .find(".editable.advanced")
-               .toggleClass("hidden");
+        new TemplateUpdater(template).update();
     }
 
     function addListeners() {
-        $(".add-technology select").off().on("change", updateTemplate.bind(this));
-        $(".add-technology button").off().on("click", AddTechnology.add);
-        $(".add-technology select").first().trigger('change');
+        $(".add-technology select")
+            .off('change')
+            .on("change", updateTemplate.bind(this));
+
+        $(".add-technology button")
+            .off('click')
+            .on("click", AddTechnology.add);
     }
 
     TechnologiesForm.prototype = {
-        currentSelectBox: undefined,
         append: function () {
             $(".technologies .technology:not(.hidden)")
-                .each(this.updateExistingTechnology);
+                .each(TechnologyTemplateFinalizer.initialize);
 
             this.setProfiles();
             addListeners.call(this);
@@ -104,30 +57,6 @@ var TechnologiesForm = (function () {
                 count    = parseInt(countDom.text().replace(/[\(\)]/g, ''), 10);
 
             countDom.text("(" + (count += amount) + ")");
-        },
-
-        updateExistingTechnology: function () {
-            var edsnSwitch = new EdsnSwitch(this);
-
-            new CompositeTemplateUpdater(this).update();
-            new BatteryTemplateUpdater(this).update();
-            new BufferSelectBox(this).add();
-
-            if (edsnSwitch.isEdsn()) {
-                edsnSwitch.cloneAndAppendProfileSelect();
-
-                $(this).find(".profile select")
-                    .off('change.edsn')
-                    .on('change.edsn', edsnSwitch.cloneAndAppendProfileSelect);
-            }
-
-            $(this).find(".remove-row")
-                .off("click").on("click", RemoveTechnology.remove);
-
-            $(this).find(".show-advanced")
-                .off("click").on("click", toggleAdvancedFeatures);
-
-            addOnChangeListener.call(this);
         },
 
         markAsEditing: function () {

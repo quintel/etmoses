@@ -1,6 +1,7 @@
 ---
 color: "#748eaa"
 carrier: gas
+expandable: false
 visible: false
 whitelisted_attributes:
   - buffer
@@ -12,4 +13,3 @@ whitelisted_attributes:
   - output_capacity
   - position_relative_to_buffer
   - technical_lifetime
-  - units
