@@ -22,6 +22,10 @@ class TestingGroundPolicy < ApplicationPolicy
     record.topology ? record.topology.public? : true
   end
 
+  def clone?
+    record.public && show_topology? && show_market_model?
+  end
+
   alias_method :data?, :show?
   alias_method :technology_profile?, :show?
   alias_method :import?, :new?

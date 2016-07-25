@@ -37,8 +37,13 @@
 
           %button.btn.btn-primary.apply_strategies Apply
 
-      - if policy(@testing_ground).edit?
-        .main-buttons
+      .main-buttons
+        - if policy(@testing_ground).edit?
           = link_to edit_testing_ground_path(@testing_ground), class: "btn btn-default" do
             .glyphicon.glyphicon-pencil
             Edit LES
+
+        - if policy(@testing_ground).clone?
+          = link_to clone_testing_ground_path(@testing_ground), method: :post, class: "btn btn-default" do
+            Clone LES
+
