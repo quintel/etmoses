@@ -2,18 +2,21 @@ module Market
   class PaymentRule
     # Public: Creates a new payment rule.
     #
-    # measure - A callable which will retrieve the value from the measurable
-    #           objects. This should be an object responding to "call" and
-    #           which accepts one or two arguments. If the measure returns a
-    #           year-round value, it should take one argument. If it needs to
-    #           measure a separate value for each hour, the second argument is
-    #           the frame to be computed.
-    # tariff  - A numeric describing the price.
+    # measure  - A callable which will retrieve the value from the measurable
+    #            objects. This should be an object responding to "call" and
+    #            which accepts one or two arguments. If the measure returns a
+    #            year-round value, it should take one argument. If it needs to
+    #            measure a separate value for each hour, the second argument is
+    #            the frame to be computed.
+    # tariff   - A numeric describing the price.
+    # detector - The object which extracted the measurables from the network;
+    #            used to supply the variants to the measure.
     #
     # Returns a PaymentRule.
-    def initialize(measure, tariff)
-      @measure = measure
-      @tariff  = tariff
+    def initialize(measure, tariff, detector = Detectors::Default.new)
+      @measure  = measure
+      @detector = detector
+      @tariff   = tariff
 
       @arity =
         if measure.respond_to?(:arity)
@@ -61,7 +64,7 @@ module Market
     end
 
     def variants_for(measurable, variants)
-      Hash[variants.map { |name, variant| [name, variant.call(measurable)] }]
+      @detector.variants_for(measurable, variants)
     end
   end # PaymentRule
 end # Market

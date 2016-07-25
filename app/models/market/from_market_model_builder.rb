@@ -1,5 +1,13 @@
 module Market
   class FromMarketModelBuilder
+    # Maps measures in the Detector which extracts the things to be measured
+    # from the network. If the measure is not specified in the hash, the default
+    # measurable will be used.
+    DETECTORS =
+      Hash.new { Detectors::Default.new }.tap do |m|
+        m[:heat_kwh_produced] = Detectors::ParkProducers.new
+      end.freeze
+
     def initialize(testing_ground, network, variants = {})
       @les      = testing_ground
       @model    = testing_ground.market_model
@@ -14,39 +22,32 @@ module Market
     private
 
     def data
-      {
-        relations: relations,
-        measurables: measurables,
-        variants: @variants
-      }
+      { relations: relations,
+        variants: @variants }
     end
 
     def relations
       ignore = [:kw_flex, :kw_connection]
 
       relations = @model.interactions.map do |inter|
+        measure    = inter['foundation'].downcase.to_sym
+        detector   = DETECTORS[measure]
+        applied_to = inter['applied_stakeholder'] || inter['stakeholder_from']
+
         {
-          from:       inter['stakeholder_from'],
-          to:         inter['stakeholder_to'],
-          measure:    inter['foundation'].downcase.to_sym,
-          applied_to: inter['applied_stakeholder'],
-          tariff:     convert_tariff(inter['tariff_type'], inter['tariff'])
+          from:        inter['stakeholder_from'],
+          to:          inter['stakeholder_to'],
+          measure:     measure,
+          detector:    detector,
+          measurables: detector.measurables(applied_to, @network, @variants),
+          applied_to:  applied_to,
+          tariff:      convert_tariff(inter['tariff_type'], inter['tariff'])
         }
       end
 
       relations.reject do |relation|
         ignore.include?(relation[:measure])
       end
-    end
-
-    def measurables
-      measurables = Hash.new { |hash, key| hash[key] = [] }
-
-      @network.nodes.select { |node| node.get(:stakeholder) }.each do |node|
-        measurables[node.get(:stakeholder)].push(node)
-      end
-
-      measurables
     end
 
     def convert_tariff(type, tariff)

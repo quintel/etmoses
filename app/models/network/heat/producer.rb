@@ -12,6 +12,12 @@ module Network
         @assignments
       end
 
+      def energy_at(frame)
+        # TODO Can we take the resolution from the profile? What about
+        # dispatchables which have no profile?
+        @assignments[frame] / 4.0
+      end
+
       def consumer?
         false
       end

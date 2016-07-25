@@ -29,6 +29,7 @@ module Market
       gas_kwh_consumed:  Measures::VariantKwh.new(:gas, :consumed),
       gas_kwh_produced:  Measures::VariantKwh.new(:gas, :produced),
       heat_kwh_consumed: Measures::VariantKwh.new(:heat, :consumed),
+      heat_kwh_produced: Measures::ParkKwhProduced,
       heat_connections:  Measures::NumberOfHeatConnections,
       load:              Measures::InstantaneousLoad,
       kw_contracted:     Measures::KwMax.new(1),
@@ -44,8 +45,6 @@ module Market
 
       @market = Graph.new
       @data   = data
-
-      @data[:measurables] ||= {}
     end
 
     # Public: Creates and returns the Market::Graph based on the data with which
@@ -75,7 +74,8 @@ module Market
 
       rule = Market::PaymentRule.new(
         measure_from(relation),
-        tariff_from(relation[:tariff])
+        tariff_from(relation[:tariff]),
+        relation[:detector]
       )
 
       from.connect_to(
@@ -89,16 +89,11 @@ module Market
         SecureRandom.uuid,
 
         measure:     relation[:measure],
-        measurables: measurables_for(relation),
+        detector:    relation[:detector],
+        measurables: relation[:measurables],
         variants:    @data[:variants],
         rule:        rule
       )
-    end
-
-    # Internal: Returns the Network nodes whose information is read in order to
-    # determine the price of a relation.
-    def measurables_for(relation)
-      @data[:measurables][relation[:applied_to] || relation[:from]] || []
     end
 
     # Internal: Given data about a relation, determines the measure object to be
