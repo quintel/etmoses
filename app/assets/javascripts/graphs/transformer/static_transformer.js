@@ -1,11 +1,14 @@
-var StaticTransformator = (function () {
+/*globals LoadSlicer*/
+
+var StaticTransformer = (function () {
     'use strict';
 
     return {
         transform: function (data, week) {
             var totals = [];
 
-            data.values.forEach(function(item) {
+            data.type = data.key;
+            data.values.forEach(function (item) {
                 totals.push({
                     type: item.type,
                     name: item.name,
@@ -16,5 +19,5 @@ var StaticTransformator = (function () {
 
             return totals;
         }
-    }
+    };
 }());

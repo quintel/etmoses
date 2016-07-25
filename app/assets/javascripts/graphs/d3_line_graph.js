@@ -1,4 +1,4 @@
-/*globals Ajax*/
+/*globals Ajax,D3BaseChart*/
 
 var D3LineGraph = (function () {
     'use strict';
@@ -23,7 +23,7 @@ var D3LineGraph = (function () {
     }
 
     function reloadD3Graph(rawData) {
-        var data = convertData(rawData);
+        var data = convertData.call(this, rawData);
 
         x.domain(d3.extent(data, function (d) { return d.x; }));
         y.domain([0, d3.max(data, function (d) { return d.y; })]);
@@ -39,7 +39,7 @@ var D3LineGraph = (function () {
     }
 
     function drawD3Graph(rawData) {
-        var data = convertData(rawData);
+        var data = convertData.call(this, rawData);
 
         this.line = d3.svg.line()
              .interpolate(this.interpolate)
@@ -76,10 +76,11 @@ var D3LineGraph = (function () {
             .attr("d", this.line);
     }
 
-    D3LineGraph.prototype = {
-        svg: null,
-        line: null,
+    D3LineGraph.prototype = $.extend({}, D3BaseChart, {
         draw: function () {
+            this.svg = null;
+            this.line = null;
+
             Ajax.json(this.url, {}, drawD3Graph.bind(this));
 
             return this;
@@ -88,7 +89,7 @@ var D3LineGraph = (function () {
         reload: function () {
             Ajax.json(this.url, {}, reloadD3Graph.bind(this));
         }
-    };
+    });
 
     function D3LineGraph(scope, data) {
         this.scope       = scope;

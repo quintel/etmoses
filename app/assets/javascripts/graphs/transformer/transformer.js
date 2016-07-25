@@ -1,4 +1,6 @@
-var Transformator = (function () {
+/*globals I18n,LoadChartsSettings,StrategyHelper*/
+
+var Transformer = (function () {
     'use strict';
 
     var currentWeek,
@@ -61,10 +63,22 @@ var Transformator = (function () {
         return new Date((frame * multiplier) + offset);
     }
 
+    function formatYvalue(y) {
+        if (this.scaling) {
+            return ((y * 1000) / this.scaling.unit.power.multiple);
+        } else {
+            return y;
+        }
+    }
+
     function setCoords(loads) {
         return loads.map(function (y, x) {
-            return { x: formatDateFromFrame(loads, x), y: y };
-        });
+            return { x: formatDateFromFrame(loads, x), y: formatYvalue.call(this, y) };
+        }.bind(this));
+    }
+
+    function isStaticLoadOrTotal() {
+        return (this.settings.load || this.settings.view_as === 'total');
     }
 
     function isShown(chartType) {
@@ -88,7 +102,7 @@ var Transformator = (function () {
         return {
             key:     settings.name,
             type:    datum.type,
-            values:  setCoords(values),
+            values:  setCoords.call(this, values),
             area:    datum.area,
             color:   settings.color,
             visible: settings.visible
@@ -96,7 +110,9 @@ var Transformator = (function () {
     }
 
     function setLoadsPerTech(values) {
-        for (var tech in values.tech_loads) {
+        var tech;
+
+        for (tech in values.tech_loads) {
             if (!LoadChartsSettings[tech]) {
                 LoadChartsSettings[tech] = { visible: true };
             }
@@ -104,16 +120,12 @@ var Transformator = (function () {
             this.results.push({
                 key:     I18n.translations.en.inputs[tech],
                 type:    tech,
-                values:  setCoords(values.tech_loads[tech]),
+                values:  setCoords.call(this, values.tech_loads[tech]),
                 area:    (this.settings.view_as === 'stacked'),
                 color:   $(".technologies.hidden span." + tech).data('color'),
                 visible: LoadChartsSettings[tech].visible
             });
         }
-    }
-
-    function isStaticLoadOrTotal() {
-        return (this.settings.load || this.settings.view_as === 'total');
     }
 
     function setLoad(datum) {
@@ -133,14 +145,14 @@ var Transformator = (function () {
             this.results  = [];
             this.data     = d3Chart.lastRequestedData;
             this.settings = d3Chart.settings;
+            this.scaling  = d3Chart.scaling;
 
             currentWeek   = thisCurrentWeek;
 
             fetchLoad.call(this).forEach(setLoad.bind(this));
 
             if (this.data.capacity && this.settings.view_as === 'total') {
-                this.results.push(
-                    generateCapacity(this.data, this.results));
+                this.results.push(generateCapacity(this.data, this.results));
             }
 
             return this.results;

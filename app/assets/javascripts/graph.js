@@ -1,3 +1,6 @@
+/*globals D3LineGraph,D3StackedBarGraph,D3GasLoadChart,D3HeatLoadChart,
+D3BaseStaticLoadChart,D3ProfileChart*/
+
 window.graphs = {};
 
 var Graph = (function () {
@@ -7,7 +10,10 @@ var Graph = (function () {
         return {
             line:              D3LineGraph,
             stacked_bar:       D3StackedBarGraph,
-            static_load_chart: StaticLoadChart
+            gas_load_chart:    D3GasLoadChart,
+            heat_load_chart:   D3HeatLoadChart,
+            static_load_chart: D3BaseStaticLoadChart,
+            profile_chart:     D3ProfileChart
         }[this.data.type];
     }
 
@@ -36,14 +42,14 @@ var Graph = (function () {
             if (Graph) {
                 graph = drawGraph.call(this, Graph);
             } else {
-                throw "No chart available for " + type;
+                throw "No chart available for " + this.data.type;
             }
 
             return graph;
         }
-    }
+    };
 
-    function Graph(scope, data) {
+    function Graph(scope) {
         this.scope    = scope;
         this.defaults = { type: 'line', interpolate: 'linear' };
         this.data     = $.extend(this.defaults, $(this.scope).underscorizedData());

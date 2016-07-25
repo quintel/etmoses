@@ -1,4 +1,6 @@
-var HeatTransformator = (function () {
+/*globals I18n,LoadSlicer*/
+
+var HeatTransformer = (function () {
     'use strict';
 
     function fetchChart(data, totals) {
@@ -21,7 +23,7 @@ var HeatTransformator = (function () {
                     fetchChart(subChart, totals);
                 }
             }
-        };
+        }
 
         return totals;
     }
@@ -29,23 +31,24 @@ var HeatTransformator = (function () {
     function withDeficit(data) {
         var deficit = [],
             length  = data.length,
-            newData, techIndex;
+            newData,
+            techIndex;
 
-        if (! length) {
+        if (!length) {
             return data;
         }
 
-        deficit = data[0].values.total.map(function(val, index) {
+        deficit = data[0].values.total.map(function (val, index) {
             var net = 0;
 
-            for(techIndex = 0; techIndex < length; techIndex++) {
+            for (techIndex = 0; techIndex < length; techIndex++) {
                 net = net + data[techIndex].values.total[index];
             }
 
             return (net < 0 ? 0.0 : -net);
         });
 
-        if (! deficit.some(function(v) { return v < 0 })) {
+        if (!deficit.some(function (v) { return v < 0 })) {
             // No deficit; don't show the series.
             return data;
         }
@@ -63,8 +66,8 @@ var HeatTransformator = (function () {
     }
 
     return {
-        transform: function (data, week) {
+        transform: function (data) {
             return withDeficit(fetchChart(data));
         }
-    }
+    };
 }());
