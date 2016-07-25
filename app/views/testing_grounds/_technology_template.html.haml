@@ -1,14 +1,16 @@
 .technology{id: "T#{technology.object_id}", class: technology_class(technology), data: technology_data(technology, node) }
   .advanced-actions.pull-right
-    - if technology.technology.expandable?
-      = link_to "#!", class: "btn btn-default btn-sm split" do
-        Split
-        %span.glyphicon.glyphicon-resize-full
 
     .btn-group
-      = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
-      = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
-        %span.glyphicon.glyphicon-trash
+      - if technology.technology.expandable?
+        = link_to "#!", class: "btn btn-default btn-sm split" do
+          %span.glyphicon.glyphicon-resize-full
+          Split
+
+      = link_to "Advanced settings", "#!", class: "btn btn-default btn-sm show-advanced"
+
+    = link_to "#!", class: "remove-row btn btn-default btn-sm" do
+      %span.glyphicon.glyphicon-trash
 
   - if technology.sticks_to_composite?
     .indent.arrow
