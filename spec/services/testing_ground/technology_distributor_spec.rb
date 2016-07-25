@@ -137,28 +137,9 @@ RSpec.describe TestingGround::TechnologyDistributor do
 
   # composites
   describe "setting composites over end points of a topology" do
-    let(:composite_technologies) {
-      [
-        {
-          "name"      => "Buffer space heating",
-          "type"      => "buffer_space_heating",
-          "capacity"  => "5.0",
-          "units"     => "10.0",
-          "composite" => true,
-          "includes"  => [ "households_space_heater_heatpump_ground_water_electricity" ]
-        },
-        {
-          "name"     => "Heat pump for space heating (ground)",
-          "type"     => "households_space_heater_heatpump_ground_water_electricity",
-          "capacity" => "2.0",
-          "units"    => "10.0"
-        }
-      ]
-    }
-
-    let(:new_profile){
-      TestingGround::TechnologyDistributor.new(composite_technologies, topology
-      ).build
+    let(:new_profile){ TestingGround::TechnologyDistributor.new(
+                          composite_technologies("10.0"), topology
+                        ).build
     }
 
     it "sets the composite values correctly" do
@@ -168,47 +149,10 @@ RSpec.describe TestingGround::TechnologyDistributor do
     end
 
     it "sets the buffer values correctly" do
-      expect(new_profile.flat_map(&:associates).map(&:buffer)).to eq([
+      expect(new_profile.map{|t| t['buffer']}.compact).to eq([
         'buffer_space_heating_1', 'buffer_space_heating_2'
       ])
     end
   end
-
-  describe "realistic scenario" do
-    let!(:profiles) {
-      FactoryGirl.create(:technology_profile,
-        technology: 'base_load')
-
-      FactoryGirl.create(:technology_profile,
-        technology: 'buffer_space_heating')
-
-      FactoryGirl.create(:technology_profile,
-        technology: 'buffer_water_heating')
-
-      FactoryGirl.create(:technology_profile,
-        technology: 'base_load_buildings')
-
-      FactoryGirl.create(:technology_profile,
-        technology: 'transport_car_using_electricity')
-    }
-
-    let(:technologies) {
-      TechnologyDistributorData.load_file('technologies_scenario_515515')
-    }
-
-    let(:new_profile){
-      TestingGround::TechnologyDistributor.new(technologies, topology).build
-    }
-
-    it "sets the composite values correctly" do
-      expect(new_profile.map(&:composite_value).compact).to eq([
-        'buffer_space_heating_1', 'buffer_space_heating_2',
-        'buffer_water_heating_1', 'buffer_water_heating_2'
-      ])
-    end
-
-    it "expects all technologies to be valid" do
-      expect(new_profile.all?(&:valid?)).to eq(true)
-    end
-  end
 end
+

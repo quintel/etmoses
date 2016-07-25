@@ -6,7 +6,6 @@ defaults:
   capacity: 2.08333
   position_relative_to_buffer: buffering
 
-expandable: false
 export_to: households_space_heater_heatpump_ground_water_electricity_share
 importable_attributes:
   - coefficient_of_performance
@@ -29,3 +28,4 @@ whitelisted_attributes:
   - performance_coefficient
   - position_relative_to_buffer
   - technical_lifetime
+  - units

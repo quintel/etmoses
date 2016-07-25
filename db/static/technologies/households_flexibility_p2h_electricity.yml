@@ -6,7 +6,6 @@ defaults:
   capacity: 2.0
   position_relative_to_buffer: buffering
 
-expandable: false
 export_to: households_flexibility_p2h_electricity_market_penetration
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
@@ -18,7 +17,6 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
 whitelisted_attributes:
-  - buffer
   - initial_investment
   - input_capacity
   - om_costs_for_ccs_per_full_load_hour
@@ -26,5 +24,7 @@ whitelisted_attributes:
   - om_costs_per_year
   - output_capacity
   - performance_coefficient
+  - profile
   - technical_lifetime
+  - units
   - volume

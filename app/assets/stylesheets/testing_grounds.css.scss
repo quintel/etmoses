@@ -406,20 +406,8 @@ table.table.scenarios{
       border-bottom-color: #ddd;
     }
 
-    .advanced-actions {
-      .remove-row {
-        color: #d9534f;
-        border-color: lighten(#d9534f, 15%);
-
-        .glyphicon {
-          top: 2px;
-        }
-      }
-
-      .split .glyphicon {
-        margin-right: 2px;
-        vertical-align: text-top;
-      }
+    .advanced-actions .remove-row .glyphicon {
+      top: 2px;
     }
 
     .indent.arrow{
@@ -435,7 +423,7 @@ table.table.scenarios{
     }
 
     .wrapper-tech{
-      width: 75%;
+      width: 80%;
     }
 
     strong{

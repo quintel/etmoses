@@ -11,7 +11,8 @@
           .add-technology.form-inline
             .form-group
               %label.sr-only Choose a technology to add
-              = select_tag :name, profile_table_options_for_name, { class: 'name form-control', autcomplete: 'off', include_blank: '-----' }
+              %select.name.form-control{autocomplete: 'off'}
+                = profile_table_options_for_name
 
             %span.input-btn
               %button{type: "button", class: "btn btn-success"}

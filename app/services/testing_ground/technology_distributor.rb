@@ -1,27 +1,27 @@
 class TestingGround
   class TechnologyDistributor
-    include ProfileSelector
-
     #
     # Given a list of technologies, a topology
     # Creates a Hash with the technologies distributed over the nodes
     #
 
     def initialize(technologies, topology)
-      @technologies = technologies.map { |tech| InstalledTechnology.new(tech) }
+      @technologies = set_technologies(technologies)
       @topology     = topology
     end
 
     # Returns an array with all technologies
     def build
-      TechnologyConnector.connect(@technologies).flat_map do |technology|
-        @technology = technology
-
-        partition.each_with_index.map(&method(:update_tech))
-      end
+      all_technologies.flatten
     end
 
     private
+
+    def set_technologies(technologies)
+      technologies.map do |t|
+        InstalledTechnology.new(t)
+      end
+    end
 
     # Returns an array
     def edge_nodes
@@ -38,11 +38,37 @@ class TestingGround
       Topologies::EdgeNodesFinder.new(@topology).find_edge_nodes
     end
 
-    def update_tech(tech, index)
-      dup_technology         = tech.dup
-      dup_technology.profile = profile_selector(dup_technology).select_profile
-      dup_technology.node    = edge_nodes[index + edge_nodes_index].key
+    # Duplicate all technologies according to the amount of units
+    #
+    # Returns a 2-dimensional Array of technologies and their 'node'
+    def all_technologies
+      @technologies.map do |technology|
+        @technology = technology
+
+        partition.each_with_index.map(&method(:duplicate_technology))
+      end
+    end
+
+    def duplicate_technology(tech, index)
+      dup_technology = tech.dup
+      dup_technology.composite_index = (index + 1)
+
+      if dup_technology.composite
+        dup_technology.composite_value = dup_technology.get_composite_value
+      elsif buffer = associations[dup_technology.type]
+        dup_technology.buffer = dup_technology.get_buffer(buffer)
+      end
+
+      dup_technology.node ||= edge_nodes[index + edge_nodes_index].key
       dup_technology
+    end
+
+    def associations
+      @technologies.select(&:composite).each_with_object({}) do |composite, result|
+        composite.includes.map do |inc|
+          result[inc] = composite.type
+        end
+      end
     end
 
     def edge_nodes_index

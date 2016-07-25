@@ -1,15 +1,8 @@
 .technology{id: "T#{technology.object_id}", class: technology_class(technology), data: technology_data(technology, node) }
-  .advanced-actions.pull-right
+  .advanced-actions.pull-right.btn-group
+    = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
 
-    .btn-group
-      - if technology.technology.expandable?
-        = link_to "#!", class: "btn btn-default btn-sm split" do
-          %span.glyphicon.glyphicon-resize-full
-          Split
-
-      = link_to "Advanced settings", "#!", class: "btn btn-default btn-sm show-advanced"
-
-    = link_to "#!", class: "remove-row btn btn-default btn-sm" do
+    = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
       %span.glyphicon.glyphicon-trash
 
   - if technology.sticks_to_composite?
@@ -37,7 +30,7 @@
 
         - %w(boosting buffering).each do |position|
           %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
-            %input{type: 'radio', value: 'after', name: "position_relative_to_buffer_name_#{ technology.object_id }", checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
+            %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
             = position.humanize
 
         = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))
@@ -82,7 +75,7 @@
         %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
         .clearfix
 
-    .editable.text.units{class: ('hidden' unless technology.whitelisted?('units'))}
+    .editable.text{class: 'units'}
       %span Units
       %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
       .clearfix
@@ -99,8 +92,5 @@
           .clearfix
 
     .clearfix
-  .clearfix
 
-- if technology.associates.any?
-  - technology.associates.each do |associate|
-    = render partial: "technology_template", locals: { technology: associate, node: node }
+  .clearfix
