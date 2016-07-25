@@ -112,7 +112,11 @@ class Export
 
     valid.each do |share_group, percentage|
       if percentage > 100 && share_group != 'no_group'
-        errors.add(:base, "Please limit your units for share group #{ I18n.t("groups.#{ share_group }") } to 100%")
+        errors.add(
+          :base,
+          "Please limit your units for the " \
+          "#{ I18n.t("groups.#{ share_group }").downcase } group to 100%"
+        )
       end
     end
   end
