@@ -37,7 +37,10 @@
             = options_for_all_stakeholders(list_item.stakeholder)
 
         %td.editable.connection_distribution
-          %input.form-control{name: 'connection_distribution', value: list_item.connection_distribution}
+          %input.slider{ style: 'width: 130px', name: 'connection_distribution', value: list_item.connection_distribution, data: { 'slider-min' => 0.0, 'slider-max' => 1.0, 'slider-step' => 0.01 } }
+
+          %span.value
+            == #{ (list_item.connection_distribution * 100).round }%
 
         %td.editable.hidden
           %input.form-control{name: 'scope', value: 'secondary'}
@@ -49,5 +52,3 @@
         %td
           = link_to '#', class: 'remove-row text-danger' do
             %span.glyphicon.glyphicon-remove
-
-

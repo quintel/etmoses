@@ -22,5 +22,6 @@
 //= require bootstrap-toggle.min
 //= require bootstrap-slider
 //= require featherlight
+//= require jquery.linkedsliders
 //= require sortable.min
 //= require_tree .
