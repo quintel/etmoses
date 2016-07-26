@@ -53,9 +53,15 @@ var EditableTable = (function () {
         e.preventDefault();
 
         var row             = $(e.currentTarget).parents("tr"),
-            clonedRow       = row.clone(true, true).removeClass("blank"),
             originalSelects = row.find('select'),
+            clonedRow,
             clonedSelects;
+
+        if (this.beforeRowAddedListener) {
+            this.beforeRowAddedListener();
+        }
+
+        clonedRow = row.clone(true, true).removeClass("blank");
 
         if (originalSelects.length) {
             clonedSelects = clonedRow.find('select');
@@ -66,6 +72,11 @@ var EditableTable = (function () {
         }
 
         clonedRow.insertAfter(row);
+
+        if (this.rowAddedListener) {
+            this.rowAddedListener(clonedRow);
+        }
+
         this.changeListener();
 
         hideLastRow.call(this);
@@ -83,9 +94,20 @@ var EditableTable = (function () {
             .find("a.remove-row")
             .off('click')
             .on('click', function (e) {
+                var row =  $(e.currentTarget).parents("tr");
+
                 e.preventDefault();
 
-                $(e.currentTarget).parents("tr").remove();
+                if (this.beforeRowDeletedListener) {
+                    this.beforeRowDeletedListener(row)
+                }
+
+                row.remove();
+
+                if (this.rowDeletedListener) {
+                    this.rowDeletedListener(row)
+                }
+
                 this.changeListener();
             }.bind(this));
     }

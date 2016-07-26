@@ -509,6 +509,20 @@ table.table.scenarios{
   }
 }
 
+#heat-asset-list .connection_distribution {
+  input.slider {
+    // This needs to be inline with the element "style" attribute.
+    width: 130px;
+  }
+
+  .value {
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 5px;
+    width: 40px;
+  }
+}
+
 span.loading-spinner{
   position: absolute;
   top: 50%;

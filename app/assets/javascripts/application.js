@@ -22,6 +22,7 @@
 //= require bootstrap-toggle.min
 //= require bootstrap-slider
 //= require featherlight
+//= require jquery.linkedsliders
 //= require sortable.min
 //= require graphs/d3_base_chart
 //= require graphs/d3_load_chart
