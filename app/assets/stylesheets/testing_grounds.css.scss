@@ -510,6 +510,8 @@ table.table.scenarios{
 }
 
 #heat-asset-list .connection_distribution {
+  white-space: nowrap;
+  
   input.slider {
     // This needs to be inline with the element "style" attribute.
     width: 130px;
