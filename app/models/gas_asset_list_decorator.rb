@@ -18,7 +18,7 @@ class GasAssetListDecorator
     @gas_asset_list.sorted_asset_list.map do |part|
       entity = GasAssets::Base.type_for(part[:part]).where(type: part[:type])
 
-      InstalledGasAsset.new(part.merge(entity.first.attributes))
-    end
+      InstalledGasAsset.new(part.merge(entity.first.attributes)) if entity.first
+    end.compact
   end
 end

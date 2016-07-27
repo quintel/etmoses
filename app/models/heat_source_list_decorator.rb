@@ -7,8 +7,8 @@ class HeatSourceListDecorator
     sorted_asset_list.map do |part|
       entity = Technology.by_key(part.fetch(:key))
 
-      InstalledHeatSource.new(part.merge(entity.attributes))
-    end
+      InstalledHeatSource.new(part.merge(entity.attributes)) if entity
+    end.compact
   end
 
   private
