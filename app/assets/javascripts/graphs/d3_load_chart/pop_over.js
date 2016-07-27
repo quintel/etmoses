@@ -13,7 +13,7 @@ var PopOver = (function () {
     }
 
     function setResults() {
-        var span, square, spanValue, type;
+        var key, span, square, spanValue, type;
 
         for (type in this.results) {
             if (isShown.call(this, type)) {
@@ -22,9 +22,9 @@ var PopOver = (function () {
                     "opacity": this.seriesOpacity
                 });
 
-                spanValue = $("<span>").text(setSpanText.bind(this, type));
-
-                span = $("<span>").addClass("wrap").append(square, spanValue);
+                key = $("<span class='key'>").text(this.results[type].key);
+                spanValue = $("<span>").html(setSpanText.bind(this, type));
+                span = $("<span>").addClass("wrap").append(key, square, spanValue);
 
                 this.scope.append(span);
             }

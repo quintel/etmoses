@@ -159,6 +159,7 @@ var D3LoadChart = (function () {
 
         chartData.forEach(function (d) {
             results[d.type] = {
+                key:    d.key,
                 color:  d.color,
                 values: d.values.find(function (val) {
                     return typeof (val.x.getTime) === 'function'
