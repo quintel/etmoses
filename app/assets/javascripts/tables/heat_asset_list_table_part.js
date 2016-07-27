@@ -35,6 +35,12 @@ var HeatAssetListTablePart = (function () {
                 .find('input[name=connection_distribution]');
 
         if (sliderInputs.length) {
+            sliderInputs.on('change', function(e) {
+                $(e.target).closest('td').find('.value').text(
+                    distributionLabel(e.value.newValue, connections)
+                )
+            });
+
             sliderInputs.each(function (index, el) {
                 var $el = $(el);
 
@@ -45,12 +51,11 @@ var HeatAssetListTablePart = (function () {
                 //
                 // Instead, get the value from the input.
                 $el.slider({ tooltip: 'hide', value: parseFloat($el.val()) });
-            });
 
-            sliderInputs.on('change', function(e) {
-                $(e.target).closest('td').find('.value').text(
-                    distributionLabel(e.value.newValue, connections)
-                )
+                if (sliderInputs.length === 1) {
+                    $el.slider('disable');
+                    $el.slider('setValue', 1.0, true, true);
+                }
             });
 
             sliderInputs.linkedSliders({ total: 1.0 });
