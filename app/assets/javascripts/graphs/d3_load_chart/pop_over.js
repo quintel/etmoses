@@ -23,12 +23,16 @@ var PopOver = (function () {
                 });
 
                 key = $("<span class='key'>").text(this.results[type].key);
+
                 spanValue = $("<span>").html(setSpanText.bind(this, type));
                 span = $("<span>").addClass("wrap").append(key, square, spanValue);
 
                 this.scope.append(span);
             }
         }
+
+        // Adjust the position of the series keys.
+        this.scope.find('span.key').css({ right: this.scope.width() + 4 });
     }
 
     PopOver.prototype = {
