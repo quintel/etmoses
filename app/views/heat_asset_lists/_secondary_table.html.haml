@@ -1,9 +1,6 @@
 %h2 Secondary network
 
-.hidden.heat_asset_list.connections
-  %input.heat_connections{name: 'heat_connections', value: 0.0}
-
-%table.table.interactions.heat_asset_list.multi_table{ data: { type: 'heat_asset_list_table'  } }
+%table.table.interactions.heat_asset_list.multi_table{ data: { type: 'heat_asset_list_table', connections: @heat_connections } }
   %thead
     %tr
       %th.col-sm-3{ data: { header: 'type' } } Type
@@ -41,6 +38,7 @@
 
           %span.value
             == #{ (list_item.connection_distribution * 100).round }%
+            == (#{ (@heat_connections * list_item.connection_distribution).round } connections)
 
         %td.editable.hidden
           %input.form-control{name: 'scope', value: 'secondary'}

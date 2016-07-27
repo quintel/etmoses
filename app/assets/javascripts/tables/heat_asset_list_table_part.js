@@ -28,7 +28,7 @@ var HeatAssetListTablePart = (function () {
      * Given a selector for a table part, creates sliders for each of the
      * connection distribution fields and links them such that they sum to 1.0.
      */
-    function createSliders(selector) {
+    function createSliders(selector, connections) {
         var sliderInputs =
             $(selector)
                 .find('tbody tr:not(.blank)')
@@ -48,8 +48,9 @@ var HeatAssetListTablePart = (function () {
             });
 
             sliderInputs.on('change', function(e) {
-                $(e.target).closest('td').find('.value')
-                    .text('' + Math.round(e.value.newValue * 100) + '%');
+                $(e.target).closest('td').find('.value').text(
+                    distributionLabel(e.value.newValue, connections)
+                )
             });
 
             sliderInputs.linkedSliders({ total: 1.0 });
@@ -67,10 +68,18 @@ var HeatAssetListTablePart = (function () {
         sliders.slider('destroy');
     }
 
+    /**
+     * Creates the label to be shown next to a connection distribution slider.
+     */
+    function distributionLabel(value, connections) {
+        return '' + Math.round(value * 100) + '% ' +
+            '(' + Math.round(connections * value) + ' connections)';
+    }
+
     HeatAssetListTablePart.prototype = {
         append: function () {
             this.setProfiles();
-            createSliders(this.editableTable.selector);
+            createSliders(this.editableTable.selector, this.connections);
         },
 
         setProfiles: function () {
@@ -82,6 +91,7 @@ var HeatAssetListTablePart = (function () {
 
     function HeatAssetListTablePart(selector) {
         this.editableTable = new EditableTable(selector);
+        this.connections   = parseInt($(selector).data('connections'), 10);
 
         this.editableTable.beforeRowAddedListener = function() {
             destroySliders(this.editableTable.selector);
@@ -93,9 +103,9 @@ var HeatAssetListTablePart = (function () {
                 .attr('data', 'value: 0.0')
                 .attr('data-slider-value', '0.0');
 
-            $(row).find('.value').text('0%');
+            $(row).find('.value').text(distributionLabel(0, 0));
 
-            createSliders(this.editableTable.selector);
+            createSliders(this.editableTable.selector, this.connections);
         }.bind(this);
 
         this.editableTable.beforeRowDeletedListener =

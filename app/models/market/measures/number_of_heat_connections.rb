@@ -33,6 +33,14 @@ module Market::Measures
       end.max || 0
     end
 
+    # Public: Given a technology profile from a LES, counts the total number of
+    # heat connections in the LES.
+    #
+    # Returns an integer.
+    def count_with_technology_profile(profile)
+      profile.sum { |_key, techs| count_with_technologies_list(techs) }
+    end
+
     def irregular?
       true
     end

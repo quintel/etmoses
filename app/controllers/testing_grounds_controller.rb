@@ -132,6 +132,11 @@ class TestingGroundsController < ResourceController
       @gas_asset_list = GasAssetListDecorator.new(
         @testing_ground.gas_asset_list).decorate
     end
+
+    @heat_connections =
+      Market::Measures::NumberOfHeatConnections.count_with_technology_profile(
+        @testing_ground.technology_profile
+      )
   end
 
   # PATCH /testing_grounds/:id
