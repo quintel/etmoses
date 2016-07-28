@@ -46,11 +46,15 @@ module TestingGroundsHelper
   end
 
   def options_for_stakeholders(stakeholder = nil)
-    options = @testing_ground.topology.each_node.map do |n|
+    options = Set.new(@testing_ground.topology.each_node.map do |n|
       n[:stakeholder]
-    end.compact.uniq.sort
+    end.compact)
 
-    options_for_select options.uniq, stakeholder
+    options.merge(@testing_ground.gas_asset_list.stakeholders)
+    options.merge(@testing_ground.heat_asset_list.stakeholders)
+    options.merge(@testing_ground.heat_source_list.stakeholders)
+
+    options_for_select options.sort, stakeholder
   end
 
   def options_for_all_stakeholders(stakeholder = nil)

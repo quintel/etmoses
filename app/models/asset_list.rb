@@ -10,4 +10,8 @@ class AssetList < ActiveRecord::Base
       super(asset_list)
     end
   end
+
+  def stakeholders
+    Set.new(asset_list.map { |item| item[:stakeholder] }.compact)
+  end
 end

@@ -33,4 +33,51 @@ RSpec.describe GasAssetList do
       expect(gas_asset_list.asset_list).to eq([])
     end
   end
+
+  describe '#stakeholders' do
+    context 'with no assets' do
+      let(:list) do
+        GasAssetList.new(asset_list: [])
+      end
+
+      it 'returns a set' do
+        expect(list.stakeholders).to be_a(Set)
+      end
+
+      it 'is empty' do
+        expect(list.stakeholders).to be_empty
+      end
+    end
+
+    context 'with one asset, one stakeholder' do
+      let(:list) do
+        GasAssetList.new(asset_list: [{ stakeholder: 'one' }])
+      end
+
+      it 'returns a set' do
+        expect(list.stakeholders).to be_a(Set)
+      end
+
+      it 'includes the stakeholder' do
+        expect(list.stakeholders).to include('one')
+      end
+    end
+
+    context 'with two assets, two stakeholders' do
+      let(:list) do
+        GasAssetList.new(asset_list: [
+          { stakeholder: 'one' },
+          { stakeholder: 'two' },
+        ])
+      end
+
+      it 'returns a set' do
+        expect(list.stakeholders).to be_a(Set)
+      end
+
+      it 'includes both stakeholders' do
+        expect(list.stakeholders.to_a).to eq(%w( one two ))
+      end
+    end
+  end # stakeholders
 end
