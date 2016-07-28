@@ -28,9 +28,9 @@ var HeatAssetListTablePart = (function () {
      * Given a selector for a table part, creates sliders for each of the
      * connection distribution fields and links them such that they sum to 1.0.
      */
-    function createSliders(selector, connections) {
+    function createSliders(table, connections) {
         var sliderInputs =
-            $(selector)
+            $(table.selector)
                 .find('tbody tr:not(.blank)')
                 .find('input[name=connection_distribution]');
 
@@ -56,6 +56,18 @@ var HeatAssetListTablePart = (function () {
                     $el.slider('disable');
                     $el.slider('setValue', 1.0, true, true);
                 }
+            });
+
+            // Suspend updates of the editable table while dragging a slider.
+            // This improves performance substantially and prevents incorrect
+            // values from being saved by "linkedSliders" change events
+            // triggering too early.
+            sliderInputs.on('slideStart', function() {
+                table.suspendUpdates()
+            });
+
+            sliderInputs.on('slideStop', function() {
+                table.resumeUpdates()
             });
 
             sliderInputs.linkedSliders({ total: 1.0 });
@@ -84,7 +96,7 @@ var HeatAssetListTablePart = (function () {
     HeatAssetListTablePart.prototype = {
         append: function () {
             this.setProfiles();
-            createSliders(this.editableTable.selector, this.connections);
+            createSliders(this.editableTable, this.connections);
         },
 
         setProfiles: function () {
@@ -110,7 +122,7 @@ var HeatAssetListTablePart = (function () {
 
             $(row).find('.value').text(distributionLabel(0, 0));
 
-            createSliders(this.editableTable.selector, this.connections);
+            createSliders(this.editableTable, this.connections);
         }.bind(this);
 
         this.editableTable.beforeRowDeletedListener =

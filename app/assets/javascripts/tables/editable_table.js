@@ -138,7 +138,13 @@ var EditableTable = (function () {
 
             $(this.selector)
                 .off('change.table')
-                .on('change.table', this.changeListener.bind(this));
+                .on('change.table', function() {
+                    if (! this.suspended) {
+                        this.changeListener.call(this)
+                    } else {
+                        this.updatedDuringSuspend = true;
+                    }
+                }.bind(this));
 
             $(this.selector)
                 .off('change.editable')
@@ -151,6 +157,32 @@ var EditableTable = (function () {
 
         getData: function () {
             return tableToProfile.call(this);
+        },
+
+        /**
+         * Instructs the table to stop firing the changeListener whenever a
+         * change occurs in the table.
+         */
+        suspendUpdates: function () {
+            if (! this.suspended) {
+                this.updatedDuringSuspend = false;
+            }
+
+            this.suspended = true;
+        },
+
+        /**
+         * Resumes handling updates by firing the changeListener when changes
+         * occur in the table. If any updates occurred while the table was
+         * suspended the changeListener will be invoked to handle the changes.
+         */
+        resumeUpdates: function () {
+            this.suspended = false;
+
+            if (this.updatedDuringSuspend) {
+                this.changeListener.call(this);
+            }
+
         }
     };
 
@@ -158,6 +190,9 @@ var EditableTable = (function () {
         this.selector       = selector;
         this.changeListener = function () { return; };
         this.changeData     = function () { return; };
+
+        this.suspended            = false;
+        this.updatedDuringSuspend = false;
     }
 
     return EditableTable;
