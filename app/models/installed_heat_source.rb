@@ -11,7 +11,7 @@ class InstalledHeatSource
   attribute :om_costs_per_year, Float, default: 0.0
   attribute :marginal_heat_costs, Float
   attribute :profile, Integer
-  attribute :stakeholder, String
+  attribute :stakeholder, String, default: 'heat producer'
   attribute :distance, Float
   attribute :dispatchable, Boolean
   attribute :priority, Integer

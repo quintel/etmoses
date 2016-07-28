@@ -21,7 +21,7 @@ class HeatSourceList::SourceListFetcher
   end
 
   def default_stakeholder
-    InstalledHeatAsset.attribute_set[:stakeholder].default_value.call
+    InstalledHeatSource.attribute_set[:stakeholder].default_value.call
   end
 
   def central_heat_network
