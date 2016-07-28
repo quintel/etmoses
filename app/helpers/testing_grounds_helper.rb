@@ -54,11 +54,8 @@ module TestingGroundsHelper
   end
 
   def options_for_all_stakeholders(stakeholder = nil)
-    options = Stakeholder.all.map(&:name)
-
-    options_for_select options, stakeholder
+    options_for_select(Stakeholder.all.map(&:name).sort, stakeholder)
   end
-
 
   def options_for_testing_grounds(testing_ground)
     testing_grounds = policy_scope(TestingGround)
