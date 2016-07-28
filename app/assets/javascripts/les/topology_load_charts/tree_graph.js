@@ -128,11 +128,11 @@ var TreeGraph = (function () {
         }
     }
 
-    function overCapacity(d) {
+    function isOverCapacity(d) {
         var load = (d.load_strategies || d.load),
             // add 1e-5 so that we don't wrongly highlight nodes whose load has tiny
             // variations due to floating-point arithmetic.
-            capacity = d.capacity + 1e-5;
+            capacity = (d.capacity * (d.units || 1)) + 1e-5;
 
         return load && (d.capacity &&
             (d3.max(load.total) > capacity || d3.min(load.total) < -capacity));
@@ -352,7 +352,7 @@ var TreeGraph = (function () {
                 .on('dblclick', dblClick)
                 .on('click', click);
 
-            node.classed('exceedance', overCapacity);
+            node.classed('exceedance', isOverCapacity);
 
             nodeEnter.append('circle')
                 .attr('class', 'nodeCircle')
