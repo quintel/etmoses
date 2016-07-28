@@ -50,9 +50,15 @@ module TestingGroundsHelper
       n[:stakeholder]
     end.compact)
 
-    options.merge(@testing_ground.gas_asset_list.stakeholders)
-    options.merge(@testing_ground.heat_asset_list.stakeholders)
-    options.merge(@testing_ground.heat_source_list.stakeholders)
+    lists = [
+      @testing_ground.gas_asset_list,
+      @testing_ground.heat_asset_list,
+      @testing_ground.heat_source_list
+    ]
+
+    lists.each do |list|
+      options.merge(list.stakeholders) if list
+    end
 
     options_for_select options.sort, stakeholder
   end
