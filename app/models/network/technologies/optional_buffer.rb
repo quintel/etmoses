@@ -17,10 +17,6 @@ module Network
         Null
       end
 
-      def self.build(installed, profile, **options)
-        super(installed, profile, **options.merge(no_legacy_fallback: true))
-      end
-
       def stored
         @stored ||= Reserve.new { |frame, _| profile.at(frame) }
       end
