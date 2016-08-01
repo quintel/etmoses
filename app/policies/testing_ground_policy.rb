@@ -43,4 +43,5 @@ class TestingGroundPolicy < ApplicationPolicy
   alias_method :heat_load?, :show?
   alias_method :heat?, :show?
   alias_method :gas?, :show?
+  alias_method :gas_level_summary?, :show?
 end

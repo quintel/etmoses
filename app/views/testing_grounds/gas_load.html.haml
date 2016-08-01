@@ -22,7 +22,7 @@
         Yearly gas flow
         %span.loading-spinner
           = image_tag 'wait.gif'
-      .graph.stacked-pressure-load-chart{ data: { poll: 'true', stalled: 'true', url: load_summary_testing_ground_gas_asset_list_path(@testing_ground, @testing_ground.gas_asset_list), type: 'stacked_bar' } }
+      .graph.stacked-pressure-load-chart{ data: { poll: 'true', stalled: 'true', url: gas_level_summary_testing_ground_path(@testing_ground), type: 'stacked_bar' } }
         .chart-area
           %p.warning
             This chart can take a long time to load.

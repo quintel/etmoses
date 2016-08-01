@@ -13,7 +13,47 @@ class CalculationController < ApplicationController
     render json: GasAssetLists::LoadSummary.new(levels).as_json
   end
 
+  def gas_level_summary
+    with_cached_networks do |calculator, _|
+      gas    = calculator.network(:gas)
+      assets = GasAssetListDecorator.new(testing_ground.gas_asset_list).decorate
+      levels = Network::Builders::GasChain.build(gas, assets)
+
+      render json: GasAssetLists::NetworkSummary.new(levels)
+    end
+  end
+
   private
+
+  def with_cached_networks
+    result = calculator.calculate
+
+    if result[:pending]
+      render json: result
+    else
+      yield(calculator, result)
+    end
+  rescue StandardError => ex
+    notify_airbrake(ex) if defined?(Airbrake)
+
+    result =
+      if ex.class == TestingGround::DataError
+        { error: ex.message }
+      else
+        { error: I18n.t("testing_grounds.error.data") }
+      end
+
+
+    if Rails.env.development? || Rails.env.test?
+      result[:message]   = "#{ ex.class }: #{ ex.message }"
+      result[:backtrace] = ex.backtrace
+
+      Rails.logger.debug(ex.message)
+      Rails.logger.debug(ex.backtrace.join("\n"))
+    end
+
+    render json: result, status: 500
+  end
 
   def calculator
     TestingGround::Calculator.new(

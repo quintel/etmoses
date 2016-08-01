@@ -27,7 +27,9 @@ module GasAssetLists
       end
     end
 
-    alias_method :as_json, :to_h
+    def as_json(*)
+      to_h
+    end
 
     private
 

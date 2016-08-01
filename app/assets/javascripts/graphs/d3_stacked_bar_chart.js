@@ -149,10 +149,15 @@ var D3StackedBarGraph = (function () {
 
     function loadD3StackedGraph() {
         if (this.poll) {
-            var self = this;
+            var self = this,
+                poller;
 
-            new Poller({ url: this.url }).poll()
-                .done(function (data) {
+            poller = new Poller({
+                url:  this.url,
+                data: { calculation: { resolution: 'high' } }
+            });
+
+            poller.poll().done(function (data) {
                     self.data = data;
 
                     drawD3Graph.call(self, data);
@@ -165,7 +170,9 @@ var D3StackedBarGraph = (function () {
                     );
                 });
         } else {
-            Ajax.json(this.url, {}, drawD3Graph.bind(this));
+            Ajax.json(this.url, {
+                calculation: { resolution: 'high' }
+            }, drawD3Graph.bind(this));
         }
     }
 

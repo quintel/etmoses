@@ -15,6 +15,7 @@ Rails.application.routes.draw do
       patch 'save_as'
 
       scope :calculation, controller: 'calculation' do
+        post 'gas_level_summary'
         post 'heat', 'gas'
       end
     end
