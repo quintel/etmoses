@@ -17,5 +17,4 @@ whitelisted_attributes:
   - input_capacity
   - output_capacity
   - position_relative_to_buffer
-  - technical_lifetime
   - units
