@@ -13,8 +13,6 @@ technology_component_behavior:
 whitelisted_attributes:
   - demand
   - initial_investment
-  - om_costs_for_ccs_per_full_load_hour
-  - om_costs_per_full_load_hour
   - om_costs_per_year
   - profile
   - technical_lifetime

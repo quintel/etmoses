@@ -14,8 +14,6 @@ importable_attributes:
   - input_capacity
   - storage.volume
   - technical_lifetime
-  - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
-  - variable_operation_and_maintenance_costs_per_full_load_hour
 
 importable_gqueries:
   initial_investment: electric_cars_additional_costs
@@ -23,8 +21,6 @@ importable_gqueries:
 whitelisted_attributes:
   - initial_investment
   - input_capacity
-  - om_costs_for_ccs_per_full_load_hour
-  - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
   - profile

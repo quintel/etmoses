@@ -15,8 +15,6 @@ whitelisted_attributes:
   - congestion_reserve_percentage
   - initial_investment
   - input_capacity
-  - om_costs_for_ccs_per_full_load_hour
-  - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
   - technical_lifetime

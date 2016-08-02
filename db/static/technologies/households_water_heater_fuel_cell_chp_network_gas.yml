@@ -6,8 +6,6 @@ whitelisted_attributes:
   - buffer
   - initial_investment
   - input_capacity
-  - om_costs_for_ccs_per_full_load_hour
-  - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
   - position_relative_to_buffer
