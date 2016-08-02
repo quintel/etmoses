@@ -2,7 +2,7 @@
   %table.table.table-bordered.finance-table
     %thead
       %tr
-        %th.center Depreciation cost
+        %th.center Yearly depreciation + fixed O&M costs
         - finance_table_rows(business_case).each do |row|
           - row.each_pair do |header, _values|
             %th= header.titleize
