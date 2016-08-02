@@ -87,7 +87,7 @@ var Transformer = (function () {
     function isShown(chartType) {
         var type = this.settings.view_carrier;
 
-        if (this.strategies && StrategyHelper.anyStrategies()) {
+        if (this.settings.strategies && StrategyHelper.anyStrategies()) {
             type += "_strategies";
         }
 
