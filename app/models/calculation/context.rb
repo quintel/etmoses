@@ -118,7 +118,8 @@ module Calculation
       # HHP techs come next, since their mandatory consumption is instead
       # treated as conditional. This is so they are processed immediately after
       # the final mandatory consumption load is assigned.
-      [ Network::Heat::Consumer,
+      order = [
+        Network::Heat::Consumer,
         Network::Heat::Buffer,
         Network::Technologies::HHP::Electricity,
         Network::Technologies::HHP::Gas,
@@ -129,9 +130,17 @@ module Calculation
         Network::Technologies::DeferrableConsumer,
         Network::Technologies::Battery,
         Network::Technologies::OptionalBuffer,
+        :rest,
         Network::Technologies::Siphon
-      ].map do |klass|
-        ->(p) { p.technology.is_a?(klass) }
+      ]
+
+      order.map.with_index do |klass, index|
+        if klass == :rest
+          remaining = order[(index + 1)..-1]
+          ->(p) { remaining.all? { |k| ! p.technology.is_a?(k) } }
+        else
+          ->(p) { p.technology.is_a?(klass) }
+        end
       end
     end
   end
