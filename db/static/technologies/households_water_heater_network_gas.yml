@@ -8,7 +8,6 @@ defaults:
 importable_attributes:
   - initial_investment
   - input_capacity
-  - storage.volume
   - technical_lifetime
 
 whitelisted_attributes:
