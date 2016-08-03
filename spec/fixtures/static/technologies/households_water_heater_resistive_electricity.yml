@@ -1,26 +1,28 @@
 ---
-behavior: optional_buffer
+behavior: buffer
 carrier: electricity
-color: "#F43B00"
+color: "#581515"
 defaults:
-  capacity: 2.0
+  capacity: 1.5
   position_relative_to_buffer: buffering
 
-export_to: households_flexibility_p2h_electricity_market_penetration
+expandable: false
+
+importable_gqueries:
+  null: share_of_p2h_in_hot_water_produced_in_households
+
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
   - initial_investment
-  - input_capacity
   - technical_lifetime
 
 whitelisted_attributes:
+  - buffer
   - initial_investment
   - input_capacity
   - om_costs_per_year
   - output_capacity
-  - performance_coefficient
-  - profile
+  - position_relative_to_buffer
   - technical_lifetime
   - units
-  - volume

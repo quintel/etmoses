@@ -1,7 +1,7 @@
 ---
 color: "#FF7979"
 name: Households space heater electricity
-behavior: null
+behavior: buffer
 carrier: electricity
 defaults:
   capacity: 6.0

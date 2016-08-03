@@ -49,10 +49,17 @@ class TestingGround::HeatSummary
   def buffer_load
     buffer_load = @park.buffer_tech.net_load
 
+    Rails.logger.info '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+    Rails.logger.info buffer_load.to_a
+
     if (endpoints = heat_composites.values.flatten.map(&:reserve_load)).any?
+      Rails.logger.info '-------------'
+      Rails.logger.info endpoints.map(&:to_a)
       # Net load from endpoint reserves.
       buffer_load = buffer_load + endpoints.reduce(:+)
     end
+
+    Rails.logger.info '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 
     compact_zeros(buffer_load)
   end

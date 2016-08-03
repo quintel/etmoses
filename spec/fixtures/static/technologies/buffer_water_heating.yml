@@ -1,35 +1,31 @@
 ---
-export_to:
 carrier: electricity
-behavior:
-visible: true
+color: "#D25113"
 composite: true
 defaults:
   capacity: 10.0
   volume: 4.0691
 
 exists_as_technology_in_etengine: false
-expandable: true
+importable_gqueries:
+  demand: etmoses_hot_water_buffer_demand
+
+name: Buffer water heating
+
 technologies:
   - households_water_heater_heatpump_air_water_electricity
-  - households_water_heater_heatpump_ground_water_electricity
-  - households_flexibility_p2h_electricity
-  - households_water_heater_network_gas
-  - households_water_heater_combined_network_gas
   - households_water_heater_hybrid_heatpump_air_water_electricity_electricity
   - households_water_heater_hybrid_heatpump_air_water_electricity_gas
+  - households_water_heater_network_gas
+  - households_water_heater_resistive_electricity
+
 whitelisted_attributes:
   - demand
   - initial_investment
   - input_capacity
-  - om_costs_for_ccs_per_full_load_hour
-  - om_costs_per_full_load_hour
   - om_costs_per_year
   - output_capacity
-  - performance_coefficient
   - profile
   - technical_lifetime
   - units
   - volume
-importable_gqueries:
-  demand: etmoses_hot_water_buffer_demand

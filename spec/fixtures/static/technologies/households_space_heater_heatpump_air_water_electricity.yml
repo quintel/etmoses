@@ -1,7 +1,7 @@
 ---
 export_to: households_space_heater_heatpump_air_water_electricity_share
 carrier: electricity
-behavior: buffer
+behavior: heat_pump
 visible: true
 composite: false
 defaults:

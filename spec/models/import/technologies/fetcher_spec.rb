@@ -10,7 +10,8 @@ RSpec.describe Import::Technologies::Fetcher do
       "etmoses_hot_water_buffer_demand",
       "etmoses_space_heating_buffer_demand",
       "number_of_buildings",
-      "present_demand_in_source_of_electricity_in_buildings"
+      "present_demand_in_source_of_electricity_in_buildings",
+      "share_of_p2h_in_hot_water_produced_in_households"
       #"et_test_capacity",
       #"et_test_capacity",
       #"et_test_heat_production",
