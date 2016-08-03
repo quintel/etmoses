@@ -21,7 +21,8 @@ module Network
           behaviors['electric_vehicle']   = ElectricVehicle
           behaviors['optional_buffer']    = OptionalBuffer
           behaviors['siphon']             = Siphon
-          behaviors['buffer']             = HeatPump
+          behaviors['buffer']             = Buffer
+          behaviors['heat_pump']          = HeatPump
           behaviors['deferrable']         = DeferrableConsumer
           behaviors['conserving']         = ConservingProducer
           behaviors['optional']           = OptionalConsumer

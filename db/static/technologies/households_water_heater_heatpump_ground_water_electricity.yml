@@ -1,5 +1,5 @@
 ---
-behavior: buffer
+behavior: heat_pump
 carrier: electricity
 color: "#56351A"
 defaults:

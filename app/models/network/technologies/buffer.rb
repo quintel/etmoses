@@ -4,11 +4,11 @@ module Network
       attr_accessor :stored
 
       def self.disabled?(options)
-        false
+        ! options[:solar_power_to_heat]
       end
 
       def self.disabled_class
-        self
+        Generic
       end
 
       def initialize(installed, profile, **)
@@ -73,6 +73,7 @@ module Network
       end
 
       def store(frame, amount)
+        Rails.logger.info ['<<<', frame, amount]
         stored.add(frame, amount * @installed.performance_coefficient)
       end
     end # Buffer

@@ -1,5 +1,5 @@
 ---
-behavior: null
+behavior: buffer
 carrier: electricity
 color: "#581515"
 defaults:
@@ -7,6 +7,10 @@ defaults:
   position_relative_to_buffer: buffering
 
 expandable: false
+
+importable_gqueries:
+  null: share_of_p2h_in_hot_water_produced_in_households
+
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours

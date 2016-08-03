@@ -8,6 +8,7 @@ class Import
         base_load_buildings
         buffer_space_heating
         buffer_water_heating
+        households_water_heater_resistive_electricity
         transport_car_using_electricity
       )
 
@@ -67,6 +68,7 @@ class Import
           Import::BuildingsBuilder,
           Import::ElectricVehicleBuilder,
           Import::HybridBuilder,
+          Import::ResistiveWaterHeaterBuilder,
           Import::DefaultTechnologyBuilder
         ]
       end
