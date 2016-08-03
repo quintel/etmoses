@@ -94,7 +94,7 @@ en:
       capping_solar_pv: 'Capping of solar PV'
       ev_capacity_constrained: 'Only buffer EVs if network has spare capacity'
       ev_excess_constrained: 'Only buffer EVs with excess PV production'
-      ev_storage: 'Storage in electric vehicles'
+      ev_storage: 'Storage in electric vehicles (vehicle-to-grid)'
 
   import:
     form:
