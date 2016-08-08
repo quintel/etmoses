@@ -2,9 +2,10 @@ module GasAssetLists
   class LoadSummary
     # Human names of each pressure level and the corresponding network layer.
     LEVELS = {
-      '0.125 bar ↔ 4 bar' => :four,
-      '4 bar ↔ 8 bar'     => :eight,
-      '8 bar ↔ 40 bar'    => :forty
+      'Endpoints ↔ 0.125 bar' => :local,
+      '0.125 bar ↔ 4 bar'     => :four,
+      '4 bar ↔ 8 bar'         => :eight,
+      '8 bar ↔ 40 bar'        => :forty
     }
 
     def initialize(network)
@@ -27,7 +28,11 @@ module GasAssetLists
     private
 
     def summarize_load(key)
-      connection = @network.public_send(key).children.first
+      connection = @network.public_send(key)
+
+      if key != :local
+        connection = connection.children.first
+      end
 
       each_frame.map { |frame| connection.output_at(frame) }
     end

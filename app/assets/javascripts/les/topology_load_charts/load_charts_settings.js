@@ -103,6 +103,12 @@ var LoadChartsSettings = {
     },
     gas_four: {
         name: "4 bar",
+        color: '#789B51',
+        visible: true,
+        axisLabel: 'kW'
+    },
+    gas_local: {
+        name: "0.125 bar",
         color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
