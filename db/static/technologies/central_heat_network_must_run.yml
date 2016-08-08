@@ -9,7 +9,7 @@ defaults:
   technical_lifetime:       30.0  # Year
   marginal_heat_costs:      0.025 # EUR/kWh
   distance:                 1
-  units:                    1
+  units:                    0
 
 exists_as_technology_in_etengine: false
 
