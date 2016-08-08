@@ -63,7 +63,7 @@ module Finance
 
     def initial_business_case_costs
       @initial_costs ||= Market::InitialCosts.new(
-        networks[:electricity], @testing_ground
+        networks, @testing_ground
       ).calculate
     end
 

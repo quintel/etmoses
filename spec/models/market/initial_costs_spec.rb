@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Market::InitialCosts do
-  let(:network) { Network::Builders::Electricity.build(tree) }
+  let(:network)  { Network::Builders::Electricity.build(tree) }
+  let(:networks) { { electricity: network } }
   let(:testing_ground) { FactoryGirl.create(:testing_ground) }
 
   let(:gas_asset_list) {
@@ -13,7 +14,7 @@ RSpec.describe Market::InitialCosts do
   }
 
   let(:initial_costs) {
-    Market::InitialCosts.new(network, testing_ground).calculate
+    Market::InitialCosts.new(networks, testing_ground).calculate
   }
 
   describe "calculates the initial costs" do

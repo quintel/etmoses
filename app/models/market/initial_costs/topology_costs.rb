@@ -2,9 +2,9 @@ module Market
   class InitialCosts
     class TopologyCosts < Costs
       def asset_list
-        @network.nodes.map(&method(:decorate_node)).select do |node|
-          node.valid?
-        end
+        @networks[:electricity].nodes
+          .map(&method(:decorate_node))
+          .select(&:valid?)
       end
 
       alias_method :grouped_asset_list, :asset_list

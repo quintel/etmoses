@@ -52,7 +52,8 @@ module Network
           @head.connect_to(@graph.add(
             Node.new(name, {
               installed_techs: techs,
-              installed_comps: []
+              installed_comps: [],
+              stakeholder: attrs[:stakeholder]
             })
           ))
         end

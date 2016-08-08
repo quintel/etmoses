@@ -1,13 +1,13 @@
 module Market
   class InitialCosts
     class Costs
-      def initialize(network, testing_ground)
-        @network = network
+      def initialize(networks, testing_ground)
+        @networks = networks
         @testing_ground = testing_ground
       end
 
-      def self.calculate(network, testing_ground)
-        self.new(network, testing_ground).calculate
+      def self.calculate(networks, testing_ground)
+        self.new(networks, testing_ground).calculate
       end
 
       def calculate

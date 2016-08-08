@@ -12,8 +12,8 @@ module Market
       HeatAssetsCosts
     ].freeze
 
-    def initialize(network, testing_ground)
-      @network        = network
+    def initialize(networks, testing_ground)
+      @networks       = networks
       @testing_ground = testing_ground
     end
 
@@ -26,7 +26,7 @@ module Market
     end
 
     def calculate_costs(costs)
-      costs.calculate(@network, @testing_ground)
+      costs.calculate(@networks, @testing_ground)
     end
   end
 end
