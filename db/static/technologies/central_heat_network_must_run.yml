@@ -4,10 +4,10 @@ importable_gqueries:
   heat_production: etmoses_must_run_heat_for_households_from_central_heat_network
 
 defaults:
-  total_initial_investment: 0.8   # EUR/kWh
-  om_costs_per_year:        0.024 # EUR/kWh
+  total_initial_investment: 0.5   # EUR/kWh
+  om_costs_per_year:        0.02  # EUR/kWh
   technical_lifetime:       30.0  # Year
-  marginal_heat_costs:      0.006 # EUR/kWh
+  marginal_heat_costs:      0.025 # EUR/kWh
   distance:                 1
   units:                    1
 
