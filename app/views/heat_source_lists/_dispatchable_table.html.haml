@@ -1,6 +1,12 @@
 %h2 Dispatchable sources
+
 .help-block
-  %p These sources produce heat following consumption of the heat network. You can choose installed capacities and other aspects of dispatchable sources in the list below. More information can be found in the <a href='https://github.com/quintel/etmoses/wiki/Heat-network'>documentation</a>.
+  %p
+    These sources produce heat following consumption of the heat network. You
+    can choose installed capacities and other aspects of dispatchable sources
+    in the list below. More information can be found in the
+    = succeed '.' do
+      %a(href="https://github.com/quintel/etmoses/wiki/Heat-network") documentation
 
 %table.table.interactions.heat_source_list.multi_table{ data: { type: 'heat_source_list_table'  } }
   %thead
