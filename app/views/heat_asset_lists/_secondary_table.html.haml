@@ -1,4 +1,14 @@
-%h2 Secondary network
+%h2 Secondary heat infrastructure
+
+.help-block
+  %p
+    The table allows you to choose what types of connections to the heat network
+    your LES has. The number of connections is determined by how many
+    &ldquo;Households water heater district heating&rdquo; and &ldquo;Households
+    space heater district heating&rdquo; technologies you have installed in the
+    Technologies tab. More information can be found in the
+    = succeed '.' do
+      %a(href="https://github.com/quintel/etmoses/wiki/Heat-network") documentation
 
 %table.table.interactions.heat_asset_list.multi_table{ data: { type: 'heat_asset_list_table', connections: @heat_connections } }
   %thead

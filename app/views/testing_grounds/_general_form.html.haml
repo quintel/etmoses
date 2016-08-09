@@ -1,3 +1,12 @@
+%h2 General properties
+
+.help-block
+  %p
+    Below you can change the name and permission of your LES. More information
+    can be found in the
+    = succeed '.' do
+      %a(href="https://github.com/quintel/etmoses/wiki/Local-Energy-Solutions") documentation
+
 .form-group
   = form.label :name, 'Local energy solution name'
   = form.text_field :name, class: 'form-control'
