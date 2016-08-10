@@ -5,12 +5,9 @@ defaults:
   capacity: 24.4444
   position_relative_to_buffer: boosting
 
-<<<<<<< eaa35adfdc78230d8583742de4d3af07651b96d8
 expandable: false
 export_to: households_water_heater_combined_network_gas_share
 
-=======
->>>>>>> Revert "Merge pull request #1277 from quintel/issues/concurrency-split"
 importable_attributes:
   - initial_investment
   - input_capacity

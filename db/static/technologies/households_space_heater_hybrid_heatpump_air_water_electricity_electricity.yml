@@ -11,12 +11,9 @@ defaults:
   technical_lifetime: 15
 
 exists_as_technology_in_etengine: false
-<<<<<<< eaa35adfdc78230d8583742de4d3af07651b96d8
 expandable: false
 export_to: households_space_heater_hybrid_heatpump_air_water_electricity_share
 
-=======
->>>>>>> Revert "Merge pull request #1277 from quintel/issues/concurrency-split"
 whitelisted_attributes:
   - buffer
   - initial_investment
