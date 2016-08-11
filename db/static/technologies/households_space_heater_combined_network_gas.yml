@@ -4,6 +4,9 @@ color: "#96B4FA"
 defaults:
   position_relative_to_buffer: boosting
 
+expandable: false
+export_to: households_space_heater_combined_network_gas_share
+
 importable_attributes:
   - initial_investment
   - input_capacity

@@ -1,0 +1,7 @@
+---
+en:
+  groups:
+    no_group: "No group"
+    heating_households: Heating households
+    hot_water_households: Hot water households
+    transport_car_tech: Transport car tech

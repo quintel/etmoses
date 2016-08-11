@@ -8,6 +8,8 @@ defaults:
 
 expandable: false
 
+export_to: households_water_heater_resistive_electricity_share
+
 importable_gqueries:
   null: share_of_p2h_in_hot_water_produced_in_households
 

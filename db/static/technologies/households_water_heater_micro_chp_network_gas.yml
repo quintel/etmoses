@@ -5,6 +5,8 @@ visible: false
 
 # Temporary, to disable importing the CHP from ETEngine.
 exists_as_technology_in_etengine: false
+expandable: false
+export_to: households_water_heater_micro_chp_network_gas_share
 
 whitelisted_attributes:
   - buffer

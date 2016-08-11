@@ -2,6 +2,10 @@
 # based on the original scaled-down scenario and accounting for changes made in
 # the testing ground.
 class Export
+  include ActiveModel::Validations
+
+  validate :validate_share_groups
+
   def initialize(testing_ground)
     @testing_ground = testing_ground
   end
@@ -10,20 +14,23 @@ class Export
   # ETEngine in order to reflect the state of the testing ground.
   #
   # Returns a Hash.
-  def inputs
-    Hash[technology_units.map do |tech_key, units|
-      value = (units / factor_for_tech(tech_key) / number_of_households) * 100
-      export_to = Technology.by_key(tech_key).export_to
+  def exported_technologies
+    technology_units.map do |technology, units|
+      value = (units / factor_for_tech(technology.key) / number_of_households) * 100
 
-      [export_to, limit_value(value, export_to)]
-    end]
+      ExportedTechnology.new(attributes_for_tech(technology, value))
+    end
+  end
+
+  def grouped_inputs
+    exported_technologies.group_by(&:share_group)
   end
 
   # Public: Sends requests to ETEngine in order to create the national scenario.
   #
   # Returns the JSON response body as a Hash.
   def export
-    NationalScenarioCreator.new(@testing_ground, inputs).create
+    NationalScenarioCreator.new(@testing_ground, exported_technologies).create
   end
 
   private
@@ -35,20 +42,29 @@ class Export
   #
   # Returns a Hash.
   def technology_units
-    all_techs = @testing_ground.technology_profile.to_h.values.flatten
-    count     = Hash.new { |hash, key| hash[key] = 0 }
-
-    all_techs.each do |technology|
-      count[technology.type] += technology.units
-    end
-
-    count.reject do |key, _|
-      (! Technology.exists?(key)) || Technology.by_key(key).export_to.blank?
+    technologies.each_with_object({}) do |tech, object|
+      object[tech.technology] = (object[tech.technology] || 0) + tech.units
     end
   end
 
-  def factor_for_tech(tech_key)
-    if tech_key == "households_solar_pv_solar_radiation"
+  def exportable(technology)
+    Technology.exists?(technology.type) &&
+      Technology.by_key(technology.type).export_to.present?
+  end
+
+  def technologies
+    @testing_ground.technology_profile.to_h.values.flatten
+      .select(&method(:exportable))
+  end
+
+  def attributes_for_tech(tech, value)
+    tech.attributes.slice(:key, :export_to)
+      .merge(raw_setting: value)
+      .merge(ete_inputs[tech.export_to])
+  end
+
+  def factor_for_tech(key)
+    if key == "households_solar_pv_solar_radiation"
       solar_panel_units_factor
     else
       1
@@ -77,19 +93,31 @@ class Export
     ).gquery(@testing_ground.scenario_id)
   end
 
-  # Private: Limits the value of an input so that it may be submitted to
-  # ETEngine without validation errors.
-  #
-  # Returns the value.
-  def limit_value(value, input)
-    [[value, ete_inputs[input]['max']].min, ete_inputs[input]['min']].max
-  end
-
   # Private: The ETENgine input data, including the minimum and maximum
   # permitted values.
   #
   # Returns a Hash.
   def ete_inputs
     @ete_inputs ||= EtEngineConnector.new.inputs(@testing_ground.scenario_id)
+  end
+
+  # Private: Validates share groups
+  #
+  def validate_share_groups
+    valid = Hash.new{ |k,v| k[v] = 0 }
+
+    exported_technologies.each_with_object(valid) do |tech, result|
+      valid[tech.share_group] += tech.slider_setting
+    end
+
+    valid.each do |share_group, percentage|
+      if percentage > 100 && share_group != 'no_group'
+        errors.add(
+          :base,
+          "Please limit your units for the " \
+          "#{ I18n.t("groups.#{ share_group }").downcase } group to 100%"
+        )
+      end
+    end
   end
 end

@@ -5,6 +5,9 @@ defaults:
   capacity: 35.8209
   position_relative_to_buffer: boosting
 
+expandable: false
+export_to: households_water_heater_network_gas_share
+
 importable_attributes:
   - initial_investment
   - input_capacity

@@ -21,8 +21,8 @@ def stub_et_engine_scenario_update_request(id = 2)
       "scenario"=>{
         "title"=>"My Testing Ground",
         "user_values"=>{
-          "households_solar_pv_solar_radiation_market_penetration"=>"100",
-          "transport_car_using_electricity_share"=>"100"
+          "households_solar_pv_solar_radiation_market_penetration"=>"100.0",
+          "transport_car_using_electricity_share"=>"100.0"
         }
       }
     },

@@ -11,6 +11,9 @@ defaults:
   technical_lifetime: 15
 
 exists_as_technology_in_etengine: false
+expandable: false
+export_to: households_water_heater_hybrid_heatpump_air_water_electricity_share
+
 whitelisted_attributes:
   - buffer
   - initial_investment

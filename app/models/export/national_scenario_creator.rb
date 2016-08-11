@@ -3,9 +3,9 @@ class Export
     # Exporting is a two-step procedure in which we create a new national-scale
     # scenario based on the original, then send the input values with a second
     # request.
-    def initialize(testing_ground, user_values)
-      @testing_ground = testing_ground
-      @user_values = user_values
+    def initialize(testing_ground, exported_technologies)
+      @testing_ground        = testing_ground
+      @exported_technologies = exported_technologies
     end
 
     def create
@@ -31,12 +31,18 @@ class Export
       }
     end
 
+    def user_values
+      Hash[@exported_technologies.map do |technology|
+        [technology.export_to, technology.slider_setting]
+      end]
+    end
+
     def update_scenario_params
       { autobalance: true,
         force_balance: true,
         scenario: {
           title: @testing_ground.name,
-          user_values: @user_values
+          user_values: user_values
         }
       }
     end

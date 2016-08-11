@@ -16,8 +16,11 @@ en:
 
     # households_space_heater
     households_space_heater_combined_network_gas: Households space heater combined network gas
+    households_space_heater_combined_network_gas_share: Condensing combi boiler
     households_space_heater_district_heating_steam_hot_water: Households space heater district heating
+    households_space_heater_district_heating_steam_hot_water_share: District heating
     households_space_heater_electricity: Households space heater electricity
+    households_space_heater_electricity_share: Electric heater
     households_space_heater_heatpump_air_water_electricity: Heat pump for space heating (air)
     households_space_heater_heatpump_air_water_electricity_share: Space heating - heat pump (air)
     households_space_heater_heatpump_ground_water_electricity: Heat pump for space heating (ground)
@@ -25,13 +28,19 @@ en:
     households_space_heater_hybrid_heatpump_air_water_electricity: Hybrid heat pump space heating
     households_space_heater_hybrid_heatpump_air_water_electricity_electricity: Hybrid heat pump space heating (electricity)
     households_space_heater_hybrid_heatpump_air_water_electricity_gas: Hybrid heat pump space heating (gas)
+    households_space_heater_hybrid_heatpump_air_water_electricity_share: Hybrid heat pump
     households_space_heater_micro_chp_network_gas: Households space heater micro chp network gas
+    households_space_heater_micro_chp_network_gas_share: "Micro-CHP"
     households_space_heater_network_gas: Households space heater network gas
+    households_space_heater_network_gas_share: Gas-fired heater
 
     # households_water_heater
     households_water_heater_combined_network_gas: Households water heater combined network gas
+    households_water_heater_combined_network_gas_share: Condensing combi boiler
     households_water_heater_district_heating_steam_hot_water: Households water heater district heating
+    households_water_heater_district_heating_steam_hot_water_share: District heating
     households_water_heater_fuel_cell_chp_network_gas: Households water heater fuel cell chp network gas
+    households_water_heater_fuel_cell_chp_network_gas_share: Fuel cell
     households_water_heater_heatpump_air_water_electricity: Heat pump for hot water (air)
     households_water_heater_heatpump_air_water_electricity_share: Hot water - heat pump (air)
     households_water_heater_heatpump_ground_water_electricity: Heat pump for hot water (ground)
@@ -39,8 +48,12 @@ en:
     households_water_heater_hybrid_heatpump_air_water_electricity: Hybrid heat pump hot water
     households_water_heater_hybrid_heatpump_air_water_electricity_electricity: Hybrid heat pump hot water (electricity)
     households_water_heater_hybrid_heatpump_air_water_electricity_gas: Hybrid heat pump hot water (gas)
+    households_water_heater_hybrid_heatpump_air_water_electricity_share: Hybrid heat pump
     households_water_heater_micro_chp_network_gas: Households water heater micro chp network gas
+    households_water_heater_micro_chp_network_gas_share: "Micro-CHP"
     households_water_heater_network_gas: Households water heater network gas
+    households_water_heater_network_gas_share: Gas water heater
     households_water_heater_resistive_electricity: Households water heater electricity
+    households_water_heater_resistive_electricity_share: Electric boiler
     transport_car_using_electricity: Electric car
     transport_car_using_electricity_share: Percentage of electric cars

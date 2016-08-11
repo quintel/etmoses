@@ -336,9 +336,10 @@ form.inline .field_with_errors {
 
 .exported-technologies {
   margin-top: 10px;
+  padding-left: 15px;
   overflow: hidden;
 
-  .input-name {
+  .tech-name {
     font-weight: bold;
   }
 }
