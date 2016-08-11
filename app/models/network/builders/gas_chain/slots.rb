@@ -3,6 +3,13 @@ module Network::Builders
     # Given a gas asset list defined by a user, constructs the upward and
     # downward slots which will be used by a connection between layers.
     class Slots
+      # Describes the default attributes of the slot when there are no assets
+      # installed.
+      DEFAULTS = {
+        upward:   { efficiency: 1.0, capacity: 0.0 }.freeze,
+        downward: { efficiency: 1.0, capacity: Float::INFINITY }.freeze
+      }.freeze
+
       def self.build(layer, assets)
         new(layer, assets).build
       end
@@ -40,7 +47,7 @@ module Network::Builders
         efficiency = 0.0
 
         # No assets installed?
-        return { capacity: Float::INFINITY, efficiency: 1.0 } if capacity.nil?
+        return DEFAULTS[direction] if capacity.nil?
 
         (@assets[direction] || []).each do |asset|
           asset_capacity   = capacity_of(asset)

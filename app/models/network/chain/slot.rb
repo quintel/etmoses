@@ -51,7 +51,7 @@ module Network
       attr_reader :efficiency
 
       def initialize(capacity: Float::INFINITY, efficiency: 1.0)
-        @capacity   = Types::NonZeroCapacity[capacity]
+        @capacity   = Types::Capacity[capacity]
         @efficiency = Types::Efficiency[efficiency]
       end
 

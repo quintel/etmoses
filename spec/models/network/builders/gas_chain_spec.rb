@@ -172,8 +172,8 @@ module Network
           expect(connection.downward.efficiency).to eq(0.5)
         end
 
-        it 'sets the upward capacity' do
-          expect(connection.upward.capacity).to eq(Float::INFINITY)
+        it 'sets the upward capacity to zero' do
+          expect(connection.upward.capacity).to be_zero
         end
 
         it 'sets the downward capacity' do

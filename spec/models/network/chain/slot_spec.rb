@@ -144,8 +144,8 @@ module Network::Chain
     context 'with a capacity of 0.0' do
       let(:slot) { Slot.upward(capacity: 0.0) }
 
-      it 'raises an error' do
-        expect { slot }.to raise_error
+      it 'reduces flow of 2 to 0' do
+        expect(slot.call(2)).to be_zero
       end
     end
 
