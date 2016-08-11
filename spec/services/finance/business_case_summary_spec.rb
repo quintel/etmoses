@@ -38,4 +38,22 @@ RSpec.describe Finance::BusinessCaseSummary do
       :total=>34152.4
     })
   end
+
+  context 'with 20.0 freeform cost on the system operator' do
+    let(:financials) do
+      super().tap do |fin|
+        fin.detect { |f| f.keys.first == 'freeform' }['freeform']['system operator'] = 20.0
+      end
+    end
+
+    it 'applies a 20.0 cost to the system operator' do
+      so = summarized.detect{ |t| t[:stakeholder] == 'system operator' }
+      expect(so[:freeform]).to eq(-20.0)
+    end
+
+    it 'reduces the stakeholder total by 20' do
+      so = summarized.detect{ |t| t[:stakeholder] == 'system operator' }
+      expect(so[:total]).to eq(34152.4 - 20)
+    end
+  end
 end

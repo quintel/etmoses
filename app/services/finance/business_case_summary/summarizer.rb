@@ -37,7 +37,7 @@ module Finance
       end
 
       def freeform
-        freeform_row[stakeholder]
+        freeform_row[stakeholder] && -freeform_row[stakeholder]
       end
 
       def total
