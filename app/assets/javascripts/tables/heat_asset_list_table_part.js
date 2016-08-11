@@ -96,6 +96,7 @@ var HeatAssetListTablePart = (function () {
     HeatAssetListTablePart.prototype = {
         append: function () {
             this.setProfiles();
+
             createSliders(this.editableTable, this.connections);
         },
 
@@ -106,24 +107,32 @@ var HeatAssetListTablePart = (function () {
         }
     };
 
+    function createSliderForRow(row) {
+        $(row).find('input.slider')
+            .val('0.0')
+            .attr('data', 'value: 0.0')
+            .attr('data-slider-value', '0.0');
+
+        $(row).find('.value').text(distributionLabel(0, 0));
+
+        createSliders(this.editableTable, this.connections);
+    }
+
+    function rowAddedListener(row) {
+        this.setProfiles();
+
+        createSliderForRow.call(this, row);
+    }
+
     function HeatAssetListTablePart(selector) {
         this.editableTable = new EditableTable(selector);
         this.connections   = parseInt($(selector).data('connections'), 10);
 
-        this.editableTable.beforeRowAddedListener = function() {
-            destroySliders(this.editableTable.selector);
-        }.bind(this);
+        this.editableTable.beforeRowAddedListener =
+            destroySliders.bind(this, this.editableTable.selector);
 
-        this.editableTable.rowAddedListener = function(row) {
-            $(row).find('input.slider')
-                .val('0.0')
-                .attr('data', 'value: 0.0')
-                .attr('data-slider-value', '0.0');
-
-            $(row).find('.value').text(distributionLabel(0, 0));
-
-            createSliders(this.editableTable, this.connections);
-        }.bind(this);
+        this.editableTable.rowAddedListener =
+            rowAddedListener.bind(this);
 
         this.editableTable.beforeRowDeletedListener =
             this.editableTable.beforeRowAddedListener;
