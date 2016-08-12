@@ -1,7 +1,5 @@
 ---
 host: 'http://etmoses.dev'
-etengine_host: 'http://etengine.dev'
-etmodel_host: 'http://etmodel.dev'
 
 cache:
   networks: false
