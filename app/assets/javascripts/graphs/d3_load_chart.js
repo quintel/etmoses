@@ -22,7 +22,6 @@ var D3LoadChart = (function () {
         chartData,
         hoverLineGroup,
 
-        currentWeek     = 1,
         margin          = { top: 20, right: 0, bottom: 70, left: 75 },
         height2         = 50,
         brushMargin     = 40,
@@ -57,11 +56,11 @@ var D3LoadChart = (function () {
     function setLesOptions() {
         var lesOptions;
 
-        if (currentWeek !== 0) {
+        if (this.currentWeek !== 0) {
             lesOptions = {
                 resolution:  'high',
-                range_start: weekResolution * (currentWeek - 1),
-                range_end:   weekResolution * currentWeek
+                range_start: weekResolution * (this.currentWeek - 1),
+                range_end:   weekResolution * this.currentWeek
             };
         } else {
             lesOptions = {
@@ -77,11 +76,11 @@ var D3LoadChart = (function () {
     function renderWeek(scope) {
         var value = parseInt($(scope.target).val(), 10);
 
-        currentWeek = value;
+        this.currentWeek = value;
 
         scope.brush.clear();
 
-        this.dateSelect.prop("disabled", true);
+        this.dateSelect.disable();
 
         if (this.settings.dateCallback) {
             this.settings.dateCallback(value);
@@ -244,7 +243,7 @@ var D3LoadChart = (function () {
     }
 
     function transformData() {
-        var data = Transformer.transform(this, currentWeek);
+        var data = Transformer.transform(this);
 
         if (this.settings.view_as === 'stacked') {
             data = StackTransformer.transform(data);
@@ -362,7 +361,7 @@ var D3LoadChart = (function () {
                 .attr("height", height2)
                 .attr("fill", "#060708");
 
-            this.dateSelect.prop("disabled", false);
+            this.dateSelect.enable();
 
             legendObj.draw(chartData);
         },
@@ -504,13 +503,9 @@ var D3LoadChart = (function () {
                         .style("opacity", 1e-6);
                 });
 
-            this.dateSelect = $("select.load-date");
-            this.dateSelect.removeClass("hidden")
-                .val(currentWeek.toString())
-                .off('change')
-                .on('change', function (e) {
-                    renderWeek.call(self, { target: e.target, brush: brush });
-                });
+            this.dateSelect.initialize(this.currentWeek, function (e) {
+                renderWeek.call(self, { target: e.target, brush: brush });
+            });
 
             this.update(data);
         }
@@ -519,10 +514,12 @@ var D3LoadChart = (function () {
     function D3LoadChart(chartClass, curveType, settings) {
         D3BaseChart.call(this, chartClass);
 
-        this.curveType  = curveType || 'default';
-        this.settings   = $.extend(DefaultSettings, settings);
-        this.width      = 500;
-        this.height     = 410;
+        this.curveType   = curveType || 'default';
+        this.settings    = $.extend(DefaultSettings, settings);
+        this.dateSelect  = new WeekSelect();
+        this.width       = 500;
+        this.height      = 410;
+        this.currentWeek = 1;
     }
 
     return D3LoadChart;
