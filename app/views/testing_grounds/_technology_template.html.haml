@@ -82,6 +82,31 @@
         %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
         .clearfix
 
+    - if technology.whitelisted?('components')
+      - technology.components.each do |component|
+        .component
+          - if component.whitelisted?('output_capacity')
+            .editable.text{class: 'capacity'}
+              %span
+                %span.tick> Output capacity (
+                %span.tick.carrier>= component.carrier
+                %span.tick ) [kW]
+
+              %input.form-control{type: 'text', value: component.capacity.try(:round, 4), data: { type: "#{ component.type }_capacity" } }
+              .clearfix
+
+          - if component.whitelisted?('performance_coefficient')
+            .editable.text{class: 'performance_coefficient'}
+              %span
+                %span.tick>= t(:"installed_technology_attributes.performance_coefficient")
+                %span.tick &nbsp;
+                %span.tick (
+                %span.tick.carrier>= component.carrier
+                %span.tick )
+
+              %input.form-control{type: 'text', value: component.performance_coefficient, data: { type: "#{ component.type }_performance_coefficient" } }
+              .clearfix
+
     .editable.text.units{class: ('hidden' unless technology.whitelisted?('units'))}
       %span Units
       %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}

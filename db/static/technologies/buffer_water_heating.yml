@@ -17,8 +17,7 @@ technologies:
   - households_water_heater_district_heating_steam_hot_water
   - households_water_heater_heatpump_air_water_electricity
   - households_water_heater_heatpump_ground_water_electricity
-  - households_water_heater_hybrid_heatpump_air_water_electricity_electricity
-  - households_water_heater_hybrid_heatpump_air_water_electricity_gas
+  - households_water_heater_hybrid_heatpump_air_water_electricity
   - households_water_heater_network_gas
   - households_water_heater_resistive_electricity
 

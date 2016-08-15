@@ -274,4 +274,26 @@ RSpec.describe InstalledTechnology do
       expect(InstalledTechnology::EDITABLES).to_not include(:associates)
     end
   end
+
+  describe "components" do
+    let(:technology) {
+      InstalledTechnology.new(
+        type: 'households_water_heater_hybrid_heatpump_air_water_electricity',
+        components: [
+          { type: 'households_water_heater_hybrid_heatpump_air_water_electricity_electricity',
+            capacity: 5.0 },
+          { type: 'households_space_heater_hybrid_heatpump_air_water_electricity_gas',
+            capacity: 1.0 }
+        ]
+      )
+    }
+
+    it "a HHP has two components" do
+      expect(technology.components.size).to eq(2)
+    end
+
+    it "a HHP components are of type InstalledTechnology" do
+      expect(technology.components.map(&:class)[0]).to eq(InstalledTechnology)
+    end
+  end
 end # InstalledTechnology

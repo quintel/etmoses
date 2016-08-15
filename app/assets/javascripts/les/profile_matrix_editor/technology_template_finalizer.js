@@ -25,26 +25,50 @@ var TechnologyTemplateFinalizer = (function () {
     }
 
     function calculateInputCapacity() {
-        $(this).find('.carrier_capacity input').val(
-            Calculations.calculateInputCapacity.call($(this).data())
-        );
+        if (this.type === 'capacity' || this.type === 'performance_coefficient') {
+            $(this.target).find('.carrier_capacity input').val(
+                Calculations.calculateInputCapacity.call($(this.target).data())
+            );
+        }
+    }
+
+    function updateCompositeUnits() {
+        if (this.type === 'units' && this.target.data('compositeValue')) {
+            new CompositeTemplateUpdater(this.target).updateUnits();
+        }
+    }
+
+    function setSliderTickValue() {
+        if ($(this.input).hasClass("slider")) {
+            $(this.input).parents(".editable")
+                .find(".tick.value").text(this.value + "%");
+        }
+    }
+
+    function updateJSONHooks() {
+        return [
+            calculateInputCapacity,
+            updateCompositeUnits,
+            setSliderTickValue
+        ];
     }
 
     function updateJSON() {
-        var type   = $(this).data('type'),
-            target = $(this).parents(".technology"),
-            value  = $(this).val().replace(/[\'\" ]/g, '');
+        var type    = $(this).data('type'),
+            target  = $(this).parents('.technology'),
+            value   = $(this).val().replace(/[\'\" ]/g, '');
 
         $(this).val(value);
         target.set(type, value);
 
-        if (type === 'capacity' || type === 'performance_coefficient') {
-            calculateInputCapacity.call(target);
-        }
-
-        if ($(this).hasClass("slider")) {
-            $(this).parents(".editable").find(".tick.value").text(value + "%");
-        }
+        updateJSONHooks().forEach(function (hook) {
+            hook.call({
+                input:  this,
+                target: target,
+                value:  value,
+                type:   type
+            });
+        }.bind(this));
 
         window.currentTechnologiesForm.parseHarmonicaToJSON();
         window.currentTechnologiesForm.markAsEditing();
@@ -64,6 +88,7 @@ var TechnologyTemplateFinalizer = (function () {
 
     return {
         initialize: function () {
+            new CompositeTemplateUpdater(this).updateUnits();
             new BufferSelectBox(this).add();
 
             addEdsnListener.call(this);

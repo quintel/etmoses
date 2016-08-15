@@ -37,6 +37,9 @@ class InstalledTechnology
   attribute :associates,                          Array[InstalledTechnology], editable: false
   attribute :node,                                String, editable: false
   attribute :profile_key,                         String, editable: false
+  attribute :components,                          Array[InstalledTechnology], editable: false
+
+  COMPONENT_EDITABLES = %i(capacity performance_coefficient)
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
@@ -245,16 +248,6 @@ class InstalledTechnology
     component_behavior ? component_behavior[curve_type.to_s] : behavior
   end
 
-  def each_profile_curve
-    if has_heat_pump_profiles?
-      yield(profile_curve.keys.sort.join('_'), *profile_curve.values)
-    else
-      profile_curve.each_pair.map do |curve_type, curve|
-        yield(curve_type, curve)
-      end
-    end
-  end
-
   def as_json(*)
     super.merge('carrier_capacity' => carrier_capacity)
   end
@@ -262,22 +255,6 @@ class InstalledTechnology
   def yearly_variable_om_costs
     (om_costs_per_full_load_hour.to_f +
      om_costs_for_ccs_per_full_load_hour.to_f) * full_load_hours.to_f
-  end
-
-  def parent_key
-    buffer && !composite ? buffer : ''
-  end
-
-  def get_composite_name
-    if name =~ /\#[0-9]+/
-      name.sub(/[0-9]+/, composite_index.to_s)
-    else
-      "#{ name } ##{ composite_index }"
-    end
-  end
-
-  def get_buffer(buffer)
-    "#{ buffer }_#{ composite_index }"
   end
 
   def position_relative_to_buffer_name
@@ -297,11 +274,7 @@ class InstalledTechnology
   end
 
   def sticks_to_composite?
-    position_relative_to_buffer.present?
-  end
-
-  def concurrency_group
-    [ node, type ].join
+    position_relative_to_buffer.present? || carrier == :hybrid
   end
 
   private

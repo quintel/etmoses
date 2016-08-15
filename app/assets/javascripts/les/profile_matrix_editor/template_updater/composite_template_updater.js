@@ -28,17 +28,21 @@ var CompositeTemplateUpdater = (function () {
     }
 
     CompositeTemplateUpdater.prototype = {
+        updateUnits: function () {
+            if (this.data.composite) {
+                this.children.set('units', this.data.units);
+            }
+        },
+
         update: function () {
             if (this.data.composite) {
                 var index          = getNewIndex.call(this),
-                    compositeValue = this.data.type + "_" + index,
-                    children       = this.template.nextUntil(":not(.buffer-child)");
+                    compositeValue = this.data.type + "_" + index;
 
                 this.template.set('composite_index', index);
                 this.template.set('composite_value', compositeValue);
 
-                children.set('buffer', compositeValue)
-                children.set('units',  this.data.units);
+                this.children.set('buffer', compositeValue);
 
                 setName.call(this, index);
             }
@@ -50,6 +54,7 @@ var CompositeTemplateUpdater = (function () {
     function CompositeTemplateUpdater(template) {
         this.template = $(template);
         this.data     = $(template).data();
+        this.children = this.template.nextUntil(":not(.buffer-child)");
     }
 
     return CompositeTemplateUpdater;

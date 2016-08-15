@@ -4,14 +4,12 @@ carrier: gas
 color: "#085304"
 defaults:
   capacity: 22.0
-  initial_investment: 1500.0
-  om_costs_per_year: 156.2
   performance_coefficient: 0.9
   position_relative_to_buffer: boosting
-  technical_lifetime: 15
 
 exists_as_technology_in_etengine: false
 expandable: false
+visible: false
 whitelisted_attributes:
   - buffer
   - initial_investment

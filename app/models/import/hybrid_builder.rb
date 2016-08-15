@@ -7,29 +7,19 @@ class Import
     # - The gas and electricity parts keys are the same as the parent key + '_gas' or
     #   '_electricity'.
 
-    CARRIERS = %w(electricity gas)
-
     def build(response)
-      response
-        .select(&method(:hybrid?))
-        .flat_map(&method(:hybrid_elements))
+      response.select(&method(:hybrid?)).map do |hybrid|
+        hybrid['components'] = hybrid_elements(hybrid)
+        hybrid
+      end
     end
 
     private
 
     def hybrid_elements(hybrid)
-      CARRIERS.map do |carrier|
-        TechnologyBuilder.build(
-          "#{ hybrid.fetch('type') }_#{ carrier }",
-          units_attribute(hybrid.fetch('units'))
-        )
+      Technology.find_by_key(hybrid.fetch('type')).components.map do |key|
+        TechnologyBuilder.build(key, hybrid.slice('number_of_units'))
       end
-    end
-
-    def units_attribute(units)
-      {
-        'number_of_units' => { 'future' => units, 'present' => units }
-      }
     end
   end
 end

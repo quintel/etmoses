@@ -115,11 +115,7 @@ module TestingGroundsHelper
   end
 
   def technology_data(technology, node)
-    stringify_values(
-      technology.attributes
-        .slice(*InstalledTechnology::EDITABLES)
-        .merge(node: node, includes: technology.includes)
-    )
+    TestingGround::TechnologyDataPresenter.new(technology, node).present
   end
 
   def testing_ground_view_options(testing_ground)

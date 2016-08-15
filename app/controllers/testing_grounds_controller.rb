@@ -202,17 +202,6 @@ class TestingGroundsController < ResourceController
       tg_params.delete(:technology_profile)
     elsif tg_params[:technology_profile]
       yamlize_attribute!(tg_params, :technology_profile)
-
-      # Some attributes which should be considered "not present" are submitted
-      # by the technology table as an empty string. The same accounts for
-      # attributes which are not present as editable. Delete them.
-      tg_params[:technology_profile].each do |_, techs|
-        techs.each do |tech|
-          tech.delete_if do |attr, value|
-            value.blank? || !InstalledTechnology::EDITABLES.include?(attr.to_sym)
-          end
-        end
-      end
     end
 
     tg_params

@@ -14,6 +14,10 @@ importable_attributes:
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
 
+components:
+  - households_water_heater_hybrid_heatpump_air_water_electricity_electricity
+  - households_water_heater_hybrid_heatpump_air_water_electricity_gas
+
 whitelisted_attributes:
   - buffer
   - demand

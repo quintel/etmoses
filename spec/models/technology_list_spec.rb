@@ -17,6 +17,11 @@ RSpec.describe TechnologyList do
     - type: Four
       capacity: 0.1
       profile_key: 'profile_1'
+      components:
+      - type: Five
+        capacity: 0.5
+      - type: Six
+        capacity: 0.5
   YML
 
   let!(:mock_presentables){

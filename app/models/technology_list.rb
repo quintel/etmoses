@@ -13,19 +13,6 @@ class TechnologyList
     data.blank? ? new({}) : from_hash(JSON.parse(data))
   end
 
-  def self.initiate_technology(tech, profiles)
-    profile_id = tech['profile']
-    profile_key = tech['profile_key']
-
-    attributes = if profile_key && profile_id.blank?
-      { 'profile' => profiles.key(profile_key) }
-    elsif profile_key.blank? && profile_id.try(:to_i)
-      { 'profile_key' => profiles[profile_id.to_i] }
-    end
-
-    InstalledTechnology.new(tech.update(attributes || {}))
-  end
-
   # Public: Given a hash containing node keys, and a list of technologies
   # attached to the node, converts this into a TechnologyList where each tech
   # becomes an InstalledTechnology instance.
@@ -36,7 +23,7 @@ class TechnologyList
 
     new(Hash[data.map do |node_key, technologies|
       [node_key, technologies.map do |technology|
-        initiate_technology(technology, profiles)
+        TechnologyDecorator.install(technology, profiles)
       end]
     end])
   end
@@ -59,7 +46,11 @@ class TechnologyList
   #
   # Returns a hash.
   def self.dump(list)
-    JSON.dump(Hash[list.to_h.map { |key, techs| [key, techs.map(&:to_h)] }])
+    JSON.dump(Hash[list.to_h.map do |key, techs|
+      [ key, techs.map(&:to_h).map do |tech|
+        tech.update(components: tech[:components].map(&:to_h))
+      end ]
+    end])
   end
 
   # Public: Given a CSV file as a string, creates a TechnologyList.

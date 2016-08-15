@@ -1,5 +1,5 @@
-/*global AddedTechnologiesValidator,AddTechnology,ETHelper,TemplateUpdater,
-Technology,TechnologyTemplateFinalizer*/
+/*global AddedTechnologiesValidator,AddTechnology,ETHelper,MatrixEditorJSONParser,
+TemplateUpdater,Technology,TechnologyTemplateFinalizer*/
 
 var TechnologiesForm = (function () {
     'use strict';
@@ -39,15 +39,7 @@ var TechnologiesForm = (function () {
          * It than writes the data several hidden <div> tags
          */
         parseHarmonicaToJSON: function () {
-            var tableProfile = $(".technologies .technology:not(.hidden)")
-                .toArray()
-                .map(function (target) {
-                    return $(target).underscorizedData();
-                }),
-                groupedByNode = ETHelper.groupBy(tableProfile, 'node');
-
-            $("#technology_distribution").text(JSON.stringify(tableProfile));
-            $("#testing_ground_technology_profile").text(JSON.stringify(groupedByNode));
+            this.jsonParser.parse();
         },
 
         updateCounter: function (add) {
@@ -75,7 +67,7 @@ var TechnologiesForm = (function () {
     };
 
     function TechnologiesForm() {
-        return;
+        this.jsonParser = new MatrixEditorJSONParser();
     }
 
     return TechnologiesForm;
