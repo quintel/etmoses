@@ -76,7 +76,7 @@ var D3LineGraph = (function () {
             .attr("d", this.line);
     }
 
-    D3LineGraph.prototype = $.extend({}, D3BaseChart, {
+    D3LineGraph.prototype = $.extend({}, D3BaseChart.prototype, {
         draw: function () {
             this.svg = null;
             this.line = null;

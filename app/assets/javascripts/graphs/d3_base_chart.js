@@ -3,11 +3,11 @@ var D3BaseChart = (function () {
 
     D3BaseChart.prototype = {
         draw: function () {
-            throw "Every chart that inherits from D3Chart needs to implement draw method";
+            throw "Every chart that inherits from D3BaseChart needs to implement draw method";
         },
 
         reload: function () {
-            throw "Every chart that inherits from D3Chart needs to implement reload method";
+            throw "Every chart that inherits from D3BaseChart needs to implement reload method";
         },
 
         holder: function () {
