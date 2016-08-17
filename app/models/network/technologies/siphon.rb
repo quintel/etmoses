@@ -31,9 +31,7 @@ module Network
       def store(frame, amount)
         # Energy consumed by the Siphon is converted into production on the
         # assigned output path.
-        if output_path && amount > 0
-          output_path.consume(frame, -amount)
-        end
+        output_path.consume(frame, -amount) if output_path
       end
 
       # Internal: A Siphon-only feature. Consumption will be converted to
