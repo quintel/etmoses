@@ -12,6 +12,8 @@ module Calculation
     # Returns the context.
     def call(context)
       context.frames do |frame|
+        production!(frame, context, context.paths)
+
         context.subpaths.each do |paths|
           mandatory_consumption!(frame, context, paths)
           conditional_consumption!(frame, context, paths)
@@ -24,6 +26,18 @@ module Calculation
     end
 
     # --
+
+    def production!(frame, context, paths)
+      paths.each do |path|
+        production = path.production_at(frame)
+        type       = path.technology.installed.type
+
+        path.path.each do |node|
+          node.tech_loads[type][frame] ||= 0.0
+          node.tech_loads[type][frame] -= production
+        end
+      end
+    end
 
     # Internal: Push mandatory flows through the network.
     #

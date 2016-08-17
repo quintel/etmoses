@@ -110,7 +110,7 @@ module Network
     # Returns nothing.
     def consume(frame, amount, conditional = false)
       # Don't assign remnants of floating point errors.
-      amount = 0.0 if amount < 1e-10
+      amount = 0.0 if amount.abs < 1e-10
 
       # Some technologies need to be explicitly told that they received no
       # (conditional) consumption.

@@ -54,25 +54,13 @@ module Network
 
       type = @full_path.technology.installed.type
 
-      # HACK Storage technologies frequently emit energy only to reclaim it
-      # later if nothing wants it. We need to log this load (as a negative) so
-      # that reclaiming later does not result in consumption being counted
-      # twice.
-      if negative_storage_tech_load? && ! @applied_negative_loads[frame]
-        @path.each do |node|
-          node.tech_loads[type][frame] ||= 0.0
-
-          node.tech_loads[type][frame] -=
-            @full_path.technology.production_at(frame)
-        end
-
-        @applied_negative_loads[frame] = true
-      end
-
       @path.each do |node|
         node.tech_loads[type][frame] ||= 0.0
         node.tech_loads[type][frame] += amount
       end
+
+      # Account for the consumption by removing production tech loads.
+      subtract_tech_production!(frame, amount) if amount > 0
     end
 
     # Internal: Describes the length that the path should be in which we
@@ -93,6 +81,45 @@ module Network
     end
 
     private
+
+    # Internal: Returns the nodes between the head of this path and the head of
+    # the network.
+    #
+    # For example
+    #
+    #   Full path: [A, B, C, D, E]
+    #   Sub path:  [A, B]
+    #   Inverse:   [C, D, E]
+    #
+    # Returns a Path
+    def inverse
+      @inverse ||= Path.new(@full_path.to_a - to_a)
+    end
+
+    # Internal: Takes an +amount+ of production away from technologies on this
+    # path. Production remains present on all nodes in the sub path, but is
+    # removed from parent nodes between the path's head and the head of the
+    # network.
+    #
+    # Returns nothing.
+    def subtract_tech_production!(frame, amount)
+      inverse.each do |node|
+        # Amount of energy to be removed from the +node+'s level in the network.
+        level_amount = amount
+
+        node.tech_loads.each do |tech_key, loads|
+          next unless loads[frame] < 0
+
+          produced = -loads[frame]
+          removed  = produced < level_amount ? produced : level_amount
+
+          node.tech_loads[tech_key][frame] += removed
+          level_amount -= removed
+
+          break if level_amount <= 0
+        end
+      end
+    end
 
     def limit_to_excess(frame, amount)
       return amount if @full_length

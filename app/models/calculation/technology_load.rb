@@ -27,8 +27,14 @@ module Calculation
         node.get(:techs).each do |tech|
           next unless tech.try(:output_carrier)
 
-          tech.output_path = Network::Path.find(
+          path = Network::Path.find(
             @context.graph(tech.output_carrier).node(node.key)
+          )
+
+          # Assign a SubPath so that the produced gas is included in the tech
+          # load map.
+          tech.output_path = Network::SubPath.new(
+            path, Network::TechnologyPath.new(tech, path)
           )
         end
       end
