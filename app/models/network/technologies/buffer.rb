@@ -62,12 +62,12 @@ module Network
         end
       end
 
-      # Public: EVs should not overload the network.
+      # Public: Buffers should not overload the network.
       def capacity_constrained?
         true
       end
 
-      # Public: EV conditional load may come from the grid.
+      # Public: Buffering loads may come from the grid.
       def excess_constrained?
         false
       end
