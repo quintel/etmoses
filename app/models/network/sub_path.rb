@@ -75,9 +75,9 @@ module Network
       end
     end
 
-    # Internal: Describes the length that the path should be in which we apply
-    # a negative tech load to each node in the path, to fix the anomalous
-    # double-counting of reclaimed storage energy.
+    # Internal: Describes the length that the path should be in which we
+    # apply a negative tech load to each node in the path, to fix the
+    # anomalous double-counting of reclaimed storage energy.
     #
     # Returns an integer.
     def negative_storage_tech_load?
