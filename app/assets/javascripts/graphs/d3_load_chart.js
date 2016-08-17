@@ -123,10 +123,10 @@ var D3LoadChart = (function () {
 
     function setArea(d, scope) {
         if (d.visible && d.area) {
-            if (!(this.settings.view_as === 'stacked')) {
-                return chartParts[scope].colorArea(d.values);
-            } else {
+            if (this.settings.view_as === 'stacked') {
                 return chartParts[scope].stackedArea(d.values);
+            } else {
+                return chartParts[scope].colorArea(d.values);
             }
         } else {
             return null;
@@ -365,8 +365,6 @@ var D3LoadChart = (function () {
             this.dateSelect.prop("disabled", false);
 
             legendObj.draw(chartData);
-
-            brushed.call(this);
         },
 
         maxYvalue: function (data) {
