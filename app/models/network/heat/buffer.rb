@@ -13,6 +13,10 @@ module Network
         @installed = Installed.new(:heat_buffer)
       end
 
+      def label
+        'heat_network_buffer'.freeze
+      end
+
       def net_load
         reserves.map { |reserve| Network::Curve.from(reserve.load) }.reduce(:+)
       end

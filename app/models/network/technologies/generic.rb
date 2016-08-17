@@ -16,6 +16,10 @@ module Network
         @profile   = profile
       end
 
+      def label
+        installed.technology.key
+      end
+
       # TODO: The name of this method suggests it checks to see if there is a
       # capacity restriction preventing fulfilment; that's not the case. Find a
       # better name.

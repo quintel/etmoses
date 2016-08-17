@@ -54,8 +54,7 @@ module Network
     end
 
     def to_s
-      "#{ @technology.installed.type.inspect } | " \
-        "{#{ @path.map(&:key).join(', ') }}"
+      "#{ @technology.label } | {#{ @path.map(&:key).join(', ') }}"
     end
 
     def congested_at?(frame, correction = 0)
