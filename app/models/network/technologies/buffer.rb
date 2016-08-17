@@ -72,7 +72,7 @@ module Network
         false
       end
 
-      def store(frame, amount)\
+      def store(frame, amount)
         stored.add(frame, amount * @installed.performance_coefficient)
       end
     end # Buffer
