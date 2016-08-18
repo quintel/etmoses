@@ -2,6 +2,10 @@ module Network
   module Technologies
     module HHP
       class Base < Buffer
+        def self.disabled?(*)
+          false
+        end
+
         alias_method :conditional_consumption_at, :mandatory_consumption_at
 
         # Public: Mandatory consumption is disabled for hybrid heat-pumps due to
