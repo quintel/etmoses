@@ -367,7 +367,16 @@ var D3LoadChart = (function () {
         },
 
         maxYvalue: function (data) {
-            return d3.max(data.load.total);
+            var charts = [
+                    data.load, data.load_strategies,
+                    data.gas,  data.gas_strategies,
+                    data.heat, data.heat_strategies
+                ],
+                totals = charts.map(function (attr) {
+                    return (attr && attr.total ? d3.max(attr.total) : 0);
+                });
+
+            return d3.max(totals);
         },
 
         getScaling: function (data) {
