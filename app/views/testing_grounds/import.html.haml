@@ -29,7 +29,8 @@
       = form.label :scenario_id
       = tooltip_tag(t('import.form.scenario_id.tooltip'))
       .input-group
-        .input-group-addon= Settings.etengine_host
+        .input-group-addon
+          = URI.parse(Settings.etengine_host).host
         = form.text_field(:scenario_id, placeholder: 'Scenario ID', class: 'form-control', value: @import.scenario_id)
 
     %div= form.submit 'Continue&hellip;'.html_safe, class: 'btn btn-primary'
