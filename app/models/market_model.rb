@@ -17,7 +17,7 @@ class MarketModel < ActiveRecord::Base
                             "price"               => "" }]
 
   belongs_to :user
-  belongs_to :orginal, class: MarketModel
+  belongs_to :orginal, class_name: 'MarketModel'
 
   serialize :interactions, JSON
 

@@ -7,8 +7,7 @@ def stub_et_engine_scenario_create_request(preset_id = 2)
     :headers => {
       'Accept'=>'application/json',
       'Accept-Encoding'=>'gzip, deflate',
-      'Content-Type'=>'application/x-www-form-urlencoded',
-      'User-Agent'=>'Ruby'
+      'Content-Type'=>'application/x-www-form-urlencoded'
     }
   ).to_return(:status => 200, :body => JSON.dump({id: 2}), :headers => {})
 end
@@ -41,8 +40,7 @@ def stub_et_engine_scenario_inputs_request(id = 2)
   stub_request(:get, url).with(:headers => {
     'Accept'          => 'application/json',
     'Accept-Encoding' => 'gzip, deflate',
-    'Content-Type'    => 'application/json',
-    'User-Agent'      => 'Ruby'
+    'Content-Type'    => 'application/json'
   }).to_return(:status => 200, :body => JSON.dump(json), :headers => {})
 end
 
@@ -74,8 +72,7 @@ end
 def stub_et_engine_templates
    stub_request(:get, "https://et-engine.com/api/v3/scenarios/templates").
       with(headers: {'Accept'=>'*/*; q=0.5, application/xml',
-                     'Accept-Encoding'=>'gzip, deflate',
-                     'User-Agent'=>'Ruby'}).
+                     'Accept-Encoding'=>'gzip, deflate'}).
       to_return(status: 200, body: JSON.dump({}), headers: {})
 end
 
@@ -85,8 +82,7 @@ def stub_et_gquery(gqueries)
          headers: {
           'Accept'=>'application/json',
           'Accept-Encoding'=>'gzip, deflate',
-          'Content-Type'=>'application/x-www-form-urlencoded',
-          'User-Agent'=>'Ruby'
+          'Content-Type'=>'application/x-www-form-urlencoded'
          }).
     to_return(
       status: 200,

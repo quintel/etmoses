@@ -1,6 +1,6 @@
 class BusinessCase < ActiveRecord::Base
   belongs_to :testing_ground
-  belongs_to :job, class: Delayed::Job
+  belongs_to :job, class_name: '::Delayed::Job'
 
   serialize :financials, JSON
 
