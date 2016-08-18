@@ -1,6 +1,6 @@
 ---
-host:          'https://beta.moses.et-model.com'
-etengine_host: 'https://beta.et-engine.com'
+host:          'https://beta-moses.energytransitionmodel.com'
+etengine_host: 'https://beta-engine.energytransitionmodel.com'
 etmodel_host:  'https://beta-pro.energytransitionmodel.com'
 
 # Path to static files loaded by ActiveHash.

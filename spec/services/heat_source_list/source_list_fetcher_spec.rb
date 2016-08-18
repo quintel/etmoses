@@ -29,7 +29,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
   }
 
   let!(:stub_et_engine_request) {
-    stub_request(:post, "https://beta.et-engine.com/api/v3/scenarios/1/converters/stats").
+    stub_request(:post, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/1/converters/stats").
          with(:body => {
                 "keys"=>{ "households_collective_chp_biogas"=>["heat_output_capacity"] }
               },
