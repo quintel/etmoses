@@ -144,13 +144,13 @@ var Transformer = (function () {
     }
 
     return {
-        transform: function (d3Chart, thisCurrentWeek) {
+        transform: function (d3Chart) {
             this.results  = [];
             this.data     = d3Chart.lastRequestedData;
             this.settings = d3Chart.settings;
             this.scaling  = d3Chart.scaling;
 
-            currentWeek   = thisCurrentWeek;
+            currentWeek   = d3Chart.currentWeek;
 
             fetchLoad.call(this).forEach(setLoad.bind(this));
 
