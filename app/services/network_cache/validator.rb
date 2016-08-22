@@ -14,10 +14,10 @@ module NetworkCache
 
     private
 
-    def cache_intact?(time_frame = time_frame)
+    def cache_intact?(res = time_frame)
       tree_scope.all? do |network|
         network.nodes.all? do |node|
-          File.exists?(file_name(network.carrier, node.key, 'load', time_frame))
+          File.exists?(file_name(network.carrier, node.key, 'load', res))
         end
       end
     end

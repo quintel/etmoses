@@ -25,8 +25,8 @@ module NetworkCache
       end
     end
 
-    def file_name(carrier, key, attr = 'load', time_frame = time_frame)
-      carrier_path(carrier).join(file_key(key, attr, time_frame))
+    def file_name(carrier, key, attr = 'load', res = time_frame)
+      carrier_path(carrier).join(file_key(key, attr, res))
     end
 
     def file_path
