@@ -97,4 +97,36 @@ RSpec.describe BusinessCasesController do
       expect(JSON.parse(response.body)).to eq({ "valid" => true })
     end
   end
+
+  describe "render summary" do
+    describe "all is fine" do
+      let(:business_case) {
+        FactoryGirl.create(:business_case, testing_ground: testing_ground)
+      }
+
+      it "gives a 200 OK" do
+        post :render_summary,
+          testing_ground_id: testing_ground.id,
+          id: business_case.id,
+          format: :js
+
+        expect(response).to be_success
+      end
+    end
+
+    describe "raises an error" do
+      let(:business_case) {
+        FactoryGirl.create(:business_case, testing_ground: testing_ground, financials: nil)
+      }
+
+      it "gives a 200 OK" do
+        post :render_summary,
+          testing_ground_id: testing_ground.id,
+          id: business_case.id,
+          format: :js
+
+        expect(response).to be_success
+      end
+    end
+  end
 end

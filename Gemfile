@@ -34,6 +34,7 @@ gem 'unicorn'
 # Background processor
 gem 'daemons'
 gem 'delayed_job_active_record'
+gem 'delayed-plugins-airbrake'
 
 # Caching
 gem 'msgpack'

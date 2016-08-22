@@ -7,6 +7,8 @@ module Finance
     end
 
     def summarize
+      return [] if financials.nil?
+
       financials_without_freeform.each_with_index.map do |financial_rule, index|
         summarize_rule(financial_rule, index)
       end
