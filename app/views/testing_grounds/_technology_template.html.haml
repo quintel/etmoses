@@ -28,7 +28,7 @@
       .editable.position_relative_to_buffer
         %span Position technology
 
-        - %w(boosting buffering).each do |position|
+        - buffering_positions(technology).each do |position|
           %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
             %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
             = position.humanize

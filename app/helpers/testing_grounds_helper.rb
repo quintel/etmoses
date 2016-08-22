@@ -177,4 +177,14 @@ module TestingGroundsHelper
       [tech.key, tech.color]
     end]
   end
+
+  def buffering_positions(technology)
+    if technology.behavior.blank? ||
+        technology.behavior == 'generic'.freeze ||
+        technology.behavior == 'hhp_gas'.freeze
+      %w(boosting)
+    else
+      %w(boosting buffering)
+    end
+  end
 end
