@@ -6,10 +6,12 @@ class UpdateBuffersForExistingLesses < ActiveRecord::Migration
     end
   end
 
-  def update_technologies(testing_ground, technologies)
-    technologies.each_with_index.flat_map do |technology, index|
+  def update_technologies(testing_ground, technologies, indices)
+    technologies.flat_map do |technology|
       if technology.position_relative_to_buffer
         buffer = fetch_buffer_for_technology(testing_ground, technology)
+
+        index = indices[buffer.type] += 1
 
         cloned_buffer                 = buffer.dup
         cloned_buffer.composite_index = index
@@ -26,8 +28,10 @@ class UpdateBuffersForExistingLesses < ActiveRecord::Migration
 
   def up
     TestingGround.all.each do |testing_ground|
+      indices = Hash.new { |h, k| h[k] = 0 }
+
       list = Hash[testing_ground.technology_profile.list.map do |node, technologies|
-        [node, update_technologies(testing_ground, technologies).compact]
+        [node, update_technologies(testing_ground, technologies, indices).compact]
       end]
 
       testing_ground.update_column(
