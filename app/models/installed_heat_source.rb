@@ -54,7 +54,8 @@ class InstalledHeatSource
   def get_profile
     if profile && !dispatchable &&
         heat_production && (curve = network_curve(:demand_scaled))
-      { 'default' => curve * (units * heat_production * curve.frames_per_hour) }
+      multi = (units.presence || 1.0) * heat_production * curve.frames_per_hour
+      { 'default' => curve * multi }
     else
       { 'default' => nil }
     end

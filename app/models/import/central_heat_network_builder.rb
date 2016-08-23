@@ -27,10 +27,19 @@ class Import
     def build_technology(technology)
       defaults = technology.defaults.merge('key' => technology.key)
 
-      technology.importable_gqueries
+      attributes = technology.importable_gqueries
         .each_with_object(defaults) do |(attr, query), hash|
           hash[attr] = ATTRIBUTES[query].call(gqueries)
         end
+
+      # Must-runs need a profile; since there is normally only one instance of
+      # each must-run, assign the first suitable profile.
+      if (profile = TechnologyProfile.where(technology: technology.key).first)
+        attributes['units']   = 1.0
+        attributes['profile'] = profile.load_profile_id
+      end
+
+      attributes
     end
 
     def technologies
