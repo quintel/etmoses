@@ -158,7 +158,7 @@ var LoadChartsSettings = {
     },
     central_heat_network_must_run: {
         name: "Central heat network must run",
-        color: '#111A3D',
+        color: '#7F818A',
         visible: true,
         axisLabel: 'kW'
     },
