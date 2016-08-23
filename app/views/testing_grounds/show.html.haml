@@ -35,6 +35,14 @@
     .tab-content
       .tab-pane.active#load{role: 'tabpanel'}
         .load-graph.line-chart
+          .chart
+          .empty.hidden
+            %p.alert.alert-warning
+              %span.node>
+              %span> &nbsp;has no&nbsp;
+              %span.context>
+              %span> &nbsp;load
+
           .controls
             %select.load-date.form-control.hidden
               = load_date_options

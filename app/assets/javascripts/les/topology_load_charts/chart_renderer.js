@@ -80,26 +80,6 @@ var ChartRenderer = (function () {
         enableCsvDownloadCurveButton.call(this);
     }
 
-    function updateChartViewInputs() {
-        var viewAs         = $("select.chart-view[name='view_as']"),
-            viewCarrier    = $("select.chart-view[name='view_carrier']"),
-            viewStrategies = $(".chart-view[name='strategies']"),
-            isTotal        = (viewAs.val() === 'total'),
-            showViewAs     = !((this.load && this.load.tech_loads) ||
-                               (this.gas  && this.gas.tech_loads) ||
-                               (this.heat && this.heat.tech_loads));
-
-        viewAs.prop('disabled', showViewAs);
-
-        viewCarrier
-            .prop('disabled', isTotal)
-            .toggle(!isTotal);
-
-        viewStrategies
-            .parent()
-            .toggle(!isTotal && StrategyHelper.anyStrategies());
-    }
-
     function changeViewOfD3(e) {
         var input      = $(e.target),
             d3Chart    = window.currentTree.d3Chart,
@@ -109,7 +89,7 @@ var ChartRenderer = (function () {
 
         d3Chart.view(attrName, value).update();
 
-        updateChartViewInputs.call(this);
+        LoadChartInterface.update.call(this);
     }
 
     function toggleDomParts() {
@@ -125,13 +105,9 @@ var ChartRenderer = (function () {
     }
 
     function addNewLoadChartPlatform() {
-        var loadGraphClass = ".load-graph .chart";
-
-        if ($(loadGraphClass).length > 0) {
+        if (window.currentTree.d3Chart.isRendered()) {
             window.currentTree.d3Chart.update(this.nodeData);
         } else {
-            $(".load-graph").prepend($("<div/>").addClass("chart"));
-
             window.currentTree.d3Chart.render(this.nodeData);
         }
     }
@@ -167,7 +143,7 @@ var ChartRenderer = (function () {
             //
             renderLoadChart.call(this, this.nodeData);
             toggleDomParts.call(this.nodeData);
-            updateChartViewInputs.call(this.nodeData);
+            LoadChartInterface.update.call(this.nodeData);
         }
     };
 

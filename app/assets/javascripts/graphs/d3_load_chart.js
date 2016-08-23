@@ -22,8 +22,6 @@ var D3LoadChart = (function () {
         chartData,
         hoverLineGroup,
 
-        margin          = { top: 20, right: 0, bottom: 70, left: 75 },
-        height2         = 50,
         brushMargin     = 40,
         weeksInYear     = (365 / 7.0),
 
@@ -245,6 +243,8 @@ var D3LoadChart = (function () {
     function transformData() {
         var data = Transformer.transform(this);
 
+        if (data.length < 1) { return false; }
+
         if (this.settings.view_as === 'stacked') {
             data = StackTransformer.transform(data);
         }
@@ -270,18 +270,17 @@ var D3LoadChart = (function () {
 
     D3LoadChart.prototype = $.extend({}, D3BaseChart.prototype, {
         lastRequestedData: null,
+
         view: function (attr, newAttr) {
             this.settings[attr] = newAttr;
 
             return this;
         },
-        axisLabel: function (data) {
-            if (this.scaling) {
-                return this.scaling.unit.name
-            } else {
-                return LoadChartsSettings[data.type || this.curveType].axisLabel;
-            }
+
+        getAxisLabel: function (data) {
+            return LoadChartsSettings[data.type || this.curveType].axisLabel;
         },
+
         setYscaleDomain: function (mainOnly) {
             var ydomain = d3.extent(all.call(chartData), setExtent.bind(this));
 
@@ -298,6 +297,7 @@ var D3LoadChart = (function () {
 
             this.redrawPaths();
         },
+
         redrawPaths: function () {
             Object.keys(chartParts).forEach(redrawPath.bind(this));
 
@@ -305,15 +305,21 @@ var D3LoadChart = (function () {
                 .attr("y1", yScale(0))
                 .attr("y2", yScale(0));
         },
+
         update: function (data) {
             var contextArea;
 
             this.lastRequestedData = data || this.lastRequestedData;
+            this.scaling = this.getScaling(this.lastRequestedData);
 
             chartData = transformData.call(this);
 
-            if (chartData.length < 1) {
-                throw "Charts are empty";
+            if (this.chartDataCallback) {
+                this.chartDataCallback(chartData);
+            }
+
+            if (!chartData) {
+                return false;
             }
 
             xScale.domain(d3.extent(chartData[0].values, function (d) {
@@ -342,7 +348,7 @@ var D3LoadChart = (function () {
             contextArea = d3.svg.area()
                 .interpolate("step-after")
                 .x(function (d) { return xScale2(d.x); })
-                .y0(height2)
+                .y0(this.height2)
                 .y1(0);
 
             context.append("path")
@@ -358,7 +364,7 @@ var D3LoadChart = (function () {
                 .attr("class", "x brush")
                 .call(brush)
                 .selectAll("rect")
-                .attr("height", height2)
+                .attr("height", this.height2)
                 .attr("fill", "#060708");
 
             this.dateSelect.enable();
@@ -373,13 +379,21 @@ var D3LoadChart = (function () {
         getScaling: function (data) {
             var scaling,
                 maxYvalue,
-                axisLabel = this.axisLabel(data);
+                axisLabel = this.getAxisLabel(data);
 
-            if (/^[a-zA-Z]W$/.test(axisLabel)) {
+            if (/^[a-zA-Z]?W$/.test(axisLabel)) {
                 scaling = new Quantity(this.maxYvalue(data), axisLabel).smartScale();
+
+                this.axisLabel = scaling.unit.name
+            } else {
+                this.axisLabel = axisLabel;
             }
 
             return scaling;
+        },
+
+        isRendered: function () {
+            return $(this.chartClass).hasClass("rendered");
         },
 
         render: function (data) {
@@ -389,10 +403,12 @@ var D3LoadChart = (function () {
 
             d3.select(this.chartClass).html('');
 
+            $(this.chartClass).addClass("rendered");
+
             xScale  = d3.time.scale.utc().range([0, this.width]);
             xScale2 = d3.time.scale.utc().range([0, this.width]);
             yScale  = d3.scale.linear().range([this.height, 0]);
-            yScale2 = d3.scale.linear().range([height2, 0]);
+            yScale2 = d3.scale.linear().range([this.height2, 0]);
 
             xAxis   = d3.svg.axis().scale(xScale).orient("bottom")
                         .tickFormat(customTimeFormat)
@@ -414,12 +430,7 @@ var D3LoadChart = (function () {
             legend = d3.select(this.chartClass).append("div")
                 .attr("class", "legend");
 
-            svg = d3.select(this.chartClass).append("svg")
-                .attr("width", this.width + margin.left + margin.right)
-                .attr("height", this.height + margin.top + margin.bottom + height2)
-                .append("g")
-                .attr("transform", "translate(" + margin.left + ","
-                                                + margin.top  + ")");
+            svg = this.drawBaseSVG();
 
             // Create invisible rect for mouse tracking
             svg.append("rect")
@@ -440,7 +451,7 @@ var D3LoadChart = (function () {
 
             context.append("g")
                 .attr("class", "axis x-axis1")
-                .attr("transform", "translate(0," + height2 + ")");
+                .attr("transform", "translate(0," + this.height2 + ")");
 
             defs = svg.append("defs");
 
@@ -454,7 +465,7 @@ var D3LoadChart = (function () {
                   .attr("id", "clip-preview_issue")
                 .append("rect")
                   .attr("width", this.width)
-                  .attr("height", height2);
+                  .attr("height", this.height2);
             //end slider part--------------------------------------------------
 
             // draw line graph
@@ -472,7 +483,7 @@ var D3LoadChart = (function () {
                 .attr("x", -10)
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
-                .text(this.axisLabel(data));
+                .text(this.axisLabel);
 
             // Hover line
             hoverLineGroup = svg.append("g")
@@ -519,6 +530,8 @@ var D3LoadChart = (function () {
         this.dateSelect  = new WeekSelect();
         this.width       = 500;
         this.height      = 410;
+        this.height2     = 50;
+        this.margin      = { top: 20, right: 0, bottom: 70, left: 75 };
         this.currentWeek = 1;
     }
 

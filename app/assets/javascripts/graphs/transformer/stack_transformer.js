@@ -9,10 +9,6 @@ var StackTransformer = (function () {
 
     return {
         transform: function (data) {
-            if (data.length <= 0) {
-                throw "data must be of length > 0";
-            }
-
             var size,
                 posOffset,
                 negOffset;

@@ -48,7 +48,7 @@ var Tree = (function () {
             updateDomElements();
 
             this.treeGraph    = new TreeGraph(this.target.selector);
-            this.d3Chart      = new D3LoadChart(".load-graph .chart", "load");
+            this.d3Chart      = new D3CarrierLoadChart(".load-graph .chart", "load");
             this.strategies   = new Strategies();
             this.lesses       = [ new Les(), new Les(this.strategies) ];
 
