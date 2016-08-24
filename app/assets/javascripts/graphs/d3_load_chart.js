@@ -368,6 +368,7 @@ var D3LoadChart = (function () {
                 .attr("fill", "#060708");
 
             this.dateSelect.enable();
+            this.setYscaleDomain(false);
 
             legendObj.draw(chartData);
         },
@@ -528,7 +529,6 @@ var D3LoadChart = (function () {
             });
 
             this.update(data);
-            this.setYscaleDomain(false);
         }
     });
 
