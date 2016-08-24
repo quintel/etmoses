@@ -1,0 +1,58 @@
+#!/bin/bash
+
+usage() {
+  echo "Script to synchronize load profiles with your local machine."
+  echo
+  echo "Usage examples:"
+  echo
+  echo "  ./synchronize_profiles (-H staging)"
+  echo
+  echo "  Synchronizes all staging profiles with local machine"
+  echo
+  echo "  ./synchronize_profiles -H staging -R"
+  echo
+  echo "  Synchronizes all staging profiles and removes all old profiles"
+  echo
+  echo "Arguments:"
+  echo " -H - Sets the host (accepted are 'production' and 'staging')"
+  echo " -R - Remove all old local profiles (prefered when switching hosts)"
+  echo " -h - Prints out this help text"
+  1>&2; exit 1;
+}
+
+while getopts "RH:h" opt; do
+  case $opt in
+    R) remove=true
+    ;;
+    H) host="$OPTARG"
+    ;;
+    h) usage
+    ;;
+    \?) echo "Invalid option -$OPTARG" >&2
+    ;;
+  esac
+done
+
+if [ $remove ]; then
+  read -r -p "Are you sure you want to remove all local profiles? [y/n]" response
+  echo
+
+  if [[ $response =~ ^[Yy]$ ]]; then
+    rm -rf public/system
+  fi
+fi
+
+if [ -z $host ] || [[ !($host =~ ^(staging|production)$) ]]; then
+  host='staging'
+fi
+
+case $host in
+  staging) prefix="beta."
+  ;;
+  production) prefix=""
+  ;;
+  \?) exit 1;
+  ;;
+esac
+
+rsync -azhv "ubuntu@${prefix}moses.et-model.com:/home/ubuntu/etmoses/current/public/system/" public/system
