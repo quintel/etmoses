@@ -1,13 +1,15 @@
 class Import
   class CentralHeatNetworkBuilder
-    TECHNOLOGIES = %w(central_heat_network_dispatchable
-                      central_heat_network_must_run)
+    TECHNOLOGIES = %w(
+      central_heat_network_dispatchable
+      central_heat_network_must_run
+    ).freeze
 
     ATTRIBUTES = Hash[
       [ CentralHeatNetworkDispatchableCapacityAttribute,
         CentralHeatNetworkMustRunHeatProductionAttribute].map do |attr|
-          [attr.remote_name, attr]
-        end
+        [attr.remote_name, attr]
+      end
     ]
 
     def initialize(scenario_id)
@@ -15,7 +17,7 @@ class Import
     end
 
     def self.build(scenario_id)
-      self.new(scenario_id).build_technologies
+      new(scenario_id).build_technologies
     end
 
     def build_technologies
