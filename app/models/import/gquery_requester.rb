@@ -5,8 +5,9 @@ class Import
     end
 
     def request(etm_scenario)
-      EtEngineConnector.new(gqueries: gquery_keys.compact.flat_map(&:values).sort)
-        .gquery(etm_scenario.fetch(:id))
+      EtEngineConnector.new(
+        gqueries: gquery_keys.compact.flat_map(&:values).sort
+      ).gquery(etm_scenario.fetch(:id))
     end
 
     private
