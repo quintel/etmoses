@@ -210,6 +210,14 @@ ul.testing-grounds {
   }
 
   .load-graph {
+    .empty {
+      height: 600px;
+      text-align: center;
+      .alert {
+        margin: 20px auto 0;
+        width: 250px;
+      }
+    }
     .chart {
       svg {
         height: 565px;
@@ -524,7 +532,7 @@ table.table.scenarios{
 
 #heat-asset-list .connection_distribution {
   white-space: nowrap;
-  
+
   input.slider {
     // This needs to be inline with the element "style" attribute.
     width: 130px;
