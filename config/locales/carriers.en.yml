@@ -1,6 +1,7 @@
 ---
 en:
   carriers:
+    load: Electricity
     electricity: Electricity
     gas: Gas
     heat: Heat

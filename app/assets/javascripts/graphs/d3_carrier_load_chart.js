@@ -16,21 +16,23 @@ var D3CarrierLoadChart = (function () {
         },
 
         displayEmptyMessage: function (name) {
-            var context,
-                empty   = this.emptyMessage(),
-                carrier = {
-                    gas: "gas",
-                    load: "electricity",
-                    heat: "heat"
-                }[this.settings.view_carrier];
+            var empty   = this.emptyMessage(),
+                context = empty.find("span.context");
+
+            if (this.settings.view_as === 'total') {
+                context.text("");
+            } else {
+                context.text(
+                    I18n.t(
+                        "carriers." + this.settings.view_carrier
+                    ).toLowerCase()
+                );
+            }
+
+            empty.find("span.node").text(name);
 
             $(this.chartClass).addClass("hidden");
-
-            context = (this.settings.view_as === 'total') ? "total" : carrier;
-
             empty.removeClass("hidden");
-            empty.find("span.context").text(context);
-            empty.find("span.node").text(name);
         }
     });
 
