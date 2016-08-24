@@ -34,10 +34,11 @@ class Import
           hash[attr] = ATTRIBUTES[query].call(gqueries)
         end
 
+      attributes['units'] = 1.0
+
       # Must-runs need a profile; since there is normally only one instance of
       # each must-run, assign the first suitable profile.
       if (profile = TechnologyProfile.where(technology: technology.key).first)
-        attributes['units']   = 1.0
         attributes['profile'] = profile.load_profile_id
       end
 
