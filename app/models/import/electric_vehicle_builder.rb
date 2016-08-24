@@ -1,5 +1,5 @@
 class Import
-  class ElectricVehicleBuilder < Builder
+  class ElectricVehicleBuilder < BaseBuilder
     EV_KEY = 'transport_car_using_electricity'
 
     def build(response)

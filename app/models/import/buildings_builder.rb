@@ -1,5 +1,5 @@
 class Import
-  class BuildingsBuilder < Builder
+  class BuildingsBuilder < BaseBuilder
     #
     # Given a scenario, returns the amount of buildings for the current scenario
     # Also calculates the average demand of a single building

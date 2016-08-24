@@ -7,7 +7,7 @@ class Import
   # we need to ensure that the Moses LES has at least 25% of households with an
   # electric heater. If the LES should fall short of that, we add extra space
   # heater electricity technologies to compensate.
-  class ResistiveWaterHeaterBuilder < Builder
+  class ResistiveWaterHeaterBuilder < BaseBuilder
     include Scaling
 
     TECH_KEY    = 'households_water_heater_resistive_electricity'.freeze

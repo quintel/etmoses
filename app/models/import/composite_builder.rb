@@ -1,5 +1,5 @@
 class Import
-  class CompositeBuilder < Builder
+  class CompositeBuilder < BaseBuilder
     include Scaling
 
     COMPOSITE_ATTRS = %w(name key default_demand)

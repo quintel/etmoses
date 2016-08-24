@@ -1,5 +1,5 @@
 class Import
-  class DefaultTechnologyBuilder < Builder
+  class DefaultTechnologyBuilder < BaseBuilder
     include Filters
 
     def build(response)
