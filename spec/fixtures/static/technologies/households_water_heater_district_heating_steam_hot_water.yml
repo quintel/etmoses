@@ -14,8 +14,6 @@ importable_attributes:
 
 whitelisted_attributes:
   - buffer
-  - input_capacity
   - output_capacity
   - position_relative_to_buffer
-  - units
   - technical_lifetime
