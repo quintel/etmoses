@@ -1,4 +1,12 @@
 class TestingGround::TechnologyPartitioner
+  include CompositeCoupler
+
+  # Partitions technology in correct amount of pieces
+  # For instance. When given a <InstalledTechnology type = x, units = 3>
+  # and size = 3. It will duplicate this technology 3 times and reduce the
+  # units down to 1.
+  #
+
   def initialize(technology, size)
     @technology = technology
     @size       = size
@@ -25,72 +33,16 @@ class TestingGround::TechnologyPartitioner
     technology
   end
 
-  # TODO: This should be cleaned
   def couple_composite(technology, index)
-    technology.composite_index = ((technology.composite_index || 1).to_i - 1) * @size + (index + 1)
-
-    if technology.composite
-      technology.composite_value = technology.get_composite_value
-
-      technology.associates = technology.associates.map do |associate|
-        associate        = associate.dup
-        associate.buffer = technology.composite_value
-        associate.units  = get_associate_units(associate.type, index)
-        associate
-      end
-    elsif technology.buffer.present?
-      technology.buffer = technology.get_buffer(technology.buffer)
+    if technology.composite? || technology.buffer.present?
+      couple_composites(technology, index, @size)
+    else
+      technology
     end
-
-    technology
-  end
-
-  def get_associate_units(type, i)
-    # Specify the remainder. It's either the amount of technologies which are
-    # available per end node or the amount of technologies that you specified
-    # in the first place
-    # Depending on which produces the lowest number
-    #
-    # For example: 2 buffers, each buffer has 7 technologies
-    # When looping this is the result:
-    #
-    # End-point 1
-    #
-    #   [7, 7] <- [technology count per node, amount of technologies for A]
-    #   Assign 4 units of technology A to end-point 1
-    #
-    #   [3, 7] <- [technology count per node, amount of technologies for B]
-    #   Assign 3 units of technology B to end-point 1
-    #
-    # End-point 2
-    #
-    #   [7, 3] <- ..
-    #   [4, 4] <- ..
-    #
-    # Pick the highest number if the remaining technologies or node count is
-    # is more than the highest number of groups
-    # else pick the remaining number
-
-    remainder  = units_per_node[i] <= @counts[type] ? units_per_node[i] : @counts[type]
-    max_units  = max_units_for(type)
-    units      = remainder < max_units ? remainder : max_units
-
-    units_per_node[i] -= units
-    @counts[type]     -= units
-
-    units
-  end
-
-  def max_units_for(type)
-    group_parts(associates_units[type], @size).max
   end
 
   def associates_units
     Hash[@technology.associates.map{|a| [a.type, a.units] }]
-  end
-
-  def units_per_node
-    @units_per_node ||= group_parts(@technology.associates.sum(&:units), @size)
   end
 
   def group_parts(units, size)

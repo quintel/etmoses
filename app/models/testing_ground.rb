@@ -100,7 +100,7 @@ class TestingGround < ActiveRecord::Base
   def network(carrier)
     Network::Builders.for(carrier).build(
       topology.graph,
-      technology_profile,
+      TechnologyProfileCalculationDecorator.new(technology_profile).decorate,
       heat_source_list
     )
   end

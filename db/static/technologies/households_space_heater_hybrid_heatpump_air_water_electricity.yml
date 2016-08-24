@@ -2,6 +2,7 @@
 carrier: hybrid
 color: "#57A753"
 behavior: buffer
+export_to: households_space_heater_hybrid_heatpump_air_water_electricity_share
 importable_attributes:
   - coefficient_of_performance
   - fixed_operation_and_maintenance_costs_per_year
@@ -9,14 +10,13 @@ importable_attributes:
   - initial_investment
   - technical_lifetime
 
-visible: false
+components:
+  - households_space_heater_hybrid_heatpump_air_water_electricity_electricity
+  - households_space_heater_hybrid_heatpump_air_water_electricity_gas
+
 whitelisted_attributes:
   - buffer
+  - components
   - initial_investment
-  - input_capacity
   - om_costs_per_year
-  - output_capacity
-  - performance_coefficient
-  - position_relative_to_buffer
   - technical_lifetime
-  - units

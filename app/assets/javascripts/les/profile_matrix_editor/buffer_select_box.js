@@ -1,4 +1,5 @@
 /*globals FormHelper*/
+
 var BufferSelectBox = (function () {
     'use strict';
 
@@ -45,7 +46,7 @@ var BufferSelectBox = (function () {
      * And replace it with the one in his template
      */
     function cloneAndAppendBufferSelect() {
-        if (!!this.techData.positionRelativeToBuffer) {
+        if (this.techData.sticksToComposite) {
             var compSelector = this.techData.buffer.replace(/_\d+/, ''),
                 target       = $(this.target).find(".editable.buffer select"),
                 template     = $(".buffer_template select." + compSelector)

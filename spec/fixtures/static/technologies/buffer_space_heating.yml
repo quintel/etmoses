@@ -24,6 +24,8 @@ whitelisted_attributes:
   - units
   - volume
 technologies:
+  - households_space_heater_district_heating_steam_hot_water
+  - households_space_heater_electricity
   - households_space_heater_heatpump_air_water_electricity
   - households_space_heater_heatpump_ground_water_electricity
   - households_space_heater_network_gas

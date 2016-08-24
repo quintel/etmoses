@@ -4,7 +4,7 @@ class TestingGroundsController < ResourceController
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:calculate_concurrency, :update, :save_as, :render_template]
+  respond_to :js, only: [:update, :save_as, :render_template]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -13,7 +13,7 @@ class TestingGroundsController < ResourceController
 
   before_filter :load_technologies_and_profiles, only: [
     :perform_import, :update, :create, :edit, :new,
-    :calculate_concurrency, :render_template
+    :render_template
   ]
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
@@ -150,17 +150,6 @@ class TestingGroundsController < ResourceController
     respond_with(@testing_ground)
   end
 
-  # POST /testing_grounds/calculate_concurrency
-  def calculate_concurrency
-    @topology = Topology.find(params[:topology_id])
-
-    distribution      = JSON.parse(params[:technology_distribution])
-    tech_distribution = TestingGround::TechnologyDistributor.new(distribution, @topology.graph).build
-    concurrency       = TestingGround::TechnologyProfileScheme.new(tech_distribution).build
-
-    @testing_ground_profile = TechnologyList.from_hash(concurrency)
-  end
-
   def render_template
     @scope      = params[:scope]
     @technology = TestingGround::TechnologyBuilder.new(
@@ -213,17 +202,6 @@ class TestingGroundsController < ResourceController
       tg_params.delete(:technology_profile)
     elsif tg_params[:technology_profile]
       yamlize_attribute!(tg_params, :technology_profile)
-
-      # Some attributes which should be considered "not present" are submitted
-      # by the technology table as an empty string. The same accounts for
-      # attributes which are not present as editable. Delete them.
-      tg_params[:technology_profile].each do |_, techs|
-        techs.each do |tech|
-          tech.delete_if do |attr, value|
-            value.blank? || !InstalledTechnology::EDITABLES.include?(attr.to_sym)
-          end
-        end
-      end
     end
 
     tg_params

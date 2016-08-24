@@ -22,20 +22,6 @@
 
   .clearfix
 
-.concurrency
-  %strong Select the technologies to switch concurrency
-  .checkboxes
-    - concurrency_options.each do |technology|
-      %span.check_box
-        - max = maximum_concurrency?(technology.key, testing_ground.technology_profile)
-        = check_box_tag technology.key, "max", max, { data: { toggle: "toggle", on: "Max", off: "Min" } }
-        %span= t("technologies.#{ technology.key }.plural")
-
-    .buttons
-      = link_to "Toggle all", "#!", class: "toggle-whitelist btn btn-default"
-      - edit_class = (testing_ground.new_record? ? "" : "edit")
-      = link_to "Apply", "#!", class: "toggle-concurrency btn btn-primary #{edit_class}"
-
 .form-group
   = form.label :technology_profile_csv, "Technology profile CSV"
   = tooltip_tag(t(:'testing_grounds.form.technology_profile_csv.tooltip'))

@@ -21,7 +21,6 @@ class InstalledTechnology
   attribute :composite_index,                     Integer, hidden: true
   attribute :concurrency,                         String,  default: 'max', hidden: true
   attribute :full_load_hours,                     Integer, hidden: true
-  attribute :includes,                            Array[String], hidden: true
 
   # Advanced features
   #
@@ -38,6 +37,9 @@ class InstalledTechnology
   attribute :associates,                          Array[InstalledTechnology], editable: false
   attribute :node,                                String, editable: false
   attribute :profile_key,                         String, editable: false
+  attribute :components,                          Array[InstalledTechnology], editable: false
+
+  COMPONENT_EDITABLES = %i(capacity performance_coefficient)
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
@@ -144,6 +146,10 @@ class InstalledTechnology
     @technology ||= type.present? ? Technology.by_key(type) : Technology.generic
   end
 
+  def includes
+    technology ? technology.technologies : []
+  end
+
   # Public: Describes the electrical capacity of the technology.
   #
   # The "full" capacity of some technologies includes energy which comes from
@@ -242,16 +248,6 @@ class InstalledTechnology
     component_behavior ? component_behavior[curve_type.to_s] : behavior
   end
 
-  def each_profile_curve
-    if has_heat_pump_profiles?
-      yield(profile_curve.keys.sort.join('_'), *profile_curve.values)
-    else
-      profile_curve.each_pair.map do |curve_type, curve|
-        yield(curve_type, curve)
-      end
-    end
-  end
-
   def as_json(*)
     super.merge('carrier_capacity' => carrier_capacity)
   end
@@ -259,26 +255,6 @@ class InstalledTechnology
   def yearly_variable_om_costs
     (om_costs_per_full_load_hour.to_f +
      om_costs_for_ccs_per_full_load_hour.to_f) * full_load_hours.to_f
-  end
-
-  def parent_key
-    buffer && !composite ? buffer : ''
-  end
-
-  def get_composite_value
-    "#{type}_#{composite_index}"
-  end
-
-  def get_composite_name
-    if name =~ /\#[0-9]+/
-      name.sub(/[0-9]+/, composite_index.to_s)
-    else
-      "#{ name } ##{ composite_index }"
-    end
-  end
-
-  def get_buffer(buffer)
-    "#{ buffer }_#{ composite_index }"
   end
 
   def position_relative_to_buffer_name
@@ -298,7 +274,7 @@ class InstalledTechnology
   end
 
   def sticks_to_composite?
-    position_relative_to_buffer.present?
+    position_relative_to_buffer.present? || carrier == :hybrid
   end
 
   private

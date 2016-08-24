@@ -1,8 +1,15 @@
 .technology{id: "T#{technology.object_id}", class: technology_class(technology), data: technology_data(technology, node) }
-  .advanced-actions.pull-right.btn-group
-    = link_to "Toggle advanced", "#!", class: "btn btn-primary btn-sm show-advanced"
+  .advanced-actions.pull-right
 
-    = link_to "#!", class: "remove-row btn btn-danger btn-sm" do
+    .btn-group
+      - if technology.technology.expandable?
+        = link_to "#!", class: "btn btn-default btn-sm split" do
+          %span.glyphicon.glyphicon-resize-full
+          Split
+
+      = link_to "Advanced settings", "#!", class: "btn btn-default btn-sm show-advanced"
+
+    = link_to "#!", class: "remove-row btn btn-default btn-sm" do
       %span.glyphicon.glyphicon-trash
 
   - if technology.sticks_to_composite?
@@ -30,7 +37,7 @@
 
         - buffering_positions(technology).each do |position|
           %label.radio-inline{class: ('active' if position == technology.position_relative_to_buffer)}
-            %input{type: 'radio', value: 'after', name: technology.position_relative_to_buffer_name, checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
+            %input{type: 'radio', value: 'after', name: "position_relative_to_buffer_name_#{ technology.object_id }", checked: ('checked' if position == technology.position_relative_to_buffer), value: position, data: {type: 'position_relative_to_buffer'} }/
             = position.humanize
 
         = tooltip_tag(t(:'testing_grounds.form.position_relative_to_buffer.tooltip'))
@@ -75,7 +82,32 @@
         %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume' }}
         .clearfix
 
-    .editable.text{class: 'units'}
+    - if technology.whitelisted?('components')
+      - technology.components.each do |component|
+        .component
+          - if component.whitelisted?('output_capacity')
+            .editable.text{class: 'capacity'}
+              %span
+                %span.tick> Output capacity (
+                %span.tick.carrier>= component.carrier
+                %span.tick ) [kW]
+
+              %input.form-control{type: 'text', value: component.capacity.try(:round, 4), data: { type: "#{ component.type }_capacity" } }
+              .clearfix
+
+          - if component.whitelisted?('performance_coefficient')
+            .editable.text{class: 'performance_coefficient'}
+              %span
+                %span.tick>= t(:"installed_technology_attributes.performance_coefficient")
+                %span.tick &nbsp;
+                %span.tick (
+                %span.tick.carrier>= component.carrier
+                %span.tick )
+
+              %input.form-control{type: 'text', value: component.performance_coefficient, data: { type: "#{ component.type }_performance_coefficient" } }
+              .clearfix
+
+    .editable.text.units{class: ('hidden' unless technology.whitelisted?('units'))}
       %span Units
       %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
       .clearfix
@@ -92,5 +124,8 @@
           .clearfix
 
     .clearfix
-
   .clearfix
+
+- if technology.associates.any?
+  - technology.associates.each do |associate|
+    = render partial: "technology_template", locals: { technology: associate, node: node }

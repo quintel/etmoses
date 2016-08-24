@@ -6,7 +6,6 @@ expandable: false
 # Temporary, to disable importing the CHP from ETEngine.
 exists_as_technology_in_etengine: false
 export_to: households_water_heater_fuel_cell_chp_network_gas_share
-
 visible: false
 whitelisted_attributes:
   - buffer
@@ -16,4 +15,3 @@ whitelisted_attributes:
   - output_capacity
   - position_relative_to_buffer
   - technical_lifetime
-  - units

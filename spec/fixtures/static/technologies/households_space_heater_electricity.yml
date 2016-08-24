@@ -1,0 +1,24 @@
+---
+color: "#FF7979"
+name: Households space heater electricity
+behavior: null
+carrier: electricity
+defaults:
+  capacity: 6.0
+  position_relative_to_buffer: buffering
+
+expandable: false
+importable_attributes:
+  - fixed_operation_and_maintenance_costs_per_year
+  - full_load_hours
+  - initial_investment
+  - technical_lifetime
+
+whitelisted_attributes:
+  - buffer
+  - initial_investment
+  - input_capacity
+  - om_costs_per_year
+  - output_capacity
+  - position_relative_to_buffer
+  - technical_lifetime

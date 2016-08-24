@@ -15,7 +15,9 @@ class TestingGround
     private
 
     def installed_attributes
-      technology.defaults.merge(imported_attributes).merge(static_attributes)
+      technology.defaults
+        .merge(imported_attributes)
+        .merge(static_attributes)
     end
 
     def imported_attributes
@@ -28,8 +30,18 @@ class TestingGround
         profile: profile,
         includes: technology.technologies,
         buffer: @buffer,
-        units: 1
+        units: 1,
+        components: components
       }
+    end
+
+    def components
+      return [] unless technology.components
+
+      technology.components.map do |component|
+        Import::TechnologyBuilder.build(
+          component, et_engine_stats.fetch(@key).slice('number_of_units'))
+      end
     end
 
     def profile
@@ -43,10 +55,12 @@ class TestingGround
     end
 
     def et_engine_stats
-      if Technology.importable.map(&:key).include?(@key)
-        EtEngineConnector.new(keys: [@key]).stats(@scenario_id)['nodes']
-      else
-        Hash[@key, {}]
+      @et_engine_stats ||= begin
+        if Technology.importable.map(&:key).include?(@key)
+          EtEngineConnector.new(keys: [@key]).stats(@scenario_id)['nodes']
+        else
+          Hash[@key, {}]
+        end
       end
     end
   end

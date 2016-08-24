@@ -39,12 +39,6 @@ module TestingGroundsHelper
     )
   end
 
-  def maximum_concurrency?(technology_key, profile)
-    technology = profile.as_json.values.flatten.detect{|t| t[:type] == technology_key }
-
-    technology ? (technology[:concurrency] == "max") : true
-  end
-
   def options_for_stakeholders(stakeholder = nil)
     options = Set.new(@testing_ground.topology.each_node.map do |n|
       n[:stakeholder]
@@ -103,10 +97,6 @@ module TestingGroundsHelper
     Hash[composites.compact]
   end
 
-  def concurrency_options
-    Technology.for_concurrency
-  end
-
   def composites_data
     composites = @technologies.map do |technology|
       if technology.technologies.any?
@@ -125,11 +115,7 @@ module TestingGroundsHelper
   end
 
   def technology_data(technology, node)
-    stringify_values(
-      technology.attributes
-        .slice(*InstalledTechnology::EDITABLES)
-        .merge(node: node)
-    )
+    TestingGround::TechnologyDataPresenter.new(technology, node).present
   end
 
   def testing_ground_view_options(testing_ground)
@@ -186,5 +172,10 @@ module TestingGroundsHelper
     else
       %w(boosting buffering)
     end
+  end
+
+  def allowed_to_change_privacy_settings?(testing_ground)
+    (!testing_ground.topology || !testing_ground.market_model) ||
+    (testing_ground.topology.public? && testing_ground.market_model.public?)
   end
 end
