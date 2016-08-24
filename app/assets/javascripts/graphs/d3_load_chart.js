@@ -528,6 +528,7 @@ var D3LoadChart = (function () {
             });
 
             this.update(data);
+            this.setYscaleDomain(false);
         }
     });
 
