@@ -80,7 +80,7 @@ module GasAssetLists
         if (constrained = connection.constrained_at(frame)) > 0
           summary[:deficit] += constrained
         else
-          summary[:surplus] -= constrained
+          summary[:surplus] += constrained
         end
       end
 
