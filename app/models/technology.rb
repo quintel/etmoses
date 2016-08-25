@@ -70,7 +70,11 @@ class Technology < ActiveHash::Base
   # Public: Retrieves the record with the matching +key+ or raises
   # ActiveRecord::RecordNotFound if no such record exists.
   def self.by_key(key)
-    key == 'generic' ? generic : where(key: key).first
+    if technology = where(key: key).first
+      technology
+    else
+      raise ActiveRecord::RecordNotFound, "can't find Technology with type #{ key }"
+    end
   end
 
   def self.base_loads
