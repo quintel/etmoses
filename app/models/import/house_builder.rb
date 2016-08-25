@@ -1,5 +1,5 @@
 class Import
-  class HouseBuilder < Builder
+  class HouseBuilder < BaseBuilder
     include Scaling
 
     #

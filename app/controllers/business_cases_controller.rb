@@ -25,7 +25,8 @@ class BusinessCasesController < ResourceController
   end
 
   def render_summary
-    @business_case_summary = Finance::BusinessCaseSummary.new(@business_case).summarize
+    @business_case_summary =
+      Finance::BusinessCaseSummary.new(@business_case).summarize
   end
 
   def update

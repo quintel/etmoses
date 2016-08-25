@@ -1,5 +1,5 @@
 class Import
-  class HybridBuilder < Builder
+  class HybridBuilder < BaseBuilder
     include Filters
     # The hybrid expanders is a class that expands hybrid technologies.
     # It assumes the following:

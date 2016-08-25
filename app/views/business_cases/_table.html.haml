@@ -1,14 +1,11 @@
 %div.compare
-  - if business_case_rows
+  - if business_case_rows && business_case_rows.size > 0
     %span= "Compare business case from #{@testing_ground.name} with"
     %span.compare
       = select_tag "compare", options_for_testing_grounds(@testing_ground), include_blank: true, class: "form-control", data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) }
 
-  - else
-    Business case
-
 #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @business_case), finish_url: render_summary_testing_ground_business_case_path(@testing_ground, @business_case) } }
-  - if business_case_rows
+  - if business_case_rows && business_case_rows.size > 0
     %table.table.table-bordered.compare
       %thead
         %tr
@@ -57,6 +54,12 @@
 
     %span.loading-spinner
       = image_tag 'wait.gif'
+
+  - elsif business_case_rows.empty?
+    .alert.alert-danger
+      Something went wrong with the business case calculation.
+
+    %br
 
   - else
     Loading ..

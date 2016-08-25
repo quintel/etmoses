@@ -1,5 +1,5 @@
 class Import
-  class Builder
+  class BaseBuilder
     def initialize(gqueries, id:, scaling:, **)
       @gqueries    = gqueries
       @scenario_id = id
