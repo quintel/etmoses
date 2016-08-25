@@ -16,6 +16,12 @@ module Network
         @capacity_constrained = hp_capacity_constrained
       end
 
+      # Heat pumps, unlike other buffering technologies, may take energy from
+      # the grid when buffering.
+      def excess_constrained?
+        false
+      end
+
       def capacity_constrained?
         @capacity_constrained
       end

@@ -67,9 +67,9 @@ module Network
         true
       end
 
-      # Public: Buffering loads may come from the grid.
+      # Public: Buffering loads may come only from excess local energy.
       def excess_constrained?
-        false
+        true
       end
 
       def store(frame, amount)

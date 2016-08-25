@@ -30,12 +30,8 @@ module Network
       # required by the Buffer superclass is therefore ignored.
       #
       # Returns a numeric.
-      def mandatory_consumption_at(frame)
+      def mandatory_consumption_at(_frame)
         0.0
-      end
-
-      def excess_constrained?
-        true
       end
     end # OptionalBuffer
   end
