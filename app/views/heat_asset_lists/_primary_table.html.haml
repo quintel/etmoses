@@ -1,13 +1,14 @@
 %h2 Primary heat infrastructure
 .help-block
-  %p 
-    The table below lists the transport pipes between your sources and the 
-    feed-in point of the heat network in your LES. You can edit the cost 
-    aspects of this primary infrastructure here. The lengths of pipes are 
-    determined by the distance of the sources in the Heat source tab. 
-    More information can be found in the 
+  %p
+    The table below lists the transport pipes between your sources and the
+    feed-in point of the heat network in your LES. You can edit the cost
+    aspects of this primary infrastructure here. The lengths of pipes are
+    determined by the distance of the sources in the Heat source tab.
+    More information can be found in the
     <a href='https://github.com/quintel/etmoses/wiki/Heat-network'>documentation</a>.
-%table.table.interactions.heat_asset_list.multi_table.primary{ data: { type: 'heat_asset_list_table' } }
+
+%table.table.interactions.heat_asset_list.primary
   %thead
     %tr
       %th.col-sm-3{ data: { header: 'type' } } Type of pipe

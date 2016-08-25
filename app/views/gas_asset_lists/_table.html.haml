@@ -1,23 +1,23 @@
 %h2 Gas infrastructure
 .help-block
   %p
-    In the table below you can edit the specifics of the gas infrastructure of your LES. 
+    In the table below you can edit the specifics of the gas infrastructure of your LES.
     Three types of network components can be chosen:
     %ul
       %li
-        %strong Pipes: 
+        %strong Pipes:
         depending on the pressure level differnt types of pipes can be chosen
       %li
-        %strong Connectors: 
+        %strong Connectors:
         connect pressure levels and allow gas to move from high to low pressure
       %li
-        %strong Compressors: 
+        %strong Compressors:
         connect pressure levels and allow gas to move from low to high pressure with loss
-    More information about the gas network and its components can be found in the 
+    More information about the gas network and its components can be found in the
     = succeed '.' do
       %a(href='https://github.com/quintel/etmoses/wiki/Gas-network') documentation
 
-%table.table.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
+%table.table.single.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
   %thead
     %tr
       %th.col-sm-1{ data: { header: 'pressure_level_index' } } Pressure level

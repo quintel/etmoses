@@ -8,9 +8,10 @@
     = succeed '.' do
       %a(href="https://github.com/quintel/etmoses/wiki/Heat-network") documentation
 
-%table.table.interactions.heat_source_list.multi_table{ data: { type: 'heat_source_list_table'  } }
+%table.table.interactions.heat_source_list.dispatchable
   %thead
     %tr
+      %td
       %th.col-sm-2{ data: { header: 'key' } } Plant type
       %th{ data: { header: 'heat_capacity' } } Heat capacity [kW]
       %th{ data: { header: 'units' } } Units
@@ -20,13 +21,16 @@
       %th{ data: { header: 'om_costs_per_year' } } O&amp;M costs [EUR/kW]
       %th{ data: { header: 'marginal_heat_costs' } } Marginal costs [EUR/kWh]
       %th{ data: { header: 'distance' } } Distance [km]
-      %th{ data: { header: 'priority' } } Priority
+      %th.hidden{ data: { header: 'priority' } } Priority
       %th
       %th
 
-  %tbody
+  %tbody.sortable
     - heat_source_list.select(&:dispatchable).each do |list_item|
       %tr
+        %td
+          %span.glyphicon.glyphicon-move
+
         %td.editable
           %select.form-control.key
             = options_for_dispatchable_heat_source_plant_types(list_item.key)
@@ -56,7 +60,7 @@
         %td.editable
           %input.form-control{name: 'distance', value: list_item.distance}
 
-        %td.editable
+        %td.editable.hidden
           %input.form-control{name: 'priority', value: list_item.priority}
 
         %td

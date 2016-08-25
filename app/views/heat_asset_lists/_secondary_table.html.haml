@@ -10,7 +10,7 @@
     = succeed '.' do
       %a(href="https://github.com/quintel/etmoses/wiki/Heat-network") documentation
 
-%table.table.interactions.heat_asset_list.multi_table{ data: { type: 'heat_asset_list_table', connections: @heat_connections } }
+%table.table.interactions.heat_asset_list.secondary{ data: { connections: @heat_connections } }
   %thead
     %tr
       %th.col-sm-3{ data: { header: 'type' } } Type
