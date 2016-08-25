@@ -6,7 +6,7 @@ module GasAssetLists
       '0.125 bar ↔ 4 bar'     => :four,
       '4 bar ↔ 8 bar'         => :eight,
       '8 bar ↔ 40 bar'        => :forty
-    }
+    }.freeze
 
     # The default summary attributes.
     DEFAULTS = {
@@ -42,7 +42,7 @@ module GasAssetLists
         end
 
       # Convert kW to kWh.
-      summary.each_key { |key| summary[key] /= 4.0 }
+      summary.each_key { |k| summary[k] /= 4.0 }
 
       summary
     end
@@ -90,10 +90,10 @@ module GasAssetLists
     def each_frame
       return enum_for(:each_frame) unless block_given?
 
-      # TODO This shouldn't be hard-coded, but presently the gas network does
+      # TODO: This shouldn't be hard-coded, but presently the gas network does
       # not return a length, and the total gas demand - which does have a
       # length - is not exposed publicly.
-      (0...35040).each { |frame| yield(frame) }
+      (0...35_040).each { |frame| yield(frame) }
     end
   end # NetworkSummary
 end
