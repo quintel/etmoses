@@ -51,7 +51,7 @@ class TestingGround
     end
 
     def technology
-      Technology.by_key(@key)
+      Technology.find_by_key!(@key)
     end
 
     def et_engine_stats

@@ -5,7 +5,7 @@ class HeatSourceListDecorator
 
   def decorate
     sorted_asset_list.map do |part|
-      entity = Technology.by_key(part.fetch(:key))
+      entity = Technology.find_by_key!(part.fetch(:key))
 
       InstalledHeatSource.new(part.merge(entity.attributes))
     end

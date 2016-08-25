@@ -4,7 +4,7 @@ class Import
     TechnicalLifetimeAttribute = Attribute.new('technical_lifetime')
 
     def self.build(key, data)
-      tech = Technology.by_key(key)
+      tech = Technology.find_by_key!(key)
 
       tech.defaults.merge(
         'key'                      => key,
