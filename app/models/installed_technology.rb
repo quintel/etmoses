@@ -143,7 +143,7 @@ class InstalledTechnology
   # Returns a Technology, or raises ActiveRecord::RecordNotFound if the tech
   # does not exist.
   def technology
-    @technology ||= type.present? ? Technology.by_key(type) : Technology.generic
+    @technology ||= type.present? ? Technology.find_by_key!(type) : Technology.generic
   end
 
   def includes

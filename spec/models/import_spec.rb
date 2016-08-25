@@ -88,7 +88,7 @@ RSpec.describe Import do
       let(:tech) { find_techs(testing_ground, 'tech_one').first }
 
       before do
-        technology = Technology.by_key('tech_one')
+        technology = Technology.find_by_key!('tech_one')
         technology.importable_attributes = ['electricity_output_capacity']
       end
 
@@ -107,7 +107,7 @@ RSpec.describe Import do
 
     context 'importing the input_capacity attribute' do
       before do
-        technology = Technology.by_key('tech_one')
+        technology = Technology.find_by_key!('tech_one')
         technology.importable_attributes = ['input_capacity']
       end
 
@@ -129,7 +129,7 @@ RSpec.describe Import do
 
     context 'importing the demand attribute' do
       before do
-        technology = Technology.by_key('tech_one')
+        technology = Technology.find_by_key!('tech_one')
         technology.importable_attributes = ['demand']
       end
 

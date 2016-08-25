@@ -49,7 +49,7 @@ class Export
 
   def exportable(technology)
     Technology.exists?(technology.type) &&
-      Technology.by_key(technology.type).export_to.present?
+      Technology.find_by_key!(technology.type).export_to.present?
   end
 
   def technologies

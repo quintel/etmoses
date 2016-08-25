@@ -34,7 +34,7 @@ class Import
     # Returns an array of hashes.
     def self.build(key, data)
       units = NumberOfUnitsAttribute.call(data).round
-      tech  = Technology.by_key(key)
+      tech  = Technology.find_by_key!(key)
       attrs = tech.defaults.merge(
         'type'       => key,
         'units'      => units,

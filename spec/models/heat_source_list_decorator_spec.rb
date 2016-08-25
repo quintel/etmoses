@@ -38,8 +38,8 @@ RSpec.describe HeatSourceListDecorator do
   context "with a heat source that doesn't exist" do
     let(:heat_source_list) { [{ key: 'invalid' }] }
 
-    it 'omits the source from the list' do
-      expect(decorated).to be_empty
+    it 'raises an ActiveRecord::RecordNotFound error' do
+      expect{ decorated }.to raise_error(ActiveHash::RecordNotFound)
     end
   end # with a heat source that doesn't exist
 end

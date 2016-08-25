@@ -64,17 +64,11 @@ class Technology < ActiveHash::Base
   # Public: Returns a "generic" technology, which represents an installed
   # technology with no explicit type.
   def self.generic
-    @@generic ||= Technology.find_by_key('generic')
-  end
-
-  # Public: Retrieves the record with the matching +key+ or raises
-  # ActiveRecord::RecordNotFound if no such record exists.
-  def self.by_key(key)
-    key == 'generic' ? generic : where(key: key).first
+    @@generic ||= Technology.find_by_key!('generic')
   end
 
   def self.base_loads
-    [ by_key('base_load'), by_key('base_load_edsn') ]
+    [ find_by_key!('base_load'), find_by_key!('base_load_edsn') ]
   end
 
   def self.exists?(key)

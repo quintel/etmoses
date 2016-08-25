@@ -14,7 +14,7 @@ class Import
 
     def gquery_keys
       @technologies.flat_map do |tech|
-        Technology.by_key(tech).importable_gqueries
+        Technology.find_by_key!(tech).importable_gqueries
       end
     end
   end
