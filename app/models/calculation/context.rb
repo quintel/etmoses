@@ -43,7 +43,8 @@ module Calculation
     def paths
       @paths ||= Network::PathCollection.new(
         technology_nodes.map(&Network::TechnologyPath.method(:find)).flatten,
-        path_order)
+        path_order
+      )
     end
 
     # Public: An array containing all paths, and their subpaths, from each
@@ -63,7 +64,7 @@ module Calculation
         by_level = Hash.new { |hash, key| hash[key] = [] }
         data     = {}
 
-        paths.map { |path| path.sub_paths }.each do |subpaths|
+        paths.map(&:sub_paths).each do |subpaths|
           subpaths.each { |path| by_level[path.distance].push(path) }
         end
 
@@ -89,10 +90,12 @@ module Calculation
       @length ||= begin
         techs = technology_nodes.flat_map do |node|
           (node.get(:installed_techs) || []) +
-          (node.get(:installed_comps) || [])
+            (node.get(:installed_comps) || [])
         end
 
-        techs.map { |t| t.profile_curve(@options[:range]) }.map(&:length).max || 1
+        techs.map do |t|
+          t.profile_curve(@options[:range])
+        end.map(&:length).max || 1
       end
     end
 
