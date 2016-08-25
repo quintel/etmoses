@@ -3,7 +3,7 @@ module Network
     # A buffer whose conditional consumption (buffering) may be limited by the
     # network capacity.
     class HeatPump < Buffer
-      def self.disabled?(options)
+      def self.disabled?(_options)
         false
       end
 
