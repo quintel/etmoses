@@ -262,7 +262,7 @@ class InstalledTechnology
   end
 
   def valid?
-    buffer.present? || valid_profile? || !technology.profile_required?
+    buffer.present? || valid_profile? || !(technology.present? && technology.profile_required?)
   end
 
   def valid_profile?
