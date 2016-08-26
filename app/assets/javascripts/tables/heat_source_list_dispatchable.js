@@ -4,24 +4,26 @@ var HeatSourceListDispatchable = (function () {
     'use strict';
 
     function updateSort() {
-        $(this.editableTable.selector).find("tbody tr").each(function (i) {
+        $(this.selector).find("tbody tr").each(function (i) {
             $(this).find("td input[name=priority]").val(i);
         });
 
-        this.editableTable.changeListener();
+        this.changeListener();
     }
 
     HeatSourceListDispatchable.prototype = $.extend({}, EditableTable.prototype, {
         afterAppendCallback: function () {
-            $(this.editableTable.selector).find("tbody").sortable({
+            $(this.selector).find("tbody").sortable({
                 axis: "y",
                 update: updateSort.bind(this)
             });
+
+            this.setProfiles();
         }
     });
 
     function HeatSourceListDispatchable(selector) {
-        this.editableTable = new EditableTable(selector);
+        EditableTable.call(this, selector);
     }
 
     return HeatSourceListDispatchable;

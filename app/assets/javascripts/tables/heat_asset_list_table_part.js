@@ -3,27 +3,6 @@
 var HeatAssetListTablePart = (function () {
     'use strict';
 
-    var editableTable;
-
-    /* Callback for profile selector
-     * Whenever somebody select's a different heat asset the data from that
-     * select option will be parsed over the table row and the values set
-     * in their respectable inputs and select boxes.
-     */
-    function updateRows(technology) {
-        var technology = $(this.target).find("select.key"),
-            techData   = $(technology)
-                            .find("option[value=" + technology.val() + "]")
-                            .data();
-
-        for (var key in techData) {
-            $(this.target)
-                .find(".editable." + key.underscorize())
-                .find("input, select")
-                .val(techData[key]);
-        }
-    }
-
     /**
      * Given a selector for a table part, creates sliders for each of the
      * connection distribution fields and links them such that they sum to 1.0.
@@ -78,8 +57,8 @@ var HeatAssetListTablePart = (function () {
      * Given a selector for a table part, removes the linkedSliders plugin from
      * each connection distribution field and them removes the sliders.
      */
-    function destroySliders(selector) {
-        var sliders = $(selector).find('tbody tr:not(.blank) input.slider');
+    function destroySliders() {
+        var sliders = $(this.selector).find('tbody tr:not(.blank) input.slider');
 
         $.linkedSliders._destroyPlugin(sliders);
         sliders.slider('destroy');
@@ -93,19 +72,13 @@ var HeatAssetListTablePart = (function () {
             '(' + Math.round(connections * value) + ' connections)';
     }
 
-    HeatAssetListTablePart.prototype = {
-        append: function () {
+    HeatAssetListTablePart.prototype = $.extend({}, EditableTable.prototype, {
+        afterAppendCallback: function () {
             this.setProfiles();
 
-            createSliders(this.editableTable, this.connections);
-        },
-
-        setProfiles: function () {
-            $(this.editableTable.selector).find("tr:not(.blank)").each(function() {
-                new ProfileSelectBox(this).add(updateRows);
-            });
+            createSliders(this, this.connections);
         }
-    };
+    });
 
     function createSliderForRow(row) {
         $(row).find('input.slider')
@@ -115,7 +88,7 @@ var HeatAssetListTablePart = (function () {
 
         $(row).find('.value').text(distributionLabel(0, 0));
 
-        createSliders(this.editableTable, this.connections);
+        createSliders(this, this.connections);
     }
 
     function rowAddedListener(row) {
@@ -125,20 +98,14 @@ var HeatAssetListTablePart = (function () {
     }
 
     function HeatAssetListTablePart(selector) {
-        this.editableTable = new EditableTable(selector);
+        EditableTable.call(this, selector);
+
         this.connections   = parseInt($(selector).data('connections'), 10);
 
-        this.editableTable.beforeRowAddedListener =
-            destroySliders.bind(this, this.editableTable.selector);
-
-        this.editableTable.rowAddedListener =
-            rowAddedListener.bind(this);
-
-        this.editableTable.beforeRowDeletedListener =
-            this.editableTable.beforeRowAddedListener;
-
-        this.editableTable.rowDeletedListener =
-            this.editableTable.rowAddedListener;
+        this.beforeRowAddedListener   = destroySliders.bind(this);
+        this.rowAddedListener         = rowAddedListener.bind(this);
+        this.beforeRowDeletedListener = this.beforeRowAddedListener;
+        this.rowDeletedListener       = this.rowAddedListener;
     }
 
     return HeatAssetListTablePart;

@@ -2,6 +2,23 @@
 var ProfileSelectBox = (function () {
     'use strict';
 
+    /* Callback for profile selector
+     * Whenever somebody select's a different heat asset the data from that
+     * select option will be parsed over the table row and the values set
+     * in their respectable inputs and select boxes.
+     */
+    function updateRows(technology) {
+        var technology = $(this.target).find("select.key"),
+            techData   = $(technology).selectedOption().data();
+
+        for (var key in techData) {
+            $(this.target)
+                .find(".editable." + key.underscorize())
+                .find("input, select")
+                .val(techData[key]);
+        }
+    }
+
     function defaultCloneAndAppend(triggerCallback) {
         addProfileSelectBox.call(this);
 
@@ -21,7 +38,6 @@ var ProfileSelectBox = (function () {
         if (profile) {
             profileSelectBox.val(profile);
             profileSelectBox.off('change').on('change', this.callback);
-
         }
     }
 
@@ -30,7 +46,7 @@ var ProfileSelectBox = (function () {
             var selectKey   = $(this.target).find("select.key");
 
             this.technology = selectKey.val(),
-            this.callback   = callback || function () { return; };
+            this.callback   = callback || updateRows.bind(this);
 
             selectKey.off('change')
                      .on('change', defaultCloneAndAppend.bind(this, true));
@@ -39,9 +55,8 @@ var ProfileSelectBox = (function () {
         }
     };
 
-    function ProfileSelectBox(target, callback) {
+    function ProfileSelectBox(target) {
         this.target = target;
-        this.callback = callback || function () { return; };
     }
 
     return ProfileSelectBox;

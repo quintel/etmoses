@@ -10,6 +10,9 @@
     = succeed '.' do
       %a(href="https://github.com/quintel/etmoses/wiki/Heat-network") documentation
 
+.empty-button{ class: ("hidden" if heat_asset_list.any?) }
+  %button.btn.btn-primary Add new Heat asset
+
 %table.table.interactions.heat_asset_list.secondary{ data: { connections: @heat_connections } }
   %thead
     %tr
@@ -23,40 +26,9 @@
       %th
       %th
 
+  %tfoot.hidden
+    = render partial: 'heat_asset_lists/secondary_table_row', locals: { list_item: InstalledHeatAssetLocation.new }
+
   %tbody
-    - heat_asset_list.select(&:secondary?).each do |list_item|
-      %tr
-        %td.editable.key
-          %select.form-control.key
-            = options_for_secondary_heat_assets(list_item.type)
-
-        %td.editable.investment_costs
-          %input.form-control{name: 'investment_costs', value: list_item.investment_costs}
-
-        %td.editable.om_costs_per_year
-          %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
-
-        %td.editable.technical_lifetime
-          %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
-
-        %td.editable.stakeholder
-          %select.form-control.stakeholder
-            = options_for_all_stakeholders(list_item.stakeholder)
-
-        %td.editable.connection_distribution
-          %input.slider{ style: 'width: 130px', name: 'connection_distribution', value: list_item.connection_distribution, data: { 'slider-min' => 0.0, 'slider-max' => 1.0, 'slider-step' => 0.01 } }
-
-          %span.value
-            == #{ (list_item.connection_distribution * 100).round }%
-            == (#{ (@heat_connections * list_item.connection_distribution).round } connections)
-
-        %td.editable.hidden
-          %input.form-control{name: 'scope', value: 'secondary'}
-
-        %td
-          = link_to '#', class: 'add-row text-success' do
-            %span.glyphicon.glyphicon-plus
-
-        %td
-          = link_to '#', class: 'remove-row text-danger' do
-            %span.glyphicon.glyphicon-remove
+    - heat_asset_list.each do |list_item|
+      = render partial: 'heat_asset_lists/secondary_table_row', locals: { list_item: list_item }

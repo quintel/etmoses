@@ -21,7 +21,7 @@
       %th.hidden{ data: { header: 'scope' } }
 
   %tbody
-    - heat_asset_list.select(&:primary?).each do |list_item|
+    - heat_asset_list.each do |list_item|
       %tr
         %td.editable
           %select.form-control.key

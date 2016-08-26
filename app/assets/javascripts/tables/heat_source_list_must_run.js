@@ -3,21 +3,19 @@
 var HeatSourceListMustRun = (function () {
     'use strict';
 
-    function setProfiles() {
-        $(this.editableTable.selector).find("tr:not(.blank)").each(function() {
-            new ProfileSelectBox(this).add();
-        });
-    }
+    HeatSourceListMustRun.prototype = $.extend({}, EditableTable.prototype, {
+        afterAppendCallback: function () {
+            this.setProfiles();
+        },
 
-    HeatSourceListMustRun.prototype = {
-        afterAppendCallback: setProfiles,
-        mergeCallback: setProfiles
-    };
+        mergeCallback: function () {
+            this.setProfiles();
+        }
+    });
 
     function HeatSourceListMustRun(selector) {
-        this.editableTable = new EditableTable(selector);
+        EditableTable.call(this, selector);
     }
 
     return HeatSourceListMustRun;
 }());
-

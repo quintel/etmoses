@@ -1,7 +1,7 @@
 class InstalledHeatAssetLocation < InstalledHeatAsset
   attribute :investment_costs, Float
   attribute :om_costs_per_year, Float
-  attribute :connection_distribution, Float
+  attribute :connection_distribution, Float, default: 1.0
   # Please remove the default; connection_distribution * total heat connections
   attribute :number_of_units, Float, default: 0.0
 

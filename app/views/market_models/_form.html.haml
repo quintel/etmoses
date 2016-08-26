@@ -34,7 +34,7 @@
   .hidden
     = form.text_area :interactions, value: JSON.dump(market_model.interactions).html_safe
 
-  = render partial: 'market_models/new_table', locals: { market_model: market_model }
+  = render partial: 'market_models/table', locals: { market_model: market_model }
 
   .btn-group
     = form.submit 'Save', class: "btn btn-primary"

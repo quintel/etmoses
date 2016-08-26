@@ -5,7 +5,7 @@ var MultiTable = (function () {
         var result = [];
 
         this.tables.forEach(function (table) {
-            result = result.concat(table.editableTable.getData());
+            result = result.concat(table.getData());
         });
 
         return result;
@@ -34,7 +34,7 @@ var MultiTable = (function () {
     MultiTable.prototype = {
         append: function () {
             this.tables.forEach(function (table) {
-                table.editableTable.append(mergeAndUpdate.bind(this));
+                table.append(mergeAndUpdate.bind(this));
             }.bind(this));
 
             afterAppendCallback.call(this);

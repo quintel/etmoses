@@ -17,6 +17,9 @@
     = succeed '.' do
       %a(href='https://github.com/quintel/etmoses/wiki/Gas-network') documentation
 
+.empty-button{ class: ('hidden' if gas_asset_list.any?) }
+  %button.btn.btn-primary Add new Gas Asset
+
 %table.table.single.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
   %thead
     %tr
@@ -29,41 +32,9 @@
       %th
       %th
 
+  %tfoot.hidden
+    = render partial: 'gas_asset_lists/table_row', locals: { list_item: InstalledGasAsset.new }
+
   %tbody
     - gas_asset_list.each do |list_item|
-      %tr
-        %td.editable
-          %select.form-control.pressure_level
-            = options_for_pressure_levels(list_item.pressure_level_index)
-
-        %td.editable
-          %select.form-control.part
-            = options_for_gas_parts(list_item.part)
-
-        %td.editable
-          %select.form-control.type{data: { type: list_item.type } }
-
-        %td.editable
-          %input.form-control{name: 'units', value: list_item.units }
-          %span.unit
-            %span.pipes
-              m
-            %span.connectors
-              = '#'
-            %span.compressors
-              = '#'
-
-        %td.editable
-          %select.form-control.stakeholder
-            = options_for_all_stakeholders(list_item.stakeholder)
-
-        %td.editable
-          %input.form-control{name: 'building_year', value: list_item.building_year}
-
-        %td
-          = link_to "#", class: "add-row text-success" do
-            %span.glyphicon.glyphicon-plus
-
-        %td
-          = link_to "#", class: "remove-row text-danger" do
-            %span.glyphicon.glyphicon-remove
+      = render partial: 'gas_asset_lists/table_row', locals: { list_item: list_item }

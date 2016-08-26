@@ -20,6 +20,11 @@ var GasAssetListTable = (function () {
             );
         });
 
+        // Reset the units of a gas asset to 0 when somebody changes the type
+        if (!initial) {
+            row.find("input[name='units']").val(0);
+        }
+
         setCorrectUnit.call(row, row.find("select.part").val());
 
         row.find("select.type")

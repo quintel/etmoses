@@ -6,7 +6,7 @@ var HeatAssetListTable = (function () {
     function HeatAssetListTable(selector) {
         MultiTable.call(this, selector);
 
-        this.formField = "#heat_asset_asset_list";
+        this.formField = "#heat_asset_list_asset_list";
         this.tables    = [
             new HeatAssetListTablePart("table.interactions.heat_asset_list.primary"),
             new HeatAssetListTablePart("table.interactions.heat_asset_list.secondary")
