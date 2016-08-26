@@ -78,8 +78,6 @@ var EditableTable = (function () {
         }
 
         this.changeListener();
-
-        hideLastRow.call(this);
     }
 
     function addClickListenersToAddRow() {
@@ -112,16 +110,6 @@ var EditableTable = (function () {
             }.bind(this));
     }
 
-    function hideLastRow() {
-        /* Remove the last remove-row button because a user should
-         * not be able to remove the last row of a table. */
-        $(this.selector).find("a.remove-row").show();
-
-        $(this.selector)
-            .find("tr:last-child")
-            .find("a.remove-row").hide();
-    }
-
     function markAsEditable() {
         var pane = $(this.selector).parents(".tab-pane"),
             form = pane.find("form");
@@ -152,7 +140,6 @@ var EditableTable = (function () {
 
             addClickListenersToAddRow.call(this);
             addClickListenersToDeleteRow.call(this);
-            hideLastRow.call(this);
         },
 
         getData: function () {
