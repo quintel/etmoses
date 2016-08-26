@@ -188,7 +188,7 @@ var LoadChartsSettings = {
     },
     deficit: {
         name: "Deficit",
-        color: '#F75E3E',
+        color: '#FF0000',
         visible: true,
         axisLabel: 'kW'
     }
