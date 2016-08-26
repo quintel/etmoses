@@ -72,7 +72,7 @@ charging_powers = [ 3.7,
                    10.0]
                    
 # battery volume in kWh
-volume = 25.0
+volume = 100.0
 
 # efficiency of the EV in km / kWh
 efficiency = 5.0
@@ -188,15 +188,15 @@ def generate_availability_profile(trips_data, charging_power):
 
 for i in range(0, len(work_data)):
 
-    for j in range(0, len(charging_powers)): 
+    for j in range(0, 1): #len(charging_powers)): 
     
         driver = i
         charging_power = charging_powers[j]
         
         availability_profile = generate_availability_profile(annual_charge_times(), charging_power)
         
-        filename = 'ev_availability_profile_' + str(driver+1) + '_' + str(charging_power) + '_kW.csv'
-        #savetxt(filename, availability_profile, fmt='%.3f', delimiter=',')
+        filename = '../output_data/ev_availability_profile_' + str(driver+1) + '_' + str(volume) + '_kWh_' + str(charging_power) + '_kW.csv'
+        savetxt(filename, availability_profile, fmt='%.3f', delimiter=',')
         
         figure(figsize=[15,10])
         
