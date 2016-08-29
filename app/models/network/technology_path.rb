@@ -35,7 +35,10 @@ module Network
     end
 
     def mandatory_consumption_at(frame)
-      amount = @technology.mandatory_consumption_at(frame) - receipts.mandatory[frame]
+      amount =
+        @technology.mandatory_consumption_at(frame) -
+        receipts.mandatory[frame]
+
       amount <= 0 ? 0.0 : amount
     end
 
@@ -45,7 +48,10 @@ module Network
     #
     # Returns a numeric.
     def conditional_consumption_at(frame)
-      amount = @technology.conditional_consumption_at(frame) - receipts.conditional[frame]
+      amount =
+        @technology.conditional_consumption_at(frame) -
+        receipts.conditional[frame]
+
       amount <= 0 ? 0.0 : constrain(frame, amount)
     end
 
