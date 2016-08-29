@@ -72,19 +72,6 @@ module Network
       end
     end
 
-    # Public: Returns how much energy decayed in the reserve at the beginning of
-    # the given frame.
-    #
-    # Returns a numeric.
-    def decay_at(frame)
-      return 0.0 if frame.zero? || ! @decay
-
-      start = at(frame - 1)
-      decay = @decay.call(frame, start)
-
-      decay < start ? decay : start
-    end
-
     # Public: Describes the net load on the reserve. Accounts for energy put in
     # to, or removed from, the reserve, excluding losses.
     #
