@@ -13,9 +13,7 @@ module Network
 
       def initialize(installed, profile, **)
         super
-
-        @mand_loads = []
-        @cond_loads = []
+        @receipts = Receipts.new
       end
 
       def stored
@@ -27,7 +25,7 @@ module Network
       # exceeds the amount stored, the deficit goes unmet.
       #
       # Returns a numeric.
-      def production_at(frame)
+      def production_at(_frame)
         0.0
       end
 
@@ -38,15 +36,20 @@ module Network
       #
       # Returns a numeric.
       def mandatory_consumption_at(frame)
-        @mand_loads[frame] ||= begin
-          # Force evaluation of energy taken from buffer.
-          stored.at(frame)
+        # Force evaluation of energy taken from buffer.
+        stored.at(frame)
 
-          @capacity.limit_mandatory(
-            frame,
-            @profile.at(frame) / @installed.performance_coefficient
-          )
-        end
+        wanted = @profile.at(frame) / @installed.performance_coefficient
+
+        # SubPath will remove from the request any energy which has already been
+        # delivered. This is because other technologies will always return their
+        # full demand even after part of that demand has been satisfied. Buffer
+        # however will compute the amount of energy still needed, accounting for
+        # that supplied by other members of the composite. Therefore we add the
+        # "receipt" back to the demand in order to counteract the SubPath.
+        wanted += @receipts.mandatory[frame]
+
+        @capacity.limit_mandatory(frame, wanted)
       end
 
       # Public: Determines how much extra the buffer may consume in order to
@@ -54,12 +57,12 @@ module Network
       #
       # Returns a numeric.
       def conditional_consumption_at(frame)
-        @cond_loads[frame] ||= begin
-          @capacity.limit_conditional(
-            frame,
-            stored.unfilled_at(frame) / @installed.performance_coefficient
-          )
-        end
+        wanted = stored.unfilled_at(frame) / @installed.performance_coefficient
+
+        # See `mandatory_consumption_at`.
+        wanted += @receipts.conditional[frame]
+
+        @capacity.limit_conditional(frame, wanted)
       end
 
       # Public: Buffers should not overload the network.
@@ -72,8 +75,14 @@ module Network
         true
       end
 
+      def receive_mandatory(frame, amount)
+        super
+        @receipts.mandatory[frame] += amount
+      end
+
       def store(frame, amount)
         stored.add(frame, amount * @installed.performance_coefficient)
+        @receipts.conditional[frame] += amount
       end
     end # Buffer
   end
