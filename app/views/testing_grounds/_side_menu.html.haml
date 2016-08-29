@@ -44,6 +44,6 @@
             Edit LES
 
         - if policy(@testing_ground).clone?
-          = link_to clone_testing_ground_path(@testing_ground), method: :post, class: "btn btn-default" do
-            Clone LES
-
+          = form_for @testing_ground, html: { remote: true } do |f|
+            = f.hidden_field :name
+            = link_to "Clone LES", "#", data: { url: save_as_testing_ground_path(@testing_ground) }, class: "btn btn-default save_as"

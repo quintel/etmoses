@@ -170,16 +170,6 @@ class TestingGroundsController < ResourceController
     )
   end
 
-  # POST /testing_grounds/:id/clone
-  def clone
-    @cloned_les = TestingGround::SaveAs.run(
-      @testing_ground, @testing_ground.name, current_user)
-
-    flash[:notice] = "Succesfully cloned LES #{ @testing_ground.name }"
-
-    redirect_to testing_ground_path(@cloned_les)
-  end
-
   # DELETE /testing_grounds/:id
   def destroy
     TestingGround::Destroyer.destroy(@testing_ground)

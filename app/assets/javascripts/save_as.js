@@ -1,4 +1,5 @@
 /*globals document,customPrompt*/
+
 $(document).on('page:change', function () {
     'use strict';
 
@@ -10,11 +11,13 @@ $(document).on('page:change', function () {
         form.submit();
     }
 
-    nameInput.on('change.name', function () {
-        nameInput.addClass('changed').off('change.name');
-    });
+    function promptCallback(newName) {
+        nameInput.val(newName);
 
-    $(".save_as").on("click", function (e) {
+        submitSaveAsForm.call(this);
+    }
+
+    function onSaveAs(e) {
         e.preventDefault();
 
         if (nameInput.hasClass('changed')) {
@@ -23,12 +26,14 @@ $(document).on('page:change', function () {
             customPrompt(
                 "Please set a name for your new LES",
                 nameInput.val(),
-                function (newName) {
-                    nameInput.val(newName);
-
-                    submitSaveAsForm.call(this);
-                }.bind(this)
+                promptCallback.bind(this)
             );
         }
+    }
+
+    nameInput.on('change.name', function () {
+        nameInput.addClass('changed').off('change.name');
     });
+
+    $(".save_as").on("click", onSaveAs.bind(this));
 });

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
     member do
       get  'export', 'technology_profile', 'gas_load', 'heat_load'
-      post 'data', 'update_strategies', 'clone'
+      post 'data', 'update_strategies'
       post 'export', to: :perform_export
       patch 'save_as'
 

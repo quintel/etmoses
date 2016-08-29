@@ -615,6 +615,11 @@ select#stakeholders[disabled]{
       float: right;
       padding: 0 0 0 8px;
 
+      form {
+        float: right;
+        margin-left: 8px;
+      }
+
       .glyphicon-pencil {
         margin: 0px 2px 0 0;
         vertical-align: text-top;
