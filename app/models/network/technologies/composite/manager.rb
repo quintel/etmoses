@@ -1,8 +1,8 @@
 module Network
   module Technologies
     module Composite
-      # Stores and wraps technologies whose profile and storage reserve is shared
-      # between them.
+      # Stores and wraps technologies whose profile and storage reserve is
+      # shared between them.
       class Manager
         attr_reader :volume, :techs, :reserve, :demand
 
@@ -62,8 +62,8 @@ module Network
           margin > 0 ? margin : 0.0
         end
 
-        # Public: Determines if boosting technologies are permitted (or required)
-        # to run in the given frame.
+        # Public: Determines if boosting technologies are permitted (or
+        # required) to run in the given frame.
         #
         # Boosting technologies will activate in order to make up a deficit in
         # production in order to meet a spike in demand.
@@ -85,7 +85,6 @@ module Network
           wrapped =
             if tech.installed.position_relative_to_buffer == 'boosting'.freeze
               if tech.is_a?(HHP::Base)
-                # Hack :(
                 HHPBoostingWrapper.new(tech, self)
               else
                 BoostingWrapper.new(tech, self)
@@ -98,7 +97,10 @@ module Network
 
           wrapped.profile = @profile
           wrapped.stored = @reserve if tech.respond_to?(:stored)
-          wrapped.volume = @volume / (tech.installed.performance_coefficient || 1)
+
+          wrapped.volume = @volume / (
+            tech.installed.performance_coefficient || 1
+          )
 
           wrapped
         end
