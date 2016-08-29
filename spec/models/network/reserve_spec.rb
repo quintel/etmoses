@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Network::Reserve do
-  let(:reserve) { Network::Reserve.new }
+  let(:reserve) { described_class.new }
 
   it 'starts empty' do
     expect(reserve.at(0)).to be_zero
@@ -76,7 +76,7 @@ RSpec.describe Network::Reserve do
   end # adding 5 in frame 0
 
   context 'with a volume of 2.0' do
-    let(:reserve) { Network::Reserve.new(2.0) }
+    let(:reserve) { described_class.new(2.0) }
 
     context 'adding 1.0' do
       let!(:added) { reserve.add(0, 1.0) }
@@ -128,7 +128,7 @@ RSpec.describe Network::Reserve do
   end # with a volume of 2.0
 
   describe 'with a decay which subtracts 2' do
-    let(:reserve) { Network::Reserve.new { |*| 2 }}
+    let(:reserve) { described_class.new { |*| 2 } }
 
     it 'has nothing in frame 0' do
       expect(reserve.at(0)).to be_zero
@@ -188,7 +188,7 @@ RSpec.describe Network::Reserve do
   end # with a decay which subtracts 2
 
   describe 'with a decay which subtracts 10%' do
-    let(:reserve) { Network::Reserve.new { |_, amt| amt * 0.1 }}
+    let(:reserve) { described_class.new { |_, amt| amt * 0.1 } }
 
     context 'and 4.0 stored' do
       before { reserve.add(0, 4.0) }
@@ -209,7 +209,7 @@ RSpec.describe Network::Reserve do
 
   describe 'with a decay which subtracts 2 in even-numbered frames' do
     let(:reserve) do
-      Network::Reserve.new { |frame, _| frame % 2 == 0 ? 2.0 : 0 }
+      described_class.new { |frame, _| (frame % 2).zero? ? 2.0 : 0 }
     end
 
     context 'and 4.0 stored' do
