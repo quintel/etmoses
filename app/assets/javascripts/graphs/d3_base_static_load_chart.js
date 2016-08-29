@@ -33,7 +33,10 @@ var D3BaseStaticLoadChart = (function () {
         },
 
         getScaling: function (load) {
-            return new Quantity(this.maxYvalue(load), 'kW').smartScale();
+            return new Quantity(
+                this.maxYvalue(load),
+                this.settings.axis_label
+            ).smartScale();
         }
     });
 
@@ -45,6 +48,7 @@ var D3BaseStaticLoadChart = (function () {
         this.height                = 400;
         this.width                 = this.holder().innerWidth();
         this.settings.dateCallback = this.draw.bind(this);
+        this.axisLabel             = this.settings.axis_label;
     }
 
     return D3BaseStaticLoadChart;

@@ -14,7 +14,7 @@
       .controls
         %select.load-date.form-control.hidden
           = load_date_options(false)
-      .graph.line-chart{ data: { type: 'gas_load_chart', url: gas_testing_ground_path(@testing_ground), curve_type: 'gas', view_as: 'total', resolution: 'high' } }
+      .graph.line-chart{ data: { type: 'gas_load_chart', url: gas_testing_ground_path(@testing_ground), curve_type: 'gas', view_as: 'total', resolution: 'high', axis_label: 'kW' } }
         .chart-area Loading your chart. One moment please!
 
     .chart-holder
