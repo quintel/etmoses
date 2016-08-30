@@ -26,9 +26,11 @@ var TechnologyTemplateFinalizer = (function () {
 
     function calculateInputCapacity() {
         if (this.type === 'capacity' || this.type === 'performance_coefficient') {
-            $(this.target).find('.carrier_capacity input').val(
-                Calculations.calculateInputCapacity.call($(this.target).data())
-            );
+            var inputCapacity = $(this.target).find('.carrier_capacity input'),
+                inputData     = $(this.target).data(),
+                calculated    = Calculations.calculateInputCapacity.call(inputData);
+
+            inputCapacity.val(calculated).trigger('blur.rounder');
         }
     }
 
@@ -56,7 +58,7 @@ var TechnologyTemplateFinalizer = (function () {
     function updateJSON() {
         var type    = $(this).data('type'),
             target  = $(this).parents('.technology'),
-            value   = $(this).val().replace(/[\'\" ]/g, '');
+            value   = $(this).rawValue().replace(/[\'\" ]/g, '');
 
         $(this).val(value);
         target.set(type, value);

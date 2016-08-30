@@ -12,7 +12,7 @@ var Rounder = (function () {
             correction = "e-" + this.roundTo,
             rounded    = +(Math.round(rounding) + correction);
 
-            this.input.val(rounded.toFixed(this.roundTo));
+            this.input.val(rounded);
         }
     }
 
@@ -49,9 +49,3 @@ var Rounder = (function () {
 
     return Rounder;
 }());
-
-$(document).on('page:change', function () {
-    $("input[data-round]").each(function () {
-        new Rounder(this).initialize();
-    });
-});

@@ -76,6 +76,10 @@ var TechnologiesForm = (function () {
 $(document).on("page:change", function () {
     'use strict';
 
+    $("input[data-round]").each(function () {
+        new Rounder(this).initialize();
+    });
+
     if ($("#profiles-table").length > 0) {
         window.currentTechnologiesForm = new TechnologiesForm();
         window.currentTechnologiesForm.append();
