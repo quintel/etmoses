@@ -15,20 +15,21 @@ module Network
           @inputs   = DefaultArray.new { 0.0 }
           @volume   = Types::Volume[(volume || 0.0)] * profile.frames_per_hour
 
-          @reserve = Reserve.new(@volume) do |frame, amount|
-            wanted = @profile.at(frame)
-            decay  = wanted < amount ? wanted : amount
+          @reserve =
+            AmplifiedReserve.new(@volume, @volume * 1.78) do |frame, amount|
+              wanted = @profile.at(frame)
+              decay  = wanted < amount ? wanted : amount
 
-            # If a capacity is defined, the reserve may deplete no more than the
-            # capacity of the composite permits.
-            decay = @capacity if @capacity && decay > @capacity
+              # If a capacity is defined, the reserve may deplete no more than
+              # the capacity of the composite permits.
+              decay = @capacity if @capacity && decay > @capacity
 
-            # Have to adjust the profile to reflect energy provided by the
-            # Reserve.
-            @profile.deplete(frame, decay)
+              # Have to adjust the profile to reflect energy provided by the
+              # Reserve.
+              @profile.deplete(frame, decay)
 
-            decay
-          end
+              decay
+            end
         end
 
         # Public: All the technologies which are contained in the composite.
