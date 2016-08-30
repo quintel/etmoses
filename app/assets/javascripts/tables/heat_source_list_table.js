@@ -1,23 +1,16 @@
 var HeatSourceListTable = (function () {
     'use strict';
 
-    function resetProfiles() {
-        this.tables.forEach(function (table) {
-            table.setProfiles();
-        });
-    }
+    HeatSourceListTable.prototype = $.extend({}, MultiTable.prototype, {});
 
-    HeatSourceListTable.prototype = {
-        add: function(table) {
-            this.multiTable.add(table);
+    function HeatSourceListTable(selector) {
+        MultiTable.call(this, selector);
 
-            table.setProfiles();
-        }
-    }
-
-    function HeatSourceListTable() {
-        this.multiTable = new MultiTable(
-            "#heat_source_list_asset_list", resetProfiles);
+        this.formField = "#heat_source_list_asset_list";
+        this.tables    = [
+            new HeatSourceListDispatchable("table.interactions.heat_source_list.dispatchable"),
+            new HeatSourceListMustRun("table.interactions.heat_source_list.must_run")
+        ];
     }
 
     return HeatSourceListTable;

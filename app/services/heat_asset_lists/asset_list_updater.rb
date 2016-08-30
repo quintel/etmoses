@@ -7,7 +7,7 @@ module HeatAssetLists
     def update!
       @testing_ground.heat_asset_list.update_attribute(:asset_list, new_asset_list)
 
-      heat_asset_list
+      heat_asset_list.select(&:primary?)
     end
 
     private

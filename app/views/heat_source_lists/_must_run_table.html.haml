@@ -12,8 +12,11 @@
     = succeed '.' do
       %a(href="https://github.com/quintel/etmoses/wiki/Heat-network") documentation
 
-%table.table.interactions.heat_source_list.multi_table{ data: { type: 'heat_source_list_table'  } }
-  %thead
+.empty-button{ class: ("hidden" if heat_source_list.any?) }
+  %button.btn.btn-primary Add new Heat Source
+
+%table.table.interactions.heat_source_list.must_run
+  %thead{class: ("hidden" if heat_source_list.empty?) }
     %tr
       %th.col-sm-3{ data: { header: 'key' } } Plant type
       %th.col-sm-1{ data: { header: 'heat_production' } } Heat production [kWh]
@@ -28,45 +31,9 @@
       %th
       %th
 
+  %tfoot.hidden
+    = render partial: 'heat_source_lists/must_run_table_row', locals: { list_item: InstalledHeatSource.new }
+
   %tbody
-    - heat_source_list.reject(&:dispatchable).each do |list_item|
-      %tr
-        %td.editable
-          %select.form-control.key
-            = options_for_must_run_heat_source_plant_types(list_item.key)
-
-        %td.editable
-          %input.form-control{name: 'heat_production', value: list_item.heat_production}
-
-        %td.editable.profile
-          %select.form-control.profile{data: { type: list_item.profile }, disabled: 'disabled' }
-
-        %td.editable
-          %select.form-control.stakeholder
-            = options_for_all_stakeholders(list_item.stakeholder)
-
-        %td.editable
-          %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}
-
-        %td.editable
-          %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
-
-        %td.editable
-          %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
-
-        %td.editable
-          %input.form-control{name: 'marginal_heat_costs', value: list_item.marginal_heat_costs}
-
-        %td.editable
-          %input.form-control{name: 'distance', value: list_item.distance}
-
-        %td.editable.hidden
-          %input.form-control{name: 'dispatchable', value: list_item.dispatchable}
-
-        %td
-          = link_to '#', class: 'add-row text-success' do
-            %span.glyphicon.glyphicon-plus
-
-        %td
-          = link_to '#', class: 'remove-row text-danger' do
-            %span.glyphicon.glyphicon-remove
+    - heat_source_list.each do |list_item|
+      = render partial: 'heat_source_lists/must_run_table_row', locals: { list_item: list_item }

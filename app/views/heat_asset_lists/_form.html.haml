@@ -1,8 +1,8 @@
-.table-holder
+.table-holder.multi-table{ data: { type: 'heat_asset_list_table' } }
   .primary-table
-    = render partial: "heat_asset_lists/primary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list }
+    = render partial: "heat_asset_lists/primary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list.select(&:primary?) }
   .secondary-table
-    = render partial: "heat_asset_lists/secondary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list }
+    = render partial: "heat_asset_lists/secondary_table", locals: { testing_ground: testing_ground, heat_asset_list: heat_asset_list.select(&:secondary?) }
 
 = form_for [testing_ground, testing_ground.heat_asset_list], html: { remote: true } do |f|
   .hidden

@@ -1,5 +1,16 @@
 /*globals GasAssetListTable,MarketModelTable*/
 
+/* EditableTable class
+ *
+ * The EditableTable is used for all <table> elements which have the
+ * class '.interactions'. The table contains rows that can be added and
+ * removed with the respected '+' and 'x' icons.
+ *
+ * The <tfoot> of the <table> contains the template of the newly added
+ * table row.
+ *
+ */
+
 var EditableTable = (function () {
     'use strict';
 
@@ -52,7 +63,7 @@ var EditableTable = (function () {
     function addRow(e) {
         e.preventDefault();
 
-        var row             = $(e.currentTarget).parents("tr"),
+        var row             = $(this.selector).find("tfoot tr"),
             originalSelects = row.find('select'),
             clonedRow,
             clonedSelects;
@@ -61,7 +72,7 @@ var EditableTable = (function () {
             this.beforeRowAddedListener();
         }
 
-        clonedRow = row.clone(true, true).removeClass("blank");
+        clonedRow = row.clone(true, true);
 
         if (originalSelects.length) {
             clonedSelects = clonedRow.find('select');
@@ -71,15 +82,13 @@ var EditableTable = (function () {
             });
         }
 
-        clonedRow.insertAfter(row);
+        $(this.selector).find("tbody").append(clonedRow);
 
         if (this.rowAddedListener) {
             this.rowAddedListener(clonedRow);
         }
 
         this.changeListener();
-
-        hideLastRow.call(this);
     }
 
     function addClickListenersToAddRow() {
@@ -89,37 +98,35 @@ var EditableTable = (function () {
             .on('click', addRow.bind(this));
     }
 
+    function removeRow(e) {
+        var row =  $(e.currentTarget).parents("tr");
+
+        e.preventDefault();
+
+        if (this.beforeRowDeletedListener) {
+            this.beforeRowDeletedListener(row)
+        }
+
+        row.remove();
+
+        if (this.rowDeletedListener) {
+            this.rowDeletedListener(row)
+        }
+
+        if (this.count() < 1) {
+            this.emptyButton.removeClass("hidden");
+
+            $(this.selector).find("thead").addClass("hidden");
+        }
+
+        this.changeListener();
+    }
+
     function addClickListenersToDeleteRow() {
         $(this.selector)
             .find("a.remove-row")
             .off('click')
-            .on('click', function (e) {
-                var row =  $(e.currentTarget).parents("tr");
-
-                e.preventDefault();
-
-                if (this.beforeRowDeletedListener) {
-                    this.beforeRowDeletedListener(row)
-                }
-
-                row.remove();
-
-                if (this.rowDeletedListener) {
-                    this.rowDeletedListener(row)
-                }
-
-                this.changeListener();
-            }.bind(this));
-    }
-
-    function hideLastRow() {
-        /* Remove the last remove-row button because a user should
-         * not be able to remove the last row of a table. */
-        $(this.selector).find("a.remove-row").show();
-
-        $(this.selector)
-            .find("tr:last-child")
-            .find("a.remove-row").hide();
+            .on('click', removeRow.bind(this));
     }
 
     function markAsEditable() {
@@ -129,6 +136,15 @@ var EditableTable = (function () {
         $("ul.nav li a[href=#" + pane.attr("id") + "]")
             .add(form)
             .addClass("editing");
+    }
+
+    function enableLastRow(e) {
+        $(this.selector).find("thead").removeClass("hidden");
+
+        addRow.call(this, e);
+
+        this.emptyButton.addClass("hidden");
+        this.changeListener();
     }
 
     EditableTable.prototype = {
@@ -150,9 +166,12 @@ var EditableTable = (function () {
                 .off('change.editable')
                 .on('change.editable', markAsEditable.bind(this));
 
+            this.emptyButton
+                .off("click")
+                .on("click", enableLastRow.bind(this));
+
             addClickListenersToAddRow.call(this);
             addClickListenersToDeleteRow.call(this);
-            hideLastRow.call(this);
         },
 
         getData: function () {
@@ -183,6 +202,16 @@ var EditableTable = (function () {
                 this.changeListener.call(this);
             }
 
+        },
+
+        setProfiles: function () {
+            $(this.selector).find("tr:not(.blank)").each(function() {
+                new ProfileSelectBox(this).add();
+            });
+        },
+
+        count: function () {
+            return tableRows.call(this).length;
         }
     };
 
@@ -190,6 +219,7 @@ var EditableTable = (function () {
         this.selector       = selector;
         this.changeListener = function () { return; };
         this.changeData     = function () { return; };
+        this.emptyButton    = $(this.selector).prev(".empty-button")
 
         this.suspended            = false;
         this.updatedDuringSuspend = false;

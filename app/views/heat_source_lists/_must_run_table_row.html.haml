@@ -1,0 +1,39 @@
+%tr
+  %td.editable
+    = select_tag :key, options_for_must_run_heat_source_plant_types(list_item.key), class: "form-control key"
+
+  %td.editable
+    %input.form-control{name: 'heat_production', value: list_item.heat_production}
+
+  %td.editable.profile
+    = select_tag :profile, [], class: 'form-control profile', disabled: 'disabled', data: { type: list_item.profile }
+
+  %td.editable
+    = select_tag :stakeholder, options_for_all_stakeholders(list_item.stakeholder), class: "form-control stakeholder"
+
+  %td.editable
+    %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}
+
+  %td.editable
+    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
+
+  %td.editable
+    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
+
+  %td.editable
+    %input.form-control{name: 'marginal_heat_costs', value: list_item.marginal_heat_costs}
+
+  %td.editable
+    %input.form-control{name: 'distance', value: list_item.distance}
+
+  %td.editable.hidden
+    %input.form-control{name: 'dispatchable', value: list_item.dispatchable}
+
+  %td
+    = link_to '#', class: 'add-row text-success' do
+      %span.glyphicon.glyphicon-plus
+
+  %td
+    = link_to '#', class: 'remove-row text-danger' do
+      %span.glyphicon.glyphicon-remove
+

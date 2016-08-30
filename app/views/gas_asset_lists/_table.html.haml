@@ -1,23 +1,26 @@
 %h2 Gas infrastructure
 .help-block
   %p
-    In the table below you can edit the specifics of the gas infrastructure of your LES. 
+    In the table below you can edit the specifics of the gas infrastructure of your LES.
     Three types of network components can be chosen:
     %ul
       %li
-        %strong Pipes: 
+        %strong Pipes:
         depending on the pressure level differnt types of pipes can be chosen
       %li
-        %strong Connectors: 
+        %strong Connectors:
         connect pressure levels and allow gas to move from high to low pressure
       %li
-        %strong Compressors: 
+        %strong Compressors:
         connect pressure levels and allow gas to move from low to high pressure with loss
-    More information about the gas network and its components can be found in the 
+    More information about the gas network and its components can be found in the
     = succeed '.' do
       %a(href='https://github.com/quintel/etmoses/wiki/Gas-network') documentation
 
-%table.table.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
+.empty-button{ class: ('hidden' if gas_asset_list.any?) }
+  %button.btn.btn-primary Add new Gas Asset
+
+%table.table.single.interactions.gas_assets{ data: { type: "gas_asset_list_table", url: get_types_testing_ground_gas_asset_lists_path(testing_ground) } }
   %thead
     %tr
       %th.col-sm-1{ data: { header: 'pressure_level_index' } } Pressure level
@@ -29,41 +32,9 @@
       %th
       %th
 
+  %tfoot.hidden
+    = render partial: 'gas_asset_lists/table_row', locals: { list_item: InstalledGasAsset.new }
+
   %tbody
     - gas_asset_list.each do |list_item|
-      %tr
-        %td.editable
-          %select.form-control.pressure_level
-            = options_for_pressure_levels(list_item.pressure_level_index)
-
-        %td.editable
-          %select.form-control.part
-            = options_for_gas_parts(list_item.part)
-
-        %td.editable
-          %select.form-control.type{data: { type: list_item.type } }
-
-        %td.editable
-          %input.form-control{name: 'units', value: list_item.units }
-          %span.unit
-            %span.pipes
-              m
-            %span.connectors
-              = '#'
-            %span.compressors
-              = '#'
-
-        %td.editable
-          %select.form-control.stakeholder
-            = options_for_all_stakeholders(list_item.stakeholder)
-
-        %td.editable
-          %input.form-control{name: 'building_year', value: list_item.building_year}
-
-        %td
-          = link_to "#", class: "add-row text-success" do
-            %span.glyphicon.glyphicon-plus
-
-        %td
-          = link_to "#", class: "remove-row text-danger" do
-            %span.glyphicon.glyphicon-remove
+      = render partial: 'gas_asset_lists/table_row', locals: { list_item: list_item }

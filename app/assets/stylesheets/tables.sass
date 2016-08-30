@@ -2,3 +2,17 @@ table.table
   &.interactions
     td
       line-height: 2
+
+    thead
+      td
+        border-bottom: 2px solid #ddd
+
+    tbody.sortable
+      tr
+        cursor: grab
+
+        td span.glyphicon
+          line-height: 30px
+
+      tr td:active
+        cursor: grabbing

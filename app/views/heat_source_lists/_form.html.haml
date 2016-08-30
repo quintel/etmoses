@@ -1,6 +1,6 @@
-.table-holder
-  = render partial: "heat_source_lists/must_run_table", locals: { testing_ground: testing_ground, heat_source_list: heat_source_list }
-  = render partial: "heat_source_lists/dispatchable_table", locals: { testing_ground: testing_ground, heat_source_list: heat_source_list }
+.table-holder.multi-table{ data: { type: 'heat_source_list_table' } }
+  = render partial: "heat_source_lists/must_run_table", locals: { testing_ground: testing_ground, heat_source_list: heat_source_list.reject(&:dispatchable) }
+  = render partial: "heat_source_lists/dispatchable_table", locals: { testing_ground: testing_ground, heat_source_list: heat_source_list.select(&:dispatchable) }
 
 .heat_source_profiles.hidden.profile
   - heat_source_technologies.each do |technology|

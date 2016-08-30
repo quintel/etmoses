@@ -1,0 +1,36 @@
+%tr
+  %td.editable
+    %select.form-control.pressure_level
+      = options_for_pressure_levels(list_item.pressure_level_index)
+
+  %td.editable
+    %select.form-control.part
+      = options_for_gas_parts(list_item.part)
+
+  %td.editable
+    %select.form-control.type{data: { type: list_item.type } }
+
+  %td.editable
+    %input.form-control{name: 'units', value: list_item.units }
+    %span.unit
+      %span.pipes
+        m
+      %span.connectors
+        = '#'
+      %span.compressors
+        = '#'
+
+  %td.editable
+    %select.form-control.stakeholder
+      = options_for_all_stakeholders(list_item.stakeholder)
+
+  %td.editable
+    %input.form-control{name: 'building_year', value: list_item.building_year}
+
+  %td
+    = link_to "#", class: "add-row text-success" do
+      %span.glyphicon.glyphicon-plus
+
+  %td
+    = link_to "#", class: "remove-row text-danger" do
+      %span.glyphicon.glyphicon-remove
