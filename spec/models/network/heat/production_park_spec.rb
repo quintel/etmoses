@@ -3,11 +3,11 @@ require 'rails_helper'
 module Network::Heat
   RSpec.describe ProductionPark do
     let(:installed_di) do
-      double().tap { |d| allow(d).to receive(:dispatchable).and_return(true) }
+      double.tap { |d| allow(d).to receive(:dispatchable).and_return(true) }
     end
 
     let(:installed_mr) do
-      double().tap { |d| allow(d).to receive(:dispatchable).and_return(false) }
+      double.tap { |d| allow(d).to receive(:dispatchable).and_return(false) }
     end
 
     let(:volume)           { 2.0 }
@@ -18,7 +18,7 @@ module Network::Heat
         must_run:         must_run,
         dispatchable:     dispatchable,
         volume:           volume,
-        amplified_volume: amplified_volume,
+        amplified_volume: amplified_volume
       )
     end
 
@@ -32,8 +32,8 @@ module Network::Heat
 
       it 'raises an error' do
         expect { park }.to raise_error(
-          "Amplified volume (1.8) must be equal to or greater " \
-          "than the volume (2.0)"
+          'Amplified volume (1.8) must be equal to or greater ' \
+          'than the volume (2.0)'
         )
       end
     end
@@ -150,9 +150,9 @@ module Network::Heat
         end
 
         it 'takes 1.0 from the must-run' do
-          expect { reserve }.
-            to change { must_run.first.available_production_at(0) }.
-            from(1.0).to(0.0)
+          expect { reserve }
+            .to change { must_run.first.available_production_at(0) }
+            .from(1.0).to(0.0)
         end
       end # storing excess from a 1.0 must run
 
@@ -169,9 +169,9 @@ module Network::Heat
         end
 
         it 'takes 2.0 from the must-run' do
-          expect { reserve }.
-            to change { must_run.first.available_production_at(0) }.
-            from(3.0).to(1.0)
+          expect { reserve }
+            .to change { must_run.first.available_production_at(0) }
+            .from(3.0).to(1.0)
         end
       end # storing excess from a 3.0 must run
 
@@ -387,7 +387,7 @@ module Network::Heat
 
         it 'takes nothing from the dispatchable' do
           expect { reserve }.
-            to_not change { dispatchable.first.available_production_at(0) }.
+            not_to change { dispatchable.first.available_production_at(0) }.
             from(2.0)
         end
       end # storing excess from a 3.0 must run and 2.0 dispatchable
