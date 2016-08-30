@@ -13,8 +13,7 @@ module Network
           @demand   = profile
           @profile  = DepletingCurve.new(profile)
           @inputs   = DefaultArray.new { 0.0 }
-
-          @volume = (volume || 0.0) * profile.frames_per_hour
+          @volume   = Types::Volume[(volume || 0.0)] * profile.frames_per_hour
 
           @reserve = Reserve.new(@volume) do |frame, amount|
             wanted = @profile.at(frame)
