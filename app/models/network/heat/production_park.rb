@@ -30,11 +30,9 @@ module Network
                "equal to or greater than the volume (#{ @volume.inspect })"
         end
 
-        @must_run          = Array(must_run)
-        @dispatchable      = Array(dispatchable)
-
-        @reserve           = Reserve.new(volume)
-        @amplified_reserve = Reserve.new(amplified_volume - volume)
+        @must_run     = Array(must_run)
+        @dispatchable = Array(dispatchable)
+        @reserve      = AmplifiedReserve.new(volume, amplified_volume)
       end
 
       def producers
@@ -51,7 +49,7 @@ module Network
       #
       # Returns a Heat::Buffer.
       def buffer_tech
-        @buffer_tech ||= Buffer.new(self, [@reserve, @amplified_reserve])
+        @buffer_tech ||= Buffer.new(self, [@reserve])
       end
 
       # Public: Informs the park that an `amount` of energy has been used by a
@@ -72,7 +70,7 @@ module Network
           amount -= tech.take(frame, amount)
         end
 
-        amount -= @amplified_reserve.take(frame, amount)
+        # amount -= @amplified_reserve.take(frame, amount)
         amount -= @reserve.take(frame, amount)
 
         @dispatchable.each do |tech|
@@ -96,7 +94,7 @@ module Network
       # Public: Returns the amount of energy stored in the buffer in the given
       # `frame`.
       def reserved_at(frame)
-        @reserve.at(frame) + @amplified_reserve.at(frame)
+        @reserve.at(frame) #+ @amplified_reserve.at(frame)
       end
 
       # Internal: Given a technology, stores its excess production in the
@@ -114,12 +112,7 @@ module Network
       # Returns the amount of energy stored.
       private def reserve_excess(frame, tech)
         original = excess = tech.available_production_at(frame)
-
-        excess -= tech.take(frame, @reserve.add(frame, excess))
-
-        if excess > 0 && tech.must_run?
-          excess -= tech.take(frame, @amplified_reserve.add(frame, excess))
-        end
+        excess  -= tech.take(frame, @reserve.add(frame, excess, tech.must_run?))
 
         original - excess
       end
