@@ -35,5 +35,6 @@ $(document).on('page:change', function () {
         nameInput.addClass('changed').off('change.name');
     });
 
-    $(".save_as").on("click", onSaveAs.bind(this));
+    $(".save_as").off("click.onSaveAs");
+    $(".save_as").on("click.onSaveAs", onSaveAs);
 });
