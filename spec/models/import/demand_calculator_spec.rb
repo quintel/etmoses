@@ -14,7 +14,7 @@ RSpec.describe Import::DemandCalculator do
 
     it 'calculating heat demand' do
       expect(Import::DemandCalculator.new(1, 10, gqueries).calculate)
-        .to eq(2777.78)
+        .to eq(2777.7777777777778)
     end
   end
 
@@ -35,7 +35,8 @@ RSpec.describe Import::DemandCalculator do
     }
 
     it 'calculating heat demand' do
-      expect(Import::DemandCalculator.new(1, 10, gqueries).calculate).to eq(5555.56)
+      expect(Import::DemandCalculator.new(1, 10, gqueries).calculate)
+        .to eq(5555.555555555556)
     end
   end
 end

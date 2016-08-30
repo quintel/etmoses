@@ -16,13 +16,10 @@ var EditableTable = (function () {
 
     function extractTextfromCells(row) {
         return $(row).find("td.editable").toArray().map(function (cell) {
-            var value;
-            if ($(cell).find("select:visible").length > 0) {
-                value = $.trim($(cell).find("select").val());
-            } else {
-                value = $.trim($(cell).find("input").val());
-            }
-            return value;
+            var input = $(cell).find("select:visible").length > 0 ? 'select' : 'input',
+                elem  = $(cell).find(input);
+
+            return $.trim($(cell).find(input).rawValue());
         });
     }
 

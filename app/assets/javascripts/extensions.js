@@ -56,6 +56,13 @@ $.fn.extend({
 
         $(this).data(option.camelize(), value)
                .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
+    },
+
+    /* Returns the value which lives under 'data-raw', if that's not present
+     * return the default 'val()'
+     */
+    rawValue: function () {
+        return $(this).data('raw') || $(this).val();
     }
 });
 
