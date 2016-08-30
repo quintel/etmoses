@@ -75,7 +75,7 @@ module Network
     # Public: Describes the net load on the reserve. Accounts for energy put in
     # to, or removed from, the reserve, excluding losses.
     #
-    # Returns an Array.
+    # Returns a Network::Curve.
     def load
       Network::Curve.from([first, *each_cons(2).map { |a, b| b - a } ])
     end
