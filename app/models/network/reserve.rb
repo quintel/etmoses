@@ -4,6 +4,8 @@ module Network
   class Reserve
     include Enumerable
 
+    attr_reader :volume
+
     def initialize(volume = Float::INFINITY, &decay)
       @volume = volume
       @decay  = decay
@@ -23,7 +25,7 @@ module Network
       @store[frame] ||= frame.zero? ? 0.0 : at(frame - 1) - decay_at(frame)
     end
 
-    alias_method :[], :at
+    alias [] at
 
     # Public: Sets the `amount` in the reserve for the given `frame`. Ignores
     # volume constraints, and assumes you know what you're doing.
@@ -33,7 +35,7 @@ module Network
       @store[frame] = amount
     end
 
-    alias_method :[]=, :set
+    alias []= set
 
     # Public: Adds the given `amount` of energy in your chosen `frame`, ensuring
     # that the reserve does not exceed capacity.
