@@ -57,7 +57,9 @@ module Network
       #
       # Returns a numeric.
       def conditional_consumption_at(frame)
-        wanted = stored.unfilled_at(frame) / @installed.performance_coefficient
+        wanted =
+          stored.unfilled_at(frame) /
+          @installed.performance_coefficient
 
         # See `mandatory_consumption_at`.
         wanted += @receipts.conditional[frame]
