@@ -96,11 +96,18 @@ module Network
           @techs.push(wrapped)
 
           wrapped.profile = @profile
-          wrapped.stored = @reserve if tech.respond_to?(:stored)
 
-          wrapped.volume = @volume / (
-            tech.installed.performance_coefficient || 1
-          )
+          if tech.respond_to?(:stored)
+            # Technologies which consume only excess local electricity when
+            # buffering may use the high-energy mode in the reserve. Those which
+            # take energy from the grid may not.
+            wrapped.stored =
+              tech.excess_constrained? ? @reserve.high_energy : @reserve
+
+            wrapped.volume = wrapped.stored.volume / (
+              tech.installed.performance_coefficient || 1
+            )
+          end
 
           wrapped
         end
