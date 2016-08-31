@@ -82,19 +82,7 @@ module Network
         #
         # Returns the wrapped technology.
         def add(tech)
-          wrapped =
-            if tech.installed.position_relative_to_buffer == 'boosting'.freeze
-              if tech.is_a?(HHP::Base)
-                HHPBoostingWrapper.new(tech, self)
-              else
-                BoostingWrapper.new(tech, self)
-              end
-            else
-              BufferingWrapper.new(tech, self)
-            end
-
-          @techs.push(wrapped)
-
+          wrapped = wrapper_class_for(tech).new(tech, self)
           wrapped.profile = @profile
 
           if tech.respond_to?(:stored)
@@ -109,7 +97,21 @@ module Network
             )
           end
 
+          @techs.push(wrapped)
+
           wrapped
+        end
+
+        # Internal: Determines the correct wrapper class for the given
+        # technology
+        #
+        # Returns a Composite::Wrapper class.
+        private def wrapper_class_for(tech)
+          if tech.installed.position_relative_to_buffer == 'boosting'.freeze
+            tech.is_a?(HHP::Base) ? HHPBoostingWrapper : BoostingWrapper
+          else
+            BufferingWrapper
+          end
         end
       end # Manager
     end # Composite
