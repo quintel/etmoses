@@ -21,7 +21,8 @@
             %tr
               %td= financial_row[:stakeholder].titleize
               %td.editable
-                %span.static= financial_row[:incoming]
+                %span.static{ tabindex: '0', role: 'button', data: breakdown_data(financial_row[:incoming_breakdown]) }
+                  = financial_row[:incoming]
                 %span.difference
                   - if financial_row[:compare]
                     %span>(
@@ -29,7 +30,8 @@
                     %span>)
 
               %td.editable
-                %span.static= financial_row[:outgoing]
+                %span.static{ tabindex: '0', role: 'button', data: breakdown_data(financial_row[:outgoing_breakdown]) }
+                  = financial_row[:outgoing]
                 %span.difference
                   - if financial_row[:compare]
                     %span>(

@@ -19,36 +19,14 @@ RSpec.describe Finance::BusinessCaseComparator do
     FactoryGirl.create(:business_case, financials: other_financials)
   }
 
-  it "compares two business cases" do
-    compare = Finance::BusinessCaseComparator.new(business_case, other_business_case).compare
+  let(:compare) {
+    Finance::BusinessCaseComparator.new(
+      business_case, other_business_case
+    ).compare
+  }
 
-    expect(compare).to eq([
-      { :stakeholder=>"aggregator",
-        :incoming=>0,
-        :outgoing=>1,
-        :freeform=>nil,
-        :total=>-1,
-        :compare=>{
-          :stakeholder=>"aggregator",
-          :incoming=>3,
-          :outgoing=>2,
-          :freeform=>nil,
-          :total=>1
-        }
-      },
-      { :stakeholder=>"cooperation",
-        :incoming=>1,
-        :outgoing=>0,
-        :freeform=>nil,
-        :total=>1,
-        :compare=>{
-          :stakeholder=>"cooperation",
-          :incoming=>1,
-          :outgoing=>3,
-          :freeform=>nil,
-          :total=>-2
-        }
-      }])
+  it "compares two business cases" do
+    expect(compare.map{|t| t[:compare][:total] }).to eq([1, -2])
   end
 
   context 'when a business case is missing a stakeholder' do
@@ -57,14 +35,15 @@ RSpec.describe Finance::BusinessCaseComparator do
     }
 
     it "compares two business cases" do
-      compare = Finance::BusinessCaseComparator.new(
-        business_case, other_business_case
-      ).compare
-
-      expect(compare).to eq([
-        { :stakeholder=>"aggregator", :incoming=>0, :outgoing=>1, :freeform=>nil, :total=>-1,
-         :compare=>{:stakeholder=>"aggregator", :incoming=>3, :outgoing=>1, :freeform=>nil, :total=>2}},
-        { :stakeholder=>"cooperation", :incoming=>1, :outgoing=>0, :freeform=>nil, :total=>1, :compare=>nil}
+      expect(compare.map{|t| t[:compare] }).to eq([
+        { :stakeholder=>"aggregator",
+          :incoming=>3,
+          :incoming_breakdown=>{"Yearly depreciation + fixed O&M costs"=>3},
+          :outgoing=>1,
+          :outgoing_breakdown=>{"Yearly depreciation + fixed O&M costs"=>1},
+          :freeform=>nil,
+          :total=>2 },
+        nil
       ]);
     end
   end
@@ -75,16 +54,20 @@ RSpec.describe Finance::BusinessCaseComparator do
     }
 
     it "compares two business cases" do
-      compare = Finance::BusinessCaseComparator.new(
-        business_case, other_business_case
-      ).compare
-
-      expect(compare).to eq([
-        { :stakeholder=>"aggregator", :incoming=>0, :outgoing=>1, :freeform=>nil, :total=>-1,
-          :compare=>{:stakeholder=>"aggregator", :incoming=>1, :outgoing=>6, :freeform=>nil, :total=>-5}},
-        { :stakeholder=>"cooperation", :incoming=>1, :outgoing=>0, :freeform=>nil, :total=>1, :compare=>nil},
-        { :stakeholder => "no_stakeholder", :compare=>{:stakeholder=>"no_stakeholder", :incoming=>3, :outgoing=>2, :freeform=>nil, :total=>1}}
-      ]);
+      # There are three unique stakeholders, Aggreagator, no_stakeholder
+      # and Cooperation. One of the compare values should be nil.
+      #
+      #   Business case | Other business case
+      #   ------------------------------
+      #   Aggregator    | Aggregator
+      #   Cooperation   |
+      #                 | no_stakeholder
+      #
+      # For `no_stakeholder` an exception is made because there's a comparison
+      # line but nothing to compare it to. It will return the financials but
+      # with a difference of 0.0.
+      #
+      expect(compare.map{|t| t[:compare] }.select(&:nil?).count).to eq(1);
     end
   end
 end

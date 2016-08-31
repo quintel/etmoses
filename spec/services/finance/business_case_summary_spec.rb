@@ -23,7 +23,11 @@ RSpec.describe Finance::BusinessCaseSummary do
     expect(summarized.detect{ |t| t[:stakeholder] == 'customer' }).to eq({
       :stakeholder=>"customer",
       :incoming=>nil,
+      :incoming_breakdown => {},
       :outgoing=>44150.4,
+      :outgoing_breakdown => {
+        "Yearly depreciation + fixed O&M costs" => 0, 'System operator' => 44150.4
+      },
       :freeform=>nil,
       :total=>-44150.4
     })
@@ -33,7 +37,13 @@ RSpec.describe Finance::BusinessCaseSummary do
     expect(summarized.detect{ |t| t[:stakeholder] == 'system operator' }).to eq({
       :stakeholder=>"system operator",
       :incoming=>44150.4,
+      :incoming_breakdown => {
+        'Customer' => 44150.4
+      },
       :outgoing=>9998,
+      :outgoing_breakdown => {
+        'Yearly depreciation + fixed O&M costs' => 9998
+      },
       :freeform=>0,
       :total=>34152.4
     })

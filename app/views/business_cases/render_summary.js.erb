@@ -1,4 +1,10 @@
 $("#business_case_target_area .placeholder").html("<%= escape_javascript(render partial: 'business_cases/table', locals: { business_case_rows: @business_case_summary, business_case: @business_case } ) %>");
-$("#business_case_target_area .placeholder").find("table tbody td.editable span.static").formatCurrency();
-enableCompareSelectbox();
+
+$("#business_case_target_area .placeholder")
+  .find("table tbody td.editable span.static")
+  .each(BusinessCase.formatCell);
+
 $(".loading img").hide();
+$("[data-toggle='popover']").popover();
+
+enableCompareSelectbox();

@@ -26,4 +26,22 @@ module BusinessCaseHelper
   def clear_business_case?(testing_ground)
     testing_ground.cache_updated_at > testing_ground.business_case.updated_at
   end
+
+  def content_for_breakdown(breakdown)
+    breakdown.each_pair.map do |stakeholder, value|
+      stakeholder_span = content_tag(:span,
+        "#{ stakeholder }: ", "class" => "stakeholder")
+
+      stakeholder_span + number_to_currency(value)
+    end
+  end
+
+  def breakdown_data(breakdown)
+    {
+      toggle:  'popover',
+      trigger: 'hover',
+      html:    'true',
+      content: content_for_breakdown(breakdown).join("<br/>")
+    }
+  end
 end

@@ -20,6 +20,12 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  number:
+    currency:
+      format:
+        unit: "€"
+        delimiter: ','
+        separator: '.'
   tariff:
     type:
       fixed: 'Fixed-rate'

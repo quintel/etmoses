@@ -721,6 +721,10 @@ table span.static{
   vertical-align: middle;
   white-space: nowrap;
   width: 130px;
+
+  &:focus {
+    outline: 0px solid transparent;
+  }
 }
 
 .chart-holder{
