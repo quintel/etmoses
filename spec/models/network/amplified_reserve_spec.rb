@@ -145,6 +145,14 @@ RSpec.describe Network::AmplifiedReserve do
           expect(reserve.load.to_a.take(4))
             .to eq([2.5, -1.5, 0.0, 0.0])
         end
+
+        context 'with the high-energy mode wrapper' do
+          let(:wrapped) { reserve.high_energy }
+
+          it 'has low-energy unfilled volume of 1.0' do
+            expect(wrapped.unfilled_at(1)).to eq(2.0)
+          end
+        end
       end
 
       context 'taking 3.0 in frame 1' do
@@ -174,6 +182,25 @@ RSpec.describe Network::AmplifiedReserve do
         end
       end
     end # adding 2.5 high-energy in frame 0
+
+    context 'adding 2.5 through the high energy wrapper in frame 0' do
+      let(:wrapped) { reserve.high_energy }
+      let!(:added)  { wrapped.add(0, 2.5) }
+
+      it 'returns 2.0' do
+        expect(added).to eq(2.5)
+      end
+
+      it 'adds 2.0 to the reserve' do
+        expect(reserve.at(0)).to eq(2.5)
+        expect(wrapped.at(0)).to eq(2.5)
+      end
+
+      it 'has unfilled volume of 0.5' do
+        expect(reserve.unfilled_at(1, true)).to eq(0.5)
+        expect(wrapped.unfilled_at(1)).to eq(0.5)
+      end
+    end # adding 2.5 through the high energy wrapper in frame 0
   end # with low_volume=2 and high_volume=3
 
   context 'with low_volume=2 and high_volume=3 and 1.0 decay' do

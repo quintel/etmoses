@@ -18,6 +18,14 @@ module Network
       super(high, &decay)
     end
 
+    # Public: Returns the reserve wrapped in a HighEnergyMode wrapper. All calls
+    # to the reserve will be in high-energy mode.
+    #
+    # Returns a HighEnergyMode.
+    def high_energy
+      HighEnergyMode.new(self)
+    end
+
     # Public: Returns how much of the reserve is unfilled.
     #
     # Returns a numeric.
@@ -54,6 +62,18 @@ module Network
     # Public: A human readable version of the reserve.
     def to_s
       "#{ self.class.name }{#{ @low_volume }, #{ @volume }}"
+    end
+
+    # A Reserve-compatible wrapper around AmplifiedReserve which enables the
+    # high-energy volume by default.
+    class HighEnergyMode < FastDelegator.create(AmplifiedReserve)
+      def unfilled_at(frame)
+        super(frame, true)
+      end
+
+      def add(frame, amount)
+        super(frame, amount, true)
+      end
     end
   end # AmplifiedReserve
 end
