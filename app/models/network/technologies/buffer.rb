@@ -1,5 +1,8 @@
 module Network
   module Technologies
+    # A technology which typically belogns to a Composite and may optionally
+    # buffer excess local or grid energy to be stored in the reserve for future
+    # use.
     class Buffer < Storage
       attr_accessor :stored
 
