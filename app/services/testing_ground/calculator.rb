@@ -70,7 +70,7 @@ class TestingGround::Calculator
 
   def fetch_networks
     @networks ||=
-      if Settings.cache.networks && ! weekly_calculation?
+      if Settings.cache.networks && ! weekly_calculation? && cache.present?
         cache.fetch(@options[:nodes])
       else
         @testing_ground.to_calculated_graphs(calculation_options)

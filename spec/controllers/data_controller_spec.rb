@@ -9,7 +9,8 @@ RSpec.describe DataController do
     let!(:sign_in_user){ sign_in(user) }
 
     before do
-      expect(Settings.cache).to receive(:networks).and_return(true)
+      expect(Settings.cache).to receive(:networks)
+        .at_least(:once).and_return(true)
     end
 
     it 'creates a merit order' do
@@ -30,7 +31,8 @@ RSpec.describe DataController do
             ]
           }]
         }),
-        Network::Builders::Gas.build({}, {})
+        Network::Builders::Gas.build({}, {}),
+        Network::Builders::Heat.build({}, {})
       ])
 
       get :price_curve, testing_ground_id: testing_ground.id, format: :csv
