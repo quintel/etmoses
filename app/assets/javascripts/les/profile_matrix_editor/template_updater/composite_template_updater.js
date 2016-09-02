@@ -4,7 +4,7 @@ var CompositeTemplateUpdater = (function () {
     function compositeFilter(d, e) {
         var techData = $(e).data();
 
-        return techData.composite && techData.type === this.data.type;
+        return techData.composite && techData.type === this.type;
     }
 
     function getNewIndex() {
@@ -29,15 +29,15 @@ var CompositeTemplateUpdater = (function () {
 
     CompositeTemplateUpdater.prototype = {
         updateUnits: function () {
-            if (this.data.composite) {
-                this.children.set('units', this.data.units);
+            if (this.composite) {
+                this.children.data('units', this.units);
             }
         },
 
         update: function () {
-            if (this.data.composite) {
+            if (this.composite) {
                 var index          = getNewIndex.call(this),
-                    compositeValue = this.data.type + "_" + index;
+                    compositeValue = this.type + "_" + index;
 
                 this.template.set('composite_index', index);
                 this.template.set('composite_value', compositeValue);
@@ -52,9 +52,11 @@ var CompositeTemplateUpdater = (function () {
     };
 
     function CompositeTemplateUpdater(template) {
-        this.template = $(template);
-        this.data     = $(template).data();
-        this.children = this.template.nextUntil(":not(.buffer-child)");
+        this.template  = $(template);
+        this.type      = template.getAttribute('data-type');
+        this.units     = template.getAttribute('data-units');
+        this.composite = template.getAttribute('data-composite') == 'true';
+        this.children  = this.template.nextUntil(":not(.buffer-child)");
     }
 
     return CompositeTemplateUpdater;

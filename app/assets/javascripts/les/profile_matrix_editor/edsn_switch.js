@@ -5,14 +5,14 @@ var EdsnSwitch = (function () {
         validBaseLoads = /^(base_load|base_load_edsn)$/;
 
     function swapSelectBox() {
-        var self         = this,
-            type         = $(this.target).data('type'),
-            profile      = $(this.target).data('profile'),
-            unitSelector = $(this.target).find(".units input"),
+        var target       = $(this),
+            type         = target.data('type'),
+            profile      = target.data('profile'),
+            unitSelector = target.find(".units input"),
             units        = parseInt(unitSelector.val(), 10),
             actual       = (units > EDSN_THRESHOLD ? "base_load_edsn" : "base_load"),
             options      = $(".hidden.profile select." + actual).find("option").clone(true, true),
-            select       = $(this.target).find('.editable.profile select');
+            select       = target.find('.editable.profile select');
 
         select.html(options);
 
@@ -22,25 +22,19 @@ var EdsnSwitch = (function () {
             select.trigger('change');
         }
 
-        $(this.target).set('profile', parseInt(select.val(), 10));
-        $(this.target).set('type', actual);
+        target.set('profile', parseInt(select.val(), 10));
+        target.set('type', actual);
 
-        unitSelector.off('change.units').on('change.units', swapSelectBox.bind(self));
+        unitSelector.off('change.units').on('change.units', swapSelectBox.bind(target));
     }
 
-    EdsnSwitch.prototype = {
-        isEdsn: function () {
-            return validBaseLoads.test($(this.target).data('type'));
-        },
+    return {
+        cloneAndAppendProfileSelect: function (target) {
+            var type = $(target).data('type');
 
-        cloneAndAppendProfileSelect: function () {
-            swapSelectBox.call(this);
+            if (validBaseLoads.test(type)) {
+                swapSelectBox.call(target);
+            }
         }
     };
-
-    function EdsnSwitch(target) {
-        this.target = target;
-    }
-
-    return EdsnSwitch;
 }());

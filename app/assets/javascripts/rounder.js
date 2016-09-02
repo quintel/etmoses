@@ -1,50 +1,76 @@
 var Rounder = (function () {
     'use strict';
 
-    function round() {
-        var rounding,
-            correction,
-            rounded,
-            value = parseFloat(this.input.val());
+    function writeRaw() {
+        this.data('raw', this.val());
+    }
 
-        if (!isNaN(value)) {
-            rounding   = value + "e+" + this.roundTo,
-            correction = "e-" + this.roundTo,
-            rounded    = +(Math.round(rounding) + correction);
+    function isValidInput(e) {
+        return e.target !== e.currentTarget &&
+            $(e.target).data('round') !== undefined;
+    }
 
-            this.input.val(rounded);
+    function onInputFocus(e) {
+        if (isValidInput(e)) {
+            var target = $(e.target);
+
+            target.val(target.data('raw'));
         }
     }
 
-    function showRawValue() {
-        var rawValue = this.input.data('raw');
+    function onInputChange(e) {
+        if (isValidInput(e)) {
+            writeRaw.call($(e.target));
+        }
 
-        this.input.val(rawValue);
+        e.stopPropagation();
     }
 
-    function writeRaw() {
-        this.input.set('raw', this.input.val());
+    function onInputBlur(e) {
+        if (isValidInput(e)) {
+            this.round.call($(e.target));
+        }
+
+        e.stopPropagation();
     }
 
     Rounder.prototype = {
+        eachInput: function (method) {
+            $(this.template).find("input[data-round]")
+                .toArray().forEach(function(input) {
+                    method.call($(input));
+                });
+        },
+
         initialize: function () {
-            writeRaw.call(this);
-            round.call(this);
+            this.eachInput(writeRaw);
+            this.eachInput(this.round);
 
-            this.input.off('focus.rounder')
-                .on('focus.rounder', showRawValue.bind(this));
+            this.template.addEventListener('focus', onInputFocus, true);
+            this.template.addEventListener('change', onInputChange, false);
+            this.template.addEventListener('blur', onInputBlur.bind(this), true);
+        },
 
-            this.input.off('change.rounder')
-                .on('change.rounder', writeRaw.bind(this));
+        round: function() {
+            var rounding,
+                correction,
+                rounded,
+                value = parseFloat(this.val()),
+                roundTo = this.data('round');
 
-            this.input.off('blur.rounder')
-                .on('blur.rounder', round.bind(this));
+            if (!isNaN(value)) {
+                rounding   = value + "e+" + roundTo,
+                correction = "e-" + roundTo,
+                rounded    = +(Math.round(rounding) + correction);
+
+                this.val(rounded);
+            }
         }
+
     };
 
-    function Rounder(input) {
-        this.input   = $(input);
-        this.roundTo = this.input.data('round');
+    function Rounder(template) {
+        this.template = template;
     }
 
     return Rounder;

@@ -30,13 +30,13 @@ $.fn.extend({
     underscorizedData: function () {
         'use strict';
 
-        var u = $(this).data(),
-            newObject = {},
-            keys = Object.keys(u);
+        var key,
+            u = this.dataset || $(this).data(),
+            newObject = {};
 
-        $.each(keys, function () {
-            newObject[this.underscorize()] = u[this];
-        });
+        for (key in u) {
+            newObject[key.underscorize()] = u[key];
+        }
 
         return newObject;
     },
