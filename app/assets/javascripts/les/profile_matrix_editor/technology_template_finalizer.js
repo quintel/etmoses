@@ -4,18 +4,6 @@ CompositeTemplateUpdater,EdsnSwitch,RemoveTechnology,Splitter*/
 var TechnologyTemplateFinalizer = (function () {
     'use strict';
 
-    function addEdsnListener() {
-        var edsnSwitch = new EdsnSwitch(this);
-
-        if (edsnSwitch.isEdsn()) {
-            edsnSwitch.cloneAndAppendProfileSelect();
-
-            $(this).find(".profile select")
-                .off('change.edsn')
-                .on('change.edsn', edsnSwitch.cloneAndAppendProfileSelect);
-        }
-    }
-
     function toggleAdvancedFeatures(e) {
         e.preventDefault();
 
@@ -26,9 +14,12 @@ var TechnologyTemplateFinalizer = (function () {
 
     function calculateInputCapacity() {
         if (this.type === 'capacity' || this.type === 'performance_coefficient') {
-            $(this.target).find('.carrier_capacity input').val(
-                Calculations.calculateInputCapacity.call($(this.target).data())
-            );
+            var inputCapacity = $(this.target).find('.carrier_capacity input'),
+                inputData     = $(this.target).data(),
+                calculated    = Calculations.calculateInputCapacity.call(inputData);
+
+            inputCapacity.val(calculated);
+            new Rounder().round.call(inputCapacity);
         }
     }
 
@@ -54,11 +45,12 @@ var TechnologyTemplateFinalizer = (function () {
     }
 
     function updateJSON() {
-        var type    = $(this).data('type'),
-            target  = $(this).parents('.technology'),
-            value   = $(this).val().replace(/[\'\" ]/g, '');
+        var obj     = $(this),
+            type    = obj.data('type'),
+            target  = obj.parents('.technology'),
+            value   = obj.rawValue().replace(/[\'\" ]/g, '');
 
-        $(this).val(value);
+        obj.val(value);
         target.set(type, value);
 
         updateJSONHooks().forEach(function (hook) {
@@ -74,34 +66,58 @@ var TechnologyTemplateFinalizer = (function () {
         window.currentTechnologiesForm.markAsEditing();
     }
 
-    function addOnChangeListener() {
-        var eventName;
+    function updateEvent(e) {
+        if (e.target !== e.currentTarget) {
+            updateJSON.call(e.target);
 
-        window.currentTechnologiesForm.parseHarmonicaToJSON();
+            EdsnSwitch.cloneAndAppendProfileSelect(this);
+        }
 
-        $(this).find("input, select").each(function () {
-            eventName = $(this).hasClass("slider") ? 'slideStop' : 'change.json_update';
-
-            $(this).off(eventName).on(eventName, updateJSON);
-        });
+        e.stopPropagation();
     }
 
+    function addOnChangeListener() {
+        new Rounder(this).initialize();
+
+        EdsnSwitch.cloneAndAppendProfileSelect(this);
+
+        this.addEventListener('change', updateEvent, false);
+
+        $(this).find(".slider[data-type]")
+            .off('slideStop')
+            .on('slideStop', updateJSON);
+    }
+
+    /* This has to be a DOMElement it can't be jQuery selection for that
+     * will fail
+     * */
     return {
         initialize: function () {
+            var elem = $(this);
+
             new CompositeTemplateUpdater(this).updateUnits();
             new BufferSelectBox(this).add();
 
-            addEdsnListener.call(this);
             addOnChangeListener.call(this);
 
-            $(this).find(".remove-row")
+            elem.find(".remove-row")
                 .off("click").on("click", RemoveTechnology.remove);
 
-            $(this).find(".btn.split")
+            elem.find(".btn.split")
                 .off("click").on("click", Splitter.split);
 
-            $(this).find(".show-advanced")
+            elem.find(".show-advanced")
                 .off("click").on("click", toggleAdvancedFeatures);
+        },
+
+        load: function () {
+            var elem          = $(this),
+                profileSelect = elem.find(".profile select"),
+                profileId     = elem.data('profile');
+
+            profileSelect.val(profileId);
+
+            TechnologyTemplateFinalizer.initialize.call(this);
         },
 
         update: function () {

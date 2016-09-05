@@ -6,7 +6,7 @@ RSpec.describe Import::BuildingsBuilder do
   let(:gqueries) {
     {
       'number_of_buildings' => {
-        'present' => 2.123, 'future' => 2.1312 },
+        'present' => 0.0, 'future' => 1.1312 },
       'etmoses_electricity_base_load_demand_for_buildings' => {
         'present' => 0.0000123, 'future' => 0.0000123 }
     }
@@ -21,8 +21,8 @@ RSpec.describe Import::BuildingsBuilder do
       "type"     => "base_load_buildings",
       "profile"  => nil,
       "capacity" => nil,
-      "demand"   => 1708.33,
-      "units"    => 2 }
+      "demand"   => 0.0,
+      "units"    => 0 }
     ])
   end
 end

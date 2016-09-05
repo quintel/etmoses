@@ -4,6 +4,6 @@ class Import
       'performance_coefficient',
       'coefficient_of_performance'
     ) do |value, *|
-      value.round(4)
+      value
     end
 end

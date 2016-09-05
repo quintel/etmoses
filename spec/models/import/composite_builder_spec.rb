@@ -37,7 +37,7 @@ RSpec.describe Import::CompositeBuilder do
     it 'assigns hot water demand' do
       # PJ -> PWh -> kWh
       expect(buffer['demand']).
-        to eq((20.0 * (1.0 / 3.6) * 1_000_000_000).round(2))
+        to eq((20.0 * (1.0 / 3.6) * 1_000_000_000))
     end
 
     it 'assigns number of units' do
@@ -58,7 +58,7 @@ RSpec.describe Import::CompositeBuilder do
     it 'assigns space heating demand' do
       # PJ -> PWh -> kWh
       expect(buffer['demand']).
-        to eq((10.0 * (1.0 / 3.6) * 1_000_000_000).round(2))
+        to eq((10.0 * (1.0 / 3.6) * 1_000_000_000))
     end
 
     it 'assigns number of units' do

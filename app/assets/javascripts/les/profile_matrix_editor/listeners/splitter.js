@@ -7,16 +7,17 @@ var Splitter = (function () {
     function finalize() {
         AddedTechnologiesValidator.validate();
 
-        window.currentTechnologiesForm.markAsEditing();
-        window.currentTechnologiesForm.updateCounter.call(this, true);
-
         if (!this.composite) {
-            TechnologyTemplateFinalizer.update.call(this.originTemplate);
+            TechnologyTemplateFinalizer.update.call(this.originTemplate[0]);
         }
 
         this.templates.each(function () {
             TechnologyTemplateFinalizer.update.call(this);
         });
+
+        window.currentTechnologiesForm.markAsEditing();
+        window.currentTechnologiesForm.updateCounter.call(this, true);
+        window.currentTechnologiesForm.parseHarmonicaToJSON();
     }
 
     function setUnits() {

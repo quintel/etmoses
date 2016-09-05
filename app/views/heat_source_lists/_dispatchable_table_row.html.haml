@@ -7,29 +7,29 @@
       = options_for_dispatchable_heat_source_plant_types(list_item.key)
 
   %td.editable
-    %input.form-control{name: 'heat_capacity', value: list_item.heat_capacity}
+    %input.form-control{name: 'heat_capacity', value: list_item.heat_capacity, data: { round: 1 }}
 
   %td.editable
-    %input.form-control{name: 'units', value: list_item.units}
+    %input.form-control{name: 'units', value: list_item.units, data: { round: 2 }}
 
   %td.editable
     %select.form-control.stakeholder
       = options_for_all_stakeholders(list_item.stakeholder)
 
   %td.editable
-    %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment}
+    %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment, data: { round: 1 }}
 
   %td.editable
-    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
+    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { round: 1 }}
 
   %td.editable
-    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
+    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year, data: { round: 1 }}
 
   %td.editable
-    %input.form-control{name: 'marginal_heat_costs', value: list_item.marginal_heat_costs}
+    %input.form-control{name: 'marginal_heat_costs', value: list_item.marginal_heat_costs, data: { round: 2 }}
 
   %td.editable.distance
-    %input.form-control{name: 'distance', value: list_item.distance}
+    %input.form-control{name: 'distance', value: list_item.distance, data: { round: 1 }}
 
   %td.editable.hidden
     %input.form-control{name: 'priority', value: list_item.priority}

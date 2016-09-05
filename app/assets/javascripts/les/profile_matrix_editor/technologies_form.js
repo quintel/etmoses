@@ -23,9 +23,8 @@ var TechnologiesForm = (function () {
     TechnologiesForm.prototype = {
         append: function () {
             $(".technologies .technology:not(.hidden)")
-                .each(TechnologyTemplateFinalizer.initialize);
+                .each(TechnologyTemplateFinalizer.load);
 
-            this.setProfiles();
             addListeners.call(this);
 
             this.parseHarmonicaToJSON();
@@ -54,15 +53,6 @@ var TechnologiesForm = (function () {
         markAsEditing: function () {
             $("form.edit_testing_ground").addClass("editing");
             $("ul.nav.nav-tabs li a[href=#technologies]").addClass("editing");
-        },
-
-        setProfiles: function () {
-            $(".technologies .technology:visible").each(function () {
-                var profileSelect = $(this).find(".profile select"),
-                    profileId = $(this).data('profile');
-
-                profileSelect.val(profileId);
-            });
         }
     };
 

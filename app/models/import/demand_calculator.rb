@@ -12,7 +12,7 @@ class Import
     end
 
     def calculate
-      DemandAttribute.call(calculation_data).round(2)
+      DemandAttribute.call(calculation_data)
     end
 
     private

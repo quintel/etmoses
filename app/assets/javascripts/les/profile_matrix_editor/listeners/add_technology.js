@@ -10,7 +10,9 @@ var AddTechnology = (function () {
         window.currentTechnologiesForm.markAsEditing();
         window.currentTechnologiesForm.updateCounter.call(this.context, true);
 
-        TechnologyTemplateFinalizer.update.call(this.newTemplate);
+        TechnologyTemplateFinalizer.update.call(this.newTemplate[0]);
+
+        window.currentTechnologiesForm.parseHarmonicaToJSON();
     }
 
     AddTechnology.prototype = {

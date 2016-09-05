@@ -20,7 +20,7 @@ module GasAssetLists
 
       GasAssetListDecorator::DEFAULT.merge(part.attributes).merge(
         part: part.part_type.pluralize,
-        units: (part.default_amount * amount_of_gas_connections).round(3),
+        units: part.default_amount * amount_of_gas_connections,
         pressure_level_index: pressure_level_index
       )
     end
