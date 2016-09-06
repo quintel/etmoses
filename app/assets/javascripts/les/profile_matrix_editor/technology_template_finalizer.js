@@ -88,12 +88,21 @@ var TechnologyTemplateFinalizer = (function () {
             .on('slideStop', updateJSON);
     }
 
+    function setProfile() {
+        var profileSelect = this.find(".profile select"),
+            profileId     = this.data('profile');
+
+        profileSelect.val(profileId);
+    }
+
     /* This has to be a DOMElement it can't be jQuery selection for that
      * will fail
      * */
     return {
         initialize: function () {
             var elem = $(this);
+
+            setProfile.call(elem);
 
             new CompositeTemplateUpdater(this).updateUnits();
             new BufferSelectBox(this).add();
@@ -110,19 +119,10 @@ var TechnologyTemplateFinalizer = (function () {
                 .off("click").on("click", toggleAdvancedFeatures);
         },
 
-        load: function () {
-            var elem          = $(this),
-                profileSelect = elem.find(".profile select"),
-                profileId     = elem.data('profile');
-
-            profileSelect.val(profileId);
-
-            TechnologyTemplateFinalizer.initialize.call(this);
-        },
-
         update: function () {
             new CompositeTemplateUpdater(this).update();
             new BatteryTemplateUpdater(this).update();
+
 
             TechnologyTemplateFinalizer.initialize.call(this);
         }

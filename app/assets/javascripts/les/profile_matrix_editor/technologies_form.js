@@ -23,7 +23,7 @@ var TechnologiesForm = (function () {
     TechnologiesForm.prototype = {
         append: function () {
             $(".technologies .technology:not(.hidden)")
-                .each(TechnologyTemplateFinalizer.load);
+                .each(TechnologyTemplateFinalizer.initialize);
 
             addListeners.call(this);
 
