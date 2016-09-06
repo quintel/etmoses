@@ -16,7 +16,7 @@ class LoadProfile < ActiveRecord::Base
     reject_if: proc{ |l| l[:curve].blank? }, allow_destroy: true
 
   def self.in_name_order
-    order('COALESCE(`name`, `key`), `name`, `key`')
+    order("CASE WHEN `name` = '' THEN `key` ELSE `name` END")
   end
 
   def self.not_deprecated
