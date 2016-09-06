@@ -1,15 +1,24 @@
 module Finance
   class BusinessCaseSummary
     module Summarizer
-      KEYS = %i(stakeholder incoming outgoing freeform total)
+      include Breakdown
 
       def summarize_rule(financial_rule, index)
-        @financial_rule = financial_rule
-        @index = index
+        outgoing_all    = transposed_financials[index]
 
-        Hash[KEYS.map do |key|
-          [key, self.send(key)]
-        end]
+        @financial_rule = financial_rule
+        @incoming       = incoming_all.compact.inject(:+)
+        @outgoing       = outgoing_all.compact.inject(:+)
+
+        {
+          stakeholder:        stakeholder,
+          incoming:           @incoming,
+          incoming_breakdown: breakdown(incoming_all),
+          outgoing:           @outgoing,
+          outgoing_breakdown: breakdown(outgoing_all),
+          freeform:           freeform,
+          total:              total
+        }
       end
 
       private
@@ -18,10 +27,10 @@ module Finance
         @financial_rule.keys.first
       end
 
-      def incoming
+      def incoming_all
         values = @financial_rule.values.flatten
         values.delete_at(skip)
-        values.compact.inject(:+)
+        values
       end
 
       def skip
@@ -32,16 +41,12 @@ module Finance
         @stakeholders ||= @business_case.financials.map(&:keys).flatten
       end
 
-      def outgoing
-        transposed_financials[@index].compact.inject(:+)
-      end
-
       def freeform
         freeform_row[stakeholder] && -freeform_row[stakeholder]
       end
 
       def total
-        (incoming || 0) - (outgoing || 0) + (freeform || 0)
+        (@incoming || 0) - (@outgoing || 0) + (freeform || 0)
       end
     end
   end

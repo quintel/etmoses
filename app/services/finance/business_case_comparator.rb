@@ -11,12 +11,21 @@ module Finance
 
     def compare
       unison.map do |stakeholder|
-        ( @business_case.detect{|t| t[:stakeholder] == stakeholder } || { stakeholder: stakeholder }).merge(
-          compare: @other_business_case.detect{|t| t[:stakeholder] == stakeholder })
+        business_case_stakeholder = find_stakeholder(@business_case, stakeholder)
+        other_business_case_stakeholder = find_stakeholder(@other_business_case, stakeholder)
+
+        (business_case_stakeholder || { stakeholder: stakeholder })
+          .merge(compare: other_business_case_stakeholder)
       end
     end
 
     private
+
+    def find_stakeholder(business_case, stakeholder)
+      business_case.detect do |t|
+        t[:stakeholder] == stakeholder
+      end
+    end
 
     def unison
       (@business_case + @other_business_case).map{|t| t[:stakeholder] }.uniq.sort
