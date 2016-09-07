@@ -77,46 +77,6 @@ module Network
       @consumption[frame] += amount
     end
 
-    # Public: Recurses through child nodes and technologies to determine the
-    # absolute minimum amount of energy which the node requires to meet demand
-    # from consumption technologies.
-    #
-    # Returns a numeric.
-    def mandatory_consumption_at(frame)
-      @mandatory[frame] ||= recursively(:mandatory_consumption_at, frame)
-    end
-
-    # Public: Recurses through child nodes and technologies to determine the
-    # how much extra energy the node would like, if there is an excess in the
-    # testing ground, to further top-up its consumption technologies (likely
-    # storage).
-    #
-    # Returns a numeric.
-    def conditional_consumption_at(frame)
-      @conditional[frame] ||= recursively(:conditional_consumption_at, frame, nil)
-    end
-
-    # Internal: Instructs the node that a conditional load is being assigned to
-    # fulfil the load demands of its consumption technologies. This load is the
-    # result of an excess in the testing ground, and is kept in attached
-    # storage technologies.
-    #
-    # Evenly distributes the load among the storage technologies.
-    #
-    # Returns nothing.
-    def assign_conditional_consumption(frame, amount)
-      wanted = conditional_consumption_at(frame)
-
-      techs.each do |tech|
-        next unless tech.storage?
-
-        share  = tech.conditional_consumption_at(frame, nil) / wanted
-        assign = amount * share
-
-        tech.store(frame, assign)
-      end
-    end
-
     # Public: If the node has a capacity restriction, returns by how much the
     # load may be increased before reaching the limit. Returns infinity if no
     # capacity is present.

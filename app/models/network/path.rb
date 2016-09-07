@@ -77,19 +77,5 @@ module Network
     def surplus_at(frame)
       @head.production_at(frame) - @head.consumption_at(frame)
     end
-
-    # Public: Sends a given amount of energy down the path, increasing the
-    # consumption flow of each node.
-    #
-    # Returns nothing.
-    def consume(frame, amount)
-      return if amount.zero?
-
-      if @leaf.consumption_at(frame) >= mandatory_consumption_at(frame)
-        @leaf.assign_conditional_consumption(frame, amount)
-      end
-
-      @path.each { |node| node.consume(frame, amount) }
-    end
   end # Path
 end # Network

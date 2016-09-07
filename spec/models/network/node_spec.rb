@@ -5,34 +5,6 @@ RSpec.describe Network::Node do
 
   let(:node) { Network::Node.new(:a) }
 
-  describe 'consume' do
-    context 'consuming 10 load in frame 1' do
-      it 'assigns 10 load' do
-        expect { node.consume(1, 10.0) }.
-          to change { node.consumption_at(1) }.from(0).to(10)
-      end
-
-      it 'assigns nothing to the next frame' do
-        expect { node.consume(1, 10.0) }.
-          to_not change { node.consumption_at(2) }.from(0)
-      end
-
-      it 'assigns nothing to the previous frame' do
-        expect { node.consume(1, 10.0) }.
-          to_not change { node.consumption_at(0) }.from(0)
-      end
-    end
-
-    context 'consuming when there is already non-zero consumption' do
-      before { node.consume(0, 10.0) }
-
-      it 'adds the load to that which is already present' do
-        expect { node.consume(0, 10.0) }.
-          to change { node.consumption_at(0) }.from(10).to(20)
-      end
-    end
-  end # consume
-
   describe 'production_at' do
     context 'when the node has no children, nor technologies' do
       it 'returns 0.0' do
@@ -102,93 +74,6 @@ RSpec.describe Network::Node do
       end
     end # when the node has both technologies and children
   end # production_at
-
-  describe 'mandatory_consumption_at' do
-    before do
-      node.set(:techs, [
-        network_technology(build(:installed_tv, capacity: 2.0))
-      ])
-    end
-
-    it 'includes mandatory load from consumption technologies' do
-      expect(node.mandatory_consumption_at(0)).to eq(2.0)
-    end
-
-    it 'does not include load from production technologies' do
-      node.get(:techs).push(
-        network_technology(build(:installed_pv, capacity: -2.0)))
-
-      expect(node.mandatory_consumption_at(0)).to eq(2.0)
-    end
-
-    it 'does not include conditional load from consumption technologies' do
-      node.get(:techs).push(
-        network_technology(build(:installed_battery, volume: 2.0)))
-
-      expect(node.mandatory_consumption_at(0)).to eq(2.0)
-    end
-  end # mandatory_consumption_at
-
-  describe 'conditional_consumption_at' do
-    before do
-      node.set(:techs, [
-        network_technology(build(:installed_battery, volume: 1.5))
-      ])
-    end
-
-    it 'includes conditional load from consumption technologies' do
-      expect(node.conditional_consumption_at(0)).to eq(1.5)
-    end
-
-    it 'does not include load from production technologies' do
-      node.get(:techs).push(
-        network_technology(build(:installed_pv, capacity: -2.0)))
-
-      expect(node.conditional_consumption_at(0)).to eq(1.5)
-    end
-
-    it 'does not include mandatory load from consumption technologies' do
-      node.get(:techs).push(
-        network_technology(build(:installed_tv, capacity: 2.0)))
-
-      expect(node.conditional_consumption_at(0)).to eq(1.5)
-    end
-  end # conditional_consumption_at
-
-  describe 'assigning conditional consumption' do
-    before do
-      node.set(:techs, [
-        network_technology(build(:installed_battery, volume: 1.0)),
-        network_technology(build(:installed_battery, volume: 3.0))
-      ])
-    end
-
-    it 'assigns storage to the technologies in the chosen frame' do
-      node.assign_conditional_consumption(0, 4.0)
-
-      expect(node.get(:techs)[0].stored[0]).to eq(1.0)
-      expect(node.get(:techs)[1].stored[0]).to eq(3.0)
-    end
-
-    it 'does not affect subsequent frames' do
-      node.assign_conditional_consumption(0, 4.0)
-
-      expect(node.get(:techs)[0].stored[1]).to be_zero
-    end
-
-    it "assigns storage fairly when it doesn't satisfy all demand" do
-      node.assign_conditional_consumption(0, 2.0)
-
-      expect(node.get(:techs)[0].stored[0]).to eq(0.5)
-      expect(node.get(:techs)[1].stored[0]).to eq(1.5)
-    end
-
-    it 'skips non-storage technologies' do
-      node.get(:techs).push(network_technology(build(:installed_tv)))
-
-      expect { node.assign_conditional_consumption(0, 4.0) }.to_not raise_error
-    end
-  end # assigning conditional consumption
 
   context 'available_capacity_at' do
     before { allow(node).to receive(:load_at).and_return(2.0) }
