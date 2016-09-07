@@ -67,12 +67,12 @@ module Network
     # A Reserve-compatible wrapper around AmplifiedReserve which enables the
     # high-energy volume by default.
     class HighEnergyMode < FastDelegator.create(AmplifiedReserve)
-      def unfilled_at(frame)
-        super(frame, true)
+      def unfilled_at(frame, high_energy = true)
+        super(frame, high_energy)
       end
 
-      def add(frame, amount)
-        super(frame, amount, true)
+      def add(frame, amount, high_energy = true)
+        super(frame, amount, high_energy)
       end
     end
   end # AmplifiedReserve
