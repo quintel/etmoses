@@ -14,7 +14,7 @@ module Network
         0.0
       end
 
-      def conditional_consumption_at(_frame)
+      def conditional_consumption_at(_frame, _path)
         0.0
       end
     end # Null

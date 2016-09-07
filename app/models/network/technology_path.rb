@@ -49,7 +49,7 @@ module Network
     # Returns a numeric.
     def conditional_consumption_at(frame)
       amount =
-        @technology.conditional_consumption_at(frame) -
+        @technology.conditional_consumption_at(frame, self) -
         receipts.conditional[frame]
 
       amount <= 0 ? 0.0 : constrain(frame, amount)

@@ -16,7 +16,7 @@ module Network
         @capacity.limit_mandatory(frame, @profile.at(frame))
       end
 
-      def conditional_consumption_at(_frame)
+      def conditional_consumption_at(_frame, _path)
         0.0
       end
 

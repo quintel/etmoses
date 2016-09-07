@@ -15,7 +15,7 @@ module Network::Heat
       end
 
       it 'has no conditional consumption' do
-        expect(producer.conditional_consumption_at(0)).to be_zero
+        expect(producer.conditional_consumption_at(0, nil)).to be_zero
       end
 
       context 'taking 1.0' do

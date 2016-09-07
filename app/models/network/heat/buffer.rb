@@ -21,15 +21,15 @@ module Network
         reserves.map { |reserve| Network::Curve.from(reserve.load) }.reduce(:+)
       end
 
-      def production_at(frame)
+      def production_at(_frame)
         0.0
       end
 
-      def mandatory_consumption_at(frame)
+      def mandatory_consumption_at(_frame)
         0.0
       end
 
-      def conditional_consumption_at(frame)
+      def conditional_consumption_at(_frame, _path)
         0.0
       end
 
@@ -43,4 +43,3 @@ module Network
     end # Buffer
   end # Heat
 end # Network
-

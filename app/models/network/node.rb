@@ -93,7 +93,7 @@ module Network
     #
     # Returns a numeric.
     def conditional_consumption_at(frame)
-      @conditional[frame] ||= recursively(:conditional_consumption_at, frame)
+      @conditional[frame] ||= recursively(:conditional_consumption_at, frame, nil)
     end
 
     # Internal: Instructs the node that a conditional load is being assigned to
@@ -110,7 +110,7 @@ module Network
       techs.each do |tech|
         next unless tech.storage?
 
-        share  = tech.conditional_consumption_at(frame) / wanted
+        share  = tech.conditional_consumption_at(frame, nil) / wanted
         assign = amount * share
 
         tech.store(frame, assign)
@@ -212,9 +212,9 @@ module Network
     # technologies.
     #
     # Returns the sum of the value from the child nodes and techs.
-    def recursively(method, frame)
+    def recursively(method, frame, *rest)
       from_children = memoized_out.sum { |node| node.__send__(method, frame) }
-      from_children + techs.sum { |tech| tech.__send__(method, frame) }
+      from_children + techs.sum { |tech| tech.__send__(method, frame, *rest) }
     end
 
     # Determines how much capacity is available given a particular `load` placed

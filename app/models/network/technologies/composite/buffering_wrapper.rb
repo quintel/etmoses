@@ -17,7 +17,7 @@ module Network
           constrain(frame, super)
         end
 
-        def conditional_consumption_at(frame)
+        def conditional_consumption_at(frame, _path)
           constrain(frame, super)
         end
 

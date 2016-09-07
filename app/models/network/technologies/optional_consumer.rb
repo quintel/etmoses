@@ -15,7 +15,11 @@ module Network
         !options[:saving_base_load]
       end
 
-      alias_method :conditional_consumption_at, :mandatory_consumption_at
+      alias orig_mandatory_consumption_at mandatory_consumption_at
+
+      def conditional_consumption_at(frame, _path)
+        orig_mandatory_consumption_at(frame)
+      end
 
       def mandatory_consumption_at(_frame)
         0.0

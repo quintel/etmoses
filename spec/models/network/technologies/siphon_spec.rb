@@ -15,7 +15,7 @@ RSpec.describe Network::Technologies::Siphon do
     end
 
     it 'has conditional consumption equal to the capacity' do
-      expect(tech.conditional_consumption_at(1)).to eq(10.0)
+      expect(tech.conditional_consumption_at(1, nil)).to eq(10.0)
     end
   end # with a capacity of 10
 
@@ -38,7 +38,7 @@ RSpec.describe Network::Technologies::Siphon do
     end
 
     it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
   end # when disabled
 end

@@ -14,7 +14,7 @@ module Network
           end
         end
 
-        def conditional_consumption_at(frame)
+        def conditional_consumption_at(_frame, _path)
           # Boosting technologies will never draw extra energy to fill up the
           # buffer; they satisfy whatever amount is needed to "boost" production
           # to meet demand and nothing more.

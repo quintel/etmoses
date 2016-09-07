@@ -14,7 +14,7 @@ RSpec.describe Network::Technologies::Null do
   end
 
   it 'has no conditional consumption' do
-    expect(tech.conditional_consumption_at(0)).to be_zero
+    expect(tech.conditional_consumption_at(0, nil)).to be_zero
   end
 
   it 'has no load' do

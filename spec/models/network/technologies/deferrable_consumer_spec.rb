@@ -13,7 +13,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
     let(:profile) { [0.0] * 8760 }
 
     it 'defaults to having no deferred loads' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
   end
 
@@ -25,7 +25,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
     end
 
     it 'has conditional consumption of 5' do
-      expect(tech.conditional_consumption_at(0)).to eq(2.0)
+      expect(tech.conditional_consumption_at(0, nil)).to eq(2.0)
     end
 
     context 'receiving 2.0' do
@@ -33,7 +33,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
 
       it 'does not defer any load' do
         expect(tech.mandatory_consumption_at(1)).to be_zero
-        expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(2.0)
       end
     end # receiving 2.0
 
@@ -42,12 +42,12 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
 
       it 'defers 1.0' do
         expect(tech.mandatory_consumption_at(1)).to be_zero
-        expect(tech.conditional_consumption_at(1)).to eq(3.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(3.0)
       end
 
       it 'has 1.0 deferred becoming mandatory in frame 12' do
         expect(tech.mandatory_consumption_at(12)).to eq(1.0)
-        expect(tech.conditional_consumption_at(12)).to eq(2.0)
+        expect(tech.conditional_consumption_at(12, nil)).to eq(2.0)
       end
     end # receiving nothing
 
@@ -56,12 +56,12 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
 
       it 'defers 2.0' do
         expect(tech.mandatory_consumption_at(1)).to be_zero
-        expect(tech.conditional_consumption_at(1)).to eq(4.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(4.0)
       end
 
       it 'has 2.0 deferred becoming mandatory in frame 12' do
         expect(tech.mandatory_consumption_at(12)).to eq(2.0)
-        expect(tech.conditional_consumption_at(12)).to eq(2.0)
+        expect(tech.conditional_consumption_at(12, nil)).to eq(2.0)
       end
 
       context 'receiving 1.0 in the next frame' do
@@ -74,7 +74,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
           # 2.0 - 2.0 wanted in f:2
           # -----
           # = 5.0
-          expect(tech.conditional_consumption_at(2)).to eq(5.0)
+          expect(tech.conditional_consumption_at(2, nil)).to eq(5.0)
         end
 
         it 'has 1.0 deferred becoming mandatory in frame 12' do
@@ -91,7 +91,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
 
         it 'defers nothing more' do
           expect(tech.mandatory_consumption_at(2)).to be_zero
-          expect(tech.conditional_consumption_at(2)).to eq(3.0)
+          expect(tech.conditional_consumption_at(2, nil)).to eq(3.0)
         end
 
         it 'has no deferred becoming mandatory in frame 12' do
@@ -112,7 +112,7 @@ RSpec.describe Network::Technologies::DeferrableConsumer do
       end
 
       it 'has no conditional in the last frame' do
-        expect(tech.conditional_consumption_at(8759)).to be_zero
+        expect(tech.conditional_consumption_at(8759, nil)).to be_zero
       end
     end # receiving 1.0 in the second-to-last frame
   end # wanting 2.0

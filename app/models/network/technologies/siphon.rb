@@ -20,7 +20,7 @@ module Network
         0.0
       end
 
-      def conditional_consumption_at(frame)
+      def conditional_consumption_at(frame, _path)
         @profile.at(frame)
       end
 

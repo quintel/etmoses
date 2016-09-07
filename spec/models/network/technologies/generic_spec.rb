@@ -31,7 +31,7 @@ RSpec.describe Network::Technologies::Generic do
     end
 
     it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
 
     it 'has reads mandatory consumption from the profile' do
@@ -63,7 +63,7 @@ RSpec.describe Network::Technologies::Generic do
     end
 
     it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
 
     it 'has no mandatory consumption' do
@@ -101,7 +101,7 @@ RSpec.describe Network::Technologies::Generic do
     end
 
     it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
 
     it 'reads mandatory consumption from the profile' do
@@ -130,7 +130,7 @@ RSpec.describe Network::Technologies::Generic do
     end
 
     it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
 
     it 'has no mandatory consumption' do

@@ -71,7 +71,7 @@ module Network
       # expiry date, are considered conditional.
       #
       # Returns a numeric.
-      def conditional_consumption_at(frame)
+      def conditional_consumption_at(frame, _path)
         # All loads are mandatory in the final frame.
         return 0.0 if frame == @last_frame
 

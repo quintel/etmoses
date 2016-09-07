@@ -59,7 +59,7 @@ module Network
       # fill the attached Reserve futher.
       #
       # Returns a numeric.
-      def conditional_consumption_at(frame)
+      def conditional_consumption_at(frame, _path)
         wanted =
           stored.unfilled_at(frame) /
           @installed.performance_coefficient

@@ -31,7 +31,7 @@ RSpec.describe Network::Technologies::Battery do
     end
 
     it 'has conditional consumption equal to the volume' do
-      expect(tech.conditional_consumption_at(0)).to eq(2.0)
+      expect(tech.conditional_consumption_at(0, nil)).to eq(2.0)
     end
 
     it 'stores nothing' do
@@ -46,7 +46,7 @@ RSpec.describe Network::Technologies::Battery do
       end
 
       it 'has conditional consumption equal to the volume' do
-        expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(2.0)
       end
 
       it 'stores nothing' do
@@ -62,7 +62,7 @@ RSpec.describe Network::Technologies::Battery do
       end
 
       it 'has conditional consumption equal to the volume' do
-        expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(2.0)
       end
 
       it 'stores nothing' do
@@ -78,7 +78,8 @@ RSpec.describe Network::Technologies::Battery do
         end
 
         it 'has conditional consumption equal to the 2x capacity' do
-          expect(tech.conditional_consumption_at(1)).to be_within(1e-9).of(0.4)
+          expect(tech.conditional_consumption_at(1, nil))
+            .to be_within(1e-9).of(0.4)
         end
 
         it 'stores 1.3' do
@@ -94,7 +95,7 @@ RSpec.describe Network::Technologies::Battery do
         end
 
         it 'has conditional consumption equal to the volume' do
-          expect(tech.conditional_consumption_at(1)).to eq(2.0)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(2.0)
         end
 
         it 'stores nothing' do
@@ -127,7 +128,7 @@ RSpec.describe Network::Technologies::Battery do
     end
 
     it 'has no conditional consumption' do
-      expect(tech.conditional_consumption_at(0)).to be_zero
+      expect(tech.conditional_consumption_at(0, nil)).to be_zero
     end
 
     it 'has no load' do

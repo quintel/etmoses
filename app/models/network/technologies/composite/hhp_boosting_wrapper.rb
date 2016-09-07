@@ -11,7 +11,7 @@ module Network
           0.0
         end
 
-        def conditional_consumption_at(frame)
+        def conditional_consumption_at(frame, _path)
           @composite.boosting_enabled_at?(frame) ? super : 0.0
         end
       end # HHPBoostingWrapper

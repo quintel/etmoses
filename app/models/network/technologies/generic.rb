@@ -63,7 +63,7 @@ module Network
       # there is enough excess elsewhere.
       #
       # Returns a numeric.
-      def conditional_consumption_at(_frame)
+      def conditional_consumption_at(_frame, _path)
         0.0
       end
 

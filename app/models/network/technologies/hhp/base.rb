@@ -6,13 +6,17 @@ module Network
           false
         end
 
-        alias_method :conditional_consumption_at, :mandatory_consumption_at
+        alias orig_mandatory_consumption_at mandatory_consumption_at
 
         # Public: Mandatory consumption is disabled for hybrid heat-pumps due to
         # the fact that the production of the electrical component is contrained
         # by network capacity only.
         def mandatory_consumption_at(_frame)
           0.0
+        end
+
+        def conditional_consumption_at(frame, _path)
+          orig_mandatory_consumption_at(frame)
         end
 
         def excess_constrained?

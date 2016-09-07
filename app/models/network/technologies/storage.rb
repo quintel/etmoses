@@ -40,7 +40,7 @@ module Network
         @capacity.limit_mandatory(frame, 0.0)
       end
 
-      def conditional_consumption_at(frame)
+      def conditional_consumption_at(frame, _path)
         @capacity.limit_conditional(
           frame, volume - mandatory_consumption_at(frame))
       end

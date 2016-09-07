@@ -26,7 +26,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     end
 
     it 'has conditional consumption equal to the volume' do
-      expect(tech.conditional_consumption_at(0)).to eq(3.0)
+      expect(tech.conditional_consumption_at(0, nil)).to eq(3.0)
     end
   end # in frame 0
 
@@ -46,7 +46,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has conditional consumption of 3.0' do
-          expect(tech.conditional_consumption_at(1)).to eq(3.0)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(3.0)
         end
       end # with storage on
 
@@ -62,7 +62,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has conditional consumption of 2.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(2.5)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(2.5)
         end
       end # with storage off
     end # and a profile value of zero
@@ -79,7 +79,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has conditional consumption of 2.0' do
-        expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(2.0)
       end
 
       it 'allows additions to storage' do
@@ -103,7 +103,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
 
         it 'has conditional consumption equal to the volume * units' do
           # Total volume is 6.0; 1.0 assigned as mandatory. 5.0 remains.
-          expect(tech.conditional_consumption_at(1)).to eq(5.0)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(5.0)
         end
       end # with two units
     end # and a profile value of 1.0
@@ -121,7 +121,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'scales conditional consumption from kWh to kW' do
-        expect(tech.conditional_consumption_at(1)).to eq(2.0 / 2)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(2.0 / 2)
       end
 
       it 'scales additions to storage from kW to kWh' do
@@ -145,7 +145,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
 
         it 'has conditional consumption equal to the volume * units' do
           # volume is 6, minus 1.0 mandatory
-          expect(tech.conditional_consumption_at(1)).to eq(5.0 / 2)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(5.0 / 2)
         end
       end # with two units
     end # with a low-resolution curve
@@ -167,7 +167,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has conditional consumption of 8.0' do
-        expect(tech.conditional_consumption_at(1)).to eq(8.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(8.0)
       end
 
       it 'scales additions to storage from kW to kWh' do
@@ -189,7 +189,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has no conditional consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
+        expect(tech.conditional_consumption_at(1, nil)).to be_zero
       end
     end # with stored energy of 0.5, and with a profile 1.0
 
@@ -212,7 +212,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has no conditional consumption' do
-          expect(tech.conditional_consumption_at(1)).to be_zero
+          expect(tech.conditional_consumption_at(1, nil)).to be_zero
         end
 
         it 'stores 0.3' do
@@ -237,7 +237,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has no conditional consumption' do
-          expect(tech.conditional_consumption_at(2)).to be_zero
+          expect(tech.conditional_consumption_at(2, nil)).to be_zero
         end
 
         it 'stores 0.3' do
@@ -264,7 +264,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
 
         it 'has conditional consumption of 3.0' do
           # The EV may charge again.
-          expect(tech.conditional_consumption_at(3)).to eq(3.0)
+          expect(tech.conditional_consumption_at(3, nil)).to eq(3.0)
         end
 
         it 'stores nothing' do
@@ -284,7 +284,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has no conditional consumption' do
-          expect(tech.conditional_consumption_at(1)).to be_zero
+          expect(tech.conditional_consumption_at(1, nil)).to be_zero
         end
 
         it 'stores 0.3' do
@@ -308,7 +308,8 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has conditional consumption of 0.4' do
-          expect(tech.conditional_consumption_at(1)).to be_within(1e-9).of(0.4)
+          expect(tech.conditional_consumption_at(1, nil))
+            .to be_within(1e-9).of(0.4)
         end
 
         context 'with two units' do
@@ -324,7 +325,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
 
           it 'has conditional consumption equal to the volume * units' do
             # No capacity remains
-            expect(tech.conditional_consumption_at(1)).to eq(0.8)
+            expect(tech.conditional_consumption_at(1, nil)).to eq(0.8)
           end
         end # with two units
       end # and a profile value of zero
@@ -341,7 +342,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has conditional consumption of zero' do
-          expect(tech.conditional_consumption_at(1)).to be_zero
+          expect(tech.conditional_consumption_at(1, nil)).to be_zero
         end
       end
 
@@ -363,7 +364,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
 
           it 'has conditional consumption equal to the volume * units' do
             # No capacity remains
-            expect(tech.conditional_consumption_at(1)).to be_zero
+            expect(tech.conditional_consumption_at(1, nil)).to be_zero
           end
         end # with two units
       end # and a profile value of 1.0
@@ -384,7 +385,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has conditional consumption of 3.0' do
-          expect(tech.conditional_consumption_at(1)).to eq(3.0)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(3.0)
         end
       end # and a profile value 0
 
@@ -400,7 +401,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
         end
 
         it 'has conditional consumption 2.2' do
-          expect(tech.conditional_consumption_at(1)).to eq(2.2)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(2.2)
         end
       end # and a profile value of 8
     end # with capacity of 5.0
@@ -418,7 +419,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
     end
 
     it 'has conditional consumption equal to the volume' do
-      expect(tech.conditional_consumption_at(1)).to eq(3.0)
+      expect(tech.conditional_consumption_at(1, nil)).to eq(3.0)
     end
   end # when the previous frame was a disconnection
 
@@ -443,7 +444,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has no conditional consumption in frame 0' do
-        expect(tech.conditional_consumption_at(0)).to be_zero
+        expect(tech.conditional_consumption_at(0, nil)).to be_zero
       end
 
       it 'has no production in frame 1' do
@@ -455,7 +456,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has conditional consumption equal to volume in frame 1' do
-        expect(tech.conditional_consumption_at(1)).to eq(3.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(3.0)
       end
     end # with a negative profile value in frame 0
 
@@ -471,7 +472,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has conditional consumption equal to volume' do
-        expect(tech.conditional_consumption_at(1)).to eq(3.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(3.0)
       end
     end # and a profile value of zero
 
@@ -487,7 +488,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has conditional consumption of 2.0' do
-        expect(tech.conditional_consumption_at(1)).to eq(2.0)
+        expect(tech.conditional_consumption_at(1, nil)).to eq(2.0)
       end
     end # and a profile value of 1.0
 
@@ -503,7 +504,7 @@ RSpec.describe Network::Technologies::ElectricVehicle do
       end
 
       it 'has no conditional consumption' do
-        expect(tech.conditional_consumption_at(1)).to be_zero
+        expect(tech.conditional_consumption_at(1, nil)).to be_zero
       end
     end # with a profile -1.0
   end # with storage disabled

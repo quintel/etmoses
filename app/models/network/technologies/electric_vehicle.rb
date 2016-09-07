@@ -52,7 +52,7 @@ module Network
       # from excess production in the network.
       #
       # Returns a numeric.
-      def conditional_consumption_at(frame)
+      def conditional_consumption_at(frame, _path)
         disconnected?(frame) ? 0.0 : super
       end
 

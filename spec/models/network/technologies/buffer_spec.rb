@@ -36,7 +36,7 @@ RSpec.describe Network::Technologies::Buffer do
         end
 
         it 'has conditional consumption equal to the capacity' do
-          expect(tech.conditional_consumption_at(1)).to eq(5)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(5)
         end
 
         it 'stores nothing' do
@@ -58,7 +58,7 @@ RSpec.describe Network::Technologies::Buffer do
           end
 
           it 'has conditional consumption of 2.5' do
-            expect(tech.conditional_consumption_at(1)).to eq(2.5)
+            expect(tech.conditional_consumption_at(1, nil)).to eq(2.5)
           end
 
           it 'stores nothing' do
@@ -74,7 +74,7 @@ RSpec.describe Network::Technologies::Buffer do
             end
 
             it 'has conditional consumption of 0.625' do
-              expect(tech.conditional_consumption_at(1)).to eq(0.625)
+              expect(tech.conditional_consumption_at(1, nil)).to eq(0.625)
             end
           end
         end
@@ -123,7 +123,7 @@ RSpec.describe Network::Technologies::Buffer do
         end
 
         it 'has conditional consumption of 5.0' do
-          expect(tech.conditional_consumption_at(1)).to eq(5)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(5)
         end
 
         it 'has 2.5 remaining storage' do
@@ -145,7 +145,7 @@ RSpec.describe Network::Technologies::Buffer do
           end
 
           it 'has conditional consumption of 5.0' do
-            expect(tech.conditional_consumption_at(1)).to eq(5)
+            expect(tech.conditional_consumption_at(1, nil)).to eq(5)
           end
 
           it 'has 1.0 remaining storage' do
@@ -166,7 +166,7 @@ RSpec.describe Network::Technologies::Buffer do
           end
 
           it 'has conditional consumption of 0.5' do
-            expect(tech.conditional_consumption_at(1)).to eq(0.5)
+            expect(tech.conditional_consumption_at(1, nil)).to eq(0.5)
           end
 
           it 'has 1.0 remaining storage' do
@@ -187,7 +187,7 @@ RSpec.describe Network::Technologies::Buffer do
           end
 
           it 'has conditional consumption of 2.0' do
-            expect(tech.conditional_consumption_at(1)).to eq(2)
+            expect(tech.conditional_consumption_at(1, nil)).to eq(2)
           end
 
           it 'has 1.0 remaining storage' do
@@ -209,7 +209,7 @@ RSpec.describe Network::Technologies::Buffer do
         end
 
         it 'has conditional consumption of 5' do
-          expect(tech.conditional_consumption_at(1)).to eq(5)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(5)
         end
 
         it 'has no remaining storage' do
@@ -230,7 +230,7 @@ RSpec.describe Network::Technologies::Buffer do
         end
 
         it 'has conditional consumption of 2.5' do
-          expect(tech.conditional_consumption_at(1)).to eq(2.5)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(2.5)
         end
 
         it 'has no remaining storage' do
@@ -253,7 +253,7 @@ RSpec.describe Network::Technologies::Buffer do
 
         pending 'has conditional consumption of 0.625' do
           # Buffer should be able to satisfy demand, *and* refill the buffer.
-          expect(tech.conditional_consumption_at(1)).to eq(0.625)
+          expect(tech.conditional_consumption_at(1, nil)).to eq(0.625)
         end
       end
     end

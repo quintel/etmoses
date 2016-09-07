@@ -12,7 +12,7 @@ module Network
           @capacity_constrained = hhp_switch_to_gas
         end
 
-        def conditional_consumption_at(frame)
+        def conditional_consumption_at(frame, _path)
           if @behavior_profile && ! @behavior_profile.at(frame).zero?
             0.0
           else
