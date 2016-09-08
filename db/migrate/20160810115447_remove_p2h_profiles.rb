@@ -1,7 +1,6 @@
 class RemoveP2hProfiles < ActiveRecord::Migration
   def up
-    cat = LoadProfileCategory.where(name: 'Power-to-heat').first!
-    cat.load_profiles.destroy_all
+    LoadProfile.where('`key` LIKE "p2h_use_profile%"').destroy_all
   end
 
   def down

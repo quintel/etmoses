@@ -2,7 +2,11 @@ class UpdateBuffersForExistingLesses < ActiveRecord::Migration
   def fetch_buffer_for_technology(testing_ground, technology)
     testing_ground.technology_profile.each_tech.detect do |tech|
       (technology.buffer == tech.composite_value) ||
-        tech.includes.include?(technology.type) # This is due to some LES's with broken buffers
+        # This is due to some LES's with broken buffers. Ignore P2H which has
+        # been removed.
+        (tech.type != 'households_flexibility_p2h_electricity'.freeze &&
+          technology.type != 'households_flexibility_p2h_electricity'.freeze &&
+          tech.includes.include?(technology.type))
     end
   end
 
@@ -10,6 +14,10 @@ class UpdateBuffersForExistingLesses < ActiveRecord::Migration
     technologies.flat_map do |technology|
       if technology.position_relative_to_buffer
         buffer = fetch_buffer_for_technology(testing_ground, technology)
+
+        # No appropriate buffers; we can't do anything. It's likely a standalone
+        # P2H in on an endpoint with no buffers. Omit the tech.
+        next if buffer.nil?
 
         index = indices[buffer.type] += 1
 

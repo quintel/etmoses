@@ -7,6 +7,9 @@ class SetDefaultCopOnExistingLeses < ActiveRecord::Migration
       changed = false
 
       les.technology_profile.each_tech do |tech|
+        # P2H has been removed.
+        next if Technology.find_by_key(tech.type).nil?
+
         next if tech.whitelisted?(:performance_coefficient)
 
         cop = tech.performance_coefficient
