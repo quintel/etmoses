@@ -8,6 +8,8 @@ class Topology < ActiveRecord::Base
   belongs_to :user
   belongs_to :original, class_name: 'Topology'
 
+  has_many :testing_grounds
+
   validates_presence_of :name
 
   validate :validate_graph_yaml

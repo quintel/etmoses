@@ -19,6 +19,8 @@ class MarketModel < ActiveRecord::Base
   belongs_to :user
   belongs_to :orginal, class_name: 'MarketModel'
 
+  has_many :testing_grounds
+
   serialize :interactions, JSON
 
   validates :name, presence: true

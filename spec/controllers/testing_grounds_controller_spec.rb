@@ -540,21 +540,21 @@ RSpec.describe TestingGroundsController do
         end
       end
 
-      describe "removes the market model and topology if they don't belong to the user of the LES and if they are the last one's left" do
+      describe "when associated objects belong to another user" do
         it "keeps the market model" do
           delete :destroy, id: testing_ground.id
 
-          expect(MarketModel.count).to eq(0)
+          expect(MarketModel.count).to eq(1)
         end
 
         it "keeps the topology" do
           delete :destroy, id: testing_ground.id
 
-          expect(Topology.count).to eq(0)
+          expect(Topology.count).to eq(1)
         end
       end
 
-      describe "removing the market model and topology if they belong to the user of the LES" do
+      describe "when associated objects belong to the LES owner" do
         before do
           MarketModel.update_all(user_id: testing_ground.user_id)
           Topology.update_all(user_id: testing_ground.user_id)

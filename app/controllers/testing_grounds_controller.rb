@@ -172,7 +172,7 @@ class TestingGroundsController < ResourceController
 
   # DELETE /testing_grounds/:id
   def destroy
-    TestingGround::Destroyer.destroy(@testing_ground)
+    TestingGround::Destroyer.run(@testing_ground)
 
     flash[:notice] = "You succesfully removed #{ @testing_ground.name }"
     redirect_to root_path
