@@ -38,6 +38,26 @@ class TestingGround < ActiveRecord::Base
     order(created_at: :desc)
   end
 
+  def self.visible_to(user)
+    if user.nil?
+      where(
+        public: true,
+        market_models: { public: true },
+        topologies: { public: true }
+      ).joins(:market_model, :topology)
+    else
+      # TODO: Rails 5 adds support for "OR". Change this.
+      joins(:market_model, :topology)
+        .where(<<-SQL.strip_heredoc, user.id, true, true, true)
+          `testing_grounds`.`user_id` = ? OR (
+            `testing_grounds`.`public` = ? AND
+            `market_models`.`public` = ? AND
+            `topologies`.`public` = ?
+          )
+        SQL
+    end
+  end
+
   # Creates a hash representing the full topology to be rendered by D3. Copies
   # important attributes from the techologies hash into the topology.
   #
