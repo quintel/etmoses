@@ -1,4 +1,4 @@
-/*globals D3LoadChart */
+/*globals D3BaseStaticLoadChart*/
 
 var D3ProfileChart = (function () {
     "use strict";

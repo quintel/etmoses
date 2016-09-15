@@ -1,8 +1,8 @@
 $.fn.extend({
-    formatCurrency: function() {
+    formatCurrency: function () {
         'use strict';
 
-        $(this).each(function(index, element) {
+        $(this).each(function (index, element) {
             element = $(element);
 
             var formatted = (parseFloat(element.text()) || 0.0).toFixed(2).
@@ -22,9 +22,7 @@ $.fn.extend({
     outerHTML: function (s) {
         'use strict';
 
-        return s
-            ? this.before(s).remove()
-            : $("<p>").append(this.eq(0).clone()).html();
+        return s ? this.before(s).remove() : $("<p>").append(this.eq(0).clone()).html();
     },
 
     underscorizedData: function () {
@@ -55,13 +53,15 @@ $.fn.extend({
         'use strict';
 
         $(this).data(option.camelize(), value)
-               .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
+            .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
     },
 
     /* Returns the value which lives under 'data-raw', if that's not present
      * return the default 'val()'
      */
     rawValue: function () {
+        'use strict';
+
         return $(this).data('raw') || $(this).val();
     }
 });
@@ -77,8 +77,8 @@ String.prototype.underscorize = function () {
 String.prototype.camelize = function () {
     'use strict';
 
-    return this.replace(/[-_\s]+(.)?/g, function (_, c) {
-      return c ? c.toUpperCase() : '';
+    return this.replace(/[\-_\s]+(.)?/g, function (_, c) {
+        return c ? c.toUpperCase() : '';
     });
 };
 
@@ -90,7 +90,7 @@ String.prototype.toTitleCase = function () {
 
 // Polyfill for find
 if (!Array.prototype.find) {
-    Array.prototype.find = function(predicate) {
+    Array.prototype.find = function (predicate) {
         if (this === null) {
             throw new TypeError('Array.prototype.find called on null or undefined');
         }
@@ -109,5 +109,33 @@ if (!Array.prototype.find) {
             }
         }
         return undefined;
+    };
+}
+
+// Production steps of ECMA-262, Edition 5, 15.4.4.17
+// Reference: http://es5.github.io/#x15.4.4.17
+if (!Array.prototype.some) {
+    Array.prototype.some = function (fun /*, thisArg*/ ) {
+        'use strict';
+
+        if (this == null) {
+            throw new TypeError('Array.prototype.some called on null or undefined');
+        }
+
+        if (typeof fun !== 'function') {
+            throw new TypeError();
+        }
+
+        var t = Object(this);
+        var len = t.length >>> 0;
+
+        var thisArg = arguments.length >= 2 ? arguments[1] : void 0;
+        for (var i = 0; i < len; i++) {
+            if (i in t && fun.call(thisArg, t[i], i, t)) {
+                return true;
+            }
+        }
+
+        return false;
     };
 }

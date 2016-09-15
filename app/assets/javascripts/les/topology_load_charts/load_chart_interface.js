@@ -7,9 +7,10 @@ var LoadChartInterface = (function () {
                 viewCarrier    = $("select.chart-view[name='view_carrier']"),
                 viewStrategies = $(".chart-view[name='strategies']"),
                 isTotal        = (viewAs.val() === 'total'),
-                showViewAs     = !((this.load && this.load.tech_loads) ||
-                                   (this.gas  && this.gas.tech_loads) ||
-                                   (this.heat && this.heat.tech_loads));
+                showViewAs     = !window.currentTree.basicCharts.some(function (chartType) {
+                                      return this[chartType] &&
+                                             this[chartType].tech_loads;
+                                  }.bind(this));
 
             viewAs.prop('disabled', showViewAs);
 

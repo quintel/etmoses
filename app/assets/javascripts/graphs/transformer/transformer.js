@@ -33,20 +33,22 @@ var Transformer = (function () {
         };
     }
 
+    function createChart(chartType) {
+        var anyStrategies = StrategyHelper.anyStrategies();
+
+        return {
+            type: chartType,
+            area: (!anyStrategies || /_features$/.test(chartType))
+        };
+    }
+
     function fetchLoad() {
         if (this.settings.load) {
             return this.settings.load;
         } else if (StrategyHelper.anyStrategies()) {
-            return [{ area: true,  type: 'load_strategies' },
-                    { area: false, type: 'load' },
-                    { area: true,  type: 'gas_strategies' },
-                    { area: false, type: 'gas' },
-                    { area: true,  type: 'heat_strategies' },
-                    { area: false, type: 'heat' }];
+            return window.currentTree.availableCharts().map(createChart);
         } else {
-            return [{ area: true, type: 'load' },
-                    { area: true, type: 'gas' },
-                    { area: true, type: 'heat' }];
+            return window.currentTree.basicCharts.map(createChart);
         }
     }
 
@@ -85,10 +87,12 @@ var Transformer = (function () {
     }
 
     function isShown(chartType) {
-        var type = this.settings.view_carrier;
+        var index,
+            type = this.settings.view_carrier;
 
         if (this.settings.strategies && StrategyHelper.anyStrategies()) {
-            type += "_strategies";
+            index = window.currentTree.basicCharts.indexOf(type);
+            type  = window.currentTree.featureCharts[index];
         }
 
         return isStaticLoadOrTotal.call(this) || chartType === type;

@@ -6,7 +6,7 @@ var DefaultSettings = (function () {
         range_start:  0,
         range_end:    672,
         view_as:      'total',
-        view_carrier: 'load',
+        view_carrier: 'electricity_basic',
         strategies:   false
     };
 }());

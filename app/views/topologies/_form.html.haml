@@ -43,10 +43,47 @@
 
     = tooltip_tag(t(:'topologies.form.public.tooltip'))
 
-  .form-group
+  .form-group.graph-width
     = form.label :graph
     = tooltip_tag(t(:'topologies.form.graph.tooltip'))
-    = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
+
+    .graph-topology{ data: { graph: topology.graph.to_json } }
+      .graph-editor
+
+      .node-interface
+        .wrapper
+          .btn-group
+            %button.add-node.btn.btn-xs.btn-success
+              %span.glyphicon.glyphicon-plus
+            %button.remove-node.btn.btn-xs.btn-danger
+              %span.glyphicon.glyphicon-trash
+        .dialogue-arrow ▼
+
+      .node-information
+        .form-group
+          = label_tag :name
+          = text_field_tag :name, nil, class: 'form-control'
+
+        .form-group
+          = label_tag :stakeholder
+          = select_tag :stakeholder, options_for_all_stakeholders, class: 'form-control'
+
+        .form-group
+          = label_tag :investment_cost
+          = text_field_tag :investment_cost, nil, class: 'form-control'
+
+        .form-group
+          = label_tag :technical_lifetime
+          = text_field_tag :technical_lifetime, nil, class: 'form-control'
+
+        .form-group
+          = label_tag :capacity
+          = text_field_tag :capacity, nil, class: 'form-control'
+
+      .hidden
+        = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
+
+      .clearfix
 
   .form-group
     .btn-group

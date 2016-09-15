@@ -112,7 +112,7 @@ class Topology < ActiveRecord::Base
   def validate_clone
     return if original.blank? || errors[:graph].any?
 
-    if each_node.count != original.each_node.count
+    if each_node.count < original.each_node.count
       errors.add(:graph, "doesn't allow to remove a child from a topology. Please make"\
                 "a new topology through the topologies menu and create a new LES.")
     end

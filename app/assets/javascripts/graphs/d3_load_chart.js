@@ -377,16 +377,15 @@ var D3LoadChart = (function () {
         },
 
         maxYvalue: function (data) {
-            var charts = [
-                    data.load, data.load_strategies,
-                    data.gas,  data.gas_strategies,
-                    data.heat, data.heat_strategies
-                ],
-                totals = charts.map(function (attr) {
-                    return (attr && attr.total ? d3.max(attr.total) : 0);
-                });
+            var chart;
 
-            return d3.max(totals);
+            return d3.max(window.currentTree.availableCharts()
+                .map(function (chartType) {
+                    chart = data[chartType];
+
+                    return (chart && chart.total ? d3.max(chart.total) : 0);
+                })
+            );
         },
 
         getScaling: function (data) {

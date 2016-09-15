@@ -78,4 +78,15 @@ RSpec.describe Topology do
         to include('may not have a non-numeric "units" attribute')
     end
   end # with a node containing a "units" attribute
+
+  context 'as json' do
+    it 'creates a topology' do
+      topology = Topology.new(name: "Test", graph: JSON.dump({
+        'name' => 'Top', 'children' => [{ 'name' => 'MV' }]
+      }))
+
+      expect(topology).to be_valid
+    end
+  end
+
 end # describe Topology

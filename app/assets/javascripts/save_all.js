@@ -26,6 +26,19 @@ var SaveAll = (function () {
         }
     }
 
+    function submit() {
+        $(this).find("input[type=submit]").addClass("disabled");
+        $(this).find("span.wait").removeClass("hidden");
+    }
+
+    function change(e) {
+        var tabTarget = $(e.target).parent().attr("id"),
+            tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
+
+        tabHeader.addClass("editing");
+        $(e.target).addClass("editing");
+    }
+
     function done(doneCallback) {
         this.completeCount += 1;
 
@@ -37,6 +50,9 @@ var SaveAll = (function () {
     SaveAll.prototype = {
         append: function () {
             this.saveAllButton.off("click").on("click", click.bind(this));
+            this.form
+                .on("submit", submit.bind(this))
+                .on("change.save_all", change.bind(this));
         },
 
         submitForms: function (success) {
@@ -50,6 +66,7 @@ var SaveAll = (function () {
 
     function SaveAll(button) {
         this.saveAllButton = $(button);
+        this.form          = this.saveAllButton.parents("form");
         this.completeCount = 0;
     }
 
@@ -59,21 +76,10 @@ var SaveAll = (function () {
 $(document).on("page:change", function () {
     'use strict';
 
-    if ($(".remote form").length > 0) {
-        $(".tab-content .remote form").on("submit", function () {
-            $(this).find("input[type=submit]").addClass("disabled");
-            $(this).find("span.wait").removeClass("hidden");
-        });
+    var saveAll = $("a.save-all");
 
-        $(".remote form").on("change", function () {
-            var tabTarget = $(this).parent().attr("id"),
-                tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
-
-            tabHeader.addClass("editing");
-            $(this).addClass("editing");
-        });
-
-        $("a.save-all").each(function() {
+    if (saveAll.length > 0) {
+        saveAll.each(function() {
             new SaveAll(this).append();
         });
     }
