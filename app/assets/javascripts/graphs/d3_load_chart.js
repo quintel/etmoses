@@ -337,6 +337,9 @@ var D3LoadChart = (function () {
 
             svg.selectAll("path").remove();
 
+            // Update the axisLabel
+            svg.select(".y.axis text").text(this.axisLabel);
+
             // Zero line ------------------------------------------------------
             svg.select("line.zero-line")
                 .attr("x1", 0)
