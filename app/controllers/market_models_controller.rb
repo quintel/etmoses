@@ -33,7 +33,7 @@ class MarketModelsController < ResourceController
   end
 
   def update
-    if @market_model.update(market_model_params)
+    if MarketModel::Update.update(@market_model, market_model_params)
       redirect_to market_model_path(@market_model)
     else
       render :edit
