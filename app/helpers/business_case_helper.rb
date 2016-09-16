@@ -28,12 +28,16 @@ module BusinessCaseHelper
   end
 
   def content_for_breakdown(breakdown)
-    breakdown.each_pair.map do |stakeholder, value|
-      stakeholder_span = content_tag(:span,
-        "#{ stakeholder }: ", "class" => "stakeholder")
+    return unless breakdown
 
-      stakeholder_span + number_to_currency(value)
-    end
+    breakdown_spans = breakdown.each_pair.map do |stakeholder, value|
+                        stakeholder_span = content_tag(:span,
+                          "#{ stakeholder }: ", "class" => "stakeholder")
+
+                        stakeholder_span + number_to_currency(value)
+                      end
+
+    breakdown_spans.join("<br/>")
   end
 
   def breakdown_data(breakdown)
@@ -41,7 +45,7 @@ module BusinessCaseHelper
       toggle:  'popover',
       trigger: 'hover',
       html:    'true',
-      content: content_for_breakdown(breakdown).join("<br/>")
+      content: content_for_breakdown(breakdown)
     }
   end
 end
