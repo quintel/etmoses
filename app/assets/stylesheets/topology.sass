@@ -1,0 +1,89 @@
+.topology-graph
+  margin: 30px 0
+
+.form-group.graph-width
+  max-width: none
+
+.graph-topology
+  .graph-editor
+    background-color: #eee
+    border: 1px solid #ddd
+    border-top-color: #ccc
+    box-shadow: inset 0 1px 2px #ddd
+    float: left
+    height: 500px
+    width: 60%
+
+    svg
+      cursor: grab
+
+      g.node
+        circle
+          stroke: lightblue
+          stroke-width: 2px
+          fill: rgb(204, 204, 204)
+
+        path.add-button
+          opacity: 0
+
+        &.focus
+          circle
+            stroke: steelblue
+
+          path.add-button
+            opacity: 1
+
+    svg:active
+      cursor: grabbing
+
+  .node-information
+    background-color: #fff
+    box-shadow: -1px 0px 5px #ddd
+    border: 1px solid #ddd
+    border-left-width: 2px
+    float: left
+    margin-left: -2px
+    padding: 15px 20px
+    width: 39%
+    height: 500px
+
+    label
+      width: 180px
+
+    input[type=text]:not(.input-sm), select
+      width: 200px
+      display: inline-block
+
+svg#topology-graph-full
+  min-height: 500px
+  width: 100%
+
+  .node circle:hover
+    cursor: pointer
+
+.topology-footer.commit
+  margin-bottom: 20px
+
+.topology-preview
+  svg
+    height: auto
+
+  .node circle
+    fill: #fff
+    stroke: #999
+    stroke-width: 1px
+
+    .node circle:hover
+      cursor: pointer
+
+    .link
+      fill: none
+      stroke: #ccc
+      stroke-width: 1px
+
+.topology-syntax-error a
+  &:hover
+    text-decoration: none
+
+    .text
+      text-decoration: underline

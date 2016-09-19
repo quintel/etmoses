@@ -1,91 +1,76 @@
-/* Basic class draws D3 svg element
- */
+/* Basic class draws D3 svg element */
 
 Topology.GraphEditor = (function () {
     'use strict';
 
-    var nodeIds = 0,
-        diagonal = d3.svg.diagonal().projection(function (d) {
-            return [d.x, d.y];
+    function deleteChild(el, child, index) {
+        var confirmDeletion = true;
+
+        if (child.children && child.children.length > 0) {
+            confirmDeletion = confirm("Are you sure you want to delete this node?");
+        }
+
+        if (confirmDeletion) {
+            el.children.splice(index, 1);
+            el.focus = true;
+        }
+    }
+
+    function deleteNode(el, focusId) {
+        el.children.forEach(function (child, index) {
+            if (child.id === focusId) {
+                deleteChild(el, child, index);
+
+                return false;
+            }
+
+            if (child.children && child.children.length > 0) {
+                deleteNode(child, focusId);
+            }
         });
+    }
 
-    function zoomListener() { return; }
-
-    function drawBaseSvg() {
-        return d3.select(this.scope).append('svg')
-            .attr('class', 'overlay')
-            .attr('width', this.width)
-            .attr('height', this.height)
-            .attr('viewBox', '0 0 ' + this.width + ' ' + this.height)
-            .call(zoomListener)
-            .on('wheel.zoom', null)
-            .on('dblclick.zoom', null);
+    function keydown() {
+        if (this.focusId !== 1) {
+            switch (d3.event.keyCode) {
+                case 8:
+                case 46: {
+                    deleteNode(this.graph.root, this.focusId);
+                    this.graph.update();
+                    break;
+                }
+            }
+        }
     }
 
     GraphEditor.prototype = {
-        draw: function () {
-            this.svg   = drawBaseSvg.call(this);
-            this.group = this.svg.append('g');
-            this.tree  = d3.layout.tree().size([this.width, this.height]);
-            this.root  = {};
+        initialize: function () {
+            this.graph = new Topology.EditorGraph(this.scope);
+            this.graph.draw();
 
-            this.group.attr('transform', function () {
-                return "translate(" + 20 + "," +
-                                      20 + ")";
-            }.bind(this));
-
-            this.update();
+            d3.select(window)
+                .on("keydown", keydown.bind(this));
         },
 
-        update: function () {
-            var node,
-                nodeEnter,
-                link,
-                nodes = this.tree.nodes(this.root).reverse(),
-                links = this.tree.links(nodes);
+        addNode: function (d) {
+            if (!(d.children && d.children.length && d.children.length > 0)) {
+                d.children = [];
+            }
 
-            nodes.forEach(function (d) {
-                d.y = d.depth * this.lineSpace;
-            }.bind(this));
+            ETHelper.eachNode([this.graph.root],
+                function (child) { child.focus = false; });
 
-            node = this.group.selectAll("g.node").data(nodes, function (d) {
-                return d.id || (d.id = ++nodeIds);
-            });
+            d.children.push({ name: "New node", focus: true });
 
-            nodeEnter = node.enter().append("g")
-                .attr("class", "node")
-                .attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                })
-                .classed('collapsed', function (d) {
-                    return d._children;
-                });
+            this.graph.update();
 
-            nodeEnter.append("circle")
-                .attr("r", 10)
-                .style("fill", "#CCC")
-                .style("stroke", "steelblue")
-                .style("stroke-width", "2px");
-
-            link = this.group.selectAll("path.link")
-                .data(links, function (d) {
-                    return d.target.id;
-                });
-
-            link.enter().insert("path", "g")
-                .attr("class", "link")
-                .attr("fill", "none")
-                .attr("stroke", "#ccc")
-                .attr("stroke-width", "2px")
-                .attr("d", diagonal);
-
+            window.TopologyEditor.form.show(d);
         }
     };
 
     function GraphEditor(scope) {
-        this.scope  = scope.find('.graph-editor')[0];
-        this.width  = 684;
-        this.height = 500;
+        this.scope   = scope.find('.graph-editor')[0];
+        this.focusId = -1;
     }
 
     return GraphEditor;

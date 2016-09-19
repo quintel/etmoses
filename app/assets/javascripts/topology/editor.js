@@ -5,13 +5,14 @@ Topology.Editor = (function () {
 
     Editor.prototype = {
         initialize: function (data) {
-            this.graphEditor.draw();
+            this.graphEditor.initialize();
         }
     };
 
     function Editor(scope) {
         this.scope       = scope;
         this.graphEditor = new Topology.GraphEditor(this.scope);
+        this.form        = new Topology.Form(this.scope);
     }
 
     return Editor;
@@ -22,6 +23,7 @@ $(document).on('page:change', function () {
         graphEditor = $('.graph-topology');
 
     if (graphEditor.length > 0) {
-        new Topology.Editor(graphEditor).initialize();
+        window.TopologyEditor = new Topology.Editor(graphEditor);
+        window.TopologyEditor.initialize();
     }
 });

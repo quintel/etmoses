@@ -1,22 +1,26 @@
-$(document).on("page:change", function(){
-  var newImportForm = $("form#new_import");
+$(document).on("page:change", function() {
+    'use strict';
 
-  if(newImportForm.length > 0){
-    var topologySelect = newImportForm.find("select#import_topology_id");
+    var topologySelect,
+        newImportForm = $("form#new_import")
 
-    function getTopology(){
-      $.ajax({ type: "GET",
-              url: "/topologies/" + $(this).val() + ".json",
-              dataType: "json",
-              success: displayPreview });
+    if (newImportForm.length > 0) {
+        topologySelect = newImportForm.find("select#import_topology_id");
+
+        function getTopology() {
+            $.ajax({
+                type: "GET",
+                url: "/topologies/" + $(this).val() + ".json",
+                dataType: "json",
+                success: displayPreview
+            });
+        };
+
+        function displayPreview(data) {
+            new Topology.ImportPreviewGraph(".topology-preview .preview-svg", data.graph).draw();
+        };
+
+        getTopology.call(topologySelect);
+        topologySelect.on('change', getTopology);
     };
-
-    function displayPreview(data){
-      new TopologyPreviewer(".topology-preview .preview-svg", data, "simple").preview();
-    };
-
-    getTopology.call(topologySelect);
-    topologySelect.on('change', getTopology);
-  };
 });
-
