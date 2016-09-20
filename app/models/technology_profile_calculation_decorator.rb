@@ -19,6 +19,7 @@ class TechnologyProfileCalculationDecorator
     if technology.components && technology.components.size > 0
       technology.components.map do |component|
         component.buffer = technology.buffer
+        component.units  = technology.units
         component
       end
     else

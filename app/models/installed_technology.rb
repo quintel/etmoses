@@ -39,7 +39,8 @@ class InstalledTechnology
   attribute :profile_key,                         String, editable: false
   attribute :components,                          Array[InstalledTechnology], editable: false
 
-  COMPONENT_EDITABLES = %i(capacity performance_coefficient)
+  COMPONENT_EDITABLES = %i(capacity performance_coefficient
+                           position_relative_to_buffer)
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)

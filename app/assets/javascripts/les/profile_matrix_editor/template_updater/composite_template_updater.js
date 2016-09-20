@@ -29,15 +29,31 @@ var CompositeTemplateUpdater = (function () {
 
     CompositeTemplateUpdater.prototype = {
         updateUnits: function () {
+            var units;
+
             if (this.composite) {
-                this.children.data('units', this.units);
+                units = this.units;
+                this.children.each(function () {
+                    $(this).set('units', units);
+                    $(this).find(".editable.units.text input").val(units);
+                });
             }
         },
 
         update: function () {
+            var buffer,
+                compositeValue,
+                index;
+
+            if (this.isChild) {
+                buffer = this.template.prev();
+
+                this.template.set('units', buffer.data('units'));
+            }
+
             if (this.composite) {
-                var index          = getNewIndex.call(this),
-                    compositeValue = this.type + "_" + index;
+                index          = getNewIndex.call(this);
+                compositeValue = this.type + "_" + index;
 
                 this.template.set('composite_index', index);
                 this.template.set('composite_value', compositeValue);
@@ -55,7 +71,8 @@ var CompositeTemplateUpdater = (function () {
         this.template  = $(template);
         this.type      = template.getAttribute('data-type');
         this.units     = template.getAttribute('data-units');
-        this.composite = template.getAttribute('data-composite') == 'true';
+        this.composite = template.getAttribute('data-composite') === 'true';
+        this.isChild   = template.getAttribute('data-buffer');
         this.children  = this.template.nextUntil(":not(.buffer-child)");
     }
 

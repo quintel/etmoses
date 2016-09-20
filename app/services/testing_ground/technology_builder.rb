@@ -26,11 +26,11 @@ class TestingGround
 
     def static_attributes
       {
-        name: I18n.t("inputs.#{ technology.key }"),
-        profile: profile,
-        includes: technology.technologies,
-        buffer: @buffer,
-        units: 1,
+        name:       I18n.t("inputs.#{ technology.key }"),
+        profile:    profile,
+        includes:   technology.technologies,
+        buffer:     @buffer,
+        units:      1,
         components: components
       }
     end

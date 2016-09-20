@@ -1,5 +1,6 @@
 /*globals BatteryTemplateUpdater,BufferSelectBox,Calculations,
-CompositeTemplateUpdater,EdsnSwitch,RemoveTechnology,Splitter*/
+CompositeTemplateUpdater,EdsnSwitch,RemoveTechnology,Rounder,
+Splitter*/
 
 var TechnologyTemplateFinalizer = (function () {
     'use strict';
@@ -25,7 +26,7 @@ var TechnologyTemplateFinalizer = (function () {
 
     function updateCompositeUnits() {
         if (this.type === 'units' && this.target.data('compositeValue')) {
-            new CompositeTemplateUpdater(this.target).updateUnits();
+            new CompositeTemplateUpdater(this.target[0]).updateUnits();
         }
     }
 
@@ -122,7 +123,6 @@ var TechnologyTemplateFinalizer = (function () {
         update: function () {
             new CompositeTemplateUpdater(this).update();
             new BatteryTemplateUpdater(this).update();
-
 
             TechnologyTemplateFinalizer.initialize.call(this);
         }

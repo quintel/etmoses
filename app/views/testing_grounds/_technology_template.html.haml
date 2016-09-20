@@ -113,7 +113,7 @@
       .clearfix
 
     - InstalledTechnology.attribute_set.each do |attribute|
-      - if attribute.options[:hidden] || ! technology.whitelisted?(attribute.name)
+      - if attribute.options[:hidden]
         .editable.hidden{class: attribute.name}
           %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name } }
 
