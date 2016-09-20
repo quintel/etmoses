@@ -11,7 +11,7 @@ module Network
       end
 
       def self.disabled_class
-        Generic
+        Composite::Consumer
       end
 
       def initialize(installed, profile, **)

@@ -82,6 +82,10 @@ module Network
         #
         # Returns the wrapped technology.
         def add(tech)
+          # Convert generic technologies to those which can correct for the
+          # depleting profile curve.
+          tech = Consumer.from(tech) if tech.class == Generic
+
           wrapped = wrapper_class_for(tech).new(tech, self)
           wrapped.profile = @profile
 
