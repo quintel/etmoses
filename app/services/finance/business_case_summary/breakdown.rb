@@ -3,7 +3,7 @@ module Finance
     module Breakdown
       def label_for_stakeholder(current_stakeholder)
         if stakeholder == current_stakeholder
-          I18n.t("business_case.depreciation_costs")
+          I18n.t("business_case.yearly_costs")
         else
           current_stakeholder.humanize
         end
