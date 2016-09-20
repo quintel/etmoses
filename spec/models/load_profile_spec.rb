@@ -76,4 +76,42 @@ RSpec.describe LoadProfile, type: :model do
       expect { profile.destroy }.to change { TechnologyProfile.count }.by(-1)
     end
   end # when destroyed
+
+  context '#ordered_by_name' do
+    let!(:upper_name) do
+      FactoryGirl.create(:load_profile, name: 'ZB', key: 'aa')
+    end
+
+    let!(:lower_name) do
+      FactoryGirl.create(:load_profile, name: 'za', key: 'ab')
+    end
+
+    let!(:empty_name) do
+      FactoryGirl.create(:load_profile, name: '', key: 'ac')
+    end
+
+    let!(:nil_name) do
+      FactoryGirl.create(:load_profile, name: nil, key: 'ad')
+    end
+
+    let(:ordered) { LoadProfile.ordered_by_name.to_a }
+
+    # Expected order: ac -> ad -> ab -> aa
+
+    it 'sorts profiles with a blank string name' do
+      expect(ordered.index(empty_name)).to eq(0)
+    end
+
+    it 'sorts profiles with a nil name' do
+      expect(ordered.index(nil_name)).to eq(1)
+    end
+
+    it 'sorts profiles with a lowercase name' do
+      expect(ordered.index(lower_name)).to eq(2)
+    end
+
+    it 'sorts profiles with an uppercase name' do
+      expect(ordered.index(upper_name)).to eq(3)
+    end
+  end
 end # LoadProfile

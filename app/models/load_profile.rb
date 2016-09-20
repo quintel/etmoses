@@ -23,6 +23,10 @@ class LoadProfile < ActiveRecord::Base
     where("`key` NOT LIKE '%deprecated%'")
   end
 
+  def self.ordered_by_name
+    order("LOWER(COALESCE(NULLIF(`name`, ''), `key`))")
+  end
+
   # Public: The human-readable name of the curve.
   def display_name
     name.presence || key
