@@ -86,7 +86,10 @@ module Network
           # to check if it had an excess of energy stored (beyond that required
           # by the profile) and ensure this energy persists while disconnected.
           @recent_excess = stored[frame - 1] - required_at(frame - 1)
+          @recent_excess = 0.0 if @recent_excess < 0
         end
+
+        @recent_excess
       end
 
       def required_at(frame)
