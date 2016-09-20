@@ -19,7 +19,7 @@
   %table.table.table-bordered.finance-table
     %thead
       %tr
-        %th.center= I18n.t("business_case.yearly_depreciation")
+        %th.center= I18n.t("business_case.yearly_costs")
         - finance_table_rows(business_case).each do |row|
           - row.each_pair do |header, _values|
             %th= header.titleize
