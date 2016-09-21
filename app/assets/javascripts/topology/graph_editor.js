@@ -14,20 +14,37 @@ Topology.GraphEditor = (function () {
             el.children.splice(index, 1);
             el.focus = true;
         }
+
+        return confirmDeletion;
+    }
+
+    function findChild(el, focusId) {
+        var foundChild = el;
+
+        if (el.children) {
+            el.children.forEach(function (child, index) {
+                if (child.id === focusId) {
+                    foundChild            = child;
+                    foundChild.childIndex = index;
+                    foundChild.parent     = el;
+
+                    return false;
+                }
+
+                if (child.children && child.children.length > 0) {
+                    findChild(child, focusId);
+                }
+            });
+        }
+
+        return foundChild;
     }
 
     function deleteNode(el, focusId) {
-        el.children.forEach(function (child, index) {
-            if (child.id === focusId) {
-                deleteChild(el, child, index);
+        var isDeleted = true,
+            child = findChild(el, focusId);
 
-                return false;
-            }
-
-            if (child.children && child.children.length > 0) {
-                deleteNode(child, focusId);
-            }
-        });
+        return deleteChild(child.parent, child, child.childIndex);
     }
 
     function keydown() {
@@ -35,8 +52,9 @@ Topology.GraphEditor = (function () {
             switch (d3.event.keyCode) {
                 case 8:
                 case 46: {
-                    deleteNode(this.graph.root, this.focusId);
-                    this.graph.update();
+                    if (deleteNode(this.graph.data, this.focusId)) {
+                        this.graph.update();
+                    }
                     break;
                 }
             }
@@ -45,7 +63,12 @@ Topology.GraphEditor = (function () {
 
     GraphEditor.prototype = {
         initialize: function () {
-            this.graph = new Topology.EditorGraph(this.scope);
+            this.graph = new Topology.EditorGraph(this.scope, {
+                name: "HV",
+                stakeholder: "aggregator",
+                focus: true
+            });
+
             this.graph.draw();
 
             d3.select(window)
@@ -53,18 +76,30 @@ Topology.GraphEditor = (function () {
         },
 
         addNode: function (d) {
-            if (!(d.children && d.children.length && d.children.length > 0)) {
-                d.children = [];
-            }
+            var newNode = {
+                name: "",
+                stakeholder: "aggregator",
+                focus: true
+            };
 
-            ETHelper.eachNode([this.graph.root],
+            // Unfocus every child
+            ETHelper.eachNode([this.graph.data],
                 function (child) { child.focus = false; });
 
-            d.children.push({ name: "New node", focus: true });
+            // Add new child
+            if (d.children) {
+                d.children.push(newNode);
+            } else {
+                d.children = [newNode];
+            }
 
             this.graph.update();
 
-            window.TopologyEditor.form.show(d);
+            window.TopologyEditor.form.show(newNode);
+        },
+
+        updateNode: function (d) {
+            $.extend(findChild(this.graph.data, this.focusId), d);
         }
     };
 

@@ -14,7 +14,6 @@ Topology.EditorGraph = (function () {
             this.group.attr('transform', "translate(0, 40)");
 
             this.tree  = d3.layout.tree().size([this.width, this.height]);
-            this.root  = { name: "Empty node", focus: true };
 
             this.update();
         },
@@ -24,7 +23,7 @@ Topology.EditorGraph = (function () {
                 nodeEnter,
                 link,
                 addSize = 6,
-                nodes   = this.tree.nodes(this.root),
+                nodes   = this.tree.nodes(this.data),
                 links   = this.tree.links(nodes);
 
             nodes.forEach(function (d) {
@@ -99,6 +98,9 @@ Topology.EditorGraph = (function () {
                 .attr("stroke", "#ccc")
                 .attr("stroke-width", "2px")
                 .attr("d", this.diagonal);
+
+            // Load top point in form
+            window.TopologyEditor.form.show(this.data);
         },
 
         zoomListener: function () {
@@ -111,12 +113,13 @@ Topology.EditorGraph = (function () {
         }
     });
 
-    function EditorGraph(scope) {
+    function EditorGraph(scope, data) {
         Topology.Base.call(this, scope);
 
         this.width     = 684;
         this.height    = 500;
         this.lineSpace = 60;
+        this.data      = data;
     }
 
     return EditorGraph;

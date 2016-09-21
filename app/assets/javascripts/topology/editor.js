@@ -6,6 +6,7 @@ Topology.Editor = (function () {
     Editor.prototype = {
         initialize: function (data) {
             this.graphEditor.initialize();
+            this.form.initialize();
         }
     };
 
