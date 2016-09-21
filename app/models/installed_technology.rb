@@ -278,6 +278,14 @@ class InstalledTechnology
     position_relative_to_buffer.present? || carrier == :hybrid
   end
 
+  def as_json(*)
+    super.delete_if { |_, v| v.blank? }
+  end
+
+  def to_h
+    super.delete_if { |_, v| v.blank? }
+  end
+
   private
 
   # Internal: Retrieves the Network::Curve used by the technology, with
