@@ -23,6 +23,8 @@ technologies:
   - households_water_heater_district_heating_steam_hot_water
 
 whitelisted_attributes:
+  - composite
+  - composite_value
   - demand
   - initial_investment
   - input_capacity

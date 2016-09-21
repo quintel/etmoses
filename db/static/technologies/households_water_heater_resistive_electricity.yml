@@ -21,6 +21,7 @@ importable_attributes:
 
 whitelisted_attributes:
   - buffer
+  - full_load_hours
   - initial_investment
   - input_capacity
   - om_costs_per_year

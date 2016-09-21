@@ -99,6 +99,10 @@ class Technology < ActiveHash::Base
     attributes[:technologies] || []
   end
 
+  def whitelisted
+    whitelisted_attributes << 'type'
+  end
+
   def options_for_names
     {
       position_relative_to_buffer: defaults['position_relative_to_buffer'],
