@@ -48,7 +48,7 @@ class TechnologyList
   def self.dump(list)
     JSON.dump(Hash[list.to_h.map do |key, techs|
       [ key, techs.map(&:to_h).map do |tech|
-        tech.update(components: tech[:components].map(&:to_h))
+        tech.update(components: (tech[:components] || []).map(&:to_h))
       end ]
     end])
   end

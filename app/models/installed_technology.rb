@@ -39,7 +39,8 @@ class InstalledTechnology
   attribute :profile_key,                         String, editable: false
   attribute :components,                          Array[InstalledTechnology], editable: false
 
-  COMPONENT_EDITABLES = %i(capacity performance_coefficient)
+  COMPONENT_EDITABLES = %i(capacity performance_coefficient
+                           position_relative_to_buffer)
 
   EDITABLES =
     attribute_set.select{ |attr| attr.options[:editable].nil? || attr.options[:editable] }.map(&:name)
@@ -275,6 +276,14 @@ class InstalledTechnology
 
   def sticks_to_composite?
     position_relative_to_buffer.present? || carrier == :hybrid
+  end
+
+  def as_json(*)
+    super.delete_if { |_, v| v.blank? }
+  end
+
+  def to_h
+    super.delete_if { |_, v| v.blank? }
   end
 
   private

@@ -85,6 +85,10 @@
     - if technology.whitelisted?('components')
       - technology.components.each do |component|
         .component
+          - if component.whitelisted?('position_relative_to_buffer')
+            .editable.hidden{class: 'position_relative_to_buffer'}
+              %input.form-control{type: 'text', value: component.position_relative_to_buffer, data: { type: 'position_relative_to_buffer' } }
+
           - if component.whitelisted?('output_capacity')
             .editable.text{class: 'capacity'}
               %span
@@ -113,7 +117,7 @@
       .clearfix
 
     - InstalledTechnology.attribute_set.each do |attribute|
-      - if attribute.options[:hidden] || ! technology.whitelisted?(attribute.name)
+      - if attribute.options[:hidden]
         .editable.hidden{class: attribute.name}
           %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name } }
 
