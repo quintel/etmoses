@@ -79,11 +79,18 @@ efficiency = 5.0
 
 # total weekdays in a year
 annual_work_days = 260.
+
 # average number of days worked annualy in the Netherlands
 annual_days_worked = 212.
 
 # year for which the profiles are generated
 year = 2013
+
+# number of quarters in an hour
+quarters_per_hour = 4.0
+
+# number of days in a week
+days_per_week = 7
 
 def randomize_trip_data(trip_data):
 
@@ -131,7 +138,7 @@ def annual_charge_times():
     
         weekday = datetime.date.weekday(datetime.date.fromordinal(i + start_date))
         
-        time_shift = [i*96, i* 96, 0]
+        time_shift = [i * 96, i * 96, 0]
         
         if weekday <= 4:
             
@@ -166,14 +173,14 @@ def generate_availability_profile(trips_data, charging_power):
         required_charge = distance / efficiency 
         
         # make sure that we never charge the EV shorter than required
-        charging_time = int(ceil(required_charge / charging_power * 4.0))
+        charging_time = int(ceil(required_charge / charging_power * quarters_per_hour))
               
         quarters_charged = 0.
                              
         for j in range(trip_data[0] - charging_time, trip_data[0] + 1):
             
             if charging_time != 0:            
-                availability_profile[j] = quarters_charged * charging_power / 4.0 / volume
+                availability_profile[j] = quarters_charged * charging_power / quarters_per_hour / volume
                 
                 quarters_charged += 1.
                 
@@ -204,10 +211,10 @@ for i in range(0, len(work_data)):
         
         for k in range(0, 52):
             
-            plot(availability_profile[k * 7 * 96 : (k +  1) * 7 * 96])
+            plot(availability_profile[k * days_per_week * 96 : (k +  1) * days_per_week * 96])
             xlabel("time step [15 minutes]")
             ylabel("availability [-]")
             title("driver: " + str(driver) + ", charging power: " + str(charging_power))
-            ylim(-1,1)
+            #ylim(-1,1)
             
         show()
