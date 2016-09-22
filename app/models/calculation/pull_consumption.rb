@@ -27,7 +27,7 @@ module Calculation
 
     # --
 
-    def production!(frame, context, paths)
+    def production!(frame, _context, paths)
       paths.each do |path|
         production = path.production_at(frame)
         type       = path.technology.installed.type
@@ -42,7 +42,7 @@ module Calculation
     # Internal: Push mandatory flows through the network.
     #
     # Returns nothing.
-    def mandatory_consumption!(frame, context, paths)
+    def mandatory_consumption!(frame, _context, paths)
       paths.each do |path|
         path.consume(frame, path.mandatory_consumption_at(frame))
       end
@@ -50,7 +50,7 @@ module Calculation
 
     private_class_method :mandatory_consumption!
 
-    def conditional_consumption!(frame, context, paths)
+    def conditional_consumption!(frame, _context, paths)
       paths.each do |path|
         wanted = path.conditional_consumption_at(frame)
 
