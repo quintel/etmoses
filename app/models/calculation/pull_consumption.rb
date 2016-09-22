@@ -19,7 +19,7 @@ module Calculation
           conditional_consumption!(frame, context, paths)
         end
 
-        conservable_production!(frame, context)
+        conservable_production!(frame, context, context.paths)
       end
 
       context
@@ -79,10 +79,10 @@ module Calculation
     # a (negative) capacity exceedance.
     #
     # Returns nothing.
-    def conservable_production!(frame, context)
+    def conservable_production!(frame, context, paths)
       return unless context.options[:strategies][:capping_solar_pv]
 
-      context.paths.each do |path|
+      paths.each do |path|
         conservable = path.technology.conservable_production_at(frame)
 
         if path.congested_at?(frame) && conservable > 0

@@ -43,10 +43,8 @@ module Calculation
     def paths
       @paths ||= Network::PathCollection.new(
         technology_nodes.flat_map { |node| Network::TechnologyPath.find(node) },
-        [
-          Network::PathCollection::ConstraintOrder,
-          Network::PathCollection::TechnologyOrder.new(technology_order)
-        ]
+        [ Network::PathCollection::ConstraintOrder,
+          Network::PathCollection::TechnologyOrder.new(technology_order) ]
       )
     end
 
