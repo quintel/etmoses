@@ -23,17 +23,10 @@ module Network
     private
 
     def ordered
-      return @ordered if @ordered
-
-      @ordered  = []
-      remaining = @paths
-
-      @order.each do |callable|
-        selected, remaining = remaining.partition(&callable)
-        @ordered.push(*selected)
-      end
-
-      @ordered.push(*remaining).freeze
+      @ordered ||=
+        @paths.sort_by do |path|
+          @order.map { |callable| callable.call(path) || Float::INFINITY }
+        end.freeze
     end
   end
 end

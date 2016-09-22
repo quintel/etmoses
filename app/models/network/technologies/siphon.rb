@@ -28,6 +28,10 @@ module Network
         true
       end
 
+      def capacity_constrained?
+        true
+      end
+
       def store(frame, amount)
         # Energy consumed by the Siphon is converted into production on the
         # assigned output path.

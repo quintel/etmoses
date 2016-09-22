@@ -42,8 +42,11 @@ module Calculation
 
     def paths
       @paths ||= Network::PathCollection.new(
-        technology_nodes.map(&Network::TechnologyPath.method(:find)).flatten,
-        path_order
+        technology_nodes.flat_map { |node| Network::TechnologyPath.find(node) },
+        [
+          Network::PathCollection::ConstraintOrder,
+          Network::PathCollection::TechnologyOrder.new(technology_order)
+        ]
       )
     end
 
@@ -113,15 +116,18 @@ module Calculation
 
     private
 
-    def path_order
-      # Central heat producers come first since it is assumed that a heat
-      # network -- if present -- will be used to satisfy heat demand before any
-      # locally-installed technologies.
-      #
-      # HHP techs come next, since their mandatory consumption is instead
-      # treated as conditional. This is so they are processed immediately after
-      # the final mandatory consumption load is assigned.
-      order = [
+    # Describes the order in which paths are sorted, such that the technologies
+    # are calculated in this order.
+    #
+    # Central heat producers come first since it is assumed that a heat
+    # network -- if present -- will be used to satisfy heat demand before any
+    # locally-installed technologies.
+    #
+    # HHP techs come next, since their mandatory consumption is instead
+    # treated as conditional. This is so they are processed immediately after
+    # the final mandatory consumption load is assigned.
+    def technology_order
+      @technology_order ||= [
         Network::Heat::Consumer,
         Network::Heat::Buffer,
         Network::Technologies::HHP::Electricity,
@@ -135,16 +141,7 @@ module Calculation
         Network::Technologies::OptionalBuffer,
         :rest,
         Network::Technologies::Siphon
-      ]
-
-      order.map.with_index do |klass, index|
-        if klass == :rest
-          remaining = order[(index + 1)..-1]
-          ->(p) { remaining.all? { |k| ! p.technology.is_a?(k) } }
-        else
-          ->(p) { p.technology.is_a?(klass) }
-        end
-      end
+      ].freeze
     end
   end
 end
