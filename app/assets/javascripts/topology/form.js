@@ -29,6 +29,10 @@ Topology.Form = (function () {
 
         show: function (d) {
             forEachField.call(this, function (name) {
+                if (d.errors && d.errors[name]) {
+                    this.addClass("invalid");
+                    this.attr('title', d.errors[name]);
+                }
                 this.val(d[name]);
             });
         }

@@ -23,12 +23,18 @@
           stroke-width: 2px
           fill: rgb(204, 204, 204)
 
+          &.invalid
+            stroke: #f99
+
         path.add-button
           opacity: 0
 
         &.focus
           circle
             stroke: steelblue
+
+            &.invalid
+              stroke: red
 
           path.add-button
             opacity: 1
@@ -53,6 +59,10 @@
     input[type=text]:not(.input-sm), select
       width: 200px
       display: inline-block
+
+      &.invalid
+        border: 1px solid #f00
+        background-color: #ffefef
 
 svg#topology-graph-full
   min-height: 500px

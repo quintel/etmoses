@@ -18,6 +18,7 @@ Topology.EditorGraph = (function () {
             this.update();
 
             this.center(this.data);
+            window.TopologyEditor.form.show(this.data);
         },
 
         update: function () {
@@ -75,6 +76,11 @@ Topology.EditorGraph = (function () {
 
             nodeEnter.append("circle")
                 .attr("r", this.radius)
+                .attr("class", function (d) {
+                    if (d.errors && Object.keys(d.errors).length > 0) {
+                        return "invalid";
+                    }
+                })
                 .on('click', function (d) {
                     window.TopologyEditor.graphEditor.focusId = d.id;
                     window.TopologyEditor.form.show(d);
@@ -100,9 +106,6 @@ Topology.EditorGraph = (function () {
                 .attr("stroke", "#ccc")
                 .attr("stroke-width", "2px")
                 .attr("d", this.diagonal);
-
-            // Load top point in form
-            window.TopologyEditor.form.show(this.data);
         },
 
         zoomListener: function () {

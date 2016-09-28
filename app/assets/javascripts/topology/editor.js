@@ -7,6 +7,10 @@ Topology.Editor = (function () {
         initialize: function () {
             this.graphEditor.initialize();
             this.form.initialize();
+
+            $(this.scope).parents("form").on("submit", function () {
+                return Topology.Validator.isValid(this.graphEditor.graph);
+            }.bind(this));
         }
     };
 

@@ -60,7 +60,6 @@ Topology.GraphEditor = (function () {
     function keydown() {
         if (this.focusId !== 1) {
             switch (d3.event.keyCode) {
-                case 8:
                 case 46: {
                     if (deleteNode(this.graph.data, this.focusId)) {
                         this.graph.update();
