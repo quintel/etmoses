@@ -3,39 +3,49 @@
 Topology.GraphEditor = (function () {
     'use strict';
 
-    function deleteChild(el, child, index) {
-        var confirmDeletion = true;
+    function deleteChild(el, child) {
+        var confirmDeletion = true,
+            parent = findChild(el, child.parentId);
 
         if (child.children && child.children.length > 0) {
             confirmDeletion = confirm("Are you sure you want to delete this node?");
         }
 
         if (confirmDeletion) {
-            el.children.splice(index, 1);
-            el.focus = true;
+            parent.children.splice(child.childIndex, 1);
         }
 
         return confirmDeletion;
     }
 
     function findChild(el, focusId) {
-        var foundChild = el;
-
-        if (el.children) {
-            el.children.forEach(function (child, index) {
-                if (child.id === focusId) {
-                    foundChild            = child;
-                    foundChild.childIndex = index;
-                    foundChild.parent     = el;
-
-                    return false;
-                }
-
-                if (child.children && child.children.length > 0) {
-                    findChild(child, focusId);
-                }
-            });
+        if (focusId === 1) {
+            return el;
         }
+
+        var i, child, foundChild;
+
+        function loopChildren(el) {
+            if (el.children) {
+                for (var i = 0; i < el.children.length; i++) {
+                    child = el.children[i];
+
+                    if (child.id === focusId) {
+                        foundChild            = child;
+                        foundChild.childIndex = i;
+                        foundChild.parentId   = el.id;
+
+                        break;
+                    }
+
+                    if (child.children && child.children.length > 0) {
+                        loopChildren(child);
+                    }
+                }
+            }
+        }
+
+        loopChildren(el);
 
         return foundChild;
     }
@@ -44,7 +54,7 @@ Topology.GraphEditor = (function () {
         var isDeleted = true,
             child = findChild(el, focusId);
 
-        return deleteChild(child.parent, child, child.childIndex);
+        return deleteChild(el, child);
     }
 
     function keydown() {
@@ -54,6 +64,8 @@ Topology.GraphEditor = (function () {
                 case 46: {
                     if (deleteNode(this.graph.data, this.focusId)) {
                         this.graph.update();
+
+                        window.TopologyEditor.graphData.update(this.graph.data);
                     }
                     break;
                 }
@@ -63,12 +75,7 @@ Topology.GraphEditor = (function () {
 
     GraphEditor.prototype = {
         initialize: function () {
-            this.graph = new Topology.EditorGraph(this.scope, {
-                name: "HV",
-                stakeholder: "aggregator",
-                focus: true
-            });
-
+            this.graph = new Topology.EditorGraph(this.scope, this.graphData.dump());
             this.graph.draw();
 
             d3.select(window)
@@ -83,8 +90,9 @@ Topology.GraphEditor = (function () {
             };
 
             // Unfocus every child
-            ETHelper.eachNode([this.graph.data],
-                function (child) { child.focus = false; });
+            ETHelper.eachNode([this.graph.data], function (child) {
+                child.focus = false;
+            });
 
             // Add new child
             if (d.children) {
@@ -95,17 +103,23 @@ Topology.GraphEditor = (function () {
 
             this.graph.update();
 
+            window.TopologyEditor.graphData.update(this.graph.data);
             window.TopologyEditor.form.show(newNode);
         },
 
         updateNode: function (d) {
-            $.extend(findChild(this.graph.data, this.focusId), d);
+            var child = findChild(this.graph.data, this.focusId);
+
+            $.extend(child, d);
+
+            window.TopologyEditor.graphData.update(this.graph.data);
         }
     };
 
-    function GraphEditor(scope) {
-        this.scope   = scope.find('.graph-editor')[0];
-        this.focusId = -1;
+    function GraphEditor(scope, graphData) {
+        this.scope     = scope.find('.graph-editor')[0];
+        this.graphData = graphData;
+        this.focusId   = -1;
     }
 
     return GraphEditor;

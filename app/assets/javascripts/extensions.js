@@ -19,15 +19,13 @@ $.fn.extend({
         });
     },
 
-    outerHTML: function (s) {
+    outerHTML: function(s) {
         'use strict';
 
-        return s
-            ? this.before(s).remove()
-            : $("<p>").append(this.eq(0).clone()).html();
+        return s ? this.before(s).remove() : $("<p>").append(this.eq(0).clone()).html();
     },
 
-    underscorizedData: function () {
+    underscorizedData: function() {
         'use strict';
 
         var key,
@@ -41,7 +39,7 @@ $.fn.extend({
         return newObject;
     },
 
-    selectedOption: function (value) {
+    selectedOption: function(value) {
         'use strict';
 
         return $(this).find("option[value='" + (value || $(this).val()) + "']");
@@ -51,34 +49,34 @@ $.fn.extend({
      *
      * Sets the data-attriute aswell as the attribute in the dom.
      */
-    set: function (option, value) {
+    set: function(option, value) {
         'use strict';
 
         $(this).data(option.camelize(), value)
-               .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
+            .attr("data-" + option.underscorize().replace(/\_/g, '-'), value);
     },
 
     /* Returns the value which lives under 'data-raw', if that's not present
      * return the default 'val()'
      */
-    rawValue: function () {
+    rawValue: function() {
         return $(this).data('raw') || $(this).val();
     }
 });
 
-String.prototype.underscorize = function () {
+String.prototype.underscorize = function() {
     'use strict';
 
-    return this.replace(/([A-Z])/g, function (a) {
+    return this.replace(/([A-Z])/g, function(a) {
         return "_" + a.toLowerCase();
     });
 };
 
-String.prototype.camelize = function () {
+String.prototype.camelize = function() {
     'use strict';
 
-    return this.replace(/[-_\s]+(.)?/g, function (_, c) {
-      return c ? c.toUpperCase() : '';
+    return this.replace(/[-_\s]+(.)?/g, function(_, c) {
+        return c ? c.toUpperCase() : '';
     });
 }
 

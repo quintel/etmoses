@@ -4,7 +4,7 @@ Topology.Editor = (function () {
     'use strict';
 
     Editor.prototype = {
-        initialize: function (data) {
+        initialize: function () {
             this.graphEditor.initialize();
             this.form.initialize();
         }
@@ -12,7 +12,8 @@ Topology.Editor = (function () {
 
     function Editor(scope) {
         this.scope       = scope;
-        this.graphEditor = new Topology.GraphEditor(this.scope);
+        this.graphData   = new Topology.GraphData(this.scope);
+        this.graphEditor = new Topology.GraphEditor(this.scope, this.graphData);
         this.form        = new Topology.Form(this.scope);
     }
 

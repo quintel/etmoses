@@ -47,7 +47,7 @@
     = form.label :graph
     = tooltip_tag(t(:'topologies.form.graph.tooltip'))
 
-    .graph-topology{ data: { graph: topology.graph } }
+    .graph-topology{ data: { graph: topology.graph.to_json } }
       .graph-editor
       .node-information
         .form-group

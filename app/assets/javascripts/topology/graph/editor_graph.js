@@ -1,21 +1,23 @@
 Topology.EditorGraph = (function () {
     'use strict';
 
-    var nodeIds = 0;
-
     function plusPath(size) {
         return 'M0,-' + size + ' V' + size +' M-' + size + ',0 H' + size;
     }
 
     EditorGraph.prototype = $.extend({}, Topology.Base.prototype, {
         draw: function () {
-            this.svg   = this.buildBaseSVG();
-            this.group = this.svg.append('g');
+            this.svg     = this.buildBaseSVG();
+            this.group   = this.svg.append('g');
+            this.nodeIds = this.maxId();
+
             this.group.attr('transform', "translate(0, 40)");
 
-            this.tree  = d3.layout.tree().size([this.width, this.height]);
+            this.tree  = d3.layout.tree().nodeSize([80, 0]);
 
             this.update();
+
+            this.center(this.data);
         },
 
         update: function () {
@@ -33,8 +35,8 @@ Topology.EditorGraph = (function () {
             this.group.selectAll("g.node, path.link").remove();
 
             node = this.group.selectAll("g.node").data(nodes, function (d) {
-                return d.id || (d.id = ++nodeIds);
-            });
+                return d.id || (d.id = ++this.nodeIds);
+            }.bind(this));
 
             nodeEnter = node.enter().append("g")
                 .attr("class", function (d) {
@@ -59,7 +61,7 @@ Topology.EditorGraph = (function () {
                 .attr('stroke', 'green')
                 .attr('stroke-width', 3)
                 .attr('fill', 'none')
-                .attr('transform', 'translate(15, 0)')
+                .attr('transform', 'translate(25, 0)')
                 .on('click', function (d) {
                     window.TopologyEditor.graphEditor
                         .addNode.call(window.TopologyEditor.graphEditor, d);
@@ -72,7 +74,7 @@ Topology.EditorGraph = (function () {
                 });
 
             nodeEnter.append("circle")
-                .attr("r", 5)
+                .attr("r", this.radius)
                 .on('click', function (d) {
                     window.TopologyEditor.graphEditor.focusId = d.id;
                     window.TopologyEditor.form.show(d);
@@ -118,7 +120,8 @@ Topology.EditorGraph = (function () {
 
         this.width     = 684;
         this.height    = 500;
-        this.lineSpace = 60;
+        this.lineSpace = 80;
+        this.radius    = 10;
         this.data      = data;
     }
 
