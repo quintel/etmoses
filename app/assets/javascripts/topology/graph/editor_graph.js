@@ -61,7 +61,7 @@ Topology.EditorGraph = (function () {
                 .attr('stroke', 'green')
                 .attr('stroke-width', 3)
                 .attr('fill', 'none')
-                .attr('transform', 'translate(25, 0)')
+                .attr('transform', 'translate(22, 0)')
                 .on('click', function (d) {
                     window.TopologyEditor.graphEditor
                         .addNode.call(window.TopologyEditor.graphEditor, d);
