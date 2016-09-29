@@ -11,6 +11,11 @@ module Network
         @capacity = CapacityLimit.new(self)
       end
 
+      def volume=(new_volume)
+        super
+        @capacity = CapacityLimit.new(self)
+      end
+
       # Public: Using the amount of energy stored in the technology in each time
       # step, determines the relative change in energy over time, giving the
       # load of the technology.

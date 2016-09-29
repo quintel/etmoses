@@ -6,6 +6,11 @@ module Network
       # constrained by the composite capacity, nor draw extra energy to be
       # stored for later use.
       class BoostingWrapper < Wrapper
+        # Boosting techs skip the buffer, therefore the volume is not limiting.
+        def volume=(*)
+          super(Float::INFINITY)
+        end
+
         def mandatory_consumption_at(frame)
           if @composite.boosting_enabled_at?(frame)
             constrain_by_capacity(super)

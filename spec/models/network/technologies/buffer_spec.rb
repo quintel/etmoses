@@ -251,7 +251,7 @@ RSpec.describe Network::Technologies::Buffer do
           expect(tech.mandatory_consumption_at(1)).to eq(0.625)
         end
 
-        pending 'has conditional consumption of 0.625' do
+        it 'has conditional consumption of 0.625' do
           # Buffer should be able to satisfy demand, *and* refill the buffer.
           expect(tech.conditional_consumption_at(1, nil)).to eq(0.625)
         end
