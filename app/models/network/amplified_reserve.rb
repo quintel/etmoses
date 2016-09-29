@@ -3,6 +3,8 @@ module Network
   # a normal reserve, and a "high-energy" volume which may receive energy only
   # under exceptional circumstances.
   class AmplifiedReserve < Reserve
+    attr_reader :high_volume
+
     # Public: Creates a new amplified reserve.
     #
     # low   - The maximum amount of energy which may be stored in the low-energy
@@ -15,6 +17,7 @@ module Network
     # Returns an AmplifiedReserve.
     def initialize(low = Float::INFINITY, high = low, &decay)
       @low_volume = low
+      @high_volume = high
       super(high, &decay)
     end
 
@@ -24,6 +27,10 @@ module Network
     # Returns a HighEnergyMode.
     def high_energy
       HighEnergyMode.new(self)
+    end
+
+    def volume
+      @low_volume
     end
 
     # Public: Returns how much of the reserve is unfilled.
@@ -73,6 +80,10 @@ module Network
 
       def add(frame, amount, high_energy = true)
         super(frame, amount, high_energy)
+      end
+
+      def volume
+        high_volume
       end
     end
   end # AmplifiedReserve
