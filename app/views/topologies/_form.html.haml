@@ -70,10 +70,12 @@
           = label_tag :capacity
           = text_field_tag :capacity, nil, class: 'form-control'
 
-      .hidden
+      .yaml-editor
         = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
 
       .clearfix
+
+      = link_to "Show YAML editor", "#", class: "switch-editor"
 
   .form-group
     .btn-group

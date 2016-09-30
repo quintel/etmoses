@@ -1,4 +1,4 @@
-/* Basic class draws D3 svg element */
+/*globals ETHelper*/
 
 Topology.GraphEditor = (function () {
     'use strict';
@@ -60,7 +60,6 @@ Topology.GraphEditor = (function () {
     function keydown() {
         if (this.focusId !== 1) {
             switch (d3.event.keyCode) {
-                case 8:
                 case 46: {
                     if (deleteNode(this.graph.data, this.focusId)) {
                         this.graph.update();
@@ -75,7 +74,7 @@ Topology.GraphEditor = (function () {
 
     GraphEditor.prototype = {
         initialize: function () {
-            this.graph = new Topology.EditorGraph(this.scope, this.graphData.dump());
+            this.graph = new Topology.EditorGraph(this.scope, this.graphData);
             this.graph.draw();
 
             d3.select(window)
@@ -105,6 +104,16 @@ Topology.GraphEditor = (function () {
 
             window.TopologyEditor.graphData.update(this.graph.data);
             window.TopologyEditor.form.show(newNode);
+        },
+
+        toggle: function (isEnabled) {
+            window.TopologyEditor.scope
+                .find(".graph-editor, .node-information")
+                .toggle(isEnabled);
+
+            if (isEnabled) {
+                this.graph.update();
+            }
         },
 
         updateNode: function (d) {
