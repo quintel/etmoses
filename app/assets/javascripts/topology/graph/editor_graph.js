@@ -7,6 +7,7 @@ Topology.EditorGraph = (function () {
 
     EditorGraph.prototype = $.extend({}, Topology.Base.prototype, {
         draw: function () {
+            this.data    = this.graphData.toGraph();
             this.svg     = this.buildBaseSVG();
             this.group   = this.svg.append('g');
             this.nodeIds = this.maxId();
@@ -25,7 +26,8 @@ Topology.EditorGraph = (function () {
                 nodeEnter,
                 link,
                 addSize = 6,
-                nodes   = this.tree.nodes(this.data),
+                data    = this.graphData.toGraph(),
+                nodes   = this.tree.nodes(data),
                 links   = this.tree.links(nodes);
 
             nodes.forEach(function (d) {
@@ -76,8 +78,7 @@ Topology.EditorGraph = (function () {
             nodeEnter.append("circle")
                 .attr("r", this.radius)
                 .on('click', function (d) {
-                    window.TopologyEditor.graphEditor.focusId = d.id;
-                    window.TopologyEditor.form.show(d);
+                    window.TopologyEditor.focusNode(d);
 
                     d3.selectAll('g.node').attr("class", "node");
                     d3.select(this.parentNode).attr("class", "node focus");
@@ -102,7 +103,7 @@ Topology.EditorGraph = (function () {
                 .attr("d", this.diagonal);
 
             // Load top point in form
-            window.TopologyEditor.form.show(this.data);
+            window.TopologyEditor.form.show(data);
         },
 
         zoomListener: function () {
@@ -115,14 +116,14 @@ Topology.EditorGraph = (function () {
         }
     });
 
-    function EditorGraph(scope, data) {
+    function EditorGraph(scope, graphData) {
         Topology.Base.call(this, scope);
 
         this.width     = 684;
         this.height    = 500;
         this.lineSpace = 80;
         this.radius    = 10;
-        this.data      = data;
+        this.graphData = graphData;
     }
 
     return EditorGraph;

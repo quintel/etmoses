@@ -16,6 +16,7 @@
 //= require i18n/translations
 //= require turbolinks
 //= require d3
+//= require yaml.min
 //= require testing_grounds
 //= require bootstrap-multiselect
 //= require bootstrap-sprockets

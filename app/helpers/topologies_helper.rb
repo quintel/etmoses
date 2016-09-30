@@ -10,8 +10,6 @@ module TopologiesHelper
   end
 
   def edge_nodes_for(topology)
-    Topologies::EdgeNodesFinder.new(topology.graph).find_edge_nodes.map do |node|
-      node.key
-    end
+    Topologies::EdgeNodesFinder.new(topology.graph).find_edge_nodes.map(&:key)
   end
 end
