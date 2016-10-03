@@ -40,8 +40,8 @@ Topology.ImportPreviewGraph = (function () {
             this.data              = [this.presetData];
             this.root              = this.data[0];
             this.lineSpace         = Math.min(calculateLineHeight.call(this), 100);
-            this.svg               = this.buildBaseSVG();
-            this.svgGroup          = this.svg.append('g');
+
+            this.buildBaseSVG();
 
             this.svgGroup.attr('transform', function () {
                 return "translate(" + this.margin.left + "," +

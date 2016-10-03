@@ -1,3 +1,5 @@
+/*globals EditorGraph,Topology*/
+
 Topology.EditorGraph = (function () {
     'use strict';
 
@@ -7,13 +9,12 @@ Topology.EditorGraph = (function () {
 
     EditorGraph.prototype = $.extend({}, Topology.Base.prototype, {
         draw: function () {
-            this.svg     = this.buildBaseSVG();
-            this.group   = this.svg.append('g');
+            this.buildBaseSVG();
+
+            this.svgGroup.attr('transform', "translate(0, 40)");
+
             this.nodeIds = this.maxId();
-
-            this.group.attr('transform', "translate(0, 40)");
-
-            this.tree  = d3.layout.tree().nodeSize([80, 0]);
+            this.tree    = d3.layout.tree().nodeSize([80, 0]);
 
             this.update();
 
@@ -33,9 +34,9 @@ Topology.EditorGraph = (function () {
                 d.y = d.depth * this.lineSpace;
             }.bind(this));
 
-            this.group.selectAll("g.node, path.link").remove();
+            this.svgGroup.selectAll("g.node, path.link").remove();
 
-            node = this.group.selectAll("g.node").data(nodes, function (d) {
+            node = this.svgGroup.selectAll("g.node").data(nodes, function (d) {
                 return d.id || (d.id = ++this.nodeIds);
             }.bind(this));
 
@@ -50,9 +51,6 @@ Topology.EditorGraph = (function () {
                 })
                 .attr("transform", function (d) {
                     return "translate(" + d.x + "," + d.y + ")";
-                })
-                .classed('collapsed', function (d) {
-                    return d._children;
                 });
 
             // append a + button
@@ -64,13 +62,12 @@ Topology.EditorGraph = (function () {
                 .attr('fill', 'none')
                 .attr('transform', 'translate(22, 0)')
                 .on('click', function (d) {
-                    window.TopologyEditor.graphEditor
-                        .addNode.call(window.TopologyEditor.graphEditor, d);
+                    window.TopologyEditor.graphEditor.addNode(d);
                 })
-                .on("mouseover", function (d) {
+                .on("mouseover", function () {
                     d3.select(this).style("cursor", "pointer");
                 })
-                .on("mouseout", function (d) {
+                .on("mouseout", function () {
                     d3.select(this).style("cursor", "default");
                 });
 
@@ -88,14 +85,14 @@ Topology.EditorGraph = (function () {
                     d3.selectAll('g.node').attr("class", "node");
                     d3.select(this.parentNode).attr("class", "node focus");
                 })
-                .on("mouseover", function (d) {
+                .on("mouseover", function () {
                     d3.select(this).style("cursor", "pointer");
                 })
-                .on("mouseout", function (d) {
+                .on("mouseout", function () {
                     d3.select(this).style("cursor", "default");
                 });
 
-            link = this.group.selectAll("path.link")
+            link = this.svgGroup.selectAll("path.link")
                 .data(links, function (d) {
                     return d.target.id;
                 });
@@ -111,7 +108,7 @@ Topology.EditorGraph = (function () {
         zoomListener: function () {
             return d3.behavior.zoom()
                 .scaleExtent([0.1, 3]).on('zoom', function () {
-                    this.group.attr('transform',
+                    this.svgGroup.attr('transform',
                         'translate(' + d3.event.translate + ')' +
                         'scale(' + d3.event.scale + ')');
                 }.bind(this));

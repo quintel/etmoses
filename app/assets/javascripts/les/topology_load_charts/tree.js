@@ -1,5 +1,5 @@
-/*globals BusinessCaseTable,D3LoadChart,ErrorDisplayer,Les,StatusUpdater,
-Strategies,TreeFetcher,TreeGraph*/
+/*globals BusinessCaseTable,ErrorDisplayer,Les,StatusUpdater,
+Strategies,TreeFetcher,LesGraph*/
 
 var Tree = (function () {
     'use strict';
@@ -14,7 +14,7 @@ var Tree = (function () {
     function updateTree(data) {
         this.toggleLoading();
 
-        this.treeGraph.setData(data).reload();
+        this.treeGraph.reload(data);
 
         if (data.error) {
             $(".alert.alert-warning").removeClass("hidden")
@@ -43,19 +43,28 @@ var Tree = (function () {
 
     Tree.prototype = {
         nodes: [],
+        basicCharts: [
+            'electricity_basic', 'gas_basic', 'heat_basic'
+        ],
+        featureCharts: [
+            'electricity_features', 'gas_features', 'heat_features'
+        ],
+        availableCharts: function () {
+            return this.featureCharts.concat(this.basicCharts);
+        },
         loading: false,
         create: function () {
             updateDomElements();
 
-            this.treeGraph    = new TreeGraph(this.target.selector);
-            this.d3Chart      = new D3CarrierLoadChart(".load-graph .chart", "load");
+            this.treeGraph    = new Topology.LesGraph(this.target.selector);
+            this.d3Chart      = new D3CarrierLoadChart(".load-graph .chart", this.basicCharts[0]);
             this.strategies   = new Strategies();
             this.lesses       = [ new Les(), new Les(this.strategies) ];
 
             getTopology.call(this, function (data) {
                 $("#collapse-stakeholders select").prop('disabled', false);
 
-                this.treeGraph.setData(data).showGraph();
+                this.treeGraph.draw(data);
             });
         },
 

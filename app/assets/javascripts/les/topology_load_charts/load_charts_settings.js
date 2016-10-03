@@ -35,13 +35,13 @@ var LoadChartsSettings = {
         visible: true,
         axisLabel: 'kW'
     },
-    load_strategies: {
+    electricity_features: {
         name: "Electricity (with strategies)",
         color: '#95BB95',
         visible: true,
         axisLabel: 'kW'
     },
-    load: {
+    electricity_basic: {
         name: "Electricity",
         color: '#1F77B4',
         visible: true,
@@ -65,25 +65,25 @@ var LoadChartsSettings = {
         visible: false,
         axisLabel: 'kW'
     },
-    gas_strategies: {
+    gas_features: {
         name: "Gas (with strategies)",
         color: '#C8C758',
         visible: true,
         axisLabel: 'kW'
     },
-    gas: {
+    gas_basic: {
         name: "Gas",
         color: '#9B5191',
         visible: true,
         axisLabel: 'kW'
     },
-    heat_strategies: {
+    heat_features: {
         name: "Heat (with strategies)",
         color: '#D8B53D',
         visible: true,
         axisLabel: 'kW'
     },
-    heat: {
+    heat_basic: {
         name: "Heat",
         color: '#D88A3D',
         visible: true,

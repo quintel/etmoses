@@ -1,58 +1,13 @@
 /*globals ChartRenderer,CSV,ETHelper,LocalSettings*/
-var TreeGraph = (function () {
+
+Topology.LesGraph = (function () {
     'use strict';
-
-    var self, container, dragListener, zoomListener, node, baseSvg, tree, diagonal,
-        svgGroup,
-        maxLabelLength  = 0,
-        viewerHeight    = 700,
-        viewerWidth     = 550,
-        duration        = 250,
-        nodeSize        = 50,
-        ease            = 'cubic-out',
-        levelWidth      = [1],
-        attributes      = { basic:    { electricity: 'load', gas: 'gas', heat: 'heat' },
-                            features: { electricity: 'load_strategies', gas: 'gas_strategies', heat: 'heat_strategies' }
-                          };
-
-    function createBaseSvg() {
-        return d3.select(container).append('svg')
-            .attr('width', viewerWidth)
-            .attr('height', viewerHeight)
-            .attr('class', 'overlay')
-            .call(zoomListener)
-            .on('wheel.zoom', null)
-            .on('dblclick.zoom', null);
-    }
 
     function buildBase() {
         $('.loading').remove();
-        $(container).find("svg").remove();
+        $(this.scope).find("svg").remove();
 
-        baseSvg = createBaseSvg();
-        svgGroup = baseSvg.append('g');
-    }
-
-    function setDataFromTree(data) {
-        var chartType, carrier, loads, tech_loads;
-
-        for (chartType in attributes) {
-            if (data[chartType]) {
-                for (carrier in data[chartType].networks) {
-                    loads = ETHelper.loadsFromTree(data[chartType].networks[carrier]);
-                    tech_loads = data[chartType].tech_loads[carrier];
-
-                    ETHelper.eachNode([this.treeData], function (node) {
-                        node[attributes[chartType][carrier]] = {
-                            total: loads[node.name],
-                            tech_loads: tech_loads[node.name]
-                        }
-                    });
-                }
-            }
-        }
-
-        return this.treeData;
+        this.buildBaseSVG();
     }
 
     function reloadLast() {
@@ -97,15 +52,15 @@ var TreeGraph = (function () {
         });
     }
 
-    function establishMaxLabelLength() {
+    function calculateMaxLabelLength() {
         visit(this.treeData,
             function (d) {
-                maxLabelLength = Math.max(d.name.length, maxLabelLength);
+                this.maxLabelLength = Math.max(d.name.length, this.maxLabelLength || 0);
 
                 if (d.children && d.children.length === 0) {
                     d.children = null;
                 }
-            },
+            }.bind(this),
             function (d) {
                 return d.children && d.children.length > 0 ? d.children : null;
             });
@@ -115,21 +70,8 @@ var TreeGraph = (function () {
         return d.children ? -20 : 20;
     }
 
-    function childCount(level, n) {
-        if (n.children && n.children.length > 0) {
-            if (levelWidth.length <= level + 1) {
-                levelWidth.push(0);
-            }
-
-            levelWidth[level + 1] += n.children.length;
-            n.children.forEach(function (d) {
-                childCount(level + 1, d);
-            });
-        }
-    }
-
     function isOverCapacity(d) {
-        var load = (d.load_strategies || d.load),
+        var load = (d.electricity_features || d.electricity),
             // add 1e-5 so that we don't wrongly highlight nodes whose load has tiny
             // variations due to floating-point arithmetic.
             capacity = (d.capacity * (d.units || 1)) + 1e-5;
@@ -140,6 +82,7 @@ var TreeGraph = (function () {
 
     function setNodeClass(data) {
         var nodeClass = ("node " + data.stakeholder + " n" + data.id);
+
         if (data.node_selected) {
             nodeClass += " selected";
         }
@@ -148,40 +91,25 @@ var TreeGraph = (function () {
 
     function recurseToggle(n) {
         toggleChildren(n);
+
         if (n.children && n.children.length > 0) {
             n.children.forEach(recurseToggle);
         }
-    }
-
-    // Function to center node when clicked/dropped so node doesn't get lost
-    // when collapsing/moving with large amount of children.
-    function centerNode(source) {
-        var scale = zoomListener.scale(),
-            x = source.x + 250,
-            y = 50;
-
-        d3.select('g').transition()
-            .duration(duration).ease(ease)
-            .attr('transform', 'translate(' + x + ',' + y + ')' +
-                'scale(' + scale + ')');
-
-        zoomListener.scale(scale);
-        zoomListener.translate([x, y]);
     }
 
     // Toggle children on click.
     function click(d) {
         // Click suppressed
         if ((d3.event && d3.event.defaultPrevented)
-            || !d.load
+            || !d.electricity_basic
             || window.currentTree.loading) {
             return false;
         }
 
         window.localSettings.set('current_chart_id', d.id);
 
-        self.lastClicked = d;
-        self.showChart(d);
+        this.lastClicked = d;
+        this.showChart(d);
     }
 
     function dblClick(d) {
@@ -189,34 +117,17 @@ var TreeGraph = (function () {
 
         if (d.collapsed_children || d.children) {
             toggleChildren(d);
-            self.update(d);
-            centerNode(d);
+            this.update(d);
+            this.center(d);
         }
     }
 
     function createD3Tree() {
-        var d3tree = d3.layout.tree().nodeSize([nodeSize, nodeSize]);
+        var d3tree = d3.layout.tree().nodeSize([50, 50]);
 
         return d3tree.sort(function (a, b) {
             return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
         });
-    }
-
-    function createD3Diagonal() {
-        return d3.svg.diagonal().projection(function (d) {
-            return [d.x, d.y];
-        });
-    }
-
-    // Define the zoomListener which calls the zoom function on the "zoom"
-    // event constrained within the scaleExtents
-    function createZoomListener() {
-        return d3.behavior.zoom()
-            .scaleExtent([0.1, 3]).on('zoom', function () {
-                svgGroup.attr('transform',
-                    'translate(' + d3.event.translate + ')' +
-                    'scale(' + d3.event.scale + ')');
-            });
     }
 
     // Listener which prevents the drag movement of the diagram when clicking on
@@ -244,49 +155,52 @@ var TreeGraph = (function () {
         reloadLast.call(this);
     }
 
-    TreeGraph.prototype = {
-        setData: function (treeData) {
-            if (treeData.graph) {
-                this.treeData = treeData.graph;
-            } else {
-                this.treeData = setDataFromTree.call(this, treeData);
-            }
-
+    LesGraph.prototype = $.extend({}, Topology.Base.prototype, {
+        draw: function (treeData) {
+            this.treeData = treeData.graph;
             this.root     = this.treeData;
-            this.root.x0  = viewerHeight / 2;
+            this.root.x0  = this.height / 2;
             this.root.y0  = 0;
 
-            return this;
-        },
-
-        clearStrategies: function () {
-            ETHelper.eachNode([this.root], function (node) {
-                delete node.load_strategies;
-                delete node.gas_strategies;
-                delete node.heat_strategies;
-            });
-
-            return this;
-        },
-
-        showGraph: function () {
             $("a.dropdown-toggle").first().removeClass("disabled");
 
-            buildBase();
+            buildBase.call(this);
 
-            establishMaxLabelLength.call(this);
+            calculateMaxLabelLength.call(this);
             updateTreeData.call(this);
             recurseToggle(this.treeData);
 
             this.update(this.root);
+            this.center(this.root);
 
-            centerNode(this.root);
             setLastClickedNode.call(this);
 
             return this;
         },
 
-        reload: function () {
+        zoomListener: function () {
+            return d3.behavior.zoom()
+                .scaleExtent([0.1, 3]).on('zoom', function () {
+                    this.svgGroup.attr('transform',
+                        'translate(' + d3.event.translate + ')' +
+                        'scale(' + d3.event.scale + ')');
+                }.bind(this));
+        },
+
+        clearStrategies: function () {
+            ETHelper.eachNode([this.root], function (node) {
+                delete node.electricity_features;
+                delete node.gas_features;
+                delete node.heat_features;
+            });
+
+            return this;
+        },
+
+        reload: function (data) {
+            this.treeData = Topology.NetworkToTree.toTree.call(this, data);
+            this.root     = this.treeData;
+
             this.update(this.root);
 
             setLastClickedNode.call(this);
@@ -302,9 +216,8 @@ var TreeGraph = (function () {
             // squashed when new nodes are made visible or looking sparse when nodes
             // are removed. This makes the layout more consistent.
             //
-            self = this;
-
             var nodeIds = 0,
+                node,
                 nodes,
                 links,
                 nodeEnter,
@@ -312,23 +225,20 @@ var TreeGraph = (function () {
                 nodeExit,
                 link;
 
-            // Fills the levelWidth area with all the nodes child counts
-            childCount(0, this.root);
-
             // Compute the new tree layout.
-            nodes = tree.nodes(this.root).reverse();
-            links = tree.links(nodes);
+            nodes = this.tree.nodes(this.root).reverse();
+            links = this.tree.links(nodes);
 
             // Set widths between levels based on maxLabelLength.
             nodes.forEach(function (d) {
                 // alternatively to keep a fixed scale one can set a fixed depth per
                 // level. Normalize for fixed-depth by commenting out below line>
                 // d.y = (d.depth * 175); //175px per level.
-                d.y = (d.depth * (maxLabelLength * 8));
-            });
+                d.y = (d.depth * (this.maxLabelLength * 8));
+            }.bind(this));
 
             // Update the nodes…
-            node = svgGroup.selectAll('g.node').data(nodes, function (d) {
+            node = this.svgGroup.selectAll('g.node').data(nodes, function (d) {
                 return d.id || (d.id = ++nodeIds);
             });
 
@@ -338,7 +248,7 @@ var TreeGraph = (function () {
 
             // Enter any new nodes at the parent's previous position.
             nodeEnter = node.enter().append('g')
-                .call(dragListener)
+                .call(this.dragListener)
                 .attr('class', setNodeClass)
                 .classed('collapsed', function (d) {
                     // We have to run the "collapsed" function again (it is already
@@ -349,8 +259,8 @@ var TreeGraph = (function () {
                 .attr('transform', function () {
                     return 'translate(' + source.x0 + ',' + source.y0 + ')';
                 })
-                .on('dblclick', dblClick)
-                .on('click', click);
+                .on('dblclick', dblClick.bind(this))
+                .on('click', click.bind(this));
 
             node.classed('exceedance', isOverCapacity);
 
@@ -377,11 +287,11 @@ var TreeGraph = (function () {
                 });
 
             // Change the circle fill depending on whether it has children and is collapsed
-            node.select('circle.nodeCircle').attr('r', 7.5);
+            node.select('circle.nodeCircle').attr('r', this.radius);
 
             // Transition nodes to their new position.
             nodeUpdate = node.transition()
-                .duration(duration).ease(ease)
+                .duration(this.duration).ease(this.ease)
                 .attr('transform', function (d) {
                     return 'translate(' + d.x + ',' + d.y + ')';
                 });
@@ -391,7 +301,7 @@ var TreeGraph = (function () {
 
             // Transition exiting nodes to the parent's new position.
             nodeExit = node.exit().transition()
-                .duration(duration).ease(ease)
+                .duration(this.duration).ease(this.ease)
                 .attr('transform', function () {
                     return 'translate(' + source.x + ',' + source.y + ')';
                 })
@@ -401,7 +311,7 @@ var TreeGraph = (function () {
             nodeExit.select('text').style('fill-opacity', 0);
 
             // Update the links…
-            link = svgGroup.selectAll('path.link').data(links, function (d) {
+            link = this.svgGroup.selectAll('path.link').data(links, function (d) {
                 return d.target.id;
             });
 
@@ -413,30 +323,30 @@ var TreeGraph = (function () {
                         x: source.x0,
                         y: source.y0
                     };
-                    return diagonal({
+                    return this.diagonal({
                         source: o,
                         target: o
                     });
-                });
+                }.bind(this));
 
             // Transition links to their new position.
             link.transition()
-                .duration(duration).ease(ease)
-                .attr('d', diagonal);
+                .duration(this.duration).ease(this.ease)
+                .attr('d', this.diagonal);
 
             // Transition exiting nodes to the parent's new position.
             link.exit().transition()
-                .duration(duration).ease(ease)
+                .duration(this.duration).ease(this.ease)
                 .attr('d', function () {
                     var o = {
                         x: source.x,
                         y: source.y
                     };
-                    return diagonal({
+                    return this.diagonal({
                         source: o,
                         target: o
                     });
-                })
+                }.bind(this))
                 .remove();
 
             // Stash the old positions for transition.
@@ -451,15 +361,21 @@ var TreeGraph = (function () {
         strategyLoads: false,
         strategyShown: false,
         treeData: {}
-    };
+    });
 
-    function TreeGraph(this_container) {
-        container    = this_container;
-        tree         = createD3Tree();
-        diagonal     = createD3Diagonal();
-        zoomListener = createZoomListener();
-        dragListener = createDragListener();
+    function LesGraph(scope) {
+        Topology.Base.call(this, scope);
+
+        this.scope        = scope;
+        this.id           = "les-graph";
+        this.height       = 700;
+        this.width        = 550;
+        this.radius       = 7.5;
+        this.duration     = 250;
+        this.ease         = 'cubic-out';
+        this.tree         = createD3Tree();
+        this.dragListener = createDragListener();
     }
 
-    return TreeGraph;
+    return LesGraph;
 }());

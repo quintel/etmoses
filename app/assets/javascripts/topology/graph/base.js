@@ -1,13 +1,11 @@
-/* Future file for cleaning up Topology graphs.
- *
- */
+/*globals Topology, Base, ETHelper*/
 
 Topology.Base = (function () {
     'use strict';
 
     Base.prototype = {
         buildBaseSVG: function () {
-            return d3.select(this.scope).append('svg')
+            this.svg = d3.select(this.scope).append('svg')
                 .attr('id', this.id)
                 .attr('class', 'overlay')
                 .attr('width', this.width)
@@ -17,17 +15,18 @@ Topology.Base = (function () {
                 .on('wheel.zoom', null)
                 .on('dblclick.zoom', null);
 
+            this.svgGroup = this.svg.append('g');
         },
 
         center: function (node) {
-            var scale;
+            var scale, x, y;
 
             if (this.zoomListener) {
-                var scale = this.zoomListener.scale(),
-                        x = node.x + (this.width / 2) + (this.radius / 2),
-                        y = 50;
+                scale = this.zoomListener.scale();
+                x     = node.x + (this.width / 2) + (this.radius / 2);
+                y     = 50;
 
-                this.group.attr('transform',
+                this.svgGroup.attr('transform',
                     'translate(' + x + ', ' + y + ') scale(' + scale + ')');
             }
         },
@@ -55,7 +54,7 @@ Topology.Base = (function () {
         update: function () {
             throw "Not implemented error";
         }
-    }
+    };
 
     function Base(scope) {
         this.scope        = scope;
