@@ -9,7 +9,14 @@ Topology.Editor = (function () {
             this.form.initialize();
 
             $(this.scope).parents("form").on("submit", function () {
-                return Topology.Validator.isValid(this.graphEditor.graph);
+                var valid = Topology.Validator.isValid(this.graphEditor.graph);
+
+                if (!valid) {
+                    $(this).find("input[type=submit]").removeClass("disabled");
+                    $(this).find("span.wait").addClass("hidden");
+                }
+
+                return valid;
             }.bind(this));
         }
     };
