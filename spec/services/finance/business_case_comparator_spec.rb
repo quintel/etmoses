@@ -31,18 +31,18 @@ RSpec.describe Finance::BusinessCaseComparator do
 
   context 'when a business case is missing a stakeholder' do
     let(:other_financials){
-      [ {"aggregator" =>[1, 3]} ]
+      [ {"aggregator" =>[1]} ]
     }
 
     it "compares two business cases" do
       expect(compare.map{|t| t[:compare] }).to eq([
         { :stakeholder=>"aggregator",
-          :incoming=>3,
-          :incoming_breakdown=>{"Yearly depreciation + fixed O&M costs"=>3},
+          :incoming=>nil,
+          :incoming_breakdown=>{},
           :outgoing=>1,
           :outgoing_breakdown=>{"Yearly depreciation + fixed O&M costs"=>1},
           :freeform=>nil,
-          :total=>2 },
+          :total=>-1 },
         nil
       ]);
     end
@@ -54,7 +54,7 @@ RSpec.describe Finance::BusinessCaseComparator do
     }
 
     it "compares two business cases" do
-      # There are three unique stakeholders, Aggreagator, no_stakeholder
+      # There are three unique stakeholders, Aggregator, no_stakeholder
       # and Cooperation. One of the compare values should be nil.
       #
       #   Business case | Other business case

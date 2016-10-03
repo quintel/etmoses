@@ -9,9 +9,11 @@ module Finance
         end
       end
 
-      def breakdown(costs)
+      def breakdown(costs, skip = nil)
         result = costs.each_with_index.map do |value, index|
-          [label_for_stakeholder(stakeholders[index]), value] if value
+          if value && skip != index
+            [label_for_stakeholder(stakeholders[index]), value]
+          end
         end
 
         Hash[result.compact]
