@@ -4,16 +4,15 @@ module Finance
       include Breakdown
 
       def summarize_rule(financial_rule, index)
-        outgoing_all    = transposed_financials[index]
-
         @financial_rule = financial_rule
+        @index          = index
         @incoming       = incoming_all.compact.inject(:+)
         @outgoing       = outgoing_all.compact.inject(:+)
 
         {
           stakeholder:        stakeholder,
           incoming:           @incoming,
-          incoming_breakdown: breakdown(incoming_all),
+          incoming_breakdown: breakdown(incoming_from_rule, skip),
           outgoing:           @outgoing,
           outgoing_breakdown: breakdown(outgoing_all),
           freeform:           freeform,
@@ -27,8 +26,16 @@ module Finance
         @financial_rule.keys.first
       end
 
+      def incoming_from_rule
+        @financial_rule.values.flatten
+      end
+
+      def outgoing_all
+        transposed_financials[@index]
+      end
+
       def incoming_all
-        values = @financial_rule.values.flatten
+        values = incoming_from_rule
         values.delete_at(skip)
         values
       end
