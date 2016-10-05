@@ -33,8 +33,8 @@ en:
       merit: 'Merit price'
     measure:
       connections: Number of electricity connections
-      flex_realised: Flexibility realised
-      flex_potential: Flexibility potential
+      flex_realised: kWh of flexibility realised
+      flex_potential: kWh of flexibility potential
       gas_connections: Number of gas connections
       gas_kwh_consumed: kWh of gas consumed
       gas_kwh_produced: kWh of gas produced
