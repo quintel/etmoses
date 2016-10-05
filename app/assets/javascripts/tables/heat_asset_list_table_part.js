@@ -74,8 +74,6 @@ var HeatAssetListTablePart = (function () {
 
     HeatAssetListTablePart.prototype = $.extend({}, EditableTable.prototype, {
         afterAppendCallback: function () {
-            this.setProfiles();
-
             createSliders(this, this.connections);
         }
     });

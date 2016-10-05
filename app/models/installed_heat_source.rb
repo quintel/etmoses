@@ -16,6 +16,20 @@ class InstalledHeatSource
   attribute :dispatchable, Boolean
   attribute :priority, Integer
 
+  def self.default_must_run
+    new(Technology.find_by_key("central_heat_network_must_run").defaults)
+  end
+
+  def self.default_dispatchable
+    new(Technology.find_by_key("generic").attributes)
+  end
+
+  def self.defaults
+    Hash[attribute_set.map do |attr|
+      [attr.name.to_s, attr.default_value.value]
+    end]
+  end
+
   def total_yearly_costs
     (initial_investment / technical_lifetime) + om_costs
   end

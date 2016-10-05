@@ -14,6 +14,23 @@
 var EditableTable = (function () {
     'use strict';
 
+    /* Callback for profile selector
+     * Whenever somebody select's a different heat asset the data from that
+     * select option will be parsed over the table row and the values set
+     * in their respectable inputs and select boxes.
+     */
+    function updateRows(technology) {
+        var technology = $(this.target).find("select.key"),
+            techData   = $(technology).selectedOption().data();
+
+        for (var key in techData) {
+            $(this.target)
+                .find(".editable." + key.underscorize())
+                .find("input, select")
+                .val(techData[key]);
+        }
+    }
+
     function extractTextfromCells(row) {
         return $(row).find("td.editable").toArray().map(function (cell) {
             var input = $(cell).find("select:visible").length > 0 ? 'select' : 'input',
@@ -142,6 +159,10 @@ var EditableTable = (function () {
 
         this.emptyButton.addClass("hidden");
         this.changeListener();
+
+        if (this.afterAppendCallback) {
+            this.afterAppendCallback();
+        }
     }
 
     EditableTable.prototype = {
@@ -203,7 +224,7 @@ var EditableTable = (function () {
 
         setProfiles: function () {
             $(this.selector).find("tr:not(.blank)").each(function() {
-                new ProfileSelectBox(this).add();
+                new ProfileSelectBox(this).add(updateRows);
             });
         },
 
@@ -213,10 +234,10 @@ var EditableTable = (function () {
     };
 
     function EditableTable(selector) {
-        this.selector       = selector;
-        this.changeListener = function () { return; };
-        this.changeData     = function () { return; };
-        this.emptyButton    = $(this.selector).prev(".empty-button")
+        this.selector             = selector;
+        this.changeListener       = function () { return; };
+        this.changeData           = function () { return; };
+        this.emptyButton          = $(this.selector).prev(".empty-button")
 
         this.suspended            = false;
         this.updatedDuringSuspend = false;
