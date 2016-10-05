@@ -59,7 +59,7 @@ class CalculationController < ApplicationController
     TestingGround::Calculator.new(
       testing_ground, calculation_options.merge(
         strategies:  testing_ground.selected_strategy.attributes,
-        resolution:  :high
+        resolution:  :low
       )
     )
   end
