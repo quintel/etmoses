@@ -30,13 +30,6 @@ var D3BaseStaticLoadChart = (function () {
             this.spinner.addClass('on');
 
             drawChart.call(this, params, (loadFirstTime !== false));
-        },
-
-        getScaling: function (load) {
-            return new Quantity(
-                this.maxYvalue(load),
-                this.settings.axis_label
-            ).smartScale();
         }
     });
 
