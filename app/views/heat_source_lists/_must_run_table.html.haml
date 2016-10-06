@@ -32,7 +32,7 @@
       %th
 
   %tfoot.hidden
-    = render partial: 'heat_source_lists/must_run_table_row', locals: { list_item: InstalledHeatSource.new }
+    = render partial: 'heat_source_lists/must_run_table_row', locals: { list_item: InstalledHeatSource.default_must_run }
 
   %tbody
     - heat_source_list.each do |list_item|

@@ -27,6 +27,7 @@ var MultiTable = (function () {
         this.tables.forEach(function (table) {
             if (table.afterAppendCallback) {
                 table.afterAppendCallback();
+                table.setProfiles();
             }
         });
     }

@@ -9,10 +9,15 @@ module HeatSourceListHelper
 
   def create_options(technologies, key)
     heat_sources = technologies.map do |heat_source|
-      [ I18n.t("heat_sources.#{ heat_source.key }"), heat_source.key, data: heat_source.defaults ]
+      [ I18n.t("heat_sources.#{ heat_source.key }"),
+        heat_source.key, data: heat_source_defaults(heat_source) ]
     end
 
     options_for_select(heat_sources, selected: key)
+  end
+
+  def heat_source_defaults(heat_source)
+    InstalledHeatSource.defaults.merge(heat_source.defaults)
   end
 
   def options_for_must_run_heat_source_plant_types(key = nil)

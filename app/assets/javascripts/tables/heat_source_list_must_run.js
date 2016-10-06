@@ -4,7 +4,7 @@ var HeatSourceListMustRun = (function () {
     'use strict';
 
     HeatSourceListMustRun.prototype = $.extend({}, EditableTable.prototype, {
-        afterAppendCallback: function () {
+        rowAddedListener: function () {
             this.setProfiles();
         },
 

@@ -12,13 +12,15 @@ var HeatSourceListDispatchable = (function () {
     }
 
     HeatSourceListDispatchable.prototype = $.extend({}, EditableTable.prototype, {
+        rowAddedListener: function () {
+            this.setProfiles();
+        },
+
         afterAppendCallback: function () {
             $(this.selector).find("tbody").sortable({
                 axis: "y",
                 update: updateSort.bind(this)
             });
-
-            this.setProfiles();
         }
     });
 

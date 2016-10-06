@@ -11,19 +11,19 @@
   %td.editable
     = select_tag :stakeholder, options_for_all_stakeholders(list_item.stakeholder), class: "form-control stakeholder"
 
-  %td.editable
+  %td.editable.total_initial_investment
     %input.form-control{name: 'total_initial_investment', value: list_item.total_initial_investment, data: { round: 2 }}
 
-  %td.editable
+  %td.editable.technical_lifetime
     %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { round: 0 }}
 
-  %td.editable
+  %td.editable.om_costs_per_year
     %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year, data: { round: 1 }}
 
-  %td.editable
+  %td.editable.marginal_heat_costs
     %input.form-control{name: 'marginal_heat_costs', value: list_item.marginal_heat_costs, data: { round: 2 }}
 
-  %td.editable
+  %td.editable.distance
     %input.form-control{name: 'distance', value: list_item.distance, data: { round: 1 }}
 
   %td.editable.hidden
