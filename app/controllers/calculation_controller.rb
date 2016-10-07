@@ -14,8 +14,8 @@ class CalculationController < ApplicationController
   end
 
   def gas_level_summary
-    with_cached_networks do |calculator, _|
-      gas    = calculator.network(:gas)
+    with_cached_networks(:low) do |calc, _|
+      gas    = calc.network(:gas)
       assets = GasAssetListDecorator.new(testing_ground.gas_asset_list).decorate
       levels = Network::Builders::GasChain.build(gas, assets)
 
@@ -25,7 +25,8 @@ class CalculationController < ApplicationController
 
   private
 
-  def with_cached_networks
+  def with_cached_networks(resolution = :high)
+    calculator = calculator(resolution)
     result = calculator.calculate
 
     if result[:pending]
@@ -55,11 +56,11 @@ class CalculationController < ApplicationController
     render json: result, status: 500
   end
 
-  def calculator
+  def calculator(resolution = :high)
     TestingGround::Calculator.new(
       testing_ground, calculation_options.merge(
         strategies:  testing_ground.selected_strategy.attributes,
-        resolution:  :low
+        resolution:  resolution
       )
     )
   end
