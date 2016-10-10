@@ -1,5 +1,5 @@
-/*globals Legend,LoadChartHelper,LoadChartsSettings,PopOver,
-StackTransformer,StrategyHelper,Transformer*/
+/*globals ChartSettings,D3BaseChart,DefaultSettings,Legend,LoadChartHelper,
+PopOver,Quantity,StackTransformer,StrategyHelper,Transformer,WeekSelect*/
 
 var D3LoadChart = (function () {
     'use strict';
@@ -14,10 +14,6 @@ var D3LoadChart = (function () {
         context,
         svg,
         defs,
-        legend,
-        legendObj,
-        popOverEl,
-        popOver,
         brush,
         chartData,
         hoverLineGroup,
@@ -27,9 +23,6 @@ var D3LoadChart = (function () {
 
         // This is assuming every LES has a length of 35040. Shorter LES's will
         // break because of this line.
-        //
-        // TODO: Fix this static value so the 'resolution' of the LES is taken
-        // into account.
         weekResolution   = 672,
         scaleCorrection  = 1.05,
         customTimeFormat = d3.time.format.utc.multi([
@@ -148,16 +141,13 @@ var D3LoadChart = (function () {
         return new Date(Math.floor(date.getTime() / rounding) * rounding);
     }
 
-    function mousemove() {
-        var mousePos   = d3.mouse(document.getElementById("mouse-tracker")),
-            rawGraphX  = xScale.invert(mousePos[0]),
-            graphX     = roundDate.call(this, rawGraphX),
-            results    = {};
+    function fetchResults(graphX) {
+        var results = {};
 
         chartData.forEach(function (d) {
             results[d.type] = {
                 key:    d.key,
-                color:  d.color,
+                color:  d.areaColor,
                 values: d.values.find(function (val) {
                     return typeof (val.x.getTime) === 'function'
                         && graphX.getTime() === val.x.getTime();
@@ -165,7 +155,16 @@ var D3LoadChart = (function () {
             };
         });
 
-        popOver.show(mousePos[0] + 60, results);
+        return results;
+    }
+
+    function mousemove() {
+        var mousePos   = d3.mouse(document.getElementById("mouse-tracker")),
+            rawGraphX  = xScale.invert(mousePos[0]),
+            graphX     = roundDate.call(this, rawGraphX),
+            results    = fetchResults(graphX);
+
+        this.popOver.show(mousePos[0] + 60, results);
 
         d3.select("#hover-line")
             .attr("x1", mousePos[0])
@@ -226,10 +225,9 @@ var D3LoadChart = (function () {
         part.append("path")
             .style("pointer-events", "none")
             .style("fill", function (d) {
-                return d.color;
-            })
+                return d.areaColor;
+            }.bind(this))
             .attr("clip-path", "url(#clip-" + clipName + ")")
-            .attr("opacity", this.seriesOpacity || 0.5)
             .attr("class", "line-bg")
             .attr("d", function (d) {
                 return setArea.call(this, d, clipName);
@@ -278,7 +276,8 @@ var D3LoadChart = (function () {
         },
 
         getAxisLabel: function (data) {
-            return LoadChartsSettings[data.type || this.curveType].axisLabel;
+            return ChartSettings.forChart(data.type || this.curveType)
+                .axisLabel;
         },
 
         setYscaleDomain: function (mainOnly) {
@@ -289,7 +288,7 @@ var D3LoadChart = (function () {
 
             yScale.domain(ydomain).nice();
 
-            if (! mainOnly) {
+            if (!mainOnly) {
                 yScale2.domain(ydomain).nice();
             }
 
@@ -306,100 +305,25 @@ var D3LoadChart = (function () {
                 .attr("y2", yScale(0));
         },
 
-        update: function (data) {
-            var contextArea;
-
-            this.lastRequestedData = data || this.lastRequestedData;
-            this.scaling = this.getScaling(this.lastRequestedData);
-
-            chartData = transformData.call(this);
-
-            if (this.chartDataCallback) {
-                this.chartDataCallback(chartData);
-            }
-
-            if (!chartData) {
-                return false;
-            }
-
-            xScale.domain(d3.extent(chartData[0].values, function (d) {
-                return d.x;
-            }));
-
-            yScale.domain(d3.extent(all.call(chartData), function (d) {
-                return d.y + (d.offset || 0);
-            }));
-
-            xScale2.domain(xScale.domain());
-            yScale2.domain(yScale.domain());
-
-            svg.select(".x.axis").call(xAxis);
-            context.select(".x-axis1").call(xAxis2);
-
-            svg.selectAll("path").remove();
-
-            // Update the axisLabel
-            svg.select(".y.axis text").text(this.axisLabel);
-
-            // Zero line ------------------------------------------------------
-            svg.select("line.zero-line")
-                .attr("x1", 0)
-                .attr("x2", this.width)
-                .attr("y1", yScale(0))
-                .attr("y2", yScale(0));
-
-            //for slider part--------------------------------------------------
-            contextArea = d3.svg.area()
-                .interpolate("step-after")
-                .x(function (d) { return xScale2(d.x); })
-                .y0(this.height2)
-                .y1(0);
-
-            context.append("path")
-                .attr("class", "area")
-                .attr("d", contextArea(chartData[0].values))
-                .attr("fill", "#F1F1F2");
-
-            //end slider part--------------------------------------------------
-            this.previewIssue = drawChartPart.call(this, context, ".preview_issue");
-            this.issue        = drawChartPart.call(this, svg, ".issue");
-
-            context.append("g")
-                .attr("class", "x brush")
-                .call(brush)
-                .selectAll("rect")
-                .attr("height", this.height2)
-                .attr("fill", "#060708");
-
-            this.dateSelect.enable();
-            this.setYscaleDomain(false);
-
-            legendObj.draw(chartData);
-        },
-
         maxYvalue: function (data) {
-            var chart;
+            var chart, isVisible;
 
             return d3.max(window.currentTree.availableCharts()
                 .map(function (chartType) {
-                    chart = data[chartType];
+                    chart     = data[chartType];
+                    isVisible = ChartSettings.forChart(chartType).visible;
 
-                    return (chart && chart.total ? d3.max(chart.total) : 0);
-                })
-            );
+                    return (chart && chart.total && isVisible ? d3.max(chart.total) : 0);
+                }));
         },
 
         getScaling: function (data) {
-            var scaling,
-                maxYvalue,
-                axisLabel = this.getAxisLabel(data);
+            var scaling;
 
-            if (/^[a-zA-Z]?W$/.test(axisLabel)) {
-                scaling = new Quantity(this.maxYvalue(data), axisLabel).smartScale();
+            if (/^[a-zA-Z]?W$/.test(this.axisLabel)) {
+                scaling = new Quantity(this.maxYvalue(data), this.axisLabel).smartScale();
 
-                this.axisLabel = scaling.unit.name
-            } else {
-                this.axisLabel = axisLabel;
+                this.axisLabel = scaling.unit.name;
             }
 
             return scaling;
@@ -412,7 +336,7 @@ var D3LoadChart = (function () {
         render: function (data) {
             var self = this;
 
-            this.scaling = this.getScaling(data);
+            this.axisLabel = this.getAxisLabel(data);
 
             d3.select(this.chartClass).html('');
 
@@ -440,7 +364,7 @@ var D3LoadChart = (function () {
             setShapes('issue', xScale, yScale);
             setShapes('preview_issue', xScale2, yScale2);
 
-            legend = d3.select(this.chartClass).append("div")
+            this.legendDiv = d3.select(this.chartClass).append("div")
                 .attr("class", "legend");
 
             svg = this.drawBaseSVG();
@@ -510,28 +434,84 @@ var D3LoadChart = (function () {
                   .style("pointer-events", "none")
                   .style("opacity", 1e-6);
 
-            popOverEl = $("<div/>").addClass("pop-over-load-graph");
+            // Other elements
+            this.popOver   = new PopOver(this.chartClass);
+            this.popOver.initialize(mousemove.bind(this));
 
-            $(this.chartClass).append(popOverEl);
-
-            popOver   = new PopOver(popOverEl, this.seriesOpacity);
-            legendObj = new Legend(this, legend);
-
-            // Add mouseover events for hover line.
-            d3.select("#mouse-tracker")
-                .on("mousemove", mousemove.bind(this))
-                .on("mouseout", function () {
-                    popOverEl.hide();
-
-                    d3.select("#hover-line")
-                        .style("opacity", 1e-6);
-                });
+            this.legend = new Legend(this);
 
             this.dateSelect.initialize(this.currentWeek, function (e) {
                 renderWeek.call(self, { target: e.target, brush: brush });
             });
 
             this.update(data);
+        },
+
+        update: function (data) {
+            var contextArea;
+
+            this.lastRequestedData = data || this.lastRequestedData;
+            this.axisLabel         = this.getAxisLabel(this.lastRequestedData);
+            this.scaling           = this.getScaling(this.lastRequestedData);
+
+            chartData = transformData.call(this);
+
+            if (this.chartDataCallback) {
+                this.chartDataCallback(chartData);
+            }
+
+            if (!chartData) {
+                return false;
+            }
+
+            xScale.domain(d3.extent(chartData[0].values, function (d) {
+                return d.x;
+            }));
+
+            xScale2.domain(xScale.domain());
+            yScale2.domain(yScale.domain());
+
+            context.select(".x-axis1").call(xAxis2);
+
+            svg.selectAll("path").remove();
+
+            // Update the axisLabel
+            svg.select(".y.axis > text").text(this.axisLabel);
+
+            // Zero line ------------------------------------------------------
+            svg.select("line.zero-line")
+                .attr("x1", 0)
+                .attr("x2", this.width)
+                .attr("y1", yScale(0))
+                .attr("y2", yScale(0));
+
+            //for slider part--------------------------------------------------
+            contextArea = d3.svg.area()
+                .interpolate("step-after")
+                .x(function (d) { return xScale2(d.x); })
+                .y0(this.height2)
+                .y1(0);
+
+            context.append("path")
+                .attr("class", "area")
+                .attr("d", contextArea(chartData[0].values))
+                .attr("fill", "#F1F1F2");
+
+            //end slider part--------------------------------------------------
+            this.previewIssue = drawChartPart.call(this, context, ".preview_issue");
+            this.issue        = drawChartPart.call(this, svg, ".issue");
+
+            context.append("g")
+                .attr("class", "x brush")
+                .call(brush)
+                .selectAll("rect")
+                .attr("height", this.height2)
+                .attr("fill", "#060708");
+
+            this.dateSelect.enable();
+            this.setYscaleDomain(false);
+
+            this.legend.draw(chartData);
         }
     });
 

@@ -1,0 +1,5 @@
+---
+name: "Capacity"
+area_color: 'darkred'
+color: 'darkred'
+axis_label: 'kW'

@@ -1,7 +1,7 @@
 ---
 behavior: heat_pump
 carrier: electricity
-color: "#CF79FF"
+color: "#e2aeff"
 defaults:
   capacity: 2.22222
   position_relative_to_buffer: buffering

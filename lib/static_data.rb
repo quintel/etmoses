@@ -7,7 +7,8 @@ module StaticData
     "gas_assets/pipes"       => GasAssets::Pipe,
     "heat_assets/primary"    => HeatAssets::Pipe,
     "heat_assets/secondary"  => HeatAssets::Location,
-    "technologies"           => Technology
+    "technologies"           => Technology,
+    "chart_settings"         => ChartSetting
   }.freeze
 
   module_function

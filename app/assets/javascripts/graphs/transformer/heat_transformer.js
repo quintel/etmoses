@@ -1,22 +1,25 @@
-/*globals I18n,LoadSlicer*/
+/*globals ChartSettings,I18n,LoadSlicer*/
 
 var HeatTransformer = (function () {
     'use strict';
 
-    function fetchChart(data, totals) {
+    function fetchChart(data, totalsArg) {
         var chart,
             subChart,
-            totals = (totals || []);
+            setting,
+            totals = (totalsArg || []);
 
         for (chart in data) {
             if (data.hasOwnProperty(chart)) {
                 subChart = data[chart];
+                setting  = ChartSettings.forChart(chart);
 
                 if (subChart.length && subChart.length > 0) {
                     totals.push({
                         type: chart,
                         name: I18n.t("charts." + chart),
                         area: true,
+                        color: setting.color,
                         values: { total: LoadSlicer.slice(subChart, 0) }
                     });
                 } else {
@@ -41,7 +44,7 @@ var HeatTransformer = (function () {
         deficit = data[0].values.total.map(function (val, index) {
             var net = 0;
 
-            for (techIndex = 0; techIndex < length; techIndex++) {
+            for (techIndex = 0; techIndex < length; techIndex += 1) {
                 net = net + data[techIndex].values.total[index];
             }
 

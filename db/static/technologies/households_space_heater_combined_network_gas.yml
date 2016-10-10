@@ -1,6 +1,6 @@
 ---
 carrier: gas
-color: "#96B4FA"
+color: "#b199be"
 defaults:
   position_relative_to_buffer: boosting
 

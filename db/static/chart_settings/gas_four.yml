@@ -1,0 +1,6 @@
+---
+name: "4 bar"
+color: '#789B51'
+area_color: '#789B51'
+area: false
+axis_label: 'kW'

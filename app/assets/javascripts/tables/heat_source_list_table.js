@@ -1,3 +1,5 @@
+/*globals HeatSourceListDispatchable,HeatSourceListMustRun,MultiTable*/
+
 var HeatSourceListTable = (function () {
     'use strict';
 

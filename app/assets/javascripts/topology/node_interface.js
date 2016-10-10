@@ -23,7 +23,7 @@ Topology.NodeInterface = (function () {
                 interfaceY,
                 focusNode     = $("g.node.focus"),
                 circle        = focusNode.find("circle"),
-                circleRadius  = parseInt(circle.attr('r')),
+                circleRadius  = parseInt(circle.attr('r'), 10),
                 parent        = focusNode.parents("svg"),
                 focusNodeRect = focusNode[0].getBoundingClientRect(),
                 parentRect    = parent[0].getBoundingClientRect();
@@ -34,7 +34,7 @@ Topology.NodeInterface = (function () {
             this.scope.css({
                 left: -interfaceX - (this.scope.width() / 2) + circleRadius,
                 top: -interfaceY - 35
-            })
+            });
         }
     };
 

@@ -1,7 +1,14 @@
-.prompt.hidden
-  .message
-  .alert.alert-danger.hidden
-  .input
-    %input.form-control.prompt-message{type: 'text'}
-  .submit
-    %button.btn.btn-primary.save Save
+.hidden
+  .chart-settings
+    - technology_colors.each_pair do |tech_key, color|
+      %div{ data: { color: color, type: tech_key } }
+
+    - ChartSetting.all.each do |chart_setting|
+      %div{ data: chart_setting.attributes }
+
+  .prompt
+    .message
+    .input
+      %input.form-control.prompt-message{type: 'text'}
+    .submit
+      %button.btn.btn-primary.save Save

@@ -1,0 +1,5 @@
+---
+name: "Space heating demand"
+color: '#ECC59E'
+area_color: '#ECC59E'
+axis_label: 'kW'

@@ -1,0 +1,6 @@
+---
+name: "8 bar"
+color: '#1F77B4'
+area_color: '#1F77B4'
+area: false
+axis_label: 'kW'

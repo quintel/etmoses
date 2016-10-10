@@ -16,7 +16,6 @@ module GasAssetLists
     def to_h
       {
         name: 'Gas load chart',
-        key: 'gas',
         values: LEVELS.map do |name, key|
           { name: name, type: "gas_#{key}", load: summarize_load(key) }
         end

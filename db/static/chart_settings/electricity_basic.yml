@@ -1,0 +1,5 @@
+---
+name: "Electricity"
+color: '#1F77B4'
+area_color: '#78add2'
+axis_label: 'kW'
