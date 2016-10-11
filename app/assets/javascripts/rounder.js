@@ -37,7 +37,7 @@ var Rounder = (function () {
     Rounder.prototype = {
         eachInput: function (method) {
             $(this.template).find("input[data-round]")
-                .toArray().forEach(function(input) {
+                .toArray().forEach(function (input) {
                     method.call($(input));
                 });
         },
@@ -51,7 +51,7 @@ var Rounder = (function () {
             this.template.addEventListener('blur', onInputBlur.bind(this), true);
         },
 
-        round: function() {
+        round: function () {
             var rounding,
                 correction,
                 rounded,
@@ -59,8 +59,8 @@ var Rounder = (function () {
                 roundTo = this.data('round');
 
             if (!isNaN(value)) {
-                rounding   = value + "e+" + roundTo,
-                correction = "e-" + roundTo,
+                rounding   = value + "e+" + roundTo;
+                correction = "e-" + roundTo;
                 rounded    = +(Math.round(rounding) + correction);
 
                 this.val(rounded);

@@ -184,6 +184,8 @@ var EditableTable = (function () {
                 .off('change.editable')
                 .on('change.editable', markAsEditable.bind(this));
 
+            new Rounder($(this.selector)[0]).initialize();
+
             this.emptyButton
                 .off("click")
                 .on("click", enableLastRow.bind(this));
