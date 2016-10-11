@@ -4,7 +4,7 @@ class TestingGroundsController < ResourceController
 
   respond_to :html, :json
   respond_to :csv, only: :technology_profile
-  respond_to :js, only: [:update, :save_as, :render_template]
+  respond_to :js, only: [:update, :render_template]
 
   before_filter :find_testing_ground, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -165,9 +165,15 @@ class TestingGroundsController < ResourceController
   end
 
   def save_as
-    @testing_ground = TestingGround::SaveAs.run(
-      @testing_ground, testing_ground_params[:name], current_user
-    )
+    begin
+      @testing_ground = TestingGround::SaveAs.run(
+        @testing_ground, testing_ground_params[:name], current_user
+      )
+
+      render json: { redirect: testing_ground_path(@testing_ground) }
+    rescue ActiveRecord::RecordInvalid => ex
+      render json: { errors: ex.record.errors }, status: 422
+    end
   end
 
   # DELETE /testing_grounds/:id
