@@ -11,6 +11,8 @@ defaults:
 exists_as_technology_in_etengine: false
 expandable: true
 whitelisted_attributes:
+  - composite
+  - composite_value
   - demand
   - initial_investment
   - input_capacity
@@ -23,6 +25,7 @@ whitelisted_attributes:
   - technical_lifetime
   - units
   - volume
+
 technologies:
   - households_space_heater_district_heating_steam_hot_water
   - households_space_heater_electricity
@@ -32,5 +35,6 @@ technologies:
   - households_space_heater_combined_network_gas
   - households_space_heater_hybrid_heatpump_air_water_electricity_gas
   - households_space_heater_hybrid_heatpump_air_water_electricity_electricity
+
 importable_gqueries:
   demand: etmoses_space_heating_buffer_demand

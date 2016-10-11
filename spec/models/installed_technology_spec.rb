@@ -296,4 +296,24 @@ RSpec.describe InstalledTechnology do
       expect(technology.components.map(&:class)[0]).to eq(InstalledTechnology)
     end
   end
+
+  describe "convert to a hash" do
+    it "doesn't include blank attributes" do
+      expect(InstalledTechnology.new(capacity: nil).to_h).to eq({
+        performance_coefficient: 1, units: 1, type: 'generic'
+      })
+    end
+
+    it "doesn't include non-whitelisted attributes" do
+      expect(InstalledTechnology.new(buffer: 'test').to_h).to eq({
+        performance_coefficient: 1, units: 1, type: 'generic'
+      })
+    end
+
+    it "does include non-blank whitelisted attributes" do
+      expect(InstalledTechnology.new(demand: 1.0).to_h).to eq({
+        performance_coefficient: 1, units: 1, type: 'generic', demand: 1.0
+      })
+    end
+  end
 end # InstalledTechnology

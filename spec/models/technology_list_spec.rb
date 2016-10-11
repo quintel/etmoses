@@ -4,17 +4,17 @@ RSpec.describe TechnologyList do
   let(:hash) { YAML.load(<<-YML.strip_heredoc) }
     ---
     lv1:
-    - type: One
+    - type: one
       capacity: 1.2
       profile_key: 'profile_1'
-    - type: Two
+    - type: two
       capacity: -0.3
       profile_key: 'profile_1'
     lv2:
-    - type: Three
+    - type: three
       capacity: 3.2
       profile_key: 'profile_1'
-    - type: Four
+    - type: four
       capacity: 0.1
       profile_key: 'profile_1'
       components:
@@ -37,14 +37,14 @@ RSpec.describe TechnologyList do
     end
 
     it 'includes technologies' do
-      expect(parsed.detect { |row| row['type'] == 'One' }).to be
-      expect(parsed.detect { |row| row['type'] == 'Two' }).to be
-      expect(parsed.detect { |row| row['type'] == 'Three' }).to be
-      expect(parsed.detect { |row| row['type'] == 'Four' }).to be
+      expect(parsed.detect { |row| row['type'] == 'one' }).to be
+      expect(parsed.detect { |row| row['type'] == 'two' }).to be
+      expect(parsed.detect { |row| row['type'] == 'three' }).to be
+      expect(parsed.detect { |row| row['type'] == 'four' }).to be
     end
 
     it 'includes technology attributes' do
-      tech = parsed.detect { |row| row['type'] == 'Two' }
+      tech = parsed.detect { |row| row['type'] == 'two' }
 
       expect(tech['connection']).to eq('lv1')
       expect(tech['capacity']).to eq('-0.3')
@@ -112,11 +112,11 @@ RSpec.describe TechnologyList do
     end
 
     it 'includes the defined technologies' do
-      expect(list['lv1'][0].type).to eq('One')
-      expect(list['lv1'][1].type).to eq('Two')
+      expect(list['lv1'][0].type).to eq('one')
+      expect(list['lv1'][1].type).to eq('two')
 
-      expect(list['lv2'][0].type).to eq('Three')
-      expect(list['lv2'][1].type).to eq('Four')
+      expect(list['lv2'][0].type).to eq('three')
+      expect(list['lv2'][1].type).to eq('four')
     end
   end # .from_hash
 

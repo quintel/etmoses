@@ -8,6 +8,7 @@ defaults:
   capacity: 4.4
 expandable: true
 profile_required: false
+
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
@@ -17,7 +18,9 @@ importable_attributes:
   - technical_lifetime
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
+
 whitelisted_attributes:
+  - capacity
   - demand
   - initial_investment
   - input_capacity

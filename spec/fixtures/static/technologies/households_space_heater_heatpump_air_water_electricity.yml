@@ -20,6 +20,7 @@ importable_attributes:
 
 whitelisted_attributes:
   - buffer
+  - capacity
   - demand
   - initial_investment
   - input_capacity

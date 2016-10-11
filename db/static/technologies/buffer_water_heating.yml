@@ -22,6 +22,8 @@ technologies:
   - households_water_heater_resistive_electricity
 
 whitelisted_attributes:
+  - composite
+  - composite_value
   - demand
   - initial_investment
   - input_capacity

@@ -6,6 +6,7 @@ visible: true
 composite: false
 defaults:
   capacity: -1.6
+
 expandable: true
 importable_attributes:
   - electricity_output_capacity
@@ -15,8 +16,11 @@ importable_attributes:
   - technical_lifetime
   - variable_operation_and_maintenance_costs_for_ccs_per_full_load_hour
   - variable_operation_and_maintenance_costs_per_full_load_hour
+
 whitelisted_attributes:
+  - capacity
   - demand
+  - full_load_hours
   - initial_investment
   - om_costs_for_ccs_per_full_load_hour
   - om_costs_per_full_load_hour
@@ -24,6 +28,7 @@ whitelisted_attributes:
   - output_capacity
   - performance_coefficient
   - profile
+  - profile_key
   - technical_lifetime
   - units
   - volume

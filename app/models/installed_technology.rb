@@ -278,12 +278,16 @@ class InstalledTechnology
     position_relative_to_buffer.present? || carrier == :hybrid
   end
 
+  def deletable(key, value)
+    value.blank? || !technology.whitelisted.include?(key.to_s)
+  end
+
   def as_json(*)
-    super.delete_if { |_, v| v.blank? }
+    super.delete_if(&method(:deletable))
   end
 
   def to_h
-    super.delete_if { |_, v| v.blank? }
+    super.delete_if(&method(:deletable))
   end
 
   private

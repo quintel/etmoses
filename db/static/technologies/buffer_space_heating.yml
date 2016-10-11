@@ -20,6 +20,8 @@ technologies:
   - households_space_heater_hybrid_heatpump_air_water_electricity
 
 whitelisted_attributes:
+  - composite
+  - composite_value
   - demand
   - initial_investment
   - input_capacity

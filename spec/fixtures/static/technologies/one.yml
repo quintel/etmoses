@@ -6,7 +6,6 @@ visible: true
 composite: false
 expandable: false
 whitelisted_attributes:
-  - capacity
   - demand
   - initial_investment
   - input_capacity
