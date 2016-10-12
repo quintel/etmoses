@@ -5,6 +5,8 @@ var AddTechnology = (function () {
     'use strict';
 
     function finalize() {
+        var animOffset;
+
         AddedTechnologiesValidator.validate();
 
         window.currentTechnologiesForm.markAsEditing();
@@ -12,6 +14,14 @@ var AddTechnology = (function () {
 
         TechnologyTemplateFinalizer.update.call(this.newTemplate[0]);
 
+        if (this.newTemplate.hasClass("buffer-child")) {
+            animOffset = ($(window).height() / 2) -
+                (this.newTemplate.outerHeight() / 2);
+
+            $.scrollTo(this.newTemplate, 500, { offset: { top: -animOffset } });
+        }
+
+        window.currentTechnologiesForm.focusTemplate.call(this.newTemplate);
         window.currentTechnologiesForm.parseHarmonicaToJSON();
     }
 

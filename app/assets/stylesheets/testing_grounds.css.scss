@@ -414,6 +414,12 @@ table.table.scenarios{
       border-bottom-color: #ddd;
     }
 
+    &.focus{
+      border-left: #99cff9 5px solid;
+      margin-left: -6px;
+      padding-left: 16px;
+    }
+
     .advanced-actions {
       .remove-row {
         color: #d9534f;
@@ -458,7 +464,7 @@ table.table.scenarios{
       padding: 7px 0;
 
       &.text, &.advanced{
-        width: 400px;
+        width: 395px;
         float: left;
       }
 
