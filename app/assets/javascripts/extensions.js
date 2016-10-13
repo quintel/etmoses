@@ -80,7 +80,13 @@ String.prototype.camelize = function () {
     return this.replace(/[-_\s]+(.)?/g, function (_, c) {
       return c ? c.toUpperCase() : '';
     });
-}
+};
+
+String.prototype.toTitleCase = function () {
+    return this.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+};
 
 // Polyfill for find
 if (!Array.prototype.find) {

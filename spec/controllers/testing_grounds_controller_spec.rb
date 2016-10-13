@@ -412,33 +412,47 @@ RSpec.describe TestingGroundsController do
     let(:testing_ground){ FactoryGirl.create(:testing_ground) }
 
     it "counts 2 testing grounds" do
-      post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "Test" }
+      post :save_as, format: :js,
+        id: testing_ground.id, testing_ground: { name: "Test" }
 
       expect(TestingGround.count).to eq(2)
     end
 
     it "saves as a new name" do
-      post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "New name" }
+      post :save_as, format: :js,
+        id: testing_ground.id, testing_ground: { name: "New name" }
 
       expect(TestingGround.last.name).to eq("New name")
       expect(TestingGround.first.name).to eq("My Testing Ground")
     end
 
     it "changes user" do
-      post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "New name" }
+      post :save_as, format: :js,
+        id: testing_ground.id, testing_ground: { name: "New name" }
 
       expect(TestingGround.last.user).to eq(admin)
     end
 
+    it "name too long" do
+      post :save_as, format: :js,
+        id: testing_ground.id, testing_ground: { name: ("New name" * 25) }
+
+      expect(JSON.parse(response.body)['errors']).to eq({
+        "name" => ["is too long (maximum is 100 characters)"]
+      })
+    end
+
     describe "selected strategies" do
       it "counts 2 selected strategies" do
-        post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "Test" }
+        post :save_as, format: :js,
+          id: testing_ground.id, testing_ground: { name: "Test" }
 
         expect(SelectedStrategy.count).to eq(2)
       end
 
       it "last selected strategy belongs to the last created testing ground" do
-        post :save_as, format: :js, id: testing_ground.id, testing_ground: { name: "Test" }
+        post :save_as, format: :js,
+          id: testing_ground.id, testing_ground: { name: "Test" }
 
         expect(SelectedStrategy.last.testing_ground).to eq(TestingGround.last)
       end

@@ -1,40 +1,86 @@
-/*globals document,customPrompt*/
+/*globals CustomPrompt*/
 
-$(document).on('page:change', function () {
+var SaveAsForm = (function () {
     'use strict';
 
-    var nameInput = $("input#testing_ground_name");
-
-    function submitSaveAsForm() {
-        var form = $(this).parents("form");
-        form.attr("action", $(this).data('url'));
-        form.submit();
+    function redirectToClonedLes(data) {
+        window.location.replace(data.redirect);
     }
 
-    function promptCallback(newName) {
-        nameInput.val(newName);
+    function displayErrors(e, f) {
+        var field,
+            errors        = e.responseJSON.errors,
+            errorField    = this.customPrompt.$content.find(".alert-danger"),
+            messageHolder = $("<div>");
 
-        submitSaveAsForm.call(this);
+        errorField.removeClass("hidden").html('');
+
+        for (field in errors) {
+            errors[field].forEach(function (message) {
+                messageHolder.text(field.toTitleCase() + " " + message);
+
+                errorField.append(messageHolder);
+            });
+        };
+    }
+
+    function submitSaveAsForm() {
+        $.ajax({
+            url: this.formAction,
+            type: "PATCH",
+            data: {
+                testing_ground: {
+                    name: this.nameInput.val()
+                }
+            },
+            success: redirectToClonedLes,
+            error: displayErrors.bind(this)
+        });
     }
 
     function onSaveAs(e) {
         e.preventDefault();
 
-        if (nameInput.hasClass('changed')) {
+        if (this.nameInput.hasClass('changed')) {
             submitSaveAsForm.call(this);
         } else {
-            customPrompt(
-                "Please set a name for your new LES",
-                nameInput.val(),
-                promptCallback.bind(this)
+            this.customPrompt = CustomPrompt.prompt(
+                "Please set a new name for your LES",
+                this.nameInput.val(),
+                submitSaveAsForm.bind(this)
             );
+            this.nameInput = this.customPrompt.$content.find(".prompt-message");
         }
     }
 
-    nameInput.on('change.name', function () {
-        nameInput.addClass('changed').off('change.name');
-    });
+    SaveAsForm.prototype = {
+        initialize: function () {
+            this.context
+                .off("click.onSaveAs")
+                .on("click.onSaveAs", onSaveAs.bind(this));
 
-    $(".save_as").off("click.onSaveAs");
-    $(".save_as").on("click.onSaveAs", onSaveAs);
+            this.nameInput.on('change.name', function () {
+                this.nameInput.addClass('changed').off('change.name');
+            }.bind(this));
+        }
+    };
+
+    function SaveAsForm(context) {
+        this.context    = context;
+        this.nameInput  = $("input#testing_ground_name");
+        this.formAction = this.context.data('url');
+        this.form       = this.nameInput.parents("form");
+    }
+
+    return SaveAsForm;
+}());
+
+$(document).on('page:change', function () {
+    'use strict';
+
+    var saveAs = $(".save_as");
+
+    if (saveAs.length > 0) {
+        new SaveAsForm(saveAs).initialize();
+    }
 });
