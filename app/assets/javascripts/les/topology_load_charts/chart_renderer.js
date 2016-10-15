@@ -1,4 +1,4 @@
-/*globals CSV,D3LoadChart,StrategyHelper*/
+/*globals CSV,StrategyHelper*/
 
 var ChartRenderer = (function () {
     'use strict';
@@ -39,12 +39,9 @@ var ChartRenderer = (function () {
     }
 
     function downloadLoad(loadType) {
-        var loads      = [],
-            chartTypes = ['load', 'load_strategies',
-                          'gas', 'gas_strategies',
-                          'heat', 'heat_strategies'];
+        var loads = [];
 
-        chartTypes.forEach(function (chartType) {
+        window.currentTree.availableCharts().forEach(function (chartType) {
             if (this[chartType]) {
                 [chartType].concat(this[chartType][loadType]).forEach(function (value, i) {
                     if (loads[i]) {
@@ -113,11 +110,14 @@ var ChartRenderer = (function () {
     }
 
     function isValidNodeData() {
-        var d = this.nodeData;
+        var chart,
+            d = this.nodeData;
 
-        return (d.load && d.load.total && d.load.total.length) ||
-               (d.gas  && d.gas.total  && d.gas.total.length) ||
-               (d.heat && d.heat.total && d.heat.total.length);
+        return window.currentTree.availableCharts().some(function (chartType) {
+            chart = d[chartType];
+
+            return chart && chart.total && chart.total.length;
+        });
     }
 
     function renderLoadChart() {
