@@ -119,9 +119,9 @@
       %span.sep
         = link_to_etm_scenario('Local scenario', @testing_ground.scenario_id)
 
-    - if @testing_ground.market_model
+    - if @testing_ground.market_model && @testing_ground.market_model.market_model_template
       %span.sep
-        = link_to @testing_ground.market_model.name, market_model_path(@testing_ground.market_model)
+        = link_to @testing_ground.market_model.market_model_template.name, market_model_templates_path(@testing_ground.market_model.market_model_template)
 
 .hidden
   .testing_ground_id= @testing_ground.id

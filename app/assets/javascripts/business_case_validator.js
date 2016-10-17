@@ -5,14 +5,15 @@ var BusinessCaseValidator = function (form) {
 
     return {
         validate: function () {
-            var data = {
-                business_case: {
-                    topology_id: $(form).find("select#import_topology_id").val(),
-                    market_model_id: $(form).find("select#import_market_model_id").val()
-                }
-            };
+            var topologyTemplateId    = form.find("#import_topology_template_id").val(),
+                marketModelTemplateId = form.find("#import_market_model_template_id").val();
 
-            Ajax.json("/validate_business_case", data, this.warn);
+            Ajax.json("/validate_business_case", {
+                business_case: {
+                    topology_template_id: parseInt(topologyTemplateId, 10),
+                    market_model_template_id: parseInt(marketModelTemplateId, 10)
+                }
+            }, this.warn);
         },
 
         warn: function (data) {

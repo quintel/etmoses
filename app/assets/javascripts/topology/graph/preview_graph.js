@@ -117,7 +117,7 @@ Topology.PreviewGraph = (function () {
 
         this.id            = "topology-graph-full";
         this.scope         = scope;
-        this.presetData    = JSON.parse($(this.scope).find(".data").text());
+        this.presetData    = $(this.scope).data("graph");
         this.lineSpace     = 0;
         this.width         = 1140;
         this.height        = 600;
@@ -130,3 +130,11 @@ Topology.PreviewGraph = (function () {
 
     return PreviewGraph;
 }());
+
+$(document).on("page:change", function () {
+    'use strict';
+
+    if ($("div.template-graph").length > 0) {
+        new Topology.PreviewGraph(".template-graph").draw();
+    }
+});

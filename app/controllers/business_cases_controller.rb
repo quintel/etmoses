@@ -47,11 +47,15 @@ class BusinessCasesController < ResourceController
   end
 
   def validate
-    @topology = Topology.find(params[:business_case][:topology_id])
-    @market_model = MarketModel.find(params[:business_case][:market_model_id])
+    @topology_template = TopologyTemplate.find(
+      params[:business_case][:topology_template_id])
+
+    @market_model_template = MarketModelTemplate.find(
+      params[:business_case][:market_model_template_id])
 
     render json: {
-      valid: Finance::BusinessCaseValidator.new(@topology, @market_model).valid?
+      valid: Finance::BusinessCaseValidator.new(
+        @topology_template, @market_model_template).valid?
     }
   end
 

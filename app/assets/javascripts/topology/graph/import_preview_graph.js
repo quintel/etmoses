@@ -105,7 +105,7 @@ Topology.ImportPreviewGraph = (function () {
         this.style         = "simple";
         this.lineSpace     = 0;
         this.margin        = { left: 20, top: 15 };
-        this.width         = 500;
+        this.width         = $(this.scope).width() || 500;
         this.height        = 250;
         this.radius        = 3.5;
         this.nodeColor     = "#999";
@@ -115,3 +115,11 @@ Topology.ImportPreviewGraph = (function () {
 
     return ImportPreviewGraph;
 }());
+
+$(document).on("page:change", function () {
+    $(".topology-featured .topology-template-graph").each(function () {
+        var data  = $(this).data('graph');
+
+        new Topology.ImportPreviewGraph(this, data).draw();
+    });
+});

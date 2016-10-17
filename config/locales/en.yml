@@ -104,13 +104,13 @@ en:
 
   import:
     form:
-      topology_id:
+      topology_template_id:
         tooltip: >
           Select a network topology for your local energy solution. To inspect
           existing topologies you can visit the topology page in the main menu.
           You can also create a new topology using the "create new" submenu of
           the topology menu item. For more information you can view the user documentation.
-      market_model_id:
+      market_model_template_id:
         tooltip: >
           Select an existing market model for your local energy solution. To inspect
           existing market models you can visit the market model page in the main menu.
@@ -122,19 +122,6 @@ en:
           technologies and base-loads from this scaled scenario will be imported
           into your local energy solution and connected to the end-points of the
           local network.
-
-  topologies:
-    form:
-      public:
-        tooltip: >
-          You can choose to make your topology private or public. A private
-          topology can be viewed only by you. A public topology can be viewed by
-          anyone but only edited by you.
-      graph:
-        tooltip: >
-          Here you can specify the structure, capacity and cost parameters of
-          your network topology. Please refer to the topology syntax page for
-          details.
 
   load_profiles:
     form:

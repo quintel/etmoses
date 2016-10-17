@@ -23,9 +23,9 @@ class TestingGround::SaveAs
       duplicate.name = @name
       duplicate.user = @user
 
-      duplicate.save!
-
       duplicate_associations!(duplicate)
+
+      duplicate.save!
     end
 
     duplicate

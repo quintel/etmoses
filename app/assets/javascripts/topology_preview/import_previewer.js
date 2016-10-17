@@ -5,12 +5,12 @@ $(document).on("page:change", function() {
         newImportForm = $("form#new_import")
 
     if (newImportForm.length > 0) {
-        topologySelect = newImportForm.find("select#import_topology_id");
+        topologySelect = newImportForm.find("select#import_topology_template_id");
 
         function getTopology() {
             $.ajax({
                 type: "GET",
-                url: "/topologies/" + $(this).val() + ".json",
+                url: "/topology_templates/" + $(this).val() + ".json",
                 dataType: "json",
                 success: displayPreview
             });

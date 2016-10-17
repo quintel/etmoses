@@ -39,9 +39,7 @@ Topology.Form = (function () {
             });
 
             if (window.TopologyEditor.isRemote) {
-                profile = JSON.parse(
-                    $("textarea#testing_ground_technology_profile").text()
-                );
+                profile = JSON.parse($("textarea.topology-graph").text());
 
                 this.nameInput.prop("disabled",
                     (!!profile[d.name] && profile[d.name].length > 0));
@@ -58,7 +56,6 @@ Topology.Form = (function () {
     function Form(scope) {
         this.tab       = new Tab("#topology");
         this.form      = scope.parents('form');
-        this.remote    = this.form.data('remote');
         this.scope     = scope.find(".node-information");
         this.nameInput = this.scope.find("input#name");
     }

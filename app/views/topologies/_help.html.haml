@@ -1,0 +1,27 @@
+%h2 Electricity infrastructure
+
+.help-block
+  %p
+    The editable YAML file below allows you to define the structure (topology)
+    and other properties of the electricity network. Most importantly you
+    can&hellip;
+  %ul
+    %li
+      Change capacities, costs and lifetimes of network components
+    %li
+      Assign stakeholder to the nodes in the network to be used in the Market
+      model rules
+
+  More information on can be found in the <a href='https://github.com/quintel/etmoses/wiki/Topologies'>documentation</a>.
+
+- if topology.errors.any?
+  %ul.errors
+    %li.topology-syntax-error
+      For help with your topology, read the
+      %a(href="https://github.com/quintel/documentation/blob/master/etmoses/topology_syntax.md" title="Topology Syntax")
+        %span.glyphicon.glyphicon-book
+        %span.text Topology Syntax documentation
+
+    - topology.errors.full_messages.uniq.each do |message|
+      %li= message
+

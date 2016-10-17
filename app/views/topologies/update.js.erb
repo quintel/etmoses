@@ -1,0 +1,6 @@
+$("#topology form .errors").html("<%= escape_javascript(render partial: "shared/errors", locals: { errors: @topology.errors }) %>");
+
+$("#topology span.wait").addClass("hidden");
+$("#topology input[type=submit]").removeClass("disabled");
+$("a[href='#topology']").removeClass("editing").toggleClass("error", <%= @topology.errors.any? %>);
+

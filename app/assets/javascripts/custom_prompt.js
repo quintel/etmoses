@@ -3,7 +3,7 @@ var CustomPrompt = (function () {
 
     return {
         prompt: function (title, input, callback) {
-            this.callback  = callback || function () { return };
+            this.callback  = callback || function () { return; };
 
             this.template = $(".prompt");
             this.template.find(".message").text(title);
@@ -18,5 +18,5 @@ var CustomPrompt = (function () {
 
             return this.popup;
         }
-    }
+    };
 }());

@@ -1,4 +1,4 @@
-/*globals D3LineGraph,D3StackedBarGraph,StaticLoadChart*/
+/*globals D3LineGraph,D3StackedBarGraph,Graph,StaticLoadChart*/
 
 $(document).on('page:change', function () {
     'use strict';

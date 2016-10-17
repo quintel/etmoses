@@ -105,7 +105,7 @@ Topology.GraphData = (function () {
     };
 
     function GraphData(scope) {
-        this.scope = scope.find("#topology_graph");
+        this.scope = scope.find(".topology-graph");
         this.graph = scope.data('graph') || data;
     }
 

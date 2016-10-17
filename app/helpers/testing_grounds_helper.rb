@@ -1,18 +1,19 @@
 module TestingGroundsHelper
-  def import_topology_select_tag(form)
-    topologies = Topology.named.map do |topo|
+  def import_topology_template_select_tag(form)
+    default = TopologyTemplate.default
+    topology_templates = policy_scope(TopologyTemplate).named.map do |topo|
       [(topo.name || "No name specified"), topo.id]
     end
 
-    topologies.unshift(['- - -', '-', { disabled: true }])
-    topologies.unshift(['Default topology', Topology.default.id])
+    topology_templates.unshift(['- - -', '-', { disabled: true }])
+    topology_templates.unshift([default.name, default.id])
 
-    form.select(:topology_id, topologies, {}, class: 'form-control')
+    form.select(:topology_template_id, topology_templates, {}, class: 'form-control')
   end
 
-  def market_model_options
-    MarketModel.all.map do |market_model|
-      [market_model.name, market_model.id]
+  def market_model_template_options
+    policy_scope(MarketModelTemplate).map do |market_model_template|
+      [market_model_template.name, market_model_template.id]
     end
   end
 
@@ -121,7 +122,7 @@ module TestingGroundsHelper
   def testing_ground_view_options(testing_ground)
     { id:             testing_ground.id,
       url:            data_testing_ground_url(testing_ground, format: :json),
-      topology_url:   topology_url(testing_ground.topology, format: :json),
+      topology_url:   testing_ground_topology_url(testing_ground, testing_ground.topology, format: :json),
       strategies_url: update_strategies_testing_ground_url(testing_ground, format: :json)
     }
   end
@@ -172,10 +173,5 @@ module TestingGroundsHelper
     else
       %w(boosting buffering)
     end
-  end
-
-  def allowed_to_change_privacy_settings?(testing_ground)
-    (!testing_ground.topology || !testing_ground.market_model) ||
-    (testing_ground.topology.public? && testing_ground.market_model.public?)
   end
 end

@@ -73,11 +73,11 @@
 
   - if @testing_ground.topology
     .tab-pane.remote.edit#topology{role: "tabpanel"}
-      = render partial: 'topologies/form', locals: { topology: @testing_ground.topology, action: clone_topology_path(@testing_ground.topology, format: :js), hide_cancel: true, remote: true }
+      = render partial: 'topologies/form', locals: { topology: @testing_ground.topology }
 
   - if @testing_ground.market_model
     .tab-pane.remote.edit#market-model{role: "tabpanel"}
-      = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model, action: clone_market_model_path(@testing_ground.market_model, format: :js), remote: true }
+      = render partial: 'market_models/form', locals: { market_model: @testing_ground.market_model }
 
   - if @testing_ground.business_case && @testing_ground.business_case.financials
     .tab-pane.remote.edit#business-case{role: "tabpanel"}

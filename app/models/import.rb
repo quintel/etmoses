@@ -1,7 +1,8 @@
 class Import
   include ActiveModel::Validations
 
-  attr_reader :provider, :scenario_id, :topology_id, :market_model_id
+  attr_reader :provider, :scenario_id, :topology_template_id,
+              :market_model_template_id
 
   validates :provider,    inclusion: { in: [Settings.etengine_host] }
   validates :scenario_id, numericality: { only_integer: true }
@@ -14,9 +15,9 @@ class Import
   def initialize(attributes = {})
     @provider = Settings.etengine_host
 
-    @scenario_id = attributes[:scenario_id]
-    @topology_id = attributes[:topology_id]
-    @market_model_id = attributes[:market_model_id]
+    @scenario_id              = attributes[:scenario_id]
+    @topology_template_id     = attributes[:topology_template_id]
+    @market_model_template_id = attributes[:market_model_template_id]
   end
 
   # Public: Import data from the remote provider and return a TestingGround with
@@ -29,7 +30,7 @@ class Import
       technology_profile:      technology_profile,
       scenario_id:             @scenario_id,
       parent_scenario_id:      parent_scenario_id,
-      market_model_id:         market_model_id)
+      market_model:            market_model)
   end
 
   def etm_title
@@ -42,10 +43,32 @@ class Import
   end
 
   def topology
-    if @topology_id.blank?
-      Topology.default
+    @topology ||= Topology.new(
+      graph: topology_template.graph,
+      topology_template: topology_template
+    )
+  end
+
+  def market_model
+    @market_model ||= MarketModel.new(
+      interactions: market_model_template.interactions,
+      market_model_template: market_model_template
+    )
+  end
+
+  def topology_template
+    if @topology_template_id.blank?
+      TopologyTemplate.default
     else
-      Topology.find(@topology_id)
+      TopologyTemplate.find(@topology_template_id)
+    end
+  end
+
+  def market_model_template
+    if @market_model_template_id.blank?
+      MarketModelTemplate.default
+    else
+      MarketModelTemplate.find(@market_model_template_id)
     end
   end
 

@@ -89,12 +89,14 @@ RSpec.describe BusinessCasesController do
 
   describe "validate business case" do
     it "validates a business case" do
-      topology = FactoryGirl.create(:topology_with_stakeholders)
-      market_model = FactoryGirl.create(:market_model)
+      topology_template = FactoryGirl.create(:topology_template)
+      market_model_template = FactoryGirl.create(:market_model_template)
 
-      post :validate, business_case: { topology_id: topology, market_model_id: market_model }
+      post :validate, business_case: {
+        topology_template_id: topology_template,
+        market_model_template_id: market_model_template }
 
-      expect(JSON.parse(response.body)).to eq({ "valid" => true })
+      expect(JSON.parse(response.body)).to eq({ "valid" => false })
     end
   end
 

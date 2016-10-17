@@ -1,5 +1,7 @@
 class TopologyPolicy < ApplicationPolicy
-  include PrivatePolicy
+  def update?
+    super || record.testing_ground.user == user
+  end
 
   def clone?
     true

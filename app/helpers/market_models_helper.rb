@@ -10,7 +10,7 @@ module MarketModelsHelper
   end
 
   def foundation_options(options = {})
-    values = MarketModel::FOUNDATIONS.map do |key|
+    values = MarketModelTemplate::FOUNDATIONS.map do |key|
       [t("tariff.measure.#{ key.downcase }"), key]
     end.sort_by { |name, _key| name.downcase }
 
@@ -18,7 +18,7 @@ module MarketModelsHelper
   end
 
   def measure_options(options = {})
-    options_for_select(MarketModel::MEASURES, options)
+    options_for_select(MarketModelTemplate::MEASURES, options)
   end
 
   def financial_profile_options(options = {})

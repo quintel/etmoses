@@ -1,0 +1,33 @@
+= render partial: "market_models/help"
+
+= form_for market_model_template, html: { multipart: true } do |form|
+  - if market_model_template.errors.any?
+    %ul.errors
+      - market_model_template.errors.full_messages.uniq.each do |message|
+        %li= message
+
+  .form-group
+    = form.label :name
+    = form.text_field :name, class: "form-control"
+
+  .form-group.permissions
+    = form.label :public, "Permissions"
+
+    .radio-buttons
+      = form.radio_button :public, true
+      = form.label :public, "Public", class: "radio-label"
+      = form.radio_button :public, false
+      = form.label :public, "Private", class: "radio-label"
+
+  - if current_user && current_user.admin?
+    .form-group
+      = form.label :featured
+      = form.check_box :featured
+
+  .hidden.market-model-interactions
+    = form.text_area :interactions, value: JSON.dump(market_model_template.interactions).html_safe
+
+  = render partial: 'market_model_templates/table', locals: { market_model_template: market_model_template }
+
+  .btn-group
+    = form.submit 'Save', class: "btn btn-primary"

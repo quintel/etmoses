@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :topology do
-    name "Topology"
+    topology_template
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: :hv
@@ -15,7 +15,6 @@ FactoryGirl.define do
   end
 
   factory :topology_with_capacity, class: Topology do
-    name "Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: :hv
@@ -34,7 +33,6 @@ FactoryGirl.define do
   end
 
   factory :topology_caching, class: Topology do
-    name "Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: :hv
@@ -55,7 +53,6 @@ FactoryGirl.define do
   end
 
   factory :large_topology, class: Topology do
-    name "Large Topology"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: :hv
@@ -70,7 +67,6 @@ FactoryGirl.define do
   end
 
   factory :topology_with_stakeholders, class: Topology do
-    name "Topology stakeholders"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: hv
@@ -86,7 +82,6 @@ FactoryGirl.define do
   end
 
   factory :topology_with_financial_information, class: Topology do
-    name "Topology finances"
     graph { YAML.load(<<-YML.strip_heredoc) }
       ---
       name: hv

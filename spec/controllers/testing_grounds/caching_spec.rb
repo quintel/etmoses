@@ -15,8 +15,9 @@ RSpec.describe TestingGroundsController do
   let(:topology){ FactoryGirl.create(:topology, graph: topology_graph) }
 
   let(:testing_ground){
-    FactoryGirl.create(:testing_ground, technology_profile: technology_profile,
-                                        topology: topology)
+    FactoryGirl.create(:testing_ground,
+      technology_profile: technology_profile,
+      topology: topology)
   }
 
   let(:technology_profile){

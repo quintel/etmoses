@@ -14,19 +14,13 @@
 .form-group
   = form.label :public, "Permissions"
 
-  - if allowed_to_change_privacy_settings?(testing_ground)
-    .radio-buttons
-      = form.radio_button :public, true
-      = form.label :public, "Public", class: "radio-label"
-      = form.radio_button :public, false
-      = form.label :public, "Private", class: "radio-label"
+  .radio-buttons
+    = form.radio_button :public, true
+    = form.label :public, "Public", class: "radio-label"
+    = form.radio_button :public, false
+    = form.label :public, "Private", class: "radio-label"
 
-      = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
-
-  - else
-    = form.hidden_field :public, value: false
-    .info
-      You use a private topology or market model therefore your LES is private.
+    = tooltip_tag(t(:'testing_grounds.form.public.tooltip'))
 
 - if testing_ground.new_record?
   = form.hidden_field :parent_scenario_id, value: testing_ground.parent_scenario_id

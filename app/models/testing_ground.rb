@@ -4,17 +4,17 @@ class TestingGround < ActiveRecord::Base
   include Privacy
 
   DEFAULT_TECHNOLOGIES = Rails.root.join('db/default_technologies.yml').read
-  CACHE_CLEARING_ATTRS = %w(technology_profile topology_id)
+  CACHE_CLEARING_ATTRS = %w(technology_profile)
 
   serialize :technology_profile, TechnologyList
 
-  belongs_to :topology
-  belongs_to :market_model
   belongs_to :user
   belongs_to :behavior_profile
 
   # All has_one relations are duplicated when a visitor creates a clone of an
   # LES using TestingGround::SaveAs.
+  has_one :market_model,      dependent: :destroy
+  has_one :topology,          dependent: :destroy
   has_one :selected_strategy, dependent: :destroy
   has_one :business_case,     dependent: :destroy
   has_one :gas_asset_list,    dependent: :destroy
@@ -37,6 +37,8 @@ class TestingGround < ActiveRecord::Base
 
   after_save :set_cache_updated_at
 
+  accepts_nested_attributes_for :topology, :market_model
+
   def self.latest_first
     order(created_at: :desc)
   end
@@ -45,19 +47,14 @@ class TestingGround < ActiveRecord::Base
     if user.nil?
       where(
         public: true,
-        market_models: { public: true },
-        topologies: { public: true }
       ).joins(:market_model, :topology)
     else
       # TODO: Rails 5 adds support for "OR". Change this.
-      joins(:market_model, :topology)
-        .where(<<-SQL.strip_heredoc, user.id, true, true, true)
-          `testing_grounds`.`user_id` = ? OR (
-            `testing_grounds`.`public` = ? AND
-            `market_models`.`public` = ? AND
-            `topologies`.`public` = ?
-          )
-        SQL
+      where(<<-SQL.strip_heredoc, user.id, true)
+        `testing_grounds`.`user_id` = ? OR (
+          `testing_grounds`.`public` = ?
+        )
+      SQL
     end
   end
 
