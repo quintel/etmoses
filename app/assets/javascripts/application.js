@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui.min
+//= require jquery.scrollTo.min
 //= require i18n/translations
 //= require turbolinks
 //= require d3

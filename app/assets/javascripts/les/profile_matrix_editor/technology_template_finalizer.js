@@ -96,7 +96,7 @@ var TechnologyTemplateFinalizer = (function () {
         profileSelect.val(profileId);
     }
 
-    /* This has to be a DOMElement it can't be jQuery selection for that
+    /* `this` has to be a DOMElement. It can't be jQuery selection because that
      * will fail
      * */
     return {
@@ -109,6 +109,9 @@ var TechnologyTemplateFinalizer = (function () {
             new BufferSelectBox(this).add();
 
             addOnChangeListener.call(this);
+
+            elem.off("click.focusTemplate")
+                .on("click.focusTemplate", window.currentTechnologiesForm.focusTemplate);
 
             elem.find(".remove-row")
                 .off("click").on("click", RemoveTechnology.remove);
