@@ -17,7 +17,7 @@
 
   .wrapper-tech
     %strong
-      = I18n.t("inputs.#{ technology.type }")
+      = I18n.t("inputs.#{ technology.type || 'unknown' }", default: :'inputs.unknown')
       = technology.name_adjective
 
     - if technology.whitelisted?('profile')

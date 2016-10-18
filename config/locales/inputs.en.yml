@@ -9,6 +9,7 @@ en:
     congestion_battery: Neighbourhood battery
     energy_flexibility_p2g_electricity: Power-To-Gas
     generic: Other
+    unknown: Unknown technology
     households_flexibility_p2h_electricity: Power-To-Heat
     households_flexibility_p2p_electricity: Battery
     households_solar_pv_solar_radiation: Residential PV panel

@@ -82,7 +82,8 @@
                     - techs.each do |tech|
                       %tr{ class: ("danger" unless tech.valid?), "data-tech" => tech.name}
                         %td
-                          .name= tech.name
+                          .name
+                            = I18n.t("inputs.#{ tech.type || 'unknown' }", default: :'inputs.unknown')
                           %i.profile= tech.profile_key
                         %td= tech.capacity && tech.capacity.round(2)
                         %td= tech.carrier_capacity && tech.carrier_capacity.round(2)
