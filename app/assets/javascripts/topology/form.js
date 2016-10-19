@@ -5,7 +5,7 @@ Topology.Form = (function () {
 
     var editableFields = [
         "name", "stakeholder", "investment_cost",
-        "technical_lifetime", "capacity"
+        "technical_lifetime", "capacity", "units"
     ];
 
     function forEachField(iterator) {
@@ -14,11 +14,21 @@ Topology.Form = (function () {
         }.bind(this));
     }
 
+    function parseValue(inputField, name) {
+        var value = inputField.val();
+
+        if (inputField.attr('type') === 'number') {
+            value = parseFloat(value);
+        }
+
+        return value;
+    }
+
     function onUpdateInfo() {
         var obj = {};
 
         forEachField.call(this, function (name) {
-            obj[name] = this.val();
+            obj[name] = parseValue(this, name);
         });
 
         window.TopologyEditor.graphEditor.updateNode(obj);
