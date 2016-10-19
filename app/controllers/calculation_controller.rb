@@ -1,4 +1,6 @@
 class CalculationController < ApplicationController
+  skip_before_filter :authenticate_user!
+
   # POST /testing_grounds/:id/calculation/heat
   def heat
     render json: TestingGround::HeatSummary.new(calculator)
