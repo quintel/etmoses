@@ -10,6 +10,7 @@ class InstalledGasAsset
   attribute :building_year, Integer
   attribute :technical_lifetime, Integer
   attribute :initial_investment, Float
+  attribute :yearly_o_and_m_cost, Float
 
   def decommissioning_year
     building_year + technical_lifetime
@@ -28,7 +29,11 @@ class InstalledGasAsset
   end
 
   def om_costs_per_year
-    part_record.yearly_o_and_m_cost
+    if yearly_o_and_m_cost
+      yearly_o_and_m_cost
+    elsif part
+      part_record.yearly_o_and_m_cost
+    end
   end
 
   # Public: The pressure level (in bars) to which the asset is assigned.
