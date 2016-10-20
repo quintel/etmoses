@@ -27,6 +27,15 @@
   %td.editable
     %input.form-control{name: 'building_year', value: list_item.building_year}
 
+  %td.editable
+    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
+
+  %td.editable
+    %input.form-control{name: 'initial_investment', value: list_item.initial_investment}
+
+  %td.editable
+    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
+
   %td
     = link_to "#", class: "add-row text-success" do
       %span.glyphicon.glyphicon-plus
