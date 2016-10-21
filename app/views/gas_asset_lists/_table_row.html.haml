@@ -1,6 +1,6 @@
 %tr
   %td.editable
-    %select.form-control.pressure_level
+    %select.form-control.pressure_level{ data: { data_type: 'integer' } }
       = options_for_pressure_levels(list_item.pressure_level_index)
 
   %td.editable
@@ -11,7 +11,7 @@
     %select.form-control.type{data: { type: list_item.type } }
 
   %td.editable
-    %input.form-control{name: 'units', value: list_item.units, data: { round: 2 }}
+    %input.form-control{name: 'units', value: list_item.units, data: { round: 2, data_type: 'float' }}
     %span.unit
       %span.pipes
         m
@@ -25,16 +25,16 @@
       = options_for_all_stakeholders(list_item.stakeholder)
 
   %td.editable
-    %input.form-control{name: 'building_year', value: list_item.building_year}
+    %input.form-control{name: 'building_year', value: list_item.building_year, data: { data_type: 'integer' }}
 
   %td.editable
-    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime}
+    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { data_type: 'integer' }}
 
   %td.editable
-    %input.form-control{name: 'initial_investment', value: list_item.initial_investment}
+    %input.form-control{name: 'initial_investment', value: list_item.initial_investment, data: { data_type: 'float' }}
 
   %td.editable
-    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year}
+    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year, data: { data_type: 'float' }}
 
   %td
     = link_to "#", class: "add-row text-success" do

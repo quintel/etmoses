@@ -70,19 +70,19 @@
 
         .form-group
           = label_tag :investment_cost
-          = number_field_tag :investment_cost, nil, class: 'form-control'
+          = text_field_tag :investment_cost, nil, class: 'form-control', data: { data_type: 'float' }
 
         .form-group
           = label_tag :technical_lifetime
-          = number_field_tag :technical_lifetime, nil, class: 'form-control'
+          = text_field_tag :technical_lifetime, nil, class: 'form-control', data: { data_type: 'integer' }
 
         .form-group
           = label_tag :capacity
-          = number_field_tag :capacity, nil, class: 'form-control'
+          = text_field_tag :capacity, nil, class: 'form-control', data: { data_type: 'float' }
 
         .form-group
           = label_tag :units
-          = number_field_tag :units, nil, class: 'form-control'
+          = text_field_tag :units, nil, class: 'form-control', data: { data_type: 'integer' }
 
       .hidden
         = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"

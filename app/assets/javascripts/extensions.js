@@ -57,12 +57,30 @@ $.fn.extend({
     },
 
     /* Returns the value which lives under 'data-raw', if that's not present
-     * return the default 'val()'
+     * return the default 'val()'. Also parses the data according to the data
+     * type that lives under the 'data-data-type'.
      */
     rawValue: function () {
         'use strict';
 
-        return $(this).data('raw') || $(this).val();
+        var value    = $(this).data('raw') || $(this).val(),
+            dataType = $(this).data('dataType');
+
+        if (value) {
+            // Remove any obsolete quotes
+            value = value.replace(/[\'\"]/g, '');
+        }
+
+        if (dataType === 'float') {
+            value = parseFloat(value);
+        } else if (dataType === 'integer') {
+            value = parseInt(value);
+        } else {
+            value = $.trim(value);
+        }
+
+        return value;
+
     }
 });
 

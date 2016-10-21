@@ -28,20 +28,20 @@
             = options_for_primary_heat_assets(list_item.type)
 
         %td.editable
-          %input.form-control{name: 'distance', value: list_item.distance, disabled: 'disabled', data: { round: 1 }}
+          %input.form-control{name: 'distance', value: list_item.distance, disabled: 'disabled', data: { round: 1, data_type: 'float' }}
 
         %td.editable
           %select.form-control.type{disabled: 'disabled'}
             = options_for_heat_source_plant_types(list_item.heat_source)
 
         %td.editable
-          %input.form-control{name: 'investment_costs_per_km', value: list_item.investment_costs_per_km, data: { round: 1 }}
+          %input.form-control{name: 'investment_costs_per_km', value: list_item.investment_costs_per_km, data: { round: 1, data_type: 'float' }}
 
         %td.editable
-          %input.form-control{name: 'om_costs_per_year_per_km', value: list_item.om_costs_per_year_per_km, data: { round: 1 }}
+          %input.form-control{name: 'om_costs_per_year_per_km', value: list_item.om_costs_per_year_per_km, data: { round: 1, data_type: 'float' }}
 
         %td.editable
-          %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { round: 0 }}
+          %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { round: 0, data_type: 'integer' }}
 
         %td.editable
           %select.form-control.stakeholder

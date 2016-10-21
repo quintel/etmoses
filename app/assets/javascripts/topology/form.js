@@ -14,21 +14,11 @@ Topology.Form = (function () {
         }.bind(this));
     }
 
-    function parseValue(inputField, name) {
-        var value = inputField.val();
-
-        if (inputField.attr('type') === 'number') {
-            value = parseFloat(value);
-        }
-
-        return value;
-    }
-
     function onUpdateInfo() {
         var obj = {};
 
         forEachField.call(this, function (name) {
-            obj[name] = parseValue(this, name);
+            obj[name] = this.rawValue();
         });
 
         window.TopologyEditor.graphEditor.updateNode(obj);

@@ -33,10 +33,9 @@ var EditableTable = (function () {
 
     function extractTextfromCells(row) {
         return $(row).find("td.editable").toArray().map(function (cell) {
-            var input = $(cell).find("select:visible").length > 0 ? 'select' : 'input',
-                elem  = $(cell).find(input);
+            var input = $(cell).find("select:visible").length > 0 ? 'select' : 'input';
 
-            return $.trim($(cell).find(input).rawValue());
+            return  $(cell).find(input).rawValue();
         });
     }
 
