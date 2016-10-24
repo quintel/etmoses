@@ -35,7 +35,11 @@ module Network
         @park = Network::Heat::ProductionPark.new(
           must_run:         must_run,
           dispatchable:     dispatchable,
-          # https://github.com/quintel/etmoses/issues/971
+          # Normal heat producers may fill the buffer up to base_volume (by
+          # default, 10kWh), but must-runs may add more to the buffer so as not
+          # to waste excess energy (17.8kWh assuming base volume of 10kWh).
+          #
+          # See https://github.com/quintel/etmoses/issues/971
           volume:           base_volume,
           amplified_volume: base_volume * 1.78
         )
