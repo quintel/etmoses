@@ -192,7 +192,7 @@ class TestingGroundsController < ResourceController
       .require(:testing_ground)
       .permit([:name, :technology_profile, :public, :behavior_profile_id,
                :parent_scenario_id, :technology_profile_csv, :scenario_id,
-               :topology_id, :market_model_id])
+               :topology_id, :market_model_id, :central_heat_buffer_capacity])
 
     if tg_params[:technology_profile_csv]
       tg_params.delete(:technology_profile)

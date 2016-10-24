@@ -26,6 +26,9 @@ class TestingGround < ActiveRecord::Base
   validates :topology, presence: true
   validates :name, presence: true, length: { maximum: 100 }
 
+  validates :central_heat_buffer_capacity,
+    numericality: { greater_than_or_equal_to: 0, allow_nil: true }
+
   validate  :validate_technology_profile_connections, if: :topology
   validate  :validate_technology_profile_types
   validate  :validate_technology_profile_units
@@ -121,7 +124,8 @@ class TestingGround < ActiveRecord::Base
     Network::Builders.for(carrier).build(
       topology.graph,
       TechnologyProfileCalculationDecorator.new(technology_profile).decorate,
-      heat_source_list
+      heat_source_list,
+      central_heat_buffer_capacity: central_heat_buffer_capacity
     )
   end
 
