@@ -15,6 +15,8 @@ var HeatSourceListMustRun = (function () {
 
     function HeatSourceListMustRun(selector) {
         EditableTable.call(this, selector);
+
+        this.setProfiles();
     }
 
     return HeatSourceListMustRun;
