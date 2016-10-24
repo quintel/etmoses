@@ -170,6 +170,8 @@ var EditableTable = (function () {
             this.changeListener = (changeListener || function () { return; });
             this.changeData = (changeData || function () { return; });
 
+            new Rounder($(this.selector)[0]).initialize();
+
             $(this.selector)
                 .off('change.table')
                 .on('change.table', function() {
@@ -183,8 +185,6 @@ var EditableTable = (function () {
             $(this.selector)
                 .off('change.editable')
                 .on('change.editable', markAsEditable.bind(this));
-
-            new Rounder($(this.selector)[0]).initialize();
 
             this.emptyButton
                 .off("click")
