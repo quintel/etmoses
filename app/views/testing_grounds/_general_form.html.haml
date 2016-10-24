@@ -36,3 +36,9 @@
     = form.label :behavior_profile_id, 'Behavior profile'
     .temperature-profile
       = form.select :behavior_profile_id, options_for_behavior_profiles(testing_ground.behavior_profile_id), {include_blank: true}, class: 'form-control'
+
+  .form-group
+    = form.label :central_heat_buffer_capacity, 'Central heat buffer capacity per connection'
+    .input-group(style="width: 150px")
+      = form.number_field :central_heat_buffer_capacity, class: 'form-control', placeholder: '10.0', step: 0.1
+      .input-group-addon kWh

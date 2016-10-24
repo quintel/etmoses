@@ -3,10 +3,12 @@ require_relative '../builders'
 module Network
   module Builders
     class Heat
-      def self.build(tree, techs = TechnologyList.new, heat_sources = nil)
+      def self.build(tree,techs = TechnologyList.new, sources = nil, opts = {})
         new(
-          tree, techs,
-          heat_sources ? HeatSourceListDecorator.new(heat_sources).decorate : []
+          tree,
+          techs,
+          sources ? HeatSourceListDecorator.new(sources).decorate : [],
+          opts
         ).to_graph
       end
 
@@ -16,10 +18,11 @@ module Network
 
       private
 
-      def initialize(tree, techs, heat_sources)
-        @tree         = tree
-        @techs        = techs
+      def initialize(tree, techs, heat_sources, opts)
+        @tree = tree
+        @techs = techs
         @heat_sources = heat_sources
+        @capacity_per_conn = opts[:central_heat_buffer_capacity] || 10.0
       end
 
       def build_graph
@@ -27,12 +30,18 @@ module Network
         dispatchable, must_run =
           sources_to_producers(@heat_sources).partition(&:dispatchable?)
 
+        base_volume = number_of_connections * 4 * @capacity_per_conn
+
         @park = Network::Heat::ProductionPark.new(
           must_run:         must_run,
           dispatchable:     dispatchable,
-          # https://github.com/quintel/etmoses/issues/971
-          volume:           number_of_connections * 4 * 10.0,
-          amplified_volume: number_of_connections * 4 * 17.78
+          # Normal heat producers may fill the buffer up to base_volume (by
+          # default, 10kWh), but must-runs may add more to the buffer so as not
+          # to waste excess energy (17.8kWh assuming base volume of 10kWh).
+          #
+          # See https://github.com/quintel/etmoses/issues/971
+          volume:           base_volume,
+          amplified_volume: base_volume * 1.78
         )
 
         @graph = Graph.new(:heat)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160825140422) do
+ActiveRecord::Schema.define(version: 20161024122719) do
 
   create_table "asset_lists", force: true do |t|
     t.integer  "testing_ground_id"
@@ -142,20 +142,21 @@ ActiveRecord::Schema.define(version: 20160825140422) do
   end
 
   create_table "testing_grounds", force: true do |t|
-    t.text     "technology_profile",  limit: 16777215
+    t.text     "technology_profile",           limit: 16777215
     t.integer  "user_id"
     t.integer  "topology_id"
     t.integer  "market_model_id"
     t.integer  "behavior_profile_id"
-    t.boolean  "public",                               default: true, null: false
+    t.float    "central_heat_buffer_capacity", limit: 24
+    t.boolean  "public",                                        default: true, null: false
     t.integer  "parent_scenario_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "cache_updated_at"
-    t.string   "name",                limit: 100,      default: "",   null: false
+    t.string   "name",                         limit: 100,      default: "",   null: false
     t.integer  "scenario_id"
-    t.integer  "range_start",                          default: 0
-    t.integer  "range_end",                            default: 672
+    t.integer  "range_start",                                   default: 0
+    t.integer  "range_end",                                     default: 672
   end
 
   create_table "topologies", force: true do |t|
