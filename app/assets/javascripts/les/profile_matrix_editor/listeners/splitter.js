@@ -15,7 +15,7 @@ var Splitter = (function () {
             TechnologyTemplateFinalizer.update.call(this);
         });
 
-        window.currentTechnologiesForm.markAsEditing();
+        window.currentTechnologiesForm.tab.markAsEditing();
         window.currentTechnologiesForm.updateCounter.call(this, true);
         window.currentTechnologiesForm.parseHarmonicaToJSON();
     }

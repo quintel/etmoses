@@ -29,6 +29,10 @@ var TechnologiesForm = (function () {
 
             this.parseHarmonicaToJSON();
 
+            this.form.on('change', function () {
+                this.tab.markAsEditing();
+            }.bind(this));
+
             AddedTechnologiesValidator.validate();
         },
 
@@ -50,19 +54,16 @@ var TechnologiesForm = (function () {
             countDom.text("(" + (count += amount) + ")");
         },
 
-        markAsEditing: function () {
-            $("form.edit_testing_ground").addClass("editing");
-            $("ul.nav.nav-tabs li a[href=#technologies]").addClass("editing");
-        },
-
         focusTemplate: function () {
             $(".technologies .technology").removeClass("focus");
             $(this).addClass("focus");
         }
     };
 
-    function TechnologiesForm() {
+    function TechnologiesForm(profilesTable) {
+        this.form       = profilesTable.parents("form");
         this.jsonParser = new MatrixEditorJSONParser();
+        this.tab        = new Tab("#technologies");
     }
 
     return TechnologiesForm;
@@ -71,8 +72,10 @@ var TechnologiesForm = (function () {
 $(document).on("page:change", function () {
     'use strict';
 
-    if ($("#profiles-table").length > 0) {
-        window.currentTechnologiesForm = new TechnologiesForm();
+    var profilesTable = $("#profiles-table");
+
+    if (profilesTable.length > 0) {
+        window.currentTechnologiesForm = new TechnologiesForm(profilesTable);
         window.currentTechnologiesForm.append();
     }
 });

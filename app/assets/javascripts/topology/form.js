@@ -50,12 +50,13 @@ Topology.Form = (function () {
 
         markAsEditing: function () {
             if (window.TopologyEditor.isRemote) {
-                this.form.trigger('change.save_all');
+                this.tab.markAsEditing();
             }
         }
     };
 
     function Form(scope) {
+        this.tab       = new Tab("#topology");
         this.form      = scope.parents('form');
         this.remote    = this.form.data('remote');
         this.scope     = scope.find(".node-information");

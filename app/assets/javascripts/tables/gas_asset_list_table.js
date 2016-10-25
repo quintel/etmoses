@@ -3,8 +3,6 @@
 var GasAssetListTable = (function () {
     'use strict';
 
-    var editableTable, assetUrl;
-
     function setCorrectUnit(part) {
         $(this).find("span.unit span").hide();
         $(this).find("span.unit span." + part).show();
@@ -49,13 +47,13 @@ var GasAssetListTable = (function () {
     function getAssetTypes(e) {
         var gasData = [ getAssetData(e.target) ];
 
-        Ajax.json(assetUrl, { gas_parts: gasData }, function (data) {
+        Ajax.json(this.assetUrl, { gas_parts: gasData }, function (data) {
             setAssetTypeOptions.call(e.target, data[0], false);
         });
     }
 
     function getMultipleAssetTypes(data) {
-        Ajax.json(assetUrl, { gas_parts: data }, function (data) {
+        Ajax.json(this.assetUrl, { gas_parts: data }, function (data) {
             data.forEach(function (options, i) {
                 setAssetTypeOptions.call($($("select.type")[i]), options, true);
             });
@@ -65,11 +63,11 @@ var GasAssetListTable = (function () {
     function setInitialSelectBoxes() {
         var data = [];
 
-        $(editableTable.selector).find("select.part").each(function () {
+        $(this.editableTable.selector).find("select.part").each(function () {
             data.push(getAssetData(this));
         });
 
-        getMultipleAssetTypes(data);
+        getMultipleAssetTypes.call(this, data);
     }
 
     function reloadGasAssetList(e) {
@@ -88,18 +86,18 @@ var GasAssetListTable = (function () {
             .off('click')
             .on("click", reloadGasAssetList);
 
-        $(editableTable.selector).find("select.part, select.pressure_level")
+        $(this.editableTable.selector).find("select.part, select.pressure_level")
             .off("change")
-            .on("change", getAssetTypes);
+            .on("change", getAssetTypes.bind(this));
     }
 
     GasAssetListTable.prototype = {
         append: function () {
             this.addEventListenerToForm();
+            this.editableTable.append(this.updateTable.bind(this));
 
-            editableTable.append(this.updateTable);
             setInitialSelectBoxes.call(this);
-            setEventListeners();
+            setEventListeners.call(this);
         },
 
         addEventListenerToForm: function () {
@@ -111,16 +109,16 @@ var GasAssetListTable = (function () {
         },
 
         updateTable: function () {
-            setEventListeners();
+            setEventListeners.call(this);
 
             $("#gas_asset_list_asset_list")
-                .text(JSON.stringify(editableTable.getData()));
+                .text(JSON.stringify(this.editableTable.getData()));
         }
     };
 
     function GasAssetListTable(selector) {
-        assetUrl      = $(selector).data('url');
-        editableTable = new EditableTable(selector);
+        this.assetUrl      = $(selector).data('url');
+        this.editableTable = new EditableTable(selector);
     }
 
     return GasAssetListTable;

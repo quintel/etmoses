@@ -9,7 +9,7 @@ var AddTechnology = (function () {
 
         AddedTechnologiesValidator.validate();
 
-        window.currentTechnologiesForm.markAsEditing();
+        window.currentTechnologiesForm.tab.markAsEditing();
         window.currentTechnologiesForm.updateCounter.call(this.context, true);
 
         TechnologyTemplateFinalizer.update.call(this.newTemplate[0]);

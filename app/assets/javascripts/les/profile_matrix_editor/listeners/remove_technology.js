@@ -48,7 +48,7 @@ var RemoveTechnology = (function () {
             }
 
             window.currentTechnologiesForm.parseHarmonicaToJSON();
-            window.currentTechnologiesForm.markAsEditing();
+            window.currentTechnologiesForm.tab.markAsEditing();
         }
     };
 }());

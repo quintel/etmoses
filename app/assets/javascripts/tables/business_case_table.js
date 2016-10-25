@@ -1,4 +1,5 @@
 /*globals Poller,StrategyHelper*/
+
 var BusinessCaseTable = (function () {
     'use strict';
 
