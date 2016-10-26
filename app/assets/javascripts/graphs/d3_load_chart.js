@@ -333,6 +333,7 @@ var D3LoadChart = (function () {
             xScale2.domain(xScale.domain());
             yScale2.domain(yScale.domain());
 
+            svg.select(".x.axis").call(xAxis);
             context.select(".x-axis1").call(xAxis2);
 
             svg.selectAll("path").remove();
