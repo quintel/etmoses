@@ -23,6 +23,7 @@ module Network
         @techs = techs
         @heat_sources = heat_sources
         @capacity_per_conn = opts[:central_heat_buffer_capacity] || 10.0
+        @range = opts[:range]
       end
 
       def build_graph
@@ -99,10 +100,8 @@ module Network
       def sources_to_producers(sources)
         sources.map do |source|
           curve = unless source.dispatchable?
-            # TODO This is providing an uncut curve to the technology,
-            # which means weekly calculations are always using Jan 1 to
-            # Jan 7th.
-            source.profile_curve.curves['default']
+            full_length = source.profile_curve.curves['default']
+            @range ? full_length[@range] : full_length
           end
 
           Network::Heat::Producer.new(source, curve, {})
