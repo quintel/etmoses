@@ -31,7 +31,7 @@ var SaveAll = (function () {
         $(this).find("span.wait").removeClass("hidden");
     }
 
-    function change(e) {;
+    function change(e) {
         var tabTarget = $(e.target).parents(".tab-pane").attr("id"),
             tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
 
