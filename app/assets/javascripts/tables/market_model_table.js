@@ -3,24 +3,23 @@
 var MarketModelTable = (function () {
     'use strict';
 
-    var editableTable;
-
     MarketModelTable.prototype = {
         append: function () {
             this.updateTable();
 
-            editableTable.append(this.updateTable);
+            this.editableTable.append(this.updateTable.bind(this));
         },
 
         updateTable: function () {
             $("#market_model_interactions").text(
-                JSON.stringify(editableTable.getData())
+                JSON.stringify(this.editableTable.getData())
             );
         }
     };
 
     function MarketModelTable(selector) {
-        editableTable = new EditableTable(selector);
+        this.editableTable = new EditableTable(selector);
+        this.tab           = new Tab("#market-model");
     }
 
     return MarketModelTable;

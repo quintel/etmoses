@@ -4,13 +4,13 @@
       = options_for_secondary_heat_assets(list_item.type)
 
   %td.editable.investment_costs
-    %input.form-control{name: 'investment_costs', value: list_item.investment_costs, data: { round: 1 }}
+    %input.form-control{name: 'investment_costs', value: list_item.investment_costs, data: { round: 1, data_type: 'float' }}
 
   %td.editable.om_costs_per_year
-    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year, data: { round: 1 }}
+    %input.form-control{name: 'om_costs_per_year', value: list_item.om_costs_per_year, data: { round: 1, data_type: 'float' }}
 
   %td.editable.technical_lifetime
-    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { round: 0 }}
+    %input.form-control{name: 'technical_lifetime', value: list_item.technical_lifetime, data: { round: 0, data_type: 'integer' }}
 
   %td.editable.stakeholder
     %select.form-control.stakeholder

@@ -8,8 +8,8 @@ var HeatAssetListTable = (function () {
 
         this.formField = "#heat_asset_list_asset_list";
         this.tables    = [
-            new HeatAssetListTablePart("table.interactions.heat_asset_list.primary"),
-            new HeatAssetListTablePart("table.interactions.heat_asset_list.secondary")
+            new HeatAssetListPrimaryTable("table.interactions.heat_asset_list.primary"),
+            new HeatAssetListSecondaryTable("table.interactions.heat_asset_list.secondary")
         ];
     }
 

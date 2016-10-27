@@ -31,15 +31,6 @@ var SaveAll = (function () {
         $(this).find("span.wait").removeClass("hidden");
     }
 
-    function change(e) {
-        var tabTarget = $(e.target).parents(".tab-pane").attr("id"),
-            tabHeader = $("ul.nav-tabs li a[href='#" + tabTarget + "']");
-
-        $(e.target).parents("form")
-            .add(tabHeader)
-            .addClass("editing");
-    }
-
     function done(doneCallback) {
         this.completeCount += 1;
 
@@ -51,9 +42,8 @@ var SaveAll = (function () {
     SaveAll.prototype = {
         append: function () {
             this.saveAllButton.off("click").on("click", click.bind(this));
-            this.form
-                .on("submit", submit.bind(this))
-                .on("change.save_all", change.bind(this));
+
+            this.form.on("submit", submit.bind(this));
         },
 
         submitForms: function (success) {

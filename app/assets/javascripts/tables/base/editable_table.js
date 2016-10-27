@@ -33,10 +33,9 @@ var EditableTable = (function () {
 
     function extractTextfromCells(row) {
         return $(row).find("td.editable").toArray().map(function (cell) {
-            var input = $(cell).find("select:visible").length > 0 ? 'select' : 'input',
-                elem  = $(cell).find(input);
+            var input = $(cell).find("select:visible").length > 0 ? 'select' : 'input';
 
-            return $.trim($(cell).find(input).rawValue());
+            return  $(cell).find(input).rawValue();
         });
     }
 
@@ -102,6 +101,7 @@ var EditableTable = (function () {
             this.rowAddedListener(clonedRow);
         }
 
+        this.tab.markAsEditing();
         this.changeListener();
     }
 
@@ -133,6 +133,7 @@ var EditableTable = (function () {
             $(this.selector).find("thead").addClass("hidden");
         }
 
+        this.tab.markAsEditing();
         this.changeListener();
     }
 
@@ -141,15 +142,6 @@ var EditableTable = (function () {
             .find("a.remove-row")
             .off('click')
             .on('click', removeRow.bind(this));
-    }
-
-    function markAsEditable() {
-        var pane = $(this.selector).parents(".tab-pane"),
-            form = pane.find("form");
-
-        $("ul.nav li a[href=#" + pane.attr("id") + "]")
-            .add(form)
-            .addClass("editing");
     }
 
     function enableLastRow(e) {
@@ -184,7 +176,9 @@ var EditableTable = (function () {
 
             $(this.selector)
                 .off('change.editable')
-                .on('change.editable', markAsEditable.bind(this));
+                .on('change.editable', function () {
+                    this.tab.markAsEditing();
+                }.bind(this));
 
             this.emptyButton
                 .off("click")
@@ -236,10 +230,13 @@ var EditableTable = (function () {
     };
 
     function EditableTable(selector) {
-        this.selector             = selector;
-        this.changeListener       = function () { return; };
-        this.changeData           = function () { return; };
-        this.emptyButton          = $(this.selector).prev(".empty-button")
+        this.selector       = selector;
+        this.changeListener = function () { return; };
+        this.changeData     = function () { return; };
+        this.emptyButton    = $(this.selector).prev(".empty-button");
+        this.tabId          = $(this.selector).parents(".tab-pane").attr("id");
+
+        this.tab = new Tab("#" + this.tabId);
 
         this.suspended            = false;
         this.updatedDuringSuspend = false;

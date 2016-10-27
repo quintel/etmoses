@@ -49,7 +49,7 @@ var TechnologyTemplateFinalizer = (function () {
         var obj     = $(this),
             type    = obj.data('type'),
             target  = obj.parents('.technology'),
-            value   = obj.rawValue().replace(/[\'\" ]/g, '');
+            value   = obj.rawValue();
 
         obj.val(value);
         target.set(type, value);
@@ -64,7 +64,7 @@ var TechnologyTemplateFinalizer = (function () {
         }.bind(this));
 
         window.currentTechnologiesForm.parseHarmonicaToJSON();
-        window.currentTechnologiesForm.markAsEditing();
+        window.currentTechnologiesForm.tab.markAsEditing();
     }
 
     function updateEvent(e) {

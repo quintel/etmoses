@@ -1,6 +1,6 @@
 /*globals EditableTable*/
 
-var HeatAssetListTablePart = (function () {
+var HeatAssetListSecondaryTable = (function () {
     'use strict';
 
     /**
@@ -72,9 +72,13 @@ var HeatAssetListTablePart = (function () {
             '(' + Math.round(connections * value) + ' connections)';
     }
 
-    HeatAssetListTablePart.prototype = $.extend({}, EditableTable.prototype, {
+    HeatAssetListSecondaryTable.prototype = $.extend({}, EditableTable.prototype, {
         afterAppendCallback: function () {
             createSliders(this, this.connections);
+        },
+
+        rowAddedListener: function (row) {
+            createSliderForRow.call(this, row);
         }
     });
 
@@ -89,22 +93,15 @@ var HeatAssetListTablePart = (function () {
         createSliders(this, this.connections);
     }
 
-    function rowAddedListener(row) {
-        this.setProfiles();
-
-        createSliderForRow.call(this, row);
-    }
-
-    function HeatAssetListTablePart(selector) {
+    function HeatAssetListSecondaryTable(selector) {
         EditableTable.call(this, selector);
 
         this.connections   = parseInt($(selector).data('connections'), 10);
 
         this.beforeRowAddedListener   = destroySliders.bind(this);
-        this.rowAddedListener         = rowAddedListener.bind(this);
         this.beforeRowDeletedListener = this.beforeRowAddedListener;
         this.rowDeletedListener       = this.rowAddedListener;
     }
 
-    return HeatAssetListTablePart;
+    return HeatAssetListSecondaryTable;
 }());

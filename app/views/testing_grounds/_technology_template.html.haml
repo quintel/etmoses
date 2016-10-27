@@ -58,13 +58,13 @@
     - if technology.whitelisted?('output_capacity')
       .editable.text{class: 'capacity'}
         %span Output capacity [kW]
-        %input.form-control{type: 'text', value: technology.capacity, data: { type: 'capacity', round: 2 } }
+        %input.form-control{type: 'text', value: technology.capacity, data: { type: 'capacity', data_type: 'float', round: 2 } }
         .clearfix
 
     - if technology.whitelisted?('demand')
       .editable.text{class: 'demand'}
         %span Demand [kWh]
-        %input.form-control{type: 'text', value: technology.demand, data: { type: 'demand', round: 0} }
+        %input.form-control{type: 'text', value: technology.demand, data: { type: 'demand', data_type: 'float', round: 0} }
         .clearfix
 
     - if technology.whitelisted?('input_capacity')
@@ -73,13 +73,13 @@
           %span.tick> Input capacity (
           %span.tick.carrier>= technology.carrier
           %span.tick ) [kW]
-        %input.form-control{type: 'text', value: technology.carrier_capacity, disabled: "disabled", data: { type: 'carrier_capacity', round: 2 } }
+        %input.form-control{type: 'text', value: technology.carrier_capacity, disabled: "disabled", data: { type: 'carrier_capacity', data_type: 'float', round: 2 } }
         .clearfix
 
     - if technology.whitelisted?('volume')
       .editable.text{class: 'volume'}
         %span Volume [kWh]
-        %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume', round: 1 }}
+        %input.form-control{type: 'text', value: technology.volume, data: { type: 'volume', data_type: 'float', round: 1 }}
         .clearfix
 
     - if technology.whitelisted?('components')
@@ -96,7 +96,7 @@
                 %span.tick.carrier>= component.carrier
                 %span.tick ) [kW]
 
-              %input.form-control{type: 'text', value: component.capacity, data: { type: "#{ component.type }_capacity", round: 2 } }
+              %input.form-control{type: 'text', value: component.capacity, data: { type: "#{ component.type }_capacity", data_type: 'float', round: 2 } }
               .clearfix
 
           - if component.whitelisted?('performance_coefficient')
@@ -108,12 +108,12 @@
                 %span.tick.carrier>= component.carrier
                 %span.tick )
 
-              %input.form-control{type: 'text', value: component.performance_coefficient, data: { type: "#{ component.type }_performance_coefficient", round: 2 } }
+              %input.form-control{type: 'text', value: component.performance_coefficient, data: { type: "#{ component.type }_performance_coefficient", data_type: 'float', round: 2 } }
               .clearfix
 
     .editable.text.units{class: ('hidden' unless technology.whitelisted?('units'))}
       %span Units
-      %input.form-control{type: 'text', value: technology.units, data: { type: 'units' }}
+      %input.form-control{type: 'text', value: technology.units, data: { type: 'units', data_type: 'integer' }}
       .clearfix
 
     - InstalledTechnology.attribute_set.each do |attribute|
@@ -124,7 +124,7 @@
       - if attribute.options[:advanced] && technology.whitelisted?(attribute.name)
         .editable.advanced.hidden{class: attribute.name}
           %span= t(:"installed_technology_attributes.#{ attribute.name }")
-          %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name, round: 1 } }
+          %input.form-control{type: 'text', value: technology.public_send(attribute.name), data: { type: attribute.name, data_type: 'float', round: 1 } }
           .clearfix
 
     .clearfix

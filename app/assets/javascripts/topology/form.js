@@ -14,21 +14,11 @@ Topology.Form = (function () {
         }.bind(this));
     }
 
-    function parseValue(inputField, name) {
-        var value = inputField.val();
-
-        if (inputField.attr('type') === 'number') {
-            value = parseFloat(value);
-        }
-
-        return value;
-    }
-
     function onUpdateInfo() {
         var obj = {};
 
         forEachField.call(this, function (name) {
-            obj[name] = parseValue(this, name);
+            obj[name] = this.rawValue();
         });
 
         window.TopologyEditor.graphEditor.updateNode(obj);
@@ -60,12 +50,13 @@ Topology.Form = (function () {
 
         markAsEditing: function () {
             if (window.TopologyEditor.isRemote) {
-                this.form.trigger('change.save_all');
+                this.tab.markAsEditing();
             }
         }
     };
 
     function Form(scope) {
+        this.tab       = new Tab("#topology");
         this.form      = scope.parents('form');
         this.remote    = this.form.data('remote');
         this.scope     = scope.find(".node-information");
