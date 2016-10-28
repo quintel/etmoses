@@ -121,7 +121,7 @@
 
     - if @testing_ground.market_model && @testing_ground.market_model.market_model_template
       %span.sep
-        = link_to @testing_ground.market_model.market_model_template.name, market_model_templates_path(@testing_ground.market_model.market_model_template)
+        = link_to @testing_ground.market_model.market_model_template.name, market_model_template_path(@testing_ground.market_model.market_model_template)
 
 .hidden
   .testing_ground_id= @testing_ground.id
