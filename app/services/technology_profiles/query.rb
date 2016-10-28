@@ -13,7 +13,7 @@ module TechnologyProfiles
     private
 
     def technology_keys
-      @distribution.map{|t| t['type']}.uniq
+      @distribution.map{ |t| t['type'] }.uniq
     end
 
     def technology_profiles

@@ -22,17 +22,18 @@ var EdsnSwitch = (function () {
             select.trigger('change');
         }
 
+        target.find('strong').text(I18n.t('inputs.' + actual));
         target.set('profile', parseInt(select.val(), 10));
         target.set('type', actual);
-
-        unitSelector.off('change.units').on('change.units', swapSelectBox.bind(target));
     }
 
     return {
         cloneAndAppendProfileSelect: function (target) {
-            var type = $(target).data('type');
+            var target     = $(target),
+                type       = target.data('type'),
+                isImported = target.hasClass('imported');
 
-            if (validBaseLoads.test(type)) {
+            if (validBaseLoads.test(type) && isImported) {
                 swapSelectBox.call(target);
             }
         }

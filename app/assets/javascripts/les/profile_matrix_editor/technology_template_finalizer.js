@@ -70,8 +70,6 @@ var TechnologyTemplateFinalizer = (function () {
     function updateEvent(e) {
         if (e.target !== e.currentTarget) {
             updateJSON.call(e.target);
-
-            EdsnSwitch.cloneAndAppendProfileSelect(this);
         }
 
         e.stopPropagation();
@@ -79,8 +77,6 @@ var TechnologyTemplateFinalizer = (function () {
 
     function addOnChangeListener() {
         new Rounder(this).initialize();
-
-        EdsnSwitch.cloneAndAppendProfileSelect(this);
 
         this.addEventListener('change', updateEvent, false);
 
@@ -109,6 +105,8 @@ var TechnologyTemplateFinalizer = (function () {
             new BufferSelectBox(this).add();
 
             addOnChangeListener.call(this);
+
+            EdsnSwitch.cloneAndAppendProfileSelect(this);
 
             elem.off("click.focusTemplate")
                 .on("click.focusTemplate", window.currentTechnologiesForm.focusTemplate);
