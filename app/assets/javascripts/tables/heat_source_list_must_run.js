@@ -6,10 +6,6 @@ var HeatSourceListMustRun = (function () {
     HeatSourceListMustRun.prototype = $.extend({}, EditableTable.prototype, {
         rowAddedListener: function () {
             this.setProfiles();
-        },
-
-        mergeCallback: function () {
-            this.setProfiles();
         }
     });
 

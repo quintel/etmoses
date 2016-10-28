@@ -17,11 +17,17 @@ class InstalledHeatSource
   attribute :priority, Integer
 
   def self.default_must_run
-    new(Technology.find_by_key("central_heat_network_must_run").defaults)
+    new_from_tech("central_heat_network_must_run")
   end
 
   def self.default_dispatchable
-    new(Technology.find_by_key("generic").attributes)
+    new_from_tech("generic")
+  end
+
+  def self.new_from_tech(key)
+    technology = Technology.find_by_key(key)
+
+    new(technology.defaults.merge(key: key))
   end
 
   def self.defaults
@@ -49,6 +55,10 @@ class InstalledHeatSource
   def profile_curve(range = nil)
     @profile_curve ||=
       InstalledTechnology::ProfileCurve.new(curves: get_profile, range: range)
+  end
+
+  def technology
+    Technology.find_by_key(key)
   end
 
   private
