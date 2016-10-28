@@ -6,7 +6,7 @@
     %input.form-control{name: 'heat_production', value: list_item.heat_production, data: { round: 2, data_type: 'float' }}
 
   %td.editable.profile
-    = select_tag :profile, [], class: 'form-control profile', disabled: 'disabled', data: { data_type: list_item.profile }
+    = select_tag :profile, options_for_load_profiles(list_item.technology, selected: list_item.profile), class: 'form-control profile', data: { data_type: 'integer' }
 
   %td.editable
     = select_tag :stakeholder, options_for_all_stakeholders(list_item.stakeholder), class: "form-control stakeholder"

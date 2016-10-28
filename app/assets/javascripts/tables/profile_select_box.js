@@ -1,40 +1,32 @@
 /*global ETHelper*/
+
 var ProfileSelectBox = (function () {
     'use strict';
 
     function defaultCloneAndAppend(triggerCallback) {
-        addProfileSelectBox.call(this);
+        var technology           = this.selectKey.val(),
+            currentProfileSelect = $(this.target).find("select.profile"),
+            newProfileSelect     = $(".hidden.profile select." + technology).clone(true, true),
+            newProfileSelectVal  = newProfileSelect.find("option:first-child").val();
 
-        if (triggerCallback) {
-            this.callback(this.target);
-        }
-    }
+        newProfileSelect
+            .val(newProfileSelectVal)
+            .off('change')
+            .on('change', this.callback);
 
-    function addProfileSelectBox() {
-        var profile          = $(this.target).find("select.profile").val(),
-            profileSelectBox = $(".hidden.profile select." + this.technology).clone(true, true);
-
-        $(this.target).find(".editable.profile select")
-            .replaceWith(profileSelectBox)
+        currentProfileSelect
+            .replaceWith(newProfileSelect)
             .trigger('change');
-
-        if (profile) {
-            profileSelectBox.val(profile);
-            profileSelectBox.off('change').on('change', this.callback);
-        }
     }
 
     ProfileSelectBox.prototype = {
         add: function (callback) {
-            var selectKey   = $(this.target).find("select.key");
+            this.selectKey = $(this.target).find("select.key");
+            this.callback  = callback;
 
-            this.technology = selectKey.val(),
-            this.callback   = callback;
-
-            selectKey.off('change')
-                     .on('change', defaultCloneAndAppend.bind(this, true));
-
-            defaultCloneAndAppend.call(this, false);
+            this.selectKey
+                .off('change')
+                .on('change', defaultCloneAndAppend.bind(this));
         }
     };
 

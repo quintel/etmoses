@@ -3,11 +3,7 @@
 var HeatAssetListPrimaryTable = (function () {
     'use strict';
 
-    HeatAssetListPrimaryTable.prototype = $.extend({}, EditableTable.prototype, {
-        rowAddedListener: function () {
-            this.setProfiles();
-        }
-    });
+    HeatAssetListPrimaryTable.prototype = $.extend({}, EditableTable.prototype);
 
     function HeatAssetListPrimaryTable(selector) {
         EditableTable.call(this, selector);
