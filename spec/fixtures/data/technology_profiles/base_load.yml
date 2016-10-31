@@ -5,7 +5,6 @@ lv1:
   :name: Base load
   :type: base_load
   :units: 1
-  :concurrency: max
   :full_load_hours: 0
   :includes: []
   :initial_investment: 6178.9

@@ -41,8 +41,7 @@ RSpec.describe TestingGround do
           "capacity"    => -1.5,
           "demand"      => nil,
           "volume"      => nil,
-          "units"       => 1,
-          "concurrency" => "max"
+          "units"       => 1
         },
         {
           "name"            => "Buffer space heating #1",
@@ -51,8 +50,7 @@ RSpec.describe TestingGround do
           "composite_value" => "buffer_space_heating_1",
           "profile"         => heat_pump_load_profile,
           "volume"          => 0.5,
-          "units"           => 1,
-          "concurrency"     => "max"
+          "units"           => 1
         },
         {
           "name"        => "Heat pump",
@@ -63,8 +61,7 @@ RSpec.describe TestingGround do
           "capacity"    => 1.0,
           "demand"      => nil,
           "volume"      => 0.5,
-          "units"       => 1,
-          "concurrency" => "max"
+          "units"       => 1
         }]
       }
     }
@@ -206,8 +203,7 @@ RSpec.describe TestingGround do
           "capacity"    => nil,
           "demand"      => 2,
           "volume"      => nil,
-          "units"       => 1,
-          "concurrency" => "max"
+          "units"       => 1
         }]
       }
     }
@@ -296,8 +292,7 @@ RSpec.describe TestingGround do
           "capacity"    => nil,
           "demand"      => 2,
           "volume"      => nil,
-          "units"       => 1,
-          "concurrency" => "max"
+          "units"       => 1
         }]
       }
     }

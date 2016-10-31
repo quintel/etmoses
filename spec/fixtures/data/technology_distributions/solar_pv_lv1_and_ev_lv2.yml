@@ -4,12 +4,9 @@
   capacity: "-1.5"
   units: 1
   node: lv1
-  concurrency: min
 - name: Electric car
   type: transport_car_using_electricity
   profile: transport_car_profile
   capacity: "-1.5"
   units: 3
   node: lv2
-  concurrency: min
-

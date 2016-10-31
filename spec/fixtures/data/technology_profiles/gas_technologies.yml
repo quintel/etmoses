@@ -13,7 +13,6 @@ lv1:
   :units: 150
   :volume: 2.9065
   :composite_index:
-  :concurrency: max
   :full_load_hours: 0
   :includes:
   - households_space_heater_heatpump_air_water_electricity
@@ -44,7 +43,6 @@ lv1:
   :units: 150
   :volume:
   :composite_index:
-  :concurrency: max
   :full_load_hours:
   :includes: []
   :initial_investment: 1300.0
@@ -61,7 +59,6 @@ lv1:
   :name: Base load
   :type: base_load
   :units: 1
-  :concurrency: max
   :full_load_hours: 0
   :includes: []
   :initial_investment: 6178.9

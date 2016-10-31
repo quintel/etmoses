@@ -19,7 +19,6 @@ class InstalledTechnology
   #
   # Are submitted with the profile matrix but are not editable by the user.
   attribute :composite_index,                     Integer, hidden: true
-  attribute :concurrency,                         String,  default: 'max', hidden: true
   attribute :full_load_hours,                     Integer, hidden: true
 
   # Advanced features
@@ -49,7 +48,7 @@ class InstalledTechnology
     attribute_set.select{ |attr| attr.options[:hidden] || false }.map(&:name)
 
   PRESENTABLES =
-    EDITABLES - %i(carrier_capacity concurrency)
+    EDITABLES - %i(carrier_capacity)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
