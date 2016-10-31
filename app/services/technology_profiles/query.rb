@@ -5,9 +5,8 @@ module TechnologyProfiles
     end
 
     def query
-      Hash[permits.group_by(&:technology).map do |tech_key, techs|
-        [ tech_key, techs.select(&method(:included_in_concurrency?))
-                         .map(&:load_profile_id) ]
+      Hash[technology_profiles.map do |tech_key, technology_profiles|
+        [ tech_key, technology_profiles.first.load_profile_id ]
       end]
     end
 
@@ -17,13 +16,9 @@ module TechnologyProfiles
       @distribution.map{|t| t['type']}.uniq
     end
 
-    def included_in_concurrency?(tech)
-      tech.load_profile.included_in_concurrency?
-    end
-
-    def permits
+    def technology_profiles
       TechnologyProfile.where(technology: technology_keys)
-        .includes(:load_profile)
+        .group_by(&:technology)
     end
   end
 end

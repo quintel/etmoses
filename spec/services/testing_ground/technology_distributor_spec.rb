@@ -13,8 +13,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
     end
   }
 
-  # Maximum concurrency
-  describe "maximum concurrency" do
+  describe "technologies with no nodes and profiles" do
     describe "assiging the correct profiles" do
       let(:testing_ground_topology){
         TestingGround::TechnologyDistributor.new(
@@ -99,8 +98,7 @@ RSpec.describe TestingGround::TechnologyDistributor do
     end
   end
 
-  # Minimum concurrency
-  describe "minimum concurrency" do
+  describe "basics" do
     describe "small topology" do
       let(:new_profile){ TestingGround::TechnologyDistributor.new(
                            basic_technologies, topology
