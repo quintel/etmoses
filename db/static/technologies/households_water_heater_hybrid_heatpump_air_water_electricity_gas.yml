@@ -1,7 +1,7 @@
 ---
 behavior: hhp_gas
 carrier: gas
-color: "#085304"
+color: "#6a9768"
 defaults:
   capacity: 22.0
   performance_coefficient: 0.9

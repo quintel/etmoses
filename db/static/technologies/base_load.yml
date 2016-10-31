@@ -1,7 +1,7 @@
 ---
 behavior: base_load
 carrier: electricity
-color: "#A3FFFF"
+color: "#c8ffff"
 exists_as_technology_in_etengine: false
 importable_gqueries:
   demand: etmoses_electricity_base_load_demand

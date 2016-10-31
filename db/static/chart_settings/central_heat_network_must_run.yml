@@ -1,0 +1,5 @@
+---
+name: "Central heat network must run"
+color: '#7F818A'
+area_color: '#7F818A'
+axis_label: 'kW'

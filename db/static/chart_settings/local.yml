@@ -1,0 +1,5 @@
+---
+name: "Locally-produced heat"
+color: '#CCCCCC'
+area_color: '#CCCCCC'
+axis_label: 'kW'

@@ -1,23 +1,25 @@
-/*globals LoadChartsSettings*/
+/*globals ChartSettings*/
 
 var Legend = (function () {
     'use strict';
+
+    function setColor(d) {
+        return d.visible ? d.areaColor : "#F1F1F2";
+    }
 
     function onLegendClick(d) {
         if (this.d3Chart.settings.view_as === 'stacked') { return false; }
 
         d.visible = !d.visible;
 
-        LoadChartsSettings[d.type].visible = d.visible;
+        ChartSettings.forChart(d.type).visible = d.visible;
 
         this.d3Chart.setYscaleDomain();
 
         d3.select(".legend-item." + d.type)
             .select(".square")
             .transition()
-            .style("background-color", function (d) {
-                return d.visible ? d.color : "#F1F1F2";
-            });
+            .style("background-color", setColor);
     }
 
     function onLegendMouseOver(d) {
@@ -25,7 +27,7 @@ var Legend = (function () {
             .select(".square")
             .transition()
             .style("background-color", function (d) {
-                return d.color;
+                return d.areaColor;
             });
 
         d3.select(".line." + d.type)
@@ -37,15 +39,12 @@ var Legend = (function () {
         d3.select(this)
             .select(".square")
             .transition()
-            .style("background-color", function (d) {
-                return d.visible ? d.color : "#F1F1F2";
-            });
+            .style("background-color", setColor);
 
         d3.select(".line." + d.type)
             .transition()
             .style("stroke-width", 1.0);
     }
-
 
     Legend.prototype = {
         draw: function (data) {
@@ -71,9 +70,7 @@ var Legend = (function () {
 
             legendItem.append("span")
                 .attr("class", "square")
-                .style("background-color", function (d) {
-                    return d.visible ? d.color : "#F1F1F2";
-                });
+                .style("background-color", setColor);
 
             legendItem.append("span")
                 .text(function (d) {
@@ -84,9 +81,9 @@ var Legend = (function () {
         }
     };
 
-    function Legend(d3Chart, legend) {
+    function Legend(d3Chart) {
         this.d3Chart = d3Chart;
-        this.legend  = legend;
+        this.legend  = d3Chart.legendDiv;
     }
 
     return Legend;

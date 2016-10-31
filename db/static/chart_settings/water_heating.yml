@@ -1,0 +1,5 @@
+---
+name: "Hot water demand"
+color: '#9CC7F9'
+area_color: '#9CC7F9'
+axis_label: 'kW'

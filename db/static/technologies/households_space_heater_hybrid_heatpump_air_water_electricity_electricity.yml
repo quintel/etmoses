@@ -1,7 +1,7 @@
 ---
 behavior: hhp_electricity
 carrier: electricity
-color: "#9ED2A1"
+color: "#c5e4c6"
 defaults:
   capacity: 4.9
   performance_coefficient: 4.5

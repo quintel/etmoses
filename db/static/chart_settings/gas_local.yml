@@ -1,0 +1,6 @@
+---
+name: "0.125 bar"
+color: '#9B5191'
+area_color: '#9B5191'
+area: false
+axis_label: 'kW'

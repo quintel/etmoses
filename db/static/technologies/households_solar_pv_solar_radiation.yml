@@ -1,7 +1,7 @@
 ---
 behavior: conserving
 carrier: electricity
-color: "#D3B129"
+color: "#e4d07e"
 defaults:
   capacity: -1.6
 

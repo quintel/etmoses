@@ -1,0 +1,6 @@
+---
+name: "40 bar"
+color: '#C8C758'
+area_color: '#C8C758'
+area: false
+axis_label: 'kW'

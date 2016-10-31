@@ -1,0 +1,5 @@
+---
+name: "Deficit"
+color: '#FF0000'
+area_color: '#FF0000'
+axis_label: 'kW'

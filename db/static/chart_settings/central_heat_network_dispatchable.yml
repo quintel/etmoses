@@ -1,0 +1,5 @@
+---
+name: "Central heat network dispatchable"
+color: '#0ED976'
+area_color: '#0ED976'
+axis_label: 'kW'

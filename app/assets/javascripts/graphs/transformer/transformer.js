@@ -1,4 +1,4 @@
-/*globals I18n,LoadChartsSettings,StrategyHelper*/
+/*globals I18n,ChartSettings,StrategyHelper*/
 
 var Transformer = (function () {
     'use strict';
@@ -13,18 +13,20 @@ var Transformer = (function () {
 
     function generateCapacity(data, results, scaling) {
         var capacity = (data.capacity * (data.units || 1.0)),
-            extent   = d3.extent(results[0].values, function (d) { return d.x; });
+            extent   = d3.extent(results[0].values, function (d) { return d.x; }),
+            settings = ChartSettings.forChart('capacity');
 
         // scale capacity according to the unit being shown.
         capacity = (capacity * 1000) / scaling.unit.power.multiple;
 
         return {
-            key:      "Capacity",
-            type:     "capacity",
-            color:    LoadChartsSettings.capacity.color,
-            area:     false,
-            visible:  LoadChartsSettings.capacity.visible,
-            values:   [
+            key:       "Capacity",
+            type:      "capacity",
+            area:      false,
+            areaColor: settings.areaColor,
+            color:     settings.color,
+            visible:   settings.visible,
+            values:    [
                 { x: extent[0], y: capacity },
                 { x: extent[1], y: capacity },
                 { x: extent[0], y: capacity * -1 },
@@ -100,37 +102,37 @@ var Transformer = (function () {
 
     function setTotalLoad(datum, values) {
         var type     = (datum.type || this.d3Chart.curveType),
-            settings = LoadChartsSettings[type];
+            settings = ChartSettings.forChart(type);
 
         if (!settings) {
             throw "No settings available for '" + type + "'";
         }
 
         return {
-            key:     settings.name,
-            type:    datum.type,
-            values:  setCoords.call(this, values),
-            area:    datum.area,
-            color:   settings.color,
-            visible: settings.visible
+            key:       settings.name,
+            type:      datum.type,
+            values:    setCoords.call(this, values),
+            area:      datum.area,
+            areaColor: settings.areaColor,
+            color:     settings.color,
+            visible:   settings.visible
         };
     }
 
     function setLoadsPerTech(values) {
-        var tech;
+        var tech, setting;
 
         for (tech in values.tech_loads) {
-            if (!LoadChartsSettings[tech]) {
-                LoadChartsSettings[tech] = { visible: true };
-            }
+            setting = ChartSettings.forChart(tech);
 
             this.results.push({
-                key:     I18n.translations.en.inputs[tech],
-                type:    tech,
-                values:  setCoords.call(this, values.tech_loads[tech]),
-                area:    (this.settings.view_as === 'stacked'),
-                color:   $(".technologies.hidden span." + tech).data('color'),
-                visible: LoadChartsSettings[tech].visible
+                key:       I18n.translations.en.inputs[tech],
+                type:      tech,
+                values:    setCoords.call(this, values.tech_loads[tech]),
+                area:      (this.settings.view_as === 'stacked'),
+                areaColor: setting.color,
+                color:     setting.color,
+                visible:   setting.visible
             });
         }
     }
