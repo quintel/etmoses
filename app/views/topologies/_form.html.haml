@@ -1,105 +1,11 @@
-%h2 Electricity infrastructure
+= render partial: "topologies/help", locals: { topology: topology }
 
-.help-block
-  %p
-    The editable YAML file below allows you to define the structure (topology)
-    and other properties of the electricity network. Most importantly you
-    can&hellip;
-  %ul
-    %li
-      Change capacities, costs and lifetimes of network components
-    %li
-      Assign stakeholder to the nodes in the network to be used in the Market
-      model rules
-
-  More information on can be found in the <a href='https://github.com/quintel/etmoses/wiki/Topologies'>documentation</a>.
-
-- if topology.errors.any?
-  %ul.errors
-    %li.topology-syntax-error
-      For help with your topology, read the
-      %a(href="https://github.com/quintel/documentation/blob/master/etmoses/topology_syntax.md" title="Topology Syntax")
-        %span.glyphicon.glyphicon-book
-        %span.text Topology Syntax documentation
-
-    - topology.errors.full_messages.uniq.each do |message|
-      %li= message
-
-= form_for topology, url: action, html: { remote: remote, multipart: true } do |form|
-  .errors
-  .form-group
-    = form.label :name
-    = form.text_field :name, class: 'form-control'
-    .help-block This field is optional.
-
-  .form-group
-    = form.label :public, "Permissions"
-
-    .radio-buttons
-      = form.radio_button :public, true
-      = form.label :public, "Public", class: "radio-label"
-      = form.radio_button :public, false
-      = form.label :public, "Private", class: "radio-label"
-
-    = tooltip_tag(t(:'topologies.form.public.tooltip'))
-
-  .form-group.graph-width
-    = form.label :graph
-    = tooltip_tag(t(:'topologies.form.graph.tooltip'))
-
-    .graph-topology{ data: { graph: topology.graph.to_json } }
-      .graph-editor
-
-      .node-interface
-        .wrapper
-          .btn-group
-            %button.add-node.btn.btn-xs.btn-success
-              %span.glyphicon.glyphicon-plus
-            %button.remove-node.btn.btn-xs.btn-danger
-              %span.glyphicon.glyphicon-trash
-        .dialogue-arrow ▼
-
-      .node-information
-        .form-group
-          = label_tag :name
-          = text_field_tag :name, nil, class: 'form-control'
-
-        .form-group
-          = label_tag :stakeholder
-          = select_tag :stakeholder, options_for_all_stakeholders, class: 'form-control'
-
-        .form-group
-          = label_tag :investment_cost
-          = text_field_tag :investment_cost, nil, class: 'form-control', data: { data_type: 'float' }
-
-        .form-group
-          = label_tag :technical_lifetime
-          = text_field_tag :technical_lifetime, nil, class: 'form-control', data: { data_type: 'integer' }
-
-        .form-group
-          = label_tag :capacity
-          = text_field_tag :capacity, nil, class: 'form-control', data: { data_type: 'float' }
-
-        .form-group
-          = label_tag :units
-          = text_field_tag :units, nil, class: 'form-control', data: { data_type: 'integer' }
-
-      .hidden
-        = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
-
-      .clearfix
+= form_for topology, url: testing_ground_topology_path(@testing_ground, topology, format: :js), html: { remote: true, multipart: true } do |form|
+  = render partial: "topologies/graph_editor", locals: { form: form, topology: topology }
 
   .form-group
     .btn-group
       = form.submit 'Save', class: 'btn btn-primary'
+      = save_all_button(testing_ground_path(@testing_ground))
 
-      - if remote
-        = save_all_button(testing_ground_path(@testing_ground))
-        %span.wait.hidden= image_tag 'wait.gif'
-
-    - unless (defined?(hide_cancel) && hide_cancel)
-      %span.or or
-      - if topology.new_record?
-        = link_to 'Cancel', topologies_path, class: 'btn btn-default'
-      - else
-        = link_to 'Cancel', topology_path(topology), class: 'btn btn-default'
+      %span.wait.hidden= image_tag 'wait.gif'

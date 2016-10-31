@@ -178,7 +178,7 @@ class TestingGroundsController < ResourceController
 
   # DELETE /testing_grounds/:id
   def destroy
-    TestingGround::Destroyer.run(@testing_ground)
+    @testing_ground.destroy
 
     flash[:notice] = "You succesfully removed #{ @testing_ground.name }"
     redirect_to root_path
@@ -190,9 +190,11 @@ class TestingGroundsController < ResourceController
   def testing_ground_params
     tg_params = params
       .require(:testing_ground)
-      .permit([:name, :technology_profile, :public, :behavior_profile_id,
+      .permit(:name, :technology_profile, :public, :behavior_profile_id,
                :parent_scenario_id, :technology_profile_csv, :scenario_id,
-               :topology_id, :market_model_id, :central_heat_buffer_capacity])
+               :central_heat_buffer_capacity,
+               market_model_attributes: [:interactions, :market_model_template_id],
+               topology_attributes: [:graph, :topology_template_id])
 
     if tg_params[:technology_profile_csv]
       tg_params.delete(:technology_profile)

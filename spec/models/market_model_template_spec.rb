@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe MarketModel do
+RSpec.describe MarketModelTemplate do
   it { expect(subject).to validate_presence_of(:name) }
 
   context "when validating" do
     let(:market) {
-      FactoryGirl.build(:market_model,
+      FactoryGirl.build(:market_model_template,
         name: "Test",
         interactions: [interaction])
     }
@@ -33,12 +33,12 @@ RSpec.describe MarketModel do
       end
     end # an interaction using merit tariff type and with no tariff
 
-    MarketModel::PRESENTABLES.each do |attribute|
-      context "an interaction with no '#{ attribute }'" do
+    MarketModelTemplate::PRESENTABLES.each do |attribute|
+      describe "an interaction with no '#{ attribute }'" do
         let(:interaction) { super().update(Hash[attribute, ""]) }
 
         let(:translated_attribute) do
-          I18n.t("market_model.table.headers.#{ attribute }").downcase
+          I18n.t("market_model_template.table.headers.#{ attribute }").downcase
         end
 
         it 'is not valid' do
@@ -51,11 +51,11 @@ RSpec.describe MarketModel do
         end
       end
 
-      context "an interaction with a missing '#{ attribute }'" do
+      describe "an interaction with a missing '#{ attribute }'" do
         let(:interaction) { super().except(attribute) }
 
         let(:translated_attribute) do
-          I18n.t("market_model.table.headers.#{ attribute }").downcase
+          I18n.t("market_model_template.table.headers.#{ attribute }").downcase
         end
 
         it 'is not valid' do

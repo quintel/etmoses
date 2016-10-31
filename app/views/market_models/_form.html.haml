@@ -1,45 +1,17 @@
-%h2 Market model
+= render partial: "market_models/help"
 
-.help-block
-  %p
-    The table allows you to define financial transactions between stakeholders.
-    The selected &ldquo;Measure&rdquo; will be applied on the nodes in the
-    electricity topology which are assigned to the stakeholder selected in the
-    &ldquo;Measured at stakeholder&rdquo; field. More information can be found
-    in the
-    = succeed '.' do
-      %a(href="https://github.com/quintel/etmoses/wiki/Market-Models")
-        documentation
-
-- form_action = defined?(action) ? action : market_model
-= form_for market_model, url: form_action, html: { remote: remote, multipart: true } do |form|
+= form_for market_model, url: testing_ground_market_model_path(@testing_ground, @testing_ground.market_model, format: :js), html: { remote: true, multipart: true } do |form|
   - if market_model.errors.any?
     %ul.errors
       - market_model.errors.full_messages.uniq.each do |message|
         %li= message
 
-  .form-group
-    = form.label :name
-    = form.text_field :name, class: "form-control"
-
-  .form-group
-    = form.label :public, "Permissions"
-
-    .radio-buttons
-      = form.radio_button :public, true
-      = form.label :public, "Public", class: "radio-label"
-      = form.radio_button :public, false
-      = form.label :public, "Private", class: "radio-label"
-
-  .hidden
+  .hidden.market-model-interactions
     = form.text_area :interactions, value: JSON.dump(market_model.interactions).html_safe
 
-  = render partial: 'market_models/table', locals: { market_model: market_model }
+  = render partial: 'market_model_templates/table', locals: { market_model_template: market_model }
 
   .btn-group
     = form.submit 'Save', class: "btn btn-primary"
-
-    - if remote
-      = save_all_button(testing_ground_path(@testing_ground))
-      %span.wait.hidden= image_tag 'wait.gif'
-
+    = save_all_button(testing_ground_path(@testing_ground))
+    %span.wait.hidden= image_tag 'wait.gif'

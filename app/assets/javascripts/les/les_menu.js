@@ -18,5 +18,7 @@ var LesMenu = (function () {
 }());
 
 $(document).on("page:change", function () {
+    'use strict';
+
     LesMenu.activateWith(window.location.pathname);
 });

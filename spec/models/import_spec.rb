@@ -8,14 +8,14 @@ RSpec.describe Import do
     allow_any_instance_of(Import::Technologies::Fetcher)
       .to receive(:gqueries).and_return({})
 
-    Import.new(topology_id: topology.id, scenario_id: 1337).tap do |import|
+    Import.new(topology_template_id: topology_template.id, scenario_id: 1337).tap do |import|
       allow(import).to receive(:parent_scenario_id).and_return(nil)
     end
   end
 
-  let(:topology)       { create(:topology) }
-  let(:testing_ground) { import.testing_ground }
-  let!(:etm_scenario)  { stub_scenario_request(1337) }
+  let(:topology_template) { FactoryGirl.create(:topology_template) }
+  let(:testing_ground)    { import.testing_ground }
+  let!(:etm_scenario)     { stub_scenario_request(1337) }
 
   before do
     %w(tech_one tech_two).each do |key|

@@ -82,12 +82,20 @@ ActiveRecord::Schema.define(version: 20161027142125) do
 
   add_index "load_profiles", ["key"], name: "index_load_profiles_on_key", unique: true, using: :btree
 
-  create_table "market_models", force: true do |t|
+  create_table "market_model_templates", force: true do |t|
+    t.boolean  "featured",     default: false
     t.string   "name"
     t.boolean  "public",       default: false
     t.integer  "user_id"
-    t.integer  "original_id"
     t.text     "interactions"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "market_models", force: true do |t|
+    t.text     "interactions",             limit: 16777215, null: false
+    t.integer  "testing_ground_id"
+    t.integer  "market_model_template_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -144,8 +152,6 @@ ActiveRecord::Schema.define(version: 20161027142125) do
   create_table "testing_grounds", force: true do |t|
     t.text     "technology_profile",           limit: 16777215
     t.integer  "user_id"
-    t.integer  "topology_id"
-    t.integer  "market_model_id"
     t.integer  "behavior_profile_id"
     t.float    "central_heat_buffer_capacity", limit: 24
     t.boolean  "public",                                        default: true, null: false
@@ -160,11 +166,21 @@ ActiveRecord::Schema.define(version: 20161027142125) do
   end
 
   create_table "topologies", force: true do |t|
-    t.string   "name"
-    t.text     "graph",       limit: 16777215,                null: false
-    t.boolean  "public",                       default: true, null: false
-    t.integer  "user_id"
-    t.integer  "original_id"
+    t.text     "graph",                limit: 16777215, null: false
+    t.integer  "testing_ground_id"
+    t.integer  "topology_template_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "topologies", ["testing_ground_id"], name: "index_topologies_on_testing_ground_id", using: :btree
+
+  create_table "topology_templates", force: true do |t|
+    t.boolean  "featured",                    default: false
+    t.integer  "user_id",                                     null: false
+    t.boolean  "public",                      default: true
+    t.string   "name",                                        null: false
+    t.text     "graph",      limit: 16777215,                 null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

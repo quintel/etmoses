@@ -20,6 +20,10 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :topologies, only: %i(show update)
+
+    resources :market_models, only: :update
+
     resources :business_cases, only: [:update, :show] do
       member do
         post 'compare_with', 'data', 'render_summary'
@@ -56,17 +60,13 @@ Rails.application.routes.draw do
       get :download
     end
   end
-  resources :topologies do
+
+  resources :topology_templates do
     member do
-      patch :clone
       post :download_as_png
     end
   end
-  resources :market_models do
-    member do
-      patch :clone
-    end
-  end
+  resources :market_model_templates
 
   root to: redirect('/welcome')
 

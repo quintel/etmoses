@@ -1,5 +1,5 @@
 %h1
-  = @market_model.name
+  = @market_model_template.name
 %table.interactions.table.table-bordered
   %tr
     %th.stakeholder_from Payer
@@ -8,9 +8,9 @@
     %th.applied_stakeholder Applied to stakeholder
     %th.foundation Measure
     %th Tariff (EUR/unit)
-  - @market_model.interactions.each do |interaction|
+  - @market_model_template.interactions.each do |interaction|
     %tr
-      - MarketModel::PRESENTABLES.each do |property|
+      - MarketModelTemplate::PRESENTABLES.each do |property|
         - if property == 'stakeholder_to'
           %td.arrow &#8594;
 
@@ -20,6 +20,7 @@
           - else
             = interaction[property]
 
-- if policy(@market_model).edit?
-  = link_to "Edit", edit_market_model_path(@market_model)
-  = link_to "Destroy", market_model_path(@market_model), method: :delete, data: { confirm: "Are you sure?" }
+- if policy(@market_model_template).edit?
+  .btn-group
+    = link_to "Edit", edit_market_model_template_path(@market_model_template), class: "btn btn-primary"
+    = link_to "Destroy", market_model_template_path(@market_model_template), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"

@@ -1,0 +1,21 @@
+- group_templates(templates).each_pair do |group, grouped_templates|
+  .group
+    %h4= I18n.t("templates.groups.#{ group }")
+
+    %table.table
+      %thead
+        %tr
+          %th.col-sm-4 Name
+
+      %tbody
+        - grouped_templates.each do |template|
+          %tr
+            %td
+              %span.permissions
+                - if template.private?
+                  %span.glyphicon.glyphicon-lock
+                - else
+                  %span.empty
+
+              = link_to template, title: I18n.l(template.created_at, format: :short) do
+                = (template.name || "No name specified")

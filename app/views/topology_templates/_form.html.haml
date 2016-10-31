@@ -1,0 +1,35 @@
+= render partial: "topologies/help", locals: { topology: topology_template }
+
+= form_for topology_template, url: action, html: { multipart: true } do |form|
+  .form-group
+    = form.label :name
+    = form.text_field :name, class: 'form-control'
+    .help-block This field is optional.
+
+  .form-group.permissions
+    = form.label :public, "Permissions"
+
+    .radio-buttons
+      = form.radio_button :public, true
+      = form.label :public, "Public", class: "radio-label"
+      = form.radio_button :public, false
+      = form.label :public, "Private", class: "radio-label"
+
+    = tooltip_tag(t(:'topology_templates.form.public.tooltip'))
+
+  - if current_user && current_user.admin?
+    .form-group
+      = form.label :featured
+      = form.check_box :featured
+
+  = render partial: "topologies/graph_editor", locals: { form: form, topology: topology_template }
+
+  .form-group
+    .btn-group
+      = form.submit 'Save', class: 'btn btn-primary'
+
+    %span.or or
+    - if topology_template.new_record?
+      = link_to 'Cancel', topology_templates_path, class: 'btn btn-default'
+    - else
+      = link_to 'Cancel', topology_template_path(topology_template), class: 'btn btn-default'

@@ -1,12 +1,18 @@
 module TestingGroundsControllerTest
-  def self.create_hash(topology_id, market_model_id)
+  def self.create_hash(topology_template, market_model_template)
     {
       "testing_ground" => {
         "name"=>"A les",
         "parent_scenario_id"=>"2",
         "scenario_id"=>"1",
-        "market_model_id" => market_model_id,
-        "topology_id" => topology_id,
+        "market_model_attributes" => {
+          "interactions" => market_model_template.interactions.to_json,
+          "market_model_template_id" => market_model_template.id
+        },
+        "topology_attributes" => {
+          "graph" => topology_template.graph.to_json,
+          "topology_template_id" => topology_template.id
+        },
         "technology_profile" => "[]"
       },
       "public" => "false",

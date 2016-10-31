@@ -1,8 +1,14 @@
 - if @testing_ground.scenario_id
   = form.hidden_field :scenario_id
 
-= form.hidden_field :topology_id, value: testing_ground.topology_id
-= form.hidden_field :market_model_id, value: testing_ground.market_model_id
+- if testing_ground.new_record?
+  = form.fields_for :topology do |t|
+    = t.hidden_field :graph, value: testing_ground.topology.graph.to_json
+    = t.hidden_field :topology_template_id, value: testing_ground.topology.topology_template_id
+
+  = form.fields_for :market_model do |m|
+    = m.hidden_field :interactions, value: testing_ground.market_model.interactions.to_json
+    = m.hidden_field :market_model_template_id, value: testing_ground.market_model.market_model_template_id
 
 %h2 Technology profile
 .help-block

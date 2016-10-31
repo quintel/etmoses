@@ -7,7 +7,7 @@ var SaveAsForm = (function () {
         window.location.replace(data.redirect);
     }
 
-    function displayErrors(e, f) {
+    function displayErrors(e) {
         var field,
             errors        = e.responseJSON.errors,
             errorField    = this.customPrompt.$content.find(".alert-danger"),
@@ -21,7 +21,7 @@ var SaveAsForm = (function () {
 
                 errorField.append(messageHolder);
             });
-        };
+        }
     }
 
     function submitSaveAsForm() {

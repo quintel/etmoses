@@ -1,0 +1,20 @@
+en:
+  topology_templates:
+    groups:
+      featured: Featured
+      yours: Yours
+      other: Other
+
+    form:
+      public:
+        tooltip: >
+          You can choose to make your topology private or public. A private
+          topology can be viewed only by you. A public topology can be viewed by
+          anyone but only edited by you.
+      graph:
+        tooltip: >
+          Here you can specify the structure, capacity and cost parameters of
+          your network topology. Please refer to the topology syntax page for
+          details.
+
+

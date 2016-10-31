@@ -1,0 +1,14 @@
+%h1= @topology_template.name
+
+.template-graph{ data: { graph: @topology_template.graph.to_json } }
+.templates
+  %h4 Associated LES's
+  - policy_scope(@topology_template.testing_grounds).each do |testing_ground|
+    = link_to testing_ground.name, testing_ground_path(testing_ground), class: "btn btn-default les"
+
+- if policy(@topology_template).edit?
+  .commit.template-footer.btn-group
+    = link_to 'Edit', edit_topology_template_path(@topology_template), class: 'btn btn-primary'
+    = link_to 'Download as PNG', '#', data: {png: download_as_png_topology_template_path(@topology_template, format: :png) }, class: 'btn btn-download-as-png btn-primary'
+    = link_to 'Delete', topology_template_path(@topology_template), class: 'btn btn-danger', method: 'delete', data: { confirm: 'Are you sure you want to delete this topology_template?' }
+

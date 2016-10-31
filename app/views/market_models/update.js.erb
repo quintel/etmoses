@@ -1,0 +1,5 @@
+$("#market-model form .errors").html("<%= escape_javascript(render partial: "shared/errors", locals: {errors: @market_model.errors }) %>");
+
+$("#market-model span.wait").addClass("hidden");
+$("#market-model input[type=submit]").removeClass("disabled");
+$("a[href='#market-model']").removeClass("editing").toggleClass("error", <%= @market_model.errors.any? %>);

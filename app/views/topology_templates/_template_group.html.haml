@@ -1,0 +1,41 @@
+- group_templates(templates).each_pair do |group, grouped_templates|
+  .group
+    %h3= I18n.t("templates.groups.#{ group }")
+
+    - if %i(featured yours).include?(group)
+      - grouped_templates.each do |template|
+        .topology-featured
+          %strong{ title: template.name }
+            %span.permissions
+              - if template.private?
+                %span.glyphicon.glyphicon-lock
+              - else
+                %span.empty
+            = truncate(template.name, length: 30)
+
+          = link_to template do
+            .topology-template-graph{ data: { graph: template.graph.to_json } }
+            .clearfix
+
+      .clearfix
+
+    - else
+      %table.table
+        %thead
+          %tr
+            %th.col-sm-4 Name
+
+        %tbody
+          - grouped_templates.each do |template|
+            %tr
+              %td
+                %span.permissions
+                  - if template.private?
+                    %span.glyphicon.glyphicon-lock
+                  - else
+                    %span.empty
+
+                = link_to template, title: I18n.l(template.created_at, format: :short) do
+                  = (template.name || "No name specified")
+
+              %td

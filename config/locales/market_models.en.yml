@@ -2,13 +2,19 @@ en:
   activerecord:
     errors:
       models:
+        market_model_template:
+          attributes:
+            interactions:
+              blank:
+                "value for %{attribute} can't be blank"
+
         market_model:
           attributes:
             interactions:
               blank:
                 "value for %{attribute} can't be blank"
 
-  market_model:
+  market_model_template:
     table:
       headers:
         applied_stakeholder: Measured at stakeholder

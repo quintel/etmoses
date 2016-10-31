@@ -12,7 +12,10 @@ RSpec.describe TestingGroundsController do
   end
 
   describe "#perform_import" do
-    let!(:topology){ FactoryGirl.create(:topology, name: "Default topology")}
+    let!(:market_model_template){ MarketModelTemplate.default }
+
+    let!(:topology_template){ TopologyTemplate.default }
+
     let!(:technology){ FactoryGirl.create(:importable_technology,
                         key: "magical_technology") }
 
@@ -36,14 +39,17 @@ RSpec.describe TestingGroundsController do
     end
 
     it "assigns a market model id to the testing ground" do
-      expect(assigns(:testing_ground).market_model_id).to eq(5)
+      expect(assigns(:testing_ground).market_model.interactions).to eq(
+        market_model_template.interactions)
     end
   end
 
   describe "#create" do
-    let(:topology){ FactoryGirl.create(:topology) }
-    let(:market_model) { FactoryGirl.create(:market_model) }
+    let(:topology){ TopologyTemplate.default }
+    let(:market_model) { MarketModelTemplate.default }
+
     let!(:sign_in_user){ sign_in(user) }
+
     let!(:valid_testing_ground){
       expect_any_instance_of(TestingGround).to receive(:valid?)
         .at_least(:once).and_return(true)
@@ -57,45 +63,68 @@ RSpec.describe TestingGroundsController do
     }
 
     it "creates a testing ground" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(TestingGround.count).to eq(1)
     end
 
     it "creates a selected strategy" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(SelectedStrategy.last.testing_ground).to eq(TestingGround.last)
     end
 
     it "creates a business case" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(BusinessCase.last.testing_ground).to eq(TestingGround.last)
     end
 
     it "redirects to show page" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(response).to redirect_to(testing_ground_path(TestingGround.last))
     end
 
     it "assings the testing ground to the current user" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(TestingGround.last.user).to eq(controller.current_user)
     end
 
     it "creates a gas asset list" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(GasAssetList.last.testing_ground).to eq(TestingGround.last)
     end
 
     it "creates a heat source list" do
-      post :create, TestingGroundsControllerTest.create_hash(topology.id, market_model.id)
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
 
       expect(HeatSourceList.last.testing_ground).to eq(TestingGround.last)
+    end
+
+    it "creates a topology" do
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
+
+      expect(Topology.last.testing_ground).to eq(TestingGround.last)
+      expect(Topology.last.topology_template).to eq(TopologyTemplate.default)
+    end
+
+    it "creates a market model" do
+      post :create, TestingGroundsControllerTest.create_hash(
+        topology, market_model)
+
+      expect(MarketModel.last.testing_ground).to eq(TestingGround.last)
+      expect(MarketModel.last.market_model_template).to eq(MarketModelTemplate.default)
     end
   end
 
@@ -167,7 +196,7 @@ RSpec.describe TestingGroundsController do
 
         get :data, calculation: {}, format: :json, id: testing_ground.id
 
-        expect(response.status).to eq(200)
+        expect(response).to be_success
       end
 
       it "denies permission for the data of a private testing grounds" do
@@ -248,24 +277,6 @@ RSpec.describe TestingGroundsController do
       get :show, id: testing_ground.id
 
       expect(response.status).to eq(200)
-    end
-
-    it "doesn't show a LES with a private market model" do
-      market_model = FactoryGirl.create(:market_model, public: false)
-      testing_ground = FactoryGirl.create(:testing_ground, public: true, market_model: market_model)
-
-      get :show, id: testing_ground.id
-
-      expect(response).to redirect_to(new_user_session_path)
-    end
-
-    it "doesn't show a LES with a private topology" do
-      topology = FactoryGirl.create(:topology, public: false)
-      testing_ground = FactoryGirl.create(:testing_ground, public: true, topology: topology)
-
-      get :show, id: testing_ground.id
-
-      expect(response).to redirect_to(new_user_session_path)
     end
   end
 
@@ -551,39 +562,6 @@ RSpec.describe TestingGroundsController do
           delete :destroy, id: testing_ground.id
 
           expect(Topology.count).to eq(1)
-        end
-      end
-
-      describe "when associated objects belong to another user" do
-        it "keeps the market model" do
-          delete :destroy, id: testing_ground.id
-
-          expect(MarketModel.count).to eq(1)
-        end
-
-        it "keeps the topology" do
-          delete :destroy, id: testing_ground.id
-
-          expect(Topology.count).to eq(1)
-        end
-      end
-
-      describe "when associated objects belong to the LES owner" do
-        before do
-          MarketModel.update_all(user_id: testing_ground.user_id)
-          Topology.update_all(user_id: testing_ground.user_id)
-        end
-
-        it "removes the market model" do
-          delete :destroy, id: testing_ground.id
-
-          expect(MarketModel.count).to eq(0)
-        end
-
-        it "removes the topology" do
-          delete :destroy, id: testing_ground.id
-
-          expect(Topology.count).to eq(0)
         end
       end
     end

@@ -1,0 +1,16 @@
+---
+behavior: optional
+carrier: electricity
+color: "#009D9D"
+exists_as_technology_in_etengine: false
+technology_component_behavior:
+  flex: optional
+  inflex: generic
+
+whitelisted_attributes:
+  - demand
+  - initial_investment
+  - om_costs_per_year
+  - profile
+  - technical_lifetime
+  - units

@@ -238,16 +238,12 @@ RSpec.describe TestingGround do
 
     let!(:user) { create(:user) }
 
-    let(:public_mm)   { create(:market_model, user: user, public: true) }
-    let(:private_mm)  { create(:market_model, user: user, public: false) }
+    let(:mm)   { create(:market_model) }
 
-    let(:public_top)  { create(:topology, user: user, public: true) }
-    let(:private_top) { create(:topology, user: user, public: false) }
+    let(:top) { create(:topology) }
 
-    let!(:les_public)      { les(true, user, public_top, public_mm) }
-    let!(:les_private)     { les(false, user, public_top, public_mm) }
-    let!(:les_private_mm)  { les(true, user, public_top, private_mm) }
-    let!(:les_private_top) { les(true, user, private_top, public_mm) }
+    let!(:les_private) { les(false, user, top, mm) }
+    let!(:les_public) { les(true,  user, top, mm) }
 
     context 'given a user' do
       it 'includes their public LESes' do
@@ -256,14 +252,6 @@ RSpec.describe TestingGround do
 
       it 'includes their private LESes' do
         expect(described_class.visible_to(user)).to include(les_private)
-      end
-
-      it 'includes their public LESes with private market models' do
-        expect(described_class.visible_to(user)).to include(les_private_mm)
-      end
-
-      it 'includes their public LESes with private topologies' do
-        expect(described_class.visible_to(user)).to include(les_private_mm)
       end
     end # given a user
 
@@ -278,16 +266,6 @@ RSpec.describe TestingGround do
         expect(described_class.visible_to(other_user))
           .not_to include(les_private)
       end
-
-      it 'excludes other users public LESes with private market models' do
-        expect(described_class.visible_to(other_user))
-          .not_to include(les_private_mm)
-      end
-
-      it 'excludes other users public LESes with private topologies' do
-        expect(described_class.visible_to(other_user))
-          .not_to include(les_private_mm)
-      end
     end # givena user who does not own the LES
 
     context 'given no user' do
@@ -298,16 +276,6 @@ RSpec.describe TestingGround do
       it 'excludes other user private LESes' do
         expect(described_class.visible_to(nil))
           .not_to include(les_private)
-      end
-
-      it 'excludes other users public LESes with private market models' do
-        expect(described_class.visible_to(nil))
-          .not_to include(les_private_mm)
-      end
-
-      it 'excludes other users public LESes with private topologies' do
-        expect(described_class.visible_to(nil))
-          .not_to include(les_private_mm)
       end
     end # givena user who does not own the LES
   end # visible_to
