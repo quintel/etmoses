@@ -7,7 +7,7 @@ class TestingGround
         @buffer_counter.add(buffer.type)
 
         buffer_clone            = buffer.clone
-        buffer_clone.profile    = profile_selector(buffer_clone).select_profile
+        buffer_clone.profile    = profile_selector[buffer_clone.type]
         buffer_clone.node       = technology.node
         buffer_clone.units      = technology.units
         buffer_clone.associates = [technology]

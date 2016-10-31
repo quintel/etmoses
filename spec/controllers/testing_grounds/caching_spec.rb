@@ -28,8 +28,7 @@ RSpec.describe TestingGroundsController do
         "capacity"    => -1.5,
         "demand"      => nil,
         "volume"      => nil,
-        "units"       => 1,
-        "concurrency" => "max"
+        "units"       => 1
       }]
     }
   }

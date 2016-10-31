@@ -2,7 +2,6 @@
   buffer: buffer_2
   name: Space heater 3
   type: households_space_heater_heatpump_ground_water_electricity
-  concurrency: max
   capacity: "-1.5"
   units: '150'
   composite: false
@@ -10,7 +9,6 @@
   buffer: buffer_2
   name: Space heater 4
   type: households_space_heater_heatpump_air_water_electricity
-  concurrency: max
   capacity: "-1.5"
   units: '150'
   composite: false
@@ -20,7 +18,6 @@
   composite_value: buffer_2
   type: buffer_space_heating
   capacity: "-1.5"
-  concurrency: max
   units: '2'
   composite: true
   buffer:

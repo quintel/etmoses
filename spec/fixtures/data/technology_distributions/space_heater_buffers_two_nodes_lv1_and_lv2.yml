@@ -2,7 +2,6 @@
   buffer: buffer_1
   name: Space heater 1
   type: households_space_heater_heatpump_ground_water_electricity
-  concurrency: min
   capacity: "-1.5"
   units: '10.0'
   composite: false
@@ -10,7 +9,6 @@
   buffer: buffer_1
   name: Space heater 2
   type: households_space_heater_heatpump_air_water_electricity
-  concurrency: min
   capacity: "-1.5"
   units: '10.0'
   composite: false
@@ -21,14 +19,12 @@
   demand:
   units: '1.0'
   node: lv2
-  concurrency: min
 - node: lv2
   profile: buffer_1_profile
   name: Buffer
   composite_value: buffer_1
   type: buffer_space_heating
   capacity: "-1.5"
-  concurrency: min
   units: '10.0'
   composite: true
   buffer:

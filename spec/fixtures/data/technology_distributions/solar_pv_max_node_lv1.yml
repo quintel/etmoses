@@ -4,4 +4,3 @@
   capacity: "-1.5"
   units: 10
   node: lv1
-  concurrency: max

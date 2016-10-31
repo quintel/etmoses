@@ -5,7 +5,6 @@
   demand:
   units: '1.0'
   node: lv1
-  concurrency: max
 - name: Residential PV panel
   type: households_solar_pv_solar_radiation
   profile: solar_pv_ameland
@@ -13,7 +12,6 @@
   demand:
   units: '1.0'
   node: lv1
-  concurrency: max
 - name: Residential PV panel
   type: households_solar_pv_solar_radiation
   profile: solar_pv_zwolle
@@ -21,7 +19,6 @@
   demand:
   units: '1.0'
   node: lv2
-  concurrency: max
 - name: Residential PV panel
   type: households_solar_pv_solar_radiation
   profile: solar_pv_ameland
@@ -29,4 +26,3 @@
   demand:
   units: '1.0'
   node: lv2
-  concurrency: max

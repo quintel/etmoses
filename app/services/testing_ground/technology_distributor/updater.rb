@@ -4,7 +4,7 @@ class TestingGround
       @technology            = tech
 
       dup_technology         = tech.dup
-      dup_technology.profile = profile_selector(dup_technology).select_profile
+      dup_technology.profile = profile_selector[dup_technology.type]
       dup_technology.node    = edge_nodes[index + edge_nodes_index].key
 
       if dup_technology.sticks_to_composite?

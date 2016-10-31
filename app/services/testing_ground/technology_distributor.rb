@@ -1,6 +1,5 @@
 class TestingGround
   class TechnologyDistributor
-    include ProfileSelector
     include BufferCreator
     include Updater
 
@@ -22,6 +21,10 @@ class TestingGround
           update_technology(technology, index)
         end
       end
+    end
+
+    def profile_selector
+      @profile_selector ||= TechnologyProfiles::Query.new(@technologies).query
     end
 
     private

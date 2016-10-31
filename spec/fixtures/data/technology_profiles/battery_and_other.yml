@@ -5,7 +5,6 @@ lv1:
   :name: Other
   :type: generic
   :units: 1
-  :concurrency: max
   :full_load_hours: 0
   :includes: []
   :initial_investment: 6178.9
@@ -23,7 +22,6 @@ lv1:
   :type: households_flexibility_p2p_electricity
   :units: 1
   :volume: 2.9065
-  :concurrency: max
   :full_load_hours: 0
   :includes: []
   :initial_investment: 6178.9

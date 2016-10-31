@@ -5,10 +5,6 @@ class TestingGroundPolicy < ApplicationPolicy
     true
   end
 
-  def calculate_concurrency?
-    new? || edit?
-  end
-
   alias_method :clone?, :show?
   alias_method :data?, :show?
   alias_method :technology_profile?, :show?
