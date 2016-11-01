@@ -49,7 +49,7 @@ class InstalledTechnology
     attribute_set.select{ |attr| attr.options[:hidden] || false }.map(&:name)
 
   PRESENTABLES =
-    EDITABLES - %i(carrier_capacity concurrency) + %i(capacity)
+    EDITABLES - %i(carrier_capacity concurrency)
 
   # Public: Returns a template for a technology. For evaluation purposes
   def self.template
