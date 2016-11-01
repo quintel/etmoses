@@ -1,9 +1,9 @@
 class TopologyTemplatesController < ResourceController
-  RESOURCE_ACTIONS = %i(show edit update destroy download_as_png)
+  RESOURCE_ACTIONS = %i(show edit update destroy download_as_png clone)
 
   respond_to :html
   respond_to :js, only: :clone
-  respond_to :json, only: :show
+  respond_to :json, only: %i(show clone)
   respond_to :png, only: :download_as_png
 
   before_filter :fetch_topology, only: RESOURCE_ACTIONS
@@ -60,6 +60,17 @@ class TopologyTemplatesController < ResourceController
       end,
       filename: "#{ @topology_template.filename }.png",
       content_type: 'image/png')
+  end
+
+  # POST /topologies/:id/clone
+  def clone
+    @topology_template = @topology_template.dup
+
+    if @topology_template.update_attributes(topology_template_params)
+      render json: { redirect: topology_template_path(@topology_template) }
+    else
+      render json: { errors: @topology_template.errors }, status: 422
+    end
   end
 
   private

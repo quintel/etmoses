@@ -3,3 +3,4 @@ translations:
   only:
     - '*.inputs'
     - '*.carriers'
+    - '*.save_as_prompt'

@@ -120,4 +120,40 @@ RSpec.describe TopologyTemplatesController do
       expect(unaffected_topology.reload.topology_template_id).to_not be_blank
     end
   end
+
+  describe "#clone" do
+    let(:topology_template){
+      FactoryGirl.create(:topology_template, user: user)
+    }
+
+    describe "with a new name" do
+      before do
+        patch :clone, id: topology_template,
+          topology_template: { name: "new name" }, format: :json
+      end
+
+      it 'duplicates templates' do
+        expect(TopologyTemplate.count).to eq(3) # Default + The normal template + the duplication
+      end
+
+      it "has a 'new name'" do
+        expect(TopologyTemplate.last.name).to eq("new name")
+      end
+    end
+
+    describe "with no name at all" do
+      before do
+        patch :clone, id: topology_template,
+          topology_template: { name: "" }, format: :json
+      end
+
+      it 'duplicates templates' do
+        expect(TopologyTemplate.count).to eq(2) # Default + The normal template
+      end
+
+      it "returns a 422 status" do
+        expect(response.code).to eq('422')
+      end
+    end
+  end
 end
