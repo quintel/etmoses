@@ -17,7 +17,9 @@ class TestingGroundsController < ResourceController
   ]
 
   skip_before_filter :verify_authenticity_token, only: [:data, :save_as]
-  skip_before_filter :authenticate_user!, only: [:show, :data, :index]
+  skip_before_filter :authenticate_user!, only: [
+    :show, :data, :index, :gas_load, :heat_load
+  ]
 
   # GET /topologies
   def index
