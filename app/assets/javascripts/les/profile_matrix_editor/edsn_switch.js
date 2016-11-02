@@ -29,11 +29,9 @@ var EdsnSwitch = (function () {
 
     return {
         cloneAndAppendProfileSelect: function (target) {
-            var target     = $(target),
-                type       = target.data('type'),
-                isImported = target.hasClass('imported');
+            var type = $(target).data('type');
 
-            if (validBaseLoads.test(type) && isImported) {
+            if (validBaseLoads.test(type)) {
                 swapSelectBox.call(target);
             }
         }

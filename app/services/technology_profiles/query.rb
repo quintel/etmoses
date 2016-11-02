@@ -17,7 +17,10 @@ module TechnologyProfiles
     end
 
     def technology_profiles
-      TechnologyProfile.where(technology: technology_keys)
+      TechnologyProfile
+        .joins(:load_profile)
+        .where(technology: technology_keys)
+        .where("`load_profiles`.`included_in_concurrency` = ?", true)
         .group_by(&:technology)
     end
   end

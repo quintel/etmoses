@@ -24,7 +24,7 @@
       .editable.profile.select
         %span Profile
         %select.profile.form-control{autocomplete: 'off', data: { type: 'profile' }}
-          = options_for_load_profiles(technology.technology)
+          = options_for_load_profiles(technology.technology, selected: technology.profile)
 
     - if technology.whitelisted?('buffer')
       .editable.buffer.select

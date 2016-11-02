@@ -112,7 +112,6 @@ module TestingGroundsHelper
     technology_class = technology.type
     technology_class += " buffer-child" if technology.sticks_to_composite?
     technology_class += " alert-danger" unless technology.valid?
-    technology_class += " imported"     if @testing_ground && @testing_ground.new_record?
     technology_class
   end
 
