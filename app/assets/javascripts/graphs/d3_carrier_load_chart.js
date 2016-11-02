@@ -16,17 +16,16 @@ var D3CarrierLoadChart = (function () {
         },
 
         displayEmptyMessage: function (name) {
-            var empty   = this.emptyMessage(),
+            var carrier,
+                empty   = this.emptyMessage(),
                 context = empty.find("span.context");
 
             if (this.settings.view_as === 'total') {
                 context.text("");
             } else {
-                context.text(
-                    I18n.t(
-                        "carriers." + this.settings.view_carrier
-                    ).toLowerCase()
-                );
+                carrier = this.settings.view_carrier.replace(/_[a-z]+$/, '');
+
+                context.text(I18n.t("carriers." + carrier).toLowerCase());
             }
 
             empty.find("span.node").text(name);
