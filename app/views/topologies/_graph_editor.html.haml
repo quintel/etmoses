@@ -3,7 +3,7 @@
   = form.label :graph
   = tooltip_tag(t(:'topology_templates.form.graph.tooltip'))
 
-  .graph-topology{ data: { graph: topology.graph.to_json } }
+  .graph-topology{ data: { graph: topology_field_value(topology) } }
     .graph-editor
 
     .node-interface
@@ -41,6 +41,6 @@
         = text_field_tag :units, nil, class: 'form-control', data: { data_type: 'integer' }
 
     .hidden
-      = form.text_area :graph, value: topology_field_value(topology), class: "topology-graph"
+      = form.text_area :graph, class: "topology-graph"
 
     .clearfix

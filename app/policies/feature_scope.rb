@@ -1,12 +1,10 @@
 module FeatureScope
   def permitted_attributes
-    attributes = [:name, :public, :interactions]
+    user.admin? ? admin_attributes : attributes
+  end
 
-    if user.admin?
-      attributes << :featured
-    end
-
-    attributes
+  def admin_attributes
+    attributes << :featured
   end
 
   class Scope < PrivatePolicy::Scope
