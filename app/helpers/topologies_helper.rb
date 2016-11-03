@@ -3,7 +3,7 @@ module TopologiesHelper
     if topology.new_record? && topology.graph.blank?
       TopologyTemplate::DEFAULT_GRAPH
     elsif topology.graph.is_a?(String)
-      topology.graph
+      topology.graph.to_json
     else
       JSON.dump(topology.graph.to_hash)
     end
