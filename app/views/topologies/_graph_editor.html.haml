@@ -41,6 +41,6 @@
         = text_field_tag :units, nil, class: 'form-control', data: { data_type: 'integer' }
 
     .hidden
-      = form.text_area :graph, class: "topology-graph"
+      = form.text_area :graph, topology_field_value(topology), class: "topology-graph"
 
     .clearfix
