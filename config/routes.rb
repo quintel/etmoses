@@ -64,6 +64,7 @@ Rails.application.routes.draw do
   resources :topology_templates do
     member do
       post :download_as_png
+      patch :clone
     end
   end
   resources :market_model_templates

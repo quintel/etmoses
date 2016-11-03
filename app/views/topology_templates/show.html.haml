@@ -8,7 +8,12 @@
 
 - if policy(@topology_template).edit?
   .commit.template-footer.btn-group
-    = link_to 'Edit', edit_topology_template_path(@topology_template), class: 'btn btn-primary'
-    = link_to 'Download as PNG', '#', data: {png: download_as_png_topology_template_path(@topology_template, format: :png) }, class: 'btn btn-download-as-png btn-primary'
-    = link_to 'Delete', topology_template_path(@topology_template), class: 'btn btn-danger', method: 'delete', data: { confirm: 'Are you sure you want to delete this topology_template?' }
+    .hidden
+      = text_field_tag :name, @topology_template.name, class: 'save-as-name'
 
+    = link_to 'Edit', edit_topology_template_path(@topology_template), class: 'btn btn-primary'
+    = link_to "Save As New Topology Template", "#", data: { url: clone_topology_template_path(@topology_template, format: 'json'), scope: "topology_template" }, class: "btn btn-primary save_as"
+    = link_to 'Download as PNG', '#', data: {png: download_as_png_topology_template_path(@topology_template, format: :png) }, class: 'btn btn-download-as-png btn-primary'
+
+  .btn-group
+    = link_to 'Delete', topology_template_path(@topology_template), class: 'btn btn-danger', method: 'delete', data: { confirm: 'Are you sure you want to delete this topology_template?' }

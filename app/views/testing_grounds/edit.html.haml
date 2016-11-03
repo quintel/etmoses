@@ -52,7 +52,7 @@
       .form-group
         .btn-group
           = form.submit "Save", class: 'btn btn-primary'
-          = link_to "Save as new Local Energy Solution", "#", data: { url: save_as_testing_ground_path(@testing_ground, format: 'json') }, class: "btn btn-success save_as"
+          = link_to "Save as new Local Energy Solution", "#", data: { scope: "testing_ground", url: save_as_testing_ground_path(@testing_ground, format: 'json') }, class: "btn btn-success save_as"
           = save_all_button(testing_ground_path(@testing_ground))
 
         - if policy(@testing_ground).destroy?
