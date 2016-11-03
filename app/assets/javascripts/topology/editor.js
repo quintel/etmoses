@@ -10,6 +10,7 @@ Topology.Editor = (function () {
             this.graphEditor.initialize();
             this.nodeInterface.initialize();
             this.form.initialize();
+            this.graphData.setData(this.graphData.graph);
 
             this.scope.parents("form").on("submit", function () {
                 var valid = Topology.Validator.isValid(this.graphEditor.graph);

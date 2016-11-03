@@ -1,5 +1,5 @@
 class TopologyTemplate < ActiveRecord::Base
-  DEFAULT_GRAPH = Rails.root.join('db/default_topology_template.yml').read
+  DEFAULT_GRAPH = Rails.root.join('db/default_topology_template.json').read
 
   include TopologyGraph
   include Privacy
