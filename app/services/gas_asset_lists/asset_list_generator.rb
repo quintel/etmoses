@@ -45,8 +45,7 @@ module GasAssetLists
     #
     # Returns a Network::Builder
     def network(carrier)
-      network = Network::Builders.for(carrier).build(
-        @testing_ground.topology.graph, @testing_ground.technology_profile)
+      network = @testing_ground.network(carrier)
 
       network.nodes.each do |node|
         node.set(:techs, node.get(:installed_techs).map do |tech|
