@@ -44,6 +44,8 @@ ETMoses is released under the [MIT License](LICENSE.txt).
 
 ## Installing
 
+* Install ImageMagick
+  * Ubuntu: `sudo apt-get install imagemagick libmagickwand-dev`
 * Pull this repository with `git clone git@github.com:quintel/etmoses.git`
 * Create your personal configuration files from the samples with
   ```
@@ -57,8 +59,12 @@ ETMoses is released under the [MIT License](LICENSE.txt).
 * Run `bundle install` to install all the dependencies
 * Create local database with `bundle exec rake db:create`
 * Fill database structure and seeds with `bundle exec rake db:reset`
+* Copy load profiles, technologies etc from staging server
+  * Run `bin/sync_profiles`
+  * Clone staging database to local development database
+* If you need to connect to a local ETEngine server rather than the staging server, copy `config/settings.yml` to `config/settings.local.yml` and adapt settings accordingly
 * Fire up your local server with `bundle exec rails server -p3000`
-* Got to [localhost:3000](http://localhost:3000) and you should see ETMoses
+* Go to [localhost:3000](http://localhost:3000) and you should see ETMoses
 
 ## Bugs and feature requests
 
