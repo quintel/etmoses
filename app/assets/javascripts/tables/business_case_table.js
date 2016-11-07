@@ -5,13 +5,10 @@ var BusinessCaseTable = (function () {
 
     function finish() {
         $.ajax({ type: "POST", url: this.data.finishUrl });
-
-        $("#business_case_table .loading-spinner").removeClass("on");
         $("select#compare").prop('disabled', false);
     }
 
     function showLoadingSpinner() {
-        $("#business_case_table .loading-spinner").addClass("on");
         $("select#compare").prop('disabled', true);
     }
 

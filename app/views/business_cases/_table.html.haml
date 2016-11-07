@@ -54,9 +54,6 @@
                     %span.calc= financial_row[:compare][:total]
                     %span>)
 
-    %span.loading-spinner
-      = image_tag 'wait.gif'
-
   - elsif business_case_rows.empty?
     .alert.alert-danger
       Something went wrong with the business case calculation.
