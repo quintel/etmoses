@@ -34,7 +34,7 @@ module BusinessCaseHelper
                         stakeholder_span = content_tag(:span,
                           "#{ stakeholder }: ", "class" => "stakeholder")
 
-                        stakeholder_span + number_to_currency(value)
+                        "#{ stakeholder_span } #{ number_to_currency(value) }"
                       end
 
     breakdown_spans.join("<br/>")
