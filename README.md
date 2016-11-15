@@ -45,6 +45,7 @@ ETMoses is released under the [MIT License](LICENSE.txt).
 ## Installing
 
 * Install ImageMagick
+  * Mac: `brew install imagemagick`
   * Ubuntu: `sudo apt-get install imagemagick libmagickwand-dev`
 * Pull this repository with `git clone git@github.com:quintel/etmoses.git`
 * Create your personal configuration files from the samples with
