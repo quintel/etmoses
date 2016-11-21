@@ -1,8 +1,9 @@
 %div.compare
   - if business_case_rows && business_case_rows.size > 0
-    %span= "Compare business case from #{@testing_ground.name} with"
+    %span= "Compare business case with"
     %span.compare
       = select_tag "compare", options_for_testing_grounds(@testing_ground), include_blank: true, class: "form-control", data: { compare_url: compare_with_testing_ground_business_case_path(@testing_ground, @business_case) }
+    = link_to('Download CSV', testing_ground_business_case_path(@testing_ground, @business_case, format: 'csv'), class: 'btn btn-default pull-right')
 
 #business_case_table{data: { url: data_testing_ground_business_case_path(@testing_ground, @business_case), finish_url: render_summary_testing_ground_business_case_path(@testing_ground, @business_case) } }
   - if business_case_rows && business_case_rows.size > 0

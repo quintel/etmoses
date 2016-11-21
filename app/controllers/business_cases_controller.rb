@@ -4,6 +4,8 @@ class BusinessCasesController < ResourceController
   respond_to :js, only: [:compare_with, :data, :create, :update, :render_summary,
                          :validate]
 
+  respond_to :csv, only: [:show]
+
   before_filter :find_testing_ground, except: :validate
   before_filter :find_business_case, only: RESOURCE_ACTIONS
   before_filter :authorize_generic, except: RESOURCE_ACTIONS
@@ -34,6 +36,15 @@ class BusinessCasesController < ResourceController
   end
 
   def show
+    respond_to do |wants|
+      wants.html
+      wants.csv do
+        presenter = Finance::BusinessCaseCSVPresenter.new(@business_case)
+
+        presenter.headers.each { |key, value| headers[key] = value }
+        render text: presenter.to_csv
+      end
+    end
   end
 
   def compare_with
