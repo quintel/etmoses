@@ -22,7 +22,9 @@ Rails.application.routes.draw do
 
     resources :topologies, only: %i(show update)
 
-    resources :market_models, only: :update
+    resources :market_models, only: :update do
+      member { post :replace }
+    end
 
     resources :business_cases, only: [:update, :show] do
       member do

@@ -34,6 +34,10 @@ class MarketModelTemplate < ActiveRecord::Base
     find_by_name("Default Market Model")
   end
 
+  def attributes_for_market_model
+    { interactions: interactions, market_model_template: self }
+  end
+
   private
 
   def disassociate_market_models

@@ -7,6 +7,38 @@ RSpec.describe MarketModelsController do
 
   let!(:sign_in_user) { sign_in(:user, user) }
 
+  describe '#replace' do
+    let(:market_model) do
+      FactoryGirl.create(
+        :market_model,
+        interactions: [],
+        testing_ground: testing_ground
+      )
+    end
+
+    let(:template) { FactoryGirl.create(:market_model_template) }
+
+    let(:request) do
+      patch :replace,
+        testing_ground_id: testing_ground.id,
+        id: market_model.id,
+        replacement_id: template.id,
+        format: :js
+    end
+
+    it 'sets the new interactions' do
+      expect { request }
+        .to change { market_model.reload.interactions }
+        .from([]).to(template.interactions)
+    end
+
+    it 'sets the new template ID' do
+      expect { request }
+        .to change { market_model.reload.market_model_template_id }
+        .to(template.id)
+    end
+  end
+
   describe "#update" do
     let!(:business_case) {
       FactoryGirl.create(:business_case, testing_ground: testing_ground, job_id: 1)

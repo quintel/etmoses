@@ -14,4 +14,18 @@
   .btn-group
     = form.submit 'Save', class: "btn btn-primary"
     = save_all_button(testing_ground_path(@testing_ground))
-    %span.wait.hidden= image_tag 'wait.gif'
+  %span.wait.hidden= image_tag 'wait.gif'
+
+  - unless @testing_ground.new_record?
+    %button.btn.btn-default.pull-right.replace_market_model
+      Replace market model&hellip;
+
+.hidden
+  .prompt.replace_mm
+    = form_tag(replace_testing_ground_market_model_path(@testing_ground, @testing_ground.market_model)) do
+      .message Replace market model with&hellip;
+      .input
+        = select_tag :replacement_id, options_for_select(market_model_template_options), class: "form-control"
+      .submit
+        %button.btn.btn-primary.save Replace
+        %a.cancel.btn.btn-default(href="#") Cancel

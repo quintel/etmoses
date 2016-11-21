@@ -50,10 +50,8 @@ class Import
   end
 
   def market_model
-    @market_model ||= MarketModel.new(
-      interactions: market_model_template.interactions,
-      market_model_template: market_model_template
-    )
+    @market_model ||=
+      MarketModel.new(market_model_template.attributes_for_market_model)
   end
 
   def topology_template

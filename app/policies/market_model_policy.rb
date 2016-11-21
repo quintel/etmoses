@@ -6,4 +6,6 @@ class MarketModelPolicy < ApplicationPolicy
   def clone?
     true
   end
+
+  alias_method :replace?, :clone?
 end
