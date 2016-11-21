@@ -118,4 +118,49 @@ RSpec.describe MarketModelTemplatesController do
       expect(unaffected_market_model.reload.market_model_template_id).to_not be_blank
     end
   end
+
+  describe '#clone' do
+    let(:user) { FactoryGirl.create(:user) }
+    let!(:sign_in_user) { sign_in(user) }
+
+    let!(:market_model_template) do
+      FactoryGirl.create(:market_model_template, user: user)
+    end
+
+    describe 'with a new name' do
+      let(:request) do
+        patch :clone,
+          id: market_model_template,
+          market_model_template: { name: 'new name' },
+          format: :json
+      end
+
+      it 'duplicates templates' do
+        expect { request }.to change { MarketModelTemplate.count }.by(1)
+      end
+
+      it 'has a "new name"' do
+        request
+        expect(MarketModelTemplate.last.name).to eq('new name')
+      end
+    end
+
+    describe 'with no name at all' do
+      let(:request) do
+        patch :clone,
+          id: market_model_template,
+          market_model_template: { name: '' },
+          format: :json
+      end
+
+      it 'duplicates templates' do
+        expect { request }.to_not change { MarketModelTemplate.count }
+      end
+
+      it 'returns a 422 status' do
+        request
+        expect(response.code).to eq('422')
+      end
+    end
+  end
 end

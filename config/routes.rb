@@ -67,7 +67,10 @@ Rails.application.routes.draw do
       patch :clone
     end
   end
-  resources :market_model_templates
+
+  resources :market_model_templates do
+    member { patch :clone }
+  end
 
   root to: redirect('/welcome')
 

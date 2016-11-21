@@ -1,4 +1,5 @@
 en:
   save_as_prompt:
+    market_model_template: "Please specify a new name for your market model"
     topology_template: "Please specify a new name for your topology template"
     testing_ground: "Please specify a new name for your LES"

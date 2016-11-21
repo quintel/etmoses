@@ -23,4 +23,5 @@
 - if policy(@market_model_template).edit?
   .btn-group
     = link_to "Edit", edit_market_model_template_path(@market_model_template), class: "btn btn-primary"
+    = link_to "Save As New Market Model", "#", data: { url: clone_market_model_template_path(@market_model_template, format: 'json'), scope: "market_model_template" }, class: "btn btn-primary save_as"
     = link_to "Destroy", market_model_template_path(@market_model_template), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-danger"

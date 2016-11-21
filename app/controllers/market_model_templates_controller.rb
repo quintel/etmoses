@@ -43,6 +43,17 @@ class MarketModelTemplatesController < ResourceController
     redirect_to(market_model_templates_path)
   end
 
+  # POST /market_model_templates/:id/clone
+  def clone
+    @clone = @market_model_template.dup
+
+    if @clone.update_attributes(market_model_template_params)
+      render json: { redirect: market_model_template_path(@clone) }
+    else
+      render json: { errors: @clone.errors }, status: 422
+    end
+  end
+
   private
 
   def find_market_model
