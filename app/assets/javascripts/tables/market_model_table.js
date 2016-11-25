@@ -8,6 +8,11 @@ var MarketModelTable = (function () {
             this.updateTable();
 
             this.editableTable.append(this.updateTable.bind(this));
+
+            $(this.selector).find("tbody").sortable({
+                axis: "y",
+                update: this.updateTable.bind(this)
+            });
         },
 
         updateTable: function () {
@@ -18,6 +23,7 @@ var MarketModelTable = (function () {
     };
 
     function MarketModelTable(selector) {
+        this.selector      = selector;
         this.editableTable = new EditableTable(selector);
         this.tab           = new Tab("#market-model");
     }
