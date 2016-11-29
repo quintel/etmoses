@@ -3,13 +3,14 @@
 
 %table.table.single.interactions.market{data: { type: "market_model_table" } }
   %thead
-    %th{data: {header: 'stakeholder_from' }}
+    %td
+    %th{data: { header: 'stakeholder_from' }}
       = I18n.t("market_model_template.table.headers.stakeholder_from")
-    %th{data: {header: 'stakeholder_to' }}
+    %th{data: { header: 'stakeholder_to' }}
       = I18n.t("market_model_template.table.headers.stakeholder_to")
-    %th{data: {header: 'foundation' }}
+    %th{data: { header: 'foundation' }}
       = I18n.t("market_model_template.table.headers.foundation")
-    %th{data: {header: 'applied_stakeholder' }}
+    %th{data: { header: 'applied_stakeholder' }}
       = I18n.t("market_model_template.table.headers.applied_stakeholder")
     %th.tariff-type{data: {header: 'tariff_type' }}
       = I18n.t("market_model_template.table.headers.tariff_type")
