@@ -1,11 +1,16 @@
 class HeatAssetListsController < ApplicationController
-  respond_to :js, only: :update
+  respond_to :js, only: %i(update reload_heat_asset_list)
 
   before_filter :find_heat_asset_list
 
   def update
     @heat_asset_list.update_attributes(heat_asset_list_attributes)
     @testing_ground.business_case.clear_job!
+  end
+
+  # POST /testing_grounds/:testing_ground_id/heat_asset_lists/:id/reload_heat_asset_list
+  def reload_heat_asset_list
+    HeatAssetLists::AssetListUpdater.new(@testing_ground).update!
   end
 
   private

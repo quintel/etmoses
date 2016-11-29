@@ -1,0 +1,1 @@
+$(".primary-table").html("<%= escape_javascript(render partial: "heat_asset_lists/primary_table", locals: { testing_ground: @testing_ground, heat_asset_list: HeatAssetListDecorator.new(@heat_asset_list.reload).decorate.select(&:primary?) }) %>");

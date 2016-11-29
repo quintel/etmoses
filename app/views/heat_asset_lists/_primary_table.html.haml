@@ -49,3 +49,8 @@
 
         %td.editable.hidden
           %input.form-control{name: 'scope', value: 'primary'}
+
+%button.btn.btn-danger.reload-heat-asset-list{ type: "button", data: { url: reload_heat_asset_list_testing_ground_heat_asset_list_path(testing_ground, testing_ground.heat_asset_list, format: :js), confirmation: "Are you sure?" } }
+  Rescale assets to heat source list
+  -# tooltip
+  %span.wait.hidden= image_tag "wait.gif"
