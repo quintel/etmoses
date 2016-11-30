@@ -82,6 +82,90 @@ RSpec.describe TechnologyList do
     end
   end # .from_csv
 
+  describe 'hhp' do
+    let(:hash) { YAML.load(<<-YML.strip_heredoc) }
+      lv1:
+      - composite: true
+        composite_value: buffer_water_heating_1
+        demand: 2454.185013061061
+        profile: 405
+        type: buffer_water_heating
+        units: 10
+        volume: 4.0691
+        composite_index: 1
+        performance_coefficient: 1.0
+        node: Households 1
+        profile_key: profile_1
+      - buffer: buffer_water_heating_1
+        type: households_water_heater_hybrid_heatpump_air_water_electricity
+        units: 5
+        full_load_hours: 0
+        initial_investment: 4135.0
+        om_costs_per_year: 0.2
+        performance_coefficient: 1.8000000000000018
+        technical_lifetime: 15
+        node: Households 1
+        components:
+        - capacity: 4.9
+          position_relative_to_buffer: buffering
+          type: households_water_heater_hybrid_heatpump_air_water_electricity_electricity
+          units: 1
+          performance_coefficient: 3.0
+        - capacity: 22.0
+          position_relative_to_buffer: boosting
+          type: households_water_heater_hybrid_heatpump_air_water_electricity_gas
+          units: 1
+          performance_coefficient: 0.9
+      - composite: true
+        composite_value: buffer_water_heating_2
+        demand: 2454.185013061061
+        profile: 405
+        type: buffer_water_heating
+        units: 10
+        volume: 4.0691
+        composite_index: 1
+        performance_coefficient: 1.0
+        node: Households 1
+        profile_key: profile_1
+      - buffer: buffer_water_heating_2
+        type: households_water_heater_hybrid_heatpump_air_water_electricity
+        units: 10
+        full_load_hours: 0
+        initial_investment: 4135.0
+        om_costs_per_year: 252.892561983471
+        performance_coefficient: 1.8000000000000018
+        technical_lifetime: 15
+        node: Households 1
+        components:
+        - capacity: 4.9
+          position_relative_to_buffer: buffering
+          type: households_water_heater_hybrid_heatpump_air_water_electricity_electricity
+          units: 1
+          performance_coefficient: 3.0
+        - capacity: 22.0
+          position_relative_to_buffer: boosting
+          type: households_water_heater_hybrid_heatpump_air_water_electricity_gas
+          units: 1
+          performance_coefficient: 0.9
+    YML
+
+    let(:csv)  { TechnologyList.load(JSON.dump(hash)).to_csv }
+    let(:list) { TechnologyList.from_csv(csv) }
+    let!(:load_profile) { FactoryGirl.create(:load_profile, key: 'profile_1') }
+
+    let(:hhp) { list.list.values[0].last }
+
+    describe 'from csv' do
+      it 'list should contain a hybrid heatpump with two components' do
+        expect(hhp.components.size).to eq(2)
+      end
+
+      it 'components should have a capacity' do
+        expect(hhp.components[0]['capacity']).to eq(4.9)
+      end
+    end
+  end
+
   describe '.load' do
     it 'returns an empty list when given nil' do
       list = TechnologyList.load(nil)

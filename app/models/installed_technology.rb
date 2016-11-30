@@ -277,6 +277,10 @@ class InstalledTechnology
     position_relative_to_buffer.present? || carrier == :hybrid
   end
 
+  def export_key
+    [ type, buffer ].join('@')
+  end
+
   def as_json(*)
     super.delete_if { |_, v| v.blank? }
   end
