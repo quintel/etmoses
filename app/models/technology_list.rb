@@ -65,15 +65,27 @@ class TechnologyList
 
     data = parsed.each_with_object({}) do |row, data|
       data[row['connection']] ||= []
-      data[row['connection']].push(
-        row.to_h.except('connection').merge(
-          associates: parse_csv_value_array(row['associates']),
-          includes:   parse_csv_value_array(row['includes'])
-        )
-      )
+      data[row['connection']].push(technology_from_csv(row))
+    end
+
+    data.each_pair do |connection, technologies|
+      technologies.each do |technology|
+        if components = data[technology['export_key']]
+          technology['components'] = components
+
+          data.delete(technology['export_key'])
+        end
+      end
     end
 
     TechnologyList.from_hash(data)
+  end
+
+  def self.technology_from_csv(row)
+    row.to_h.except('connection').merge(
+      associates: parse_csv_value_array(row['associates']),
+      includes:   parse_csv_value_array(row['includes']),
+    )
   end
 
   # Internal: Parses a attribute imported from a CSV file which may be an
@@ -128,7 +140,7 @@ class TechnologyList
 
   # Public: Converts the technology list to a CSV file.
   def to_csv
-    attributes = InstalledTechnology::PRESENTABLES
+    attributes = InstalledTechnology::PRESENTABLES + %i(export_key)
     options    = { headers: [:connection, *attributes], write_headers: true }
 
     CSV.generate(options) do |csv|
@@ -137,6 +149,12 @@ class TechnologyList
           csv << [connection, *attributes.map do |attribute|
             technology.send(attribute)
           end]
+
+          technology.components.each do |component|
+            csv << [technology.export_key, *attributes.map do |attribute|
+              component.send(attribute)
+            end]
+          end
         end
       end
     end
