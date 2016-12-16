@@ -16,7 +16,7 @@ module Market
     end
 
     def to_market
-      Builder.new(data).to_market
+      Market::Builder.new(data).to_market
     end
 
     private
