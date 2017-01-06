@@ -89,7 +89,9 @@ module Calculation
           exceedance = path.production_exceedance_at(frame)
           amount     = conservable < exceedance ? conservable : exceedance
 
-          path.consume(frame, amount, true)
+          # Consume on the full-length path. Use the first sub-path so that
+          # technology loads are correctly updated.
+          path.sub_paths.first.consume(frame, amount, true)
         end
       end
     end
