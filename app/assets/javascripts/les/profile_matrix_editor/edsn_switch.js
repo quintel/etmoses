@@ -22,10 +22,9 @@ var EdsnSwitch = (function () {
             select.trigger('change');
         }
 
+        target.find('strong').text(I18n.t('inputs.' + actual));
         target.set('profile', parseInt(select.val(), 10));
         target.set('type', actual);
-
-        unitSelector.off('change.units').on('change.units', swapSelectBox.bind(target));
     }
 
     return {

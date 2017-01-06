@@ -7,7 +7,6 @@ technology_component_behavior:
   flex: optional
   inflex: generic
 
-visible: false
 whitelisted_attributes:
   - demand
   - initial_investment
