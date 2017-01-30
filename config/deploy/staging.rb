@@ -43,3 +43,5 @@ set :branch, 'master'
 #     auth_methods: %w(publickey password)
 #     # password: 'please use keys'
 #   }
+
+set :delayed_job_workers, 3
