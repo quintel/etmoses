@@ -131,13 +131,13 @@ module Calculation
         Network::Technologies::HHP::Electricity,
         Network::Technologies::HHP::Gas,
         Network::Technologies::OptionalConsumer,
-        Network::Technologies::ConservingProducer,
         Network::Technologies::ElectricVehicle,
         Network::Technologies::Buffer,
         Network::Technologies::DeferrableConsumer,
         Network::Technologies::Battery,
         Network::Technologies::OptionalBuffer,
         :rest,
+        Network::Technologies::ConservingProducer,
         Network::Technologies::Siphon
       ].freeze
     end
