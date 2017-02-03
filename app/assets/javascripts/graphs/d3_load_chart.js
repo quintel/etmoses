@@ -511,6 +511,8 @@ var D3LoadChart = (function () {
             this.dateSelect.enable();
             this.setYscaleDomain(false);
 
+            brushed.call(this);
+
             this.legend.draw(chartData);
         }
     });
