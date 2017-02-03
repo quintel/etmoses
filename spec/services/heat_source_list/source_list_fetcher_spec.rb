@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe HeatSourceList::SourceListFetcher do
   let(:testing_ground) { FactoryGirl.create(:testing_ground) }
 
-  let(:heat_sources_result) {
+  let(:heat_sources_result) do
     { 'nodes' => {
       'households_collective_chp_biogas' => {
         'heat_output_capacity' => {
@@ -26,53 +26,61 @@ RSpec.describe HeatSourceList::SourceListFetcher do
         }
       }
     } }
-  }
+  end
 
   let!(:stub_et_engine_request) {
-    stub_request(:post, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/1/converters/stats").
-         with(:body => {
-                "keys"=>{ "households_collective_chp_biogas"=>["heat_output_capacity"] }
-              },
-              :headers => { 'Accept'=>'application/json' }).
-         to_return(
-           :status => 200,
-           :body => JSON.dump(heat_sources_result),
-           :headers => {})
+    stub_request(
+      :post,
+      'https://beta-engine.energytransitionmodel.com/api/v3/scenarios/1/converters/stats'
+    ).with(
+        headers: { 'Accept' => 'application/json' },
+        body: {
+          'keys' => {
+            'households_collective_chp_biogas' => ['heat_output_capacity']
+          }
+        }
+      ).to_return(
+        status: 200,
+        body: JSON.dump(heat_sources_result),
+        headers: {}
+      )
   }
 
-  let!(:stub_gqueries) {
+  let!(:stub_gqueries) do
     expect_any_instance_of(Import::GqueryRequester).to receive(:request)
       .with(id: 1)
       .and_return({
-        "central_heat_network_dispatchable" => {},
-        "central_heat_network_must_run" => {}
+        'central_heat_network_dispatchable' => {},
+        'central_heat_network_must_run' => {}
       })
-  }
+  end
 
-  let(:source_list) {
+  let(:source_list) do
     HeatSourceList::SourceListFetcher.new(testing_ground).fetch
-  }
+  end
 
-  it "expects two technologies" do
+  it 'expects two technologies' do
     expect(source_list.size).to eq(3)
   end
 
-  context "central heat network" do
-    let(:source) {
+  context 'central heat network' do
+    let(:source) do
       source_list.detect do |source|
         source['key'] == 'central_heat_network_dispatchable'
       end
-    }
+    end
 
-    it "sets the correct defaults" do
+    it 'sets the correct defaults' do
       expect(source.fetch('total_initial_investment')).to eq(100000.0)
     end
   end
 
-  context "et engine related heat source" do
-    let(:source) { source_list.detect do |source|
-      source['key'] == 'households_collective_chp_biogas'
-    end }
+  context 'ETEngine related heat source' do
+    let(:source) do
+      source_list.detect do |source|
+        source['key'] == 'households_collective_chp_biogas'
+      end
+    end
 
     it 'sets the correct units' do
       expect(source.fetch('units')).to eq(2)
@@ -100,14 +108,14 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     end
 
     context 'when the source has zero units' do
-      let(:heat_sources_result) {
+      let(:heat_sources_result) do
         result = super()
         biogas = result['nodes']['households_collective_chp_biogas']
 
         biogas['number_of_units'] = { 'present' => 1.0, 'future' => 0.0 }
 
         result
-      }
+      end
 
       it 'omits the technology' do
         tech_keys = source_list.map { |source| source['key'] }
@@ -116,13 +124,15 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     end
   end
 
-  context "central heat networks" do
-    it "expects both to be central heat networks" do
-      expect(source_list.map{|t| t['key'] }).to include("central_heat_network_must_run")
+  context 'central heat networks' do
+    let(:tech_keys) { source_list.map {|source| source['key'] } }
+
+    it 'expects both to be central heat networks' do
+      expect(tech_keys).to include('central_heat_network_must_run')
     end
 
-    it "expects both to be central heat networks" do
-      expect(source_list.map{|t| t['key'] }).to include("central_heat_network_dispatchable")
+    it 'expects both to be central heat networks' do
+      expect(tech_keys).to include('central_heat_network_dispatchable')
     end
   end
 end
