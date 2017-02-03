@@ -98,6 +98,22 @@ RSpec.describe HeatSourceList::SourceListFetcher do
     it 'sets the total investment costs' do
       expect(source.fetch('total_initial_investment')).to eq(2.0)
     end
+
+    context 'when the source has zero units' do
+      let(:heat_sources_result) {
+        result = super()
+        biogas = result['nodes']['households_collective_chp_biogas']
+
+        biogas['number_of_units'] = { 'present' => 1.0, 'future' => 0.0 }
+
+        result
+      }
+
+      it 'omits the technology' do
+        tech_keys = source_list.map { |source| source['key'] }
+        expect(tech_keys).not_to include('households_collective_chp_biogas')
+      end
+    end
   end
 
   context "central heat networks" do

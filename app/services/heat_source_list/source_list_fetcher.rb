@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HeatSourceList::SourceListFetcher
   def initialize(testing_ground)
     @testing_ground = testing_ground
@@ -15,9 +17,12 @@ class HeatSourceList::SourceListFetcher
   private
 
   def technologies
-    (default_heat_sources + central_heat_network).sort_by do |tech|
-      tech['marginal_heat_costs'] || -1
-    end
+    sources = (default_heat_sources + central_heat_network)
+
+    sources.reject! { |tech| tech['units'].zero? }
+    sources.sort_by! { |tech| tech['marginal_heat_costs'] || -1 }
+
+    sources
   end
 
   def default_stakeholder
