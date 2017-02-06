@@ -1,6 +1,8 @@
 ---
 carrier: heat
 color: "#622A72"
+defaults:
+  marginal_heat_costs: 0.0
 dispatchable: false
 exists_as_technology_in_etengine: false
 expandable: false

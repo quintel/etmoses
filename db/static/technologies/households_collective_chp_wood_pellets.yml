@@ -4,10 +4,10 @@ importable_attributes:
 - fixed_operation_and_maintenance_costs_per_year_per_mw
 - full_load_hours
 - heat_output_capacity
-- marginal_heat_costs
 - number_of_units
 - technical_lifetime
 - total_initial_investment_per_mw
 
 defaults:
   distance: 1
+  marginal_heat_costs: 0.0
