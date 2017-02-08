@@ -415,7 +415,7 @@ DEPENDENCIES
   letter_opener
   mailcatcher
   msgpack
-  mysql2 (~> 0.3.18)
+  mysql2 (~> 0.3.21)
   paperclip (~> 4.2)
   pry-rails
   pundit (~> 1.0)
