@@ -5,6 +5,7 @@ color: "#c8ffff"
 exists_as_technology_in_etengine: false
 importable_gqueries:
   demand: etmoses_electricity_base_load_demand
+  units: number_of_residences
 
 technology_component_behavior:
   flex: deferrable

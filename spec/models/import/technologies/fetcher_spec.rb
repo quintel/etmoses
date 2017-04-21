@@ -28,7 +28,7 @@ RSpec.describe Import::Technologies::Fetcher do
   }
 
   let!(:stub_etm_scenario_technologies) {
-    stub_request(:post, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/2/converters/stats").
+    stub_request(:post, "#{ Settings.etengine_host }/api/v3/scenarios/2/converters/stats").
       with(:body => { },
            :headers => { 'Accept'=>'application/json', }
           ).to_return(
@@ -49,13 +49,15 @@ RSpec.describe Import::Technologies::Fetcher do
         'present' => 1, 'future' => 2 },
       "number_of_buildings" => {
         'present' => 1, 'future' => 2 },
+      "number_of_residences" => {
+        'present' => 1, 'future' => 2 },
       "electric_cars_additional_costs" => {
         'present' => 1, 'future' => 2 }
     } }
   }
 
   let!(:stub_gqueries) {
-    stub_request(:put, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/2").
+    stub_request(:put, "#{ Settings.etengine_host }/api/v3/scenarios/2").
          with(:body => {"gqueries"=> importable_gqueries },
               :headers => { 'Accept'=>'application/json', }
              ).to_return(

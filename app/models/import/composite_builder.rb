@@ -1,7 +1,5 @@
 class Import
   class CompositeBuilder < BaseBuilder
-    include Scaling
-
     COMPOSITE_ATTRS = %w(name key default_demand)
 
     DEMAND_MAPPING = {
@@ -10,8 +8,6 @@ class Import
     }.freeze
 
     def build(_response)
-      return [] unless valid_scaling?
-
       Technology.where(composite: true).map do |technology|
         transform(technology.attributes.slice(*COMPOSITE_ATTRS))
           .merge(composite_attributes(technology))
@@ -19,7 +15,7 @@ class Import
     end
 
     def composite_attributes(technology)
-      { 'units'     => scaling_value,
+      { 'units'     => number_of_residences,
         'type'      => technology.key,
         'composite' => true,
         'demand'    => demand_for(technology),
@@ -41,7 +37,7 @@ class Import
 
     def demand_for(technology)
       Import::DemandCalculator.new(
-        @scenario_id, scaling_value,
+        @scenario_id, number_of_residences,
         @gqueries.slice(DEMAND_MAPPING[technology.key.to_s])
       ).calculate
     end

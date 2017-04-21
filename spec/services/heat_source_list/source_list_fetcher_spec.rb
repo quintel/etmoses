@@ -31,7 +31,7 @@ RSpec.describe HeatSourceList::SourceListFetcher do
   let!(:stub_et_engine_request) {
     stub_request(
       :post,
-      'https://beta-engine.energytransitionmodel.com/api/v3/scenarios/1/converters/stats'
+      "#{ Settings.etengine_host }/api/v3/scenarios/1/converters/stats"
     ).with(
         headers: { 'Accept' => 'application/json' },
         body: {

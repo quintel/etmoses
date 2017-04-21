@@ -9,6 +9,11 @@ RSpec.describe Import::HouseBuilder do
         "present"=>90.11341999999999,
         "future"=>99.05439142786325,
         "unit"=>"PJ"
+      },
+      'number_of_residences' => {
+        'present' => 0.0,
+        'future'  => 5.0,
+        'unit'    => 'number'
       }
     }
   }
@@ -21,24 +26,6 @@ RSpec.describe Import::HouseBuilder do
         "has_agriculture"=>true,
         "has_industry"=>false
       }}).build(response)[0]['units']).to eq(5)
-    end
-  end
-
-  describe "#number_of_inhabitants" do
-    it 'builds a house for scaling attributes' do
-      expect(Import::HouseBuilder.new(gqueries, { id: 1, scaling: {
-        "area_attribute"=>"number_of_inhabitants",
-        "value"=>5.0,
-        "has_agriculture"=>true,
-        "has_industry"=>false
-      }}).build(response)).to eq([])
-    end
-  end
-
-  describe "#nil" do
-    it "doesn't build a house for scaling attributes" do
-      expect(Import::HouseBuilder.new(gqueries, { id: 1, scaling: nil}
-        ).build(response)).to eq([])
     end
   end
 end

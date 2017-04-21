@@ -24,6 +24,11 @@ class Import
           'present' => 0.0,
           'future'  => p2h_share,
           'unit'    => 'factor'
+        },
+        'number_of_residences' => {
+          'present' => 0.0,
+          'future'  => 100.0,
+          'unit'    => 'number'
         }
       }
     end
