@@ -39,19 +39,19 @@ RSpec.describe Import::Technologies::Fetcher do
 
   let(:gquery_answer) {
     { 'gqueries' => {
-      "etmoses_electricity_base_load_demand" => {
+      'etmoses_electricity_base_load_demand' => {
         'present' => 1, 'future' => 2 },
-      "etmoses_space_heating_buffer_demand" => {
+      'etmoses_space_heating_buffer_demand' => {
         'present' => 1, 'future' => 2 },
-      "etmoses_hot_water_buffer_demand" => {
+      'etmoses_hot_water_buffer_demand' => {
         'present' => 1, 'future' => 2 },
-      "present_demand_in_source_of_electricity_in_buildings" => {
+      'present_demand_in_source_of_electricity_in_buildings' => {
         'present' => 1, 'future' => 2 },
-      "number_of_buildings" => {
+      'etmoses_number_of_buildings' => {
         'present' => 1, 'future' => 2 },
-      "number_of_residences" => {
+      'households_number_of_residences' => {
         'present' => 1, 'future' => 2 },
-      "electric_cars_additional_costs" => {
+      'electric_cars_additional_costs' => {
         'present' => 1, 'future' => 2 }
     } }
   }

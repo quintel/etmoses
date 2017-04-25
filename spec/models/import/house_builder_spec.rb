@@ -10,7 +10,7 @@ RSpec.describe Import::HouseBuilder do
         "future"=>99.05439142786325,
         "unit"=>"PJ"
       },
-      'number_of_residences' => {
+      'households_number_of_residences' => {
         'present' => 0.0,
         'future'  => 5.0,
         'unit'    => 'number'

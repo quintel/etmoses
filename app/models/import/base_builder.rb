@@ -15,7 +15,7 @@ class Import
     private
 
     def number_of_residences
-      if query = @gqueries['number_of_residences']
+      if query = @gqueries['households_number_of_residences']
         query.fetch("future")
       else
         0

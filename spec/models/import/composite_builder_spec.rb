@@ -13,7 +13,7 @@ RSpec.describe Import::CompositeBuilder do
         'future'  => 20.0,
         'unit'    => 'PJ'
       },
-      'number_of_residences' => {
+      'households_number_of_residences' => {
         'present' => 0.0,
         'future'  => 1.0,
         'unit'    => 'number'
