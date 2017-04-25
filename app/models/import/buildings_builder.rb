@@ -5,7 +5,7 @@ class Import
     # Also calculates the average demand of a single building
     #
 
-    NUMBER_OF_BUILDINGS = 'number_of_buildings'
+    NUMBER_OF_BUILDINGS = 'etmoses_number_of_buildings'.freeze
 
     def build(_response)
       return [] if no_buildings?

@@ -1,5 +1,5 @@
 def stub_et_engine_scenario_create_request(preset_id = 2)
-  stub_request(:post, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios").with(
+  stub_request(:post, "#{ Settings.etengine_host }/api/v3/scenarios").with(
     :body => {
       "scenario"=>{"scenario_id"=>preset_id.to_s,
       "descale"=>"true"}
@@ -13,7 +13,7 @@ def stub_et_engine_scenario_create_request(preset_id = 2)
 end
 
 def stub_et_engine_scenario_update_request(id = 2)
-  stub_request(:put, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/#{id}").with(
+  stub_request(:put, "#{ Settings.etengine_host }/api/v3/scenarios/#{ id }").with(
     :body => {
       "autobalance"=>"true",
       "force_balance"=>"true",
@@ -34,7 +34,7 @@ def stub_et_engine_scenario_update_request(id = 2)
 end
 
 def stub_et_engine_scenario_inputs_request(id = 2)
-  url  = "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/#{id}/inputs"
+  url  = "#{ Settings.etengine_host }/api/v3/scenarios/#{id}/inputs"
   json = YAML.load_file(Rails.root.join('spec/fixtures/responses/inputs.yml'))
 
   stub_request(:get, url).with(:headers => {
@@ -50,7 +50,7 @@ def stub_et_engine_request(keys = ['magical_technology'])
   end]
 
   stub_request(:post,
-    "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/1/converters/stats").
+    "#{ Settings.etengine_host }/api/v3/scenarios/1/converters/stats").
     with(body: {"keys"=>keys},
          headers: {
           'Accept'=>'application/json',
@@ -61,7 +61,7 @@ def stub_et_engine_request(keys = ['magical_technology'])
 end
 
 def stub_scenario_request(id = 1)
-  stub_request(:get, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/#{id}").
+  stub_request(:get, "#{ Settings.etengine_host }/api/v3/scenarios/#{id}").
        with(headers: {'Accept'=>'application/json',
                       'Accept-Encoding'=>'gzip, deflate'}).
        to_return(status: 200,
@@ -70,14 +70,14 @@ end
 
 
 def stub_et_engine_templates
-   stub_request(:get, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/templates").
+   stub_request(:get, "#{ Settings.etengine_host }/api/v3/scenarios/templates").
       with(headers: {'Accept'=>'*/*; q=0.5, application/xml',
                      'Accept-Encoding'=>'gzip, deflate'}).
       to_return(status: 200, body: JSON.dump({}), headers: {})
 end
 
 def stub_et_gquery(gqueries)
-  stub_request(:put, "https://beta-engine.energytransitionmodel.com/api/v3/scenarios/1").
+  stub_request(:put, "#{ Settings.etengine_host }/api/v3/scenarios/1").
     with(body: { "gqueries"=> gqueries.keys.map(&:to_s) },
          headers: {
           'Accept'=>'application/json',

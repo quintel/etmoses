@@ -5,7 +5,7 @@ color: "#6db1b1"
 exists_as_technology_in_etengine: false
 importable_gqueries:
   demand: etmoses_electricity_base_load_demand_for_buildings
-  units: number_of_buildings
+  units: etmoses_number_of_buildings
 
 technology_component_behavior:
   flex: optional

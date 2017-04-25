@@ -11,5 +11,15 @@ class Import
         Every sub-class of Builder needs a method called 'build'
       eos
     end
+
+    private
+
+    def number_of_residences
+      if query = @gqueries['households_number_of_residences']
+        query.fetch("future")
+      else
+        0
+      end
+    end
   end
 end

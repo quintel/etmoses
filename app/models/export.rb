@@ -76,7 +76,7 @@ class Export
   #
   # Returns a Float
   def solar_panel_units_factor
-    et_engine_gqueries['number_of_solar_pv']['future'] / number_of_households
+    et_engine_gqueries['etmoses_number_of_solar_pv']['future'] / number_of_households
   end
 
   # Private: Queries ETEngine to determine how many households exist in the
@@ -89,7 +89,7 @@ class Export
 
   def et_engine_gqueries
     @et_engine_gqueries ||= EtEngineConnector.new(gqueries:
-      %w(households_number_of_residences number_of_solar_pv)
+      %w(households_number_of_residences etmoses_number_of_solar_pv)
     ).gquery(@testing_ground.scenario_id)
   end
 

@@ -5,7 +5,7 @@ RSpec.describe Import::BuildingsBuilder do
 
   let(:gqueries) {
     {
-      'number_of_buildings' => {
+      'etmoses_number_of_buildings' => {
         'present' => 0.0, 'future' => 1.1312 },
       'etmoses_electricity_base_load_demand_for_buildings' => {
         'present' => 0.0000123, 'future' => 0.0000123 }

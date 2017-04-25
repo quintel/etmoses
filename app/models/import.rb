@@ -7,7 +7,6 @@ class Import
   validates :provider,    inclusion: { in: [Settings.etengine_host] }
   validates :scenario_id, numericality: { only_integer: true }
   validate :etm_scenario_present, if: -> { valid_scenario? }
-  validate :scaled_scenario?, if: -> { valid_scenario? }
 
   # Public: Creates a new Import with the given provider and scenario.
   #
@@ -83,12 +82,6 @@ class Import
 
   def valid_scenario?
     scenario_id.present? && scenario_id =~ /^\d+$/
-  end
-
-  def scaled_scenario?
-    return if etm_scenario[:scaling].present?
-
-    errors.add(:scenario_id, 'is not scaled')
   end
 
   # Internal: Retrieves the ID of the national-scale preset or saved scenario.

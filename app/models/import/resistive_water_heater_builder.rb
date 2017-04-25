@@ -8,8 +8,6 @@ class Import
   # electric heater. If the LES should fall short of that, we add extra space
   # heater electricity technologies to compensate.
   class ResistiveWaterHeaterBuilder < BaseBuilder
-    include Scaling
-
     TECH_KEY    = 'households_water_heater_resistive_electricity'.freeze
     SHARE_QUERY = 'share_of_p2h_in_hot_water_produced_in_households'.freeze
 
@@ -41,7 +39,7 @@ class Import
     end
 
     def required_heaters
-      scaling_value * @gqueries.fetch(SHARE_QUERY).fetch('future')
+      number_of_residences * @gqueries.fetch(SHARE_QUERY).fetch('future')
     end
   end
 end
