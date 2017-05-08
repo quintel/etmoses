@@ -72,7 +72,7 @@ module Calculation
         # "Round-robin" paths of the same length, so as not to give preference
         # to technologies form the first node returned by "paths".
         by_level.each do |level, level_paths|
-          by_parent = level_paths.group_by(&:leaf).values
+          by_parent = level_paths.group_by { |p| p.leaf.key }.values
 
           data[level] = Array.new(by_parent.map(&:length).max)
             .zip(*by_parent).flatten.compact
