@@ -15,8 +15,18 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'beta.moses.et-model.com', user: 'ubuntu', roles: %w{web app db}
+server 'beta.moses.et-model.com', user: 'deploy', roles: %w{web app db}
 set :branch, 'master'
+
+# Puma Options
+# ============
+# If these are changed, be sure to then run `cap $stage puma:config`; the config
+# on the server is not automatically updated when deploying.
+
+set :puma_threads, [1, 1]
+set :puma_workers, 4
+set :puma_init_active_record, true
+set :puma_preload_app, true
 
 # Custom SSH Options
 # ==================

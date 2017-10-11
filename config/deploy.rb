@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.2.1'
+lock '3.9.1'
 
 set :application, 'etmoses'
 set :repo_url, 'https://github.com/quintel/etmoses.git'
@@ -9,6 +9,8 @@ set :rbenv_type, :user
 set :rbenv_ruby, '2.3.1'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+
+set :bundle_binstubs, (-> { shared_path.join('sbin') })
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
@@ -33,7 +35,7 @@ set :linked_files, %w{config/database.yml config/email.yml config/secrets.yml}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{
-  bin log tmp/pids tmp/cache tmp/sockets vendor/bundle
+  sbin log tmp/pids tmp/cache tmp/sockets vendor/bundle
   public/system data/curves
 }
 
@@ -44,12 +46,9 @@ set :linked_dirs, %w{
 # set :keep_releases, 5
 
 namespace :deploy do
-  desc 'Restart application'
-  task :restart do
-    invoke 'unicorn:restart'
-  end
-
+  # build_missing_styles needs to be disabled for the cold (first) deploy.
   after 'deploy:compile_assets', 'paperclip:build_missing_styles'
+
   after 'deploy:finished', 'airbrake:deploy'
   after :publishing, :restart
 end
