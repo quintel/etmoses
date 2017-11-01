@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.3.1'
+ruby '2.4.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1.8'
+gem 'rails', '~> 4.1'
 gem 'mysql2', '~> 0.3.21'
 
 # Assets
