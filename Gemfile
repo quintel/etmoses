@@ -2,8 +2,10 @@ source 'https://rubygems.org'
 ruby '2.4.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+
 gem 'rails', '~> 4.1'
 gem 'mysql2', '~> 0.3.21'
+gem 'rake', '< 11.0'
 
 # Assets
 gem 'sass-rails',   '~> 4.0.3'
@@ -46,7 +48,7 @@ gem 'active_hash'
 gem 'letter_opener'
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.1'
+  gem 'rspec-rails', '~> 3'
   gem 'pry-rails'
 
   gem 'simplecov', require: false
@@ -61,7 +63,6 @@ group :development do
   gem 'capistrano-rails',    '~> 1.1',   require: false
   gem 'capistrano-bundler',  '~> 1.1',   require: false
   gem 'capistrano3-puma',       '~> 3.1.1', require: false
-  gem 'capistrano-scm-local',   '~> 0.1',   require: false
   gem 'capistrano3-delayed-job', '~> 1.0'
 
   gem 'better_errors'
