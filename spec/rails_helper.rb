@@ -18,7 +18,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Moses::Spec::Fixtures
   config.include Moses::Spec::Network
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 

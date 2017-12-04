@@ -47,7 +47,7 @@ RSpec.describe TopologyTemplatesController do
   end
 
   describe "#update" do
-    let!(:sign_in_user) { sign_in(:user, user) }
+    let!(:sign_in_user) { sign_in(user) }
 
     let(:topology_template) {
       FactoryGirl.create(:topology_template, user: user)

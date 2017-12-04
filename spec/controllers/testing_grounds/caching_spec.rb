@@ -8,7 +8,7 @@ RSpec.describe TestingGroundsController do
 
   let(:user){ FactoryGirl.create(:user) }
 
-  let!(:sign_in_user) { sign_in(:user, user) }
+  let!(:sign_in_user) { sign_in(user) }
 
   let(:topology_graph){ FakeLoadManagement.caching_graph(1, [0.0] * 8760) }
 

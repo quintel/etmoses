@@ -51,6 +51,11 @@ module Moses
       config.action_mailer.smtp_settings =
         YAML.load_file(email_conf)[Rails.env].symbolize_keys
     end
+
+    # New Framework Defaults
+    # ----------------------
+
+    config.active_record.raise_in_transactional_callbacks = true
   end
 
   # Public: Path to the directory in which static data files files typically

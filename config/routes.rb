@@ -4,14 +4,14 @@ Rails.application.routes.draw do
   resources :testing_grounds, except: :new do
     collection do
       get  'import'
-      post 'import', to: :perform_import
+      post 'import', action: :perform_import
       post 'render_template'
     end
 
     member do
       get  'export', 'technology_profile', 'gas_load', 'heat_load'
       post 'data', 'update_strategies'
-      post 'export', to: :perform_export
+      post 'export', action: :perform_export
       patch 'save_as'
 
       scope :calculation, controller: 'calculation' do

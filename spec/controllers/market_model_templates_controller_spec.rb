@@ -9,7 +9,7 @@ RSpec.describe MarketModelTemplatesController do
     end
 
     it 'visits new market model view' do
-      sign_in(:user, FactoryGirl.create(:user))
+      sign_in(FactoryGirl.create(:user))
 
       get :new
 
@@ -19,7 +19,7 @@ RSpec.describe MarketModelTemplatesController do
 
   describe "#create" do
     it 'creating a market model template' do
-      sign_in(:user, FactoryGirl.create(:user))
+      sign_in(FactoryGirl.create(:user))
 
       post :create, "market_model_template"=>{
         "name"=>"Hello",
@@ -49,7 +49,7 @@ RSpec.describe MarketModelTemplatesController do
   end
 
   describe "#update" do
-    let!(:sign_in_user) { sign_in(:user, user) }
+    let!(:sign_in_user) { sign_in(user) }
 
     let(:market_model_template) {
       FactoryGirl.create(:market_model_template, user: user)
@@ -87,7 +87,7 @@ RSpec.describe MarketModelTemplatesController do
 
   describe "#destroy" do
     let(:user) { FactoryGirl.create(:user) }
-    let!(:sign_in_user) { sign_in(:user, user) }
+    let!(:sign_in_user) { sign_in(user) }
 
     let(:market_model_template) {
       FactoryGirl.create(:market_model_template, user: user)

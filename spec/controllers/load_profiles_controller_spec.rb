@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe LoadProfilesController do
   let(:user){ FactoryGirl.create(:user) }
-  let!(:sign_in_user){ sign_in(:user, user) }
+  let!(:sign_in_user){ sign_in(user) }
 
   describe "show a load profile" do
     it "shows a load profile" do

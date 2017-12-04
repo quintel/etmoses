@@ -5,7 +5,7 @@ RSpec.describe MarketModelsController do
   let(:testing_ground) { FactoryGirl.create(:testing_ground, user: user) }
   let(:market_model) { FactoryGirl.create(:market_model, testing_ground: testing_ground) }
 
-  let!(:sign_in_user) { sign_in(:user, user) }
+  let!(:sign_in_user) { sign_in(user) }
 
   describe '#replace' do
     let(:market_model) do

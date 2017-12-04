@@ -6,7 +6,7 @@ RSpec.describe TopologiesController do
   let!(:business_case) { FactoryGirl.create(:business_case, testing_ground: testing_ground, job_id: 1) }
   let(:topology) { FactoryGirl.create(:topology, testing_ground: testing_ground) }
 
-  let!(:sign_in_user) { sign_in(:user, user) }
+  let!(:sign_in_user) { sign_in(user) }
 
   describe "#update" do
     before do

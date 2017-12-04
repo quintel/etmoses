@@ -4,8 +4,6 @@ class AssetListSerializer
   end
 
   def self.load(array)
-    fail "array can't be empty or nil" if array.nil?
-
-    YAML.load(array).map(&:symbolize_keys)
+    array.nil? ? [] : YAML.load(array).map(&:symbolize_keys)
   end
 end

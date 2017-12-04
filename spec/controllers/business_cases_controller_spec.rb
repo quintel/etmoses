@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe BusinessCasesController do
   let(:user) { FactoryGirl.create(:user) }
-  let!(:sign_in_user) { sign_in(:user, user) }
+  let!(:sign_in_user) { sign_in(user) }
   let(:market_model) { FactoryGirl.create(:market_model) }
 
   let(:testing_ground) {
