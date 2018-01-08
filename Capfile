@@ -21,7 +21,6 @@ require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
 require 'capistrano/puma'
-require 'capistrano-scm-local'
 require 'airbrake/capistrano3'
 require 'capistrano/delayed-job'
 
