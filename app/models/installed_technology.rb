@@ -286,7 +286,10 @@ class InstalledTechnology
   end
 
   def to_h
-    super.delete_if { |_, v| v.blank? }
+    tech = super.delete_if { |_, v| v.blank? }
+    tech[:associates] = (tech[:associates] || []).map(&:to_h)
+    tech[:components] = (tech[:components] || []).map(&:to_h)
+    tech
   end
 
   private
