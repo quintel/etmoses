@@ -46,11 +46,9 @@ class TechnologyList
   #
   # Returns a hash.
   def self.dump(list)
-    JSON.dump(Hash[list.to_h.map do |key, techs|
-      [ key, techs.map(&:to_h).map do |tech|
-        tech.update(components: (tech[:components] || []).map(&:to_h))
-      end ]
-    end])
+    JSON.dump(list.each_with_object({}) do |(key, techs), obj|
+      obj[key] = techs.map(&:to_h)
+    end)
   end
 
   # Public: Given a CSV file as a string, creates a TechnologyList.
