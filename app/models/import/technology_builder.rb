@@ -12,6 +12,7 @@ class Import
                         InputCapacityAttribute,
                         StorageVolumeAttribute,
                         InitialInvestmentAttribute,
+                        NumberOfUnitsAttribute,
                         TechnicalLifetimeAttribute,
                         CoefficientOfPerformanceAttribute,
                         FullLoadHoursAttribute,

@@ -14,6 +14,7 @@ importable_attributes:
   - input_capacity
   - storage.volume
   - technical_lifetime
+  - number_of_units
 
 importable_gqueries:
   initial_investment: electric_cars_additional_costs
