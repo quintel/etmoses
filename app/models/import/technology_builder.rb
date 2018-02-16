@@ -43,10 +43,30 @@ class Import
         'composite'  => tech.composite
       )
 
-      tech.importable_attributes.map(&method(:attribute))
-        .each { |attr| attrs[attr.local_name] = attr.call(data) }
+      importable_attributes(tech) do |attr|
+        attrs[attr.local_name] = attr.call(data)
+      end
 
       attrs
+    end
+
+    # Public: Determines which Attributes may be imported by a technology.
+    #
+    # Yields each attribute if a block is given.
+    #
+    # For example
+    #
+    #   importable_attributes(tech) # => [Attribute, Attribute, ...]
+    #
+    #   importable_attributes(tech) do |attr|
+    #     # yields each Attribute
+    #   end
+    #
+    # Returns an array of Attributes.
+    def self.importable_attributes(technology)
+      return enum_for(:importable_attributes, technology) unless block_given?
+
+      technology.importable_attributes.each { |attr| yield(attribute(attr)) }
     end
   end
 end

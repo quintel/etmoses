@@ -72,4 +72,38 @@ RSpec.describe Import::TechnologyBuilder do
       expect(techs['units']).to be_zero
     end
   end # importing a technology of zero units
+
+  describe 'importable_attributes' do
+    let(:importable_keys) do
+      Import::TechnologyBuilder.importable_attributes(build_stubbed(
+        :importable_technology, key: 'tech', importable_attributes: attributes
+      ))
+    end
+
+    context 'when the technology has a number_of_units attribute' do
+      let(:attributes) { %w[number_of_units] }
+
+      it 'includes a "number_of_units" attribute' do
+        expect(
+          importable_keys.detect { |attr| attr.remote_name == 'number_of_units' }
+        ).to be
+      end
+    end
+
+    context 'when the technology has a storage.volume attribute' do
+      let(:attributes) { %w[storage.volume] }
+
+      it 'includes StorageVolumeAttribute' do
+        expect(
+          importable_keys.detect { |attr| attr.remote_name == 'storage.volume' }
+        ).to be
+      end
+
+      it 'does not include a "number_of_units" attribute' do
+        expect(
+          importable_keys.detect { |attr| attr.remote_name == 'number_of_units' }
+        ).to_not be
+      end
+    end
+  end
 end # Import::TechnologyBuilder

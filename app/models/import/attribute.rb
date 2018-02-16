@@ -39,6 +39,12 @@ class Import
       extract_subkey(data, subkey, FUTURE)
     end
 
+    # Public: The key to be fetched from the remote API which provides the data
+    # for this attribute.
+    def remote_key
+      remote_name.to_s.split('.', 2).first
+    end
+
     def to_s
       "#{ @remote_name } to #{ @local_name }"
     end

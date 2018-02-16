@@ -33,9 +33,10 @@ class Import
       end
 
       def keys
-        Hash[Technology.importable.map do |technology|
-          [technology.key, technology.importable_attributes]
-        end]
+        Technology.importable.each_with_object({}) do |tech, data|
+          data[tech.key] =
+            TechnologyBuilder.importable_attributes(tech).map(&:remote_key)
+        end
       end
 
       def technologies_for_gqueries
