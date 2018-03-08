@@ -51,4 +51,5 @@ namespace :deploy do
 
   after 'deploy:finished', 'airbrake:deploy'
   after :publishing, :restart
+  after :publishing, 'delayed_job:restart'
 end
