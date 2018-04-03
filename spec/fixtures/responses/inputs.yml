@@ -32,7 +32,7 @@ households_flexibility_p2p_electricity_market_penetration:
   min: 0
   max: 100
   default: 0
-number_of_energy_flexibility_p2g_electricity:
+number_of_energy_hydrogen_flexibility_p2g_electricity:
   min: 0
   max: 0.01353777173692319
   default: 0

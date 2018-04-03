@@ -7,7 +7,7 @@ en:
     buffer_space_heating: Buffer space heating
     buffer_water_heating: Buffer water heating
     congestion_battery: Neighbourhood battery
-    energy_flexibility_p2g_electricity: Power-To-Gas
+    energy_hydrogen_flexibility_p2g_electricity: Power-To-Gas
     generic: Other
     unknown: Unknown technology
     households_flexibility_p2h_electricity: Power-To-Heat

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161130123307) do
+ActiveRecord::Schema.define(version: 20180410121702) do
 
   create_table "asset_lists", force: true do |t|
     t.integer  "testing_ground_id"

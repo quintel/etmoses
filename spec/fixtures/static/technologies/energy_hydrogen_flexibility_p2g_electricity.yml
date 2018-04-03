@@ -1,5 +1,5 @@
 ---
-export_to: number_of_energy_flexibility_p2g_electricity
+export_to: number_of_energy_hydrogen_flexibility_p2g_electricity
 carrier: electricity
 behavior: siphon
 visible: true

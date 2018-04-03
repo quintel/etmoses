@@ -56,7 +56,7 @@
   carrier: gas
   composite: false
 - capacity: 739.583333333333
-  type: energy_flexibility_p2g_electricity
+  type: energy_hydrogen_flexibility_p2g_electricity
   units: 0
   carrier: electricity
   composite: false

@@ -15,7 +15,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'moses.et-model.com', user: 'deploy', roles: %w{web app db}
+server 'et-engine.com', user: 'deploy', roles: %w{web app db}
 set :branch, 'production'
 
 # Puma Options

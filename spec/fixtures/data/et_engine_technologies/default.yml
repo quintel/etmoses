@@ -1,6 +1,6 @@
 ---
 nodes:
-  energy_flexibility_p2g_electricity:
+  energy_hydrogen_flexibility_p2g_electricity:
     demand:
       present: 0.0
       future: 0.0

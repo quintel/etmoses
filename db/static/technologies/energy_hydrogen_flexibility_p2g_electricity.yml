@@ -5,7 +5,7 @@ color: "#358B30"
 defaults:
   capacity: 739.583
 
-export_to: number_of_energy_flexibility_p2g_electricity
+export_to: number_of_energy_hydrogen_flexibility_p2g_electricity
 importable_attributes:
   - fixed_operation_and_maintenance_costs_per_year
   - full_load_hours
