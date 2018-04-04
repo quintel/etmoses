@@ -20,8 +20,17 @@ class EtEngineConnector
 
   def stats(scenario_id)
     url = ETM_URLS[:stats] % [@provider, scenario_id]
+    params = @params
 
-    et_api_request(:post, url, @params, HEADERS)
+    if params.key?(:keys) && params[:keys].is_a?(Array)
+      # 'stats' wants a hash of keys and attributes to fetch. If the caller does
+      # not care about specific attributes, request all.
+      #
+      # { keys: [:a, :b] } becomes { keys: { a: nil, b: nil } }
+      params = params.merge(keys: Hash[params[:keys].zip([])])
+    end
+
+    et_api_request(:post, url, params, HEADERS)
   end
 
   def scenario(scenario_id)

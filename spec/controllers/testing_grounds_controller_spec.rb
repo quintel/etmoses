@@ -474,7 +474,7 @@ RSpec.describe TestingGroundsController do
     let!(:user) { FactoryGirl.create(:user) }
     let!(:sign_in_user){ sign_in(user) }
     let!(:stub_et_engine) {
-      stub_et_engine_request(keys = ['households_solar_pv_solar_radiation'])
+      stub_et_engine_request({ 'households_solar_pv_solar_radiation' => nil })
     }
 
     let!(:render_template) {
