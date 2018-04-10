@@ -44,7 +44,7 @@ def stub_et_engine_scenario_inputs_request(id = 2)
   }).to_return(:status => 200, :body => JSON.dump(json), :headers => {})
 end
 
-def stub_et_engine_request(keys = {'magical_technology' => ['electricity_output_capacity']})
+def stub_et_engine_request(keys = {'magical_technology' => nil})
   nodes = Hash[keys.map do |key, _|
     [key, { load: 1.0, technical_lifetime: { present: 2, future: 2 } }]
   end]

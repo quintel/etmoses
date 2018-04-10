@@ -34,9 +34,7 @@ class Import
 
       def keys
         Hash[Technology.importable.map do |technology|
-          [technology.key, technology.importable_attributes.map do |key|
-            key.sub(/\..+/, '')
-          end]
+          [technology.key, nil] # Import all attributes.
         end]
       end
 
