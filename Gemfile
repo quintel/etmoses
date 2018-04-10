@@ -18,7 +18,7 @@ gem 'therubyracer', '~> 0.12.1', platforms: :ruby
 gem 'i18n-js', ">= 3.0.0.rc11"
 
 gem 'haml-rails'
-gem 'paperclip', '~> 4.2'
+gem 'paperclip', '~> 5.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
