@@ -174,4 +174,17 @@ module TestingGroundsHelper
       %w(boosting buffering)
     end
   end
+
+  # Public: Formats the value which will be used to export a technology to ETE.
+  #
+  # tech - An Export::ExportedTechnology
+  #
+  # Returns a string.
+  def formatted_export_input_value(tech)
+    format(
+      '%.1f%s',
+      tech.slider_setting,
+      tech.export_to.to_s.start_with?('number_of') ? nil : '%'
+    )
+  end
 end

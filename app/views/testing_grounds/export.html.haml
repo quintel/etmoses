@@ -18,7 +18,7 @@ slider settings will be used:
           %span.tech-name= I18n.t("inputs.#{ technology.key }")
           %span.arrow &rarr;
           %span.input-name{ title: technology.export_to }== #{ I18n.t("inputs.#{ technology.export_to }") }:
-          %span.input-value== #{ technology.slider_setting }%
+          %span.input-value= formatted_export_input_value(technology)
 
 .perform-export
   = link_to('Cancel', testing_ground_path(@testing_ground), class: 'btn btn-default')
